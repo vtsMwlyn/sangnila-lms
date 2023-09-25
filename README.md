@@ -14,3 +14,5 @@ php artisan migrate:status --path database\migrations\02
 php artisan migrate:status --path database\migrations\03
 php artisan migrate:status --path database\migrations\04
 php artisan migrate:status --path database\migrations\05
+
+

@@ -1,0 +1,21 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+Route::prefix('/student')
+	->name('student.')
+	->group(function() {
+		Route::prefix('/attendance')
+			->name('attendance.')
+			->group(function() {
+				Route::get('/')->name('index'); // Show attendance table
+				Route::patch('/{attendance_id}')->name('update'); // Update the attendance status (Select input), with input:reason
+			});
+
+			Route::prefix('/mycourse')
+				->name('mycourse.')
+				->group(function(){
+					Route::get('/')->name('index');
+					Route::get('/{course_id}')->name('show')->whereNumber('course_id');
+				});
+	});
