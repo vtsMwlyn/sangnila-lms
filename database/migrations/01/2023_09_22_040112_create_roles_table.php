@@ -20,7 +20,7 @@ return new class extends Migration {
 
 		// Insert the constant values
 		DB::table('roles')->insert([
-			['role_name' => 'SuperAdmin'],
+			['role_name' => 'SysAdmin'],
 			['role_name' => 'Admin'],
 			['role_name' => 'Teacher'],
 			['role_name' => 'Student'],

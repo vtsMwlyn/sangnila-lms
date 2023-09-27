@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminAccountController;
+use App\Http\Controllers\CourseController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/sysadmin')
@@ -10,10 +12,11 @@ Route::prefix('/sysadmin')
 			->name('account.')
 			->group(function() {
 				// Admin account controller
-				Route::get('/')->name('index');
-				Route::get('/{user_id}')->name('show')->whereNumber('user_id');
+				Route::get('/', [AdminAccountController::class, 'index'])->name('index');
+				Route::get('/{user_id}', [AdminAccountController::class, 'show'])->name('show')->whereNumber('user_id');
 
-				Route::get('/create')->name('create');
+				// Create special form to make administrator accounts
+				Route::get('/create', )->name('create');
 				Route::post('/')->name('store');
 
 			});
@@ -23,13 +26,13 @@ Route::prefix('/sysadmin')
 			->name('course.')
 			->group(function() {
 				// Course Controller
-				Route::get('/')->name('index');
-				Route::get('/{course_id}')->name('show')->whereNumber('course_id');
+				Route::get('/', [CourseController::class, 'index'])->name('index');
+				Route::get('/{course_id}', [CourseController::class, 'show'])->name('show')->whereNumber('course_id');
 
-				Route::get('/create')->name('create');
-				Route::post('/')->name('store');
+				Route::get('/create', [CourseController::class, 'create'])->name('create');
+				Route::post('/', [CourseController::class, 'store'])->name('store');
 
-				Route::get('/{course_id}/archive')->name('archive')->whereNumber('course_id'); // Confirmation
-				Route::patch('/{course_id}')->name('update.archive')->whereNumber('course_id'); // Change visibility to private
+				Route::get('/{course_id}/archive', [CourseController::class, 'archive_confirm'])->name('conrifm.archive')->whereNumber('course_id'); // Confirmation
+				Route::patch('/{course_id}', [CourseController::class, 'archive_update'])->name('update.archive')->whereNumber('course_id'); // Change visibility to private
 			});
 });

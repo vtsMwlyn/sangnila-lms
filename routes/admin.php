@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\TeacherAccountController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/admin')
@@ -10,10 +12,11 @@ Route::prefix('/admin')
 			->name('teacher.')
 			->group(function () {
 				// Teacher account controller
-				Route::get('/')->name('index');
-				Route::get('/{teacher_id}')->name('show')
+				Route::get('/', [TeacherAccountController::class, 'index'])->name('index');
+				Route::get('/{teacher_id}', [TeacherAccountController::class, 'show'])->name('show')
 					->whereNumber('teacher_id');
 
+				// Create special form to make administrator accounts
 				Route::get('/create')->name('create');
 				Route::post('/')->name('store');
 			});
@@ -22,12 +25,12 @@ Route::prefix('/admin')
 			->name('course.')
 			->group(function () {
 				// Course Controller
-				Route::get('/')->name('index');
-				Route::get('/{course_id}')->name('show')->whereNumber('course_id');
+				Route::get('/', [CourseController::class, 'index'])->name('index');
+				Route::get('/{course_id}', [CourseController::class, 'show'])->name('show')->whereNumber('course_id');
 
 				//Edit Course
-				Route::get('/{course_id}/edit')->name('edit')->whereNumber('course_id');
-				Route::patch('/course/{course_id}')->name('update')->whereNumber('course_id');
+				Route::get('/{course_id}/edit', [CourseController::class,'edit'])->name('edit')->whereNumber('course_id');
+				Route::patch('/course/{course_id}', [CourseController::class, 'update'])->name('update')->whereNumber('course_id');
 
 				// ==========================================================================
 
