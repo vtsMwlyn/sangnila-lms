@@ -16,6 +16,7 @@ class AdminAccountController extends Controller {
 		$role = Role::where('role_name', 'SuperAdmin')->first();
 		$accounts = $role->users();
 		dd($accounts);
+		// return view(sysadmin.account.index);
 		# TODO
 	}
 
@@ -45,8 +46,10 @@ class AdminAccountController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($user_id) {
-		$user = User::where('id', $user_id)->first();
+		$user = User::findOrFail($user_id);
 		dd($user);
+		// return view(sysadmin.account.show);
+
 	}
 
 	/**

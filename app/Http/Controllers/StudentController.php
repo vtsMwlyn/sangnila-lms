@@ -6,17 +6,17 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class TeacherAccountController extends Controller {
+class StudentController extends Controller {
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index() {
-		$role = Role::where('role_name', 'Teacher')->first();
-		$accounts = $role->users();
-		dd($accounts);
-		//return view(admin.teacher.index);
+		$role = Role::where('role_name', 'Student')->get();
+		$students = $role->users;
+		//return view(admin.student.index);
+		//
 	}
 
 	/**
@@ -44,10 +44,10 @@ class TeacherAccountController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($teacher_id) {
-		$user = User::findOrFail($teacher_id);
-		dd($user);
-		//return view(admin.teacher.show)
+	public function show($student_id) {
+		$student = User::findOrFail($student_id);
+		// return view(admin.student.show);
+		//
 	}
 
 	/**

@@ -24,7 +24,7 @@ class CourseTeacherController extends Controller {
 	 */
 	public function create($course_id) {
 		// Find the course
-		$course = Course::where('id', $course_id);
+		$course = Course::findOrFail($course_id);
 
 		// Find Teacher role
 		$role = Role::where('role_name', 'Teacher');
@@ -38,9 +38,7 @@ class CourseTeacherController extends Controller {
 			->get();
 
 		dd($teachers);
-		# Sampe sini
 
-		// filter the teacher where not
 		// return assign course form
 	}
 
@@ -50,8 +48,15 @@ class CourseTeacherController extends Controller {
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request) {
-		//
+	public function store(Request $request, $course_id) {
+		$data = $request->all();
+		dd($data);
+
+		$lecture = new CourseTeacher();
+		$lecture->user_id = $request->user;
+		$lecture->course_id = $course_id;
+		$lecture->save();
+		return redirect(route('admin.course.show'));
 	}
 
 	/**
@@ -93,5 +98,37 @@ class CourseTeacherController extends Controller {
 	 */
 	public function destroy($id) {
 		//
+	}
+
+	//================================================================
+
+	/**
+	 * Unassign the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function unassign($course_id) {
+		$course = Course::findOrFail($course_id);
+		$teachers = $course->teachers;
+		// return view(admin.course.unassign);
+		//
+		// TODO
+	}
+
+
+
+	/**
+	 * Unassign the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function unassign_destroy($course_id, Request $request) {
+		$teacher_id = $request->teacher_id;
+		$lecture = CourseTeacher::where('course_id', $course_id)->where('user_id', $teacher_id)->first();
+		dd($lecture);
+		CourseTeacher::destroy($lecture->id);
+		return redirect(route('admin.course.show', $course_id));
 	}
 }

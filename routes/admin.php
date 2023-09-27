@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CourseTeacherController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherAccountController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,41 +28,42 @@ Route::prefix('/admin')
 			->name('course.')
 			->group(function () {
 				// Course Controller
-				Route::get('/', [CourseController::class, 'index'])->name('index');
-				Route::get('/{course_id}', [CourseController::class, 'show'])->name('show')->whereNumber('course_id');
+				Route::get('/', [CourseController::class, 'admin_index'])->name('index');
+				Route::get('/{course_id}', [CourseController::class, 'admin_show'])->name('show')->whereNumber('course_id');
 
 				//Edit Course
-				Route::get('/{course_id}/edit', [CourseController::class,'edit'])->name('edit')->whereNumber('course_id');
-				Route::patch('/course/{course_id}', [CourseController::class, 'update'])->name('update')->whereNumber('course_id');
+				Route::get('/{course_id}/edit', [CourseController::class,'admin_edit'])->name('edit')->whereNumber('course_id');
+				Route::patch('/course/{course_id}', [CourseController::class, 'admin_update'])->name('update')->whereNumber('course_id');
 
 				// ==========================================================================
 
 				// Assign Teacher (CourseTeacherController)
-				Route::get('/assign/{course_id}')->name('assign')->whereNumber('course_id');
-				Route::post('/assign/{course_id}')->name('store')->whereNumber('course_id');
+				Route::get('/assign/{course_id}', [CourseTeacherController::class, 'create'])->name('assign')->whereNumber('course_id');
+				Route::post('/assign/{course_id}', [CourseTeacherController::class, 'store'])->name('store')->whereNumber('course_id');
 
 				// Unassign Teacher (CourseTeacherController)
 				// idea-1: a direct link to a specific page, where course_id, and a list of teacher with teacher_id as the input
 				// idea-2: form with course_teacher id
-				Route::get('/unassign/{course_id}')->name('unassign')->whereNumber('course_id'); // Deletion confirmation
-				Route::delete('/unassign/{course_id}')->name('destroy.unassign')->whereNumber('course_id');
+				Route::get('/unassign/{course_id}', [CourseController::class, 'unassign'])->name('unassign')->whereNumber('course_id'); // Deletion confirmation
+				Route::delete('/unassign/{course_id}', [CourseTeacherController::class, 'unassign_destroy'])->name('destroy.unassign')->whereNumber('course_id');
 			});
 
 		Route::prefix('/schedule')
 			->name('schedule.')
 			->group(function () {
 				// Schedule Controller (course_schedule)
-				Route::get('/')->name('index');
-				Route::get('/{schedule_id}')->name('show')->whereNumber('schedule_id');
+				Route::get('/', [ScheduleController::class, 'index'])->name('index');
+				Route::get('/{schedule_id}', [ScheduleController::class, 'show'])->name('show')->whereNumber('schedule_id');
 
 				// Create Schedule (course_schedule)
-				Route::get('/create')->name('create');
-				Route::post('/')->name('store');
+				Route::get('/create', [ScheduleController::class, 'create'])->name('create');
+				Route::post('/', [ScheduleController::class, 'store'])->name('store');
 
 				// Edit Schedule (course_schedule);
-				Route::get('/{schedule_id}/edit')->name('edit')->whereNumber('schedule_id');
-				Route::patch('/{schedule_id}')->name('update')->whereNumber('schedule_id');
+				Route::get('/{schedule_id}/edit', [ScheduleController::class, 'edit'])->name('edit')->whereNumber('schedule_id');
+				Route::patch('/{schedule_id}', [ScheduleController::class, 'update'])->name('update')->whereNumber('schedule_id');
 
+				// TODO
 				// Assign schedules (student_schedule)
 				// Student Controller
 				Route::get('/{schedule_id}/assign')->name('assign')->whereNumber('schedule_id'); // Show student where course->students
@@ -70,12 +74,12 @@ Route::prefix('/admin')
 			->name('student.')
 			->group(function () {
 				// Student Controller
-				Route::get('/')->name('index');
-				Route::get('/{student_id}')->name('show')->whereNumber('student_id');
+				Route::get('/', [StudentController::class, 'index'])->name('index');
+				Route::get('/{student_id}', [StudentController::class, 'show'])->name('show')->whereNumber('student_id');
 
-				// Student Controller
-				Route::get('/{student_id}/{course_id}')->name('show.schedule')->whereNumber('student_id')->whereNumber('course_id');
-				Route::get('/{student_id}/{course_id}/edit')->name('edit.schedule')->whereNumber('student_id')->whereNumber('course_id');
-				Route::patch('/{student_id}/{course_id}')->name('update.schedule')->whereNumber('student_id')->whereNumber('course_id');
+				// student_schedule Controller
+				Route::get('/{student_id}/{course_id}', [StudentController::class, 'student_show'])->name('show.schedule')->whereNumber('student_id')->whereNumber('course_id');
+				Route::get('/{student_id}/{course_id}/edit', [StudentController::class, 'student_edit'])->name('edit.schedule')->whereNumber('student_id')->whereNumber('course_id');
+				Route::patch('/{student_id}/{course_id}', [StudentController::class, 'student_update'])->name('update.schedule')->whereNumber('student_id')->whereNumber('course_id');
 			});
 	});
