@@ -62,4 +62,8 @@ class User extends Authenticatable {
 		return $this->hasMany(MaterialProgress::class);
 	}
 
+	public function schedules() {
+		return $this->belongstoMany(CourseSchedule::class, 'student_schedules');
+	}
+
 }
