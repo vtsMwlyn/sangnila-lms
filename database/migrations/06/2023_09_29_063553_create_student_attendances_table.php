@@ -18,10 +18,11 @@ return new class extends Migration {
 			$table->string('reason')->nullable();
 			$table->date('submit_date');
 			$table->time('submit_time');
-			$table->enum('validation', ['valid', 'invalid', 'unvalidated']);
-			$table->unsignedBigInteger('validated_by_teacher');
-			$table->foreign('student_schedule_id')->references('id')->on('student_schedule');
-			$table->foreign('validated_by_teacher')->references('id')->on('users');
+			$table->enum('valid', ['valid', 'invalid', 'unvalidated']);
+			$table->unsignedBigInteger('validated_by')->nullable();
+			$table->foreign('student_schedule_id')->references('id')->on('student_schedules');
+			$table->foreign('validated_by')->references('id')->on('users');
+
 			$table->timestamps();
 		});
 	}
