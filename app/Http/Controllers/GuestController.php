@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
-use App\Models\User;
+use App\Models\Course;
 use Illuminate\Http\Request;
 
-class AdminAccountController extends Controller {
+class GuestController extends Controller {
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index() {
-		$accounts = User::get();
-		return view('roles.sysadmin.account.index', [
-			'accounts' => $accounts
+		$courses = Course::where('visibility', 'public')->get();
+		return view('roles.guest.index', [
+			'courses' => $courses,
 		]);
+		//
 	}
 
 	/**
@@ -44,11 +44,12 @@ class AdminAccountController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($user_id) {
-		$user = User::findOrFail($user_id);
-		dd($user);
-		// return view(sysadmin.account.show); # TODO
-
+	public function show($id) {
+		$course = Course::findOrFail($id);
+		return view('roles.guest.show', [
+			'course' => $course
+		]);
+		//
 	}
 
 	/**

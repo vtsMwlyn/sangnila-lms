@@ -15,8 +15,9 @@ class CourseController extends Controller {
 	 */
 	public function sys_index() {
 		$courses = Course::get();
-		dd($courses);
-		// return view(sysadmin.course.index);
+		return view('roles.sysadmin.course.index',[
+			'courses' => $courses
+		]);
 
 	}
 
@@ -26,7 +27,7 @@ class CourseController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function sys_create() {
-		// return view(sysadmin.course.create);
+		return view('roles.sysadmin.course.create');
 
 	}
 
@@ -38,13 +39,12 @@ class CourseController extends Controller {
 	 */
 	public function sys_store(Request $request) {
 		$data = $request->all();
-		dd($data);
 		$course = new Course();
 		$course->course_name = $request->course_name;
-		$course->course_description = $request->course_description;
-		$course->visibility = $request->course_visibility;
+		$course->course_description = $request->course_desc;
+		$course->visibility = $request->visibility;
 		$course->save();
-		return redirect(route('home'));
+		return redirect(route('sysadmin.course.index'));
 	}
 
 	/**
@@ -69,7 +69,7 @@ class CourseController extends Controller {
 	public function sys_edit($course_id) {
 		$course = Course::findOrFail( $course_id);
 		dd($course);
-		// return edit form
+		// return view(sysadmin.course.edit);
 	}
 
 	/**
@@ -80,9 +80,12 @@ class CourseController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function sys_update(Request $request, $course_id) {
-		$course = Course::findOrFail($course_id);
-		dd($course);
-		// Update Course DB
+		$data = $request->except(['_token', '_method']);
+		dd($data);
+		Course::where('id', $course_id)->update($data);
+		return redirect(route('sysadmin.course.show', [
+			'course_id' => $course_id
+		]));
 	}
 
 	/**
@@ -111,7 +114,7 @@ class CourseController extends Controller {
 		$course->visibility = 'private';
 		dd($course);
 		$course->save();
-		return redirect(route('sys.course.inde'));
+		return redirect(route('sysadmin.course.index'));
 	}
 
 	// ADMIN ==============================================================

@@ -6,7 +6,7 @@ Route::prefix('/teacher')
 	->name('teacher.')
 	->group(function() {
 		Route::prefix('/mycourse')
-		->name('mycourse')
+		->name('mycourse.')
 		->group(function() {
 			// Course Controller
 			Route::get('/')->name('index');
