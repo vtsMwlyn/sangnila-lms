@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,11 +15,36 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+	if (Auth::check()) {
+		// User is logged in, so redirect to a specific route
+		return redirect()->route('dashboard');
+	}
 	return view('roles.guest.home');
 })->name('home');
 
 Route::get('/dashboard', function () {
-	return view('dashboard');
+	$roleName = Auth::user()->role->role_name;
+	switch ($roleName) {
+		case 'SysAdmin':
+			// Logic for SysAdmin
+			dd('SysAdmin');
+			break;
+		case 'Admin':
+			// Logic for Admin
+			dd('Admin');
+			break;
+		case 'Teacher':
+			// Logic for Teacher
+			dd('Teacher');
+			break;
+		case 'Student':
+			// Logic for Student
+			dd('Student');
+			break;
+		default:
+			// Default behavior (e.g., for unknown roles)
+			return view('dashboard');
+	}
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__ . '/auth.php'; // to be deleted
@@ -28,4 +54,3 @@ require __DIR__ . '/admin.php';
 require __DIR__ . '/teacher.php';
 require __DIR__ . '/student.php';
 require __DIR__ . '/guest.php';
-

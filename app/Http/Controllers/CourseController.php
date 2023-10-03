@@ -28,7 +28,6 @@ class CourseController extends Controller {
 	 */
 	public function sys_create() {
 		return view('roles.sysadmin.course.create');
-
 	}
 
 	/**
@@ -55,8 +54,9 @@ class CourseController extends Controller {
 	 */
 	public function sys_show($course_id) {
 		$course = Course::findOrFail($course_id);
-		dd($course);
-		// return view(sysadmin.course.show);
+		return view('roles.sysadmin.course.show', [
+			'course' => $course
+		]);
 
 	}
 
@@ -95,9 +95,10 @@ class CourseController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function sys_archive_confirm($course_id) {
+	public function sys_archive_confirm($course_id, Request $request) {
 		$course = Course::findOrFail($course_id);
 		dd($course);
+
 		//return view(sysadmin.course.archive);
 	}
 
@@ -109,11 +110,9 @@ class CourseController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function sys_archive_update($course_id) {
-		$course = Course::findOrFail($course_id);
-		$course->visibility = 'private';
-		dd($course);
-		$course->save();
+	public function sys_archive_update($course_id,Request $request) {
+		$visibility = $request->visibility === 'on' ? 'public' : 'private';
+		$course = Course::findOrFail($course_id)->update(['visibility' => $visibility]);
 		return redirect(route('sysadmin.course.index'));
 	}
 
@@ -136,7 +135,7 @@ class CourseController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function admin_show($course_id) {
-		$course = Course::findOrFail($course_id);
+		$course = Course::findOrFail($course_id)->where('visibility', 'public');
 		dd($course);
 		// return view(admin.course.show);
 
