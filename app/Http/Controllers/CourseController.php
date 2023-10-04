@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller {
 
-	// SYSADMIN==============================================================
+	// ========== SYSADMIN ==========
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -116,16 +116,17 @@ class CourseController extends Controller {
 		return redirect(route('sysadmin.course.index'));
 	}
 
-	// ADMIN ==============================================================
+	// ========== ADMIN ==========
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function admin__index() {
-		$courses = Course::get();
-		dd($courses);
-		// return view(admin.course.index);
+	public function admin_index() {
+		$courses = Course::where('visibility', 'public')->get();
+		return view('roles.admin.course.index', [
+			'courses' => $courses,
+		]);
 	}
 
 	/**
@@ -135,9 +136,10 @@ class CourseController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function admin_show($course_id) {
-		$course = Course::findOrFail($course_id)->where('visibility', 'public');
-		dd($course);
-		// return view(admin.course.show);
+		$course = Course::findOrFail($course_id)->where('visibility', 'public')->first();
+		return view('roles.admin.course.show', [
+			'course' => $course
+		]);
 
 	}
 
@@ -148,9 +150,10 @@ class CourseController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function admin_edit($course_id) {
-		$course = Course::findOrFail($course_id);
-		dd($course);
-		// return edit form
+		$course = Course::findOrFail($course_id)->where('visibility', 'public')->first();
+		return view('roles.admin.course.edit', [
+			'course' => $course
+		]);
 	}
 
 	/**
@@ -161,9 +164,9 @@ class CourseController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function admin_update(Request $request, $course_id) {
-		$course = Course::findOrFail($course_id);
-		dd($course);
-		// Update Course DB
+		$data = $request->except(['_token', '_method']);
+		$course = Course::findOrFail($course_id)->where('visibility', 'public')->update($data);
+		return redirect(route('admin.course.show', $course_id));
 	}
 
 }

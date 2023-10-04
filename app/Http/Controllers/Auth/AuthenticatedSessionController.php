@@ -36,7 +36,7 @@ class AuthenticatedSessionController extends Controller {
 				return redirect(route('sysadmin.account.index'));
 				break;
 			case 'Admin':
-				return redirect(route('admin.course.index'));
+				return redirect(route('admin.teacher.index'));
 				break;
 			case 'Teacher':
 				return redirect(route('teacher.schedule.index'));

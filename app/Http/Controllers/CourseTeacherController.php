@@ -24,22 +24,22 @@ class CourseTeacherController extends Controller {
 	 */
 	public function create($course_id) {
 		// Find the course
-		$course = Course::findOrFail($course_id);
+		$course = Course::findOrFail($course_id)->where('visibility', 'public')->first();
 
 		// Find Teacher role
-		$role = Role::where('role_name', 'Teacher');
+		$role = Role::where('role_name', 'Teacher')->first();
 
 		// Get the user IDs that are already associated with the course
-		$existingUserIds = CourseTeacher::where('course_id', $course_id)->pluck('user_id')->toArray();
+		$existingUserIds = CourseTeacher::where('course_id', $course_id)->get()->pluck('user_id')->toArray();
 
 		// Find users with the "Teacher" role who are not already associated with the course
 		$teachers = $role->users()
 			->whereNotIn('id', $existingUserIds)
 			->get();
-
-		dd($teachers);
-
-		// return assign course form
+		return view('roles.admin.course.assign', [
+			'teachers' => $teachers,
+			'course' => $course
+		]);
 	}
 
 	/**
@@ -50,13 +50,12 @@ class CourseTeacherController extends Controller {
 	 */
 	public function store(Request $request, $course_id) {
 		$data = $request->all();
-		dd($data);
 
 		$lecture = new CourseTeacher();
-		$lecture->user_id = $request->user;
+		$lecture->user_id = $request->teacher;
 		$lecture->course_id = $course_id;
 		$lecture->save();
-		return redirect(route('admin.course.show'));
+		return redirect(route('admin.course.show', $course_id));
 	}
 
 	/**

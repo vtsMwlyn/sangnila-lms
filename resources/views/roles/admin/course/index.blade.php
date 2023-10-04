@@ -14,21 +14,17 @@
 	<div class="bg-cover h-screen flex flex-col items-center"
 		style="background-image: url({{ asset('img/background.png') }});">
 
-		<x-navbar.sysadmin></x-navbar.sysadmin>
+		<x-navbar.admin></x-navbar.admin>
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
 			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Courses</h1>
-			<div class="h-fit mb-5">
-				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white" href="{{ route('sysadmin.course.create') }}">Create new
-					course</a>
-			</div>
 			@if ($courses->isNotEmpty())
 				<div class="overflow-x-auto">
 					<table class="min-w-full bg-white border-collapse border border-blue-400">
 						<thead>
 							<tr>
 								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Course Name</th>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Visibility</th>
+								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Description</th>
 								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Actions</th>
 							</tr>
 						</thead>
@@ -36,25 +32,20 @@
 							@foreach ($courses as $course)
 								<tr>
 									<td class="border border-blue-400 px-4 py-2">
-										<a href="{{ route('sysadmin.course.show', ['course_id' => $course->id]) }}">
+										<a href="{{ route('admin.course.show', ['course_id' => $course->id]) }}"
+											class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
 											{{ $course->course_name }}
 										</a>
 									</td>
 
 									<td class="border border-blue-400 px-4 py-2">
-										{{ $course->visibility }}
+										{{ $course->course_description }}
 									</td>
-									<td class="border border-blue-400 px-4 py-2">
-										<form method="POST" action="{{ route('sysadmin.course.update.archive', $course->id) }}">
-											@csrf
-											@method('PATCH')
-											<div class="inline-flex items-center">
-												<input type="checkbox" name="visibility" id="material_checkbox_{{ $course->id }}"
-												class="form-checkbox h-5 w-5 text-blue-500 border border-gray-300 {{ $course->visibility === 'public' ? 'bg-blue-500' : 'bg-gray-300' }}"
-												@if ($course->visibility === 'public') checked @endif>
-												<x-button>Submit</x-button>
-											</div>
-										</form>
+									<td class="border border-blue-400 px-4 py-2 ">
+										<a class="px-5 py-2 bg-indigo-400 rounded-lg  text-white"
+											href="{{ route('admin.course.edit', $course->id) }}">
+											Edit
+										</a>
 									</td>
 
 								</tr>

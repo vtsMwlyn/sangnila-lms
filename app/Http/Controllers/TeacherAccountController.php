@@ -14,10 +14,12 @@ class TeacherAccountController extends Controller {
 	 */
 	public function index() {
 		$role = Role::where('role_name', 'Teacher')->first();
-		$accounts = $role->users();
-		dd($accounts);
-		//return view(admin.teacher.index);
+		$users = $role->users()->get(); // Use get() to retrieve the users
+		return view('roles.admin.teacher.index', [
+			'accounts' => $users,
+		]);
 	}
+
 
 	/**
 	 * Show the form for creating a new resource.
@@ -45,9 +47,11 @@ class TeacherAccountController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show($teacher_id) {
-		$user = User::findOrFail($teacher_id);
-		dd($user);
-		//return view(admin.teacher.show)
+		$role = Role::where('role_name', 'Teacher')->first();
+		$user = User::where('id', $teacher_id)->where('role_id', $role->id)->first();
+		return view('roles.admin.teacher.show', [
+			'user' => $user
+		]);
 	}
 
 	/**

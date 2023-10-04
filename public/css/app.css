@@ -915,6 +915,9 @@ select {
 .cursor-default {
   cursor: default;
 }
+.cursor-pointer {
+  cursor: pointer;
+}
 .list-inside {
   list-style-position: inside;
 }
@@ -1289,6 +1292,10 @@ select {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
+.text-blue-600 {
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity));
+}
 .underline {
   text-decoration-line: underline;
 }
@@ -1417,6 +1424,13 @@ select {
 .hover\:text-gray-900:hover {
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+.hover\:text-blue-800:hover {
+  --tw-text-opacity: 1;
+  color: rgb(30 64 175 / var(--tw-text-opacity));
+}
+.hover\:underline:hover {
+  text-decoration-line: underline;
 }
 .focus\:z-10:focus {
   z-index: 10;
