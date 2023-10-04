@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+	<title>Laravel</title>
+
+</head>
+
+<body>
+	<div class="bg-cover h-screen" style="background-image: url({{ asset('img/background.png') }}) ; width: 100%;">
+		<div class="flex justify-center align-items-center h-screen">
+			<div class="w-96 my-auto">
+				<img src="{{ asset('img/Sangnila_Arts.png') }}" alt="" width="200px" class="m-auto">
+
+				<!-- Session Status -->
+				<x-auth-session-status class="mb-4" :status="session('status')" />
+
+				<!-- Validation Errors -->
+				<x-auth-validation-errors class="mb-4" :errors="$errors" />
+
+				<form method="POST" action="{{ route('sysadmin.account.store') }}"
+					class="bg-white rounded-2xl p-5  border-blue-300 border-2">
+					@csrf
+
+					<!-- Name -->
+					<div>
+						<x-label for="name" :value="__('Name')" />
+
+						<x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required
+							autofocus />
+					</div>
+
+					<!-- Email Address -->
+					<div>
+						<x-label for="email" :value="__('Email')" />
+						<x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required
+							autofocus />
+					</div>
+
+					<!-- Password -->
+					<div class="mt-4">
+						<x-label for="password" :value="__('Password')" />
+						<x-input id="password" class="block mt-1 w-full" type="password" name="password" required
+							autocomplete="current-password" />
+					</div>
+
+					<!-- Confirm Password -->
+					<div class="mt-4">
+						<x-label for="password_confirmation" :value="__('Confirm Password')" />
+
+						<x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation"
+							required />
+					</div>
+
+					<!-- Role Selection -->
+					<div class="mt-4">
+						<x-label for="role" :value="__('Role')" />
+
+						<select name="role" id="role"
+							class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+							@forelse ($roles as $role)
+								@if ($role->role_name !== 'SysAdmin')
+									<option value="{{ $role->role_name }}">{{ $role->role_name }}</option>
+								@endif
+							@empty
+							@endforelse
+
+						</select>
+					</div>
+					<div class="flex items-center justify-end mt-2">
+
+						<x-button class="ml-3">
+							{{ __('Create Account') }}
+						</x-button>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>

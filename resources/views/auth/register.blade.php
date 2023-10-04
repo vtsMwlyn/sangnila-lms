@@ -50,7 +50,7 @@
 
 				<select name="role" id="role" class="block mt-1 w-full">
 					@forelse ($roles as $role)
-						<option value="{{ $role->id }}">{{ $role->role_name }}</option>
+						<option value="{{ $role->role_name }}">{{ $role->role_name }}</option>
 					@empty
 					@endforelse
 

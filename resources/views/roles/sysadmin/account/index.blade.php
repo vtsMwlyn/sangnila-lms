@@ -18,6 +18,10 @@
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
 			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Accounts</h1>
+			<div class="h-fit mb-5">
+				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white" href="{{ route('sysadmin.account.create') }}">Create new
+					Account</a>
+			</div>
 			@if ($accounts->isNotEmpty())
 				<div class="overflow-x-auto">
 					<table class="min-w-full bg-white border-collapse border border-blue-400">
