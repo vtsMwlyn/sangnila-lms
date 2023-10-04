@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\CourseTeacher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller {
 
@@ -15,10 +17,9 @@ class CourseController extends Controller {
 	 */
 	public function sys_index() {
 		$courses = Course::get();
-		return view('roles.sysadmin.course.index',[
+		return view('roles.sysadmin.course.index', [
 			'courses' => $courses
 		]);
-
 	}
 
 	/**
@@ -57,7 +58,6 @@ class CourseController extends Controller {
 		return view('roles.sysadmin.course.show', [
 			'course' => $course
 		]);
-
 	}
 
 	/**
@@ -67,7 +67,7 @@ class CourseController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function sys_edit($course_id) {
-		$course = Course::findOrFail( $course_id);
+		$course = Course::findOrFail($course_id);
 		dd($course);
 		// return view(sysadmin.course.edit);
 	}
@@ -110,7 +110,7 @@ class CourseController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function sys_archive_update($course_id,Request $request) {
+	public function sys_archive_update($course_id, Request $request) {
 		$visibility = $request->visibility === 'on' ? 'public' : 'private';
 		$course = Course::findOrFail($course_id)->update(['visibility' => $visibility]);
 		return redirect(route('sysadmin.course.index'));
@@ -140,7 +140,6 @@ class CourseController extends Controller {
 		return view('roles.admin.course.show', [
 			'course' => $course
 		]);
-
 	}
 
 	/**
@@ -169,4 +168,29 @@ class CourseController extends Controller {
 		return redirect(route('admin.course.show', $course_id));
 	}
 
+	// ========== TEACHER ==========
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function teacher_index() {
+		$courses = Auth::user()->teached_courses;
+		return view('roles.teacher.mycourse.index', [
+			'courses' => $courses,
+		]);
+	}
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function teacher_show($course_id) {
+		$lecturer = CourseTeacher::where('user_id', Auth::user()->id)->where('course_id', $course_id)->first();
+		return view('roles.teacher.mycourse.show', [
+			'course' => $lecturer->course
+		]);
+	}
 }

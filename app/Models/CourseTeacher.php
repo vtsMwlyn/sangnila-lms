@@ -12,11 +12,11 @@ class CourseTeacher extends Model {
 		'course_id',
 	];
 
-	public function parent_user() {
+	public function teacher() {
 		return $this->belongsTo(User::class);
 	}
 
-	public function parent_course() {
+	public function course() {
 		return $this->belongsTo(Course::class);
 	}
 }

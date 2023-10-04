@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CourseController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/teacher')
@@ -9,12 +10,12 @@ Route::prefix('/teacher')
 		->name('mycourse.')
 		->group(function() {
 			// Course Controller
-			Route::get('/')->name('index');
-			Route::get('/{course_id}')->name('show')->whereNumber('course_id');
+			Route::get('/', [CourseController::class, 'teacher_index'])->name('index'); // DONE
+			Route::get('/{course_id}', [CourseController::class, 'teacher_show'])->name('show')->whereNumber('course_id'); // DONE
 		});
 
 		Route::prefix('/material')
-			->name('material')
+			->name('material.')
 			->group(function() {
 				// Material Controller
 				Route::get('/upload/{course_id}')->name('upload')->whereNumber('course_id');
