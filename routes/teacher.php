@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\MaterialController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/teacher')
@@ -18,11 +19,11 @@ Route::prefix('/teacher')
 			->name('material.')
 			->group(function() {
 				// Material Controller
-				Route::get('/upload/{course_id}')->name('upload')->whereNumber('course_id');
-				Route::post('/upload/{course_id}')->name('store')->whereNumber('course_id');
+				Route::get('/upload/{course_id}', [MaterialController::class, 'teacher_create'])->name('upload')->whereNumber('course_id');
+				Route::post('/upload/{course_id}', [MaterialController::class, 'teacher_store'])->name('store')->whereNumber('course_id');
 
-				Route::get('/{material_id}/edit')->name('edit')->whereNumber('material_id');
-				Route::patch('/{material_id}')->name('update')->whereNumber('material_id');
+				Route::get('/{material_id}/edit', [MaterialController::class, 'teacher_edit'])->name('edit')->whereNumber('material_id');
+				Route::patch('/{material_id}', [MaterialController::class, 'teacher_update'])->name('update')->whereNumber('material_id');
 
 				Route::get('/{material_id}/delete')->name('remove')->whereNumber('material_id');
 				Route::delete('/{material_id}')->name('destroy')->whereNumber('material_id');

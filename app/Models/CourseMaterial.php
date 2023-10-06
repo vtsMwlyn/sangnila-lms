@@ -13,7 +13,7 @@ class CourseMaterial extends Model {
 		'link'
 	];
 
-	public function parent_course() {
+	public function course() {
 		return $this->belongsTo(Course::class);
 	}
 }

@@ -25,10 +25,9 @@
 					<li class="text-gray-500">No student enrolled in this course</li>
 				@endforelse
 			</ul>
-			<h2 class="text-xl font-semibold mb-2">Course Materials</h2>
+			<h2 class="text-xl font-semibold mb-2">Course Materials:</h2>
 			<div class="h-fit mb-5">
-				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white"
-					href="{{ route('teacher.material.upload', $course->id) }}">Add new material:</a>
+
 			</div>
 			<div class="mb-6">
 				@forelse ($course->materials as $material)
@@ -46,6 +45,13 @@
 				@empty
 					<div class="text-gray-500">No materials</div>
 				@endforelse
+				<div class="relative flex items-center py-2 grou">
+					<span class="mr-2">
+						<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white"
+							href="{{ route('teacher.material.upload', $course->id) }}">Add new material</a>
+					</span>
+				</div>
+
 			</div>
 		</div>
 	</div>

@@ -39,7 +39,7 @@ class AuthenticatedSessionController extends Controller {
 				return redirect(route('admin.teacher.index'));
 				break;
 			case 'Teacher':
-				return redirect(route('teacher.course.index'));
+				return redirect(route('teacher.mycourse.index'));
 				// SOON change to schedule.index
 				break;
 			case 'Student':

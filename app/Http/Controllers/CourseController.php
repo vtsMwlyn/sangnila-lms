@@ -164,7 +164,7 @@ class CourseController extends Controller {
 	 */
 	public function admin_update(Request $request, $course_id) {
 		$data = $request->except(['_token', '_method']);
-		$course = Course::findOrFail($course_id)->where('visibility', 'public')->update($data);
+		$course = Course::where('visibility', 'public')->where('id', $course_id)->update($data);
 		return redirect(route('admin.course.show', $course_id));
 	}
 
