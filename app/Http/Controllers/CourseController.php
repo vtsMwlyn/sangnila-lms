@@ -149,7 +149,7 @@ class CourseController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function admin_edit($course_id) {
-		$course = Course::findOrFail($course_id)->where('visibility', 'public')->first();
+		$course = Course::where('visibility', 'public')->where('id', $course_id)->first();
 		return view('roles.admin.course.edit', [
 			'course' => $course
 		]);

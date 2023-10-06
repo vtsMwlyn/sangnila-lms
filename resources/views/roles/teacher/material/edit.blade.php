@@ -14,8 +14,8 @@
 	<div class="bg-cover h-screen flex flex-col items-center"
 		style="background-image: url({{ asset('img/background.png') }});">
 		<!-- Content Section -->
-		{{-- TODO change navbar to teacher --}}
-		<x-navbar.sysadmin></x-navbar.sysadmin>
+
+		<x-navbar.teacher></x-navbar.teacher>
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
 			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Edit Material on {{ $material->course->course_name }}</h1>
 			<form action="{{ route('teacher.material.update', $material->id) }}" method="post">

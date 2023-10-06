@@ -14,8 +14,7 @@
 	<div class="bg-cover h-screen flex flex-col items-center"
 		style="background-image: url({{ asset('img/background.png') }});">
 
-		{{-- TODO, change to teacher navbar --}}
-		<x-navbar.admin></x-navbar.admin>
+		<x-navbar.teacher></x-navbar.teacher>
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
 			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Courses</h1>

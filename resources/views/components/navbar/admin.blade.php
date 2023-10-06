@@ -20,6 +20,16 @@
 				Teachers
 			</a>
 			<!-- Add more navigation links as needed -->
+
+			<!-- Logout Button -->
+			<form method="POST" action="{{ route('logout') }}" class="flex">
+				@csrf
+
+				<button type="submit"
+					class="text-indigo-700 hover:text-blue-700 transition duration-300 px-3 py-2 rounded-lg bg-white hover:bg-indigo-200">
+					{{ __('Log Out') }}
+				</button>
+			</form>
 		</div>
 	</div>
 </nav>
