@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CourseStudentController;
 use App\Http\Controllers\CourseTeacherController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
@@ -11,7 +12,7 @@ Route::prefix('/admin') // ON PROGRESS
 	->name('admin.')
 	->group(function () {
 		// Teacher Account
-		Route::prefix('/teacher')
+		Route::prefix('/teacher') // ON HALT
 			->name('teacher.')
 			->group(function () {
 				// Teacher account controller
@@ -26,7 +27,7 @@ Route::prefix('/admin') // ON PROGRESS
 				Route::post('/')->name('store');
 			});
 
-		Route::prefix('/course')
+		Route::prefix('/course') // ON PROGRESS
 			->name('course.')
 			->group(function () {
 				// Course Controller
@@ -48,8 +49,8 @@ Route::prefix('/admin') // ON PROGRESS
 				// Unassign Teacher (CourseTeacherController)
 				// idea-1: a direct link to a specific page, where course_id, and a list of teacher with teacher_id as the input
 				// idea-2: form with course_teacher id
-				Route::get('/{course_id}/unassign', [CourseController::class, 'unassign'])->name('unassign')->whereNumber('course_id'); // Deletion confirmation
-				Route::delete('/{course_id}/unassign', [CourseTeacherController::class, 'unassign_destroy'])->name('destroy.unassign')->whereNumber('course_id');
+				Route::get('/{course_id}/unassign/{teacher_id}', [CourseController::class, 'unassign'])->name('unassign')->whereNumber('course_id'); // Deletion confirmation
+				Route::delete('/{course_id}/unassign{teacher_id}', [CourseTeacherController::class, 'unassign_destroy'])->name('destroy.unassign')->whereNumber('course_id');
 			});
 
 		Route::prefix('/schedule') // SOON
@@ -73,16 +74,19 @@ Route::prefix('/admin') // ON PROGRESS
 				Route::post('/{schedule_id}')->name('store')->whereNumber('schedule_id'); // Accepts student_id as the input
 			});
 
-		Route::prefix('/student')
+		Route::prefix('/student') // DONE
 			->name('student.')
 			->group(function () {
 				// Student Controller
-				Route::get('/', [StudentController::class, 'index'])->name('index');
-				Route::get('/{student_id}', [StudentController::class, 'show'])->name('show')->whereNumber('student_id');
+				Route::get('/', [StudentController::class, 'admin_index'])->name('index'); // DONE
+				Route::get('/{student_id}', [StudentController::class, 'admin_show'])->name('show')->whereNumber('student_id'); //DONE
 
-				// student_schedule Controller
-				Route::get('/{student_id}/{course_id}', [StudentController::class, 'student_show'])->name('show.schedule')->whereNumber('student_id')->whereNumber('course_id');
-				Route::get('/{student_id}/{course_id}/edit', [StudentController::class, 'student_edit'])->name('edit.schedule')->whereNumber('student_id')->whereNumber('course_id');
-				Route::patch('/{student_id}/{course_id}', [StudentController::class, 'student_update'])->name('update.schedule')->whereNumber('student_id')->whereNumber('course_id');
-			});
+				// Assign
+				Route::get('/{student_id}/assign', [CourseStudentController::class, 'create'])->name('assign.create'); // DONE
+				Route::post('/{student_id}/assign', [CourseStudentController::class, 'store'])->name('assign.store'); // DONE
+
+				// Unassign
+				Route::get('{student_id}/unassign/{course_id}', [CourseStudentController::class, 'delete'])->name('unassign.delete'); // DONE
+				Route::delete('{student_id}/unassign/{course_id}', [CourseStudentController::class, 'destroy'])->name('unassign.destroy'); //DONE
+				});
 	});

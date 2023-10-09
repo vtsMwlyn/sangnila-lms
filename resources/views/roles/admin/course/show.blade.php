@@ -33,7 +33,7 @@
 			<h2 class="text-xl font-semibold mb-2">Student List:</h2>
 			<ul class="list-disc pl-6 mb-6">
 				@forelse ($course->students as $student)
-					<li class="text-black">{{ $student->details->full_name }}</li>
+					<li class="text-black">{{ $student->full_name }}</li>
 				@empty
 					<li class="text-gray-500">No student enrolled in this course</li>
 				@endforelse

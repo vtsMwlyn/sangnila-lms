@@ -8,11 +8,11 @@
 		</a>
 		<div class="flex space-x-4">
 			<a href="{{ route('teacher.mycourse.index') }}"
-				class="text-indigo-700 hover:text-blue-700 transition duration-300 {{ Request::is('sysadmin/account*') ? 'text-blue-700' : '' }} px-3 py-2 rounded-lg bg-white hover:bg-indigo-200">
+				class="text-indigo-700 hover:text-blue-700 transition duration-300 {{ Request::is('teacher/mycourse*') ? 'text-blue-700' : '' }} px-3 py-2 rounded-lg bg-white hover:bg-indigo-200">
 				My Course(s)
 			</a>
 			<a href="{{ route('teacher.student.index') }}"
-				class="text-indigo-700 hover:text-blue-700 transition duration-300 {{ Request::is('sysadmin/course*') ? 'text-blue-700' : '' }} px-3 py-2 rounded-lg bg-white hover:bg-indigo-200">
+				class="text-indigo-700 hover:text-blue-700 transition duration-300 {{ Request::is('teacher/student*') ? 'text-blue-700' : '' }} px-3 py-2 rounded-lg bg-white hover:bg-indigo-200">
 				Students
 			</a>
 			<!-- Add more navigation links as needed -->

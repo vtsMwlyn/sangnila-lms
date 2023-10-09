@@ -36,7 +36,8 @@
 							Edit
 						</a>
 						<span class="mr-2">
-							<a href="{{ $material->link }}" class="text-black hover:text-blue-500 transition duration-300 ease-in-out">
+							<a href="{{ $material->link }}" class="text-black hover:text-blue-500 transition duration-300 ease-in-out"
+								target="_blank">
 								{{ $material->title }}
 							</a>
 						</span>

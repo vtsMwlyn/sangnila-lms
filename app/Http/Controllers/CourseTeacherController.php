@@ -36,7 +36,7 @@ class CourseTeacherController extends Controller {
 		$teachers = $role->users()
 			->whereNotIn('id', $existingUserIds)
 			->get();
-		return view('roles.admin.course.assign', [
+		return view('roles.admin.teacher.assign', [
 			'teachers' => $teachers,
 			'course' => $course
 		]);

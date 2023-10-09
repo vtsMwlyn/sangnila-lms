@@ -7,35 +7,19 @@ use App\Models\User;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller {
+
+	// ========== Teacher ==========
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index() {
-		$role = Role::where('role_name', 'Student')->get();
+	public function teacher_index() {
+		$role = Role::where('role_name', 'Student')->first();
 		$students = $role->users;
-		//return view(admin.student.index);
-		//
-	}
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create() {
-		//
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function store(Request $request) {
-		//
+		return view('roles.teacher.student.index', [
+			'students' => $students
+		]);
 	}
 
 	/**
@@ -44,40 +28,39 @@ class StudentController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($student_id) {
+	public function teacher_show($student_id) {
 		$student = User::findOrFail($student_id);
-		// return view(admin.student.show);
-		//
+		return  view('roles.teacher.student.show', [
+			'student' => $student
+		]);
 	}
 
+
+	// ========== Admin ==========
 	/**
-	 * Show the form for editing the specified resource.
+	 * Display a listing of the resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function admin_index() {
+		$role = Role::where('role_name', 'Student')->first();
+		$students = $role->users;
+		return view('roles.admin.student.index', [
+			'students' => $students
+		]);
+	}
+
+
+	/**
+	 * Display the specified resource.
 	 *
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit($id) {
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id) {
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id) {
-		//
+	public function admin_show($student_id) {
+		$student = User::findOrFail($student_id);
+		return  view('roles.admin.student.show', [
+			'student' => $student
+		]);
 	}
 }

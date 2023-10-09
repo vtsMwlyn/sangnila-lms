@@ -35,4 +35,5 @@ Route::prefix('/sysadmin')
 				Route::get('/{course_id}/archive', [CourseController::class, 'sys_archive_confirm'])->name('confirm.archive')->whereNumber('course_id'); // Confirmation // HALT (gatau dipakeato ga)
 				Route::patch('/{course_id}', [CourseController::class, 'sys_archive_update'])->name('update.archive')->whereNumber('course_id'); // Change visibility to private // DONE
 			});
+
 	});
