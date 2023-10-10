@@ -59,7 +59,7 @@ class User extends Authenticatable {
 	}
 
 	public function progress() {
-		return $this->hasMany(MaterialProgress::class);
+		return $this->hasMany(MaterialProgress::class, 'student_id');
 	}
 
 	public function schedules() {

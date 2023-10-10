@@ -175,9 +175,7 @@ class CourseController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function teacher_index() {
-		$courses = Auth::user()->teached_courses;
 		return view('roles.teacher.mycourse.index', [
-			'courses' => $courses,
 		]);
 	}
 

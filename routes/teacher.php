@@ -4,6 +4,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\MaterialProgressController;
 use App\Http\Controllers\StudentController;
+use App\Models\MaterialProgress;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/teacher')
@@ -15,6 +16,7 @@ Route::prefix('/teacher')
 				// Course Controller
 				Route::get('/', [CourseController::class, 'teacher_index'])->name('index'); // DONE
 				Route::get('/{course_id}', [CourseController::class, 'teacher_show'])->name('show')->whereNumber('course_id'); // DONE
+				Route::get('/{course_id}/progress', [MaterialProgressController::class, 'students_progress'])->name('progress');
 			});
 
 		Route::prefix('/material') // ON HALT

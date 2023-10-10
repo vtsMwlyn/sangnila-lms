@@ -61,4 +61,11 @@ class MaterialProgressController extends Controller {
 			'course_id' => $materialProgress->course_id
 		]));
 	}
+
+	public function students_progress($course_id) {
+		$course = Course::where('visibility', 'public')->where('id', $course_id)->first();
+		return view('roles.teacher.mycourse.progress', [
+			'course' => $course,
+		]);
+	}
 }

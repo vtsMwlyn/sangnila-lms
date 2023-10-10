@@ -17,39 +17,44 @@
 		<x-navbar.teacher></x-navbar.teacher>
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Courses</h1>
-			@if (Auth::user()->teached_courses->isNotEmpty())
+			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Students Profress for {{ $course->course_name }}</h1>
+
+			@if ($course->students->isNotEmpty())
 				<div class="overflow-x-auto">
 					<table class="min-w-full bg-white border-collapse border border-blue-400">
 						<thead>
 							<tr>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Course Name</th>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Description</th>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Actions</th>
+								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Student Name</th>
+								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Progress</th>
+								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Action</th>
 							</tr>
 						</thead>
 						<tbody>
-							@foreach (Auth::user()->teached_courses as $course)
+							@foreach ($course->students as $student)
 								<tr>
 									<td class="border border-blue-400 px-4 py-2">
-										<a href="{{ route('teacher.mycourse.show', ['course_id' => $course->id]) }}"
-											class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
-											{{ $course->course_name }}
-										</a>
+											{{ $student->full_name }}
 									</td>
 
 									<td class="border border-blue-400 px-4 py-2">
-										{{ $course->course_description }}
+										{{-- Calculate the progress --}}
+										@php
+											$totalMaterials = count($course->materials);
+											$unlockedMaterials = $student->progress->where('status', 'unlocked')->count();
+											$progress = $unlockedMaterials . '/' . $totalMaterials;
+										@endphp
+
+										<h1>Progress: {{ $progress }}</h1>
 									</td>
-									<td class="border border-blue-400 px-4 py-2 ">
+									<td class="border border-blue-400 px-4 py-2">
 										<a class="px-5 py-2 bg-indigo-400 rounded-lg  text-white"
-											href="{{ route('teacher.mycourse.progress', $course->id) }}">
-											View Students Progress
+											href="{{ route('teacher.student.index', ['student_id' => $student->id, 'course_id' => $course->id]) }}">
+											Update Progress
 										</a>
 									</td>
-
 								</tr>
 							@endforeach
+
 						</tbody>
 					</table>
 				</div>
