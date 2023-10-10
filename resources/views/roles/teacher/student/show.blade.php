@@ -30,7 +30,7 @@
 							@foreach ($student->enrolled_courses as $course)
 								<tr>
 									<td class="border border-blue-400 px-4 py-2">
-										<a href="{{ route('', ['course_id' => $course->id]) }}"
+										<a href="{{ route('teacher.student.show.progress', ['course_id' => $course->id, 'student_id'=> $student->id]) }}"
 											class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
 											{{ $course->course_name }}
 										</a>

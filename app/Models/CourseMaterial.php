@@ -16,4 +16,8 @@ class CourseMaterial extends Model {
 	public function course() {
 		return $this->belongsTo(Course::class);
 	}
+
+	public function progress() {
+		return $this->hasMany(MaterialProgress::class);
+	}
 }

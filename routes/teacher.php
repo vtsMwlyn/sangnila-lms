@@ -2,23 +2,24 @@
 
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\MaterialProgressController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/teacher')
 	->name('teacher.')
-	->group(function() {
-		Route::prefix('/mycourse')
-		->name('mycourse.')
-		->group(function() {
-			// Course Controller
-			Route::get('/', [CourseController::class, 'teacher_index'])->name('index'); // DONE
-			Route::get('/{course_id}', [CourseController::class, 'teacher_show'])->name('show')->whereNumber('course_id'); // DONE
-		});
+	->group(function () {
+		Route::prefix('/mycourse') // DONE
+			->name('mycourse.')
+			->group(function () {
+				// Course Controller
+				Route::get('/', [CourseController::class, 'teacher_index'])->name('index'); // DONE
+				Route::get('/{course_id}', [CourseController::class, 'teacher_show'])->name('show')->whereNumber('course_id'); // DONE
+			});
 
-		Route::prefix('/material') // PROGRESS
+		Route::prefix('/material') // ON HALT
 			->name('material.')
-			->group(function() {
+			->group(function () {
 				// Material Controller
 				Route::get('/upload/{course_id}', [MaterialController::class, 'teacher_create'])->name('upload')->whereNumber('course_id'); // DONE
 				Route::post('/upload/{course_id}', [MaterialController::class, 'teacher_store'])->name('store')->whereNumber('course_id'); // DONE
@@ -30,30 +31,33 @@ Route::prefix('/teacher')
 				Route::delete('/{material_id}')->name('destroy')->whereNumber('material_id'); // SOON
 			});
 
-		Route::prefix('/student') // Progress
+		Route::prefix('/student') // DONE
 			->name('student.')
-			->group(function() {
+			->group(function () {
 				// Student Controller
 				Route::get('/', [StudentController::class, 'teacher_index'])->name('index'); // DONE
-				Route::get('/{student_id}', [StudentController::class, 'teacher_show'])->name('show')->whereNumber('student_id'); // Done
+				Route::get('/{student_id}', [StudentController::class, 'teacher_show'])->name('show')->whereNumber('student_id'); // DONE
 
 				// Progress Controller
-				// TODO
-				Route::get('/{student_id}/{course_id}')->name('show.progress')->whereNumber('student_id')->whereNumber('student_id'); // Show progression table
-				Route::patch('/progress/{progress_id}')->name('update.progress')->whereNumber('progress_id');
-
+				Route::get('/{student_id}/progress/{course_id}', [MaterialProgressController::class, 'index']) // DONE
+					->name('show.progress')
+					->whereNumber('student_id')
+					->whereNumber('student_id'); // Show progression table // DONE
+				Route::patch('/progress/{progress_id}', [MaterialProgressController::class, 'update']) // DONE
+					->name('update.progress')
+					->whereNumber('progress_id');
 			});
 
-		Route::prefix('/schedule')
+		Route::prefix('/schedule') // ON HALT
 			->name('schedule.')
-			->group(function() {
+			->group(function () {
 				// Schedule Controller
 				Route::get('/')->name('index'); // Show all schedule for the teacher
 				Route::get('/{schedule}')->name('show.student')->whereNumber('schedule_id');
 
 				Route::prefix('/verify')
 					->name('vefiry.')
-					->group(function() {
+					->group(function () {
 						// Attendance Controller (student_attendance)
 						Route::get('/')->name('index'); // Show a list of student teached by this teacher
 						Route::get('/{student_id}')->name('show'); // Show student attendance table
@@ -61,6 +65,5 @@ Route::prefix('/teacher')
 						Route::get('/{student_id}/validate')->name('validate')->whereNumber('student_id');
 						Route::patch('/{student_id}')->name('update')->whereNumber('student_id');
 					});
-
 			});
 	});

@@ -31,4 +31,5 @@ class MaterialProgress extends Model {
 	public function material() {
 		return $this->belongsTo(CourseMaterial::class, 'material_id');
 	}
+
 }
