@@ -22,25 +22,40 @@
 
 			</div>
 			<div class="mb-6">
-				@forelse ($materials as $material)
-					<div class="relative flex items-center py-2 group hover:bg-gray-100">
-						@if ($material->status === 'unlocked')
-							<span class="mr-2">
-								<a href="{{ $material->material->link }}" class="text-black hover:text-blue-500 transition duration-300 ease-in-out"
-									target="_blank">
-									{{ $material->material->title }}
-								</a>
-							</span>
-						@else
-							<span class="mr-2 text-black">
-								{{ $material->material->title }}
-							</span>
-						@endif
-
-					</div>
-				@empty
-					<div class="text-gray-500">No materials</div>
-				@endforelse
+				<table class="min-w-full table-fixed border-collapse">
+					<thead>
+						<tr class="border-b border-solid border-blue-900">
+							<th class="px-4 py-2 border border-solid border-blue-900 bg-blue-200">Material Name</th>
+							<th class="px-4 py-2 border border-solid border-blue-900 bg-blue-200">Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						@forelse ($materials as $material)
+							<tr class="hover:bg-gray-100 border-b border-solid border-blue-900">
+								<td class="px-4 py-2 border border-solid border-blue-900 {{ $material->status === 'unlocked' ? 'text-white bg-green-400' : 'text-gray-500' }}">
+									@if ($material->status === 'unlocked')
+										<a href="{{ $material->material->link }}" class="text-white hover:underline font-bold">
+											{{ $material->material->title }}
+										</a>
+									@else
+										<span class="text-gray-500">
+											{{ $material->material->title }}
+										</span>
+									@endif
+								</td>
+								<td class="px-4 py-2 border border-solid border-blue-900 {{ $material->status === 'unlocked' ? 'text-white bg-green-400' : 'text-gray-500' }}">
+									<span class="">
+										{{ ucfirst($material->status) }}
+									</span>
+								</td>
+							</tr>
+						@empty
+							<tr>
+								<td colspan="2" class="px-4 py-2 text-center border-t border-solid border-blue-900">No materials found.</td>
+							</tr>
+						@endforelse
+					</tbody>
+				</table>
 
 			</div>
 		</div>
