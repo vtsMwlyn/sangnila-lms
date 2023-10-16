@@ -18,4 +18,8 @@ class CourseSchedule extends Model {
 	public function students() {
 		return $this->belongsToMany(StudentSchedule::class, 'student_schedule');
 	}
+
+	public function course() {
+		return $this->belongsTo(Course::class);
+	}
 }

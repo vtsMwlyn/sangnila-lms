@@ -12,12 +12,12 @@ Route::prefix('/admin') // ON PROGRESS
 	->name('admin.')
 	->middleware(['auth', 'role:Admin'])
 	->group(function () {
-		Route::get('/', function() {
+		Route::get('/', function () {
 			return redirect(route('dashboard'));
 		});
 
 		// Teacher Account
-		Route::prefix('/teacher') // ON HALT
+		Route::prefix('/teacher') // ON HALT 50%
 			->name('teacher.')
 			->group(function () {
 				// Teacher account controller
@@ -31,8 +31,8 @@ Route::prefix('/admin') // ON PROGRESS
 				Route::get('/create')->name('create');
 				Route::post('/')->name('store');
 			});
-
-		Route::prefix('/course') // ON PROGRESS
+		// All Course List
+		Route::prefix('/course') // ON PROGRESS 90%
 			->name('course.')
 			->group(function () {
 				// Course Controller
@@ -40,7 +40,7 @@ Route::prefix('/admin') // ON PROGRESS
 				Route::get('/{course_id}', [CourseController::class, 'admin_show'])->name('show')->whereNumber('course_id'); // DONE
 
 				//Edit Course
-				Route::get('/{course_id}/edit', [CourseController::class,'admin_edit'])->name('edit')->whereNumber('course_id'); // DONE
+				Route::get('/{course_id}/edit', [CourseController::class, 'admin_edit'])->name('edit')->whereNumber('course_id'); // DONE
 				Route::patch('/{course_id}', [CourseController::class, 'admin_update'])->name('update')->whereNumber('course_id'); // DONE
 
 				// ==========================================================================
@@ -57,7 +57,7 @@ Route::prefix('/admin') // ON PROGRESS
 				Route::get('/{course_id}/unassign/{teacher_id}', [CourseController::class, 'unassign'])->name('unassign')->whereNumber('course_id'); // Deletion confirmation
 				Route::delete('/{course_id}/unassign{teacher_id}', [CourseTeacherController::class, 'unassign_destroy'])->name('destroy.unassign')->whereNumber('course_id');
 			});
-
+		//Schedules
 		Route::prefix('/schedule') // SOON
 			->name('schedule.')
 			->group(function () {
@@ -69,6 +69,7 @@ Route::prefix('/admin') // ON PROGRESS
 				Route::get('/create', [ScheduleController::class, 'create'])->name('create');
 				Route::post('/', [ScheduleController::class, 'store'])->name('store');
 
+
 				// Edit Schedule (course_schedule);
 				Route::get('/{schedule_id}/edit', [ScheduleController::class, 'edit'])->name('edit')->whereNumber('schedule_id');
 				Route::patch('/{schedule_id}', [ScheduleController::class, 'update'])->name('update')->whereNumber('schedule_id');
@@ -76,9 +77,9 @@ Route::prefix('/admin') // ON PROGRESS
 				// Assign schedules (student_schedule)
 				// Student Controller
 				Route::get('/{schedule_id}/assign')->name('assign')->whereNumber('schedule_id'); // Show student where course->students
-				Route::post('/{schedule_id}')->name('store')->whereNumber('schedule_id'); // Accepts student_id as the input
+				Route::post('/{schedule_id}')->name('assign_store')->whereNumber('schedule_id'); // Accepts student_id as the input
 			});
-
+		// Student List
 		Route::prefix('/student') // DONE
 			->name('student.')
 			->group(function () {
@@ -93,5 +94,5 @@ Route::prefix('/admin') // ON PROGRESS
 				// Unassign
 				Route::get('{student_id}/unassign/{course_id}', [CourseStudentController::class, 'delete'])->name('unassign.delete'); // DONE
 				Route::delete('{student_id}/unassign/{course_id}', [CourseStudentController::class, 'destroy'])->name('unassign.destroy'); //DONE
-				});
+			});
 	});

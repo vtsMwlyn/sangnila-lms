@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
+use App\Models\CourseSchedule;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
@@ -12,9 +14,10 @@ class ScheduleController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index() {
-		// $schedules = //get all schedule from course_schedule table
-		// return view(admin.schedule.index);
-		//
+		$schedules = CourseSchedule::get();
+		return view('roles.admin.schedule.index', [
+			'schedules' => $schedules
+		]);
 	}
 
 	/**
@@ -23,8 +26,10 @@ class ScheduleController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function create() {
-		//return view(admin.schedule.create);
-		//
+		$courses = Course::get();
+		return view('roles.admin.schedule.create', [
+			'courses' => $courses
+		]);
 	}
 
 	/**
@@ -34,14 +39,14 @@ class ScheduleController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request) {
-		$data = $request->all();
-		dd($data);
-		// $schedule = new CourseSchedule();
-		// $schedule->course_id = $request->course_id;
-		// $schedule->day_of_week = $request->day_of_week;
-		// $schedule->start_time = $request->start_time;
-		// $schedule->end_time = $request->end_time;
-		// $schedule->save();
+		$courseSchedule = new CourseSchedule;
+
+		$courseSchedule->course_id = $request->course_id;
+		$courseSchedule->day_of_week = $request->day_of_week;
+		$courseSchedule->start_time = $request->start_time;
+		$courseSchedule->end_time = $request->end_time;
+
+		$courseSchedule->save();
 		return redirect(route('admin.schedule.index'));
 	}
 
@@ -119,7 +124,7 @@ class ScheduleController extends Controller {
 		// return view(admin.schedule.assign);
 	}
 
-	public function assign_store($schedule_id, Request $request){
+	public function assign_store($schedule_id, Request $request) {
 		$data = $request->all();
 		//$student_schedule = new StudentSchedule();
 		//$student_schedule->schedule_id = $schedule_id;
