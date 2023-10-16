@@ -39,6 +39,7 @@ Route::get('/dashboard', function () {
 			break;
 		case 'Student':
 			// Logic for Student
+			return redirect(route('student.mycourse.index'));
 			dd('Student');
 			break;
 		default:
@@ -49,8 +50,8 @@ Route::get('/dashboard', function () {
 
 require __DIR__ . '/auth.php'; // to be deleted
 
-require __DIR__ . '/sysadmin.php';
-require __DIR__ . '/admin.php';
-require __DIR__ . '/teacher.php';
-require __DIR__ . '/student.php';
-require __DIR__ . '/guest.php';
+require __DIR__ . '/roles/sysadmin.php';
+require __DIR__ . '/roles/admin.php';
+require __DIR__ . '/roles/teacher.php';
+require __DIR__ . '/roles/student.php';
+require __DIR__ . '/roles/guest.php';

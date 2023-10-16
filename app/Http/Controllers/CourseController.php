@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\CourseStudent;
 use App\Models\CourseTeacher;
+use App\Models\MaterialProgress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -175,8 +177,7 @@ class CourseController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function teacher_index() {
-		return view('roles.teacher.mycourse.index', [
-		]);
+		return view('roles.teacher.mycourse.index', []);
 	}
 
 	/**
@@ -189,6 +190,21 @@ class CourseController extends Controller {
 		$lecturer = CourseTeacher::where('user_id', Auth::user()->id)->where('course_id', $course_id)->first();
 		return view('roles.teacher.mycourse.show', [
 			'course' => $lecturer->course
+		]);
+	}
+
+	// ========== STUDENT ==========
+
+	public function student_index() {
+		return view('roles.student.course.index');
+	}
+
+	public function student_show($course_id) {
+		$materials = MaterialProgress::where('course_id', $course_id)->where('student_id', Auth::user()->id)->get();
+		$student = CourseStudent::where('user_id', Auth::user()->id)->where('course_id', $course_id)->first();
+		return view('roles.student.course.show', [
+			'course' => $student->course,
+			'materials' => $materials
 		]);
 	}
 }

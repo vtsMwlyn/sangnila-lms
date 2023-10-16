@@ -1,12 +1,15 @@
 <?php
 
+use App\Http\Controllers\CourseController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/student')
 	->name('student.')
 	->group(function() {
 
-		Route::get('/')->name('dashboard');
+		Route::get('/', function() {
+			return redirect(route('student.mycourse.index'));
+		})->name('dashboard');
 
 		Route::prefix('/attendance')
 			->name('attendance.')
@@ -18,7 +21,7 @@ Route::prefix('/student')
 			Route::prefix('/mycourse')
 				->name('mycourse.')
 				->group(function(){
-					Route::get('/')->name('index');
-					Route::get('/{course_id}')->name('show')->whereNumber('course_id');
+					Route::get('/', [CourseController::class, 'student_index'])->name('index');
+					Route::get('/{course_id}', [CourseController::class, 'student_show'])->name('show')->whereNumber('course_id');
 				});
 	});
