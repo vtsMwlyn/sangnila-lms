@@ -27,14 +27,17 @@ Route::get('/dashboard', function () {
 	switch ($roleName) {
 		case 'SysAdmin':
 			// Logic for SysAdmin
+			return redirect(route('sysadmin.account.index'));
 			dd('SysAdmin');
 			break;
 		case 'Admin':
 			// Logic for Admin
+			return redirect(route('admin.course.index'));
 			dd('Admin');
 			break;
 		case 'Teacher':
 			// Logic for Teacher
+			return redirect(route('teacher.mycourse.index'));
 			dd('Teacher');
 			break;
 		case 'Student':

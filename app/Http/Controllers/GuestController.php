@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\CourseMaterial;
 use Illuminate\Http\Request;
 
 class GuestController extends Controller {
@@ -44,12 +45,13 @@ class GuestController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($id) {
-		$course = Course::findOrFail($id);
+	public function show($course_id) {
+		$course = Course::findOrFail($course_id);
+		$materials = CourseMaterial::where('course_id', $course_id)->get();
 		return view('roles.guest.show', [
-			'course' => $course
+			'course' => $course,
+			'materials' => $materials
 		]);
-		//
 	}
 
 	/**

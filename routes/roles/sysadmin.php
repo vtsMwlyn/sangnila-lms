@@ -7,7 +7,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/sysadmin')
 	->name('sysadmin.')
+	->middleware(['auth', 'role:SysAdmin'])
 	->group(function () {
+		Route::get('/', function() {
+			return redirect(route('dashboard'));
+		});
+
 		// Admin Account
 		Route::prefix('/account')
 			->name('account.')

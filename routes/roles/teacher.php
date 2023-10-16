@@ -9,7 +9,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/teacher')
 	->name('teacher.')
+	->middleware(['auth', 'role:Teacher'])
 	->group(function () {
+		Route::get('/', function () {
+			return redirect(route('dashboard'));
+		});
+
 		Route::prefix('/mycourse') // DONE
 			->name('mycourse.')
 			->group(function () {

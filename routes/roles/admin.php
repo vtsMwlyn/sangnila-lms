@@ -10,7 +10,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/admin') // ON PROGRESS
 	->name('admin.')
+	->middleware(['auth', 'role:Admin'])
 	->group(function () {
+		Route::get('/', function() {
+			return redirect(route('dashboard'));
+		});
+
 		// Teacher Account
 		Route::prefix('/teacher') // ON HALT
 			->name('teacher.')
@@ -21,7 +26,7 @@ Route::prefix('/admin') // ON PROGRESS
 					->whereNumber('teacher_id');
 
 
-				# TODO
+				# TODO // ON HALT
 				// Create special form to make teacher accounts
 				Route::get('/create')->name('create');
 				Route::post('/')->name('store');

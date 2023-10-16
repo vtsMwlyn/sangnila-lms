@@ -21,12 +21,6 @@
 			<div class="w-96 my-auto">
 				<img src="{{ asset('img/Sangnila_Arts.png') }}" alt="" width="200px" class="m-auto">
 
-				<!-- Session Status -->
-				<x-auth-session-status class="mb-4" :status="session('status')" />
-
-				<!-- Validation Errors -->
-				<x-auth-validation-errors class="mb-4" :errors="$errors" />
-
 				<form method="POST" action="{{ route('sysadmin.account.store') }}"
 					class="bg-white rounded-2xl p-5  border-blue-300 border-2">
 					@csrf
