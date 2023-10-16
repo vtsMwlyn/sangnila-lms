@@ -76,8 +76,8 @@ Route::prefix('/admin') // ON PROGRESS
 
 				// Assign schedules (student_schedule)
 				// Student Controller
-				Route::get('/{schedule_id}/assign')->name('assign')->whereNumber('schedule_id'); // Show student where course->students
-				Route::post('/{schedule_id}')->name('assign_store')->whereNumber('schedule_id'); // Accepts student_id as the input
+				Route::get('/{schedule_id}/assign', [ScheduleController::class, 'assign'])->name('assign')->whereNumber('schedule_id'); // Show student where course->students
+				Route::post('/{schedule_id}', [ScheduleController::class, 'assign_store'])->name('assign_store')->whereNumber('schedule_id'); // Accepts student_id as the input
 			});
 		// Student List
 		Route::prefix('/student') // DONE

@@ -60,6 +60,50 @@
 			@else
 				<div class="text-blue-900">N/A</div>
 			@endif
+
+			<h2 class="text-xl font-semibold mb-2">Student Schedules:</h2>
+
+			@if ($student->schedules->isNotEmpty())
+				<div class="overflow-x-auto">
+					<table class="min-w-full bg-white border-collapse border border-blue-400">
+						<thead>
+							<tr>
+								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Course Name</th>
+								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Day of Week</th>
+								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Start Time</th>
+								<th class="bg-blue-300 border border-blue-400 px-4 py-2">End Time</th>
+							</tr>
+						</thead>
+						<tbody>
+							@forelse ($student->schedules as $schedule)
+								<tr>
+									<td class="border border-blue-400 px-4 py-2">
+										<a href="{{ route('admin.course.show', ['course_id' => $schedule->schedule->course->id ]) }}"
+											class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
+											{{ $schedule->schedule->course->course_name }}
+										</a>
+									</td>
+									<td class="border border-blue-400 px-4 py-2">
+										{{ $schedule->schedule->day_of_week }}
+									</td>
+									<td class="border border-blue-400 px-4 py-2">
+										{{ $schedule->schedule->start_time }}
+									</td>
+									<td class="border border-blue-400 px-4 py-2">
+										{{ $schedule->schedule->end_time }}
+									</td>
+								</tr>
+							@empty
+								<tr>
+									<td colspan="4" class="text-center py-2">No schedules found for this student.</td>
+								</tr>
+							@endforelse
+						</tbody>
+					</table>
+				</div>
+			@else
+				<div class="text-blue-900">N/A</div>
+			@endif
 		</div>
 	</div>
 

@@ -27,6 +27,7 @@
 				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white" href="{{ route('admin.schedule.create') }}">Create new
 					schedule</a>
 			</div>
+
 			@if ($schedules->isNotEmpty())
 				<div class="overflow-x-auto">
 					<table class="min-w-full bg-white border-collapse border border-blue-400">
@@ -36,6 +37,7 @@
 								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Day of Week</th>
 								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Start Time</th>
 								<th class="bg-blue-300 border border-blue-400 px-4 py-2">End Time</th>
+								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Action</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -55,6 +57,15 @@
 
 									<td class="border border-blue-400 px-4 py-2">
 										<div>{{ $schedule->end_time }}</div>
+									</td>
+
+									<td class="border border-blue-400 px-4 py-2">
+										<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white"
+											href="{{ route('admin.schedule.edit', $schedule->id) }}">Edit Schedule</a>
+
+										<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white"
+											href="{{ route('admin.schedule.assign', $schedule->id) }}">Assign
+											Schedule</a>
 									</td>
 								</tr>
 							@endforeach

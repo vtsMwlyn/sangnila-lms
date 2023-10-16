@@ -30,6 +30,7 @@
 							<tr>
 								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Course Name</th>
 								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Description</th>
+								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Visibility</th>
 								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Actions</th>
 							</tr>
 						</thead>
@@ -45,6 +46,10 @@
 
 									<td class="border border-blue-400 px-4 py-2">
 										{{ $course->course_description }}
+									</td>
+
+									<td class="border border-blue-400 px-4 py-2">
+										{{ $course->visibility }}
 									</td>
 									<td class="border border-blue-400 px-4 py-2 ">
 										<a class="px-5 py-2 bg-indigo-400 rounded-lg  text-white"

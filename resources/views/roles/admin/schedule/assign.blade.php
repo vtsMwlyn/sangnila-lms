@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+	<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+	<link rel="manifest" href="{{ asset('site.webmanifest') }}">
+
+	<title>Sangnila Academy | LMS</title>
+</head>
+
+<body>
+	<div class="bg-cover h-screen flex flex-col items-center"
+		style="background-image: url({{ asset('img/background.png') }});">
+		<!-- Content Section -->
+		<x-navbar.admin></x-navbar.admin>
+		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
+			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Assign Student to Schedule</h1>
+			<form method="POST" action="{{ route('admin.schedule.assign_store', $schedule->id) }}"
+				class="bg-white rounded-2xl p-5 border-blue-300 border-2">
+				@csrf
+				<!-- Schedule Information -->
+				<div class="mb-6">
+					<h1 class="text-xl font-semibold text-blue-900">Assign student to:</h1>
+					<p class="text-lg text-gray-700 mt-2">Day: {{ $schedule->day_of_week }}</p>
+					<p class="text-lg text-gray-700 mt-2">Start Time: {{ $schedule->start_time }}</p>
+					<p class="text-lg text-gray-700 mt-2">End Time: {{ $schedule->end_time }}</p>
+					<p class="text-lg text-gray-700 mt-2">Course: {{ $schedule->course->course_name }}</p>
+				</div>
+
+				<!-- Student Selection -->
+				<div class="mt-4">
+					<x-label for="student" :value="__('Student')" />
+					@if ($students->isEmpty())
+						<p class="text-lg text-gray-700">No students enrolled in this course.</p>
+						<a href="{{ route('admin.schedule.show', $schedule->id) }}"
+							class="text-blue-500 hover:text-blue-700 underline cursor-pointer mt-2 block">Go back to previous page</a>
+					@else
+						<select name="student" id="student"
+							class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+							@foreach ($students as $student)
+								<option value="{{ $student->id }}">{{ $student->full_name }}</option>
+							@endforeach
+						</select>
+						@if ($students->isNotEmpty())
+							<div class="flex items-center justify-end mt-4">
+								<x-button class="ml-3">
+									{{ __('ASSIGN!') }}
+								</x-button>
+							</div>
+						@endif
+					@endif
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+
+</html>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Models\CourseSchedule;
 use App\Models\Role;
+use App\Models\StudentSchedule;
 use Illuminate\Http\Request;
 
 class ScheduleController extends Controller {
@@ -68,10 +69,12 @@ class ScheduleController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit($schedule_id) {
-		// $schedule = CourseSchedule::findOrFail($schedule_id);
-		// dd($schedule);
-		// return view(admin.schedule.edit);
-		//
+		$courses = Course::where('visibility', 'public')->get();
+		$schedule = CourseSchedule::findOrFail($schedule_id);
+		return view('roles.admin.schedule.edit', [
+			'schedule' => $schedule,
+			'courses' => $courses
+		]);
 	}
 
 	/**
@@ -118,14 +121,21 @@ class ScheduleController extends Controller {
 
 	// assign schedule to student
 	public function assign($schedule_id) {
-		$role = Role::where('role_name', 'Student')->get();
-		$students = $role->users;
-		// $schedule = CourseSchedule::findOrFail($schedule_id);
-		// return view(admin.schedule.assign);
+		$schedule = CourseSchedule::where('id', $schedule_id)->first();
+		$students = $schedule->course->students;
+		return view('roles.admin.schedule.assign', [
+			'schedule' => $schedule,
+			'students' => $students,
+		]);
 	}
 
 	public function assign_store($schedule_id, Request $request) {
 		$data = $request->all();
+		StudentSchedule::create([
+			'schedule_id' => $schedule_id,
+			'student_id' => $request->student
+		]);
+		return redirect(route('admin.schedule.index'));
 		//$student_schedule = new StudentSchedule();
 		//$student_schedule->schedule_id = $schedule_id;
 		//$student_schedule->student_id = $request->user_id;

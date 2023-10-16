@@ -63,7 +63,7 @@ class User extends Authenticatable {
 	}
 
 	public function schedules() {
-		return $this->belongstoMany(CourseSchedule::class, 'student_schedules');
+		return $this->hasMany(StudentSchedule::class, 'student_id');
 	}
 
 }
