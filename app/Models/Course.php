@@ -25,6 +25,10 @@ class Course extends Model {
 		return $this->belongsToMany(User::class, 'course_students');
 	}
 
+	public function schedules() {
+		return $this->hasMany(CourseSchedule::class);
+	}
+
 	# SOON (Portfolios)
 
 }

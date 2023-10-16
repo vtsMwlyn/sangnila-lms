@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Sangnila Academy| LMS</title>
+	<title>Sangnila Academy | LMS</title>
 
 </head>
 
