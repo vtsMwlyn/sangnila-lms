@@ -6,10 +6,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
-	<title>Laravel</title>
+	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+	<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+	<link rel="manifest" href="{{ asset('site.webmanifest') }}">
+
+	<title>Sangnila Academy| LMS</title>
 
 </head>
-{{-- TODO --}}
 
 <body>
 	<div class="bg-cover h-screen flex flex-col items-center"
@@ -34,7 +38,6 @@
 							@foreach ($materials as $material)
 								<tr>
 									<td class="border border-blue-400 px-4 py-2">
-										{{-- TODO --}}
 										<a href="">
 											{{ $material->material->title }}
 										</a>
@@ -44,7 +47,6 @@
 										{{ $material->status }}
 									</td>
 									<td class="border border-blue-400 px-4 py-2">
-										{{-- TODO --}}
 										<form method="POST" action="{{ route('teacher.student.update.progress', $material->id) }}">
 											@csrf
 											@method('PATCH')
