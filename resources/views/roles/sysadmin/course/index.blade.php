@@ -55,8 +55,8 @@
 											@method('PATCH')
 											<div class="inline-flex items-center">
 												<input type="checkbox" name="visibility" id="material_checkbox_{{ $course->id }}"
-												class="form-checkbox h-5 w-5 text-blue-500 border border-gray-300 {{ $course->visibility === 'public' ? 'bg-blue-500' : 'bg-gray-300' }}"
-												@if ($course->visibility === 'public') checked @endif>
+													class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 {{ $course->visibility === 'public' ? 'bg-blue-500' : 'bg-gray-300' }}"
+													@if ($course->visibility === 'public') checked @endif>
 												<x-button>Submit</x-button>
 											</div>
 										</form>

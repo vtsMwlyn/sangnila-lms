@@ -5,7 +5,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CourseController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('/sysadmin')
+Route::prefix('/sysadmin') // 80%
 	->name('sysadmin.')
 	->middleware(['auth', 'role:SysAdmin'])
 	->group(function () {
@@ -14,7 +14,7 @@ Route::prefix('/sysadmin')
 		});
 
 		// Admin Account
-		Route::prefix('/account')
+		Route::prefix('/account') // 90%
 			->name('account.')
 			->group(function () {
 				// Admin account controller
@@ -27,7 +27,7 @@ Route::prefix('/sysadmin')
 			});
 
 		// Create Course
-		Route::prefix('/course')
+		Route::prefix('/course') // 90%
 			->name('course.')
 			->group(function () {
 				// Course Controller

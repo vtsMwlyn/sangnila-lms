@@ -31,26 +31,7 @@ class AuthenticatedSessionController extends Controller {
 
 		$user = Auth::user();
 
-		switch ($user->role->role_name) {
-			case 'SysAdmin':
-				return redirect(route('sysadmin.account.index'));
-				break;
-			case 'Admin':
-				return redirect(route('admin.teacher.index'));
-				break;
-			case 'Teacher':
-				return redirect(route('teacher.mycourse.index'));
-				// SOON change to schedule.index
-				break;
-			case 'Student':
-				return redirect(route('student.dashboard'));
-				break;
-			default:
-				return redirect(route('home'));
-				break;
-		}
-
-		return redirect()->intended(RouteServiceProvider::HOME);
+		return redirect(route('dashboard'));
 	}
 
 	/**

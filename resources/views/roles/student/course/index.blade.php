@@ -23,7 +23,7 @@
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
 			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Courses</h1>
-			@if (Auth::user()->enrolled_courses->isNotEmpty())
+			@if (Auth::user()->enrolled_courses->where('visibility', 'public')->isNotEmpty())
 				<div class="overflow-x-auto">
 					<table class="min-w-full bg-white border-collapse border border-blue-400">
 						<thead>
@@ -33,7 +33,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							@foreach (Auth::user()->enrolled_courses as $course)
+							@foreach (Auth::user()->enrolled_courses->where('visibility', 'public') as $course)
 								<tr>
 									<td class="border border-blue-400 px-4 py-2">
 										<a href="{{ route('student.mycourse.show', ['course_id' => $course->id]) }}"

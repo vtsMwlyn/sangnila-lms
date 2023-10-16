@@ -19,10 +19,10 @@ Route::prefix('/student')
 				Route::patch('/{attendance_id}')->name('update'); // Update the attendance status (Select input), with input:reason
 			});
 
-			Route::prefix('/mycourse')
+			Route::prefix('/mycourse') // DONE
 				->name('mycourse.')
 				->group(function(){
-					Route::get('/', [CourseController::class, 'student_index'])->name('index');
-					Route::get('/{course_id}', [CourseController::class, 'student_show'])->name('show')->whereNumber('course_id');
+					Route::get('/', [CourseController::class, 'student_index'])->name('index'); // DONE
+					Route::get('/{course_id}', [CourseController::class, 'student_show'])->name('show')->whereNumber('course_id'); // DONE
 				});
 	});
