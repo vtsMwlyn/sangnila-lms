@@ -15,8 +15,8 @@ class CourseSchedule extends Model {
 		'day_of_week'
 	];
 
-	public function students() {
-		return $this->belongsToMany(StudentSchedule::class, 'student_schedule');
+	public function student_schedules() {
+		return $this->hasMany(StudentSchedule::class, 'schedule_id');
 	}
 
 	public function course() {

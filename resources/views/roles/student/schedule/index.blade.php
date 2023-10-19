@@ -16,11 +16,53 @@
 </head>
 
 <body>
-	<div class="bg-cover h-screen" style="background-image: url({{ asset('img/background.png') }}) ; width: 100%;">
-		<div class="flex justify-center align-items-center h-screen">
-			<div class="w-96 my-auto">
+	<div class="bg-cover h-screen flex flex-col items-center"
+		style="background-image: url({{ asset('img/background.png') }});">
 
-			</div>
+		<x-navbar.student></x-navbar.student>
+		<!-- Content Section -->
+		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
+			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Your Schedules</h1>
+
+			@if ($schedules->isNotEmpty())
+				<div class="overflow-x-auto">
+					<table class="min-w-full bg-white border-collapse border border-blue-400">
+						<thead>
+							<tr>
+								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Course Name</th>
+								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Day of Week</th>
+								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Start Time</th>
+								<th class="bg-blue-300 border border-blue-400 px-4 py-2">End Time</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach ($schedules as $schedule)
+							{{-- <h1>{{ $schedule->schedule->course->course_name }}</h1> --}}
+								<tr>
+									<td class="border border-blue-400 px-4 py-2">
+										<div>{{ $schedule->schedule->course->course_name }}</div>
+									</td>
+
+									<td class="border border-blue-400 px-4 py-2">
+										<div>{{ $schedule->schedule->day_of_week }}</div>
+									</td>
+
+									<td class="border border-blue-400 px-4 py-2">
+										<div>{{ $schedule->schedule->start_time }}</div>
+									</td>
+
+									<td class="border border-blue-400 px-4 py-2">
+										<div>{{ $schedule->schedule->end_time }}</div>
+									</td>
+
+								</tr>
+							@endforeach
+						</tbody>
+					</table>
+				</div>
+			@else
+				<div class="text-blue-900">N/A</div>
+			@endif
 		</div>
 	</div>
 

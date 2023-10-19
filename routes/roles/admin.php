@@ -58,26 +58,26 @@ Route::prefix('/admin') // ON PROGRESS
 				Route::delete('/{course_id}/unassign{teacher_id}', [CourseTeacherController::class, 'unassign_destroy'])->name('destroy.unassign')->whereNumber('course_id');
 			});
 		//Schedules
-		Route::prefix('/schedule') // SOON
+		Route::prefix('/schedule') // ON PROGRESS
 			->name('schedule.')
 			->group(function () {
 				// Schedule Controller (course_schedule)
-				Route::get('/', [ScheduleController::class, 'index'])->name('index');
-				Route::get('/{schedule_id}', [ScheduleController::class, 'show'])->name('show')->whereNumber('schedule_id');
+				Route::get('/', [ScheduleController::class, 'admin_index'])->name('index'); // DONE
+				Route::get('/{schedule_id}', [ScheduleController::class, 'admin_show'])->name('show')->whereNumber('schedule_id');
 
 				// Create Schedule (course_schedule)
-				Route::get('/create', [ScheduleController::class, 'create'])->name('create');
-				Route::post('/', [ScheduleController::class, 'store'])->name('store');
+				Route::get('/create', [ScheduleController::class, 'admin_create'])->name('create'); // DONE
+				Route::post('/', [ScheduleController::class, 'admin_store'])->name('store'); // DONE
 
 
 				// Edit Schedule (course_schedule);
-				Route::get('/{schedule_id}/edit', [ScheduleController::class, 'edit'])->name('edit')->whereNumber('schedule_id');
-				Route::patch('/{schedule_id}', [ScheduleController::class, 'update'])->name('update')->whereNumber('schedule_id');
+				Route::get('/{schedule_id}/edit', [ScheduleController::class, 'admin_edit'])->name('edit')->whereNumber('schedule_id'); // DONE
+				Route::patch('/{schedule_id}', [ScheduleController::class, 'admin_update'])->name('update')->whereNumber('schedule_id'); // DONE
 
 				// Assign schedules (student_schedule)
 				// Student Controller
-				Route::get('/{schedule_id}/assign', [ScheduleController::class, 'assign'])->name('assign')->whereNumber('schedule_id'); // Show student where course->students
-				Route::post('/{schedule_id}', [ScheduleController::class, 'assign_store'])->name('assign_store')->whereNumber('schedule_id'); // Accepts student_id as the input
+				Route::get('/{schedule_id}/assign', [ScheduleController::class, 'assign'])->name('assign')->whereNumber('schedule_id'); // DONE
+				Route::post('/{schedule_id}', [ScheduleController::class, 'assign_store'])->name('assign_store')->whereNumber('schedule_id'); // DONE
 			});
 		// Student List
 		Route::prefix('/student') // DONE

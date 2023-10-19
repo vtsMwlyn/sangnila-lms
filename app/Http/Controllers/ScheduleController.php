@@ -7,39 +7,29 @@ use App\Models\CourseSchedule;
 use App\Models\Role;
 use App\Models\StudentSchedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller {
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function index() {
+
+	// ========== ADMIN ==========
+
+	public function admin_index() {
 		$schedules = CourseSchedule::get();
 		return view('roles.admin.schedule.index', [
 			'schedules' => $schedules
 		]);
 	}
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create() {
+
+	public function admin_create() {
 		$courses = Course::get();
 		return view('roles.admin.schedule.create', [
 			'courses' => $courses
 		]);
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function store(Request $request) {
+
+	public function admin_store(Request $request) {
 		$courseSchedule = new CourseSchedule;
 
 		$courseSchedule->course_id = $request->course_id;
@@ -51,24 +41,14 @@ class ScheduleController extends Controller {
 		return redirect(route('admin.schedule.index'));
 	}
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($schhedule_id) {
+
+	public function admin_show($schhedule_id) {
 		// $schedule = CourseSchedule::findOrFail($schedule_id);
 		// return view(admin.schedule.show);
 	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($schedule_id) {
+
+	public function admin_edit($schedule_id) {
 		$courses = Course::where('visibility', 'public')->get();
 		$schedule = CourseSchedule::findOrFail($schedule_id);
 		return view('roles.admin.schedule.edit', [
@@ -77,30 +57,25 @@ class ScheduleController extends Controller {
 		]);
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $schedule_id) {
-		$data = $request->except(['_token', '_method']);
-		// CourseSchedule::findOrFail($schedule_id)->update($data);
 
+	public function admin_update(Request $request, $schedule_id) {
+		$data = $request->except(['_token', '_method']);
+		CourseSchedule::findOrFail($schedule_id)->update($data);
+		return redirect(route('admin.schedule.index'));
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
 	public function destroy($id) {
 		//
 	}
 
 	// student_schedule ===============================
+
+	public function student_index(){
+		$schedules = Auth::user()->schedules;
+		return view('roles.student.schedule.index', [
+			'schedules' => $schedules
+		]);
+	}
 
 	public function student_show($student_id, $course_id) {
 		// $schedules = StudentSchedule::where('studet_id', $student_id)->where('course_id', $course_id)->get();
@@ -122,7 +97,12 @@ class ScheduleController extends Controller {
 	// assign schedule to student
 	public function assign($schedule_id) {
 		$schedule = CourseSchedule::where('id', $schedule_id)->first();
-		$students = $schedule->course->students;
+
+		// Get the student IDs that are already assigned to this schedule
+		$assignedStudentIds = $schedule->student_schedules->pluck('student_id');
+
+		// Get students from the course who are not assigned to this schedule
+		$students = $schedule->course->students->whereNotIn('id', $assignedStudentIds);
 		return view('roles.admin.schedule.assign', [
 			'schedule' => $schedule,
 			'students' => $students,

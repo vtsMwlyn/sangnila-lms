@@ -24,7 +24,7 @@
 			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Edit Course Schedule</h1>
 			<form action="{{ route('admin.schedule.update', $schedule->id) }}" method="post">
 				@csrf
-				@method('PUT')
+				@method('PATCH')
 				<!-- Course Select -->
 				<div class="mt-4">
 					<x-label for="course_id" :value="__('Course')" />

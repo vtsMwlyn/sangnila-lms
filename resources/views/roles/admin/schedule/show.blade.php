@@ -19,7 +19,7 @@
 	<div class="bg-cover h-screen flex flex-col items-center"
 		style="background-image: url({{ asset('img/background.png') }});">
 		<!-- Content Section -->
-		{{-- <x-navbar.admin></x-navbar.admin> --}}
+		<x-navbar.admin></x-navbar.admin>
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
 
 		</div>

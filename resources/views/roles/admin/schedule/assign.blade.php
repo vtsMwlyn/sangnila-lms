@@ -37,7 +37,7 @@
 				<div class="mt-4">
 					<x-label for="student" :value="__('Student')" />
 					@if ($students->isEmpty())
-						<p class="text-lg text-gray-700">No students enrolled in this course.</p>
+						<p class="text-lg text-gray-700">No student are available to assign.</p>
 						<a href="{{ route('admin.schedule.show', $schedule->id) }}"
 							class="text-blue-500 hover:text-blue-700 underline cursor-pointer mt-2 block">Go back to previous page</a>
 					@else
