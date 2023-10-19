@@ -125,7 +125,7 @@ class CourseController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function admin_index() {
-		$courses = Course::where('visibility', 'public')->get();
+		$courses = Course::get();
 		return view('roles.admin.course.index', [
 			'courses' => $courses,
 		]);
@@ -138,7 +138,7 @@ class CourseController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function admin_show($course_id) {
-		$course = Course::findOrFail($course_id)->where('visibility', 'public')->first();
+		$course = Course::findOrFail($course_id);
 		return view('roles.admin.course.show', [
 			'course' => $course
 		]);

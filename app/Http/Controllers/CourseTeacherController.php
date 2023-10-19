@@ -24,7 +24,7 @@ class CourseTeacherController extends Controller {
 	 */
 	public function create($course_id) {
 		// Find the course
-		$course = Course::findOrFail($course_id)->where('visibility', 'public')->first();
+		$course = Course::findOrFail($course_id);
 
 		// Find Teacher role
 		$role = Role::where('role_name', 'Teacher')->first();

@@ -3,6 +3,7 @@
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\MaterialProgressController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
 use App\Models\MaterialProgress;
 use Illuminate\Support\Facades\Route;
@@ -55,12 +56,12 @@ Route::prefix('/teacher')
 					->whereNumber('progress_id');
 			});
 
-		Route::prefix('/schedule') // ON HALT
-			->name('schedule.')
+		Route::prefix('/attendance') // ON HALT
+			->name('attendance.')
 			->group(function () {
 				// Schedule Controller
 				Route::get('/')->name('index'); // Show all schedule for the teacher
-				Route::get('/{schedule}')->name('show.student')->whereNumber('schedule_id');
+				Route::get('/{attendance_id}')->name('show.student')->whereNumber('attendance_id');
 
 				Route::prefix('/verify')
 					->name('vefiry.')
@@ -72,5 +73,13 @@ Route::prefix('/teacher')
 						Route::get('/{student_id}/validate')->name('validate')->whereNumber('student_id');
 						Route::patch('/{student_id}')->name('update')->whereNumber('student_id');
 					});
+			});
+
+		Route::prefix('/schedule') // ON HALT
+			->name('schedule.')
+			->group(function () {
+				// Schedule Controller
+				Route::get('/', [ScheduleController::class, 'teacher_index'])->name('index'); // Show all schedule for the teacher
+
 			});
 	});

@@ -68,9 +68,23 @@ class ScheduleController extends Controller {
 		//
 	}
 
+	public function assign_store($schedule_id, Request $request) {
+		$data = $request->all();
+		StudentSchedule::create([
+			'schedule_id' => $schedule_id,
+			'student_id' => $request->student
+		]);
+		return redirect(route('admin.schedule.index'));
+		//$student_schedule = new StudentSchedule();
+		//$student_schedule->schedule_id = $schedule_id;
+		//$student_schedule->student_id = $request->user_id;
+		//$student_schedule->save();
+		return redirect(route('admin.schedule.show', $schedule_id));
+	}
+
 	// student_schedule ===============================
 
-	public function student_index(){
+	public function student_index() {
 		$schedules = Auth::user()->schedules;
 		return view('roles.student.schedule.index', [
 			'schedules' => $schedules
@@ -109,18 +123,14 @@ class ScheduleController extends Controller {
 		]);
 	}
 
-	public function assign_store($schedule_id, Request $request) {
-		$data = $request->all();
-		StudentSchedule::create([
-			'schedule_id' => $schedule_id,
-			'student_id' => $request->student
+	// ========== Teacher ==========
+	public function teacher_index(){
+		$courses = Auth::user()->teached_courses;
+		return view('roles.teacher.schedule.index', [
+			'courses' => $courses
 		]);
-		return redirect(route('admin.schedule.index'));
-		//$student_schedule = new StudentSchedule();
-		//$student_schedule->schedule_id = $schedule_id;
-		//$student_schedule->student_id = $request->user_id;
-		//$student_schedule->save();
-		return redirect(route('admin.schedule.show', $schedule_id));
 	}
+
+
 	# SAMPAI SINI
 }
