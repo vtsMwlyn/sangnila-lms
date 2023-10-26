@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\MaterialProgressController;
@@ -59,11 +60,20 @@ Route::prefix('/teacher')
 		Route::prefix('/attendance') // ON HALT
 			->name('attendance.')
 			->group(function () {
-				// Schedule Controller
-				Route::get('/')->name('index'); // Show all schedule for the teacher
-				Route::get('/{attendance_id}')->name('show.student')->whereNumber('attendance_id');
 
-				Route::prefix('/verify')
+				// Teacher yang check attendance
+				Route::get('/', [AttendanceController::class, 'index'])->name('index');
+				Route::get('/{course_id}', [AttendanceController::class, 'show'])->name('show')->whereNumber('course_id');
+
+				Route::post('/submit', [AttendanceController::class, 'store'])->name('store');
+
+				Route::get('/view/{course_id}', [AttendanceController::class, 'view'])->name('view');
+
+				// Schedule Controller
+				/* Route::get('/')->name('index'); // Show all schedule for the teacher
+				Route::get('/{attendance_id}')->name('show.student')->whereNumber('attendance_id'); */
+
+				/* Route::prefix('/verify')
 					->name('vefiry.')
 					->group(function () {
 						// Attendance Controller (student_attendance)
@@ -72,7 +82,7 @@ Route::prefix('/teacher')
 
 						Route::get('/{student_id}/validate')->name('validate')->whereNumber('student_id');
 						Route::patch('/{student_id}')->name('update')->whereNumber('student_id');
-					});
+					}); */
 			});
 
 		Route::prefix('/schedule') // ON HALT

@@ -31,6 +31,10 @@ class Course extends Model {
 
 	# SOON (Portfolios)
 
+	public function attendances() {
+		return $this->hasMany(AttendanceByTeacher::class, 'course_id');
+	}
+
 }
 
 

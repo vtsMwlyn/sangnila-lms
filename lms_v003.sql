@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 19, 2023 at 06:19 AM
+-- Generation Time: Oct 25, 2023 at 04:42 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -36,16 +36,6 @@ CREATE TABLE `courses` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `courses`
---
-
-INSERT INTO `courses` (`id`, `course_name`, `course_description`, `visibility`, `created_at`, `updated_at`) VALUES
-(1, 'Roblox Game Development Course', 'Develop games with Roblox scripting skills.', 'public', '2023-10-02 02:35:35', '2023-10-05 21:49:06'),
-(2, 'Digital Drawing Course', 'Master digital drawing and create stunning art.', 'private', '2023-10-03 00:18:24', '2023-10-15 21:07:31'),
-(3, '3D Modeling Course', 'Learn 3D modeling for animation and design.', 'private', '2023-10-03 00:18:37', '2023-10-15 21:07:33'),
-(4, 'Concept Art Course', 'Create imaginative concept art for storytelling.', 'private', '2023-10-03 00:18:46', '2023-10-03 01:44:58');
-
 -- --------------------------------------------------------
 
 --
@@ -60,14 +50,6 @@ CREATE TABLE `course_materials` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `course_materials`
---
-
-INSERT INTO `course_materials` (`id`, `course_id`, `title`, `link`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Google00', 'https://www.google.com', '2023-10-05 02:10:39', '2023-10-06 01:15:04'),
-(2, 1, 'Youtube01', 'https://www.youtube.com', '2023-10-12 23:18:55', '2023-10-12 23:18:55');
 
 -- --------------------------------------------------------
 
@@ -85,13 +67,6 @@ CREATE TABLE `course_schedules` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `course_schedules`
---
-
-INSERT INTO `course_schedules` (`id`, `course_id`, `start_time`, `end_time`, `day_of_week`, `created_at`, `updated_at`) VALUES
-(1, 1, '11:40:00', '13:00:00', 'monday', '2023-10-15 21:53:57', '2023-10-15 21:53:57');
-
 -- --------------------------------------------------------
 
 --
@@ -107,15 +82,6 @@ CREATE TABLE `course_students` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `course_students`
---
-
-INSERT INTO `course_students` (`id`, `user_id`, `course_id`, `student_type`, `created_at`, `updated_at`) VALUES
-(2, 4, 2, 'regular', '2023-10-09 01:01:45', '2023-10-09 01:01:45'),
-(3, 4, 3, 'regular', '2023-10-09 01:01:49', '2023-10-09 01:01:49'),
-(4, 4, 1, 'regular', '2023-10-09 02:59:06', '2023-10-09 02:59:06');
-
 -- --------------------------------------------------------
 
 --
@@ -129,13 +95,6 @@ CREATE TABLE `course_teachers` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `course_teachers`
---
-
-INSERT INTO `course_teachers` (`id`, `user_id`, `course_id`, `created_at`, `updated_at`) VALUES
-(1, 3, 1, '2023-10-04 01:43:34', '2023-10-04 01:43:34');
 
 -- --------------------------------------------------------
 
@@ -170,14 +129,6 @@ CREATE TABLE `material_progress` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `material_progress`
---
-
-INSERT INTO `material_progress` (`id`, `student_id`, `material_id`, `teacher_id`, `course_id`, `note`, `status`, `created_at`, `updated_at`) VALUES
-(1, 4, 1, NULL, 1, NULL, 'unlocked', '2023-10-09 21:22:33', '2023-10-12 23:17:50'),
-(2, 4, 2, NULL, 1, NULL, 'locked', '2023-10-12 23:19:01', '2023-10-12 23:19:01');
 
 -- --------------------------------------------------------
 
@@ -297,13 +248,6 @@ CREATE TABLE `student_schedules` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `student_schedules`
---
-
-INSERT INTO `student_schedules` (`id`, `schedule_id`, `student_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 4, '2023-10-16 01:24:11', '2023-10-16 01:24:11');
-
 -- --------------------------------------------------------
 
 --
@@ -321,17 +265,6 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `full_name`, `email`, `email_verified_at`, `password`, `role_id`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Immov', 'immov@email.com', NULL, '$2y$10$P5oeAHU4wLe6MZ/DATLwae3R0wAp2CG6CpALE1jM0u0bNPE22FE7.', 1, 'XqPvUFnbNJFM7n3SnKdSxOAD21vFRepeEdNGmNJpzJMduBy3EOngeHyL1h7d', '2023-10-02 00:02:46', '2023-10-02 00:02:46'),
-(2, 'Tiwi', 'tiwi@email.com', NULL, '$2y$10$lVpJnkZdX7/GWIVuELwMsuEU0hfeUAgZXXkp9QY27UW7mvObXOCnO', 2, NULL, '2023-10-02 00:03:23', '2023-10-02 00:03:23'),
-(3, 'Victor', 'victor@email.com', NULL, '$2y$10$56X7KPUFRLskWzMPl3q8k.ilFqQp6q/tCrxjrvMUqp7a93UjPaTIe', 3, NULL, '2023-10-02 00:04:33', '2023-10-02 00:04:33'),
-(4, 'Kenzo', 'kenzo@email.com', NULL, '$2y$10$tyFnzLGGlBTk1MqLtIaqWup4J2agtbwi2YIcgssh222pltc26nMdy', 4, NULL, '2023-10-02 00:05:05', '2023-10-02 00:05:05'),
-(5, 'sample', 'sample@email.com', NULL, '$2y$10$GliPzqliLWX4FD999cKM4OccNZvV708eymJwgIkR3Eu034nSF0Weq', 2, NULL, '2023-10-03 20:24:02', '2023-10-03 20:24:02');
 
 -- --------------------------------------------------------
 
@@ -470,31 +403,31 @@ ALTER TABLE `user_details`
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `course_materials`
 --
 ALTER TABLE `course_materials`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `course_schedules`
 --
 ALTER TABLE `course_schedules`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `course_students`
 --
 ALTER TABLE `course_students`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `course_teachers`
 --
 ALTER TABLE `course_teachers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -506,7 +439,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `material_progress`
 --
 ALTER TABLE `material_progress`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -536,13 +469,13 @@ ALTER TABLE `student_attendances`
 -- AUTO_INCREMENT for table `student_schedules`
 --
 ALTER TABLE `student_schedules`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user_details`

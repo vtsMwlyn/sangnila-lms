@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Route;
 
 
 // Register
-Route::get('/register', [RegisteredUserController::class, 'create'])->middleware('guest')->name('register');
-Route::post('/register', [RegisteredUserController::class, 'store'])->middleware('guest');
+Route::get('/register', [RegisteredUserController::class, 'create'])->middleware('guest')->name('register'); // TODO: Remove after sysadmin registered
+Route::post('/register', [RegisteredUserController::class, 'store'])->middleware('guest')->name('store_register');
 
 // Login
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->middleware('guest')->name('login');

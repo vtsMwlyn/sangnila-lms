@@ -81,7 +81,7 @@ class RegisteredUserController extends Controller {
 			'name' => ['required', 'string', 'max:255'],
 			'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
 			'password' => ['required', 'confirmed', Rules\Password::defaults()],
-			'role' => ['required', 'in:Admin,Teacher,Studen'], // Exclude sysadmin
+			'role' => ['required', 'in:Admin,Teacher,Student'], // Exclude sysadmin
 		]);
 
 		$role_id = Role::where('role_name', $request->role)->first();
