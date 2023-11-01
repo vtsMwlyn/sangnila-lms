@@ -20,7 +20,8 @@
 		<!-- Content Section -->
 		<x-navbar.admin></x-navbar.admin>
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Assign Student to Schedule</h1>
+			{{-- Schedule --}}
+			{{-- <h1 class="text-3xl font-semibold text-blue-900 mb-4">Assign Student to Schedule</h1>
 			<form method="POST" action="{{ route('admin.schedule.assign_store', $schedule->id) }}"
 				class="bg-white rounded-2xl p-5 border-blue-300 border-2">
 				@csrf
@@ -56,7 +57,7 @@
 						@endif
 					@endif
 				</div>
-			</form>
+			</form> --}}
 		</div>
 	</div>
 </body>

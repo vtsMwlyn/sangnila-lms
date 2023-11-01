@@ -22,7 +22,8 @@
 		<x-navbar.admin></x-navbar.admin>
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Schedules</h1>
+			{{-- Schedule --}}
+			{{-- <h1 class="text-3xl font-semibold text-blue-900 mb-4">Schedules</h1>
 			<div class="h-fit mb-5">
 				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white" href="{{ route('admin.schedule.create') }}">Create new
 					schedule</a>
@@ -74,7 +75,7 @@
 				</div>
 			@else
 				<div class="text-blue-900">N/A</div>
-			@endif
+			@endif --}}
 		</div>
 	</div>
 

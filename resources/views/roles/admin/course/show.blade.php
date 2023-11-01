@@ -44,7 +44,8 @@
 			@endforelse
 		</ul>
 
-		<h2 class="text-xl font-semibold mb-2">Schedule List:</h2>
+		{{-- Schedule --}}
+		{{-- <h2 class="text-xl font-semibold mb-2">Schedule List:</h2>
 		<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white" href="{{ route('admin.schedule.create', $course->id) }}">Add
 			New Schedule</a>
 		@if ($course->schedules->isNotEmpty())
@@ -85,7 +86,7 @@
 			</div>
 		@else
 			<div class="text-blue-900">N/A</div>
-		@endif
+		@endif --}}
 
 		<h2 class="text-xl font-semibold mb-2 mt-8">Course Materials</h2>
 		<div class="mb-6">

@@ -21,7 +21,8 @@
 		<x-navbar.admin></x-navbar.admin>
 
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Edit Course Schedule</h1>
+			{{-- Schedule --}}
+			{{-- <h1 class="text-3xl font-semibold text-blue-900 mb-4">Edit Course Schedule</h1>
 			<form action="{{ route('admin.schedule.update', $schedule->id) }}" method="post">
 				@csrf
 				@method('PATCH')
@@ -76,7 +77,7 @@
 						{{ __('Update') }}
 					</x-button>
 				</div>
-			</form>
+			</form> --}}
 		</div>
 	</div>
 </body>

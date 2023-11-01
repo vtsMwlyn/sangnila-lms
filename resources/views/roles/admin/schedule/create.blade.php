@@ -20,8 +20,9 @@
 		<!-- Content Section -->
 		<x-navbar.admin></x-navbar.admin>
 
-		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Create Course</h1>
+		{{-- Schedule --}}
+		{{-- <div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
+			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Create Schedule</h1>
 			<form action="{{ route('admin.schedule.store') }}" method="post">
 				@csrf
 				<!-- Course Select -->
@@ -71,7 +72,7 @@
 					</x-button>
 				</div>
 			</form>
-		</div>
+		</div> --}}
 	</div>
 </body>
 

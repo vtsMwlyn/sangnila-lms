@@ -22,7 +22,8 @@
 		<x-navbar.teacher></x-navbar.teacher>
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Attendance for {{ $course->course_name }}</h1>
+			{{-- Attendance --}}
+			{{-- <h1 class="text-3xl font-semibold text-blue-900 mb-4">Attendance for {{ $course->course_name }}</h1>
 
 			@if ($course->students->isNotEmpty())
 				<form method="POST" action="{{ route('teacher.attendance.store') }}">
@@ -69,7 +70,7 @@
 				</form>
 			@else
 				<div class="text-blue-900">N/A</div>
-			@endif
+			@endif --}}
 
 		</div>
 	</div>

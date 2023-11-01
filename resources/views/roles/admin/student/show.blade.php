@@ -61,7 +61,8 @@
 				<div class="text-blue-900">N/A</div>
 			@endif
 
-			<h2 class="text-xl font-semibold mb-2">Student Schedules:</h2>
+			{{-- Schedule --}}
+			{{-- <h2 class="text-xl font-semibold mb-2">Student Schedules:</h2>
 
 			@if ($student->schedules->isNotEmpty())
 				<div class="overflow-x-auto">
@@ -103,7 +104,7 @@
 				</div>
 			@else
 				<div class="text-blue-900">N/A</div>
-			@endif
+			@endif --}}
 		</div>
 	</div>
 

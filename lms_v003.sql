@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 25, 2023 at 04:42 AM
+-- Generation Time: Nov 01, 2023 at 07:35 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -24,6 +24,23 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `attendance_by_teachers`
+--
+
+CREATE TABLE `attendance_by_teachers` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `teacher_id` bigint(20) UNSIGNED NOT NULL,
+  `course_id` bigint(20) UNSIGNED NOT NULL,
+  `student_id` bigint(20) UNSIGNED NOT NULL,
+  `schedule_id` bigint(20) UNSIGNED NOT NULL,
+  `status` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `courses`
 --
 
@@ -35,6 +52,15 @@ CREATE TABLE `courses` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `courses`
+--
+
+INSERT INTO `courses` (`id`, `course_name`, `course_description`, `visibility`, `created_at`, `updated_at`) VALUES
+(1, '3D Modeling', 'Deskripsi 3D Modeling', 'public', '2023-10-31 23:15:39', '2023-10-31 23:15:39'),
+(2, 'Concept Art', 'Deskripsi Concept Art', 'public', '2023-10-31 23:15:52', '2023-10-31 23:15:52'),
+(3, 'Roblox', 'Deskripsi Roblox', 'public', '2023-10-31 23:21:44', '2023-10-31 23:21:44');
 
 -- --------------------------------------------------------
 
@@ -50,6 +76,17 @@ CREATE TABLE `course_materials` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `course_materials`
+--
+
+INSERT INTO `course_materials` (`id`, `course_id`, `title`, `link`, `created_at`, `updated_at`) VALUES
+(1, 2, '[TOPIC 01] - Introduction to Concept Art Video', 'https://youtu.be/61mkx_OV61s', '2023-10-31 23:30:03', '2023-10-31 23:30:03'),
+(2, 2, '[TOPIC 01] - Introduction to concept art Article', 'https://www.nfi.edu/concept-art/', '2023-10-31 23:31:17', '2023-10-31 23:31:17'),
+(3, 2, '[TOPIC 02] - Creating your first concept art video', 'https://youtu.be/WVPwtsQ-RzI', '2023-10-31 23:32:22', '2023-10-31 23:32:22'),
+(4, 3, '[TOPIC 01] - Introduction to Roblox studio video', 'https://youtu.be/UMmZMPYAzZs', '2023-10-31 23:34:02', '2023-10-31 23:34:02'),
+(5, 3, '[TOPIC 01] - Roblox studio article', 'https://create.roblox.com/docs/tutorials/first-experience', '2023-10-31 23:34:32', '2023-10-31 23:34:32');
 
 -- --------------------------------------------------------
 
@@ -82,6 +119,14 @@ CREATE TABLE `course_students` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `course_students`
+--
+
+INSERT INTO `course_students` (`id`, `user_id`, `course_id`, `student_type`, `created_at`, `updated_at`) VALUES
+(1, 5, 3, 'regular', '2023-10-31 23:24:12', '2023-10-31 23:24:12'),
+(2, 6, 2, 'regular', '2023-10-31 23:24:18', '2023-10-31 23:24:18');
+
 -- --------------------------------------------------------
 
 --
@@ -95,6 +140,14 @@ CREATE TABLE `course_teachers` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `course_teachers`
+--
+
+INSERT INTO `course_teachers` (`id`, `user_id`, `course_id`, `created_at`, `updated_at`) VALUES
+(1, 4, 3, '2023-10-31 23:23:37', '2023-10-31 23:23:37'),
+(2, 3, 2, '2023-10-31 23:23:54', '2023-10-31 23:23:54');
 
 -- --------------------------------------------------------
 
@@ -130,6 +183,17 @@ CREATE TABLE `material_progress` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `material_progress`
+--
+
+INSERT INTO `material_progress` (`id`, `student_id`, `material_id`, `teacher_id`, `course_id`, `note`, `status`, `created_at`, `updated_at`) VALUES
+(1, 6, 1, NULL, 2, NULL, 'unlocked', '2023-10-31 23:32:48', '2023-10-31 23:32:51'),
+(2, 6, 2, NULL, 2, NULL, 'unlocked', '2023-10-31 23:32:48', '2023-10-31 23:32:53'),
+(3, 6, 3, NULL, 2, NULL, 'locked', '2023-10-31 23:32:48', '2023-10-31 23:32:48'),
+(4, 5, 4, NULL, 3, NULL, 'unlocked', '2023-10-31 23:34:41', '2023-10-31 23:34:44'),
+(5, 5, 5, NULL, 3, NULL, 'locked', '2023-10-31 23:34:41', '2023-10-31 23:34:41');
+
 -- --------------------------------------------------------
 
 --
@@ -160,7 +224,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (11, '2023_09_22_042648_create_course_students_table', 5),
 (12, '2023_09_22_043914_create_material_progress_table', 6),
 (13, '2023_09_29_063540_create_student_schedules_table', 6),
-(14, '2023_09_29_063553_create_student_attendances_table', 7);
+(14, '2023_09_29_063553_create_student_attendances_table', 7),
+(15, '2023_10_26_040111_create_attendance_by_teachers_table', 7);
 
 -- --------------------------------------------------------
 
@@ -266,6 +331,18 @@ CREATE TABLE `users` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `full_name`, `email`, `email_verified_at`, `password`, `role_id`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Immanuel Giovano', 'immanuel.sangnila@gmail.com', NULL, '$2y$10$kJmplyOgM/1HPWoCyBGlNuGTtQ8DblphxPUeYjwqAk3CmzBbXJxq6', 1, NULL, '2023-10-31 23:12:03', '2023-10-31 23:12:03'),
+(2, 'Pratiwi', 'tiwi.sangnila@gmail.com', NULL, '$2y$10$a9AUnFs1mx47EPjGWoG1JOq6gploPyf7xucd/yx9fOR5OJxWkswkq', 2, NULL, '2023-10-31 23:12:28', '2023-10-31 23:12:28'),
+(3, 'Victor', 'victor.sangnila@gmail.com', NULL, '$2y$10$AlYzXaGSK7TqhzH3ujQH3O3WqsqcfvkeZ44pUh5BYmz54x4b.mabS', 3, NULL, '2023-10-31 23:12:45', '2023-10-31 23:12:45'),
+(4, 'Hari', 'hari.sangnila@gmail.com', NULL, '$2y$10$YRdzKxtgghACnLepAMVPcuGLkdebrO.4iGGkgAi22RSotH.zFSs0G', 3, NULL, '2023-10-31 23:13:17', '2023-10-31 23:13:17'),
+(5, 'Kenzo', 'kenzo.sangnila@gmail.com', NULL, '$2y$10$4EKeBiu.OsxaExpGN9weT..1/w3p.y.E8NC6oVz1BZ/bh6XdqDMJu', 4, NULL, '2023-10-31 23:13:40', '2023-10-31 23:13:40'),
+(6, 'Chelsea', 'chelsea.sangnila@gmail.com', NULL, '$2y$10$f9vLJ3z5Ud6k5/INr3y8ROMct2IuM/m9zA2Ty0MHliCC2K3LU7voG', 4, NULL, '2023-10-31 23:14:02', '2023-10-31 23:14:02');
+
 -- --------------------------------------------------------
 
 --
@@ -284,6 +361,16 @@ CREATE TABLE `user_details` (
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `attendance_by_teachers`
+--
+ALTER TABLE `attendance_by_teachers`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `attendance_by_teachers_schedule_id_foreign` (`schedule_id`),
+  ADD KEY `attendance_by_teachers_teacher_id_foreign` (`teacher_id`),
+  ADD KEY `attendance_by_teachers_student_id_foreign` (`student_id`),
+  ADD KEY `attendance_by_teachers_course_id_foreign` (`course_id`);
 
 --
 -- Indexes for table `courses`
@@ -400,16 +487,22 @@ ALTER TABLE `user_details`
 --
 
 --
+-- AUTO_INCREMENT for table `attendance_by_teachers`
+--
+ALTER TABLE `attendance_by_teachers`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `course_materials`
 --
 ALTER TABLE `course_materials`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `course_schedules`
@@ -421,13 +514,13 @@ ALTER TABLE `course_schedules`
 -- AUTO_INCREMENT for table `course_students`
 --
 ALTER TABLE `course_students`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `course_teachers`
 --
 ALTER TABLE `course_teachers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -439,13 +532,13 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `material_progress`
 --
 ALTER TABLE `material_progress`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -475,7 +568,7 @@ ALTER TABLE `student_schedules`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `user_details`
@@ -486,6 +579,15 @@ ALTER TABLE `user_details`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `attendance_by_teachers`
+--
+ALTER TABLE `attendance_by_teachers`
+  ADD CONSTRAINT `attendance_by_teachers_course_id_foreign` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`),
+  ADD CONSTRAINT `attendance_by_teachers_schedule_id_foreign` FOREIGN KEY (`schedule_id`) REFERENCES `course_schedules` (`id`),
+  ADD CONSTRAINT `attendance_by_teachers_student_id_foreign` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `attendance_by_teachers_teacher_id_foreign` FOREIGN KEY (`teacher_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `course_materials`

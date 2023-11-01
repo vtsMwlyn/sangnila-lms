@@ -22,7 +22,8 @@
 		<x-navbar.student></x-navbar.student>
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Your Schedules</h1>
+			{{-- Schedule --}}
+			{{-- <h1 class="text-3xl font-semibold text-blue-900 mb-4">Your Schedules</h1>
 
 			@if ($schedules->isNotEmpty())
 				<div class="overflow-x-auto">
@@ -62,7 +63,7 @@
 				</div>
 			@else
 				<div class="text-blue-900">N/A</div>
-			@endif
+			@endif --}}
 		</div>
 	</div>
 

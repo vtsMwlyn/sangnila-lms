@@ -58,7 +58,7 @@ Route::prefix('/admin') // ON PROGRESS
 				Route::delete('/{course_id}/unassign{teacher_id}', [CourseTeacherController::class, 'unassign_destroy'])->name('destroy.unassign')->whereNumber('course_id');
 			});
 		//Schedules
-		Route::prefix('/schedule') // ON PROGRESS
+		/* Route::prefix('/schedule') // ON PROGRESS
 			->name('schedule.')
 			->group(function () {
 				// Schedule Controller (course_schedule)
@@ -78,7 +78,7 @@ Route::prefix('/admin') // ON PROGRESS
 				// Student Controller
 				Route::get('/{schedule_id}/assign', [ScheduleController::class, 'assign'])->name('assign')->whereNumber('schedule_id'); // DONE
 				Route::post('/{schedule_id}', [ScheduleController::class, 'assign_store'])->name('assign_store')->whereNumber('schedule_id'); // DONE
-			});
+			}); */
 		// Student List
 		Route::prefix('/student') // DONE
 			->name('student.')

@@ -20,11 +20,11 @@ Route::prefix('/student')
 				Route::patch('/{attendance_id}')->name('update'); // Update the attendance status (Select input), with input:reason
 			});
 
-			Route::prefix('/schedule') // DONE
+			/* Route::prefix('/schedule') // DONE
 			->name('schedule.')
 			->group(function() {
 				Route::get('/', [ScheduleController::class, 'student_index'])->name('index'); // Show student schedules table
-			});
+			}); */
 
 			Route::prefix('/mycourse') // DONE
 				->name('mycourse.')

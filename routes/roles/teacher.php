@@ -70,10 +70,10 @@ Route::prefix('/teacher')
 				Route::get('/view/{course_id}', [AttendanceController::class, 'view'])->name('view');
 
 				// Schedule Controller
-				/* Route::get('/')->name('index'); // Show all schedule for the teacher
-				Route::get('/{attendance_id}')->name('show.student')->whereNumber('attendance_id'); */
+/* 				Route::get('/')->name('index'); // Show all schedule for the teacher
+				Route::get('/{attendance_id}')->name('show.student')->whereNumber('attendance_id');
 
-				/* Route::prefix('/verify')
+				Route::prefix('/verify')
 					->name('vefiry.')
 					->group(function () {
 						// Attendance Controller (student_attendance)
@@ -85,11 +85,11 @@ Route::prefix('/teacher')
 					}); */
 			});
 
-		Route::prefix('/schedule') // ON HALT
+/* 		Route::prefix('/schedule') // ON HALT
 			->name('schedule.')
 			->group(function () {
 				// Schedule Controller
 				Route::get('/', [ScheduleController::class, 'teacher_index'])->name('index'); // Show all schedule for the teacher
 
-			});
+			}); */
 	});
