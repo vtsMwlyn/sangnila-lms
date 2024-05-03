@@ -54,7 +54,7 @@
 				@endforelse
 				<div class="relative flex items-center py-2 grou">
 					<span class="mr-2">
-						<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white"
+						<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
 							href="{{ route('teacher.material.upload', $course->id) }}">Add new material</a>
 					</span>
 				</div>

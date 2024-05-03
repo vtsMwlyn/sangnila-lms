@@ -24,32 +24,32 @@
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
 			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Courses</h1>
 			<div class="h-fit mb-5">
-				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white" href="{{ route('sysadmin.course.create') }}">Create new
+				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="{{ route('sysadmin.course.create') }}">Create new
 					course</a>
 			</div>
 			@if ($courses->isNotEmpty())
-				<div class="overflow-x-auto">
-					<table class="min-w-full bg-white border-collapse border border-blue-400">
+				<div class="overflow-x-auto rounded-md">
+					<table class="min-w-full bg-white border-collapse ">
 						<thead>
 							<tr>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Course Name</th>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Visibility</th>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Actions</th>
+								<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Course Name</td>
+								<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Visibility</td>
+								<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Actions</td>
 							</tr>
 						</thead>
 						<tbody>
 							@foreach ($courses as $course)
 								<tr>
-									<td class="border border-blue-400 px-4 py-2">
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
 										<a href="{{ route('sysadmin.course.show', ['course_id' => $course->id]) }}">
 											{{ $course->course_name }}
 										</a>
 									</td>
 
-									<td class="border border-blue-400 px-4 py-2">
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
 										{{ $course->visibility }}
 									</td>
-									<td class="border border-blue-400 px-4 py-2">
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
 										<form method="POST" action="{{ route('sysadmin.course.update.archive', $course->id) }}">
 											@csrf
 											@method('PATCH')

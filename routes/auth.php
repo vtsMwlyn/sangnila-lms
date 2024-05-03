@@ -16,8 +16,13 @@ Route::get('/register', [RegisteredUserController::class, 'create'])->middleware
 Route::post('/register', [RegisteredUserController::class, 'store'])->middleware('guest')->name('store_register');
 
 // Login
-Route::get('/login', [AuthenticatedSessionController::class, 'create'])->middleware('guest')->name('login');
+// Route::get('/login', [AuthenticatedSessionController::class, 'create'])->middleware('guest')->name('login');
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->middleware('guest');
+
+Route::get('/login', function() {
+	return redirect(route('home'));
+})->middleware('guest')->name('login');
+
 
 // Forgot Password
 Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->middleware('guest')->name('password.request');

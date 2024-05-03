@@ -13,6 +13,8 @@
 
 	<title>Sangnila Academy | LMS</title>
 
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 </head>
 
 <body>
@@ -22,33 +24,48 @@
 		<x-navbar.admin></x-navbar.admin>
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Courses</h1>
+			<h2 class="text-2xl font-semibold text-blue-900 mb-4">Student Details</h2>
 			<div class="h-fit mb-5">
-				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white"
-					href="{{ route('admin.student.assign.create', $student->id) }}">Assign Student to course</a>
+				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+					href="#">Edit</a>
 			</div>
-			@if ($student->enrolled_courses->isNotEmpty())
-				<div class="overflow-x-auto">
-					<table class="min-w-full bg-white border-collapse border border-blue-400">
+			<table class="mb-8 border">
+				<tr>
+					<td class="border px-5 font-bold">Full name</td>
+					<td class="border px-5">{{ $student->full_name }}</td>
+				</tr>
+				<tr>
+					<td class="border px-5 font-bold">Email</td>
+					<td class="border px-5">{{ $student->email }}</td>
+				</tr>
+			</table>
+
+			{{-- @if ($student->enrolled_courses->isNotEmpty())
+			<h2 class="text-xl font-semibold mb-5">Course(s) enrolled by this user:</h2>
+			<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+					href="{{ route('admin.student.assign.create', $student->id) }}">Assign Student to course</a>
+
+				<div class="overflow-x-auto rounded-md">
+					<table class="min-w-full bg-white border-collapse">
 						<thead>
 							<tr>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Course Name</th>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Action</th>
+								<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Course Name</td>
+								<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Action</th>
 							</tr>
 						</thead>
 						<tbody>
 							@foreach ($student->enrolled_courses as $course)
 								<tr>
-									<td class="border border-blue-400 px-4 py-2">
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 										<a href="{{ route('admin.course.show', ['course_id' => $course->id]) }}"
 											class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
 											{{ $course->course_name }}
 										</a>
 									</td>
-									<td class="border border-blue-400 px-4 py-2">
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4 text-center">
 										<a
 											href="{{ route('admin.student.unassign.delete', ['student_id' => $student->id, 'course_id' => $course->id]) }}"
-											class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
+											class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-red-500 transition duration-300">
 											Unassign
 										</a>
 									</td>
@@ -59,38 +76,59 @@
 				</div>
 			@else
 				<div class="text-blue-900">N/A</div>
-			@endif
+			@endif --}}
+
+			<h2 class="text-xl font-semibold mb-5">Course(s) enrolled by this user:</h2>
+			<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+				href="{{ route('admin.student.assign.create', $student->id) }}">
+				Assign to course
+			</a>
+
+			<ul class="mb-6 mt-6 flex flex-wrap gap-5">
+				@forelse ($student->enrolled_courses as $course)
+					<li class="text-black border rounded-lg bg-gray-600 px-3 py-1">
+						{{ $course->course_name }}
+						<a
+							href="{{ route('admin.student.unassign.delete', ['student_id' => $student->id, 'course_id' => $course->id]) }}"
+							class="">
+							<i class="bi bi-x-circle-fill"></i>
+						</a>
+					</li>
+				@empty
+					<li class="text-gray-500">No course</li>
+				@endforelse
+			</ul>
 
 			{{-- Schedule --}}
 			{{-- <h2 class="text-xl font-semibold mb-2">Student Schedules:</h2>
 
 			@if ($student->schedules->isNotEmpty())
 				<div class="overflow-x-auto">
-					<table class="min-w-full bg-white border-collapse border border-blue-400">
+					<table class="min-w-full bg-white border-collapse">
 						<thead>
 							<tr>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Course Name</th>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Day of Week</th>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Start Time</th>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">End Time</th>
+								<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Course Name</th>
+								<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Day of Week</th>
+								<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Start Time</th>
+								<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">End Time</th>
 							</tr>
 						</thead>
 						<tbody>
 							@forelse ($student->schedules as $schedule)
 								<tr>
-									<td class="border border-blue-400 px-4 py-2">
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 										<a href="{{ route('admin.course.show', ['course_id' => $schedule->schedule->course->id ]) }}"
 											class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
 											{{ $schedule->schedule->course->course_name }}
 										</a>
 									</td>
-									<td class="border border-blue-400 px-4 py-2">
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 										{{ $schedule->schedule->day_of_week }}
 									</td>
-									<td class="border border-blue-400 px-4 py-2">
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 										{{ $schedule->schedule->start_time }}
 									</td>
-									<td class="border border-blue-400 px-4 py-2">
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 										{{ $schedule->schedule->end_time }}
 									</td>
 								</tr>

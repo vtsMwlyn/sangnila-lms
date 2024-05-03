@@ -38,9 +38,20 @@
 					<x-input id="course_description" class="block mt-1 w-full" type="text" name="course_description" :value="$course->course_description" required />
 				</div>
 
+				<!-- Course Visibility -->
+				<div class="mt-4">
+					<x-label for="visibility" :value="__('Course Visibility')" />
+					{{-- <x-input id="course_description" class="block mt-1 w-full" type="text" name="course_description" :value="$course->visibility" required /> --}}
+					<select name="visibility" id="visibility" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full">
+						<option value="public" @if($course->visibility == "public") selected @endif>Public</option>
+						<option value="private" @if($course->visibility == "private") selected @endif>Private</option>
+					</select>
+				</div>
+
+
 				<div class="flex items-center justify-end mt-4">
 					<x-button class="ml-4">
-						{{ __('EDIT!') }}
+						{{ __('Save') }}
 					</x-button>
 				</div>
 			</form>

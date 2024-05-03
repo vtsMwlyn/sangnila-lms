@@ -19,13 +19,14 @@
 	<x-navbar.admin></x-navbar.admin>
 	<!-- Content Section -->
 	<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-		<h1 class="text-3xl font-semibold text-blue-900 mb-4">{{ $course->course_name }}</h1>
+		<h1 class="text-3xl font-semibold text-blue-900 mb-4">{{ $course->course_name }} <span class="text-sm italic text-gray-500">(Visibility: {{ $course->visibility }})</span></h1>
 		<p class="text-gray-700 mb-8">{{ $course->course_description }}</p>
 		<div class="flex space-x-4 mb-6">
-			<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white" href="{{ route('admin.course.edit', $course->id) }}">Edit
-				Course</a>
-			<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white"
-				href="{{ route('admin.course.assign', $course->id) }}">Assign Teacher</a>
+			<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="{{ route('admin.course.edit', $course->id) }}">Edit Course</a>
+			{{-- <a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+				href="{{ route('admin.course.assign', $course->id) }}">Assign Teacher</a> --}}
+			<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+				href="#">Delete Course</a>
 		</div>
 		<h2 class="text-xl font-semibold mb-2">Teacher List:</h2>
 		<ul class="list-disc pl-6 mb-6">
@@ -53,29 +54,29 @@
 				<table class="min-w-full bg-white border-collapse border border-blue-400">
 					<thead>
 						<tr>
-							<th class="bg-blue-300 border border-blue-400 px-4 py-2">Day of Week</th>
-							<th class="bg-blue-300 border border-blue-400 px-4 py-2">Start Time</th>
-							<th class="bg-blue-300 border border-blue-400 px-4 py-2">End Time</th>
-							<th class="bg-blue-300 border border-blue-400 px-4 py-2">Action</th>
+							<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Day of Week</th>
+							<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Start Time</th>
+							<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">End Time</th>
+							<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Action</th>
 						</tr>
 					</thead>
 					<tbody>
 						@foreach ($course->schedules as $schedule)
 							<tr>
 
-								<td class="border border-blue-400 px-4 py-2">
+								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 									<div>{{ $schedule->day_of_week }}</div>
 								</td>
 
-								<td class="border border-blue-400 px-4 py-2">
+								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 									<div>{{ $schedule->start_time }}</div>
 								</td>
 
-								<td class="border border-blue-400 px-4 py-2">
+								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 									<div>{{ $schedule->end_time }}</div>
 								</td>
 
-								<td class="border border-blue-400 px-4 py-2">
+								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white"
 										href="{{ route('admin.schedule.edit', $schedule->id) }}">Edit Schedule</a>
 								</td>
@@ -88,7 +89,7 @@
 			<div class="text-blue-900">N/A</div>
 		@endif --}}
 
-		<h2 class="text-xl font-semibold mb-2 mt-8">Course Materials</h2>
+		<h2 class="text-xl font-semibold mb-2 mt-8">Course Topics</h2>
 		<div class="mb-6">
 			@forelse ($course->materials as $material)
 				<div class="relative flex items-center py-2 group hover:bg-gray-100">

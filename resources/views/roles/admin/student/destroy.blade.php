@@ -37,8 +37,8 @@
 
 				<!-- Yes/No Buttons -->
 				<div class="flex space-x-4">
-					<button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Yes</button>
-					<button type="button" onclick="history.back()" class="px-4 py-2 bg-gray-500 text-white rounded-lg">No</button>
+					<button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-red-500 transition duration-300">Yes</button>
+					<button type="button" onclick="history.back()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-900 transition duration-300">No</button>
 				</div>
 			</form>
 		</div>

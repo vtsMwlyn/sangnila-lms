@@ -25,23 +25,23 @@
 			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Students Profress for {{ $course->course_name }}</h1>
 
 			@if ($course->students->isNotEmpty())
-				<div class="overflow-x-auto">
-					<table class="min-w-full bg-white border-collapse border border-blue-400">
+				<div class="overflow-x-auto rounded-md">
+					<table class="min-w-full bg-white border-collapse">
 						<thead>
 							<tr>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Student Name</th>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Progress</th>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Action</th>
+								<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Student Name</td>
+								<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Progress</td>
+								<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Action</td>
 							</tr>
 						</thead>
 						<tbody>
 							@foreach ($course->students as $student)
 								<tr>
-									<td class="border border-blue-400 px-4 py-2">
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
 											{{ $student->full_name }}
 									</td>
 
-									<td class="border border-blue-400 px-4 py-2">
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
 										{{-- Calculate the progress --}}
 										@php
 											$totalMaterials = count($course->materials);
@@ -51,8 +51,8 @@
 
 										<h1>Progress: {{ $progress }}</h1>
 									</td>
-									<td class="border border-blue-400 px-4 py-2">
-										<a class="px-5 py-2 bg-indigo-400 rounded-lg  text-white"
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
+										<a class="px-5 py-2 bg-indigo-400 rounded-lg  text-white hover:bg-gray-700 transition duration-300"
 											href="{{ route('teacher.student.index', ['student_id' => $student->id, 'course_id' => $course->id]) }}">
 											Update Progress
 										</a>

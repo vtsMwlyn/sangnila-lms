@@ -37,7 +37,7 @@
 					@if ($teachers->isEmpty())
 						<p class="text-lg text-gray-700">No Teacher to assign.</p>
 						<a href="{{ route('admin.course.show', $course->id) }}"
-							class="text-blue-500 hover:text-blue-700 underline cursor-pointer mt-2 block">Go back to previous page</a>
+							class="px-3 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300 mt-2 inline-block">Go back to previous page</a>
 					@else
 						<select name="teacher" id="teacher"
 							class="w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
@@ -48,7 +48,7 @@
 						@if ($teachers->isNotEmpty())
 							<div class="flex items-center justify-end mt-4">
 								<x-button class="ml-3">
-									{{ __('ASSIGN!') }}
+									{{ __('ASSIGN') }}
 								</x-button>
 							</div>
 						@endif

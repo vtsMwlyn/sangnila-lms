@@ -25,28 +25,28 @@
 			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Materials for {{ $course->course_name }}</h1>
 
 			@if ($course->materials->isNotEmpty())
-				<div class="overflow-x-auto">
-					<table class="min-w-full bg-white border-collapse border border-blue-400">
+				<div class="overflow-x-auto rounded-md">
+					<table class="min-w-full bg-white border-collapse ">
 						<thead>
 							<tr>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Material Name</th>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Access</th>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Actions</th>
+								<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Material Name</td>
+								<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Access</td>
+								<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Actions</td>
 							</tr>
 						</thead>
 						<tbody>
 							@foreach ($materials as $material)
 								<tr>
-									<td class="border border-blue-400 px-4 py-2">
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 ">
 										<a href="">
 											{{ $material->material->title }}
 										</a>
 									</td>
 
-									<td class="border border-blue-400 px-4 py-2">
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 ">
 										{{ $material->status }}
 									</td>
-									<td class="border border-blue-400 px-4 py-2">
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 ">
 										<form method="POST" action="{{ route('teacher.student.update.progress', $material->id) }}">
 											@csrf
 											@method('PATCH')

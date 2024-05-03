@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Auth::routes(['verify' => true]);
+
 Route::get('/', function () {
 	if (Auth::check()) {
 		// User is logged in, so redirect to a specific route
@@ -49,7 +51,7 @@ Route::get('/dashboard', function () {
 			// Default behavior (e.g., for unknown roles)
 			return view('dashboard');
 	}
-})->middleware(['auth'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__ . '/auth.php'; // to be deleted
 

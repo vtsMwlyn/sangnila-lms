@@ -44,10 +44,12 @@ class AdminAccountController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($user_id) {
+	public function show_acc($user_id) {
 		$user = User::findOrFail($user_id);
-		dd($user);
-		// return view(sysadmin.account.show); # TODO
+
+		return view("roles.sysadmin.account.show", [
+			"user" => $user
+		]);
 
 	}
 
@@ -57,8 +59,10 @@ class AdminAccountController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit($id) {
-		//
+	public function edit_acc($user_id) {
+		$user = User::findOrFail($user_id);
+
+		return $user;
 	}
 
 	/**
@@ -68,8 +72,14 @@ class AdminAccountController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, $id) {
+	public function update_acc(Request $request, $user_id) {
 		//
+	}
+
+	public function disable_acc($user_id){
+		$user = User::findOrFail($user_id);
+
+		return $user;
 	}
 
 	/**
@@ -78,7 +88,9 @@ class AdminAccountController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy($id) {
-		//
+	public function destroy($user_id) {
+		$user = User::findOrFail($user_id);
+
+		return $user;
 	}
 }

@@ -46,7 +46,8 @@ class CourseController extends Controller {
 		$course->course_description = $request->course_desc;
 		$course->visibility = $request->visibility;
 		$course->save();
-		return redirect(route('sysadmin.course.index'));
+		// return redirect(route('sysadmin.course.index'));
+		return redirect(route('admin.course.index'));
 	}
 
 	/**
@@ -151,7 +152,7 @@ class CourseController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function admin_edit($course_id) {
-		$course = Course::where('visibility', 'public')->where('id', $course_id)->first();
+		$course = Course::/*where('visibility', 'public')->*/where('id', $course_id)->first();
 		return view('roles.admin.course.edit', [
 			'course' => $course
 		]);
@@ -166,7 +167,7 @@ class CourseController extends Controller {
 	 */
 	public function admin_update(Request $request, $course_id) {
 		$data = $request->except(['_token', '_method']);
-		$course = Course::where('visibility', 'public')->where('id', $course_id)->update($data);
+		$course = Course::/*where('visibility', 'public')->*/where('id', $course_id)->update($data);
 		return redirect(route('admin.course.show', $course_id));
 	}
 

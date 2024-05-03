@@ -6,11 +6,12 @@ use App\Http\Controllers\CourseTeacherController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherAccountController;
+use App\Models\CourseTeacher;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/admin') // ON PROGRESS
 	->name('admin.')
-	->middleware(['auth', 'role:Admin'])
+	->middleware(['auth', 'role:Admin', 'verified'])
 	->group(function () {
 		Route::get('/', function () {
 			return redirect(route('dashboard'));
@@ -25,12 +26,18 @@ Route::prefix('/admin') // ON PROGRESS
 				Route::get('/{teacher_id}', [TeacherAccountController::class, 'show'])->name('show') // DONE
 					->whereNumber('teacher_id');
 
+				// Assign and unassign teacher to a course
+				Route::get("/{teacher_id}/assign", [CourseTeacherController::class, "show"])->name("assign");
+				Route::post("/{teacher_id}/assign", [CourseTeacherController::class, "assign"])->name("assign.store");
+				Route::post("/{teacher_id}/unassign", [CourseTeacherController::class, "unassign"])->name("unassign");
 
 				# TODO // ON HALT
 				// Create special form to make teacher accounts
-				Route::get('/create')->name('create');
-				Route::post('/')->name('store');
-			});
+				// Route::get('/create')->name('create');
+				// Route::post('/')->name('store');
+			}
+		);
+
 		// All Course List
 		Route::prefix('/course') // ON PROGRESS 90%
 			->name('course.')
@@ -56,7 +63,9 @@ Route::prefix('/admin') // ON PROGRESS
 				// idea-2: form with course_teacher id
 				Route::get('/{course_id}/unassign/{teacher_id}', [CourseController::class, 'unassign'])->name('unassign')->whereNumber('course_id'); // Deletion confirmation
 				Route::delete('/{course_id}/unassign{teacher_id}', [CourseTeacherController::class, 'unassign_destroy'])->name('destroy.unassign')->whereNumber('course_id');
-			});
+			}
+		);
+
 		//Schedules
 		/* Route::prefix('/schedule') // ON PROGRESS
 			->name('schedule.')
@@ -79,6 +88,7 @@ Route::prefix('/admin') // ON PROGRESS
 				Route::get('/{schedule_id}/assign', [ScheduleController::class, 'assign'])->name('assign')->whereNumber('schedule_id'); // DONE
 				Route::post('/{schedule_id}', [ScheduleController::class, 'assign_store'])->name('assign_store')->whereNumber('schedule_id'); // DONE
 			}); */
+
 		// Student List
 		Route::prefix('/student') // DONE
 			->name('student.')
@@ -94,5 +104,6 @@ Route::prefix('/admin') // ON PROGRESS
 				// Unassign
 				Route::get('{student_id}/unassign/{course_id}', [CourseStudentController::class, 'delete'])->name('unassign.delete'); // DONE
 				Route::delete('{student_id}/unassign/{course_id}', [CourseStudentController::class, 'destroy'])->name('unassign.destroy'); //DONE
-			});
+			}
+		);
 	});

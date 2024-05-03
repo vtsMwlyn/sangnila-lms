@@ -75,7 +75,7 @@
 					</div>
 				</form>
 				<div class="flex justify-center my-2">
-					<a class="text-lg font-weight-bold underline text-blue-800 hover:text-blue-950 bg-blue-200 px-5 py-2 rounded-lg"
+					<a class="text-xl font-bold text-blue-800 hover:text-blue-950 hover:scale-110 transition duration-300 px-5 py-2 rounded-lg"
 						href="{{ route('guest.index') }}">
 						{{ __('Login As Guest') }}
 					</a>

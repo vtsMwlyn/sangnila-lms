@@ -23,31 +23,47 @@
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
 			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Teachers</h1>
-			<div class="overflow-x-auto">
-				<table class="min-w-full bg-white border-collapse border border-blue-400">
+			<div class="overflow-x-auto rounded-md">
+				<table class="min-w-full bg-white border-collapse">
 					<thead>
 						<tr>
-							<th class="bg-blue-300 border border-blue-400 px-4 py-2">Full Name</th>
-							<th class="bg-blue-300 border border-blue-400 px-4 py-2">Role</th>
-							<th class="bg-blue-300 border border-blue-400 px-4 py-2">Email</th>
+							<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Full Name</td>
+							<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Email</td>
+							<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Assigned Courses</td>
+							<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Actions</td>
 						</tr>
 					</thead>
 					<tbody>
 						@forelse ($accounts as $account)
 							<tr>
-								<td class="border border-blue-400 px-4 py-2">
+								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 									<a href="{{ route('admin.teacher.show', ['teacher_id' => $account->id]) }}" class="text-blue-500 hover:text-blue-700 underline cursor-pointer">
 										{{ $account->full_name }}
 									</a>
 								</td>
-
-
-								<td class="border border-blue-400 px-4 py-2">{{ $account->role->role_name }}</td>
-								<td class="border border-blue-400 px-4 py-2">{{ $account->email }}</td>
+								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">{{ $account->email }}</td>
+								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
+									{{-- {{ $account->teached_courses }} --}}
+									<ul>
+										@foreach ($account->teached_courses as $course)
+											<li>{{ $course->course_name }}</li>
+										@endforeach
+									</ul>
+								</td>
+								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
+									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+										href="{{ route("admin.teacher.show", $account->id) }}">
+										View
+									</a>
+									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+										href="#">
+										Edit
+									</a>
+								</td>
 							</tr>
 						@empty
 							<tr>
-								<td class="border border-blue-400 px-4 py-2" colspan="3">N/A</td>
+								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4" colspan="3">N/A</td>
 							</tr>
 						@endforelse
 					</tbody>

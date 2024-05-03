@@ -32,7 +32,12 @@ class CourseStudentController extends Controller {
 			->whereNotIn('id', $existingCourseIds)
 			->get();
 
-		return view('roles.admin.student.assign', [
+		// return view('roles.admin.student.assign', [
+		// 	'student' => $student,
+		// 	'courses' => $courses,
+		// ]);
+
+		return view('roles.admin.student.index-assign', [
 			'student' => $student,
 			'courses' => $courses,
 		]);
@@ -46,10 +51,13 @@ class CourseStudentController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request, $student_id) {
+		$targettedCourse = Course::where("course_name", $request["course_name"])->first();
+		
 		CourseStudent::create([
 			'user_id' => $student_id,
-			'course_id' => $request->course
+			'course_id' => $targettedCourse->id
 		]);
+
 		return redirect(route('admin.student.show', $student_id));
 	}
 

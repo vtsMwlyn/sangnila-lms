@@ -24,20 +24,43 @@
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
 			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Students</h1>
 			@if ($students->isNotEmpty())
-				<div class="overflow-x-auto">
-					<table class="min-w-full bg-white border-collapse border border-blue-400">
+				<div class="overflow-x-auto rounded-md">
+					<table class="min-w-full bg-white border-collapse ">
 						<thead>
 							<tr>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Student Name</th>
+								<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Student Name</th>
+								<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Email</th>
+								<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Enrolled Courses</th>
+								<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							@foreach ($students as $student)
 								<tr>
-									<td class="border border-blue-400 px-4 py-2">
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 										<a href="{{ route('admin.student.show', ['student_id' => $student->id]) }}"
 											class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
 											{{ $student->full_name }}
+										</a>
+									</td>
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
+										{{ $student->email }}
+									</td>
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
+										<ul>
+											@foreach ($student->enrolled_courses as $course)
+												<li>{{ $course->course_name }}</li>
+											@endforeach
+										</ul>
+									</td>
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
+										<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+										href="{{ route("admin.student.show", $student->id) }}">
+											View
+										</a>
+										<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+											href="#">
+											Edit
 										</a>
 									</td>
 								</tr>

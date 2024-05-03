@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
-use App\Models\CourseTeacher;
 use App\Models\Role;
+use App\Models\User;
+use App\Models\Course;
 use Illuminate\Http\Request;
+use App\Models\CourseTeacher;
 
 class CourseTeacherController extends Controller {
 	/**
@@ -14,7 +15,7 @@ class CourseTeacherController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index() {
-		//
+
 	}
 
 	/**
@@ -36,6 +37,7 @@ class CourseTeacherController extends Controller {
 		$teachers = $role->users()
 			->whereNotIn('id', $existingUserIds)
 			->get();
+
 		return view('roles.admin.teacher.assign', [
 			'teachers' => $teachers,
 			'course' => $course
@@ -48,6 +50,7 @@ class CourseTeacherController extends Controller {
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
+
 	public function store(Request $request, $course_id) {
 		$data = $request->all();
 
@@ -64,8 +67,19 @@ class CourseTeacherController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($id) {
-		//
+	public function show($teacher_id) {
+		$role = Role::where('role_name', 'Teacher')->first();
+		$user = User::where('id', $teacher_id)->where('role_id', $role->id)->first();
+
+		$existingCourseIds = CourseTeacher::where('user_id', $teacher_id)->get()->pluck('course_id')->toArray();
+		$courses = Course::where('visibility', 'public')
+			->whereNotIn('id', $existingCourseIds)
+			->get();
+
+		return view('roles.admin.teacher.index-assign', [
+			'user' => $user,
+			'courses' => $courses
+		]);
 	}
 
 	/**
@@ -86,7 +100,7 @@ class CourseTeacherController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, $id) {
-		//
+
 	}
 
 	/**
@@ -107,15 +121,30 @@ class CourseTeacherController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function unassign($course_id) {
-		$course = Course::findOrFail($course_id);
-		$teachers = $course->teachers;
-		// return view(admin.course.unassign);
-		//
-		// TODO
+
+	public function assign(Request $request, $teacher_id){
+		$selectedNewCourse = Course::where("course_name", $request["course_name"])->first();
+		$alreadyExist = CourseTeacher::where("course_id", $selectedNewCourse["id"])->where("user_id", $teacher_id)->first();
+
+		if($alreadyExist){
+			return back()->with("duplicateCourseAssignment", "This teacher is already assigned to the course!");
+		}
+
+		CourseTeacher::create(["user_id" => $teacher_id, "course_id" => $selectedNewCourse["id"]]);
+
+		return redirect(route("admin.teacher.show", $teacher_id));
 	}
 
+	public function unassign(Request $request, $teacher_id) {
+		// $course = Course::findOrFail($course_id);
+		// $teachers = $course->teachers;
+		// return view(admin.course.unassign);
+		$targettedData = CourseTeacher::where("user_id", $teacher_id)->where("course_id", $request["course_id"])->first();
+		CourseTeacher::destroy($targettedData->id);
 
+		return redirect(route("admin.teacher.show", $teacher_id));
+
+	}
 
 	/**
 	 * Unassign the specified resource from storage.
