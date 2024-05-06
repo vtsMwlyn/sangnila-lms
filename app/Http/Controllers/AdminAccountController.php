@@ -13,9 +13,12 @@ class AdminAccountController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index() {
-		$accounts = User::get();
+		$accounts = User::where("status", "enabled")->get();
+		$disabled = User::where("status", "disabled")->get();
+
 		return view('roles.sysadmin.account.index', [
-			'accounts' => $accounts
+			'accounts' => $accounts,
+			'disabled' => $disabled
 		]);
 	}
 
@@ -62,7 +65,9 @@ class AdminAccountController extends Controller {
 	public function edit_acc($user_id) {
 		$user = User::findOrFail($user_id);
 
-		return $user;
+		return view("roles.sysadmin.account.edit", [
+			"account" => $user
+		]);
 	}
 
 	/**
@@ -72,14 +77,33 @@ class AdminAccountController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update_acc(Request $request, $user_id) {
-		//
+	public function update_acc(Request $request, $account_id) {
+		$account = User::findOrFail($account_id);
+
+		// $dataToUpdate = $request->except(["_token", "_method"]);
+
+		$dataToUpdate = $request->validate([
+			"full_name" => "required|min:3",
+			"email" => "required|email:dns"
+		]);
+
+		User::where("id", $account->id)->update($dataToUpdate);
+
+		return redirect(route("sysadmin.account.index"))->with("successUpdateAccountData", "Successfully updated account data!");
 	}
 
 	public function disable_acc($user_id){
 		$user = User::findOrFail($user_id);
+		User::where("id", $user->id)->update(["status" => "disabled"]);
 
-		return $user;
+		return redirect(route("sysadmin.account.index"))->with("successDisableAccount", "Successfully disabled account!");
+	}
+
+	public function enable_acc($user_id){
+		$user = User::findOrFail($user_id);
+		User::where("id", $user->id)->update(["status" => "enabled"]);
+
+		return redirect(route("sysadmin.account.index"))->with("successEnableAccount", "Successfully enabled account!");
 	}
 
 	/**
@@ -90,7 +114,8 @@ class AdminAccountController extends Controller {
 	 */
 	public function destroy($user_id) {
 		$user = User::findOrFail($user_id);
+		User::destroy("id", $user->id);
 
-		return $user;
+		return redirect(route("sysadmin.account.index"))->with("successDeleteAccount", "Successfully deleted account!");
 	}
 }

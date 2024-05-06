@@ -80,22 +80,27 @@
 
 			<h2 class="text-xl font-semibold mb-5">Course(s) enrolled by this user:</h2>
 
-			<form action="{{ route('admin.student.assign.store', $student->id) }}" method="post" class="border rounded-lg p-5">
-				@csrf
-				<x-label for="visibility" :value="__('Select a course to assign')" />
-				<select name="course_name" id="course_name" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full mt-4">
-					@foreach ($courses as $course)
-						<option value="{{ $course->course_name }}">{{ $course->course_name }}</option>
-					@endforeach
-				</select>
+			@if($courses->count())
+				<form action="{{ route('admin.student.assign.store', $student->id) }}" method="post" class="border rounded-lg p-5">
+					@csrf
+					<x-label for="visibility" :value="__('Select a course to assign')" />
 
-				<a href="{{ route("admin.teacher.show", $student->id) }}" class="inline-flex items-center px-4 py-2 bg-indigo-400 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">Back</a>
+						<select name="course_name" id="course_name" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full mt-4">
+							@foreach ($courses as $course)
+								<option value="{{ $course->course_name }}">{{ $course->course_name }}</option>
+							@endforeach
+						</select>
 
-				<x-button class="mt-4">
-					{{ __('Save') }}
-				</x-button>
+					<a href="{{ route("admin.student.show", $student->id) }}" class="inline-flex items-center px-4 py-2 bg-indigo-400 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">Back</a>
 
-			</form>
+					<x-button class="mt-4">
+						{{ __('Add') }}
+					</x-button>
+
+				</form>
+			@else
+				<p class="text-gray-500 italic">- No more courses to assign -</p>
+			@endif
 
 			<ul class="list-disc pl-6 mb-6 mt-5">
 				@forelse ($student->enrolled_courses as $course)

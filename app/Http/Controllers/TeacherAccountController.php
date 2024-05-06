@@ -84,4 +84,27 @@ class TeacherAccountController extends Controller {
 	public function destroy($id) {
 		//
 	}
+
+	public function admin_edit($teacher_id){
+		$teacher = User::findOrFail($teacher_id);
+
+		return view("roles.admin.teacher.edit", [
+			"teacher" => $teacher
+		]);
+	}
+
+	public function admin_update(Request $request, $teacher_id){
+		$teacher = User::findOrFail($teacher_id);
+
+		// $dataToUpdate = $request->except(["_token", "_method"]);
+
+		$dataToUpdate = $request->validate([
+			"full_name" => "required|min:3",
+			"email" => "required|email:dns"
+		]);
+
+		User::where("id", $teacher->id)->update($dataToUpdate);
+
+		return redirect(route("admin.teacher.index"))->with("successUpdateTeacherData", "Successfully updated teacher data!");
+	}
 }

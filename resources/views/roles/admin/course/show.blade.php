@@ -20,14 +20,28 @@
 	<!-- Content Section -->
 	<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
 		<h1 class="text-3xl font-semibold text-blue-900 mb-4">{{ $course->course_name }} <span class="text-sm italic text-gray-500">(Visibility: {{ $course->visibility }})</span></h1>
+
+		@if(session()->has("successUpdateCourseData"))
+			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-green-900">{{ session("successUpdateCourseData") }}</p>
+			</div>
+		@endif
+
 		<p class="text-gray-700 mb-8">{{ $course->course_description }}</p>
+
 		<div class="flex space-x-4 mb-6">
 			<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="{{ route('admin.course.edit', $course->id) }}">Edit Course</a>
 			{{-- <a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
 				href="{{ route('admin.course.assign', $course->id) }}">Assign Teacher</a> --}}
-			<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-				href="#">Delete Course</a>
+			<form action="{{ route("admin.course.delete", $course->id) }}" method="post">
+				@csrf
+				@method("delete")
+				<button type="submit" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
+					Delete Course
+				</button>
+			</form>
 		</div>
+
 		<h2 class="text-xl font-semibold mb-2">Teacher List:</h2>
 		<ul class="list-disc pl-6 mb-6">
 			@forelse ($course->teachers as $teacher)

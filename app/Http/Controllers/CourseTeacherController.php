@@ -132,7 +132,7 @@ class CourseTeacherController extends Controller {
 
 		CourseTeacher::create(["user_id" => $teacher_id, "course_id" => $selectedNewCourse["id"]]);
 
-		return redirect(route("admin.teacher.show", $teacher_id));
+		return redirect(route("admin.teacher.show", $teacher_id))->with("successAssignToCourse", "Successfully assigned the teacher to the course!");
 	}
 
 	public function unassign(Request $request, $teacher_id) {
@@ -142,7 +142,7 @@ class CourseTeacherController extends Controller {
 		$targettedData = CourseTeacher::where("user_id", $teacher_id)->where("course_id", $request["course_id"])->first();
 		CourseTeacher::destroy($targettedData->id);
 
-		return redirect(route("admin.teacher.show", $teacher_id));
+		return redirect(route("admin.teacher.show", $teacher_id))->with("successUnassignFromCourse", "Successfully unassigned the teacher from the course!");
 
 	}
 
@@ -152,11 +152,11 @@ class CourseTeacherController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function unassign_destroy($course_id, Request $request) {
-		$teacher_id = $request->teacher_id;
-		$lecture = CourseTeacher::where('course_id', $course_id)->where('user_id', $teacher_id)->first();
-		dd($lecture);
-		CourseTeacher::destroy($lecture->id);
-		return redirect(route('admin.course.show', $course_id));
-	}
+	// public function unassign_destroy($course_id, Request $request) {
+	// 	$teacher_id = $request->teacher_id;
+	// 	$lecture = CourseTeacher::where('course_id', $course_id)->where('user_id', $teacher_id)->first();
+	// 	dd($lecture);
+	// 	CourseTeacher::destroy($lecture->id);
+	// 	return redirect(route('admin.course.show', $course_id));
+	// }
 }

@@ -63,4 +63,27 @@ class StudentController extends Controller {
 			'student' => $student
 		]);
 	}
+
+	public function admin_edit($student_id){
+		$student = User::findOrFail($student_id);
+
+		return view("roles.admin.student.edit", [
+			"student" => $student
+		]);
+	}
+
+	public function admin_update(Request $request, $student_id){
+		$student = User::findOrFail($student_id);
+
+		// $dataToUpdate = $request->except(["_token", "_method"]);
+
+		$dataToUpdate = $request->validate([
+			"full_name" => "required|min:3",
+			"email" => "required|email:dns"
+		]);
+
+		User::where("id", $student->id)->update($dataToUpdate);
+
+		return redirect(route("admin.student.index"))->with("successUpdateStudentData", "Successfully updated student data!");
+	}
 }

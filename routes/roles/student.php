@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/student')
 	->name('student.')
-	->middleware(['auth', 'role:Student', 'verified'])
+	->middleware(['auth', 'role:Student', 'verified', "acc_not_disabled"])
 	->group(function() {
 
 		Route::get('/', function() {

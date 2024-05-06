@@ -21,21 +21,21 @@
 		<!-- Content Section -->
 		<x-navbar.admin></x-navbar.admin>
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Edit Account Data</h1>
-			<form action="{{ route('sysadmin.account.acc_edit.store', $account->id) }}" method="post">
+			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Edit Teacher Data</h1>
+			<form action="{{ route('admin.teacher.update', $teacher->id) }}" method="post">
 				@csrf
 				@method('PATCH')
-				<!-- Account Name -->
+				<!-- Teacher Name -->
 				<div>
-					<x-label for="full_name" :value="__('New Account Name')" />
-					<x-input id="full_name" class="block mt-1 w-full" type="text" name="full_name" :value="$account->full_name"
+					<x-label for="full_name" :value="__('New Teacher Name')" />
+					<x-input id="full_name" class="block mt-1 w-full" type="text" name="full_name" :value="$teacher->full_name" 
 						autofocus />
 				</div>
 
-				<!-- Account Email -->
+				<!-- Teacher Email -->
 				<div class="mt-3">
-					<x-label for="email" :value="__('New Account Email')"/>
-					<x-input id="email" class="block mt-1 w-full" type="text" name="email" :value="$account->email"  />
+					<x-label for="email" :value="__('New Teacher Email')"/>
+					<x-input id="email" class="block mt-1 w-full" type="text" name="email" :value="$teacher->email"  />
 				</div>
 
 				<div class="flex items-center justify-end mt-4">

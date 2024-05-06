@@ -23,6 +23,13 @@
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
 			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Teachers</h1>
+
+			@if(session()->has("successUpdateTeacherData"))
+				<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+					<p class="text-green-900">{{ session("successUpdateTeacherData") }}</p>
+				</div>
+			@endif
+
 			<div class="overflow-x-auto rounded-md">
 				<table class="min-w-full bg-white border-collapse">
 					<thead>
@@ -51,14 +58,16 @@
 									</ul>
 								</td>
 								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
-									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-										href="{{ route("admin.teacher.show", $account->id) }}">
-										View
-									</a>
-									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-										href="#">
-										Edit
-									</a>
+									<div class="flex w-full gap-1">
+										<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+											href="{{ route("admin.teacher.show", $account->id) }}">
+											View
+										</a>
+										<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+											href="{{ route("admin.teacher.edit", $account->id) }}">
+											Edit
+										</a>
+									</div>
 								</td>
 							</tr>
 						@empty

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/admin') // ON PROGRESS
 	->name('admin.')
-	->middleware(['auth', 'role:Admin', 'verified'])
+	->middleware(['auth', 'role:Admin', 'verified', "acc_not_disabled"])
 	->group(function () {
 		Route::get('/', function () {
 			return redirect(route('dashboard'));
@@ -25,6 +25,10 @@ Route::prefix('/admin') // ON PROGRESS
 				Route::get('/', [TeacherAccountController::class, 'index'])->name('index'); // DONE
 				Route::get('/{teacher_id}', [TeacherAccountController::class, 'show'])->name('show') // DONE
 					->whereNumber('teacher_id');
+
+				// Edit teacher data
+				Route::get('/{teacher_id}/edit', [TeacherAccountController::class, 'admin_edit'])->name('edit')->whereNumber('teacher_id');
+				Route::patch('/{teacher_id}', [TeacherAccountController::class, 'admin_update'])->name('update')->whereNumber('teacher_id');
 
 				// Assign and unassign teacher to a course
 				Route::get("/{teacher_id}/assign", [CourseTeacherController::class, "show"])->name("assign");
@@ -49,6 +53,9 @@ Route::prefix('/admin') // ON PROGRESS
 				//Edit Course
 				Route::get('/{course_id}/edit', [CourseController::class, 'admin_edit'])->name('edit')->whereNumber('course_id'); // DONE
 				Route::patch('/{course_id}', [CourseController::class, 'admin_update'])->name('update')->whereNumber('course_id'); // DONE
+
+				// Delete Course
+				Route::delete('/{course_id}', [CourseController::class, 'admin_destroy'])->name('delete')->whereNumber('course_id');
 
 				// ==========================================================================
 
@@ -96,6 +103,10 @@ Route::prefix('/admin') // ON PROGRESS
 				// Student Controller
 				Route::get('/', [StudentController::class, 'admin_index'])->name('index'); // DONE
 				Route::get('/{student_id}', [StudentController::class, 'admin_show'])->name('show')->whereNumber('student_id'); //DONE
+
+				// Edit student data
+				Route::get('/{student_id}/edit', [StudentController::class, 'admin_edit'])->name('edit')->whereNumber('student_id');
+				Route::patch('/{student_id}', [StudentController::class, 'admin_update'])->name('update')->whereNumber('student_id');
 
 				// Assign
 				Route::get('/{student_id}/assign', [CourseStudentController::class, 'create'])->name('assign.create'); // DONE

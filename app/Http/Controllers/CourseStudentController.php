@@ -52,13 +52,13 @@ class CourseStudentController extends Controller {
 	 */
 	public function store(Request $request, $student_id) {
 		$targettedCourse = Course::where("course_name", $request["course_name"])->first();
-		
+
 		CourseStudent::create([
 			'user_id' => $student_id,
 			'course_id' => $targettedCourse->id
 		]);
 
-		return redirect(route('admin.student.show', $student_id));
+		return redirect(route('admin.student.show', $student_id))->with("successAssignToCourse", "Successfully assigned the student to the course!");
 	}
 
 	/**
@@ -107,6 +107,6 @@ class CourseStudentController extends Controller {
 	public function destroy($student_id, $course_id) {
 		$CourseStudent = CourseStudent::where('user_id', $student_id)->where('course_id', $course_id)->first();
 		CourseStudent::destroy($CourseStudent->id);
-		return redirect(route('admin.student.show', $student_id));
+		return redirect(route('admin.student.show', $student_id))->with("successUnassignFromCourse", "Successfully unassigned the student from the course!");;
 	}
 }

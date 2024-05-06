@@ -28,6 +28,16 @@
 			<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="{{ route('sysadmin.course.create') }}">Add New Course</a>
 		</div>
 
+		@if(session()->has("successCreateNewCourse"))
+			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-green-900">{{ session("successCreateNewCourse") }}</p>
+			</div>
+		@elseif(session()->has("successDeleteCourse"))
+			<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-yellow-600" >{{ session("successDeleteCourse") }}</p>
+			</div>
+		@endif
+
         @if ($courses->isNotEmpty())
         <div class="overflow-x-auto rounded-md">
 			<table class="min-w-full bg-white border-collapse sm:table">
@@ -57,18 +67,23 @@
 							{{ $course->visibility }}
 						</td>
 						<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4 text-center">
-							<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-								href="{{ route('admin.course.show', ['course_id' => $course->id]) }}">
-								View
-							</a>
-							<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-								href="{{ route('admin.course.edit', $course->id) }}">
-								Edit
-							</a>
-							<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-								href="#">
-								Delete
-							</a>
+							<div class="flex gap-1 w-full">
+								<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+									href="{{ route('admin.course.show', ['course_id' => $course->id]) }}">
+									View
+								</a>
+								<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+									href="{{ route('admin.course.edit', $course->id) }}">
+									Edit
+								</a>
+								<form action="{{ route("admin.course.delete", $course->id) }}" method="post">
+									@csrf
+									@method("delete")
+									<button type="submit" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
+										Delete
+									</button>
+								</form>
+							</div>
 						</td>
 
 					</tr>

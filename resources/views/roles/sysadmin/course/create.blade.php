@@ -27,17 +27,17 @@
             <div class="mb-4">
                 <x-label for="course_name" :value="__('Course Name')" />
                 <x-input id="course_name" class="block mt-1 w-full" type="text" name="course_name"
-                    :value="old('Course Name')" required autofocus />
+                    :value="old('Course Name')" autofocus />
             </div>
 
             <!-- Course Description -->
             <div class="mb-4">
-                <x-label for="course_desc" :value="__('Course Description')" />
-                <x-input id="course_desc" class="block mt-1 w-full" type="text" name="course_desc"
-                    :value="old('Course Description')" required />
+                <x-label for="course_description" :value="__('Course Description')" />
+                <x-input id="course_description" class="block mt-1 w-full" type="text" name="course_description"
+                    :value="old('Course Description')" />
             </div>
 
-          <!-- Visibility Selection -->
+			<!-- Visibility Selection -->
 			<div class="mb-4">
 				<x-label for="visibility" :value="__('Visibility')" />
 				<select name="visibility" id="visibility" class="block w-full max-w-full py-2 px-3 border border-gray-300 rounded-md max-h-screen">

@@ -12,6 +12,12 @@
 		<!-- Validation Errors -->
 		<x-auth-validation-errors class="mb-4" :errors="$errors" />
 
+		{{-- @if(session()->has("failLogin"))
+			<div class="w-full bg-red-500 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-red-900">{{ session("failLogin") }}</p>
+			</div>
+		@endif --}}
+
 		<form method="POST" action="{{ route('login') }}">
 			@csrf
 
@@ -19,14 +25,15 @@
 			<div>
 				<x-label for="email" :value="__('Email')" />
 
-				<x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+				<x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')"  autofocus />
+
 			</div>
 
 			<!-- Password -->
 			<div class="mt-4">
 				<x-label for="password" :value="__('Password')" />
 
-				<x-input id="password" class="block mt-1 w-full" type="password" name="password" required
+				<x-input id="password" class="block mt-1 w-full" type="password" name="password"
 					autocomplete="current-password" />
 			</div>
 

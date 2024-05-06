@@ -29,21 +29,20 @@
 					<div>
 						<x-label for="name" :value="__('Name')" />
 
-						<x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required
+						<x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')"
 							autofocus />
 					</div>
 
 					<!-- Email Address -->
-					<div>
+					<div class="mt-4">
 						<x-label for="email" :value="__('Email')" />
-						<x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required
-							autofocus />
+						<x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" autofocus />
 					</div>
 
 					<!-- Password -->
 					<div class="mt-4">
 						<x-label for="password" :value="__('Password')" />
-						<x-input id="password" class="block mt-1 w-full" type="password" name="password" required
+						<x-input id="password" class="block mt-1 w-full" type="password" name="password"
 							autocomplete="current-password" />
 					</div>
 
@@ -51,8 +50,7 @@
 					<div class="mt-4">
 						<x-label for="password_confirmation" :value="__('Confirm Password')" />
 
-						<x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation"
-							required />
+						<x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" />
 					</div>
 
 					<!-- Role Selection -->
@@ -60,7 +58,7 @@
 						<x-label for="role" :value="__('Role')" />
 
 						<select name="role" id="role"
-							class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+							class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 mt-1">
 							@forelse ($roles as $role)
 								@if ($role->role_name !== 'SysAdmin')
 									<option value="{{ $role->role_name }}">{{ $role->role_name }}</option>

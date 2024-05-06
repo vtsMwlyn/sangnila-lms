@@ -26,9 +26,12 @@ Route::prefix('/sysadmin') // 80%
 				Route::post('/', [RegisteredUserController::class, 'sys_store'])->name('store'); // DONE
 
 				Route::get("/{user_id}/edit", [AdminAccountController::class, "edit_acc"])->name("acc_edit");
-				Route::post("/{user_id}/edit", [AdminAccountController::class, "update_acc"])->name("acc_edit.store");
+				Route::patch("/{user_id}/edit", [AdminAccountController::class, "update_acc"])->name("acc_edit.store");
+
 				Route::post("/{user_id}/delete", [AdminAccountController::class, "destroy"])->name("acc_delete");
 				Route::post("/{user_id}/disable", [AdminAccountController::class, "disable_acc"])->name("acc_disable");
+				Route::post("/{user_id}/enable", [AdminAccountController::class, "enable_acc"])->name("acc_enable");
+
 			});
 
 		// Create Course

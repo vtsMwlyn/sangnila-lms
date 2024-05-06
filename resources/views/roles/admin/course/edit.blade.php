@@ -28,14 +28,14 @@
 				<!-- Course Name -->
 				<div>
 					<x-label for="course_name" :value="__('Course Name')" />
-					<x-input id="course_name" class="block mt-1 w-full" type="text" name="course_name" :value="$course->course_name" required
+					<x-input id="course_name" class="block mt-1 w-full" type="text" name="course_name" :value="$course->course_name"
 						autofocus />
 				</div>
 
 				<!-- Course Description -->
 				<div class="mt-4">
 					<x-label for="course_description" :value="__('Course Description')" />
-					<x-input id="course_description" class="block mt-1 w-full" type="text" name="course_description" :value="$course->course_description" required />
+					<x-input id="course_description" class="block mt-1 w-full" type="text" name="course_description" :value="$course->course_description" />
 				</div>
 
 				<!-- Course Visibility -->

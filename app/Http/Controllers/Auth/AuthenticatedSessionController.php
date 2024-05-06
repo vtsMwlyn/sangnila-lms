@@ -25,6 +25,11 @@ class AuthenticatedSessionController extends Controller {
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function store(LoginRequest $request) {
+		$validatedData = $request->validate([
+			"email" => "required|email:dns",
+			"password" => "required|min:8"
+		]);
+
 		$request->authenticate();
 
 		$request->session()->regenerate();
@@ -33,6 +38,20 @@ class AuthenticatedSessionController extends Controller {
 
 		return redirect(route('dashboard'));
 	}
+
+	// public function store(Request $request) {
+	// 	$validatedData = $request->validate([
+	// 		"email" => "required|email:dns",
+	// 		"password" => "required|min:8"
+	// 	]);
+
+	// 	if(Auth::attempt($validatedData)){
+	// 		$request->session()->regenerate();
+	// 		return redirect()->intended(route('dashboard'));
+	// 	}
+
+	// 	return back()->with("failLogin", "Login failed!");
+	// }
 
 	/**
 	 * Destroy an authenticated session.

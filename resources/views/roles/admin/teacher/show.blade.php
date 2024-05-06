@@ -24,6 +24,21 @@
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
 			<h2 class="text-2xl font-semibold text-blue-900 mb-4">Teacher's Detail</h2>
+
+			@if(session()->has("successAssignToCourse"))
+				<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+					<p class="text-green-900">{{ session("successAssignToCourse") }}</p>
+				</div>
+			@elseif(session()->has("successUnassignFromCourse"))
+				<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
+					<p class="text-yellow-600" >{{ session("successUnassignFromCourse") }}</p>
+				</div>
+			@endif
+
+			<div class="h-fit mb-5">
+				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+					href="{{ route("admin.teacher.edit", $user->id) }}">Edit</a>
+			</div>
 			<table class="mb-8 border">
 				<tr>
 					<td class="border px-5 font-bold">Full name</td>
@@ -44,8 +59,8 @@
 
 			<ul class="mb-6 mt-6 flex flex-wrap gap-5">
 				@forelse ($user->teached_courses as $course)
-					<li class="text-black border rounded-lg">
-						<form action="{{ route("admin.teacher.unassign", $user->id) }}" method="post" class="bg-gray-600 px-3 py-1">
+					<li class="text-black">
+						<form action="{{ route("admin.teacher.unassign", $user->id) }}" method="post" class="bg-gray-300 px-3 py-1 border rounded-lg">
 							@csrf
 							{{ $course->course_name }}
 							<input type="hidden" name="course_id" id="course_id" value={{ $course->id }}>

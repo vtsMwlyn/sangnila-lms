@@ -40,14 +40,23 @@ class CourseController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function sys_store(Request $request) {
-		$data = $request->all();
-		$course = new Course();
-		$course->course_name = $request->course_name;
-		$course->course_description = $request->course_desc;
-		$course->visibility = $request->visibility;
-		$course->save();
+		// $data = $request->all();
+		// $course = new Course();
+		// $course->course_name = $request->course_name;
+		// $course->course_description = $request->course_desc;
+		// $course->visibility = $request->visibility;
+		// $course->save();
 		// return redirect(route('sysadmin.course.index'));
-		return redirect(route('admin.course.index'));
+
+		$validatedData = $request->validate([
+			"course_name" => "required|min:3",
+			"course_description" => "required|min:3",
+			"visibility" => "required"
+		]);
+
+		Course::create($validatedData);
+
+		return redirect(route('admin.course.index'))->with("successCreateNewCourse", "Successfully created new course!");
 	}
 
 	/**
@@ -71,7 +80,6 @@ class CourseController extends Controller {
 	 */
 	public function sys_edit($course_id) {
 		$course = Course::findOrFail($course_id);
-		dd($course);
 		// return view(sysadmin.course.edit);
 	}
 
@@ -84,11 +92,8 @@ class CourseController extends Controller {
 	 */
 	public function sys_update(Request $request, $course_id) {
 		$data = $request->except(['_token', '_method']);
-		dd($data);
 		Course::where('id', $course_id)->update($data);
-		return redirect(route('sysadmin.course.show', [
-			'course_id' => $course_id
-		]));
+		return redirect(route('sysadmin.course.show', $course_id))->with("successUpdateCourseData", "Successfully updated course data!");
 	}
 
 	/**
@@ -116,6 +121,7 @@ class CourseController extends Controller {
 	public function sys_archive_update($course_id, Request $request) {
 		$visibility = $request->visibility === 'on' ? 'public' : 'private';
 		$course = Course::findOrFail($course_id)->update(['visibility' => $visibility]);
+
 		return redirect(route('sysadmin.course.index'));
 	}
 
@@ -166,9 +172,25 @@ class CourseController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function admin_update(Request $request, $course_id) {
-		$data = $request->except(['_token', '_method']);
-		$course = Course::/*where('visibility', 'public')->*/where('id', $course_id)->update($data);
-		return redirect(route('admin.course.show', $course_id));
+		// $data = $request->except(['_token', '_method']);
+
+		$validatedData = $request->validate([
+			"course_name" => "required|min:3",
+			"course_description" => "required|min:3",
+			"visibility" => "required"
+		]);
+
+		// $course = Course::/*where('visibility', 'public')->*/where('id', $course_id)->update($data);
+		Course::where('id', $course_id)->update($validatedData);
+
+		return redirect(route('admin.course.show', $course_id))->with("successUpdateCourseData", "Successfully updated course data!");
+	}
+
+	public function admin_destroy($course_id){
+		$course = Course::findOrFail($course_id);
+		Course::destroy("id", $course->id);
+
+		return redirect(route('admin.course.index'))->with("successDeleteCourse", "Successfully deleted course!");
 	}
 
 	// ========== TEACHER ==========

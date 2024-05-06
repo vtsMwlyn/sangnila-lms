@@ -33,27 +33,29 @@ class RegisteredUserController extends Controller {
 	 *
 	 * @throws \Illuminate\Validation\ValidationException
 	 */
-	public function store(Request $request) {
-		$request->validate([
-			'name' => ['required', 'string', 'max:255'],
-			'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-			'password' => ['required', 'confirmed', Rules\Password::defaults()],
-			'role' => ['required', 'in:SysAdmin, Admin,Teacher,Student'], // Use the 'in' rule
-		]);
-		$role_id = Role::where('role_name', $request->role)->first();
-		$user = User::create([
-			'full_name' => $request->name,
-			'email' => $request->email,
-			'password' => Hash::make($request->password),
-			'role_id' => $role_id->id,
-		]);
+	// public function store(Request $request) {
+	// 	$request->validate([
+	// 		'name' => ['required', 'string', 'min:3', 'max:255'],
+	// 		'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+	// 		'password' => ['required', 'confirmed', 'min:3', Rules\Password::defaults()],
+	// 		'role' => ['required', 'in:SysAdmin,Admin,Teacher,Student'], // Use the 'in' rule
+	// 	]);
 
-		event(new Registered($user));
+	// 	$role_id = Role::where('role_name', $request->role)->first();
+	// 	$user = User::create([
+	// 		'full_name' => $request->name,
+	// 		'email' => $request->email,
+	// 		'password' => Hash::make($request->password),
+	// 		'role_id' => $role_id->id,
+	// 		"status" => "enabled"
+	// 	]);
 
-		Auth::login($user);
+	// 	event(new Registered($user));
 
-		return redirect(RouteServiceProvider::HOME);
-	}
+	// 	Auth::login($user);
+
+	// 	return redirect(RouteServiceProvider::HOME);
+	// }
 
 	// ========== SYSADMIN ==========
 	/**
@@ -79,8 +81,9 @@ class RegisteredUserController extends Controller {
 	public function sys_store(Request $request) {
 		$request->validate([
 			'name' => ['required', 'string', 'max:255'],
-			'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-			'password' => ['required', 'confirmed', Rules\Password::defaults()],
+			'email' => ['required', 'email', 'max:255', 'unique:users'],
+			'password' => ['required', 'confirmed', 'min:8', Rules\Password::defaults()],
+			'password_confirmation' => ['required', 'min:8'],
 			'role' => ['required', 'in:Admin,Teacher,Student'], // Exclude sysadmin
 		]);
 
@@ -90,9 +93,10 @@ class RegisteredUserController extends Controller {
 			'email' => $request->email,
 			'password' => Hash::make($request->password),
 			'role_id' => $role_id->id,
+			"status" => "enabled"
 		]);
 
-		return redirect(route('sysadmin.account.index'));
+		return redirect(route('sysadmin.account.index'))->with("successCreateNewAccount", "Successfully created new account!");
 	}
 
 	// ========== ADMIN ==========

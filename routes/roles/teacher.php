@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/teacher')
 	->name('teacher.')
-	->middleware(['auth', 'role:Teacher', 'verified'])
+	->middleware(['auth', 'role:Teacher', 'verified', "acc_not_disabled"])
 	->group(function () {
 		Route::get('/', function () {
 			return redirect(route('dashboard'));

@@ -21,33 +21,21 @@
 		<!-- Content Section -->
 		<x-navbar.admin></x-navbar.admin>
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Edit Account Data</h1>
-			<form action="{{ route('sysadmin.account.acc_edit.store', $account->id) }}" method="post">
+			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Notice</h1>
+			<div class="bg-white rounded-2xl p-5 border-blue-300 border-2">
 				@csrf
-				@method('PATCH')
-				<!-- Account Name -->
-				<div>
-					<x-label for="full_name" :value="__('New Account Name')" />
-					<x-input id="full_name" class="block mt-1 w-full" type="text" name="full_name" :value="$account->full_name"
-						autofocus />
+				@method('DELETE')
+				<!-- Confirmation Text -->
+				<div class="mb-4">
+					<h1 class="text-xl font-semibold text-blue-900">
+						Sorry, your account is disabled.
+					</h1>
+					<h3 class="italic text-gray-500 mt-4">Please contact admin to enable your account.</h3>
 				</div>
-
-				<!-- Account Email -->
-				<div class="mt-3">
-					<x-label for="email" :value="__('New Account Email')"/>
-					<x-input id="email" class="block mt-1 w-full" type="text" name="email" :value="$account->email"  />
-				</div>
-
-				<div class="flex items-center justify-end mt-4">
-					<x-button class="ml-4">
-						{{ __('Save') }}
-					</x-button>
-				</div>
-			</form>
-
+			</div>
 		</div>
-	</div>
 
+	</div>
 </body>
 
 </html>
