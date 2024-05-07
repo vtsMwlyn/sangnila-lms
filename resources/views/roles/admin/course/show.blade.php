@@ -103,19 +103,35 @@
 			<div class="text-blue-900">N/A</div>
 		@endif --}}
 
-		<h2 class="text-xl font-semibold mb-2 mt-8">Course Topics</h2>
+		<h2 class="text-xl font-semibold mb-2 mt-8">Course Topics & Materials:</h2>
 		<div class="mb-6">
-			@forelse ($course->materials as $material)
-				<div class="relative flex items-center py-2 group hover:bg-gray-100">
-					<span class="mr-2">
-						<a href="{{ $material->link }}" class="text-black hover:text-blue-500 transition duration-300 ease-in-out">
-							{{ $material->title }}
-						</a>
-					</span>
-				</div>
-			@empty
-				<div class="text-gray-500">No materials</div>
-			@endforelse
+			<table>
+				<thead>
+					<th class="border px-3">Topic name</th>
+					<th class="border px-3">Materials</th>
+				</thead>
+				<tbody>
+					@forelse ($course->course_topics as $topic)
+						<tr>
+							<td class="border px-3">{{ $topic->title }}</td>
+							<td class="border px-3">
+								@if($topic->course_materials->count())
+									<ul>
+										@foreach ($topic->course_materials as $material)
+											<li>{{ $material->title }}</li>
+										@endforeach
+									</ul>
+								@else
+									<span class="text-gray-500">- No materials yet -</span>
+								@endif
+							</td>
+						</tr>
+					@empty
+						<tr class="text-gray-500 border"><td colspan="2" class="text-center">- No topics yet -</td></tr>
+					@endforelse
+				</tbody>
+			</table>
+
 		</div>
 	</div>
 </body>

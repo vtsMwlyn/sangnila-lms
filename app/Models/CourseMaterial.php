@@ -7,14 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class CourseMaterial extends Model {
 	use HasFactory;
+
 	protected $fillable = [
-		'course_id',
+		'course_topic_id',
 		'title',
 		'link'
 	];
 
-	public function course() {
-		return $this->belongsTo(Course::class);
+	public function course_topic() {
+		return $this->belongsTo(CourseTopic::class, "course_topic_id");
 	}
 
 	public function progress() {

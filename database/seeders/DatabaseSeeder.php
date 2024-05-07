@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Course;
 use App\Models\CourseMaterial;
+use App\Models\CourseTopic;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -41,32 +42,36 @@ class DatabaseSeeder extends Seeder
 		]);
 		Course::create([
 			"course_name" => "Concept Art",
-			"course_description" => "This course provides a comprehensive introduction to the fundamentals of concept art, exploring the techniques, principles, and workflows essential for creating captivating visual concepts for various media industries. Through a combination of lectures, hands-on exercises, and projects, students will develop the skills and knowledge necessary to bring their creative ideas to life in the form of compelling concept art."
+			"course_description" => "This is the description of course Concept Art. You can modify or add anything here."
 		]);
 
+		CourseTopic::create(["title" => "TOPIC 01", "course_id" => 3]);
+		CourseTopic::create(["title" => "TOPIC 02", "course_id" => 3]);
+		CourseTopic::create(["title" => "TOPIC 01", "course_id" => 2]);
+
 		CourseMaterial::create([
-			"course_id" => 3,
+			"course_topic_id" => 1,
 			"title" => "[TOPIC 01] - Introduction to Concept Art Video",
 			"link" => "https://youtu.be/61mkx_OV61s"
 		]);
 		CourseMaterial::create([
-			"course_id" => 3,
-			"title" => "[TOPIC 01] - Introduction to Concept Art Article",
+			"course_topic_id" => 1,
+			"title" => "Introduction to Concept Art Article",
 			"link" => "https://www.nfi.edu/concept-art/"
 		]);
 		CourseMaterial::create([
-			"course_id" => 3,
-			"title" => "[TOPIC 02] - Creating your first concept art video",
+			"course_topic_id" => 2,
+			"title" => "Creating your first concept art video",
 			"link" => "https://youtu.be/WVPwtsQ-RzI"
 		]);
 		CourseMaterial::create([
-			"course_id" => 2,
-			"title" => "[TOPIC 01] - Introduction to Roblox studio video",
+			"course_topic_id" => 3,
+			"title" => "Introduction to Roblox studio video",
 			"link" => "https://youtu.be/UMmZMPYAzZs"
 		]);
 		CourseMaterial::create([
-			"course_id" => 2,
-			"title" => "[TOPIC 01] - Roblox studio article",
+			"course_topic_id" => 3,
+			"title" => "Roblox studio article",
 			"link" => "https://create.roblox.com/docs/tutorials/first-experience"
 		]);
     }

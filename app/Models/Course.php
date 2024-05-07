@@ -7,14 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model {
 	use HasFactory;
+
 	protected $fillable = [
 		'course_name',
 		'course_description',
 		'visibility'
 	];
 
-	public function materials(){
-		return $this->hasMany(CourseMaterial::class);
+	public function course_topics(){
+		return $this->hasMany(CourseTopic::class);
 	}
 
 	public function teachers() {
