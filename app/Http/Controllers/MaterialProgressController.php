@@ -23,14 +23,16 @@ class MaterialProgressController extends Controller {
 			->pluck('material_id')
 			->toArray();
 
-		foreach ($course->materials as $material) {
-			if (!in_array($material->id, $existingProgress)) {
-				$progress = MaterialProgress::create([
-					'student_id' => $student->id,
-					'material_id' => $material->id,
-					'course_id' => $course->id,
-					'status' => 'locked'
-				]);
+		foreach ($course->course_topics as $topic) {
+			foreach($topic->course_materials as $material) {
+				if (!in_array($material->id, $existingProgress)) {
+					$progress = MaterialProgress::create([
+						'student_id' => $student->id,
+						'material_id' => $material->id,
+						'course_id' => $course->id,
+						'status' => 'locked'
+					]);
+				}
 			}
 		}
 
@@ -39,7 +41,7 @@ class MaterialProgressController extends Controller {
 		return view('roles.teacher.student.progress', [
 			'student' => $student,
 			'course' => $course,
-			'materials' => $newestProgress
+			'newestprogress' => $newestProgress
 		]);
 	}
 
@@ -52,10 +54,12 @@ class MaterialProgressController extends Controller {
 	 */
 	public function update(Request $request, $progress_id) {
 		$status = $request->access === 'on' ? 'unlocked' : 'locked';
-		$materialProgress = MaterialProgress::findOrFail($progress_id)->first();
+		$materialProgress = MaterialProgress::where("id", $progress_id)->first();
+
 		MaterialProgress::findOrFail($progress_id)->update([
 			'status' => $status
 		]);
+
 		return redirect(route('teacher.student.show.progress', [
 			'student_id' => $materialProgress->student_id,
 			'course_id' => $materialProgress->course_id

@@ -34,31 +34,34 @@
 				<table class="min-w-full bg-white border-collapse">
 					<thead>
 						<tr>
-							<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Full Name</td>
-							<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Email</td>
-							<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Assigned Courses</td>
-							<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Actions</td>
+							<th class="bg-blue-300 border-b border-blue-400 px-4 py-2 sm:w-1/4">Full Name</th>
+							<th class="bg-blue-300 border-b border-blue-400 px-4 py-2 sm:w-1/4">Email</th>
+							<th class="bg-blue-300 border-b border-blue-400 px-4 py-2 sm:w-1/4">Assigned Courses</th>
+							<th class="bg-blue-300 border-b border-blue-400 px-4 py-2 sm:w-1/4">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 						@forelse ($accounts as $account)
+							@if($account->status == "disabled")
+								@continue
+							@endif
 							<tr>
 								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
-									<a href="{{ route('admin.teacher.show', ['teacher_id' => $account->id]) }}" class="text-blue-500 hover:text-blue-700 underline cursor-pointer">
+									<a href="{{ route('admin.teacher.show', ['teacher_id' => $account->id]) }}" class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
 										{{ $account->full_name }}
 									</a>
 								</td>
 								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">{{ $account->email }}</td>
 								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 									{{-- {{ $account->teached_courses }} --}}
-									<ul>
+									<ul class="flex flex-col items-center">
 										@foreach ($account->teached_courses as $course)
 											<li>{{ $course->course_name }}</li>
 										@endforeach
 									</ul>
 								</td>
 								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
-									<div class="flex w-full gap-1">
+									<div class="flex w-full justify-center gap-1">
 										<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
 											href="{{ route("admin.teacher.show", $account->id) }}">
 											View

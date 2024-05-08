@@ -45,13 +45,13 @@ class DatabaseSeeder extends Seeder
 			"course_description" => "This is the description of course Concept Art. You can modify or add anything here."
 		]);
 
-		CourseTopic::create(["title" => "TOPIC 01", "course_id" => 3]);
-		CourseTopic::create(["title" => "TOPIC 02", "course_id" => 3]);
-		CourseTopic::create(["title" => "TOPIC 01", "course_id" => 2]);
+		CourseTopic::create(["title" => "TOPIC 01 - Introduction to Concept Art", "course_id" => 3]);
+		CourseTopic::create(["title" => "TOPIC 02 - Software Installation and Test Run", "course_id" => 3]);
+		CourseTopic::create(["title" => "TOPIC 01 - Get Stated with Roblox", "course_id" => 2]);
 
 		CourseMaterial::create([
 			"course_topic_id" => 1,
-			"title" => "[TOPIC 01] - Introduction to Concept Art Video",
+			"title" => "Introduction to Concept Art Video",
 			"link" => "https://youtu.be/61mkx_OV61s"
 		]);
 		CourseMaterial::create([

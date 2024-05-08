@@ -13,7 +13,7 @@
             class="md:hidden text-indigo-700 font-semibold text-3xl hover:text-blue-950 hover:scale-110 transition duration-300 py-2 pl-40 pr-3 mx-1">
             <span class="inline-block">&#9776;</span> <!-- 3-line icon (hamburger) -->
         </button>
-        
+
 
             <!-- Standard Navigation Links for Larger Screens -->
             <div class="hidden md:flex md:items-center md:space-x-4 md:justify-start px-14">
@@ -28,12 +28,22 @@
                     </a> -->
                     <a href="{{ route('teacher.mycourse.index') }}"
                         class="text-indigo-700 font-semibold text-xl hover:text-blue-950 hover:scale-110 transition duration-300 py-2 px-5">
-                        My Course(s)
+                        Manage Courses
                     </a>
-					
-					<a href="{{ route('teacher.student.index') }}"
+
+					<a href="{{ route('teacher.student.select-course') }}"
                         class="text-indigo-700 font-semibold text-xl hover:text-blue-950 hover:scale-110 transition duration-300 py-2 px-5">
-                        Students
+                        Manage Student
+                    </a>
+
+					<a href="{{ route('teacher.attendance.index') }}"
+                        class="text-indigo-700 font-semibold text-xl hover:text-blue-950 hover:scale-110 transition duration-300 py-2 px-5">
+                        Attendance
+                    </a>
+
+					<a href="{{ route("teacher.assignment.index") }}"
+                        class="text-indigo-700 font-semibold text-xl hover:text-blue-950 hover:scale-110 transition duration-300 py-2 px-5">
+                        Assignment
                     </a>
                     <!-- Add more navigation links as needed -->
                 </div>
@@ -61,7 +71,7 @@
                 class="block text-indigo-700 font-semibold text-md hover:text-blue-950 hover:scale-110 transition duration-300 py-1">
                 My Course(s)
             </a>
-            <a href="{{ route('teacher.student.index') }}"
+            <a href="{{ route('teacher.student.select-course') }}"
                 class="block text-indigo-700 font-semibold text-md hover:text-blue-950 hover:scale-110 transition duration-300 py-1">
                 Students
             </a>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,11 +15,9 @@ class StudentController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function teacher_index() {
-		$role = Role::where('role_name', 'Student')->first();
-		$students = $role->users;
-		return view('roles.teacher.student.index', [
-			'students' => $students
+	public function teacher_select_course() {
+		return  view('roles.teacher.student.select-course', [
+			"courses" => auth()->user()->teached_courses
 		]);
 	}
 
@@ -28,10 +27,12 @@ class StudentController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function teacher_show($student_id) {
-		$student = User::findOrFail($student_id);
-		return  view('roles.teacher.student.show', [
-			'student' => $student
+	public function teacher_select_student($course_id) {
+		$course = Course::where("id", $course_id)->first();
+		$students = $course->students;
+		return view('roles.teacher.student.select-student', [
+			'students' => $students,
+			"course" => $course
 		]);
 	}
 

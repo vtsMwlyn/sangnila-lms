@@ -37,12 +37,15 @@
 							<tr>
 								<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Student Name</th>
 								<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Email</th>
-								<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Enrolled Courses</th>
+								<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4" >Enrolled Courses and Progress</th>
 								<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
 							@foreach ($students as $student)
+								@if($student->status == "disabled")
+									@continue
+								@endif
 								<tr>
 									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 										<a href="{{ route('admin.student.show', ['student_id' => $student->id]) }}"
@@ -53,15 +56,18 @@
 									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 										{{ $student->email }}
 									</td>
-									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
+									<td class="bg-blue-100 border-b border-blue-300 px-6 py-2 sm:w-1/4">
 										<ul>
 											@foreach ($student->enrolled_courses as $course)
-												<li>{{ $course->course_name }}</li>
+												<li class="flex justify-between">
+													<span>{{ $course->course_name }}</span>
+													<span>[Progress: 0/0]</span>
+												</li>
 											@endforeach
 										</ul>
 									</td>
 									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
-										<div class="flex w-full gap-1">
+										<div class="flex w-full justify-center gap-1">
 											<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
 											href="{{ route("admin.student.show", $student->id) }}">
 												View

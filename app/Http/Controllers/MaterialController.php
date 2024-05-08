@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\CourseMaterial;
+use App\Models\CourseTopic;
 use Illuminate\Http\Request;
 
 class MaterialController extends Controller {
@@ -22,10 +23,10 @@ class MaterialController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function teacher_create($course_id) {
-		$course = Course::findOrFail($course_id);
-		return view('roles.teacher.material.create', [
-			'course' => $course
+	public function teacher_create($topic_id) {
+		$topic = CourseTopic::where("id", $topic_id)->first();
+		return view('roles.teacher.topic-and-material.create-material', [
+			'topic' => $topic
 		]);
 	}
 
@@ -35,13 +36,16 @@ class MaterialController extends Controller {
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function teacher_store(Request $request, $course_id) {
-		$material = CourseMaterial::create([
-			'course_id' => $course_id,
-			'title' => $request->title,
-			'link' => $request->link
+	public function teacher_store(Request $request, $topic_id) {
+		$topic = CourseTopic::where("id", $topic_id)->first();
+		$validatedData = $request->validate([
+			"title" => "required|min:3",
+			"link" => "required|url"
 		]);
-		return redirect(route('teacher.mycourse.show', $course_id));
+
+		CourseMaterial::create(["course_topic_id" => $topic->id, "title" => $validatedData["title"], "link" => $validatedData["link"]]);
+
+		return redirect(route('teacher.topic.show', [$topic->course->id, $topic->id]))->with("successUploadMaterial", "Successfully uploaded new material to the topic!");
 	}
 
 	/**
@@ -62,7 +66,7 @@ class MaterialController extends Controller {
 	 */
 	public function teacher_edit($material_id) {
 		$material = CourseMaterial::findOrFail($material_id);
-		return view('roles.teacher.material.edit', [
+		return view('roles.teacher.topic-and-material.edit-material', [
 			'material' => $material
 		]);
 	}
@@ -74,11 +78,15 @@ class MaterialController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function teacher_update(Request $request, $id) {
-		$material = CourseMaterial::findOrFail($id);
-		$data = $request->except(['_token', '_method']);
-		CourseMaterial::findOrFail($id)->update($data);
-		return redirect(route('teacher.mycourse.show', $material->course->id));
+	public function teacher_update(Request $request, $material_id) {
+		$material = CourseMaterial::findOrFail($material_id);
+		$data = $request->validate([
+			"title" => "required|min:3",
+			"link" => "required|url"
+		]);
+		CourseMaterial::findOrFail($material_id)->update($data);
+
+		return redirect(route('teacher.topic.show', [$material->course_topic->course->id, $material->course_topic->id]))->with("successEditMaterial", "Successfully update material data!");
 	}
 
 	/**
@@ -87,7 +95,18 @@ class MaterialController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function teacher_destroy($id) {
-		//
+
+	public function teacher_delete($material_id) {
+		return view("roles.teacher.topic-and-material.delete-material-confirmation", [
+			"material" => CourseMaterial::where("id", $material_id)->first()
+		]);
+	}
+
+	public function teacher_destroy($material_id) {
+		$material = CourseMaterial::where("id", $material_id)->first();
+
+		CourseMaterial::destroy("id", $material->id);
+
+		return redirect(route("teacher.topic.show", [$material->course_topic->course->id, $material->course_topic->id]))->with("successDeleteMaterial", "Successfully deleted material from the topic!");
 	}
 }

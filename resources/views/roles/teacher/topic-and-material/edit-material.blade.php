@@ -19,27 +19,35 @@
 	<div class="bg-cover h-screen flex flex-col items-center"
 		style="background-image: url({{ asset('img/background.png') }});">
 		<!-- Content Section -->
+
 		<x-navbar.teacher></x-navbar.teacher>
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Add Material to {{ $course->course_name }}</h1>
-			<form action="{{ route('teacher.material.store', $course->id) }}" method="post">
+			<h1 class="text-3xl font-semibold text-blue-900 mb-1">
+				<a href="{{ route("teacher.mycourse.show", $material->course_topic->course->id) }}">{{ $material->course_topic->course->course_name }}</a>
+			</h1>
+			<h1 class="text-xl font-semibold text-blue-900 mb-4">
+				<a href="{{ route("teacher.mycourse.show", [$material->course_topic->course->id, $material->course_topic->id]) }}">{{ $material->course_topic->title }}</a>
+			</h1>
+			<h1 class="text-2xl font-semibold text-blue-900 mb-4">Edit Material: "{{ $material->title }}"</h1>
+			<form action="{{ route('teacher.material.update', $material->id) }}" method="post">
 				@csrf
+				@method('PATCH')
 				<!-- Material Title -->
 				<div>
 					<x-label for="title" :value="__('Material Title')" />
-					<x-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('Material Title')" required
+					<x-input id="title" class="block mt-1 w-full" type="text" name="title" value="{{ $material->title }}" required
 						autofocus />
 				</div>
 
 				<!-- Material Link -->
 				<div class="mt-4">
 					<x-label for="link" :value="__('Material Link')" />
-					<x-input id="link" class="block mt-1 w-full" type="text" name="link" :value="old('Material Link')" required />
+					<x-input id="link" class="block mt-1 w-full" type="text" name="link" value="{{ $material->link }}" required />
 				</div>
 
 				<div class="flex items-center justify-end mt-4">
 					<x-button class="ml-4">
-						{{ __('Submit') }}
+						{{ __('SAVE') }}
 					</x-button>
 				</div>
 			</form>

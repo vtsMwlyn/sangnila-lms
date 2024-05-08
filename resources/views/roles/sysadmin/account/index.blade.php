@@ -18,7 +18,7 @@
 
     <x-navbar.sysadmin></x-navbar.sysadmin>
     <!-- Content Section -->
-    <div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
+    <div class="container mx-auto mt-6 mb-6 p-4 bg-white rounded-lg shadow-lg">
 
         <h2 class="text-2xl font-semibold text-blue-900 mb-4">Accounts</h2>
         <div class="mb-5">

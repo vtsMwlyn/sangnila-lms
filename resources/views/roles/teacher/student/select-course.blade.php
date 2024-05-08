@@ -18,33 +18,36 @@
 <body>
 	<div class="bg-cover h-screen flex flex-col items-center"
 		style="background-image: url({{ asset('img/background.png') }});">
-		<!-- Content Section -->
 
 		<x-navbar.teacher></x-navbar.teacher>
+		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Edit Material on {{ $material->course->course_name }}</h1>
-			<form action="{{ route('teacher.material.update', $material->id) }}" method="post">
-				@csrf
-				@method('PATCH')
-				<!-- Material Title -->
-				<div>
-					<x-label for="title" :value="__('Material Title')" />
-					<x-input id="title" class="block mt-1 w-full" type="text" name="title" value="{{ $material->title }}" required
-						autofocus />
-				</div>
-
-				<!-- Material Link -->
-				<div class="mt-4">
-					<x-label for="link" :value="__('Material Link')" />
-					<x-input id="link" class="block mt-1 w-full" type="text" name="link" value="{{ $material->link }}" required />
-				</div>
-
-				<div class="flex items-center justify-end mt-4">
-					<x-button class="ml-4">
-						{{ __('EDIT!') }}
-					</x-button>
-				</div>
-			</form>
+			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Pick a Course</h1>
+			<div class="overflow-x-auto rounded-md">
+				<table class="min-w-full bg-white border-collapse ">
+					<thead>
+						<tr>
+							<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Course Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						@if ($courses->isNotEmpty())
+							@foreach ($courses as $course)
+								<tr>
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
+										<a href="{{ route('teacher.student.select-student', $course->id) }}"
+											class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
+											{{ $course->course_name }}
+										</a>
+									</td>
+								</tr>
+							@endforeach
+						@else
+							<tr class="text-blue-900"><td>N/A</td></tr>
+						@endif
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 

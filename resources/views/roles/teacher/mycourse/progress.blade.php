@@ -44,7 +44,7 @@
 									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
 										{{-- Calculate the progress --}}
 										@php
-											$totalMaterials = count($course->materials);
+											$totalMaterials = count($course->course_topics);
 											$unlockedMaterials = $student->progress->where('status', 'unlocked')->count();
 											$progress = $unlockedMaterials . '/' . $totalMaterials;
 										@endphp
