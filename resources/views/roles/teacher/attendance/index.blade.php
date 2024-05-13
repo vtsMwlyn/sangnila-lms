@@ -22,53 +22,33 @@
 		<x-navbar.teacher></x-navbar.teacher>
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Courses</h1>
-			@if (Auth::user()->teached_courses->isNotEmpty())
-				<div class="overflow-x-auto">
-					<table class="min-w-full bg-white border-collapse border border-blue-400">
-						<thead>
-							<tr>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Course Name</th>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Description</th>
-								<th class="bg-blue-300 border border-blue-400 px-4 py-2">Actions</th>
-							</tr>
-						</thead>
-						<tbody>
+			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Manage Attendance</h1>
+			<h1 class="text-2xl font-semibold text-blue-900 mb-4">Pick a Course</h1>
+			<div class="overflow-x-auto rounded-md">
+				<table class="min-w-full bg-white border-collapse ">
+					<thead>
+						<tr>
+							<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Course Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						@if (Auth::user()->teached_courses->isNotEmpty())
 							@foreach (Auth::user()->teached_courses as $course)
 								<tr>
-									<td class="border border-blue-400 px-4 py-2">
-										<a href="{{ route('teacher.mycourse.show', ['course_id' => $course->id]) }}"
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
+										<a href="{{ route('teacher.attendance.show', $course->id) }}"
 											class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
 											{{ $course->course_name }}
 										</a>
 									</td>
-
-									<td class="border border-blue-400 px-4 py-2">
-										{{ $course->course_description }}
-									</td>
-									<td class="border border-blue-400 px-4 py-2">
-										<div class="mb-5">
-											<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white"
-												href="{{ route('teacher.attendance.show', $course->id) }}">
-												Check Attendance
-											</a>
-										</div>
-										<div>
-											<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white"
-												href="{{ route('teacher.attendance.view', $course->id) }}">
-												View Attendance
-											</a>
-										</div>
-									</td>
-
 								</tr>
 							@endforeach
-						</tbody>
-					</table>
-				</div>
-			@else
-				<div class="text-blue-900">N/A</div>
-			@endif
+						@else
+							<tr class="text-blue-900"><td>N/A</td></tr>
+						@endif
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 

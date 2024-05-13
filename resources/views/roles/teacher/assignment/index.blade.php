@@ -22,7 +22,7 @@
 		<x-navbar.teacher></x-navbar.teacher>
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Manage Student</h1>
+			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Manage Assignment</h1>
 			<h1 class="text-2xl font-semibold text-blue-900 mb-4">Pick a Course</h1>
 			<div class="overflow-x-auto rounded-md">
 				<table class="min-w-full bg-white border-collapse ">
@@ -32,11 +32,11 @@
 						</tr>
 					</thead>
 					<tbody>
-						@if ($courses->isNotEmpty())
-							@foreach ($courses as $course)
+						@if (Auth::user()->teached_courses->isNotEmpty())
+							@foreach (Auth::user()->teached_courses as $course)
 								<tr>
 									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-										<a href="{{ route('teacher.student.select-student', $course->id) }}"
+										<a href="{{ route('teacher.assignment.show', $course->id) }}"
 											class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
 											{{ $course->course_name }}
 										</a>

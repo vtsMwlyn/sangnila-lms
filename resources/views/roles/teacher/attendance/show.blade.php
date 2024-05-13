@@ -23,57 +23,76 @@
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
 			{{-- Attendance --}}
-			{{-- <h1 class="text-3xl font-semibold text-blue-900 mb-4">Attendance for {{ $course->course_name }}</h1>
+			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Student Attendance for {{ $attendanceData[0]->course->course_name }}</h1>
 
-			@if ($course->students->isNotEmpty())
-				<form method="POST" action="{{ route('teacher.attendance.store') }}">
-					@csrf
-					<input type="text" name="course" id="course" value="{{ $course->id }}" hidden>
-					@if ($course->schedules->isNotEmpty())
-					<select name="schedule" id="schedule">
-						@foreach ($course->schedules as $schedule)
-							<option value="{{ $schedule->id }}">{{ $schedule->day_of_week }}: {{ $schedule->start_time }} - {{ $schedule->end_time }}</option>
-						@endforeach
-					</select>
-					@else
-					<div>No Schedule for this course</div>
-					@endif
+			@if(session()->has("successUploadAttendance"))
+				<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+					<p class="text-green-900">{{ session("successUploadAttendance") }}</p>
+				</div>
+			@elseif(session()->has("successEditAttendance"))
+				<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+					<p class="text-green-900">{{ session("successEditAttendance") }}</p>
+				</div>
+			@endif
 
-					<div class="overflow-x-auto">
-						<table class="min-w-full bg-white border-collapse border border-blue-400">
-							<thead>
-								<tr>
-									<th class="bg-blue-300 border border-blue-400 px-4 py-2">Student Name</th>
-									<th class="bg-blue-300 border border-blue-400 px-4 py-2">Present (?)</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach ($course->students as $student)
-									<tr>
-										<td class="border border-blue-400 px-4 py-2">
-											{{ $student->full_name }}
-										</td>
+			<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white"
+				href="{{ route('teacher.attendance.upload', $attendanceData[0]->course->id) }}">
+				Upload New Attendance
+			</a>
 
-										<td class="border border-blue-400 px-4 py-2">
-											<div class="inline-flex items-center">
-												<input type="checkbox" name="attendance_{{ $student->id }}" id="attendance_{{ $student->id }}"
-													class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300b bg-gray-300">
-											</div>
-										</td>
+			{{-- @for($i = 0; $i < $attendanceData->count() / $course->students->count(); $i++)
+				<table class="w-full">
+					<thead>
+						<th class="border px-3">Timestamp</th>
+						<th class="border px-3">Uploaded by</th>
+						<th class="border px-3">Students</th>
+						<th class="border px-3">Actions</th>
+					</thead>
+					<tbody>
+						@for($j = 0; $j < $course->students->count(); $j++)
+							<tr>
+								<td class="border px-3">{{ $attendanceData[$j + ($i * $attendanceData->count() / $course->students->count())]->created_at }}</td>
+								<td class="border px-3">{{ $attendanceData[$j + ($i * $attendanceData->count() / $course->students->count())]->teacher->full_name }}</td>
+								<td class="border px-3">{{ $attendanceData[$j + ($i * $attendanceData->count() / $course->students->count())]->student->full_name }}</td>
+								<td class="border px-3">Action buttons here</td>
+							</tr>
+						@endfor
+					</tbody>
+				</table>
+			@endfor --}}
 
-									</tr>
-								@endforeach
-							</tbody>
-						</table>
+			@for($i = 0; $i < $attendanceData->count(); $i += $course->students->count())
+				<div class="border rounded-lg p-5 mb-5 mt-5">
+					<p>Date/Time: {{ $attendanceData[$i]->created_at }}</p>
+					<p>Uploaded by: {{ $attendanceData[$i]->teacher->full_name }}</p>
+					<div class="mt-5">
+						<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+							href="{{ route("teacher.attendance.edit", $attendanceData[$i]->id) }}">
+							Edit
+						</a>
 					</div>
+					<table class="w-full mt-5 mb-5">
+						<thead>
+							<th class="border px-3">Students</th>
+							<th class="border px-3">Attendance status</th>
+							<th class="border px-3">Attendance detail</th>
+						</thead>
+						<tbody>
+							@for($j = $i; $j < min($attendanceData->count(), $i + $course->students->count()); $j++)
+								<tr>
+									<td class="border px-3">{{ $attendanceData[$j]->student->full_name }}</td>
+									<td class="border px-3">{{ ($attendanceData[$j]->is_attend == 1)? "Attended" : "Absent" }}</td>
+									<td class="border px-3">{{ $attendanceData[$j]->attendance_detail }}</td>
+								</tr>
+							@endfor
+						</tbody>
+					</table>
+				</div>
+			@endfor
 
-					<x-button>
-						Submit
-					</x-button>
-				</form>
-			@else
-				<div class="text-blue-900">N/A</div>
-			@endif --}}
+			<div class="">
+				{{ $attendanceData->links() }}
+			</div>
 
 		</div>
 	</div>

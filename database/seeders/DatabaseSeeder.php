@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Course;
 use App\Models\CourseMaterial;
+use App\Models\CourseStudent;
+use App\Models\CourseTeacher;
 use App\Models\CourseTopic;
 use App\Models\Role;
 use App\Models\User;
@@ -25,12 +27,13 @@ class DatabaseSeeder extends Seeder
 		Role::create(["role_name" => "Student"]);
 		Role::create(["role_name" => "Parent"]);
 
-        User::create(["email" => "dummyAdmin.sangnila@gmail.com", "full_name" => "Dummy Admin", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 2, "status" => "enabled"]);
-		User::create(["email" => "dummyTeacher.sangnila@gmail.com", "full_name" => "Dummy Teacher", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]);
-		User::create(["email" => "sussyTeacher.sangnila@gmail.com", "full_name" => "Sussy Teacher", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]);
-		User::create(["email" => "dummyStudent.sangnila@gmail.com", "full_name" => "Dummy Student", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 4, "status" => "enabled"]);
-		User::create(["email" => "sussyStudent.sangnila@gmail.com", "full_name" => "Sussy Student", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 4, "status" => "enabled"]);
-		User::create(["email" => "fakeStudent.sangnila@gmail.com", "full_name" => "Fake Student", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 4, "status" => "enabled"]);
+        User::create(["email" => "admin.sangnila@gmail.com", "full_name" => "Admin", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 2, "status" => "enabled"]);
+		User::create(["email" => "teacherA.sangnila@gmail.com", "full_name" => "Teacher A", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]);
+		User::create(["email" => "teacherB.sangnila@gmail.com", "full_name" => "Teacher B", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]);
+		User::create(["email" => "studentA.sangnila@gmail.com", "full_name" => "Student A", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 4, "status" => "enabled"]);
+		User::create(["email" => "studentB.sangnila@gmail.com", "full_name" => "Student B", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 4, "status" => "enabled"]);
+		User::create(["email" => "studentC.sangnila@gmail.com", "full_name" => "Student C", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 4, "status" => "enabled"]);
+		User::create(["email" => "studentD.sangnila@gmail.com", "full_name" => "Student D", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 4, "status" => "enabled"]);
 
 		Course::create([
 			"course_name" => "3D Modelling",
@@ -47,7 +50,10 @@ class DatabaseSeeder extends Seeder
 
 		CourseTopic::create(["title" => "TOPIC 01 - Introduction to Concept Art", "course_id" => 3]);
 		CourseTopic::create(["title" => "TOPIC 02 - Software Installation and Test Run", "course_id" => 3]);
-		CourseTopic::create(["title" => "TOPIC 01 - Get Stated with Roblox", "course_id" => 2]);
+		CourseTopic::create(["title" => "TOPIC 01 - Get Started with Roblox", "course_id" => 2]);
+		CourseTopic::create(["title" => "[TOPIC 01] 3D Modelling Fundamentals", "course_id" => 1]);
+		CourseTopic::create(["title" => "[TOPIC 02] 3D Drawing Basics Techniques", "course_id" => 1]);
+		CourseTopic::create(["title" => "[TOPIC 03] 3D Drawing Advanced Techniques", "course_id" => 1]);
 
 		CourseMaterial::create([
 			"course_topic_id" => 1,
@@ -74,5 +80,34 @@ class DatabaseSeeder extends Seeder
 			"title" => "Roblox studio article",
 			"link" => "https://create.roblox.com/docs/tutorials/first-experience"
 		]);
+		CourseMaterial::create([
+			"course_topic_id" => 4,
+			"title" => "Get to know what is 3D modelling",
+			"link" => "https://www.futurelearn.com/info/blog/general/what-is-3d-modelling"
+		]);
+		CourseMaterial::create([
+			"course_topic_id" => 5,
+			"title" => "Learn to draw 3D objects",
+			"link" => "https://youtu.be/48_P5552638?si=ysyeVlA38_9v6CQY"
+		]);
+		CourseMaterial::create([
+			"course_topic_id" => 6,
+			"title" => "More advanced techniques in 3D drawing",
+			"link" => "https://youtu.be/PqysfuKMQbM?si=rwyVnJV7jhcI3wa-"
+		]);
+
+		CourseTeacher::create(["course_id" => 1, "user_id" => 2]);
+		CourseTeacher::create(["course_id" => 2, "user_id" => 2]);
+		CourseTeacher::create(["course_id" => 2, "user_id" => 3]);
+		CourseTeacher::create(["course_id" => 3, "user_id" => 3]);
+
+		CourseStudent::create(["course_id" => 1, "user_id" => 4]);
+		CourseStudent::create(["course_id" => 1, "user_id" => 5]);
+		CourseStudent::create(["course_id" => 1, "user_id" => 6]);
+		CourseStudent::create(["course_id" => 2, "user_id" => 4]);
+		CourseStudent::create(["course_id" => 2, "user_id" => 5]);
+		CourseStudent::create(["course_id" => 3, "user_id" => 5]);
+		CourseStudent::create(["course_id" => 3, "user_id" => 6]);
+		CourseStudent::create(["course_id" => 3, "user_id" => 7]);
     }
 }

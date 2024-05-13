@@ -7,20 +7,30 @@ use Illuminate\Database\Eloquent\Model;
 
 class StudentAttendance extends Model {
 	use HasFactory;
+
 	protected $fillable = [
-		'student_schedule_id',
-		'status',
-		'reason',
-		'submit_date',
-		'submit_time',
-		'validated_by_teacher'
+		'teacher_id',
+		'student_id',
+		'schedule_id',
+		'course_id',
+		"is_attend",
+		"attendance_detail"
 	];
 
 	public function teacher(){
-		return $this->belongsTo(User::class);
+		return $this->belongsTo(User::class, 'teacher_id');
 	}
 
-	public function student_schedule(){
-		return $this->belongsTo(StudentSchedule::class);
+	public function student() {
+		return $this->belongsTo(User::class, 'student_id');
 	}
+
+	public function course() {
+		return $this->belongsTo(Course::class, 'course_id');
+	}
+
+	public function schedule() {
+		return $this->belongsTo(CourseSchedule::class, 'schedule_id');
+	}
+
 }

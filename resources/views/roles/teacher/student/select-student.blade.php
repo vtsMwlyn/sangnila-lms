@@ -22,7 +22,8 @@
 		<x-navbar.teacher></x-navbar.teacher>
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Pick a Student</h1>
+			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Manage Students</h1>
+			<h1 class="text-2xl font-semibold text-blue-900 mb-4">Pick a Student</h1>
 			@if ($students->isNotEmpty())
 				<div class="overflow-x-auto rounded-md">
 					<table class="min-w-full bg-white border-collapse ">

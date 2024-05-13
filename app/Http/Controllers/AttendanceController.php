@@ -3,57 +3,94 @@
 namespace App\Http\Controllers;
 
 use App\Models\AttendanceByTeacher;
+use App\Models\Course;
+use App\Models\StudentAttendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PHPUnit\Framework\Constraint\Count;
 
 class AttendanceController extends Controller {
-	public function index() {
-		$courses = Auth::user()->teached_courses;
-		return view('roles.teacher.attendance.index', [
-			'courses' => $courses
-		]);
+
+	public function index(){
+		return view('roles.teacher.attendance.index');
 	}
 
 	public function show($course_id) {
 		$course = Auth::user()->teached_courses->where('id', $course_id)->first();
 		return view('roles.teacher.attendance.show', [
-			'course' => $course
+			'attendanceData' => StudentAttendance::where("course_id", $course->id)->latest()->paginate(3 * $course->students->count()),
+			"course" => Course::where("id", $course_id)->first()
 		]);
 	}
 
-	public function store(Request $request) {
-		$course_id = $request->course;
-		$teacher_id = Auth::user()->id;
+	public function create($course_id){
+		$course = Auth::user()->teached_courses->where('id', $course_id)->first();
+		return view("roles.teacher.attendance.upload", [
+			"course" => $course
+		]);
+	}
 
-		foreach ($request->input() as $key => $value) {
-			if (strpos($key, 'attendance_') !== false) {
-				$student_id = str_replace('attendance_', '', $key);
+	public function store(Request $request, $course_id) {
+		$validatedData = $request->validate([
+			"checkbox_value.*" => "required",
+			"attendance_detail.*" => "required|min:3"
+		], [
+			"attendance_detail.*.required" => "The attendance detail field is required."
+		]);
 
-				$status = $value ? 'Attended' : 'Absent';
+		$course = Course::where("id", $course_id)->first();
+		$teacher = Auth::user();
 
-				// // Debugging output
-				// print_r([
-				// 	'teacher_id' => $teacher_id,
-				// 	'student_id' => $student_id,
-				// 	'status' => $status,
-				// 	'course_id' => $course_id,
-				// ]);
+		$i = 0;
+		foreach($course->students as $student){
+			$isAttend = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
+			$attendanceDetail = $validatedData["attendance_detail"][$i];
 
-				// Commented out for debugging
+			StudentAttendance::create([
+				"course_id" => $course->id,
+				"teacher_id" => $teacher->id,
+				"student_id" => $student->id,
+				"is_attend" => $isAttend,
+				"attendance_detail" => $attendanceDetail
+			]);
 
-				AttendanceByTeacher::create([
-					'teacher_id' => $teacher_id,
-					'student_id' => $student_id,
-					'schedule_id' => $request->schedule,
-					'status' => $status,
-					'course_id' => $course_id,
-				]);
-
-			}
+			$i++;
 		}
 
-		// Redirect to a success page or flash a success message
-		return redirect()->route('teacher.attendance.index');
+		return redirect(route("teacher.attendance.show", $course->id))->with("successUploadAttendance", "Attendance uploaded successfully!");
+
+		// $course_id = $request->course;
+		// $teacher_id = Auth::user()->id;
+
+		// foreach ($request->input() as $key => $value) {
+		// 	if (strpos($key, 'attendance_') !== false) {
+		// 		$student_id = str_replace('attendance_', '', $key);
+
+		// 		$status = $value ? 'Attended' : 'Absent';
+
+		// 		// // Debugging output
+		// 		// print_r([
+		// 		// 	'teacher_id' => $teacher_id,
+		// 		// 	'student_id' => $student_id,
+		// 		// 	'status' => $status,
+		// 		// 	'course_id' => $course_id,
+		// 		// ]);
+
+		// 		// Commented out for debugging
+
+		// 		StudentAttendance::create([
+		// 			'teacher_id' => $teacher_id,
+		// 			'student_id' => $student_id,
+		// 			'schedule_id' => $request->schedule,
+		// 			'status' => $status,
+		// 			'course_id' => $course_id,
+		// 		]);
+
+		// 	}
+		// }
+
+		// // Redirect to a success page or flash a success message
+		// return redirect()->route('teacher.attendance.index');
 	}
 
 	public function view($course_id) {
@@ -61,5 +98,36 @@ class AttendanceController extends Controller {
 		return view('roles.teacher.attendance.view', [
 			'course' => $course
 		]);
+	}
+
+	public function edit($attendance_data_id){
+		$studentAttendance = StudentAttendance::where("id", $attendance_data_id)->first();
+		return view("roles.teacher.attendance.edit", [
+			"attendanceData" => StudentAttendance::where("created_at", $studentAttendance->created_at)->get()
+		]);
+	}
+
+	public function update(Request $request, $attendance_data_id){
+		$validatedData = $request->validate([
+			"checkbox_value.*" => "required",
+			"attendance_detail.*" => "required|min:3"
+		], [
+			"attendance_detail.*.required" => "The attendance detail field is required."
+		]);
+
+		$studentAttendance = StudentAttendance::where("id", $attendance_data_id)->first();
+		$existingAttendanceData = StudentAttendance::where("created_at", $studentAttendance->created_at)->get();
+
+		$i = 0;
+		foreach($existingAttendanceData as $a){
+			$isAttend = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
+			$attendanceDetail = $validatedData["attendance_detail"][$i];
+
+			StudentAttendance::where("id", $a->id)->update(["is_attend" => $isAttend, "attendance_detail" => $attendanceDetail]);
+
+			$i++;
+		}
+
+		return redirect(route("teacher.attendance.show", $studentAttendance->course->id))->with("successEditAttendance", "Attendance edited successfully!");
 	}
 }

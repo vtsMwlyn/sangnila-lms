@@ -22,29 +22,37 @@
 		<x-navbar.teacher></x-navbar.teacher>
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Manage Student</h1>
-			<h1 class="text-2xl font-semibold text-blue-900 mb-4">Pick a Course</h1>
+			<h1 class="text-3xl font-semibold text-blue-900 mb-4">List of Assignments in {{ $course->course_name }}</h1>
+
+			<div class="mt-5 mb-5">
+				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white"
+					href="{{ route('teacher.assignment.upload', $course->id) }}">
+					Upload New Assignment
+				</a>
+			</div>
+
 			<div class="overflow-x-auto rounded-md">
-				<table class="min-w-full bg-white border-collapse ">
+				<table class="min-w-full bg-white">
 					<thead>
 						<tr>
-							<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Course Name</th>
+							<th class="border px-3">Title</th>
+							<th class="border px-3">Description</th>
+							<th class="border px-3">Deadline</th>
+							<th class="border px-3">Download link</th>
 						</tr>
 					</thead>
 					<tbody>
-						@if ($courses->isNotEmpty())
-							@foreach ($courses as $course)
+						@if ($assignments->isNotEmpty())
+							@foreach ($assignments as $asg)
 								<tr>
-									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-										<a href="{{ route('teacher.student.select-student', $course->id) }}"
-											class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
-											{{ $course->course_name }}
-										</a>
-									</td>
+									<td class="border px-3">{{ $asg->title }}</td>
+									<td class="border px-3">{{ $asg->desc }}</td>
+									<td class="border px-3">{{ $asg->deadline_date }}<br>{{ $asg->deadline_time }}</td>
+									<td class="border px-3">{{ $asg->link }}</td>
 								</tr>
 							@endforeach
 						@else
-							<tr class="text-blue-900"><td>N/A</td></tr>
+							<tr class="border px-3 text-center"><td colspan="4">- No assignments yet -</td></tr>
 						@endif
 					</tbody>
 				</table>

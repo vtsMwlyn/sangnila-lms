@@ -53,7 +53,7 @@
 									</td>
 									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
 										<a class="px-5 py-2 bg-indigo-400 rounded-lg  text-white hover:bg-gray-700 transition duration-300"
-											href="{{ route('teacher.student.index', ['student_id' => $student->id, 'course_id' => $course->id]) }}">
+											href="{{ route('teacher.student.show.progress', ['student_id' => $student->id, 'course_id' => $course->id]) }}">
 											Update Progress
 										</a>
 									</td>

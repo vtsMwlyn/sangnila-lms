@@ -11,17 +11,22 @@ return new class extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::create('attendance_by_teachers', function (Blueprint $table) {
+		Schema::create('student_attendances', function (Blueprint $table) {
 			$table->id();
+
 			$table->unsignedBigInteger('teacher_id');
 			$table->unsignedBigInteger('course_id');
 			$table->unsignedBigInteger('student_id');
-			$table->unsignedBigInteger('schedule_id');
-			$table->string('status');
-			$table->foreign('schedule_id')->references('id')->on('course_schedules');
-			$table->foreign('teacher_id')->references('id')->on('users');
-			$table->foreign('student_id')->references('id')->on('users');
-			$table->foreign('course_id')->references('id')->on('courses');
+
+			// $table->unsignedBigInteger('schedule_id');
+			$table->unsignedInteger("is_attend");
+			$table->longText('attendance_detail');
+
+			// $table->foreign('schedule_id')->references('id')->on('course_schedules');
+			$table->foreign('teacher_id')->references('id')->on('users')->onDelete("cascade");
+			$table->foreign('student_id')->references('id')->on('users')->onDelete("cascade");
+			$table->foreign('course_id')->references('id')->on('courses')->onDelete("cascade");
+
 			$table->timestamps();
 		});
 	}

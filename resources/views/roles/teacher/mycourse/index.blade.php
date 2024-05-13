@@ -47,7 +47,7 @@
                                 </td>
                                 <td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
                                     <a class="block w-full text-center px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-                                        href="{{ route('teacher.mycourse.progress', $course->id) }}">
+                                        href="{{ route('teacher.student.select-student', $course->id) }}">
                                         View Students Progress
                                     </a>
                                 </td>

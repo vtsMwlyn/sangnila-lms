@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\MaterialController;
@@ -75,12 +76,12 @@ Route::prefix('/teacher')
 			->group(function () {
 
 				// Teacher yang check attendance
-				Route::get('/', [AttendanceController::class, 'index'])->name('index');
-				Route::get('/{course_id}', [AttendanceController::class, 'show'])->name('show')->whereNumber('course_id');
-
-				Route::post('/submit', [AttendanceController::class, 'store'])->name('store');
-
-				Route::get('/view/{course_id}', [AttendanceController::class, 'view'])->name('view');
+				Route::get("/", [AttendanceController::class, "index"])->name("index");
+				Route::get('/{course_id}', [AttendanceController::class, 'show'])->name('show');
+				Route::get('/{course_id}/upload', [AttendanceController::class, 'create'])->name('upload')->whereNumber('course_id');
+				Route::post('/{course_id}/upload', [AttendanceController::class, 'store'])->name('store');
+				Route::get("/{attendance_data_id}/edit", [AttendanceController::class, "edit"])->name("edit");
+				Route::post("/{attendance_data_id}/edit", [AttendanceController::class, "update"])->name("update");
 
 				// Schedule Controller
 /* 				Route::get('/')->name('index'); // Show all schedule for the teacher
@@ -98,13 +99,18 @@ Route::prefix('/teacher')
 					}); */
 			});
 
-			Route::prefix("/assignment")
-				->name("assignment.")
-				->group(function(){
-					Route::get("/", function(){
-						return "Ini halaman assignment";
-					})->name("index");
-				});
+		Route::prefix("/assignment")
+			->name("assignment.")
+			->group(function(){
+				Route::get("/", [AssignmentController::class, "teacher_index"])->name("index");
+				Route::get("/{course_id}", [AssignmentController::class, "teacher_show"])->name("show");
+				Route::get("/upload/{course_id}", [AssignmentController::class, "teacher_upload"])->name("upload");
+				Route::post("/upload/{course_id}", [AssignmentController::class, "teacher_store"])->name("store");
+				Route::get("/{assignment_id}/edit", [AssignmentController::class, "teacher_edit"])->name("edit");
+				Route::patch("/{assignment_id}/edit", [AssignmentController::class, "teacher_update"])->name("update");
+				Route::get("/{assignment_id}/delete-confirm", [AssignmentController::class, "teacher_delete"])->name("delete");
+				Route::delete("/{assignment_id}/delete-confirm", [AssignmentController::class, "teacher_destroy"])->name("destroy");
+			});
 
 /* 		Route::prefix('/schedule') // ON HALT
 			->name('schedule.')

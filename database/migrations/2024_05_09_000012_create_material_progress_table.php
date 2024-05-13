@@ -20,10 +20,10 @@ return new class extends Migration {
 			$table->text('note')->nullable();
 			$table->enum('status', ['locked', 'unlocked']);
 			// ========================================================
-			$table->foreign('student_id')->references('id')->on('users');
-			$table->foreign('teacher_id')->references('id')->on('users');
-			$table->foreign('material_id')->references('id')->on('course_materials');
-			$table->foreign('course_id')->references('id')->on('courses');
+			$table->foreign('student_id')->references('id')->on('users')->onDelete("cascade");
+			$table->foreign('teacher_id')->references('id')->on('users')->onDelete("cascade");
+			$table->foreign('material_id')->references('id')->on('course_materials')->onDelete("cascade");
+			$table->foreign('course_id')->references('id')->on('courses')->onDelete("cascade");
 			$table->timestamps();
 		});
 	}
