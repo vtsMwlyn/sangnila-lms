@@ -10,7 +10,7 @@ class StudentAssignment extends Model {
 
 	protected $guarded = ["id"];
 
-	public function submitted_by(){
+	public function assigned_to(){
 		return $this->belongsTo(User::class, "student_id");
 	}
 

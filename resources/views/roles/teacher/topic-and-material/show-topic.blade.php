@@ -40,6 +40,10 @@
 			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
 				<p class="text-green-900">{{ session("successEditMaterial") }}</p>
 			</div>
+		@elseif(session()->has("successDeleteMaterial"))
+			<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-yellow-600" >{{ session("successDeleteMaterial") }}</p>
+			</div>
 		@endif
 
 		<div class="flex space-x-4 mb-6">

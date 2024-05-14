@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AttendanceByTeacher;
 use App\Models\Course;
-use App\Models\StudentAttendance;
 use Illuminate\Http\Request;
+use App\Models\CourseStudent;
+use App\Models\StudentAttendance;
+use App\Models\AttendanceByTeacher;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Constraint\Count;
 
@@ -58,39 +59,6 @@ class AttendanceController extends Controller {
 		}
 
 		return redirect(route("teacher.attendance.show", $course->id))->with("successUploadAttendance", "Attendance uploaded successfully!");
-
-		// $course_id = $request->course;
-		// $teacher_id = Auth::user()->id;
-
-		// foreach ($request->input() as $key => $value) {
-		// 	if (strpos($key, 'attendance_') !== false) {
-		// 		$student_id = str_replace('attendance_', '', $key);
-
-		// 		$status = $value ? 'Attended' : 'Absent';
-
-		// 		// // Debugging output
-		// 		// print_r([
-		// 		// 	'teacher_id' => $teacher_id,
-		// 		// 	'student_id' => $student_id,
-		// 		// 	'status' => $status,
-		// 		// 	'course_id' => $course_id,
-		// 		// ]);
-
-		// 		// Commented out for debugging
-
-		// 		StudentAttendance::create([
-		// 			'teacher_id' => $teacher_id,
-		// 			'student_id' => $student_id,
-		// 			'schedule_id' => $request->schedule,
-		// 			'status' => $status,
-		// 			'course_id' => $course_id,
-		// 		]);
-
-		// 	}
-		// }
-
-		// // Redirect to a success page or flash a success message
-		// return redirect()->route('teacher.attendance.index');
 	}
 
 	public function view($course_id) {
@@ -129,5 +97,19 @@ class AttendanceController extends Controller {
 		}
 
 		return redirect(route("teacher.attendance.show", $studentAttendance->course->id))->with("successEditAttendance", "Attendance edited successfully!");
+	}
+
+	// Student only
+	public function student_index(){
+		return view("roles.student.attendance.index", [
+			"courses" => CourseStudent::where("user_id", Auth::user()->id)->get()
+		]);
+	}
+
+	public function student_show($course_id){
+		return StudentAttendance::where("course_id", $course_id)->where("student_id", Auth::user()->id)->get();
+		return view("roles.student.attendance.show", [
+			"attendances" => StudentAttendance::where("course_id", $course_id)->where("student_id", Auth::user()->id)->get()
+		]);
 	}
 }

@@ -31,6 +31,20 @@
 				</a>
 			</div>
 
+			@if(session()->has("successUploadAssignment"))
+				<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+					<p class="text-green-900">{{ session("successUploadAssignment") }}</p>
+				</div>
+			@elseif(session()->has("successEditAssignment"))
+				<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+					<p class="text-green-900">{{ session("successEditAssignment") }}</p>
+				</div>
+			@elseif(session()->has("successDeleteAssignment"))
+				<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
+					<p class="text-yellow-600" >{{ session("successDeleteAssignment") }}</p>
+				</div>
+			@endif
+
 			<div class="overflow-x-auto rounded-md">
 				<table class="min-w-full bg-white">
 					<thead>
@@ -39,18 +53,63 @@
 							<th class="border px-3">Description</th>
 							<th class="border px-3">Deadline</th>
 							<th class="border px-3">Download link</th>
+							{{-- <th class="border px-3">Assigned to</th> --}}
+							<th class="border px-3">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 						@if ($assignments->isNotEmpty())
-							@foreach ($assignments as $asg)
+							{{-- @foreach ($assignments as $asg)
 								<tr>
 									<td class="border px-3">{{ $asg->title }}</td>
 									<td class="border px-3">{{ $asg->desc }}</td>
 									<td class="border px-3">{{ $asg->deadline_date }}<br>{{ $asg->deadline_time }}</td>
-									<td class="border px-3">{{ $asg->link }}</td>
+									<td class="border px-3 text-blue-600"><a href="{{ $asg->link }}">{{ $asg->link }}</a></td>
+									<td class="border px-3">{{ $asg->assigned_to->full_name }}</td>
+									<td class="border px-3">
+										<div class="flex gap-1">
+											<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+												href="#">
+												Edit
+											</a>
+											<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+												href="#">
+												Delete
+											</a>
+										</div>
+									</td>
 								</tr>
-							@endforeach
+							@endforeach --}}
+							@for ($i = 0; $i < $assignments->count(); $i++)
+								@if($i == 0 || ($assignments[$i]->title != $assignments[$i - 1]->title))
+									<tr>
+										<td class="border px-3">{{ $assignments[$i]->title }}</td>
+										<td class="border px-3">{{ $assignments[$i]->desc }}</td>
+										<td class="border px-3">{{ $assignments[$i]->deadline_date }}<br>{{ $assignments[$i]->deadline_time }}</td>
+										<td class="border px-3 text-blue-600"><a href="{{ $assignments[$i]->link }}">{{ $assignments[$i]->link }}</a></td>
+										{{-- <td class="border px-3">{{ $assignments[$i]->assigned_to->full_name }}</td> --}}
+										{{-- <td class="border px-3">
+											<ul>
+												@for ($j = $i; $assignments[$j]->title == $assignments[$j + 1]->title; $j++)
+													<li>{{ $assignments[$j]->assigned_to->full_name }}</li>
+												@endfor
+											</ul>
+										</td> --}}
+										<td class="border px-3">
+											<div class="flex gap-1">
+												<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+													href="{{ route("teacher.assignment.edit", $assignments[$i]->id) }}">
+													Edit
+												</a>
+												<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+													href="{{ route("teacher.assignment.delete", $assignments[$i]->id) }}">
+													Delete
+												</a>
+											</div>
+										</td>
+									</tr>
+								@endif
+							@endfor
 						@else
 							<tr class="border px-3 text-center"><td colspan="4">- No assignments yet -</td></tr>
 						@endif

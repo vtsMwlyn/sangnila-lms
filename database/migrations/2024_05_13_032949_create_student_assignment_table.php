@@ -26,6 +26,7 @@ return new class extends Migration
 			$table->string("link");
 			$table->date("deadline_date");
 			$table->time("deadline_time");
+			$table->unsignedBigInteger("student_is_assigned");
 
 			// $table->foreign('schedule_id')->references('id')->on('course_schedules');
 			$table->foreign('teacher_id')->references('id')->on('users')->onDelete("cascade");

@@ -21,11 +21,15 @@
 						class="text-indigo-700 font-semibold text-xl hover:text-blue-950 hover:scale-110 transition duration-300 py-2 px-5">
 						Courses
 					</a>
+					<a href="{{ route('student.assignment.index') }}"
+						class="text-indigo-700 font-semibold text-xl hover:text-blue-950 hover:scale-110 transition duration-300 py-2 px-5">
+						Assignments
+					</a>
 					<a href="{{ route('student.attendance.index') }}"
 						class="text-indigo-700 font-semibold text-xl hover:text-blue-950 hover:scale-110 transition duration-300 py-2 px-5">
 						Attendance
 					</a>
-					
+
                     <!-- Add more navigation links as needed -->
                 </div>
             </div>
@@ -52,11 +56,11 @@
 				class="block text-indigo-700 font-semibold text-md hover:text-blue-950 hover:scale-110 transition duration-300 py-1">
 				Courses
 			</a>
-			<a href="{{ route('student.attendance.index') }}"
+			<a href="{{ route('student.attendance.index', Auth::user()->id) }}"
 				class="block text-indigo-700 font-semibold text-md hover:text-blue-950 hover:scale-110 transition duration-300 py-1">
 				Attendance
 			</a>
-			
+
             <!-- Add more navigation links as needed -->
 
             <!-- Logout Button -->
@@ -80,4 +84,4 @@
 </nav>
 
 
-	
+
