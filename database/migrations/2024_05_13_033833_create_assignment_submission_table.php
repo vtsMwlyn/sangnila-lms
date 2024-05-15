@@ -17,11 +17,14 @@ return new class extends Migration
             $table->id();
 
 			$table->unsignedBigInteger("assignment_id");
+			$table->unsignedBigInteger("student_id");
 
 			$table->string("link");
-			$table->date("submission_date");
-			$table->time("submission_time");
+			$table->string("title");
+			$table->longText("feedback")->nullable();
+			$table->string("status");
 
+			$table->foreign("student_id")->references("id")->on("users")->onDelete("cascade");
 			$table->foreign("assignment_id")->references("id")->on("student_assignments")->onDelete("cascade");
 
             $table->timestamps();

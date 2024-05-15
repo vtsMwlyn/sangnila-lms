@@ -13,4 +13,8 @@ class AssignmentSubmission extends Model {
 	public function assignment(){
 		return $this->belongsTo(StudentAssignment::class, "assignment_id");
 	}
+
+	public function uploaded_by(){
+		return $this->belongsTo(User::class, "student_id");
+	}
 }

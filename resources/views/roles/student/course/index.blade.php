@@ -30,6 +30,8 @@
 							<tr>
 								<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Course Name</td>
 								<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Description</td>
+								<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Lecturers</td>
+								<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Progress</td>
 							</tr>
 						</thead>
 						<tbody>
@@ -45,6 +47,16 @@
 									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 										{{ $course->course_description }}
 									</td>
+
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
+										<ul>
+											@foreach($course->teachers as $t)
+												<li>{{ $t->full_name }}</li>
+											@endforeach
+										</ul>
+									</td>
+
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">0/0</td>
 
 								</tr>
 							@endforeach

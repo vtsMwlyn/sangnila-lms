@@ -8,6 +8,7 @@ use App\Models\CourseStudent;
 use App\Models\CourseTeacher;
 use App\Models\CourseTopic;
 use App\Models\Role;
+use App\Models\StudentAssignment;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -109,5 +110,54 @@ class DatabaseSeeder extends Seeder
 		CourseStudent::create(["course_id" => 3, "user_id" => 5]);
 		CourseStudent::create(["course_id" => 3, "user_id" => 6]);
 		CourseStudent::create(["course_id" => 3, "user_id" => 7]);
+
+		StudentAssignment::create([
+			"teacher_id" => 2, "course_id" => 1, "student_id" => 4, "student_is_assigned" => 1,
+			"title" => "Introduction to 3D Modelling",
+			"desc" => "Write summary of what have you learned from 3D modelling introduction in minimum of 1 A4 page",
+			"link" => "https://www.google.com/", "deadline_date" => date("y-m-d"), "deadline_time" => "23:59:00"
+		]);
+		StudentAssignment::create([
+			"teacher_id" => 2, "course_id" => 1, "student_id" => 5, "student_is_assigned" => 0,
+			"title" => "Introduction to 3D Modelling",
+			"desc" => "Write summary of what have you learned from 3D modelling introduction in minimum of 1 A4 page",
+			"link" => "https://www.google.com/", "deadline_date" => date("y-m-d"), "deadline_time" => "23:59:00"
+		]);
+		StudentAssignment::create([
+			"teacher_id" => 2, "course_id" => 1, "student_id" => 6, "student_is_assigned" => 1,
+			"title" => "Introduction to 3D Modelling",
+			"desc" => "Write summary of what have you learned from 3D modelling introduction in minimum of 1 A4 page",
+			"link" => "https://www.google.com/", "deadline_date" => date("y-m-d"), "deadline_time" => "23:59:00"
+		]);
+		StudentAssignment::create([
+			"teacher_id" => 2, "course_id" => 2, "student_id" => 4, "student_is_assigned" => 1,
+			"title" => "Design Your Own Game Idea",
+			"desc" => "Think, imagine, and design your own game! Please write the concept with some image illustration that describe your game.",
+			"link" => "https://www.google.com/", "deadline_date" => date("y-m-d"), "deadline_time" => "23:59:00"
+		]);
+		StudentAssignment::create([
+			"teacher_id" => 2, "course_id" => 2, "student_id" => 5, "student_is_assigned" => 1,
+			"title" => "Design Your Own Game Idea",
+			"desc" => "Think, imagine, and design your own game! Please write the concept with some image illustration that describe your game.",
+			"link" => "https://www.google.com/", "deadline_date" => date("y-m-d"), "deadline_time" => "23:59:00"
+		]);
+		StudentAssignment::create([
+			"teacher_id" => 3, "course_id" => 3, "student_id" => 5, "student_is_assigned" => 1,
+			"title" => "Software Installation and Test Run",
+			"desc" => "Please follow the instruction given in the link then submit screenshots that shows if the software runs well in your device (put the screenshots in a microsoft word file)",
+			"link" => "https://www.google.com/", "deadline_date" => date("y-m-d"), "deadline_time" => "23:59:00"
+		]);
+		StudentAssignment::create([
+			"teacher_id" => 3, "course_id" => 3, "student_id" => 6, "student_is_assigned" => 0,
+			"title" => "Software Installation and Test Run",
+			"desc" => "Please follow the instruction given in the link then submit screenshots that shows if the software runs well in your device (put the screenshots in a microsoft word file)",
+			"link" => "https://www.google.com/", "deadline_date" => date("y-m-d"), "deadline_time" => "23:59:00"
+		]);
+		StudentAssignment::create([
+			"teacher_id" => 3, "course_id" => 3, "student_id" => 7, "student_is_assigned" => 0,
+			"title" => "Software Installation and Test Run",
+			"desc" => "Please follow the instruction given in the link then submit screenshots that shows if the software runs well in your device (put the screenshots in a microsoft word file)",
+			"link" => "https://www.google.com/", "deadline_date" => date("y-m-d"), "deadline_time" => "23:59:00"
+		]);
     }
 }

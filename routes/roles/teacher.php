@@ -110,6 +110,8 @@ Route::prefix('/teacher')
 				Route::patch("/{assignment_id}/edit", [AssignmentController::class, "teacher_update"])->name("update");
 				Route::get("/{assignment_id}/delete-confirm", [AssignmentController::class, "teacher_delete"])->name("delete");
 				Route::delete("/{assignment_id}/delete-confirm", [AssignmentController::class, "teacher_destroy"])->name("destroy");
+
+				Route::get("/{assignment_id}/submission", [AssignmentController::class, "teacher_check_submission"])->name("check");
 			});
 
 /* 		Route::prefix('/schedule') // ON HALT

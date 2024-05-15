@@ -22,29 +22,29 @@
 		<x-navbar.student></x-navbar.student>
 		<!-- Content Section -->
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
-			<h1 class="text-3xl font-semibold text-blue-900 mb-4">My Assignments</h1>
-			<h1 class="text-2xl font-semibold text-blue-900 mb-4">Pick a Course</h1>
-			<div class="overflow-x-auto rounded-md">
-				<table class="min-w-full bg-white border-collapse ">
+			<h1 class="text-3xl font-semibold text-blue-900 mb-4">My Submission and Feedback in assignment "{{ $assignment->title }}"</h1>
+			<div class="overflow-x-auto">
+				<table class="min-w-full bg-white border mt-3" style="border-radius: 0;">
 					<thead>
 						<tr>
-							<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Course Name</th>
+							<th class="border px-3">Submission time</th>
+							<th class="border px-3">Submission title</th>
+							<th class="border px-3">Submission status</th>
+							<th class="border px-3">Feedback</th>
 						</tr>
 					</thead>
 					<tbody>
-						@if ($courseStudents->count())
-							@foreach ($courseStudents as $cs)
-								<tr>
-									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-										<a href="{{ route('student.assignment.show', $cs->course->id) }}"
-											class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
-											{{ $cs->course->course_name }}
-										</a>
-									</td>
+						@if ($assignment->submissions->count())
+							@foreach ($assignment->submissions as $submission)
+								<tr @if($submission->status == "Late") class="bg-red-400" @endif>
+									<td class="border px-3">{{ $submission->created_at }}</td>
+									<td class="border px-3">{{ $submission->title }}</td>
+									<td class="border px-3">{{ $submission->status }}</td>
+									<td class="border px-3">@if($submission->feedback == "") - No feedback - @else {{ $submission->feedback }} @endif</td>
 								</tr>
 							@endforeach
 						@else
-							<tr class="text-blue-900"><td>N/A</td></tr>
+							<tr class="border px-3" colspan="3"><td class="text-center">- The teacher haven't uploaded any attendance data yet -</td></tr>
 						@endif
 					</tbody>
 				</table>

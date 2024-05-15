@@ -223,11 +223,11 @@ class CourseController extends Controller {
 	}
 
 	public function student_show($course_id) {
-		$materials = MaterialProgress::where('course_id', $course_id)->where('student_id', Auth::user()->id)->get();
+		$materialProgresses = MaterialProgress::where('course_id', $course_id)->where('student_id', Auth::user()->id)->get();
 		$student = CourseStudent::where('user_id', Auth::user()->id)->where('course_id', $course_id)->first();
 		return view('roles.student.course.show', [
 			'course' => $student->course,
-			'materials' => $materials
+			'materialProgresses' => $materialProgresses
 		]);
 	}
 }

@@ -90,9 +90,9 @@
 			<div class="flex flex-wrap gap-3 mt-2 rounded-lg @error("checkbox_value") border p-5 border-red-500 @enderror">
 				@for ($i = 0; $i < $course->students->count(); $i++)
 					<div class="flex items-center gap-3 border rounded-lg p-5" style="width: 30%">
-						<input type="checkbox" id="checkbox{{ $i }}"
+						<input type="checkbox" id="checkbox{{ $i + 1 }}"
 						class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $i) == "on" ) checked @elseif($checkboxes_values[$i] == "on") checked @endif>
-						<label for="checkbox{{ $i }}">{{ $course->students[$i]->full_name }}</label>
+						<label for="checkbox{{ $i + 1 }}">{{ $course->students[$i]->full_name }}</label>
 					</div>
 				@endfor
 			</div>

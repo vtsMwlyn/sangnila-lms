@@ -27,22 +27,20 @@
             <table class="min-w-full table-auto">
                 <thead>
                     <tr class="border-b border-blue-900 bg-blue-200">
+						<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Course Topic</th>
                         <th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Material Name</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($materials as $index => $material)
                         <tr class="hover:bg-gray-100 border-b border-blue-900">
-                            <td class="{{ $index === 0 ? 'bg-green-400' : 'bg-blue-100' }} border-b border-blue-300 px-4 py-2">
-                                @if ($index === 0)
-                                    <a href="{{ $material->link }}" class="{{ $index === 0 ? 'text-white font-bold hover:underline' : 'text-blue-600 hover:underline' }}">
-                                        {{ $material->title }}
-                                    </a>
-                                @else
-                                    <span class="text-gray-500">
-                                        {{ $material->title }}
-                                    </span>
-                                @endif
+							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
+								{{ $material->course_topic->title }}
+                            </td>
+                            <td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
+								<a href="{{ $material->link }}" class="font-bold hover:underline text-blue-600">
+									{{ $material->title }}
+								</a>
                             </td>
                         </tr>
                     @empty

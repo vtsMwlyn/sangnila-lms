@@ -83,7 +83,7 @@
 							@for ($i = 0; $i < $assignments->count(); $i++)
 								@if($i == 0 || ($assignments[$i]->title != $assignments[$i - 1]->title))
 									<tr>
-										<td class="border px-3">{{ $assignments[$i]->title }}</td>
+										<td class="border px-3"><a class="text-blue-700 font-bold" href="{{ route("teacher.assignment.check", $assignments[$i]->id) }}">{{ $assignments[$i]->title }}</a></td>
 										<td class="border px-3">{{ $assignments[$i]->desc }}</td>
 										<td class="border px-3">{{ $assignments[$i]->deadline_date }}<br>{{ $assignments[$i]->deadline_time }}</td>
 										<td class="border px-3 text-blue-600"><a href="{{ $assignments[$i]->link }}">{{ $assignments[$i]->link }}</a></td>
@@ -111,7 +111,7 @@
 								@endif
 							@endfor
 						@else
-							<tr class="border px-3 text-center"><td colspan="4">- No assignments yet -</td></tr>
+							<tr ><td colspan="4" class="border px-3 text-center">- No assignments yet -</td></tr>
 						@endif
 					</tbody>
 				</table>

@@ -32,27 +32,31 @@
 				<table class="min-w-full table-fixed border-collapse">
 					<thead>
 						<tr class="border-b border-solid border-blue-900">
+							<th class="px-4 py-2 border border-solid border-blue-900 bg-blue-200">Course Topic</th>
 							<th class="px-4 py-2 border border-solid border-blue-900 bg-blue-200">Material Name</th>
 							<th class="px-4 py-2 border border-solid border-blue-900 bg-blue-200">Status</th>
 						</tr>
 					</thead>
 					<tbody>
-						@forelse ($materials as $material)
+						@forelse ($materialProgresses as $progress)
 							<tr class="hover:bg-gray-100 border-b border-solid border-blue-900">
-								<td class="px-4 py-2 border border-solid border-blue-900 {{ $material->status === 'unlocked' ? 'text-white bg-green-400' : 'text-gray-500' }}">
-									@if ($material->status === 'unlocked')
-										<a href="{{ $material->material->link }}" class="text-white hover:underline font-bold">
-											{{ $material->material->title }}
+								<td class="px-4 py-2 border border-solid border-blue-900 {{ $progress->status === 'unlocked' ? 'text-white bg-green-400' : 'text-gray-500' }}">
+									{{ $progress->material->course_topic->title }}
+								</td>
+								<td class="px-4 py-2 border border-solid border-blue-900 {{ $progress->status === 'unlocked' ? 'text-white bg-green-400' : 'text-gray-500' }}">
+									@if ($progress->status === 'unlocked')
+										<a href="{{ $progress->material->link }}" class="text-white hover:underline font-bold">
+											{{ $progress->material->title }}
 										</a>
 									@else
 										<span class="text-gray-500">
-											{{ $material->material->title }}
+											{{ $progress->material->title }}
 										</span>
 									@endif
 								</td>
-								<td class="px-4 py-2 border border-solid border-blue-900 {{ $material->status === 'unlocked' ? 'text-white bg-green-400' : 'text-gray-500' }}">
+								<td class="px-4 py-2 border border-solid border-blue-900 {{ $progress->status === 'unlocked' ? 'text-white bg-green-400' : 'text-gray-500' }}">
 									<span class="">
-										{{ ucfirst($material->status) }}
+										{{ ucfirst($progress->status) }}
 									</span>
 								</td>
 							</tr>

@@ -102,14 +102,14 @@ class AttendanceController extends Controller {
 	// Student only
 	public function student_index(){
 		return view("roles.student.attendance.index", [
-			"courses" => CourseStudent::where("user_id", Auth::user()->id)->get()
+			"courseStudents" => CourseStudent::where("user_id", Auth::user()->id)->get()
 		]);
 	}
 
 	public function student_show($course_id){
-		return StudentAttendance::where("course_id", $course_id)->where("student_id", Auth::user()->id)->get();
 		return view("roles.student.attendance.show", [
-			"attendances" => StudentAttendance::where("course_id", $course_id)->where("student_id", Auth::user()->id)->get()
+			"attendances" => StudentAttendance::where("course_id", $course_id)->where("student_id", Auth::user()->id)->get(),
+			"course" => Course::where("id", $course_id)->first()
 		]);
 	}
 }

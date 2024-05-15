@@ -35,6 +35,12 @@ Route::prefix('/student')
 			->group(function() {
 				Route::get('/', [AssignmentController::class, "student_index"])->name('index'); // Select course before continue to see assignment list in the course
 				Route::get("/{course_id}", [AssignmentController::class, "student_show"])->name("show"); // Show list of assignments assigned in the course
+
+				/*student will do reupload up to 10 times*/
+				Route::get("/{course_id}/{assignment_id}/submit", [AssignmentController::class, "student_submit"])->name("submit"); // Sends student to assignment submission form
+				Route::post("/{course_id}/{assignment_id}/submit", [AssignmentController::class, "student_store"])->name("store"); // Sends student to assignment submission form
+
+				Route::get("/{course_id}/{assignment_id}/detail", [AssignmentController::class, "student_submission_detail"])->name("detail");
 			});
 
 		/* Route::prefix('/schedule') // DONE
