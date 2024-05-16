@@ -157,7 +157,6 @@ class AssignmentController extends Controller
 					break;
 				}
 			}
-
 		}
 
 		return view("roles.teacher.assignment.check-submission", [
@@ -165,6 +164,39 @@ class AssignmentController extends Controller
 			"assignment" => $assignment,
 			"students" => $course->students
 		]);
+	}
+
+	public function teacher_check_history($submission_id, $student_id){
+		$submission = AssignmentSubmission::where("id", $submission_id)->first();
+		$assignment = $submission->assignment;
+		$student = User::where("id", $student_id)->first();
+
+		$students_submission = $student->assignment_submissions;
+		$history = [];
+
+		for($i = $students_submission->count() - 1; $i >= 0; $i--){
+			if($students_submission[$i]->assignment->title == $assignment->title){
+				array_push($history, $students_submission[$i]);
+			}
+		}
+
+		return view("roles.teacher.assignment.submission-history", [
+			"history" => $history,
+			"assignment" => $assignment,
+			"student" => $student
+		]);
+	}
+
+	public function teacher_feedback(Request $request, $submission_id, $student_id){
+		$asgsmt = AssignmentSubmission::where("id", $submission_id)->first();
+		$msg = "Feedback added successfully!";
+		if($asgsmt->feedback){
+			$msg = "Feedback edited successfully!";
+		}
+
+		AssignmentSubmission::where("id", $submission_id)->update(["feedback" => $request->feedback]);
+
+		return redirect(route("teacher.assignment.submission-history", [$submission_id, $student_id]))->with("successModifFeedback", $msg);
 	}
 
 

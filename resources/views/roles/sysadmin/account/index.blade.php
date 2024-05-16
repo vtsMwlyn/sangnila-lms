@@ -91,13 +91,10 @@
 											</button>
 										</form>
 
-										<form action="{{ route("sysadmin.account.acc_delete", $account->id) }}" method="post">
-											@csrf
-											<button type="submit" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-												href="{{ route("sysadmin.account.acc_delete", $account->id) }}">
-												Delete
-											</button>
-										</form>
+										<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+											href="{{ route("sysadmin.account.acc_delete", $account->id) }}">
+											Delete
+										</a>
 									</div>
 
 								</td>
@@ -154,13 +151,10 @@
 											</button>
 										</form>
 
-										<form action="{{ route("sysadmin.account.acc_delete", $account->id) }}" method="post">
-											@csrf
-											<button type="submit" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-												href="{{ route("sysadmin.account.acc_delete", $account->id) }}">
-												Delete
-											</button>
-										</form>
+										<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+											href="{{ route("sysadmin.account.acc_delete", $account->id) }}">
+											Delete
+										</a>
 									</div>
 
 								</td>

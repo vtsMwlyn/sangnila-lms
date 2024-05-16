@@ -110,6 +110,38 @@
 				@endforelse
 			</ul>
 
+			<h2 class="text-xl font-semibold mb-3 mt-5">Student's Assignment and Attendance Data:</h2>
+			<table class="w-full">
+				<thead>
+					<th class="border px-3">Course</th>
+					<th class="border px-3">Attendance</th>
+					<th class="border px-3">Assignments</th>
+				</thead>
+				<tbody>
+					@for($i = 0; $i < $student->enrolled_courses->count(); $i++)
+						<tr>
+							<td class="border px-3">{{ $student->enrolled_courses[$i]->course_name }}</td>
+							<td class="border px-3">
+								<div class="flex w-full items-center gap-3">
+									<span>{{ $attended[$i] }}/{{ $attendance_if_full[$i] }} attended</span>
+									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="#">
+										Details
+									</a>
+								</div>
+							</td>
+							<td class="border px-3">
+								<div class="flex w-full items-center gap-3">
+									<span>{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done</span>
+									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="#">
+										Details
+									</a>
+								</div>
+							</td>
+						</tr>
+					@endfor
+				</tbody>
+			</table>
+
 			{{-- Schedule --}}
 			{{-- <h2 class="text-xl font-semibold mb-2">Student Schedules:</h2>
 

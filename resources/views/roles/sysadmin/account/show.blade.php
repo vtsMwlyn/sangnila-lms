@@ -33,12 +33,10 @@
 						Disable
 					</button>
 				</form>
-				<form action="{{ route("sysadmin.account.acc_delete", $user->id) }}" method="post">
-					@csrf
-					<button type="submit" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
-						Delete
-					</button>
-				</form>
+				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+					href="{{ route("sysadmin.account.acc_delete", $user->id) }}">
+					Delete
+				</a>
 			</div>
 
 			<table class="mt-5 border">

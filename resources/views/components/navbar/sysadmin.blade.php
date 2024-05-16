@@ -5,14 +5,19 @@
           <!-- Logo/Brand Image -->
           <a href="{{ route('home') }}" class="flex items-center pl-3 mb-1 md:mb-0">
             <img src="{{ asset('img/Sangnila_Arts.png') }}" alt="Your Logo/Brand" width="70px" class="mr-20 ml-4 md:mr-2">
-            <span class="text-blue-700 text-2xl font-semibold hidden lg:flex ">SANGNILA LMS</span>
+            <div class="flex flex-col">
+				<span class="text-blue-700 text-2xl font-semibold hidden lg:flex ">SANGNILA LMS</span>
+				@auth
+					<span class="text-blue-700 text-md font-semibold hidden lg:flex ">Logged in as: {{ Auth::user()->full_name }}</span>
+				@endauth
+			</div>
         </a>
 
-        <!-- Mobile Menu Button with 3-line icon -->
-        <button id="mobileMenuButton"
-            class="md:hidden text-indigo-700 font-semibold text-3xl hover:text-blue-950 hover:scale-110 transition duration-300 py-2 pl-40 pr-3 mx-1">
-            <span class="inline-block">&#9776;</span> <!-- 3-line icon (hamburger) -->
-        </button>
+			<!-- Mobile Menu Button with 3-line icon -->
+			<button id="mobileMenuButton"
+				class="md:hidden text-indigo-700 font-semibold text-3xl hover:text-blue-950 hover:scale-110 transition duration-300 py-2 pl-40 pr-3 mx-1">
+				<span class="inline-block">&#9776;</span> <!-- 3-line icon (hamburger) -->
+			</button>
 
             <!-- Standard Navigation Links for Larger Screens -->
             <div class="hidden md:flex md:items-center md:space-x-4 md:justify-start px-14">
@@ -63,13 +68,21 @@
 
         <!-- Dropdown Menu (hidden by default on larger screens) -->
         <div id="mobileMenu" class="md:hidden mt-2 px-6 w-full" style="display: none;">
-            <a href="{{ route('sysadmin.account.index') }}"
-                class="block text-indigo-700 font-semibold text-md hover:text-blue-950 hover:scale-110 transition duration-300 py-1">
-                Accounts
-            </a>
-            <a href="{{ route('sysadmin.course.index') }}"
+            <a href="{{ route('admin.course.index') }}"
                 class="block text-indigo-700 font-semibold text-md hover:text-blue-950 hover:scale-110 transition duration-300 py-1">
                 Courses
+            </a>
+            <a href="{{ route('admin.teacher.index') }}"
+                class="block text-indigo-700 font-semibold text-md hover:text-blue-950 hover:scale-110 transition duration-300 py-1">
+                Teachers
+            </a>
+			<a href="{{ route('admin.student.index') }}"
+                class="block text-indigo-700 font-semibold text-md hover:text-blue-950 hover:scale-110 transition duration-300 py-1">
+                Students
+            </a>
+			<a href="{{ route('sysadmin.account.index') }}"
+                class="block text-indigo-700 font-semibold text-md hover:text-blue-950 hover:scale-110 transition duration-300 py-1">
+                Accounts
             </a>
             <!-- Add more navigation links as needed -->
 

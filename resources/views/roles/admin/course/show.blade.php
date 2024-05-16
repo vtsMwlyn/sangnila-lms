@@ -33,13 +33,10 @@
 			<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="{{ route('admin.course.edit', $course->id) }}">Edit Course</a>
 			{{-- <a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
 				href="{{ route('admin.course.assign', $course->id) }}">Assign Teacher</a> --}}
-			<form action="{{ route("admin.course.delete", $course->id) }}" method="post">
-				@csrf
-				@method("delete")
-				<button type="submit" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
-					Delete Course
-				</button>
-			</form>
+				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
+				href="{{ route('admin.course.delete', $course->id) }}">
+				Delete
+			</a>
 		</div>
 
 		<h2 class="text-xl font-semibold mb-2">Teacher List:</h2>

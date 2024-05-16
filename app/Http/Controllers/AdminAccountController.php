@@ -106,12 +106,14 @@ class AdminAccountController extends Controller {
 		return redirect(route("sysadmin.account.index"))->with("successEnableAccount", "Successfully enabled account!");
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
+	public function delete($account_id){
+		$account = User::where('id', $account_id)->first();
+
+		return view('roles.sysadmin.account.destroy', [
+			'account' => $account,
+		]);
+	}
+
 	public function destroy($user_id) {
 		$user = User::findOrFail($user_id);
 		User::destroy("id", $user->id);

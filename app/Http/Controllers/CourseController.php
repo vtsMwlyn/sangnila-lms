@@ -186,6 +186,14 @@ class CourseController extends Controller {
 		return redirect(route('admin.course.show', $course_id))->with("successUpdateCourseData", "Successfully updated course data!");
 	}
 
+	public function admin_delete($course_id){
+		$course = Course::where('id', $course_id)->first();
+
+		return view('roles.admin.course.destroy', [
+			'course' => $course,
+		]);
+	}
+
 	public function admin_destroy($course_id){
 		$course = Course::findOrFail($course_id);
 		Course::destroy("id", $course->id);

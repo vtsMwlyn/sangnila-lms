@@ -135,11 +135,21 @@ class CourseTeacherController extends Controller {
 		return redirect(route("admin.teacher.show", $teacher_id))->with("successAssignToCourse", "Successfully assigned the teacher to the course!");
 	}
 
-	public function unassign(Request $request, $teacher_id) {
+	public function delete($teacher_id, $course_id){
+		$role = Role::where('role_name', 'Teacher')->first();
+		$teacher = User::where('role_id', $role->id)->where('id', $teacher_id)->first();
+		$course = Course::where('visibility', 'public')->where('id', $course_id)->first();
+		return view('roles.admin.teacher.destroy', [
+			'teacher' => $teacher,
+			'course' => $course
+		]);
+	}
+
+	public function unassign(Request $request, $teacher_id, $course_id) {
 		// $course = Course::findOrFail($course_id);
 		// $teachers = $course->teachers;
 		// return view(admin.course.unassign);
-		$targettedData = CourseTeacher::where("user_id", $teacher_id)->where("course_id", $request["course_id"])->first();
+		$targettedData = CourseTeacher::where("user_id", $teacher_id)->where("course_id", $course_id)->first();
 		CourseTeacher::destroy($targettedData->id);
 
 		return redirect(route("admin.teacher.show", $teacher_id))->with("successUnassignFromCourse", "Successfully unassigned the teacher from the course!");

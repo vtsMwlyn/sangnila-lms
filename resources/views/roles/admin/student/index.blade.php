@@ -61,7 +61,26 @@
 											@foreach ($student->enrolled_courses as $course)
 												<li class="flex justify-between">
 													<span>{{ $course->course_name }}</span>
-													<span>[Progress: 0/0]</span>
+													{{-- <span>[Progress: 0/0]</span> --}}
+													<span>
+														@php
+															$all_progress_in_current_course = [];
+															foreach($student->progress as $pgr){
+																if($pgr->course_id == $course->id){
+																	array_push($all_progress_in_current_course, $pgr);
+																}
+															}
+
+															$count = 0;
+															foreach($all_progress_in_current_course as $curr_pgr){
+																if($curr_pgr->status == "unlocked"){
+																	$count++;
+																}
+															}
+
+															echo "[Progress: " . $count . "/" . count($all_progress_in_current_course) . "]";
+														@endphp
+													</span>
 												</li>
 											@endforeach
 										</ul>

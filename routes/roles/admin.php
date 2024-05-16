@@ -33,7 +33,8 @@ Route::prefix('/admin') // ON PROGRESS
 				// Assign and unassign teacher to a course
 				Route::get("/{teacher_id}/assign", [CourseTeacherController::class, "show"])->name("assign");
 				Route::post("/{teacher_id}/assign", [CourseTeacherController::class, "assign"])->name("assign.store");
-				Route::post("/{teacher_id}/unassign", [CourseTeacherController::class, "unassign"])->name("unassign");
+				Route::get('{teacher_id}/unassign/{course_id}', [CourseTeacherController::class, 'delete'])->name('unassign.delete');
+				Route::delete("/{teacher_id}/unassign/{course_id}", [CourseTeacherController::class, "unassign"])->name("unassign.destroy");
 
 				# TODO // ON HALT
 				// Create special form to make teacher accounts
@@ -55,21 +56,22 @@ Route::prefix('/admin') // ON PROGRESS
 				Route::patch('/{course_id}', [CourseController::class, 'admin_update'])->name('update')->whereNumber('course_id'); // DONE
 
 				// Delete Course
-				Route::delete('/{course_id}', [CourseController::class, 'admin_destroy'])->name('delete')->whereNumber('course_id');
+				Route::get("/{course_id}/delete", [CourseController::class, "admin_delete"])->name("delete");
+				Route::delete('/{course_id}/delete', [CourseController::class, 'admin_destroy'])->name('destroy')->whereNumber('course_id');
 
 				// ==========================================================================
 
-				// Assign Teacher (CourseTeacherController)
-				Route::get('{course_id}/assign/', [CourseTeacherController::class, 'create'])->name('assign')->whereNumber('course_id'); // DONE
-				Route::post('{course_id}/assign/', [CourseTeacherController::class, 'store'])->name('assign_store')->whereNumber('course_id'); // DONE
+				// // Assign Teacher (CourseTeacherController)
+				// Route::get('{course_id}/assign/', [CourseTeacherController::class, 'create'])->name('assign')->whereNumber('course_id'); // DONE
+				// Route::post('{course_id}/assign/', [CourseTeacherController::class, 'store'])->name('assign_store')->whereNumber('course_id'); // DONE
 
 
 				# TODO
 				// Unassign Teacher (CourseTeacherController)
 				// idea-1: a direct link to a specific page, where course_id, and a list of teacher with teacher_id as the input
 				// idea-2: form with course_teacher id
-				Route::get('/{course_id}/unassign/{teacher_id}', [CourseController::class, 'unassign'])->name('unassign')->whereNumber('course_id'); // Deletion confirmation
-				Route::delete('/{course_id}/unassign{teacher_id}', [CourseTeacherController::class, 'unassign_destroy'])->name('destroy.unassign')->whereNumber('course_id');
+				// Route::get('/{course_id}/unassign/{teacher_id}', [CourseController::class, 'unassign'])->name('unassign')->whereNumber('course_id'); // Deletion confirmation
+				// Route::delete('/{course_id}/unassign/{teacher_id}', [CourseTeacherController::class, 'unassign_destroy'])->name('destroy.unassign')->whereNumber('course_id');
 			}
 		);
 

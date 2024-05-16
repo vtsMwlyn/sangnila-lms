@@ -59,13 +59,13 @@
 
 			<ul class="mb-6 mt-6 flex flex-wrap gap-5">
 				@forelse ($user->teached_courses as $course)
-					<li class="text-black">
-						<form action="{{ route("admin.teacher.unassign", $user->id) }}" method="post" class="bg-gray-300 px-3 py-1 border rounded-lg">
-							@csrf
-							{{ $course->course_name }}
-							<input type="hidden" name="course_id" id="course_id" value={{ $course->id }}>
-							<button type="submit" class="" href="#"><i class="bi bi-x-circle-fill"></i></button>
-						</form>
+					<li class="text-black border rounded-lg bg-gray-300 px-3 py-1">
+						{{ $course->course_name }}
+						<a
+							href="{{ route('admin.teacher.unassign.delete', ['teacher_id' => $user->id, 'course_id' => $course->id]) }}"
+							class="">
+							<i class="bi bi-x-circle-fill"></i>
+						</a>
 					</li>
 				@empty
 					<li class="text-gray-500">No course</li>

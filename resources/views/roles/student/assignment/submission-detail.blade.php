@@ -35,14 +35,14 @@
 					</thead>
 					<tbody>
 						@if ($assignment->submissions->count())
-							@foreach ($assignment->submissions as $submission)
-								<tr @if($submission->status == "Late") class="bg-red-400" @endif>
-									<td class="border px-3">{{ $submission->created_at }}</td>
-									<td class="border px-3">{{ $submission->title }}</td>
-									<td class="border px-3">{{ $submission->status }}</td>
-									<td class="border px-3">@if($submission->feedback == "") - No feedback - @else {{ $submission->feedback }} @endif</td>
+							@for ($i = $assignment->submissions->count() - 1; $i >= 0; $i--)
+								<tr @if($assignment->submissions[$i]->status == "Late") class="bg-red-400" @endif>
+									<td class="border px-3">{{ $assignment->submissions[$i]->created_at }}</td>
+									<td class="border px-3">{{ $assignment->submissions[$i]->title }}</td>
+									<td class="border px-3">{{ $assignment->submissions[$i]->status }}</td>
+									<td class="border px-3">@if($assignment->submissions[$i]->feedback == "") - No feedback - @else {{ $assignment->submissions[$i]->feedback }} @endif</td>
 								</tr>
-							@endforeach
+							@endfor
 						@else
 							<tr class="border px-3" colspan="3"><td class="text-center">- The teacher haven't uploaded any attendance data yet -</td></tr>
 						@endif

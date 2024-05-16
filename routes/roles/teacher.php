@@ -112,6 +112,8 @@ Route::prefix('/teacher')
 				Route::delete("/{assignment_id}/delete-confirm", [AssignmentController::class, "teacher_destroy"])->name("destroy");
 
 				Route::get("/{assignment_id}/submission", [AssignmentController::class, "teacher_check_submission"])->name("check");
+				Route::get("/{submission_id}/{student_id}/history", [AssignmentController::class, "teacher_check_history"])->name("submission-history");
+				Route::post("/{submission_id}/{student_id}/history", [AssignmentController::class, "teacher_feedback"])->name("feedback");
 			});
 
 /* 		Route::prefix('/schedule') // ON HALT

@@ -2,17 +2,22 @@
 <nav class="bg-blue-200 w-full py-3">
     <div class="container mx-auto flex flex-col md:flex-row items-center">
         <div class="flex items-center  ">
-          <!-- Logo/Brand Image -->
-          <a href="{{ route('home') }}" class="flex items-center pl-3 mb-1 md:mb-0">
-            <img src="{{ asset('img/Sangnila_Arts.png') }}" alt="Your Logo/Brand" width="70px" class="mr-20 ml-4 md:mr-2">
-            <span class="text-blue-700 text-2xl font-semibold hidden lg:flex ">SANGNILA LMS</span>
-        </a>
+		<!-- Logo/Brand Image -->
+		<a href="{{ route('home') }}" class="flex items-center pl-3 mb-1 md:mb-0">
+			<img src="{{ asset('img/Sangnila_Arts.png') }}" alt="Your Logo/Brand" width="70px" class="mr-20 ml-4 md:mr-2">
+			<div class="flex flex-col">
+				<span class="text-blue-700 text-2xl font-semibold hidden lg:flex ">SANGNILA LMS</span>
+				@auth
+					<span class="text-blue-700 text-md font-semibold hidden lg:flex ">Logged in as: {{ Auth::user()->full_name }}</span>
+				@endauth
+			</div>
+		</a>
 
-        <!-- Mobile Menu Button with 3-line icon -->
-        <button id="mobileMenuButton"
-            class="md:hidden text-indigo-700 font-semibold text-3xl hover:text-blue-950 hover:scale-110 transition duration-300 py-2 pl-40 pr-3 mx-1">
-            <span class="inline-block">&#9776;</span> <!-- 3-line icon (hamburger) -->
-        </button>
+			<!-- Mobile Menu Button with 3-line icon -->
+			<button id="mobileMenuButton"
+				class="md:hidden text-indigo-700 font-semibold text-3xl hover:text-blue-950 hover:scale-110 transition duration-300 py-2 pl-40 pr-3 mx-1">
+				<span class="inline-block">&#9776;</span> <!-- 3-line icon (hamburger) -->
+			</button>
 
             <!-- Standard Navigation Links for Larger Screens -->
             <div class="hidden md:flex md:items-center md:space-x-4 md:justify-start px-14">
@@ -56,7 +61,11 @@
 				class="block text-indigo-700 font-semibold text-md hover:text-blue-950 hover:scale-110 transition duration-300 py-1">
 				Courses
 			</a>
-			<a href="{{ route('student.attendance.index', Auth::user()->id) }}"
+			<a href="{{ route('student.assignment.index') }}"
+				class="block text-indigo-700 font-semibold text-md hover:text-blue-950 hover:scale-110 transition duration-300 py-1">
+				Assignments
+			</a>
+			<a href="{{ route('student.attendance.index') }}"
 				class="block text-indigo-700 font-semibold text-md hover:text-blue-950 hover:scale-110 transition duration-300 py-1">
 				Attendance
 			</a>
