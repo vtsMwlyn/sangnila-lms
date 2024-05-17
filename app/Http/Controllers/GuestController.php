@@ -47,11 +47,9 @@ class GuestController extends Controller {
 	 */
 	public function show($course_id) {
 		$course = Course::findOrFail($course_id);
-		$topic = $course->course_topics[0];
-		$materials = CourseMaterial::where('course_topic_id', $topic->id)->get();
+
 		return view('roles.guest.show', [
 			'course' => $course,
-			'materials' => $materials
 		]);
 	}
 

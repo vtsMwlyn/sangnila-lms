@@ -32,22 +32,31 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($materials as $index => $material)
-                        <tr class="hover:bg-gray-100 border-b border-blue-900">
-							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-								{{ $material->course_topic->title }}
-                            </td>
-                            <td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-								<a href="{{ $material->link }}" class="font-bold hover:underline text-blue-600">
-									{{ $material->title }}
-								</a>
-                            </td>
-                        </tr>
-                    @empty
+                    @if ($course->course_topics->count())
+						@forelse ($course->course_topics[0]->course_materials as $material)
+							<tr class="hover:bg-gray-100 border-b border-blue-900">
+								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
+									{{ $course->course_topics[0]->title }}
+								</td>
+								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
+									<a href="{{ $material->link }}" class="font-bold hover:underline text-blue-600">
+										{{ $material->title }}
+									</a>
+								</td>
+							</tr>
+						@empty
+							<tr class="hover:bg-gray-100 border-b border-blue-900">
+								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
+									{{ $course->course_topics[0]->title }}
+								</td>
+								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 text-center">This topic doesn't have any materials yet.</td>
+							</tr>
+						@endforelse
+                    @else
                         <tr>
-                            <td colspan="1" class="px-4 py-2 text-center border-t border-blue-900">No materials found.</td>
+                            <td colspan="2" class="px-4 py-2 text-center border-t border-blue-900">This course doesn't have any topics and materials yet.</td>
                         </tr>
-                    @endforelse
+                    @endif
                 </tbody>
             </table>
         </div>

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
 use App\Models\StudentAttendance;
 use App\Models\AttendanceByTeacher;
+use App\Models\MaterialProgress;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Constraint\Count;
 
@@ -17,11 +19,17 @@ class AttendanceController extends Controller {
 	}
 
 	public function show($course_id) {
-		$course = Auth::user()->teached_courses->where('id', $course_id)->first();
-		return view('roles.teacher.attendance.show', [
-			'attendanceData' => StudentAttendance::where("course_id", $course->id)->latest()->paginate(3 * $course->students->count()),
-			"course" => Course::where("id", $course_id)->first()
-		]);
+		$progresses = MaterialProgress::where("course_id", $course_id)->get();
+		if($progresses->count() || true){
+			$course = Auth::user()->teached_courses->where('id', $course_id)->first();
+
+			return view('roles.teacher.attendance.show', [
+				'attendanceData' => StudentAttendance::where("course_id", $course->id)->latest()->paginate(3 * $course->students->count()),
+				"course" => Course::where("id", $course_id)->first()
+			]);
+		}
+
+		return "Please unlock student progresses first";
 	}
 
 	public function create($course_id){
@@ -110,6 +118,16 @@ class AttendanceController extends Controller {
 		return view("roles.student.attendance.show", [
 			"attendances" => StudentAttendance::where("course_id", $course_id)->where("student_id", Auth::user()->id)->get(),
 			"course" => Course::where("id", $course_id)->first()
+		]);
+	}
+
+
+	// For Admin
+	public function admin_show($student_id, $course_id){
+		return view("roles.admin.student.atd-details", [
+			"attendances" => StudentAttendance::where("course_id", $course_id)->where("student_id", $student_id)->get(),
+			"course" => Course::where("id", $course_id)->first(),
+			"student" => User::where("id", $student_id)->first()
 		]);
 	}
 }

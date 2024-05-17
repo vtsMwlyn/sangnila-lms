@@ -69,10 +69,10 @@ class AssignmentController extends Controller
 
 	public function teacher_edit($assignment_id){
 		$target_asg = StudentAssignment::where("id", $assignment_id)->first();
-		$all_asg = StudentAssignment::where("title", $target_asg->title)->get();
 		$course = Course::where("id", $target_asg->course_id)->first();
-		$student_assignment_status = [];
+		$all_asg = StudentAssignment::where("title", $target_asg->title)->where("course_id", $course->id)->get();
 
+		$student_assignment_status = [];
 		foreach($all_asg as $assignment){
 			if($assignment->student_is_assigned){
 				array_push($student_assignment_status, "on");
@@ -100,8 +100,8 @@ class AssignmentController extends Controller
 		]);
 
 		$target_asg = StudentAssignment::where("id", $assignment_id)->first();
-		$existingAssignmentData = StudentAssignment::where("title", $target_asg->title)->get();
 		$course = Course::where("id", $target_asg->course_id)->first();
+		$existingAssignmentData = StudentAssignment::where("title", $target_asg->title)->where("course_id", $course->id)->get();
 
 		$i = 0;
 		foreach($existingAssignmentData as $a){
@@ -236,8 +236,8 @@ class AssignmentController extends Controller
 		$assignment = StudentAssignment::where("id", $assignment_id)->first();
 
 		//The time is currently set to Asia/Jakarta
-		$submissionTime = Carbon::parse(now());
-		$deadlineTime = Carbon::parse($assignment->deadline_date . " " . $assignment->deadline_time);
+		$submissionTime = now();
+		$deadlineTime = $assignment->deadline_date . " " . $assignment->deadline_time;
 
 		if($submissionTime > $deadlineTime){
 			$status = "Late";
@@ -260,6 +260,18 @@ class AssignmentController extends Controller
 		return view("roles.student.assignment.submission-detail", [
 			"course" => Course::where("id", $course_id)->first(),
 			"assignment" => StudentAssignment::where("id", $assignment_id)->first()
+		]);
+	}
+
+
+	// For Admin
+	public function admin_show($student_id, $course_id){
+		$assignments = StudentAssignment::where("course_id", $course_id)->where("student_id", $student_id)->where("student_is_assigned", 1)->get();
+
+		return view("roles.admin.student.asg-details", [
+			"assignments" => $assignments,
+			"student" => User::where("id", $student_id)->first(),
+			"course" => Course::where("id", $course_id)->first()
 		]);
 	}
 }

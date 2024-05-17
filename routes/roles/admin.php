@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseStudentController;
 use App\Http\Controllers\CourseTeacherController;
@@ -117,6 +119,10 @@ Route::prefix('/admin') // ON PROGRESS
 				// Unassign
 				Route::get('{student_id}/unassign/{course_id}', [CourseStudentController::class, 'delete'])->name('unassign.delete'); // DONE
 				Route::delete('{student_id}/unassign/{course_id}', [CourseStudentController::class, 'destroy'])->name('unassign.destroy'); //DONE
+
+				// Assignment and Attendance Details
+				Route::get("{student_id}/{course_id}/assignments", [AssignmentController::class, "admin_show"])->name("asg-details");
+				Route::get("{student_id}/{course_id}/attendance", [AttendanceController::class, "admin_show"])->name("atd-details");
 			}
 		);
 	});

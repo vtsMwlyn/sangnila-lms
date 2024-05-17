@@ -124,7 +124,7 @@
 							<td class="border px-3">
 								<div class="flex w-full items-center gap-3">
 									<span>{{ $attended[$i] }}/{{ $attendance_if_full[$i] }} attended</span>
-									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="#">
+									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="{{ route("admin.student.atd-details", [$student->id, $student->enrolled_courses[$i]->id]) }}">
 										Details
 									</a>
 								</div>
@@ -132,7 +132,7 @@
 							<td class="border px-3">
 								<div class="flex w-full items-center gap-3">
 									<span>{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done</span>
-									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="#">
+									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="{{ route("admin.student.asg-details", [$student->id, $student->enrolled_courses[$i]->id]) }}">
 										Details
 									</a>
 								</div>

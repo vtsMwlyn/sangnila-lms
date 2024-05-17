@@ -56,7 +56,25 @@
 										</ul>
 									</td>
 
-									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">0/0</td>
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
+										@php
+											$all_progress_in_current_course = [];
+											foreach(Auth::user()->progress as $pgr){
+												if($pgr->course_id == $course->id){
+													array_push($all_progress_in_current_course, $pgr);
+												}
+											}
+
+											$count = 0;
+											foreach($all_progress_in_current_course as $curr_pgr){
+												if($curr_pgr->status == "unlocked"){
+													$count++;
+												}
+											}
+
+											echo "[Progress: " . $count . "/" . count($all_progress_in_current_course) . "]";
+										@endphp
+									</td>
 
 								</tr>
 							@endforeach

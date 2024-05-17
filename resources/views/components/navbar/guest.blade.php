@@ -21,45 +21,55 @@
 
                     <a href="{{ route('guest.index') }}"
                         class="text-indigo-700 font-semibold text-xl hover:text-blue-950 hover:scale-110 transition duration-300 py-2 px-5">
-                        Courses
+                        Our Courses
                     </a>
+
+					<a href="https://academy.sangnilaindonesia.com/"
+                        class="text-indigo-700 font-semibold text-xl hover:text-blue-950 hover:scale-110 transition duration-300 py-2 px-5">
+                        About Us
+                    </a>
+
+					<a href="https://sangnilaindonesia.com"
+                        class="text-indigo-700 font-semibold text-xl hover:text-blue-950 hover:scale-110 transition duration-300 py-2 px-5">
+                        Visit Our Website
+                    </a>
+
                     <!-- Add more navigation links as needed -->
                 </div>
             </div>
         </div>
 
-        <!-- Logout Button -->
-        <form method="POST" action="{{ route('logout') }}" class=" ml-auto hidden md:flex pr-10 ">
-            @csrf
-			<button type="submit"
-            class="text-indigo-700 font-semibold text-xl transition duration-300 py-2 hover:text-red-500 px-1">
-            {{ __('Log Out') }}
-        </button>
-        <svg class=" h-12 w-8 text-red-500 " width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" />
-            <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
-            <path d="M7 12h14l-3 -3m0 6l3 -3" />
-        </svg>
-
-        </form>
+        <!-- Register Button -->
+        <a href="https://register.sangnilaindonesia.com/"
+			class="ml-auto hidden md:flex pr-10 text-indigo-700 font-semibold text-xl hover:text-blue-950 hover:scale-110 transition duration-300">
+			Register Now!
+		</a>
 
         <!-- Dropdown Menu (hidden by default on larger screens) -->
         <div id="mobileMenu" class="md:hidden mt-2 px-6 w-full" style="display: none;">
 
             <a href="{{ route('guest.index') }}"
                 class="block text-indigo-700 font-semibold text-md hover:text-blue-950 hover:scale-110 transition duration-300 py-1">
-                Courses
+                Our Courses
+            </a>
+
+			<a href="https://academy.sangnilaindonesia.com/"
+                class="block text-indigo-700 font-semibold text-md hover:text-blue-950 hover:scale-110 transition duration-300 py-1">
+                About Us
+            </a>
+
+			<a href="https://sangnilaindonesia.com/"
+                class="block text-indigo-700 font-semibold text-md hover:text-blue-950 hover:scale-110 transition duration-300 py-1">
+                Visit Our Website
             </a>
             <!-- Add more navigation links as needed -->
 
-            <!-- Logout Button -->
-            <form method="POST" action="{{ route('logout') }}" >
-                @csrf
-                <button type="submit"
-                    class="text-red-500 font-semibold text-md pt-1 pb-3">
-                    {{ __('Log Out') }}
-                </button>
-            </form>
+			<a href="https://register.sangnilaindonesia.com/"
+				class="text-indigo-700 font-semibold text-xl hover:text-blue-950 hover:scale-110 transition duration-300 py-2 px-5">
+				Register Now!
+			</a>
+
+
         </div>
     </div>
 
