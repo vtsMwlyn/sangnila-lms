@@ -64,32 +64,17 @@
 				<p>Pick students to assign or</p>
 				<button class="px-5 py-2 text-white bg-indigo-400 rounded-lg border" id="checkall">Assign to all</button>
 			</div>
-			{{-- <div class="flex w-full gap-3">
-				<div style="width: 50%">
-					@for ($i = 0; $i < $course->students->count() / 2; $i++)
-						<div class="flex items-center gap-3 mt-2 mb-2 ml-5 mr-5 border rounded-lg p-5">
-							<input type="checkbox" id="checkbox{{ $i + 1 }}"
-							class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $i) == "on") checked @endif>
-							<label for="checkbox{{ $i + 1 }}">{{ $course->students[$i]->full_name }}</label>
-						</div>
-					@endfor
-				</div>
-				<div style="width: 50%">
-					@for ($i = $course->students->count() / 2 + 1; $i < $course->students->count(); $i++)
-						<div class="flex items-center gap-3 mt-2 mb-2 ml-5 mr-5 border rounded-lg p-5">
-							<input type="checkbox" id="checkbox{{ $i + 1 }}"
-							class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $i) == "on") checked @endif>
-							<label for="checkbox{{ $i + 1 }}">{{ $course->students[$i]->full_name }}</label>
-						</div>
-					@endfor
-				</div>
-			</div> --}}
+
 			@error("checkbox_value")
 				<p class="text-red-500 mt-3">{{ $message }}</p>
 			@enderror
 			<div class="flex flex-wrap gap-3 mt-2 rounded-lg @error("checkbox_value") border p-5 border-red-500 @enderror">
 				@for ($i = 0; $i < $course->students->count(); $i++)
-					<div class="flex items-center gap-3 border rounded-lg p-5" style="width: 30%">
+					{{--
+						Note:
+						Teacher can only assign assigments / edit assigning status to active student accounts
+					--}}
+					<div class="flex items-center gap-3 border rounded-lg p-5 checkbox-container" style="width: 30%; @if($course->students[$i]->status == "disabled") display: none; @endif">
 						<input type="checkbox" id="checkbox{{ $i }}"
 						class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $i) == "on" ) checked @elseif($checkboxes_values[$i] == "on") checked @endif>
 						<label for="checkbox{{ $i }}">{{ $course->students[$i]->full_name }}</label>
@@ -97,7 +82,10 @@
 				@endfor
 			</div>
 
-            <div class="flex items-center justify-end mt-6">
+            <div class="flex items-stretch gap-1 justify-end mt-6">
+				<button type="button" onclick="history.back()" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
+						Cancel
+				</button>
                 <x-button>
                     {{ __('Submit') }}
                 </x-button>
@@ -140,8 +128,15 @@
 		checkAllBtn.addEventListener("click", (e) => {
 			e.preventDefault();
 			const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+			const checkboxContainers = document.querySelectorAll(".checkbox-container");
+			let i = 0;
 			checkboxes.forEach((checkbox) => {
-				checkbox.checked = true;
+				if(checkboxContainers[i].style.display != "none"){
+					checkbox.checked = true;
+				} else {
+					checkbox.checked = false;
+				}
+				i++;
 			});
 		})
 	</script>

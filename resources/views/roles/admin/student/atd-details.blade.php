@@ -38,9 +38,12 @@
 					<tbody>
 						@if ($attendances->count())
 							@foreach ($attendances as $attendance)
-								<tr class="@if($attendance->is_attend) bg-green-500 @else bg-red-400 @endif">
+								@if($attendance->attendance_detail == "Account disabled")
+									@continue
+								@endif
+								<tr class="@if($attendance->is_attend == 1) bg-green-500 @else bg-red-400 @endif">
 									<td class="border border-black px-3">{{ $attendance->created_at }}</td>
-									<td class="border border-black px-3">@if($attendance->is_attend) Present @else Absent @endif</td>
+									<td class="border border-black px-3">@if($attendance->is_attend == 1) Present @else Absent @endif</td>
 									<td class="border border-black px-3">{{ $attendance->attendance_detail }}</td>
 									<td class="border border-black px-3">{{ $attendance->teacher->full_name }}</td>
 								</tr>

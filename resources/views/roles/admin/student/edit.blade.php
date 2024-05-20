@@ -28,7 +28,7 @@
 				<!-- Student Name -->
 				<div>
 					<x-label for="full_name" :value="__('New Student Name')" />
-					<x-input id="full_name" class="block mt-1 w-full" type="text" name="full_name" :value="$student->full_name" 
+					<x-input id="full_name" class="block mt-1 w-full" type="text" name="full_name" :value="$student->full_name"
 						autofocus />
 				</div>
 
@@ -38,7 +38,10 @@
 					<x-input id="email" class="block mt-1 w-full" type="text" name="email" :value="$student->email"  />
 				</div>
 
-				<div class="flex items-center justify-end mt-4">
+				<div class="flex items-stretch justify-end mt-4">
+					<button type="button" onclick="history.back()" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
+							Cancel
+					</button>
 					<x-button class="ml-4">
 						{{ __('Save') }}
 					</x-button>

@@ -21,87 +21,83 @@
     <!-- Content Section -->
     <div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
         <h1 class="text-3xl font-semibold text-blue-900 mb-4">Upload New Assignment to {{ $course->course_name }}</h1>
-        <form action="{{ route('teacher.assignment.store', $course->id) }}" method="post" class="mx-auto" id="assignment_form">
-            @csrf
-            <!-- Assignment Title -->
-            <div class="mb-4">
-                <x-label for="title" :value="__('Assignment Title')" />
-                <x-input id="title" class="block mt-1 w-full" type="text" name="title"
-                    :value="old('title')" autofocus />
-            </div>
-
-            <!-- Assignment Description -->
-            <div class="mb-4">
-                <x-label for="desc" :value="__('Assignment Description')" />
-                <x-input id="desc" class="block mt-1 w-full" type="text" name="desc"
-                    :value="old('desc')" />
-			</div>
-
-			<!-- Assignment Link -->
-            <div class="mb-4">
-                <x-label for="link" :value="__('Assignment Link')" />
-                <x-input id="link" class="block mt-1 w-full" type="text" name="link"
-                    :value="old('link')" />
-			</div>
-
-			<!-- Assignment Deadline Date -->
-			<div class="mb-4">
-                <x-label for="deadline_date" :value="__('Assignment Deadline Date')" />
-                <x-input id="deadline_date" class="block mt-1 w-full" type="date" name="deadline_date"
-                    :value="old('deadline_date')" />
-            </div>
-
-			<!-- Assignment Deadline Time -->
-			<div class="mb-4">
-                <x-label for="deadline_time" :value="__('Assignment Deadline Time')" />
-                <x-input id="deadline_time" class="block mt-1 w-full" type="time" name="deadline_time"
-                    :value="old('deadline_time')" />
-            </div>
-
-			<!-- Select Students to Assign -->
-			<div class="flex items-center gap-3">
-				<p>Pick students to assign or</p>
-				<button class="px-5 py-2 text-white bg-indigo-400 rounded-lg border" id="checkall">Assign to all</button>
-			</div>
-			{{-- <div class="flex w-full gap-3">
-				<div style="width: 50%">
-					@for ($i = 0; $i < $course->students->count() / 2; $i++)
-						<div class="flex items-center gap-3 mt-2 mb-2 ml-5 mr-5 border rounded-lg p-5">
-							<input type="checkbox" id="checkbox{{ $i + 1 }}"
-							class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $i) == "on") checked @endif>
-							<label for="checkbox{{ $i + 1 }}">{{ $course->students[$i]->full_name }}</label>
-						</div>
-					@endfor
+		@if($course->students->count())
+			<form action="{{ route('teacher.assignment.store', $course->id) }}" method="post" class="mx-auto" id="assignment_form">
+				@csrf
+				<!-- Assignment Title -->
+				<div class="mb-4">
+					<x-label for="title" :value="__('Assignment Title')" />
+					<x-input id="title" class="block mt-1 w-full" type="text" name="title"
+						:value="old('title')" autofocus />
 				</div>
-				<div style="width: 50%">
-					@for ($i = $course->students->count() / 2 + 1; $i < $course->students->count(); $i++)
-						<div class="flex items-center gap-3 mt-2 mb-2 ml-5 mr-5 border rounded-lg p-5">
-							<input type="checkbox" id="checkbox{{ $i + 1 }}"
-							class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $i) == "on") checked @endif>
-							<label for="checkbox{{ $i + 1 }}">{{ $course->students[$i]->full_name }}</label>
-						</div>
-					@endfor
-				</div>
-			</div> --}}
-			@error("checkbox_value")
-				<p class="text-red-500 mt-3">{{ $message }}</p>
-			@enderror
-			<div class="flex flex-wrap gap-3 mt-2 rounded-lg @error("checkbox_value") border p-5 border-red-500 @enderror">
-				@foreach ($course->students as $student)
-					<div class="flex items-center gap-3 border rounded-lg p-5" style="width: 30%">
-						<input type="checkbox" id="checkbox{{ $loop->iteration }}"
-						class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif>
-						<label for="checkbox{{ $loop->iteration }}">{{ $student->full_name }}</label>
-					</div>
-				@endforeach
-			</div>
 
-            <div class="flex items-center justify-end mt-6">
-                <x-button>
-                    {{ __('Submit') }}
-                </x-button>
-            </div>
-        </form>
+				<!-- Assignment Description -->
+				<div class="mb-4">
+					<x-label for="desc" :value="__('Assignment Description')" />
+					<x-input id="desc" class="block mt-1 w-full" type="text" name="desc"
+						:value="old('desc')" />
+				</div>
+
+				<!-- Assignment Link -->
+				<div class="mb-4">
+					<x-label for="link" :value="__('Assignment Link')" />
+					<x-input id="link" class="block mt-1 w-full" type="text" name="link"
+						:value="old('link')" />
+				</div>
+
+				<!-- Assignment Deadline Date -->
+				<div class="mb-4">
+					<x-label for="deadline_date" :value="__('Assignment Deadline Date')" />
+					<x-input id="deadline_date" class="block mt-1 w-full" type="date" name="deadline_date"
+						:value="old('deadline_date')" />
+				</div>
+
+				<!-- Assignment Deadline Time -->
+				<div class="mb-4">
+					<x-label for="deadline_time" :value="__('Assignment Deadline Time')" />
+					<x-input id="deadline_time" class="block mt-1 w-full" type="time" name="deadline_time"
+						:value="old('deadline_time')" />
+				</div>
+
+				<!-- Select Students to Assign -->
+				<div class="flex items-center gap-3">
+					<p>Pick students to assign or</p>
+					<button class="px-5 py-2 text-white bg-indigo-400 rounded-lg border" id="checkall">Assign to all</button>
+				</div>
+
+				@error("checkbox_value")
+					<p class="text-red-500 mt-3">{{ $message }}</p>
+				@enderror
+
+				<div class="flex flex-wrap gap-3 mt-2 rounded-lg @error("checkbox_value") border p-5 border-red-500 @enderror">
+					@foreach ($course->students as $student)
+						{{--
+							Note:
+							Teacher can only assign assigments / edit assigning status to active student accounts
+						--}}
+						<div class="flex items-center gap-3 border rounded-lg p-5 checkbox-container" style="width: 30%; @if($student->status == "disabled") display: none; @endif">
+							<input type="checkbox" id="checkbox{{ $loop->iteration }}"
+							class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif>
+							<label for="checkbox{{ $loop->iteration }}">{{ $student->full_name }}</label>
+						</div>
+					@endforeach
+				</div>
+
+				<div class="flex items-stretch gap-1 justify-end mt-6">
+					<button type="button" onclick="history.back()" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
+							Cancel
+					</button>
+					<x-button>
+						{{ __('Submit') }}
+					</x-button>
+				</div>
+			</form>
+		@else
+			<h1 class="text-md font-semibold italic">- No students assigned to this course yet, cannot upload assignment -</h1>
+			<button type="button" onclick="history.back()" class="mt-6 px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
+				Return
+			</button>
+		@endif
     </div>
 
 	<script>
@@ -139,8 +135,15 @@
 		checkAllBtn.addEventListener("click", (e) => {
 			e.preventDefault();
 			const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+			const checkboxContainers = document.querySelectorAll(".checkbox-container");
+			let i = 0;
 			checkboxes.forEach((checkbox) => {
-				checkbox.checked = true;
+				if(checkboxContainers[i].style.display != "none"){
+					checkbox.checked = true;
+				} else {
+					checkbox.checked = false;
+				}
+				i++;
 			});
 		})
 	</script>

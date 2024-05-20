@@ -32,25 +32,25 @@ class DatabaseSeeder extends Seeder
 
 		/*COMMENT BELOW COMMANDS TO SET THE APP DATA TO COMPLETELY EMPTY*/
 
-		// User::create(["email" => "teacherA.sangnila@gmail.com", "full_name" => "Teacher A", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]);
-		// User::create(["email" => "teacherB.sangnila@gmail.com", "full_name" => "Teacher B", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]);
-		// User::create(["email" => "studentA.sangnila@gmail.com", "full_name" => "Student A", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 4, "status" => "enabled"]);
-		// User::create(["email" => "studentB.sangnila@gmail.com", "full_name" => "Student B", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 4, "status" => "enabled"]);
-		// User::create(["email" => "studentC.sangnila@gmail.com", "full_name" => "Student C", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 4, "status" => "enabled"]);
-		// User::create(["email" => "studentD.sangnila@gmail.com", "full_name" => "Student D", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 4, "status" => "enabled"]);
+		User::create(["email" => "teacherA.sangnila@gmail.com", "full_name" => "Teacher A", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]);
+		User::create(["email" => "teacherB.sangnila@gmail.com", "full_name" => "Teacher B", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]);
+		User::create(["email" => "studentA.sangnila@gmail.com", "full_name" => "Student A", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 4, "status" => "enabled"]);
+		User::create(["email" => "studentB.sangnila@gmail.com", "full_name" => "Student B", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 4, "status" => "enabled"]);
+		User::create(["email" => "studentC.sangnila@gmail.com", "full_name" => "Student C", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 4, "status" => "enabled"]);
+		User::create(["email" => "studentD.sangnila@gmail.com", "full_name" => "Student D", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 4, "status" => "enabled"]);
 
-		// Course::create([
-		// 	"course_name" => "3D Modelling",
-		// 	"course_description" => "This course serves as a comprehensive introduction to the exciting world of 3D modeling. Whether you're a beginner looking to delve into the realm of digital design or an enthusiast seeking to enhance your skills, this course provides a solid foundation in the principles and techniques of 3D modeling.  Throughout the course, students will explore the fundamental concepts of 3D modeling, learning how to create three-dimensional objects and environments using industry-standard software tools."
-		// ]);
-		// Course::create([
-		// 	"course_name" => "Roblox",
-		// 	"course_description" => "Learn to create various of games using Roblox game engine, designed for easily understandable by kids. It's a good opportunity to learn game development with Roblox before getting started with more advanced game development technologies such as Unity and Unreal game engine."
-		// ]);
-		// Course::create([
-		// 	"course_name" => "Concept Art",
-		// 	"course_description" => "This is the description of course Concept Art. You can modify or add anything here."
-		// ]);
+		Course::create([
+			"course_name" => "3D Modelling",
+			"course_description" => "This course serves as a comprehensive introduction to the exciting world of 3D modeling. Whether you're a beginner looking to delve into the realm of digital design or an enthusiast seeking to enhance your skills, this course provides a solid foundation in the principles and techniques of 3D modeling.  Throughout the course, students will explore the fundamental concepts of 3D modeling, learning how to create three-dimensional objects and environments using industry-standard software tools."
+		]);
+		Course::create([
+			"course_name" => "Roblox",
+			"course_description" => "Learn to create various of games using Roblox game engine, designed for easily understandable by kids. It's a good opportunity to learn game development with Roblox before getting started with more advanced game development technologies such as Unity and Unreal game engine."
+		]);
+		Course::create([
+			"course_name" => "Concept Art",
+			"course_description" => "This is the description of course Concept Art. You can modify or add anything here."
+		]);
 
 		// CourseTopic::create(["title" => "TOPIC 01 - Introduction to Concept Art", "course_id" => 3]);
 		// CourseTopic::create(["title" => "TOPIC 02 - Software Installation and Test Run", "course_id" => 3]);

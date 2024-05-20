@@ -24,12 +24,6 @@
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
 			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Teachers</h1>
 
-			@if(session()->has("successUpdateTeacherData"))
-				<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-					<p class="text-green-900">{{ session("successUpdateTeacherData") }}</p>
-				</div>
-			@endif
-
 			<div class="overflow-x-auto rounded-md">
 				<table class="min-w-full bg-white border-collapse">
 					<thead>
@@ -52,13 +46,17 @@
 									</a>
 								</td>
 								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">{{ $account->email }}</td>
-								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
+								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4 text-center">
 									{{-- {{ $account->teached_courses }} --}}
-									<ul class="flex flex-col items-center">
-										@foreach ($account->teached_courses as $course)
-											<li>{{ $course->course_name }}</li>
-										@endforeach
-									</ul>
+									@if($account->teached_courses->count())
+										<ul class="flex flex-col items-center">
+											@foreach ($account->teached_courses as $course)
+												<li>{{ $course->course_name }}</li>
+											@endforeach
+										</ul>
+									@else
+										- No courses assigned yet -
+									@endif
 								</td>
 								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 									<div class="flex w-full justify-center gap-1">

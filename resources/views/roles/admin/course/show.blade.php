@@ -102,7 +102,7 @@
 
 		<h2 class="text-xl font-semibold mb-2 mt-8">Course Topics & Materials:</h2>
 		<div class="mb-6">
-			<table>
+			<table class="w-full">
 				<thead>
 					<th class="border px-3">Topic name</th>
 					<th class="border px-3">Materials</th>

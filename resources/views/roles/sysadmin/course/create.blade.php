@@ -27,14 +27,14 @@
             <div class="mb-4">
                 <x-label for="course_name" :value="__('Course Name')" />
                 <x-input id="course_name" class="block mt-1 w-full" type="text" name="course_name"
-                    :value="old('Course Name')" autofocus />
+                    :value="old('course_name')" autofocus />
             </div>
 
             <!-- Course Description -->
             <div class="mb-4">
                 <x-label for="course_description" :value="__('Course Description')" />
                 <x-input id="course_description" class="block mt-1 w-full" type="text" name="course_description"
-                    :value="old('Course Description')" />
+                    :value="old('course_description')" />
             </div>
 
 			<!-- Visibility Selection -->
@@ -47,7 +47,10 @@
 			</div>
 
 
-            <div class="flex items-center justify-end mt-6">
+            <div class="flex items-stretch gap-1 justify-end mt-6">
+				<button type="button" onclick="history.back()" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
+					Cancel
+				</button>
                 <x-button>
                     {{ __('Submit') }}
                 </x-button>

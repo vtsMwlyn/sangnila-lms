@@ -149,7 +149,7 @@ class AssignmentController extends Controller
 
 		$latest_submission = [];
 		foreach($course->students as $student){
-			$student_submissions = AssignmentSubmission::where("student_id", $student->id)->latest()->get();
+			$student_submissions = AssignmentSubmission::where("student_id", $student->id)->where("assignment_id", $assignment->id)->latest()->get();
 
 			foreach($student_submissions as $submission){
 				if($submission->assignment->title == $assignment->title){
@@ -171,11 +171,15 @@ class AssignmentController extends Controller
 		$assignment = $submission->assignment;
 		$student = User::where("id", $student_id)->first();
 
-		$students_submission = $student->assignment_submissions;
+		// $students_submission = $student->assignment_submissions;
+
+		$students_submission = AssignmentSubmission::where("student_id", $student_id)->where("assignment_id", $assignment->id)->get();
+
 		$history = [];
 
 		for($i = $students_submission->count() - 1; $i >= 0; $i--){
-			if($students_submission[$i]->assignment->title == $assignment->title){
+			// if($students_submission[$i]->assignment->title == $assignment->title){
+			if($students_submission[$i]->assignment->course_id == $assignment->course_id && $students_submission[$i]->assignment->title == $assignment->title){
 				array_push($history, $students_submission[$i]);
 			}
 		}

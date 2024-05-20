@@ -80,7 +80,7 @@ class StudentController extends Controller {
 		$count_full_attendance = [];
 
 		foreach($student->enrolled_courses as $course){
-			$attendance_data_of_student = StudentAttendance::where("course_id", $course->id)->where("student_id", $student->id)->get();
+			$attendance_data_of_student = StudentAttendance::where("course_id", $course->id)->where("student_id", $student->id)->whereNot("attendance_detail", "Account disabled")->get();
 
 			array_push($students_attendances, $attendance_data_of_student);
 		}
@@ -127,6 +127,6 @@ class StudentController extends Controller {
 
 		User::where("id", $student->id)->update($dataToUpdate);
 
-		return redirect(route("admin.student.index"))->with("successUpdateStudentData", "Successfully updated student data!");
+		return redirect(route("admin.student.show", $student_id))->with("successUpdateStudentData", "Successfully updated student data!");
 	}
 }

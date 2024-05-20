@@ -105,6 +105,6 @@ class TeacherAccountController extends Controller {
 
 		User::where("id", $teacher->id)->update($dataToUpdate);
 
-		return redirect(route("admin.teacher.index"))->with("successUpdateTeacherData", "Successfully updated teacher data!");
+		return redirect(route("admin.teacher.show", $teacher_id))->with("successUpdateTeacherData", "Successfully updated teacher data!");
 	}
 }

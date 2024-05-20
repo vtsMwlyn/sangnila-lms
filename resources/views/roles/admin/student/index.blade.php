@@ -24,12 +24,6 @@
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
 			<h1 class="text-3xl font-semibold text-blue-900 mb-4">Students</h1>
 
-			@if(session()->has("successUpdateStudentData"))
-				<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-					<p class="text-green-900">{{ session("successUpdateStudentData") }}</p>
-				</div>
-			@endif
-
 			@if ($students->isNotEmpty())
 				<div class="overflow-x-auto rounded-md">
 					<table class="min-w-full bg-white border-collapse ">
@@ -57,33 +51,37 @@
 										{{ $student->email }}
 									</td>
 									<td class="bg-blue-100 border-b border-blue-300 px-6 py-2 sm:w-1/4">
-										<ul>
-											@foreach ($student->enrolled_courses as $course)
-												<li class="flex justify-between">
-													<span>{{ $course->course_name }}</span>
-													{{-- <span>[Progress: 0/0]</span> --}}
-													<span>
-														@php
-															$all_progress_in_current_course = [];
-															foreach($student->progress as $pgr){
-																if($pgr->course_id == $course->id){
-																	array_push($all_progress_in_current_course, $pgr);
+										@if($student->enrolled_courses->count())
+											<ul>
+												@foreach ($student->enrolled_courses as $course)
+													<li class="flex justify-between">
+														<span>{{ $course->course_name }}</span>
+														{{-- <span>[Progress: 0/0]</span> --}}
+														<span>
+															@php
+																$all_progress_in_current_course = [];
+																foreach($student->progress as $pgr){
+																	if($pgr->course_id == $course->id){
+																		array_push($all_progress_in_current_course, $pgr);
+																	}
 																}
-															}
 
-															$count = 0;
-															foreach($all_progress_in_current_course as $curr_pgr){
-																if($curr_pgr->status == "unlocked"){
-																	$count++;
+																$count = 0;
+																foreach($all_progress_in_current_course as $curr_pgr){
+																	if($curr_pgr->status == "unlocked"){
+																		$count++;
+																	}
 																}
-															}
 
-															echo "[Progress: " . $count . "/" . count($all_progress_in_current_course) . "]";
-														@endphp
-													</span>
-												</li>
-											@endforeach
-										</ul>
+																echo "[Progress: " . $count . "/" . count($all_progress_in_current_course) . "]";
+															@endphp
+														</span>
+													</li>
+												@endforeach
+											</ul>
+										@else
+											<p class="text-center">- No courses assigned yet -</p>
+										@endif
 									</td>
 									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
 										<div class="flex w-full justify-center gap-1">

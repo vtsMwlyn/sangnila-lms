@@ -40,35 +40,14 @@
 				Upload New Attendance
 			</a>
 
-			{{-- @for($i = 0; $i < $attendanceData->count() / $course->students->count(); $i++)
-				<table class="w-full">
-					<thead>
-						<th class="border px-3">Timestamp</th>
-						<th class="border px-3">Uploaded by</th>
-						<th class="border px-3">Students</th>
-						<th class="border px-3">Actions</th>
-					</thead>
-					<tbody>
-						@for($j = 0; $j < $course->students->count(); $j++)
-							<tr>
-								<td class="border px-3">{{ $attendanceData[$j + ($i * $attendanceData->count() / $course->students->count())]->created_at }}</td>
-								<td class="border px-3">{{ $attendanceData[$j + ($i * $attendanceData->count() / $course->students->count())]->teacher->full_name }}</td>
-								<td class="border px-3">{{ $attendanceData[$j + ($i * $attendanceData->count() / $course->students->count())]->student->full_name }}</td>
-								<td class="border px-3">Action buttons here</td>
-							</tr>
-						@endfor
-					</tbody>
-				</table>
-			@endfor --}}
-
-			@if($attendanceData->count())
-				@for($i = 0; $i < $attendanceData->count(); $i += $course->students->count())
+			@if(count($attendanceData))
+				@for($i = count($attendanceData) - 1; $i >= 0; $i--)
 					<div class="border rounded-lg p-5 mb-5 mt-5">
-						<p>Date/Time: {{ $attendanceData[$i]->created_at }}</p>
-						<p>Uploaded by: {{ $attendanceData[$i]->teacher->full_name }}</p>
+						<p>Date/Time: {{ $attendanceData[$i][0]->created_at }}</p>
+						<p>Uploaded by: {{ $attendanceData[$i][0]->teacher->full_name }}</p>
 						<div class="mt-5">
 							<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-								href="{{ route("teacher.attendance.edit", $attendanceData[$i]->id) }}">
+								href="{{ route("teacher.attendance.edit", $attendanceData[$i][0]->id) }}">
 								Edit
 							</a>
 						</div>
@@ -79,21 +58,34 @@
 								<th class="border px-3">Attendance detail</th>
 							</thead>
 							<tbody>
-								@for($j = $i; $j < min($attendanceData->count(), $i + $course->students->count()); $j++)
-									<tr>
-										<td class="border px-3">{{ $attendanceData[$j]->student->full_name }}</td>
-										<td class="border px-3">{{ ($attendanceData[$j]->is_attend == 1)? "Attended" : "Absent" }}</td>
-										<td class="border px-3">{{ $attendanceData[$j]->attendance_detail }}</td>
-									</tr>
+								{{--
+								Note:
+								Student attendance data when the account is disabled by admin will not be shown
+								--}}
+
+								@for($j = 0; $j < count($attendanceData[$i]); $j++)
+									@if($attendanceData[$i][$j]->attendance_detail != "Account disabled")
+										<tr>
+											<td class="border px-3">{{ $attendanceData[$i][$j]->student->full_name }}</td>
+											<td class="border px-3">
+												@if($attendanceData[$i][$j]->is_attend == 1)
+													Attended
+												@elseif($attendanceData[$i][$j]->is_attend == 0)
+													Absent
+												@endif
+											</td>
+											<td class="border px-3">{{ $attendanceData[$i][$j]->attendance_detail }}</td>
+										</tr>
+									@endif
 								@endfor
 							</tbody>
 						</table>
 					</div>
 				@endfor
 
-				<div class="">
+				{{-- <div class="">
 					{{ $attendanceData->links() }}
-				</div>
+				</div> --}}
 			@else
 				<div class="mt-5">- No attendance data yet -</div>
 			@endif

@@ -111,7 +111,7 @@
 								@endif
 							@endfor
 						@else
-							<tr ><td colspan="4" class="border px-3 text-center">- No assignments yet -</td></tr>
+							<tr ><td colspan="5" class="border px-3 text-center">- No assignments yet -</td></tr>
 						@endif
 					</tbody>
 				</table>

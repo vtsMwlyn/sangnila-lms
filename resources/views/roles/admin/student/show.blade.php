@@ -34,6 +34,10 @@
 				<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
 					<p class="text-yellow-600" >{{ session("successUnassignFromCourse") }}</p>
 				</div>
+			@elseif(session()->has("successUpdateStudentData"))
+				<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+					<p class="text-green-900">{{ session("successUpdateStudentData") }}</p>
+				</div>
 			@endif
 
 			<div class="h-fit mb-5">
@@ -118,27 +122,31 @@
 					<th class="border px-3">Assignments</th>
 				</thead>
 				<tbody>
-					@for($i = 0; $i < $student->enrolled_courses->count(); $i++)
-						<tr>
-							<td class="border px-3">{{ $student->enrolled_courses[$i]->course_name }}</td>
-							<td class="border px-3">
-								<div class="flex w-full items-center gap-3">
-									<span>{{ $attended[$i] }}/{{ $attendance_if_full[$i] }} attended</span>
-									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="{{ route("admin.student.atd-details", [$student->id, $student->enrolled_courses[$i]->id]) }}">
-										Details
-									</a>
-								</div>
-							</td>
-							<td class="border px-3">
-								<div class="flex w-full items-center gap-3">
-									<span>{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done</span>
-									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="{{ route("admin.student.asg-details", [$student->id, $student->enrolled_courses[$i]->id]) }}">
-										Details
-									</a>
-								</div>
-							</td>
-						</tr>
-					@endfor
+					@if($student->enrolled_courses->count())
+						@for($i = 0; $i < $student->enrolled_courses->count(); $i++)
+							<tr>
+								<td class="border px-3">{{ $student->enrolled_courses[$i]->course_name }}</td>
+								<td class="border px-3">
+									<div class="flex w-full items-center gap-3">
+										<span>{{ $attended[$i] }}/{{ $attendance_if_full[$i] }} attended</span>
+										<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="{{ route("admin.student.atd-details", [$student->id, $student->enrolled_courses[$i]->id]) }}">
+											Details
+										</a>
+									</div>
+								</td>
+								<td class="border px-3">
+									<div class="flex w-full items-center gap-3">
+										<span>{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done</span>
+										<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="{{ route("admin.student.asg-details", [$student->id, $student->enrolled_courses[$i]->id]) }}">
+											Details
+										</a>
+									</div>
+								</td>
+							</tr>
+						@endfor
+					@else
+						<tr><td colspan="3" class="text-center border px-3">- Student isn't assigned to any courses yet -</td></tr>
+					@endif
 				</tbody>
 			</table>
 

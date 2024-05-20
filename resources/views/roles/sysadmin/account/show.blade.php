@@ -25,14 +25,29 @@
 		<div class="container mx-auto mt-6 p-4 bg-white rounded-lg shadow-lg">
 			<h2 class="text-2xl font-semibold text-blue-900 mb-4">Account's Detail</h2>
 
-			<div class="flex">
+			@if(session()->has("successUpdateAccountData"))
+				<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+					<p class="text-green-900">{{ session("successUpdateAccountData") }}</p>
+				</div>
+			@endif
+
+			<div class="flex gap-1">
 				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="{{ route("sysadmin.account.acc_edit", $user->id) }}">Edit</a>
-				<form action="{{ route("sysadmin.account.acc_disable", $user->id) }}" method="post">
-					@csrf
-					<button type="submit" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
-						Disable
-					</button>
-				</form>
+				@if($user->status == "enabled")
+					<form action="{{ route("sysadmin.account.acc_disable", $user->id) }}" method="post">
+						@csrf
+						<button type="submit" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
+							Disable
+						</button>
+					</form>
+				@elseif($user->status == "disabled")
+					<form action="{{ route("sysadmin.account.acc_enable", $user->id) }}" method="post">
+						@csrf
+						<button type="submit" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
+							Enable
+						</button>
+					</form>
+				@endif
 				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
 					href="{{ route("sysadmin.account.acc_delete", $user->id) }}">
 					Delete

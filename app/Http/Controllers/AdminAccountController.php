@@ -89,7 +89,7 @@ class AdminAccountController extends Controller {
 
 		User::where("id", $account->id)->update($dataToUpdate);
 
-		return redirect(route("sysadmin.account.index"))->with("successUpdateAccountData", "Successfully updated account data!");
+		return redirect(route("sysadmin.account.show", $account_id))->with("successUpdateAccountData", "Successfully updated account data!");
 	}
 
 	public function disable_acc($user_id){

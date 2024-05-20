@@ -19,17 +19,36 @@ class AttendanceController extends Controller {
 	}
 
 	public function show($course_id) {
-		$progresses = MaterialProgress::where("course_id", $course_id)->get();
-		if($progresses->count() || true){
-			$course = Auth::user()->teached_courses->where('id', $course_id)->first();
+		$course = Auth::user()->teached_courses->where('id', $course_id)->first();
+		$attendances_in_the_course = StudentAttendance::where("course_id", $course->id)->get();
 
-			return view('roles.teacher.attendance.show', [
-				'attendanceData' => StudentAttendance::where("course_id", $course->id)->latest()->paginate(3 * $course->students->count()),
-				"course" => Course::where("id", $course_id)->first()
-			]);
+		$attendanceData = [];
+		if($attendances_in_the_course->count()){
+			$atd_group = [];
+
+			for($i = 0; $i < $attendances_in_the_course->count(); $i++){
+				if($i == 0){
+					array_push($atd_group, $attendances_in_the_course[0]);
+
+					continue;
+				}
+
+				if($attendances_in_the_course[$i]->created_at != $attendances_in_the_course[$i - 1]->created_at){
+					array_push($attendanceData, $atd_group);
+
+					$atd_group = [];
+				}
+
+				array_push($atd_group, $attendances_in_the_course[$i]);
+			}
+
+			array_push($attendanceData, $atd_group);
 		}
 
-		return "Please unlock student progresses first";
+		return view('roles.teacher.attendance.show', [
+			'attendanceData' => $attendanceData,
+			"course" => Course::where("id", $course_id)->first()
+		]);
 	}
 
 	public function create($course_id){
@@ -52,8 +71,13 @@ class AttendanceController extends Controller {
 
 		$i = 0;
 		foreach($course->students as $student){
-			$isAttend = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
 			$attendanceDetail = $validatedData["attendance_detail"][$i];
+
+			if($attendanceDetail == "Account disabled"){
+				$isAttend = 2;
+			} else {
+				$isAttend = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
+			}
 
 			StudentAttendance::create([
 				"course_id" => $course->id,
@@ -116,7 +140,7 @@ class AttendanceController extends Controller {
 
 	public function student_show($course_id){
 		return view("roles.student.attendance.show", [
-			"attendances" => StudentAttendance::where("course_id", $course_id)->where("student_id", Auth::user()->id)->get(),
+			"attendances" => StudentAttendance::where("course_id", $course_id)->where("student_id", Auth::user()->id)->whereNot("attendance_detail", "Account disabled")->get(),
 			"course" => Course::where("id", $course_id)->first()
 		]);
 	}
