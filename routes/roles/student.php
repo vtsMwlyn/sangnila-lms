@@ -12,42 +12,59 @@ Route::prefix('/student')
 	->middleware(['auth', 'role:Student', 'verified', "acc_not_disabled"])
 	->group(function() {
 
+		// Landing page
 		Route::get('/', function() {
 			return redirect(route('dashboard'));
 		});
 
-		Route::prefix('/mycourse') // DONE
+		// My courses
+		Route::prefix('/mycourse')
 			->name('mycourse.')
 			->group(function(){
-				Route::get('/', [CourseController::class, 'student_index'])->name('index'); // DONE
-				Route::get('/{course_id}', [CourseController::class, 'student_show'])->name('show')->whereNumber('course_id'); // DONE
-			});
 
-		Route::prefix('/attendance')
-			->name('attendance.')
-			->group(function() {
-				Route::get('/', [AttendanceController::class, "student_index"])->name('index'); // Select course before continue to see attendance data in the course
-				Route::get('/{course_id}', [AttendanceController::class, "student_show"])->name('show'); // Select course before continue to see attendance data in the course
-			});
+				// List of enrolled courses
+				Route::get('/', [CourseController::class, 'student_index'])->name('index');
 
+				// Course details and available topics and materials
+				Route::get('/{course_id}', [CourseController::class, 'student_show'])->name('show')->whereNumber('course_id');
+
+			}
+		);
+
+		// Assignment
 		Route::prefix('/assignment')
 			->name('assignment.')
 			->group(function() {
-				Route::get('/', [AssignmentController::class, "student_index"])->name('index'); // Select course before continue to see assignment list in the course
-				Route::get("/{course_id}", [AssignmentController::class, "student_show"])->name("show"); // Show list of assignments assigned in the course
 
-				/*student will do reupload up to 10 times*/
-				Route::get("/{course_id}/{assignment_id}/submit", [AssignmentController::class, "student_submit"])->name("submit"); // Sends student to assignment submission form
-				Route::post("/{course_id}/{assignment_id}/submit", [AssignmentController::class, "student_store"])->name("store"); // Sends student to assignment submission form
+				// Pick an intended course to show assignment
+				Route::get('/', [AssignmentController::class, "student_index"])->name('index');
 
+				// List of assigned assignments in the selected course
+				Route::get("/{course_id}", [AssignmentController::class, "student_show"])->name("show");
+
+				// Upload assignment
+				Route::get("/{course_id}/{assignment_id}/submit", [AssignmentController::class, "student_submit"])->name("submit");
+				Route::post("/{course_id}/{assignment_id}/submit", [AssignmentController::class, "student_store"])->name("store");
+
+				// Check submission history
 				Route::get("/{course_id}/{assignment_id}/detail", [AssignmentController::class, "student_submission_detail"])->name("detail");
-			});
 
-		/* Route::prefix('/schedule') // DONE
-		->name('schedule.')
-		->group(function() {
-			Route::get('/', [ScheduleController::class, 'student_index'])->name('index'); // Show student schedules table
-		}); */
+			}
+		);
 
+		// Attendance
+		Route::prefix('/attendance')
+			->name('attendance.')
+			->group(function() {
 
-	});
+				// Pick an intended course to show attendance data
+				Route::get('/', [AttendanceController::class, "student_index"])->name('index');
+
+				// List of attendance data in the selected course
+				Route::get('/{course_id}', [AttendanceController::class, "student_show"])->name('show');
+
+			}
+		);
+
+	}
+);

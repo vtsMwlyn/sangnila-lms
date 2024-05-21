@@ -12,6 +12,7 @@ use App\Rules\MinimumOneCheckbox;
 use App\Models\AssignmentSubmission;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use PhpParser\Node\Stmt\Return_;
 
 class AssignmentController extends Controller
 {
@@ -21,8 +22,31 @@ class AssignmentController extends Controller
 	}
 
 	public function teacher_show($course_id){
+		$all_asg_data = StudentAssignment::where("course_id", $course_id)->get();
+
+		$assignments = [];
+
+		foreach($all_asg_data as $index => $asg_data){
+			if($index == 0){
+				array_push($assignments, $asg_data);
+			}
+			else {
+				$titleAlreadyExists = false;
+				foreach($assignments as $asg){
+					if($asg_data->title == $asg->title){
+						$titleAlreadyExists = true;
+						break;
+					}
+				}
+
+				if(!$titleAlreadyExists){
+					array_push($assignments, $asg_data);
+				}
+			}
+		}
+
 		return view("roles.teacher.assignment.show", [
-			"assignments" => StudentAssignment::where("course_id", $course_id)->get(),
+			"assignments" => $assignments,
 			"course" => Course::where("id", $course_id)->first()
 		]);
 	}
@@ -73,12 +97,40 @@ class AssignmentController extends Controller
 		$all_asg = StudentAssignment::where("title", $target_asg->title)->where("course_id", $course->id)->get();
 
 		$student_assignment_status = [];
-		foreach($all_asg as $assignment){
-			if($assignment->student_is_assigned){
-				array_push($student_assignment_status, "on");
+		// If the number students still the same within the record, then just check the student assignment status
+		if($all_asg->count() == $course->students->count()){
+			foreach($all_asg as $assignment){
+				if($assignment->student_is_assigned == 1){
+					array_push($student_assignment_status, "on");
+				}
+				else {
+					array_push($student_assignment_status, "off");
+				}
 			}
-			else {
-				array_push($student_assignment_status, "off");
+		}
+
+		// If the number of student is increasing then should be checked first whether the student data is already in record or not, if it is already in the record then just check from the database its assignment status, but if it doesnt exist then give it default checkbox value off
+		else {
+			foreach($course->students as $std){
+				$studentExists = false;
+				foreach($all_asg as $assignment){
+					if($std->id == $assignment->student_id){
+						$studentExists = true;
+						break;
+					}
+				}
+
+				if($studentExists){
+					if($assignment->student_is_assigned == 1){
+						array_push($student_assignment_status, "on");
+					}
+					else {
+						array_push($student_assignment_status, "off");
+					}
+				}
+				else {
+					array_push($student_assignment_status, "off");
+				}
 			}
 		}
 
@@ -103,20 +155,63 @@ class AssignmentController extends Controller
 		$course = Course::where("id", $target_asg->course_id)->first();
 		$existingAssignmentData = StudentAssignment::where("title", $target_asg->title)->where("course_id", $course->id)->get();
 
-		$i = 0;
-		foreach($existingAssignmentData as $a){
-			$isAssigned = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
+		if($existingAssignmentData->count() == $course->students->count()){
+			$i = 0;
+			foreach($existingAssignmentData as $a){
+				$isAssigned = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
+				// If the number of the students in the course and in the assignment record is still the same, just update the data
+					StudentAssignment::where("id", $a->id)->update([
+						"title" => $validatedData["title"],
+						"desc" => $validatedData["desc"],
+						"link" => $validatedData["link"],
+						"deadline_date" => $validatedData["deadline_date"],
+						"deadline_time" => $validatedData["deadline_time"],
+						"student_is_assigned" => $isAssigned
+					]);
+				$i++;
+			}
+		}
 
-			StudentAssignment::where("id", $a->id)->update([
-				"title" => $validatedData["title"],
-				"desc" => $validatedData["desc"],
-				"link" => $validatedData["link"],
-				"deadline_date" => $validatedData["deadline_date"],
-				"deadline_time" => $validatedData["deadline_time"],
-				"student_is_assigned" => $isAssigned,
-			]);
+		// But if the number of students is increasing, if the student hasn't been in the assignment record yet, we have to add them into the record
+		else {
+			$i = 0;
+			foreach($course->students as $s){
+				$isAssigned = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
 
-			$i++;
+				$studentIsFound = false;
+				foreach($existingAssignmentData as $a){
+					if($s->id == $a->student_id){
+						$studentIsFound = true;
+						break;
+					}
+				}
+
+				if(!$studentIsFound){
+					StudentAssignment::create([
+						"title" => $validatedData["title"],
+						"desc" => $validatedData["desc"],
+						"link" => $validatedData["link"],
+						"deadline_date" => $validatedData["deadline_date"],
+						"deadline_time" => $validatedData["deadline_time"],
+						"student_is_assigned" => $isAssigned,
+						"teacher_id" => Auth::user()->id,
+						"course_id" => $course->id,
+						"student_id" => $s->id
+					]);
+				}
+				else {
+					StudentAssignment::where("id", $a->id)->update([
+						"title" => $validatedData["title"],
+						"desc" => $validatedData["desc"],
+						"link" => $validatedData["link"],
+						"deadline_date" => $validatedData["deadline_date"],
+						"deadline_time" => $validatedData["deadline_time"],
+						"student_is_assigned" => $isAssigned
+					]);
+				}
+
+				$i++;
+			}
 		}
 
 		return redirect(route("teacher.assignment.show", $course->id))->with("successEditAssignment", "Assignment edited successfully!");
@@ -149,7 +244,11 @@ class AssignmentController extends Controller
 
 		$latest_submission = [];
 		foreach($course->students as $student){
-			$student_submissions = AssignmentSubmission::where("student_id", $student->id)->where("assignment_id", $assignment->id)->latest()->get();
+			if($student->status == "disabled"){
+				continue;
+			}
+			// $student_submissions = AssignmentSubmission::where("student_id", $student->id)->where("assignment_id", $assignment->id)->latest()->get();
+			$student_submissions = AssignmentSubmission::where("student_id", $student->id)->latest()->get();
 
 			foreach($student_submissions as $submission){
 				if($submission->assignment->title == $assignment->title){

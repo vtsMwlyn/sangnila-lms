@@ -58,58 +58,35 @@
 						</tr>
 					</thead>
 					<tbody>
-						@if ($assignments->isNotEmpty())
-							{{-- @foreach ($assignments as $asg)
+						@if (count($assignments))
+							@foreach($assignments as $asg)
 								<tr>
-									<td class="border px-3">{{ $asg->title }}</td>
+									<td class="border px-3"><a class="text-blue-700 font-bold" href="{{ route("teacher.assignment.check", $asg->id) }}">{{ $asg->title }}</a></td>
 									<td class="border px-3">{{ $asg->desc }}</td>
 									<td class="border px-3">{{ $asg->deadline_date }}<br>{{ $asg->deadline_time }}</td>
 									<td class="border px-3 text-blue-600"><a href="{{ $asg->link }}">{{ $asg->link }}</a></td>
-									<td class="border px-3">{{ $asg->assigned_to->full_name }}</td>
+									{{-- <td class="border px-3">{{ $asg->assigned_to->full_name }}</td> --}}
+									{{-- <td class="border px-3">
+										<ul>
+											@for ($j = $i; $assignments[$j]->title == $assignments[$j + 1]->title; $j++)
+												<li>{{ $assignments[$j]->assigned_to->full_name }}</li>
+											@endfor
+										</ul>
+									</td> --}}
 									<td class="border px-3">
 										<div class="flex gap-1">
 											<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-												href="#">
+												href="{{ route("teacher.assignment.edit", $asg->id) }}">
 												Edit
 											</a>
 											<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-												href="#">
+												href="{{ route("teacher.assignment.delete", $asg->id) }}">
 												Delete
 											</a>
 										</div>
 									</td>
 								</tr>
-							@endforeach --}}
-							@for ($i = 0; $i < $assignments->count(); $i++)
-								@if($i == 0 || ($assignments[$i]->title != $assignments[$i - 1]->title))
-									<tr>
-										<td class="border px-3"><a class="text-blue-700 font-bold" href="{{ route("teacher.assignment.check", $assignments[$i]->id) }}">{{ $assignments[$i]->title }}</a></td>
-										<td class="border px-3">{{ $assignments[$i]->desc }}</td>
-										<td class="border px-3">{{ $assignments[$i]->deadline_date }}<br>{{ $assignments[$i]->deadline_time }}</td>
-										<td class="border px-3 text-blue-600"><a href="{{ $assignments[$i]->link }}">{{ $assignments[$i]->link }}</a></td>
-										{{-- <td class="border px-3">{{ $assignments[$i]->assigned_to->full_name }}</td> --}}
-										{{-- <td class="border px-3">
-											<ul>
-												@for ($j = $i; $assignments[$j]->title == $assignments[$j + 1]->title; $j++)
-													<li>{{ $assignments[$j]->assigned_to->full_name }}</li>
-												@endfor
-											</ul>
-										</td> --}}
-										<td class="border px-3">
-											<div class="flex gap-1">
-												<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-													href="{{ route("teacher.assignment.edit", $assignments[$i]->id) }}">
-													Edit
-												</a>
-												<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-													href="{{ route("teacher.assignment.delete", $assignments[$i]->id) }}">
-													Delete
-												</a>
-											</div>
-										</td>
-									</tr>
-								@endif
-							@endfor
+							@endforeach
 						@else
 							<tr ><td colspan="5" class="border px-3 text-center">- No assignments yet -</td></tr>
 						@endif
