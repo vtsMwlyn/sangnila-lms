@@ -1,5 +1,9 @@
 @extends("layouts.main-teacher")
 
+@section("title")
+	<h1>Manage Courses</h1>
+@endsection
+
 @section("content")
 	<h1 class="text-3xl font-semibold text-blue-900 mb-4">Courses</h1>
 	@if (Auth::user()->teached_courses->isNotEmpty())

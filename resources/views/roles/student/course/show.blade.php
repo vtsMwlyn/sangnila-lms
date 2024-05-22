@@ -1,5 +1,9 @@
 @extends("layouts.main-student")
 
+@section("title")
+	<h1>{{ $course->course_name }}</h1>
+@endsection
+
 @section("content")
 	<h1 class="text-3xl font-semibold text-blue-900 mb-4">{{ $course->course_name }}</h1>
 	<p class="text-gray-700 mb-8">{{ $course->course_description }}</p>
@@ -8,7 +12,7 @@
 	<div class="h-fit mb-5">
 
 	</div>
-	<div class="mb-6">
+	<div class="mb-6 overflow-x-auto">
 		<table class="min-w-full table-fixed border-collapse">
 			<thead>
 				<tr class="border-b border-solid border-blue-900">

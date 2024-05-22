@@ -1,49 +1,55 @@
 @extends("layouts.main-teacher")
 
+@section("title")
+	<h1>Student Attendance</h1>
+@endsection
+
 @section("content")
         <h1 class="text-3xl font-semibold text-blue-900 mb-4">Upload New Attendance Data</h1>
 		@if($course->students->count())
 			<form action="{{ route('teacher.attendance.store', $course->id) }}" method="post" class="mx-auto" id="attendance_form">
 				@csrf
 
-				<table class="w-full">
-					<thead>
-						<th class="border px-5">Student Name</th>
-						<th class="border px-5">Attendance Detail</th>
-					</thead>
-					<tbody>
-						@foreach ($course->students as $student)
-						{{--
-							Note:
-							Teacher can only submit attendance for active students account, if disabled by admin then the checkbox and textarea for that student account will be disabled (showing "account disabled")
-						--}}
-							<tr>
-								<td class="border px-5">
-									<div class="flex items-center gap-3">
-										<input type="checkbox" id="checkbox{{ $loop->iteration }}"
-										class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif @if($student->status == "disabled") disabled @endif>
-										<span>{{ $student->full_name }}</span>
-									</div>
-								</td>
-								<td class="border px-5">
-									<div class="flex flex-col items-stretch">
-										<textarea name="attendance_detail[]" rows="3" class="rounded-lg @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @enderror" placeholder="Enter student attendance details" style="resize: none;" @if($student->status == "disabled") disabled @endif>@if($student->status == "disabled") Account disabled @endif {{ old("attendance_detail." . $loop->index) }}</textarea>
+				<div class="overflow-x-auto">
+					<table class="w-full">
+						<thead>
+							<th class="border px-5">Student Name</th>
+							<th class="border px-5">Attendance Detail</th>
+						</thead>
+						<tbody>
+							@foreach ($course->students as $student)
+							{{--
+								Note:
+								Teacher can only submit attendance for active students account, if disabled by admin then the checkbox and textarea for that student account will be disabled (showing "account disabled")
+							--}}
+								<tr>
+									<td class="border px-5">
+										<div class="flex items-center gap-3">
+											<input type="checkbox" id="checkbox{{ $loop->iteration }}"
+											class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif @if($student->status == "disabled") disabled @endif>
+											<span>{{ $student->full_name }}</span>
+										</div>
+									</td>
+									<td class="border px-5">
+										<div class="flex flex-col items-stretch">
+											<textarea name="attendance_detail[]" rows="3" class="rounded-lg @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @enderror" placeholder="Enter student attendance details" style="resize: none; box-sizing: border-box; padding: 10px;" @if($student->status == "disabled") disabled @endif>@if($student->status == "disabled") Account disabled @else{{ old("attendance_detail." . $loop->index) }}@endif</textarea>
 
-										@error("attendance_detail." . $loop->index)
-											<span class="text-red-500 mt-2">{{ $message }}</span>
-										@enderror
-									</div>
-								</td>
-							</tr>
-						@endforeach
-					</tbody>
-				</table>
+											@error("attendance_detail." . $loop->index)
+												<span class="text-red-500 mt-2">{{ $message }}</span>
+											@enderror
+										</div>
+									</td>
+								</tr>
+							@endforeach
+						</tbody>
+					</table>
+				</div>
 
 				<div class="flex items-stretch gap-1 justify-end mt-4">
 					<button type="button" onclick="history.back()" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
 							Cancel
 					</button>
-					<x-button>
+					<x-button class="bg-indigo-400">
 						{{ __('Submit') }}
 					</x-button>
 				</div>

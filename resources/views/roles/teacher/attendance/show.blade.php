@@ -1,5 +1,9 @@
 @extends("layouts.main-teacher")
 
+@section("title")
+	<h1>Student Attendance</h1>
+@endsection
+
 @section("content")
 	<h1 class="text-3xl font-semibold text-blue-900 mb-4">Student Attendance for {{ $course->course_name }}</h1>
 
@@ -29,35 +33,37 @@
 						Edit
 					</a>
 				</div>
-				<table class="w-full mt-5 mb-5">
-					<thead>
-						<th class="border px-3">Students</th>
-						<th class="border px-3">Attendance status</th>
-						<th class="border px-3">Attendance detail</th>
-					</thead>
-					<tbody>
-						{{--
-						Note:
-						Student attendance data when the account is disabled by admin will not be shown
-						--}}
+				<div class="overflow-x-auto">
+					<table class="w-full mt-5 mb-5">
+						<thead>
+							<th class="border px-3">Students</th>
+							<th class="border px-3">Attendance status</th>
+							<th class="border px-3">Attendance detail</th>
+						</thead>
+						<tbody>
+							{{--
+							Note:
+							Student attendance data when the account is disabled by admin will not be shown
+							--}}
 
-						@for($j = 0; $j < count($attendanceData[$i]); $j++)
-							@if($attendanceData[$i][$j]->attendance_detail != "Account disabled")
-								<tr>
-									<td class="border px-3">{{ $attendanceData[$i][$j]->student->full_name }}</td>
-									<td class="border px-3">
-										@if($attendanceData[$i][$j]->is_attend == 1)
-											Attended
-										@elseif($attendanceData[$i][$j]->is_attend == 0)
-											Absent
-										@endif
-									</td>
-									<td class="border px-3">{{ $attendanceData[$i][$j]->attendance_detail }}</td>
-								</tr>
-							@endif
-						@endfor
-					</tbody>
-				</table>
+							@for($j = 0; $j < count($attendanceData[$i]); $j++)
+								@if($attendanceData[$i][$j]->attendance_detail != "Account disabled")
+									<tr>
+										<td class="border px-3">{{ $attendanceData[$i][$j]->student->full_name }}</td>
+										<td class="border px-3">
+											@if($attendanceData[$i][$j]->is_attend == 1)
+												Attended
+											@elseif($attendanceData[$i][$j]->is_attend == 0)
+												Absent
+											@endif
+										</td>
+										<td class="border px-3">{{ $attendanceData[$i][$j]->attendance_detail }}</td>
+									</tr>
+								@endif
+							@endfor
+						</tbody>
+					</table>
+				</div>
 			</div>
 		@endfor
 

@@ -20,21 +20,31 @@
 		<!-- Bootstrap icons -->
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+		<!-- Tailwind CDN -->
+		<script src="https://cdn.tailwindcss.com"></script>
+
 		<!-- App title -->
 		<title>Sangnila Academy | LMS</title>
 
 	</head>
 
-	<body class="bg-cover min-h-screen flex flex-col items-center"
-		style="background-image: url({{ asset('img/background.png') }});">
+	<body class="bg-cover min-h-screen flex flex-col md:flex-row"
+		style="background-image: url({{ asset('img/background.jpg') }});">
 
-		<x-navbar.student></x-navbar.student>
+		{{-- <x-navbar.admin></x-navbar.admin> --}}
+		<x-sidebar.student></x-sidebar.student>
 
 		<!-- Content Section -->
-		<div class="container mx-auto my-6 p-4 bg-white rounded-lg shadow-lg">
-			@yield("content")
-		</div>
+		<div class="container md:w-full min-h-screen">
 
+			<div class="my-10 text-4xl text-center text-white font-bold">
+				@yield("title")
+			</div>
+
+			<div class="bg-white p-10" style="min-height: 80%">
+				@yield("content")
+			</div>
+		</div>
 	</body>
 
 </html>

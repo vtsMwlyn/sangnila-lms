@@ -1,5 +1,9 @@
 @extends("layouts.main-student")
 
+@section("title")
+	<h1>My Assignments</h1>
+@endsection
+
 @section("content")
 	<h1 class="text-3xl font-semibold text-blue-900 mb-4">My Assignments</h1>
 	<h1 class="text-2xl font-semibold text-blue-900 mb-4">Pick a Course</h1>

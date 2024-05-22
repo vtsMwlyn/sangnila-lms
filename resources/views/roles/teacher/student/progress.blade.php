@@ -1,5 +1,9 @@
 @extends("layouts.main-teacher")
 
+@section("title")
+	<h1>{{ $student->full_name }}</h1>
+@endsection
+
 @section("content")
 	<h1 class="text-3xl font-semibold text-blue-900 mb-4">{{ $student->full_name }}'s Progress</h1>
 	<h1 class="text-xl font-semibold text-blue-900 mb-4">In Course: {{ $course->course_name }}</h1>
@@ -41,7 +45,7 @@
 										<input type="checkbox" name="access" id="material_progress_{{ $progress->id }}"
 											class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 {{ $progress->status === 'unlocked' ? 'bg-blue-500' : 'bg-gray-300' }}"
 											@if ($progress->status === 'unlocked') checked @endif>
-										<x-button>Submit</x-button>
+										<x-button class="bg-indigo-400">Submit</x-button>
 									</div>
 								</form>
 							</td>

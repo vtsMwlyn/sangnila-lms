@@ -1,5 +1,9 @@
 @extends("layouts.main-guest")
 
+@section("title")
+	<h1>Our Courses</h1>
+@endsection
+
 @section("content")
 	<h1 class="text-3xl font-semibold text-blue-900 mb-4">Courses</h1>
 	@if ($courses->isNotEmpty())

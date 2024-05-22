@@ -28,23 +28,10 @@
 
 	</head>
 
-	<body class="bg-cover min-h-screen flex flex-col md:flex-row"
+	<body class="bg-cover min-h-screen flex items-center justify-center"
 		style="background-image: url({{ asset('img/background.jpg') }});">
 
-		{{-- <x-navbar.admin></x-navbar.admin> --}}
-		<x-sidebar.teacher></x-sidebar.teacher>
-
-		<!-- Content Section -->
-		<div class="container md:w-full min-h-screen">
-
-			<div class="my-10 text-4xl text-center text-white font-bold">
-				@yield("title")
-			</div>
-
-			<div class="bg-white p-10" style="min-height: 80%">
-				@yield("content")
-			</div>
-		</div>
+		@yield("content");
 	</body>
 
 </html>

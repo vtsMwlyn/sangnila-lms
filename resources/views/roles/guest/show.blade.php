@@ -1,5 +1,9 @@
 @extends("layouts.main-guest")
 
+@section("title")
+	<h1>{{ $course->course_name }}</h1>
+@endsection
+
 @section("content")
 	<h1 class="text-3xl font-semibold text-blue-900 mb-4">{{ $course->course_name }}</h1>
 	<p class="text-gray-700 mb-8">{{ $course->course_description }}</p>

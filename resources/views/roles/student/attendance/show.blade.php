@@ -1,5 +1,9 @@
 @extends("layouts.main-student")
 
+@section("title")
+	<h1>My Attendances</h1>
+@endsection
+
 @section("content")
 	<h1 class="text-3xl font-semibold text-blue-900 mb-4">My Attendance in Course {{ $course->course_name }}</h1>
 	<div class="overflow-x-auto">

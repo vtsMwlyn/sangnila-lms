@@ -1,5 +1,5 @@
 <!-- Updated Responsive Navbar with Dropdown for Mobile -->
-<nav class="bg-blue-200 w-full py-3">
+<nav class="bg-blue-200 w-full py-3 sticky top-0">
     <div class="container mx-auto flex flex-col md:flex-row items-center">
         <div class="flex items-center  ">
 			<!-- Logo/Brand Image -->

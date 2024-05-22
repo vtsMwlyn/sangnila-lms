@@ -1,5 +1,9 @@
 @extends("layouts.main-teacher")
 
+@section("title")
+	<h1>{{ $material->course_topic->course->course_name }}</h1>
+@endsection
+
 @section("content")
 	<h1 class="text-3xl font-semibold text-blue-900 mb-4">Delete Topic</h1>
 	<form method="POST" action="{{ route("teacher.material.destroy", $material->id) }}" class="bg-white rounded-2xl p-5 border-blue-300 border-2">

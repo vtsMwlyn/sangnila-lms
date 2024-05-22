@@ -1,5 +1,9 @@
 @extends("layouts.main-teacher")
 
+@section("title")
+	<h1>{{ $course->course_name }}</h1>
+@endsection
+
 @section("content")
 	<h1 class="text-3xl font-semibold text-blue-900 mb-4">{{ $course->course_name }}</h1>
 
@@ -34,7 +38,7 @@
 			</a>
 		</span>
 	</div>
-	<div class="mt-5 mb-5">
+	<div class="mt-5 mb-5 overflow-x-auto">
 		<table class="w-full">
 			<thead>
 				<th class="border px-3">Topic Title</th>

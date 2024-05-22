@@ -1,5 +1,9 @@
 @extends("layouts.main-teacher")
 
+@section("title")
+	<h1>{{ $material->course_topic->course->course_name }}</h1>
+@endsection
+
 @section("content")
 	<h1 class="text-3xl font-semibold text-blue-900 mb-1">
 		<a href="{{ route("teacher.mycourse.show", $material->course_topic->course->id) }}">{{ $material->course_topic->course->course_name }}</a>
@@ -28,7 +32,7 @@
 			<button type="button" onclick="history.back()" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
 					Cancel
 			</button>
-			<x-button class="ml-4">
+			<x-button class="ml-4 bg-indigo-400">
 				{{ __('SAVE') }}
 			</x-button>
 		</div>
