@@ -5,8 +5,9 @@
 @endsection
 
 @section("content")
-	<h1 class="text-3xl font-semibold text-blue-900 mb-4">Create Course</h1>
-	<form action="{{ route('sysadmin.course.store') }}" method="post" class="mx-auto">
+	<x-page-title>{{ __("Add New Course") }}</x-page-title>
+
+	<form action="{{ route('sysadmin.course.store') }}" method="post" class="py-5 px-10 rounded-3xl bg-indigo-200">
 		@csrf
 		<!-- Course Name -->
 		<div class="mb-4">
@@ -25,7 +26,7 @@
 		<!-- Visibility Selection -->
 		<div class="mb-4">
 			<x-label for="visibility" :value="__('Visibility')" />
-			<select name="visibility" id="visibility" class="block w-full max-w-full py-2 px-3 border border-gray-300 rounded-md max-h-screen">
+			<select name="visibility" id="visibility" class="rounded-md shadow-sm border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 border focus:ring-opacity-50 w-1/3 py-2 px-4 mt-1 text-blue-800">
 				<option value="public">Public</option>
 				<option value="private">Private</option>
 			</select>
@@ -33,10 +34,10 @@
 
 
 		<div class="flex items-stretch gap-1 justify-end mt-6">
-			<button type="button" onclick="history.back()" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
+			<x-button type="button" onclick="history.back()" class="bg-orange-500">
 				Cancel
-			</button>
-			<x-button class="bg-indigo-400">
+			</x-button>
+			<x-button class="bg-orange-500">
 				{{ __('Submit') }}
 			</x-button>
 		</div>

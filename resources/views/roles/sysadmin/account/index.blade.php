@@ -5,11 +5,7 @@
 @endsection
 
 @section("content")
-	<h2 class="text-2xl font-semibold text-blue-900 mb-4">Accounts</h2>
-	<div class="mb-5">
-		<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="{{ route('sysadmin.account.create') }}">Create new
-			Account</a>
-	</div>
+	<x-page-title>{{ __("List of All Accounts") }}</x-page-title>
 
 	@if(session()->has("successCreateNewAccount"))
 		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
@@ -29,16 +25,21 @@
 		</div>
 	@endif
 
+	<div class="mb-5">
+		<x-anchor-button class="bg-orange-500" href="{{ route('sysadmin.account.create') }}"><i class="bi bi-plus-lg"></i> Create New Account</x-anchor-button>
+	</div>
+
 	@if ($accounts->isNotEmpty())
-		<div class="overflow-x-auto rounded-md">
-			<table class="min-w-full bg-white border-collapse">
+		<div class="overflow-x-auto rounded-3xl mt-8 px-10 py-5 bg-indigo-200">
+			<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate;
+			border-spacing: 0 20px;">
 				<thead>
-					<tr>
-						<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Full Name</td>
-						<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Email</td>
-						<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Role</td>
-						<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Status</td>
-						<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Actions</td>
+					<tr class="bg-blue-900 text-white">
+						<th class="border-blue-400 font-bold px-4 py-5 rounded-l-xl">Full Name</th>
+						<th class="border-blue-400 font-bold px-4 py-5">Email</th>
+						<th class="border-blue-400 font-bold px-4 py-5">Role</th>
+						<th class="border-blue-400 font-bold px-4 py-5">Status</th>
+						<th class="border-blue-400 font-bold px-4 py-5 rounded-r-xl">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -48,42 +49,38 @@
 								@continue
 							@endif
 
-							<tr>
-								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">{{ $account->full_name }}</td>
-								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">{{ $account->email }}</td>
-								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">{{ $account->role->role_name }}</td>
-								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">{{ $account->status }}</td>
-								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-									<div class="flex w-full gap-1">
-										<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-											href="{{ route("sysadmin.account.show", $account->id) }}"
-										>
-											View
-										</a>
+							<tr class="bg-blue-800 text-white">
+								<td class="border-blue-300 px-4 py-5 rounded-l-xl"><a href="{{ route('sysadmin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $account->full_name }}</a></td>
+								<td class="border-blue-300 px-4 py-5 text-center">{{ $account->email }}</td>
+								<td class="border-blue-300 px-4 py-5 text-center">{{ $account->role->role_name }}</td>
+								<td class="border-blue-300 px-4 py-5 text-center">{{ $account->status }}</td>
+								<td class="border-blue-300 px-4 py-5 rounded-r-xl">
+									<div class="flex w-full items-stretch gap-1 justify-center">
+										<x-anchor-button class="bg-orange-500" href="{{ route('sysadmin.account.show', $account->id) }}">
+											<i class="bi bi-eye"></i>
+										</x-anchor-button>
 
-										<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-											href="{{ route("sysadmin.account.acc_edit", $account->id) }}">
-											Edit
-										</a>
+										<x-anchor-button class="bg-orange-500" href="{{ route('sysadmin.account.acc_edit', $account->id) }}">
+											<i class="bi bi-pencil-square"></i>
+										</x-anchor-button>
 
-										<form action="{{ route("sysadmin.account.acc_disable", $account->id) }}" method="post">
+										<form action="{{ route('sysadmin.account.acc_disable', $account->id) }}" method="post">
 											@csrf
-											<button type="submit" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
-												Disable
-											</button>
+											<x-button type="submit" class="bg-orange-500">
+												<i class="bi bi-ban"></i>
+											</x-button>
 										</form>
 
-										<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-											href="{{ route("sysadmin.account.acc_delete", $account->id) }}">
-											Delete
-										</a>
+										<x-anchor-button class="bg-orange-500" href="{{ route('sysadmin.account.acc_delete', $account->id) }}">
+											<i class="bi bi-trash3"></i>
+										</x-anchor-button>
 									</div>
 
 								</td>
 							</tr>
 						@endforeach
 					@else
-						<tr><td colspan="5" class="border px-3 text-center">- No accounts available to use yet -</td></tr>
+						<tr><td colspan="5" class="border px-3 text-center rounded-xl">- No accounts available to use yet -</td></tr>
 					@endif
 				</tbody>
 			</table>
@@ -92,16 +89,17 @@
 		<div class="text-blue-900">N/A</div>
 	@endif
 
-	<h2 class="text-2xl font-semibold text-blue-900 mt-5 mb-4">Disabled Accounts</h2>
-	<div class="overflow-x-auto rounded-md">
-		<table class="min-w-full bg-white border-collapse">
+	<x-page-title class="mt-10">{{ __("Disabled Accounts") }}</x-page-title>
+	<div class="overflow-x-auto rounded-lg mt-8 px-10 py-5 bg-indigo-200">
+		<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate;
+		border-spacing: 0 20px;">
 			<thead>
-				<tr>
-					<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Full Name</td>
-					<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Email</td>
-					<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Role</td>
-					<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Status</td>
-					<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Actions</td>
+				<tr class="bg-blue-900 text-white">
+					<th class="border-blue-400 font-bold px-4 py-5 rounded-l-xl">Full Name</th>
+					<th class="border-blue-400 font-bold px-4 py-5">Email</th>
+					<th class="border-blue-400 font-bold px-4 py-5">Role</th>
+					<th class="border-blue-400 font-bold px-4 py-5">Status</th>
+					<th class="border-blue-400 font-bold px-4 py-5 rounded-r-xl">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -111,35 +109,31 @@
 							@continue
 						@endif
 
-						<tr>
-							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">{{ $account->full_name }}</td>
-							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">{{ $account->email }}</td>
-							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">{{ $account->role->role_name }}</td>
-							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">{{ $account->status }}</td>
-							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-								<div class="flex w-full gap-1">
-									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-										href="{{ route("sysadmin.account.show", $account->id) }}"
-									>
-										View
-									</a>
+						<tr class="bg-blue-800 text-white">
+							<td class="border-blue-300 px-4 py-5 rounded-l-xl"><a href="{{ route('sysadmin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $account->full_name }}</a></td>
+							<td class="border-blue-300 px-4 py-5 text-center">{{ $account->email }}</td>
+							<td class="border-blue-300 px-4 py-5 text-center">{{ $account->role->role_name }}</td>
+							<td class="border-blue-300 px-4 py-5 text-center">{{ $account->status }}</td>
+							<td class="border-blue-300 px-4 py-5 rounded-r-xl">
+								<div class="flex w-full items-stretch justify-center gap-1">
+									<x-anchor-button class="bg-orange-500" href="{{ route('sysadmin.account.show', $account->id) }}">
+										<i class="bi bi-eye"></i>
+									</x-anchor-button>
 
-									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-										href="{{ route("sysadmin.account.acc_edit", $account->id) }}">
-										Edit
-									</a>
+									<x-anchor-button class="bg-orange-500" href="{{ route('sysadmin.account.acc_edit', $account->id) }}">
+										<i class="bi bi-pencil-square"></i>
+									</x-anchor-button>
 
 									<form action="{{ route("sysadmin.account.acc_enable", $account->id) }}" method="post">
 										@csrf
-										<button type="submit" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
-											Enable
-										</button>
+										<x-button type="submit" class="bg-orange-500">
+											<i class="bi bi-check-circle"></i>
+										</x-button>
 									</form>
 
-									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-										href="{{ route("sysadmin.account.acc_delete", $account->id) }}">
-										Delete
-									</a>
+									<x-anchor-button class="bg-orange-500" href="{{ route('sysadmin.account.acc_delete', $account->id) }}">
+										<i class="bi bi-trash3"></i>
+									</x-anchor-button>
 								</div>
 
 							</td>

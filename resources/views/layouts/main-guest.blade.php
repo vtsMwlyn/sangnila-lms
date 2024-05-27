@@ -29,19 +29,19 @@
 	</head>
 
 	<body class="bg-cover min-h-screen flex flex-col md:flex-row"
-		style="background-image: url({{ asset('img/background.jpg') }});">
+		style="background: url({{ asset('img/background.jpg') }}) no-repeat;">
 
 		{{-- <x-navbar.admin></x-navbar.admin> --}}
 		<x-sidebar.guest></x-sidebar.guest>
 
 		<!-- Content Section -->
-		<div class="container md:w-full min-h-screen">
+		<div class="container w-full md:w-4/5 min-h-screen">
 
 			<div class="my-10 text-4xl text-center text-white font-bold">
 				@yield("title")
 			</div>
 
-			<div class="bg-white p-10" style="min-height: 80%">
+			<div class="bg-white py-5 px-10" style="min-height: 80%">
 				@yield("content")
 			</div>
 		</div>

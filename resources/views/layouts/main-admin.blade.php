@@ -29,19 +29,23 @@
 	</head>
 
 	<body class="bg-cover min-h-screen flex flex-col md:flex-row"
-		style="background-image: url({{ asset('img/background.jpg') }});">
+		style="background: url({{ asset('img/background.jpg') }}) no-repeat;">
 
 		{{-- <x-navbar.admin></x-navbar.admin> --}}
 		<x-sidebar.admin></x-sidebar.admin>
 
 		<!-- Content Section -->
-		<div class="container md:w-full min-h-screen">
+		<div class="container w-full md:w-4/5 min-h-screen">
 
-			<div class="my-10 text-4xl text-center text-white font-bold">
+			<div class="my-10 text-4xl text-white font-bold flex items-center justify-center">
 				@yield("title")
+				<div class="flex flex-col absolute items-center right-10 invisible md:visible">
+					<i class="bi bi-person-circle"></i>
+					<span class="text-white text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
+				</div>
 			</div>
 
-			<div class="bg-white p-10" style="min-height: 80%">
+			<div class="bg-white py-5 px-10" style="min-height: 80%">
 				@yield("content")
 			</div>
 		</div>

@@ -33,7 +33,7 @@
 
 		<div class="flex flex-col items-center justify-center w-1/2">
 			<img src={{ asset("img/AR.W.png") }} alt="logo" width="100px">
-			<img src={{ asset("img/loginimg.png") }} alt="logo" width="400px">
+			<img src={{ asset("img/loginpict.png") }} alt="logo" width="400px">
 		</div>
 	</div>
 @endsection

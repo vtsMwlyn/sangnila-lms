@@ -5,7 +5,7 @@
 @endsection
 
 @section("content")
-	<h2 class="text-2xl font-semibold text-blue-900 mb-4">Account's Detail</h2>
+	<x-page-title>{{ __("Account's Details") }}</x-page-title>
 
 	@if(session()->has("successUpdateAccountData"))
 		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
@@ -13,41 +13,46 @@
 		</div>
 	@endif
 
-	<div class="flex gap-1">
-		<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="{{ route("sysadmin.account.acc_edit", $user->id) }}">Edit</a>
+	<div class="flex items-stretch gap-1 my-2">
+		<x-anchor-button class="bg-orange-500" href="{{ route('sysadmin.account.acc_edit', $user->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		@if($user->status == "enabled")
 			<form action="{{ route("sysadmin.account.acc_disable", $user->id) }}" method="post">
 				@csrf
-				<button type="submit" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
-					Disable
-				</button>
+				<x-button type="submit" class="bg-orange-500">
+					<i class="bi bi-ban"></i> Disable
+				</x-button>
 			</form>
 		@elseif($user->status == "disabled")
 			<form action="{{ route("sysadmin.account.acc_enable", $user->id) }}" method="post">
 				@csrf
-				<button type="submit" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
-					Enable
-				</button>
+				<x-button type="submit" class="bg-orange-500">
+					<i class="bi bi-check-circle"></i> Enable
+				</x-button>
 			</form>
 		@endif
-		<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-			href="{{ route("sysadmin.account.acc_delete", $user->id) }}">
-			Delete
-		</a>
+		<x-anchor-button class="bg-orange-500" href="{{ route('sysadmin.account.acc_delete', $user->id) }}">
+			<i class="bi bi-trash3"></i> Delete
+		</x-anchor-button>
 	</div>
 
-	<table class="mt-5 border">
-		<tr>
-			<td class="border px-5 font-bold">Full name</td>
-			<td class="border px-5">{{ $user->full_name }}</td>
-		</tr>
-		<tr>
-			<td class="border px-5 font-bold">Email</td>
-			<td class="border px-5">{{ $user->email }}</td>
-		</tr>
-		<tr>
-			<td class="border px-5 font-bold">Role</td>
-			<td class="border px-5">{{ $user->role->role_name }}</td>
-		</tr>
-	</table>
+	<div class="p-5 bg-indigo-200 rounded-3xl overflow-x-auto">
+		<table class="w-full" style="border-collapse: separate; border-spacing: 15px 10px;">
+			<tr>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold">Full name</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $user->full_name }}</td>
+			</tr>
+			<tr>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold">Email</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $user->email }}</td>
+			</tr>
+			<tr>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold">Role</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $user->role->role_name }}</td>
+			</tr>
+			<tr>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold">Account Status</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $user->status }}</td>
+			</tr>
+		</table>
+	</div>
 @endsection

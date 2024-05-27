@@ -5,8 +5,9 @@
 @endsection
 
 @section("content")
-	<h1 class="text-3xl font-semibold text-blue-900 mb-4">Edit Account Data</h1>
-	<form action="{{ route('sysadmin.account.acc_edit.store', $account->id) }}" method="post">
+	<x-page-title>{{ __("Edit Account's Data") }}</x-page-title>
+
+	<form action="{{ route('sysadmin.account.acc_edit.store', $account->id) }}" method="post" class="bg-indigo-200 py-5 px-10 rounded-xl">
 		@csrf
 		@method('PATCH')
 		<!-- Account Name -->
@@ -23,10 +24,10 @@
 		</div>
 
 		<div class="flex items-stretch justify-end mt-4">
-			<button type="button" onclick="history.back()" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
-					Cancel
-			</button>
-			<x-button class="ml-4 bg-indigo-400">
+			<x-button type="button" onclick="history.back()" class="bg-orange-500">
+				Cancel
+			</x-button>
+			<x-button class="ml-4 bg-orange-500">
 				{{ __('Save') }}
 			</x-button>
 		</div>

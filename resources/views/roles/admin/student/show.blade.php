@@ -5,7 +5,7 @@
 @endsection
 
 @section("content")
-	<h2 class="text-2xl font-semibold text-blue-900 mb-4">Student Details</h2>
+	<x-page-title>{{ __("Student's Details") }}</x-page-title>
 
 	@if(session()->has("successAssignToCourse"))
 		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
@@ -22,79 +22,87 @@
 	@endif
 
 	<div class="h-fit mb-5">
-		<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-			href="{{ route("admin.student.edit", $student->id) }}">Edit</a>
+		<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.edit', $student->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 	</div>
-	<table class="mb-8 border">
-		<tr>
-			<td class="border px-5 font-bold">Full name</td>
-			<td class="border px-5">{{ $student->full_name }}</td>
-		</tr>
-		<tr>
-			<td class="border px-5 font-bold">Email</td>
-			<td class="border px-5">{{ $student->email }}</td>
-		</tr>
-	</table>
 
-	<h2 class="text-xl font-semibold mb-5">Course(s) enrolled by this user:</h2>
-	<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-		href="{{ route('admin.student.assign.create', $student->id) }}">
-		Assign to course
-	</a>
+	<div class="p-5 bg-indigo-200 rounded-3xl overflow-x-auto">
+		<table class="w-full" style="border-collapse: separate; border-spacing: 15px 10px;">
+			<tr>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold">Full name</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $student->full_name }}</td>
+			</tr>
+			<tr>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold">Email</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $student->email }}</td>
+			</tr>
+		</table>
+	</div>
 
-	<ul class="mb-6 mt-6 flex flex-wrap gap-5">
-		@forelse ($student->enrolled_courses as $course)
-			<li class="text-black border rounded-lg bg-gray-300 px-3 py-1">
-				{{ $course->course_name }}
-				<a
-					href="{{ route('admin.student.unassign.delete', ['student_id' => $student->id, 'course_id' => $course->id]) }}"
-					class="">
-					<i class="bi bi-x-circle-fill"></i>
-				</a>
-			</li>
-		@empty
-			<li class="text-gray-500">No course</li>
-		@endforelse
-	</ul>
+	<div class="flex flex-col items-stretch mt-10">
+		<div class="rounded-xl py-2 px-10 flex justify-between items-center text-white bg-blue-900">
+			<span>Courses Assigned</span>
+			<x-anchor-button class="bg-orange-500"
+				href="{{ route('admin.student.assign.create', $student->id) }}">
+				Assign to course
+			</x-anchor-button>
+		</div>
 
-	<h2 class="text-xl font-semibold mb-3 mt-5">Student's Assignment and Attendance Data:</h2>
-	<div class="overflow-x-auto">
-		<table class="w-full">
+		<div class="flex gap-x-10 overflow-x-auto bg-indigo-200 px-10 py-5 rounded-xl mt-3">
+			@forelse ($student->enrolled_courses as $course)
+				<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center gap-3 font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">
+					{{ $course->course_name }}
+					<a
+						href="{{ route('admin.student.unassign.delete', ['student_id' => $student->id, 'course_id' => $course->id]) }}"
+						class="">
+						<i class="bi bi-x-circle-fill"></i>
+					</a>
+				</div>
+			@empty
+				<li class="text-gray-500">No course</li>
+			@endforelse
+		</div>
+	</div>
+
+	<div class="overflow-x-auto rounded-3xl mt-8 px-10 py-5 bg-indigo-200">
+		<x-page-title>{{ __("Student's Attendances and Assignments") }}</x-page-title>
+
+		<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate;
+		border-spacing: 0 20px;">
 			<thead>
-				<th class="border px-3">Course</th>
-				<th class="border px-3">Attendance</th>
-				<th class="border px-3">Assignments</th>
+				<th class="px-5 py-4 bg-blue-900 text-white rounded-l-xl">Course</th>
+				<th class="px-5 py-4 bg-blue-900 text-white">Attendance</th>
+				<th class="px-5 py-4 bg-blue-900 text-white rounded-r-xl">Assignments</th>
 			</thead>
 			<tbody>
 				@if($student->enrolled_courses->count())
 					@for($i = 0; $i < $student->enrolled_courses->count(); $i++)
-						<tr>
-							<td class="border px-3">{{ $student->enrolled_courses[$i]->course_name }}</td>
-							<td class="border px-3">
-								<div class="flex w-full items-center gap-3">
+						<tr class="bg-blue-800 text-white">
+							<td class="px-5 py-2 rounded-l-xl">{{ $student->enrolled_courses[$i]->course_name }}</td>
+							<td class="px-5 py-2">
+								<div class="flex w-full items-center justify-center gap-3">
 									<span>{{ $attended[$i] }}/{{ $attendance_if_full[$i] }} attended</span>
-									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="{{ route("admin.student.atd-details", [$student->id, $student->enrolled_courses[$i]->id]) }}">
+									<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.atd-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
 										Details
-									</a>
+									</x-anchor-button>
 								</div>
 							</td>
-							<td class="border px-3">
-								<div class="flex w-full items-center gap-3">
+							<td class="px-5 py-2 rounded-r-xl">
+								<div class="flex w-full items-center justify-center gap-3">
 									<span>{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done</span>
-									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300" href="{{ route("admin.student.asg-details", [$student->id, $student->enrolled_courses[$i]->id]) }}">
+									<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.asg-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
 										Details
-									</a>
+									</x-anchor-button>
 								</div>
 							</td>
 						</tr>
 					@endfor
 				@else
-					<tr><td colspan="3" class="text-center border px-3">- Student isn't assigned to any courses yet -</td></tr>
+					<tr><td colspan="3" class="text-center px-5 py-2">- Student isn't assigned to any courses yet -</td></tr>
 				@endif
 			</tbody>
 		</table>
 	</div>
-	
+
 	{{-- Schedule --}}
 	{{-- <h2 class="text-xl font-semibold mb-2">Student Schedules:</h2>
 

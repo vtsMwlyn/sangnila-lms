@@ -5,11 +5,11 @@
 @props(['disabled' => false])
 
 @php
-    $classList = 'rounded-md shadow-sm border-gray-300';
+    $classList = 'rounded-md shadow-sm border text-blue-800';
     if($errors->has($attributes->get('name'))) {
         $classList .= ' border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50';
     } else {
-		$classList .= " focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50";
+		$classList .= " border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50";
 	}
 @endphp
 

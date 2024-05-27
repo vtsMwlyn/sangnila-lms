@@ -5,8 +5,9 @@
 @endsection
 
 @section("content")
-	<h1 class="text-3xl font-semibold text-blue-900 mb-4">Edit Student Data</h1>
-	<form action="{{ route('admin.student.update', $student->id) }}" method="post">
+	<x-page-title>{{ __("Edit Student's Data") }}</x-page-title>
+
+	<form action="{{ route('admin.student.update', $student->id) }}" method="post" class="bg-indigo-200 py-5 px-10 rounded-xl">
 		@csrf
 		@method('PATCH')
 		<!-- Student Name -->
@@ -23,10 +24,10 @@
 		</div>
 
 		<div class="flex items-stretch justify-end mt-4 gap-1">
-			<x-button type="button" onclick="history.back()" class="bg-indigo-400">
+			<x-button type="button" onclick="history.back()" class="bg-orange-500">
 					Cancel
 			</x-button>
-			<x-button class="bg-indigo-400">
+			<x-button class="bg-orange-500">
 				{{ __('Save') }}
 			</x-button>
 		</div>

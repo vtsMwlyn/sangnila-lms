@@ -5,22 +5,21 @@
 @endsection
 
 @section("content")
-	<h2 class="text-2xl font-semibold text-blue-900 mb-4">{{ $student->full_name }}'s Assignments</h2>
-	<h3 class="text-xl font-semibold">Course: {{ $course->course_name }}</h3>
+	<x-page-title>{{ __($student->full_name . "'s Assignments in Course: " . $course->course_name) }}</x-page-title>
 
-	<div class="overflow-x-auto mt-3">
-		<table class="w-full">
-			<thead>
-				<th class="border px-3">Assignment Title</th>
-				<th class="border px-3">Assignment Description</th>
-				<th class="border px-3">Submission Status</th>
-				<th class="border px-3">Latest Submission Time</th>
+	<div class="overflow-x-auto p-10 bg-indigo-200 rounded-3xl">
+		<table class="w-full bg-white border border-black">
+			<thead class="bg-blue-800 text-white">
+				<th class="border border-blue-400 px-3">Assignment Title</th>
+				<th class="border border-blue-400 px-3">Assignment Description</th>
+				<th class="border border-blue-400 px-3">Submission Status</th>
+				<th class="border border-blue-400 px-3">Latest Submission Time</th>
 			</thead>
 			<tbody>
 				@forelse ($assignments as $asg)
 					<tr>
-						<td class="border px-3">{{ $asg->title }}</td>
-						<td class="border px-3">{{ $asg->desc }}</td>
+						<td class="border border-blue-400 px-3">{{ $asg->title }}</td>
+						<td class="border border-blue-400 px-3">{{ $asg->desc }}</td>
 						@php
 							$submissions = $asg->submissions;
 							$found = false;
@@ -34,9 +33,9 @@
 							}
 
 							if($found){
-								echo "<td class='border px-3'>Submitted</td><td class='border px-3'>". $latest_submission->created_at ."</td>";
+								echo "<td class='border border-blue-400 px-3 font-bold text-green-700'>Submitted</td><td class='border border-blue-400 px-3'>". $latest_submission->created_at ."</td>";
 							} else {
-								echo "<td class='border px-3 text-center' colspan='2'>No Submissions Yet</td>";
+								echo "<td class='border border-blue-400 px-3 text-center font-bold text-red-400' colspan='2'>No Submissions Yet</td>";
 							}
 						@endphp
 

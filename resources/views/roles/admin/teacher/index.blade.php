@@ -5,16 +5,17 @@
 @endsection
 
 @section("content")
-	<h1 class="text-3xl font-semibold text-blue-900 mb-4">Teachers</h1>
+	<x-page-title>{{ __("List of Active Teachers") }}</x-page-title>
 
-	<div class="overflow-x-auto rounded-md">
-		<table class="min-w-full bg-white border-collapse">
+	<div class="overflow-x-auto rounded-3xl mt-5 px-10 py-5 bg-indigo-200">
+		<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate;
+		border-spacing: 0 20px;">
 			<thead>
-				<tr>
-					<th class="bg-blue-300 border-b border-blue-400 px-4 py-2 sm:w-1/4">Full Name</th>
-					<th class="bg-blue-300 border-b border-blue-400 px-4 py-2 sm:w-1/4">Email</th>
-					<th class="bg-blue-300 border-b border-blue-400 px-4 py-2 sm:w-1/4">Assigned Courses</th>
-					<th class="bg-blue-300 border-b border-blue-400 px-4 py-2 sm:w-1/4">Actions</th>
+				<tr class="bg-blue-900 text-white">
+					<th class="border-blue-400 px-4 py-5 sm:w-1/4 rounded-l-xl">Full Name</th>
+					<th class="border-blue-400 px-4 py-5 sm:w-1/4">Email</th>
+					<th class="border-blue-400 px-4 py-5 sm:w-1/4">Assigned Courses</th>
+					<th class="border-blue-400 px-4 py-5 sm:w-1/4 rounded-r-xl">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -22,14 +23,14 @@
 					@if($account->status == "disabled")
 						@continue
 					@endif
-					<tr>
-						<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
-							<a href="{{ route('admin.teacher.show', ['teacher_id' => $account->id]) }}" class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
+					<tr class="bg-blue-800 text-white">
+						<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-l-xl">
+							<a href="{{ route('admin.teacher.show', ['teacher_id' => $account->id]) }}" class="text-blue-200 hover:text-blue-400 font-semibold hover:underline">
 								{{ $account->full_name }}
 							</a>
 						</td>
-						<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">{{ $account->email }}</td>
-						<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4 text-center">
+						<td class="border-blue-300 px-4 py-5 sm:w-1/4">{{ $account->email }}</td>
+						<td class="border-blue-300 px-4 py-5 sm:w-1/4 text-center">
 							{{-- {{ $account->teached_courses }} --}}
 							@if($account->teached_courses->count())
 								<ul class="flex flex-col items-center">
@@ -41,22 +42,22 @@
 								- No courses assigned yet -
 							@endif
 						</td>
-						<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
+						<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-r-xl">
 							<div class="flex w-full justify-center gap-1">
-								<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-									href="{{ route("admin.teacher.show", $account->id) }}">
-									View
-								</a>
-								<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-									href="{{ route("admin.teacher.edit", $account->id) }}">
-									Edit
-								</a>
+								<x-anchor-button class="bg-orange-500"
+									href="{{ route('admin.teacher.show', $account->id) }}">
+									<i class="bi bi-eye"></i>
+								</x-anchor-button>
+								<x-anchor-button class="bg-orange-500"
+									href="{{ route('admin.teacher.edit', $account->id) }}">
+									<i class="bi bi-pencil-square"></i>
+								</x-anchor-button>
 							</div>
 						</td>
 					</tr>
 				@empty
 					<tr>
-						<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4" colspan="3">N/A</td>
+						<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-xl" colspan="3">N/A</td>
 					</tr>
 				@endforelse
 			</tbody>

@@ -5,17 +5,16 @@
 @endsection
 
 @section("content")
-	<h2 class="text-2xl font-semibold text-blue-900 mb-4">{{ $student->full_name }}'s Attendance</h2>
-	<h3 class="text-xl font-semibold">Course: {{ $course->course_name }}</h3>
+	<x-page-title>{{ __($student->full_name . "'s Attendance in Course: " . $course->course_name) }}</x-page-title>
 
-	<div class="overflow-x-auto">
-		<table class="min-w-full bg-white border border-black mt-3" style="border-radius: 0;">
+	<div class="overflow-x-auto p-10 bg-indigo-200 rounded-3xl">
+		<table class="min-w-full" style="border-radius: 0;">
 			<thead>
-				<tr>
-					<th class="border border-black px-3">Date and time</th>
-					<th class="border border-black px-3">Attendance status</th>
-					<th class="border border-black px-3">Attendance detail</th>
-					<th class="border border-black px-3">Uploaded by</th>
+				<tr class="text-white bg-blue-800">
+					<th class="border border-blue-400 px-3 py-2">Date and time</th>
+					<th class="border border-blue-400 px-3 py-2">Attendance status</th>
+					<th class="border border-blue-400 px-3 py-2">Attendance detail</th>
+					<th class="border border-blue-400 px-3 py-2">Uploaded by</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -24,11 +23,11 @@
 						@if($attendance->attendance_detail == "Account disabled")
 							@continue
 						@endif
-						<tr class="@if($attendance->is_attend == 1) bg-green-500 @else bg-red-400 @endif">
-							<td class="border border-black px-3">{{ $attendance->created_at }}</td>
-							<td class="border border-black px-3">@if($attendance->is_attend == 1) Present @else Absent @endif</td>
-							<td class="border border-black px-3">{{ $attendance->attendance_detail }}</td>
-							<td class="border border-black px-3">{{ $attendance->teacher->full_name }}</td>
+						<tr class="bg-white">
+							<td class="border border-blue-400 px-3 py-2">{{ $attendance->created_at }}</td>
+							<td class="border border-blue-400 px-3 py-2 font-bold @if($attendance->is_attend == 1) text-green-700 @else text-red-400 @endif">@if($attendance->is_attend == 1) Present @else Absent @endif</td>
+							<td class="border border-blue-400 px-3 py-2">{{ $attendance->attendance_detail }}</td>
+							<td class="border border-blue-400 px-3 py-2">{{ $attendance->teacher->full_name }}</td>
 						</tr>
 					@endforeach
 				@else
