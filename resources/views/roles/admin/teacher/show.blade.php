@@ -21,11 +21,11 @@
 		</div>
 	@endif
 
-	<div class="h-fit mb-5">
-		<x-anchor-button class="bg-orange-500" href="{{ route('admin.teacher.edit', $user->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
-	</div>
+	<div class="p-10 bg-indigo-200 rounded-3xl overflow-x-auto">
+		<div class="mb-5">
+			<x-anchor-button class="bg-orange-500" href="{{ route('admin.teacher.edit', $user->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
+		</div>
 
-	<div class="p-5 bg-indigo-200 rounded-3xl overflow-x-auto">
 		<table class="w-full" style="border-collapse: separate; border-spacing: 15px 10px;">
 			<tr>
 				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold">Full name</td>
@@ -36,29 +36,29 @@
 				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $user->email }}</td>
 			</tr>
 		</table>
-	</div>
 
-	<div class="flex flex-col items-stretch mt-10">
-		<div class="rounded-xl py-2 px-10 flex justify-between items-center text-white bg-blue-900">
-			<span>Courses Assigned</span>
-			<x-anchor-button class="bg-orange-500" href="{{ route('admin.teacher.assign', $user->id) }}">
-				Assign to Course
-			</x-anchor-button>
-		</div>
-
-		<div class="flex gap-x-10 overflow-x-auto bg-indigo-200 px-10 py-5 rounded-xl mt-3">
-			@forelse ($user->teached_courses as $course)
-				<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center gap-3 font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">
-					{{ $course->course_name }}
-					<a
-						href="{{ route('admin.teacher.unassign.delete', ['teacher_id' => $user->id, 'course_id' => $course->id]) }}"
-						class="">
-						<i class="bi bi-x-circle-fill"></i>
-					</a>
-				</div>
-			@empty
-				<li class="text-gray-500">No course</li>
-			@endforelse
+		<x-page-title class="mt-5" style="text-align: left;">Courses Teached</x-page-title>
+		<div class="px-10 py-5 border rounded-xl bg-blue-900 mt-3">
+			<div class="py-8">
+				<x-anchor-button class="bg-orange-500" href="{{ route('admin.teacher.assign', $user->id) }}">
+					<i class="bi bi-plus-lg"></i> Assign to Course
+				</x-anchor-button>
+			</div>
+			<hr>
+			<div class="flex gap-x-10 overflow-x-auto bg-blue-900 rounded-b-xl mt-5">
+				@forelse ($user->teached_courses as $course)
+					<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center gap-3 font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">
+						{{ $course->course_name }}
+						<a
+							href="{{ route('admin.teacher.unassign.delete', ['teacher_id' => $user->id, 'course_id' => $course->id]) }}"
+							class="">
+							<i class="bi bi-x-circle-fill"></i>
+						</a>
+					</div>
+				@empty
+					<li class="text-gray-500">No course</li>
+				@endforelse
+			</div>
 		</div>
 	</div>
 @endsection

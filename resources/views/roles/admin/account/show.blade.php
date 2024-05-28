@@ -14,23 +14,13 @@
 	@endif
 
 	<div class="flex items-stretch gap-1 my-2">
-		<x-anchor-button class="bg-orange-500" href="{{ route('sysadmin.account.acc_edit', $user->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
+		<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_edit', $user->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		@if($user->status == "enabled")
-			<form action="{{ route("sysadmin.account.acc_disable", $user->id) }}" method="post">
-				@csrf
-				<x-button type="submit" class="bg-orange-500">
-					<i class="bi bi-ban"></i> Disable
-				</x-button>
-			</form>
+			<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_disable.conf', $user->id) }}"><i class="bi bi-ban"></i> Disable</x-anchor-button>
 		@elseif($user->status == "disabled")
-			<form action="{{ route("sysadmin.account.acc_enable", $user->id) }}" method="post">
-				@csrf
-				<x-button type="submit" class="bg-orange-500">
-					<i class="bi bi-check-circle"></i> Enable
-				</x-button>
-			</form>
+			<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_enable.conf', $user->id) }}"><i class="bi bi-check-circle"></i> Enable</x-anchor-button>
 		@endif
-		<x-anchor-button class="bg-orange-500" href="{{ route('sysadmin.account.acc_delete', $user->id) }}">
+		<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_delete', $user->id) }}">
 			<i class="bi bi-trash3"></i> Delete
 		</x-anchor-button>
 	</div>

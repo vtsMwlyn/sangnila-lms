@@ -1,15 +1,17 @@
 <?php
 
-use App\Http\Controllers\AssignmentController;
-use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\CourseStudentController;
-use App\Http\Controllers\CourseTeacherController;
-use App\Http\Controllers\ScheduleController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\TeacherAccountController;
 use App\Models\CourseTeacher;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AdminAccountController;
+use App\Http\Controllers\CourseStudentController;
+use App\Http\Controllers\CourseTeacherController;
+use App\Http\Controllers\TeacherAccountController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 Route::prefix('/admin')
 	->name('admin.')
@@ -28,6 +30,10 @@ Route::prefix('/admin')
 
 				// Show all courses (including private/not public courses)
 				Route::get('/', [CourseController::class, 'admin_index'])->name('index');
+
+				// Create new course
+				Route::get('/create', [CourseController::class, 'admin_create'])->name('create');
+				Route::post('/', [CourseController::class, 'admin_store'])->name('store');
 
 				// Course details
 				Route::get('/{course_id}', [CourseController::class, 'admin_show'])->name('show')->whereNumber('course_id');
@@ -92,6 +98,38 @@ Route::prefix('/admin')
 				// Assignment and attendance details
 				Route::get("{student_id}/{course_id}/assignments", [AssignmentController::class, "admin_show"])->name("asg-details");
 				Route::get("{student_id}/{course_id}/attendance", [AttendanceController::class, "admin_show"])->name("atd-details");
+
+			}
+		);
+
+		// Manage accounts
+		Route::prefix('/account')
+			->name('account.')
+			->group(function () {
+
+				// List of available accounts (categorized to enabled/disabled)
+				Route::get('/', [AdminAccountController::class, 'index'])->name('index');
+
+				// Account details
+				Route::get('/{user_id}', [AdminAccountController::class, 'show_acc'])->name('show')->whereNumber('user_id');
+
+				// Create new account
+				Route::get('/create', [RegisteredUserController::class, 'admin_create'])->name('create');
+				Route::post('/', [RegisteredUserController::class, 'admin_store'])->name('store');
+
+				// Edit account data
+				Route::get("/{user_id}/edit", [AdminAccountController::class, "edit_acc"])->name("acc_edit");
+				Route::patch("/{user_id}/edit", [AdminAccountController::class, "update_acc"])->name("acc_edit.store");
+
+				// Delete account data
+				Route::get("/{user_id}/delete", [AdminAccountController::class, "delete"])->name("acc_delete");
+				Route::delete("/{user_id}/delete", [AdminAccountController::class, "destroy"])->name("destroy");
+
+				// Enable/disable account
+				Route::get("/{user_id}/disable", [AdminAccountController::class, "disable_conf"])->name("acc_disable.conf");
+				Route::post("/{user_id}/disable", [AdminAccountController::class, "disable_acc"])->name("acc_disable");
+				Route::get("/{user_id}/enable", [AdminAccountController::class, "enable_conf"])->name("acc_enable.conf");
+				Route::post("/{user_id}/enable", [AdminAccountController::class, "enable_acc"])->name("acc_enable");
 
 			}
 		);

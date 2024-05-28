@@ -21,11 +21,11 @@
 		</div>
 	@endif
 
-	<div class="h-fit mb-5">
-		<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.edit', $student->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
-	</div>
+	<div class="p-10 bg-indigo-200 rounded-3xl overflow-x-auto">
+		<div class="h-fit mb-5">
+			<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.edit', $student->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
+		</div>
 
-	<div class="p-5 bg-indigo-200 rounded-3xl overflow-x-auto">
 		<table class="w-full" style="border-collapse: separate; border-spacing: 15px 10px;">
 			<tr>
 				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold">Full name</td>
@@ -36,72 +36,74 @@
 				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $student->email }}</td>
 			</tr>
 		</table>
-	</div>
 
-	<div class="flex flex-col items-stretch mt-10">
-		<div class="rounded-xl py-2 px-10 flex justify-between items-center text-white bg-blue-900">
-			<span>Courses Assigned</span>
-			<x-anchor-button class="bg-orange-500"
-				href="{{ route('admin.student.assign.create', $student->id) }}">
-				Assign to course
-			</x-anchor-button>
+		<x-page-title class="mt-8" style="text-align: left;">{{ __("Courses Enrolled") }}</x-page-title>
+		<div class="px-10 py-5 border rounded-xl bg-blue-900 mt-3">
+			<div class="py-8">
+				<x-anchor-button class="bg-orange-500"
+					href="{{ route('admin.student.assign.create', $student->id) }}">
+					<i class="bi bi-plus-lg"></i> Assign to course
+				</x-anchor-button>
+			</div>
+			<hr>
+			<div class="flex gap-x-10 overflow-x-auto bg-blue-900 rounded-b-xl mt-5">
+				@forelse ($student->enrolled_courses as $course)
+					<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center gap-3 font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">
+						{{ $course->course_name }}
+						<a
+							href="{{ route('admin.student.unassign.delete', ['student_id' => $student->id, 'course_id' => $course->id]) }}"
+							class="">
+							<i class="bi bi-x-circle-fill"></i>
+						</a>
+					</div>
+				@empty
+					<li class="text-gray-500">No course</li>
+				@endforelse
+			</div>
 		</div>
 
-		<div class="flex gap-x-10 overflow-x-auto bg-indigo-200 px-10 py-5 rounded-xl mt-3">
-			@forelse ($student->enrolled_courses as $course)
-				<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center gap-3 font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">
-					{{ $course->course_name }}
-					<a
-						href="{{ route('admin.student.unassign.delete', ['student_id' => $student->id, 'course_id' => $course->id]) }}"
-						class="">
-						<i class="bi bi-x-circle-fill"></i>
-					</a>
-				</div>
-			@empty
-				<li class="text-gray-500">No course</li>
-			@endforelse
+		<x-page-title class="mt-10" style="text-align: left;">{{ __("Student's Attendances and Assignments") }}</x-page-title>
+		<div class="overflow-x-auto">
+			<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate;
+			border-spacing: 0 20px;">
+				<thead>
+					<th class="px-5 py-4 bg-blue-900 text-white rounded-l-xl">Course</th>
+					<th class="px-5 py-4 bg-blue-900 text-white">Attendance</th>
+					<th class="px-5 py-4 bg-blue-900 text-white rounded-r-xl">Assignments</th>
+				</thead>
+				<tbody>
+					@if($student->enrolled_courses->count())
+						@for($i = 0; $i < $student->enrolled_courses->count(); $i++)
+							<tr class="bg-blue-800 text-white">
+								<td class="px-5 py-2 rounded-l-xl">{{ $student->enrolled_courses[$i]->course_name }}</td>
+								<td class="px-5 py-2">
+									<div class="flex w-full items-center justify-center gap-3">
+										<span>{{ $attended[$i] }}/{{ $attendance_if_full[$i] }} attended</span>
+										<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.atd-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
+											Details
+										</x-anchor-button>
+									</div>
+								</td>
+								<td class="px-5 py-2 rounded-r-xl">
+									<div class="flex w-full items-center justify-center gap-3">
+										<span>{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done</span>
+										<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.asg-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
+											Details
+										</x-anchor-button>
+									</div>
+								</td>
+							</tr>
+						@endfor
+					@else
+						<tr><td colspan="3" class="text-center px-5 py-2">- Student isn't assigned to any courses yet -</td></tr>
+					@endif
+				</tbody>
+			</table>
 		</div>
+
 	</div>
 
-	<div class="overflow-x-auto rounded-3xl mt-8 px-10 py-5 bg-indigo-200">
-		<x-page-title>{{ __("Student's Attendances and Assignments") }}</x-page-title>
 
-		<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate;
-		border-spacing: 0 20px;">
-			<thead>
-				<th class="px-5 py-4 bg-blue-900 text-white rounded-l-xl">Course</th>
-				<th class="px-5 py-4 bg-blue-900 text-white">Attendance</th>
-				<th class="px-5 py-4 bg-blue-900 text-white rounded-r-xl">Assignments</th>
-			</thead>
-			<tbody>
-				@if($student->enrolled_courses->count())
-					@for($i = 0; $i < $student->enrolled_courses->count(); $i++)
-						<tr class="bg-blue-800 text-white">
-							<td class="px-5 py-2 rounded-l-xl">{{ $student->enrolled_courses[$i]->course_name }}</td>
-							<td class="px-5 py-2">
-								<div class="flex w-full items-center justify-center gap-3">
-									<span>{{ $attended[$i] }}/{{ $attendance_if_full[$i] }} attended</span>
-									<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.atd-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
-										Details
-									</x-anchor-button>
-								</div>
-							</td>
-							<td class="px-5 py-2 rounded-r-xl">
-								<div class="flex w-full items-center justify-center gap-3">
-									<span>{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done</span>
-									<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.asg-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
-										Details
-									</x-anchor-button>
-								</div>
-							</td>
-						</tr>
-					@endfor
-				@else
-					<tr><td colspan="3" class="text-center px-5 py-2">- Student isn't assigned to any courses yet -</td></tr>
-				@endif
-			</tbody>
-		</table>
-	</div>
 
 	{{-- Schedule --}}
 	{{-- <h2 class="text-xl font-semibold mb-2">Student Schedules:</h2>

@@ -6,7 +6,7 @@
 			<img src={{ asset("img/AR.W.png") }} alt="logo" width="100px">
 			<img src={{ asset("img/loginpict.png") }} alt="logo" width="400px">
 		</div>
-		<form method="POST" action="{{ route('sysadmin.account.store') }}" class="flex flex-col justify-center items-stretch w-1/2 py-6 px-10 bg-blue-950 rounded-2xl">
+		<form method="POST" action="{{ route('admin.account.store') }}" class="flex flex-col justify-center items-stretch w-1/2 py-6 px-10 bg-blue-950 rounded-2xl">
 			@csrf
 
 			<h1 class="text-center text-2xl font-bold text-white">CREATE NEW ACCOUNT</h1>
@@ -41,9 +41,7 @@
 				<select name="role" id="role"
 					class="rounded-md w-1/3 px-4 py-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 mt-1">
 					@forelse ($roles as $role)
-						@if ($role->role_name !== 'SysAdmin')
-							<option value="{{ $role->role_name }}">{{ $role->role_name }}</option>
-						@endif
+						<option value="{{ $role->role_name }}">{{ $role->role_name }}</option>
 					@empty
 					@endforelse
 

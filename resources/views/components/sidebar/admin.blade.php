@@ -13,10 +13,14 @@
 			</a>
 		</div>
 
-		<span class="text-white text-center text-sm mt-5 visible md:invisible">Welcome, {{ Auth::user()->full_name }}!</span>
+		<a href="{{ route("profile.show") }}" class="flex items-center visible md:invisible mt-5 gap-3 font-bold">
+			<i class="bi bi-person-circle text-xl"></i>
+			<span class="text-white text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
+		</a>
+		{{-- <span class="text-white text-center text-sm mt-5 visible md:invisible">Welcome, {{ Auth::user()->full_name }}!</span> --}}
 
 		<!-- Sidebar navigations -->
-		<div class="mt-8 flex flex-col text-sm">
+		<div class="mt-5 flex flex-col text-sm">
 			<x-anchor-button class="{{ Request::is('admin*course*')? 'bg-orange-500' : 'bg-blue-600' }} my-2"
 				href="{{ route('admin.course.index') }}">
 				<i class="bi bi-grid"></i> Courses
@@ -32,8 +36,8 @@
 				<i class="bi bi-person-workspace"></i> Students
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('sysadmin*account*')? 'bg-orange-500' : 'bg-blue-600' }} my-2"
-				href="{{ route('sysadmin.account.index') }}">
+			<x-anchor-button class="{{ Request::is('admin*account*')? 'bg-orange-500' : 'bg-blue-600' }} my-2"
+				href="{{ route('admin.account.index') }}">
 				<i class="bi bi-person-gear"></i> Accounts
 			</x-anchor-button>
 		</div>

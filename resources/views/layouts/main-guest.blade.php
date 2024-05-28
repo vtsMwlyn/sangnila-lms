@@ -41,8 +41,12 @@
 				@yield("title")
 			</div>
 
-			<div class="bg-white py-5 px-10" style="min-height: 80%">
-				@yield("content")
+			<div class="bg-white flex flex-col justify-between" style="min-height: 85vh;">
+				<div class="p-10">
+					@yield("content")
+				</div>
+
+				<x-footer></x-footer>
 			</div>
 		</div>
 	</body>

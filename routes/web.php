@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserAccountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,9 +54,13 @@ Route::get('/dashboard', function () {
 	}
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::prefix("/profile")->name("profile.")->middleware(["auth", "verified"])->group(function(){
+	Route::get("/", [UserAccountController::class, "show"])->name("show");
+	Route::post("/", [UserAccountController::class, "update"])->name("update");
+});
+
 require __DIR__ . '/auth.php'; // to be deleted
 
-require __DIR__ . '/roles/sysadmin.php';
 require __DIR__ . '/roles/admin.php';
 require __DIR__ . '/roles/teacher.php';
 require __DIR__ . '/roles/student.php';

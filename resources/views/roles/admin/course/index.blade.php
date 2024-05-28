@@ -17,7 +17,7 @@
 		</div>
 	@endif
 
-	<x-anchor-button class="bg-orange-500" href="{{ route('sysadmin.course.create') }}"><i class="bi bi-plus-lg"></i> Add New Course</x-anchor-button>
+	<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.create') }}"><i class="bi bi-plus-lg"></i> Add New Course</x-anchor-button>
 
 	@if ($courses->isNotEmpty())
 	<div class="overflow-x-auto rounded-3xl mt-8 px-10 py-5 bg-indigo-200">

@@ -5,18 +5,17 @@
 @endsection
 
 @section("content")
-	<x-page-title>{{ __("Delete Account") }}</x-page-title>
+	<x-page-title>{{ __("Disable Account") }}</x-page-title>
 
 	<div class="bg-indigo-200 rounded-3xl p-5">
-		<form method="POST" action="{{ route('sysadmin.account.destroy', $account->id) }}" class="bg-blue-800 rounded-2xl py-5 px-10">
+		<form method="POST" action="{{ route('admin.account.acc_disable', $account->id) }}" class="bg-blue-800 rounded-2xl py-5 px-10">
 			@csrf
-			@method('delete')
 			<!-- Confirmation Text -->
 			<div class="mb-6">
 				<h1 class="text-xl font-semibold text-white">
-					Are you sure you want to permanently delete account
-				<span class="text-red-500 font-bold">{{ $account->full_name }}</span>
-				from Sangnila LMS?
+					Are you sure you want to <span class="text-red-500 font-bold">disable</span> account
+					<span class="text-yellow-400 font-bold">{{ $account->full_name }}</span>
+					from Sangnila LMS? Disabled accounts can't be used again by the user.
 				</h1>
 			</div>
 

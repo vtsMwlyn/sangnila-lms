@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class Disabled
 {
@@ -19,8 +20,12 @@ class Disabled
 		if(auth()->user()->status != "disabled"){
 			return $next($request);
 		} else {
-			// abort(403);
-			return response()->view('auth.account-disabled', [], 403);
+			switch(Auth::user()->role->id){
+				case 1: return response()->view('roles.admin.account-disabled', [], 403);
+				case 2: return response()->view('roles.teacher.account-disabled', [], 403);
+				case 3: return response()->view('roles.student.account-disabled', [], 403);
+			}
+
 		}
 
     }

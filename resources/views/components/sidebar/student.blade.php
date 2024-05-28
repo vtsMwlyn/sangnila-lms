@@ -13,8 +13,11 @@
 			</a>
 		</div>
 
-		<span class="text-white text-center text-sm mt-5 visible md:invisible">Welcome, {{ Auth::user()->full_name }}!</span>
-
+		<a href="{{ route("profile.show") }}" class="flex items-center visible md:invisible mt-5 gap-3 font-bold">
+			<i class="bi bi-person-circle text-xl"></i>
+			<span class="text-white text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
+		</a>
+		
 		<!-- Sidebar navigations -->
 		<div class="mt-8 flex flex-col text-sm">
 			<x-anchor-button class="{{ Request::is('student*mycourse*')? 'bg-orange-500' : 'bg-blue-600' }} my-2"

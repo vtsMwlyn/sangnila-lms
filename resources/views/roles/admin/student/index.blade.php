@@ -57,7 +57,7 @@
 															}
 														}
 
-														echo "[Progress: " . $count . "/" . count($all_progress_in_current_course) . "]";
+														echo "[Progress: " . $count . "/" . /*count($all_progress_in_current_course)*/"x" . "]";
 													@endphp
 												</span>
 											</li>

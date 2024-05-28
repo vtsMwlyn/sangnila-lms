@@ -7,7 +7,7 @@
 @section("content")
 	<x-page-title>{{ __("Edit Account's Data") }}</x-page-title>
 
-	<form action="{{ route('sysadmin.account.acc_edit.store', $account->id) }}" method="post" class="bg-indigo-200 py-5 px-10 rounded-xl">
+	<form action="{{ route('admin.account.acc_edit.store', $account->id) }}" method="post" class="bg-indigo-200 py-5 px-10 rounded-xl">
 		@csrf
 		@method('PATCH')
 		<!-- Account Name -->
@@ -23,11 +23,25 @@
 			<x-input id="email" class="block mt-1 w-full" type="text" name="email" :value="$account->email"  />
 		</div>
 
-		<div class="flex items-stretch justify-end mt-4">
+		<!-- Role Selection -->
+		<div class="mt-4">
+			<x-label for="role_id" class="text-white" :value="__('Select New Role')" />
+
+			<select name="role_id" id="role_id"
+			class="rounded-md shadow-sm border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 border focus:ring-opacity-50 w-1/3 py-2 px-4 mt-1 text-blue-800">
+				@forelse ($roles as $role)
+					<option value="{{ $role->id }}" @if($account->role->role_name == $role->role_name) selected @endif>{{ $role->role_name }}</option>
+				@empty
+				@endforelse
+
+			</select>
+		</div>
+
+		<div class="flex items-stretch justify-end mt-4 gap-1">
 			<x-button type="button" onclick="history.back()" class="bg-orange-500">
 				Cancel
 			</x-button>
-			<x-button class="ml-4 bg-orange-500">
+			<x-button class="bg-orange-500">
 				{{ __('Save') }}
 			</x-button>
 		</div>

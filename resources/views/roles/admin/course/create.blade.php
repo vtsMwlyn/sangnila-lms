@@ -7,7 +7,7 @@
 @section("content")
 	<x-page-title>{{ __("Add New Course") }}</x-page-title>
 
-	<form action="{{ route('sysadmin.course.store') }}" method="post" class="py-5 px-10 rounded-3xl bg-indigo-200">
+	<form action="{{ route('admin.course.store') }}" method="post" class="py-5 px-10 rounded-3xl bg-indigo-200">
 		@csrf
 		<!-- Course Name -->
 		<div class="mb-4">

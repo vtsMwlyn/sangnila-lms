@@ -39,14 +39,18 @@
 
 			<div class="my-10 text-4xl text-white font-bold flex items-center justify-center">
 				@yield("title")
-				<div class="flex flex-col absolute items-center right-10 invisible md:visible">
+				<a href="{{ route("profile.show") }}" class="flex flex-col absolute items-center right-10 invisible md:visible">
 					<i class="bi bi-person-circle"></i>
 					<span class="text-white text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
-				</div>
+				</a>
 			</div>
 
-			<div class="bg-white py-5 px-10" style="min-height: 80%">
-				@yield("content")
+			<div class="bg-white flex flex-col justify-between" style="min-height: 85vh;">
+				<div class="p-10">
+					@yield("content")
+				</div>
+
+				<x-footer></x-footer>
 			</div>
 		</div>
 	</body>
