@@ -35,17 +35,17 @@
 		<x-sidebar.teacher></x-sidebar.teacher>
 
 		<!-- Content Section -->
-		<div class="container w-full md:w-4/5 min-h-screen">
+		<div class="container w-full md:w-4/5 min-h-screen flex flex-col justify-between">
 
 			<div class="my-10 text-4xl text-white font-bold flex items-center justify-center">
 				@yield("title")
-				<a href="{{ route("profile.show") }}" class="flex flex-col absolute items-center right-10 invisible md:visible">
+				<a href="{{ route("profile.show") }}" class="flex flex-col absolute items-center right-10 invisible md:visible text-white hover:text-yellow-400 transition ease-in-out hover:scale-105 duration-600">
 					<i class="bi bi-person-circle"></i>
-					<span class="text-white text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
+					<span class="text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
 				</a>
 			</div>
 
-			<div class="bg-white flex flex-col justify-between" style="min-height: 85vh;">
+			<div class="bg-white flex flex-col justify-between h-full">
 				<div class="p-10">
 					@yield("content")
 				</div>

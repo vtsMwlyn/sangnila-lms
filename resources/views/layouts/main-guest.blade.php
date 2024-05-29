@@ -35,13 +35,13 @@
 		<x-sidebar.guest></x-sidebar.guest>
 
 		<!-- Content Section -->
-		<div class="container w-full md:w-4/5 min-h-screen">
+		<div class="container w-full md:w-4/5 min-h-screen flex flex-col justify-between">
 
 			<div class="my-10 text-4xl text-center text-white font-bold">
 				@yield("title")
 			</div>
 
-			<div class="bg-white flex flex-col justify-between" style="min-height: 85vh;">
+			<div class="bg-white flex flex-col justify-between h-full">
 				<div class="p-10">
 					@yield("content")
 				</div>

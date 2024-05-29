@@ -7,13 +7,13 @@
 @section("content")
 	<x-page-title>{{ __("Edit Course") }}</x-page-title>
 
-	<form action="{{ route('admin.course.update', $course->id) }}" method="post" class="bg-indigo-200 py-5 px-10 rounded-xl">
+	<form action="{{ route('admin.course.update', $course->id) }}" method="post" class="bg-indigo-200 p-10 rounded-3xl mt-10">
 		@csrf
 		@method('PATCH')
 		<!-- Course Name -->
 		<div>
 			<x-label for="course_name" :value="__('Course Name')" />
-			<x-input id="course_name" class="block mt-1 w-full" type="text" name="course_name" :value="$course->course_name"
+			<x-input id="course_name" class="block mt-1 w-full" type="text" placeholder="Course name" name="course_name" :value="$course->course_name"
 				autofocus />
 		</div>
 
@@ -21,7 +21,7 @@
 		<div class="mt-4">
 			<x-label for="course_description" :value="__('Course Description')" />
 			{{-- <x-input id="course_description" class="block mt-1 w-full bg-blue-950" type="text" name="course_description" :value="$course->course_description" style="color: white"/> --}}
-			<x-input id="course_description" class="block mt-1 w-full" type="text" name="course_description" :value="$course->course_description"/>
+			<x-input id="course_description" class="block mt-1 w-full" type="text" name="course_description" placeholder="Course description" :value="$course->course_description"/>
 		</div>
 
 		<!-- Course Visibility -->

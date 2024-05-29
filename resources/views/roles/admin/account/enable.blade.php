@@ -8,7 +8,7 @@
 	<x-page-title>{{ __("Enable Account") }}</x-page-title>
 
 	<div class="bg-indigo-200 rounded-3xl p-5">
-		<form method="POST" action="{{ route("admin.account.acc_enable", $account->id) }}" class="bg-blue-800 rounded-2xl py-5 px-10">
+		<form method="POST" action="{{ route("admin.account.acc_enable", $account->id) }}" class="bg-blue-800 rounded-2xl py-5 px-10 mt-10">
 			@csrf
 			<!-- Confirmation Text -->
 			<div class="mb-6">

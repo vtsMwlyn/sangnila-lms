@@ -17,20 +17,20 @@
 			<i class="bi bi-person-circle text-xl"></i>
 			<span class="text-white text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
 		</a>
-		
+
 		<!-- Sidebar navigations -->
 		<div class="mt-8 flex flex-col text-sm">
-			<x-anchor-button class="{{ Request::is('student*mycourse*')? 'bg-orange-500' : 'bg-blue-600' }} my-2"
+			<x-anchor-button class="{{ Request::is('student*mycourse*')? 'bg-orange-500' : 'bg-blue-600' }} my-2 hover:scale-105 transition duration-600"
 				href="{{ route('student.mycourse.index') }}">
 				<i class="bi bi-grid"></i> Courses
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('student*assignment*')? 'bg-orange-500' : 'bg-blue-600' }} my-2"
+			<x-anchor-button class="{{ Request::is('student*assignment*')? 'bg-orange-500' : 'bg-blue-600' }} my-2 hover:scale-105 transition duration-600"
 				href="{{ route('student.assignment.index') }}">
 				<i class="bi bi-file-earmark-text"></i> Assignments
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('student*attendance*')? 'bg-orange-500' : 'bg-blue-600' }} my-2"
+			<x-anchor-button class="{{ Request::is('student*attendance*')? 'bg-orange-500' : 'bg-blue-600' }} my-2 hover:scale-105 transition duration-600"
 				href="{{ route('student.attendance.index') }}">
 				<i class="bi bi-person-check-fill"></i> Attendances
 			</x-anchor-button>
@@ -40,7 +40,7 @@
 		<form method="POST" action="{{ route('logout') }}" class="mt-5">
 			@csrf
 			<x-button
-				class="font-semibold w-full bg-red-600">
+				class="font-semibold w-full bg-red-600 hover:scale-105 transition duration-600">
 					<i class="bi bi-box-arrow-left"></i> {{ __('Log Out') }}
 			</x-button>
 		</form>

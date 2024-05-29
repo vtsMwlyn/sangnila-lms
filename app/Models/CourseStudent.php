@@ -10,7 +10,8 @@ class CourseStudent extends Model {
 	protected $fillable = [
 		'user_id',
 		'course_id',
-		'student_type'
+		'student_type',
+		"max_course_session"
 	];
 
 	public function parent_user() {

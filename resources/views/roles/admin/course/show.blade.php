@@ -14,7 +14,7 @@
 		</div>
 	@endif
 
-	<div class="px-10 py-5 bg-indigo-200 rounded-3xl mb-10">
+	<div class="px-10 py-5 bg-indigo-200 rounded-3xl my-10">
 
 		<x-page-title>{{ __("About Course") }}</x-page-title>
 
@@ -32,7 +32,9 @@
 			@forelse ($course->teachers as $teacher)
 				<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">{{ $teacher->full_name }}</div>
 			@empty
-				<span class="text-gray-500">No teacher for this course</span>
+				<div class="flex w-full justify-center">
+					<span>- No student enrolled in this course yet -</span>
+				</div>
 			@endforelse
 		</div>
 	</div>
@@ -43,7 +45,9 @@
 			@forelse ($course->students as $student)
 				<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">{{ $student->full_name }}</div>
 			@empty
-				<span class="text-gray-500">No student enrolled in this course</span>
+				<div class="flex w-full justify-center">
+					<span>- No student enrolled in this course yet -</span>
+				</div>
 			@endforelse
 		</div>
 	</div>
@@ -53,14 +57,14 @@
 		<div class="mb-6 overflow-x-auto">
 			<table class="w-full bg-white">
 				<thead class="bg-blue-900 text-white">
-					<th class="border border-blue-400 px-5 py-2">Topic name</th>
-					<th class="border border-blue-400 px-5 py-2">Materials</th>
+					<th class="border border-blue-400 px-5 py-3">Topic name</th>
+					<th class="border border-blue-400 px-5 py-3">Materials</th>
 				</thead>
 				<tbody>
 					@forelse ($course->course_topics as $topic)
 						<tr>
-							<td class="border border-blue-400 px-5 py-2">{{ $topic->title }}</td>
-							<td class="border border-blue-400 px-5 py-2">
+							<td class="border border-blue-400 px-5 py-3">{{ $topic->title }}</td>
+							<td class="border border-blue-400 px-5 py-3">
 								@if($topic->course_materials->count())
 									<ul>
 										@foreach ($topic->course_materials as $material)
@@ -73,7 +77,7 @@
 							</td>
 						</tr>
 					@empty
-						<tr class="text-gray-500 border border-blue-900"><td colspan="2" class="text-center">- No topics yet -</td></tr>
+						<tr class="text-gray-500 border border-blue-900"><td colspan="2" class="text-center py-3">- No topics yet -</td></tr>
 					@endforelse
 				</tbody>
 			</table>

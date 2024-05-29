@@ -21,25 +21,33 @@
 		</div>
 	@endif
 
-	<div class="p-10 bg-indigo-200 rounded-3xl overflow-x-auto">
+	<div class="p-10 bg-indigo-200 rounded-3xl">
 		<div class="mb-5">
 			<x-anchor-button class="bg-orange-500" href="{{ route('admin.teacher.edit', $user->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		</div>
 
 		<table class="w-full" style="border-collapse: separate; border-spacing: 15px 10px;">
 			<tr>
-				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold">Full name</td>
-				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $user->full_name }}</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Full name</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">@if($user->full_name){{ $user->full_name }}@else{{ __("N/A") }}@endif</td>
 			</tr>
 			<tr>
-				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold">Email</td>
-				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $user->email }}</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Phone number</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">@if($user->details->phone_number){{ $user->details->phone_number }}@else{{ __("N/A") }}@endif</td>
+			</tr>
+			<tr>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">City of Birth</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">@if($user->details->city_of_birth){{ $user->details->city_of_birth }}@else{{ __("N/A") }}@endif</td>
+			</tr>
+			<tr>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Date of Birth</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">@if($user->details->date_of_birth){{ $user->details->date_of_birth }}@else{{ __("N/A") }}@endif</td>
 			</tr>
 		</table>
 
 		<x-page-title class="mt-5" style="text-align: left;">Courses Teached</x-page-title>
 		<div class="px-10 py-5 border rounded-xl bg-blue-900 mt-3">
-			<div class="py-8">
+			<div class="py-5">
 				<x-anchor-button class="bg-orange-500" href="{{ route('admin.teacher.assign', $user->id) }}">
 					<i class="bi bi-plus-lg"></i> Assign to Course
 				</x-anchor-button>
@@ -56,7 +64,7 @@
 						</a>
 					</div>
 				@empty
-					<li class="text-gray-500">No course</li>
+					<span class="text-white">No courses teached</span>
 				@endforelse
 			</div>
 		</div>

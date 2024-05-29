@@ -10,9 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller {
-
-	// ========== ADMIN ==========
-
+	// ===== ADMIN ===== //
+	// Showing list of all available courses in Sangnila LMS
 	public function admin_index() {
 		$courses = Course::get();
 		return view('roles.admin.course.index', [
@@ -20,10 +19,12 @@ class CourseController extends Controller {
 		]);
 	}
 
+	// Create new course page
 	public function admin_create() {
 		return view('roles.admin.course.create');
 	}
 
+	// Insert the new course into database
 	public function admin_store(Request $request) {
 		$validatedData = $request->validate([
 			"course_name" => "required|min:3",
@@ -36,6 +37,7 @@ class CourseController extends Controller {
 		return redirect(route('admin.course.index'))->with("successCreateNewCourse", "Successfully created new course!");
 	}
 
+	// Shows a course details
 	public function admin_show($course_id) {
 		$course = Course::findOrFail($course_id);
 		return view('roles.admin.course.show', [
@@ -43,6 +45,7 @@ class CourseController extends Controller {
 		]);
 	}
 
+	// Edit course page
 	public function admin_edit($course_id) {
 		$course = Course::/*where('visibility', 'public')->*/where('id', $course_id)->first();
 		return view('roles.admin.course.edit', [
@@ -50,6 +53,7 @@ class CourseController extends Controller {
 		]);
 	}
 
+	// Update the course in the database
 	public function admin_update(Request $request, $course_id) {
 		// $data = $request->except(['_token', '_method']);
 
@@ -65,6 +69,7 @@ class CourseController extends Controller {
 		return redirect(route('admin.course.show', $course_id))->with("successUpdateCourseData", "Successfully updated course data!");
 	}
 
+	// Course deletion confirmation
 	public function admin_delete($course_id){
 		$course = Course::where('id', $course_id)->first();
 
@@ -73,6 +78,7 @@ class CourseController extends Controller {
 		]);
 	}
 
+	// Delete course from database
 	public function admin_destroy($course_id){
 		$course = Course::findOrFail($course_id);
 		Course::destroy("id", $course->id);
@@ -81,12 +87,13 @@ class CourseController extends Controller {
 	}
 
 
-	// ========== TEACHER ==========
-
+	// ===== TEACHER ====== //
+	// List of assigned courses
 	public function teacher_index() {
 		return view('roles.teacher.mycourse.index', []);
 	}
 
+	// Shows a course details also topics and materials
 	public function teacher_show($course_id) {
 		$lecturer = CourseTeacher::where('user_id', Auth::user()->id)->where('course_id', $course_id)->first();
 		return view('roles.teacher.mycourse.show', [
@@ -95,12 +102,13 @@ class CourseController extends Controller {
 	}
 
 
-	// ========== STUDENT ==========
-
+	// ===== STUDENT ===== //
+	// List of enrolled courses
 	public function student_index() {
 		return view('roles.student.course.index');
 	}
 
+	// Shows a course details with topics and materials
 	public function student_show($course_id) {
 		$materialProgresses = MaterialProgress::where('course_id', $course_id)->where('student_id', Auth::user()->id)->get();
 		$student = CourseStudent::where('user_id', Auth::user()->id)->where('course_id', $course_id)->first();

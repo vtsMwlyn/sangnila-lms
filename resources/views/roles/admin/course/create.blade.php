@@ -7,19 +7,19 @@
 @section("content")
 	<x-page-title>{{ __("Add New Course") }}</x-page-title>
 
-	<form action="{{ route('admin.course.store') }}" method="post" class="py-5 px-10 rounded-3xl bg-indigo-200">
+	<form action="{{ route('admin.course.store') }}" method="post" class="p-10 rounded-3xl bg-indigo-200 mt-10">
 		@csrf
 		<!-- Course Name -->
 		<div class="mb-4">
 			<x-label for="course_name" :value="__('Course Name')" />
-			<x-input id="course_name" class="block mt-1 w-full" type="text" name="course_name"
+			<x-input id="course_name" class="block mt-1 w-full" type="text" name="course_name" placeholder="New course name"
 				:value="old('course_name')" autofocus />
 		</div>
 
 		<!-- Course Description -->
 		<div class="mb-4">
 			<x-label for="course_description" :value="__('Course Description')" />
-			<x-input id="course_description" class="block mt-1 w-full" type="text" name="course_description"
+			<x-input id="course_description" class="block mt-1 w-full" type="text" name="course_description" placeholder="New course description"
 				:value="old('course_description')" />
 		</div>
 

@@ -15,17 +15,17 @@
 
 		<!-- Sidebar navigations -->
 		<div class="mt-8 flex flex-col text-sm">
-			<x-anchor-button class="bg-orange-500 my-2"
+			<x-anchor-button class="bg-orange-500 my-2 hover:scale-105 transition duration-600"
 				href="{{ route('guest.index') }}">
 				<i class="bi bi-grid"></i> Courses Available
 			</x-anchor-button>
 
-			<x-anchor-button class="bg-blue-600 my-2"
+			<x-anchor-button class="bg-blue-600 my-2 hover:scale-105 transition duration-600"
 				href="https://academy.sangnilaindonesia.com/">
 				<i class="bi bi-info-circle"></i> About Us
 			</x-anchor-button>
 
-			<x-anchor-button class="bg-blue-600 my-2"
+			<x-anchor-button class="bg-blue-600 my-2 hover:scale-105 transition duration-600"
 				href="https://sangnilaindonesia.com/">
 				<i class="bi bi-globe2"></i> Our Website
 			</x-anchor-button>

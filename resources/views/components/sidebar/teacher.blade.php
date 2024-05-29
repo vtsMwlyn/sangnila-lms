@@ -20,22 +20,22 @@
 
 		<!-- Sidebar navigations -->
 		<div class="mt-8 flex flex-col text-sm">
-			<x-anchor-button class="{{ (Request::is('teacher*mycourse*') || Request::is('teacher*topic*') || Request::is('teacher*material*'))? 'bg-orange-500' : 'bg-blue-600' }} my-2"
+			<x-anchor-button class="{{ (Request::is('teacher*mycourse*') || Request::is('teacher*topic*') || Request::is('teacher*material*'))? 'bg-orange-500' : 'bg-blue-600' }} my-2 hover:scale-105 transition duration-600"
 				href="{{ route('teacher.mycourse.index') }}">
 				<i class="bi bi-grid"></i> My Courses
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('teacher*student*')? 'bg-orange-500' : 'bg-blue-600' }} my-2"
+			<x-anchor-button class="{{ Request::is('teacher*student*')? 'bg-orange-500' : 'bg-blue-600' }} my-2 hover:scale-105 transition duration-600"
 				href="{{ route('teacher.student.select-course') }}">
 				<i class="bi bi-graph-up"></i> Student Progress
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('teacher*attendance*')? 'bg-orange-500' : 'bg-blue-600' }} my-2"
+			<x-anchor-button class="{{ Request::is('teacher*attendance*')? 'bg-orange-500' : 'bg-blue-600' }} my-2 hover:scale-105 transition duration-600"
 				href="{{ route('teacher.attendance.index') }}">
 				<i class="bi bi-person-check-fill"></i> Attendances
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('teacher*assignment*')? 'bg-orange-500' : 'bg-blue-600' }} my-2"
+			<x-anchor-button class="{{ Request::is('teacher*assignment*')? 'bg-orange-500' : 'bg-blue-600' }} my-2 hover:scale-105 transition duration-600"
 				href="{{ route('teacher.assignment.index') }}">
 				<i class="bi bi-file-earmark-text"></i> Assignments
 			</x-anchor-button>
@@ -45,7 +45,7 @@
 		<form method="POST" action="{{ route('logout') }}" class="mt-5">
 			@csrf
 			<x-button
-				class="font-semibold w-full bg-red-600">
+				class="font-semibold w-full bg-red-600 hover:scale-105 transition duration-600">
 					<i class="bi bi-box-arrow-left"></i> {{ __('Log Out') }}
 			</x-button>
 		</form>

@@ -5,20 +5,29 @@
 @endsection
 
 @section("content")
-	<x-page-title>{{ __("Assign Teacher to Course") }}</x-page-title>
+	<x-page-title>{{ __("Assign Student to Course") }}</x-page-title>
 
-	<div class="rounded-xl bg-indigo-200 p-5 mt-3">
+	<div class="rounded-xl bg-indigo-200 p-5 mt-10">
 		@if($courses->count())
 			<form action="{{ route('admin.student.assign.store', $student->id) }}" method="post" class="rounded-lg py-5 px-10 bg-blue-800">
 				@csrf
-				<x-label for="visibility" :value="__('Select a course to assign')" style="color: white;"/>
-				<select name="course_name" id="course_name" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full mt-4 py-2 px-4">
-					@foreach ($courses as $course)
-						<option value="{{ $course->course_name }}">{{ $course->course_name }}</option>
-					@endforeach
-				</select>
+				<!-- Select course -->
+				<div class="mt-3">
+					<x-label for="visibility" :value="__('Select a course to assign')" style="color: white;"/>
+					<select name="course_name" id="course_name" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full mt-1 py-2 px-4">
+						@foreach ($courses as $course)
+							<option value="{{ $course->course_name }}">{{ $course->course_name }}</option>
+						@endforeach
+					</select>
+				</div>
 
-				<div class="flex mt-4 items-center gap-1">
+				<!-- Max Course Sessions -->
+				<div class="mt-3">
+					<x-label for="max_course_session" :value="__('Maximum sessions in this course')" style="color: white;"/>
+					<x-input id="max_course_session" class="block mt-1 w-full" type="number" name="max_course_session" placeholder="Maximum sessions"  />
+				</div>
+
+				<div class="flex mt-8 items-center gap-1">
 					<x-button type="button" onclick="history.back()" class="bg-orange-500">
 						Cancel
 					</x-button>

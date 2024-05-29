@@ -7,7 +7,7 @@
 @section("content")
 	<x-page-title>{{ __("Edit Account's Data") }}</x-page-title>
 
-	<form action="{{ route('admin.account.acc_edit.store', $account->id) }}" method="post" class="bg-indigo-200 py-5 px-10 rounded-xl">
+	<form action="{{ route('admin.account.acc_edit.store', $account->id) }}" method="post" class="bg-indigo-200 p-10 mt-10 rounded-xl">
 		@csrf
 		@method('PATCH')
 		<!-- Account Name -->
@@ -26,14 +26,12 @@
 		<!-- Role Selection -->
 		<div class="mt-4">
 			<x-label for="role_id" class="text-white" :value="__('Select New Role')" />
-
 			<select name="role_id" id="role_id"
 			class="rounded-md shadow-sm border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 border focus:ring-opacity-50 w-1/3 py-2 px-4 mt-1 text-blue-800">
 				@forelse ($roles as $role)
 					<option value="{{ $role->id }}" @if($account->role->role_name == $role->role_name) selected @endif>{{ $role->role_name }}</option>
 				@empty
 				@endforelse
-
 			</select>
 		</div>
 

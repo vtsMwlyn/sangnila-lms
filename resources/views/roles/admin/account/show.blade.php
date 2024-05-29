@@ -13,7 +13,7 @@
 		</div>
 	@endif
 
-	<div class="flex items-stretch gap-1 my-2">
+	<div class="flex items-stretch gap-1 mt-10 mb-5">
 		<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_edit', $user->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		@if($user->status == "enabled")
 			<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_disable.conf', $user->id) }}"><i class="bi bi-ban"></i> Disable</x-anchor-button>
@@ -28,19 +28,19 @@
 	<div class="p-5 bg-indigo-200 rounded-3xl overflow-x-auto">
 		<table class="w-full" style="border-collapse: separate; border-spacing: 15px 10px;">
 			<tr>
-				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold">Full name</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Full name</td>
 				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $user->full_name }}</td>
 			</tr>
 			<tr>
-				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold">Email</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Email</td>
 				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $user->email }}</td>
 			</tr>
 			<tr>
-				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold">Role</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Role</td>
 				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $user->role->role_name }}</td>
 			</tr>
 			<tr>
-				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold">Account Status</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Account Status</td>
 				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $user->status }}</td>
 			</tr>
 		</table>

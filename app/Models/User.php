@@ -69,19 +69,19 @@ class User extends Authenticatable implements MustVerifyEmail{
 	}
 
 	public function course_attendances(){
-		return $this->hasMany(StudentAttendance::class, "student_id");
+		return $this->hasMany(Attendance::class, "student_id");
 	}
 
 	public function submitted_attendances(){
-		return $this->hasMany(StudentAttendance::class, "teacher_id");
+		return $this->hasMany(Attendance::class, "teacher_id");
 	}
 
 	public function assigned_assignments(){
-		return $this->hasMany(StudentAssignment::class, "student_id");
+		return $this->hasMany(Assignment::class, "student_id");
 	}
 
 	public function course_assignments(){
-		return $this->hasMany(StudentAssignment::class, "teacher_id");
+		return $this->hasMany(Assignment::class, "teacher_id");
 	}
 
 	public function assignment_submissions(){

@@ -7,7 +7,7 @@
 @section("content")
 	<x-page-title>{{ __("Unassign Student from Course") }}</x-page-title>
 
-	<div class="bg-indigo-200 rounded-3xl p-5">
+	<div class="bg-indigo-200 rounded-3xl p-5 mt-10">
 		<form method="POST" action="{{ route('admin.student.unassign.destroy', ['student_id' => $student->id, 'course_id' => $course->id]) }}" class="bg-blue-800 rounded-2xl py-5 px-10">
 			@csrf
 			@method('delete')

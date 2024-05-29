@@ -9,20 +9,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 
 class CourseStudentController extends Controller {
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function index() {
-		//
-	}
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
+	// ===== ADMIN ===== //
+	// Shows a page to select a course to assign to a student
 	public function create($student_id) {
 		$role = Role::where('role_name', 'Student')->first();
 		$student = User::where('role_id', $role->id)->where('id', $student_id)->first();
@@ -32,62 +20,31 @@ class CourseStudentController extends Controller {
 			->whereNotIn('id', $existingCourseIds)
 			->get();
 
-		// return view('roles.admin.student.assign', [
-		// 	'student' => $student,
-		// 	'courses' => $courses,
-		// ]);
-
 		return view('roles.admin.student.index-assign', [
 			'student' => $student,
 			'courses' => $courses,
 		]);
 	}
 
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
+	// Save the selected course into database
 	public function store(Request $request, $student_id) {
-		$targettedCourse = Course::where("course_name", $request["course_name"])->first();
+		$validatedData = $request->validate([
+			"course_name" => "required",
+			"max_course_session" => "required"
+		]);
+
+		$targettedCourse = Course::where("course_name", $validatedData["course_name"])->first();
 
 		CourseStudent::create([
 			'user_id' => $student_id,
-			'course_id' => $targettedCourse->id
+			'course_id' => $targettedCourse->id,
+			'max_course_session' => $validatedData["max_course_session"]
 		]);
 
 		return redirect(route('admin.student.show', $student_id))->with("successAssignToCourse", "Successfully assigned the student to the course!");
 	}
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function show($id) {
-		//
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($id) {
-		//
-	}
-
-	/**
-	 * Show delete page for specific record
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
+	// Unassign student from a course confirmation
 	public function delete($student_id, $course_id) {
 		$role = Role::where('role_name', 'student')->first();
 		$student = User::where('role_id', $role->id)->where('id', $student_id)->first();
@@ -98,15 +55,11 @@ class CourseStudentController extends Controller {
 		]);
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
+	// Remove the course from student's assigned course in the database
 	public function destroy($student_id, $course_id) {
 		$CourseStudent = CourseStudent::where('user_id', $student_id)->where('course_id', $course_id)->first();
 		CourseStudent::destroy($CourseStudent->id);
 		return redirect(route('admin.student.show', $student_id))->with("successUnassignFromCourse", "Successfully unassigned the student from the course!");;
 	}
+
 }

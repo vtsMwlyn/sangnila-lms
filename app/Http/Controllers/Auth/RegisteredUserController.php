@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\UserDetail;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -45,6 +46,8 @@ class RegisteredUserController extends Controller {
 			"status" => "enabled",
 			"email_verified_at" => now() // soon email verification will be enabled
 		]);
+
+		UserDetail::create(["user_id" => $user->id]);
 
 		return redirect(route('admin.account.index'))->with("successCreateNewAccount", "Successfully created new account!");
 	}

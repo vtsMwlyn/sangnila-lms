@@ -21,22 +21,22 @@
 
 		<!-- Sidebar navigations -->
 		<div class="mt-5 flex flex-col text-sm">
-			<x-anchor-button class="{{ Request::is('admin*course*')? 'bg-orange-500' : 'bg-blue-600' }} my-2"
+			<x-anchor-button class="{{ Request::is('admin*course*')? 'bg-orange-500' : 'bg-blue-600' }} my-2 hover:scale-105 transition duration-600"
 				href="{{ route('admin.course.index') }}">
 				<i class="bi bi-grid"></i> Courses
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('admin*teacher*')? 'bg-orange-500' : 'bg-blue-600' }} my-2"
+			<x-anchor-button class="{{ Request::is('admin*teacher*')? 'bg-orange-500' : 'bg-blue-600' }} my-2 hover:scale-105 transition duration-600"
 				href="{{ route('admin.teacher.index') }}">
 				<i class="bi bi-person-lines-fill"></i> Teachers
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('admin*student*')? 'bg-orange-500' : 'bg-blue-600' }} my-2"
+			<x-anchor-button class="{{ Request::is('admin*student*')? 'bg-orange-500' : 'bg-blue-600' }} my-2 hover:scale-105 transition duration-600"
 				href="{{ route('admin.student.index') }}">
 				<i class="bi bi-person-workspace"></i> Students
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('admin*account*')? 'bg-orange-500' : 'bg-blue-600' }} my-2"
+			<x-anchor-button class="{{ Request::is('admin*account*')? 'bg-orange-500' : 'bg-blue-600' }} my-2 hover:scale-105 transition duration-600"
 				href="{{ route('admin.account.index') }}">
 				<i class="bi bi-person-gear"></i> Accounts
 			</x-anchor-button>
@@ -46,7 +46,7 @@
 		<form method="POST" action="{{ route('logout') }}" class="mt-5">
 			@csrf
 			<x-button
-				class="font-semibold w-full bg-red-600">
+				class="font-semibold w-full bg-red-600 hover:scale-105 transition duration-600">
 					<i class="bi bi-box-arrow-left"></i> {{ __('Log Out') }}
 			</x-button>
 		</form>

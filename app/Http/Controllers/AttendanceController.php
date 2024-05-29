@@ -6,21 +6,23 @@ use App\Models\User;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
-use App\Models\StudentAttendance;
+use App\Models\Attendance;
 use App\Models\AttendanceByTeacher;
 use App\Models\MaterialProgress;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Constraint\Count;
 
 class AttendanceController extends Controller {
-
+	// ===== TEACHER ===== //
+	// Showing all assigned course to select before continue
 	public function index(){
 		return view('roles.teacher.attendance.index');
 	}
 
+	// Showing all attendance data in the selected course
 	public function show($course_id) {
 		$course = Auth::user()->teached_courses->where('id', $course_id)->first();
-		$attendances_in_the_course = StudentAttendance::where("course_id", $course->id)->get();
+		$attendances_in_the_course = Attendance::where("course_id", $course->id)->get();
 
 		$attendanceData = [];
 		if($attendances_in_the_course->count()){
@@ -51,6 +53,7 @@ class AttendanceController extends Controller {
 		]);
 	}
 
+	// New attendance data input form page
 	public function create($course_id){
 		$course = Auth::user()->teached_courses->where('id', $course_id)->first();
 		return view("roles.teacher.attendance.upload", [
@@ -58,6 +61,7 @@ class AttendanceController extends Controller {
 		]);
 	}
 
+	// Insert new attendance data into database
 	public function store(Request $request, $course_id) {
 		$validatedData = $request->validate([
 			"checkbox_value.*" => "required",
@@ -79,7 +83,7 @@ class AttendanceController extends Controller {
 				$isAttend = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
 			}
 
-			StudentAttendance::create([
+			Attendance::create([
 				"course_id" => $course->id,
 				"teacher_id" => $teacher->id,
 				"student_id" => $student->id,
@@ -93,20 +97,15 @@ class AttendanceController extends Controller {
 		return redirect(route("teacher.attendance.show", $course->id))->with("successUploadAttendance", "Attendance uploaded successfully!");
 	}
 
-	public function view($course_id) {
-		$course = Auth::user()->teached_courses->where('id', $course_id)->first();
-		return view('roles.teacher.attendance.view', [
-			'course' => $course
-		]);
-	}
-
+	// Edit attendance data page
 	public function edit($attendance_data_id){
-		$studentAttendance = StudentAttendance::where("id", $attendance_data_id)->first();
+		$Attendance = Attendance::where("id", $attendance_data_id)->first();
 		return view("roles.teacher.attendance.edit", [
-			"attendanceData" => StudentAttendance::where("created_at", $studentAttendance->created_at)->get()
+			"attendanceData" => Attendance::where("created_at", $Attendance->created_at)->get()
 		]);
 	}
 
+	// Update attendance data in the database
 	public function update(Request $request, $attendance_data_id){
 		$validatedData = $request->validate([
 			"checkbox_value.*" => "required",
@@ -115,41 +114,44 @@ class AttendanceController extends Controller {
 			"attendance_detail.*.required" => "The attendance detail field is required."
 		]);
 
-		$studentAttendance = StudentAttendance::where("id", $attendance_data_id)->first();
-		$existingAttendanceData = StudentAttendance::where("created_at", $studentAttendance->created_at)->get();
+		$Attendance = Attendance::where("id", $attendance_data_id)->first();
+		$existingAttendanceData = Attendance::where("created_at", $Attendance->created_at)->get();
 
 		$i = 0;
 		foreach($existingAttendanceData as $a){
 			$isAttend = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
 			$attendanceDetail = $validatedData["attendance_detail"][$i];
 
-			StudentAttendance::where("id", $a->id)->update(["is_attend" => $isAttend, "attendance_detail" => $attendanceDetail]);
+			Attendance::where("id", $a->id)->update(["is_attend" => $isAttend, "attendance_detail" => $attendanceDetail]);
 
 			$i++;
 		}
 
-		return redirect(route("teacher.attendance.show", $studentAttendance->course->id))->with("successEditAttendance", "Attendance edited successfully!");
+		return redirect(route("teacher.attendance.show", $Attendance->course->id))->with("successEditAttendance", "Attendance edited successfully!");
 	}
 
-	// Student only
+	// ===== STUDENT ====== //
+	// Showing all enrolled course to pick before continue
 	public function student_index(){
 		return view("roles.student.attendance.index", [
 			"courseStudents" => CourseStudent::where("user_id", Auth::user()->id)->get()
 		]);
 	}
 
+	// List of all attendance data in the selected course
 	public function student_show($course_id){
 		return view("roles.student.attendance.show", [
-			"attendances" => StudentAttendance::where("course_id", $course_id)->where("student_id", Auth::user()->id)->whereNot("attendance_detail", "Account disabled")->get(),
+			"attendances" => Attendance::where("course_id", $course_id)->where("student_id", Auth::user()->id)->whereNot("attendance_detail", "Account disabled")->get(),
 			"course" => Course::where("id", $course_id)->first()
 		]);
 	}
 
 
-	// For Admin
+	// ===== ADMIN ===== //
+	// Showing attendance data of a student in all enrolled course
 	public function admin_show($student_id, $course_id){
 		return view("roles.admin.student.atd-details", [
-			"attendances" => StudentAttendance::where("course_id", $course_id)->where("student_id", $student_id)->get(),
+			"attendances" => Attendance::where("course_id", $course_id)->where("student_id", $student_id)->get(),
 			"course" => Course::where("id", $course_id)->first(),
 			"student" => User::where("id", $student_id)->first()
 		]);

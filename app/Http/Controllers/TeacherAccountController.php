@@ -4,14 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Models\UserDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TeacherAccountController extends Controller {
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
+	// ===== ADMIN ===== //
+	// List of all active teachers in Sangnila LMS
 	public function index() {
 		$role = Role::where('role_name', 'Teacher')->first();
 		$users = $role->users()->get(); // Use get() to retrieve the users
@@ -20,32 +19,7 @@ class TeacherAccountController extends Controller {
 		]);
 	}
 
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create() {
-		//
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function store(Request $request) {
-		//
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
+	// Shows teacher's details
 	public function show($teacher_id) {
 		$role = Role::where('role_name', 'Teacher')->first();
 		$user = User::where('id', $teacher_id)->where('role_id', $role->id)->first();
@@ -54,37 +28,7 @@ class TeacherAccountController extends Controller {
 		]);
 	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($id) {
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, $id) {
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id) {
-		//
-	}
-
+	// Edit teacher input page
 	public function admin_edit($teacher_id){
 		$teacher = User::findOrFail($teacher_id);
 
@@ -93,18 +37,32 @@ class TeacherAccountController extends Controller {
 		]);
 	}
 
+	// Update the teacher data in the database
 	public function admin_update(Request $request, $teacher_id){
 		$teacher = User::findOrFail($teacher_id);
 
-		// $dataToUpdate = $request->except(["_token", "_method"]);
-
-		$dataToUpdate = $request->validate([
+		$validationRule = [
 			"full_name" => "required|min:3",
-			"email" => "required|email:dns"
-		]);
+			"phone_number" => "nullable",
+			"city_of_birth" => "nullable",
+			"date_of_birth" => "nullable",
+		];
 
-		User::where("id", $teacher->id)->update($dataToUpdate);
+		$validator = Validator::make($request->all(), $validationRule);
+
+        $validator->sometimes('phone_number', ['min:9', 'regex:/^(0|\+)([0-9]+[\s|-]?)+$/'], function ($input) {
+            return true;
+        });
+
+		$dataToUpdate = $validator->validate();
+
+		User::where("id", $teacher->id)->update(["full_name" => $dataToUpdate["full_name"]]);
+
+		unset($dataToUpdate["full_name"]);
+
+		UserDetail::where("user_id", $teacher_id)->update($dataToUpdate);
 
 		return redirect(route("admin.teacher.show", $teacher_id))->with("successUpdateTeacherData", "Successfully updated teacher data!");
 	}
+
 }

@@ -9,11 +9,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 
 class MaterialProgressController extends Controller {
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
+	// ===== TEACHER ===== //
+	// Showing list of student's course materials accessibility status (locked/unlocked) and create progress data for the student
 	public function index($student_id, $course_id) {
 		$course = Course::where('visibility', 'public')->where('id', $course_id)->first();
 		$role = Role::where('role_name', 'Student')->first();
@@ -45,13 +42,7 @@ class MaterialProgressController extends Controller {
 		]);
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
+	// Update the material accessibility in the database
 	public function update(Request $request, $progress_id) {
 		$status = $request->access === 'on' ? 'unlocked' : 'locked';
 		$materialProgress = MaterialProgress::where("id", $progress_id)->first();

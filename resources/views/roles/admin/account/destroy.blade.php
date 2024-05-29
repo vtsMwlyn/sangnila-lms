@@ -7,7 +7,7 @@
 @section("content")
 	<x-page-title>{{ __("Delete Account") }}</x-page-title>
 
-	<div class="bg-indigo-200 rounded-3xl p-5">
+	<div class="bg-indigo-200 rounded-3xl p-5 mt-10">
 		<form method="POST" action="{{ route('admin.account.destroy', $account->id) }}" class="bg-blue-800 rounded-2xl py-5 px-10">
 			@csrf
 			@method('delete')

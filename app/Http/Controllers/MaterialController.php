@@ -8,21 +8,8 @@ use App\Models\CourseTopic;
 use Illuminate\Http\Request;
 
 class MaterialController extends Controller {
-	// ========== Teacher ==========
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function teacher_index() {
-		//
-	}
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
+	// ===== TEACHER ===== //
+	// New material input page
 	public function teacher_create($topic_id) {
 		$topic = CourseTopic::where("id", $topic_id)->first();
 		return view('roles.teacher.topic-and-material.create-material', [
@@ -30,12 +17,7 @@ class MaterialController extends Controller {
 		]);
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
+	// Insert the new material data into database
 	public function teacher_store(Request $request, $topic_id) {
 		$topic = CourseTopic::where("id", $topic_id)->first();
 		$validatedData = $request->validate([
@@ -48,22 +30,7 @@ class MaterialController extends Controller {
 		return redirect(route('teacher.topic.show', [$topic->course->id, $topic->id]))->with("successUploadMaterial", "Successfully uploaded new material to the topic!");
 	}
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function teacher_show($id) {
-		//
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
+	// Edit material input page
 	public function teacher_edit($material_id) {
 		$material = CourseMaterial::findOrFail($material_id);
 		return view('roles.teacher.topic-and-material.edit-material', [
@@ -71,13 +38,7 @@ class MaterialController extends Controller {
 		]);
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
+	// Update the material data in the database
 	public function teacher_update(Request $request, $material_id) {
 		$material = CourseMaterial::findOrFail($material_id);
 		$data = $request->validate([
@@ -89,19 +50,14 @@ class MaterialController extends Controller {
 		return redirect(route('teacher.topic.show', [$material->course_topic->course->id, $material->course_topic->id]))->with("successEditMaterial", "Successfully update material data!");
 	}
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-
+	// Material deletion confirmation
 	public function teacher_delete($material_id) {
 		return view("roles.teacher.topic-and-material.delete-material-confirmation", [
 			"material" => CourseMaterial::where("id", $material_id)->first()
 		]);
 	}
 
+	// Remove material data from database
 	public function teacher_destroy($material_id) {
 		$material = CourseMaterial::where("id", $material_id)->first();
 
@@ -109,4 +65,5 @@ class MaterialController extends Controller {
 
 		return redirect(route("teacher.topic.show", [$material->course_topic->course->id, $material->course_topic->id]))->with("successDeleteMaterial", "Successfully deleted material from the topic!");
 	}
+
 }

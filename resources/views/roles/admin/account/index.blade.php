@@ -8,53 +8,53 @@
 	<x-page-title>{{ __("List of All Accounts") }}</x-page-title>
 
 	@if(session()->has("successCreateNewAccount"))
-		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+		<div class="w-full bg-green-500 px-5 py-3 rounded-lg">
 			<p class="text-green-900">{{ session("successCreateNewAccount") }}</p>
 		</div>
 	@elseif(session()->has("successDeleteAccount"))
-		<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
+		<div class="w-full bg-yellow-300 px-5 py-3 rounded-lg">
 			<p class="text-yellow-600" >{{ session("successDeleteAccount") }}</p>
 		</div>
 	@elseif(session()->has("successEnableAccount"))
-		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+		<div class="w-full bg-green-500 px-5 py-3 rounded-lg">
 			<p class="text-green-900">{{ session("successEnableAccount") }}</p>
 		</div>
 	@elseif(session()->has("successDisableAccount"))
-		<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
+		<div class="w-full bg-yellow-300 px-5 py-3 rounded-lg">
 			<p class="text-yellow-600" >{{ session("successDisableAccount") }}</p>
 		</div>
 	@endif
 
 	<div class="mb-5">
-		<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.create') }}"><i class="bi bi-plus-lg"></i> Create New Account</x-anchor-button>
+		<x-anchor-button class="bg-orange-500 mt-5" href="{{ route('admin.account.create') }}"><i class="bi bi-plus-lg"></i> Create New Account</x-anchor-button>
 	</div>
 
-	@if ($accounts->isNotEmpty())
+
 		<div class="overflow-x-auto rounded-3xl mt-8 px-10 py-5 bg-indigo-200 {{--overflow-y-auto--}}" {{-- style="max-height: 550px" --}}>
 			<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate;
 			border-spacing: 0 20px;">
 				<thead>
 					<tr class="bg-blue-900 text-white">
-						<th class="border-blue-400 font-bold px-4 py-5 rounded-l-xl">Full Name</th>
-						<th class="border-blue-400 font-bold px-4 py-5">Email</th>
-						<th class="border-blue-400 font-bold px-4 py-5">Role</th>
-						<th class="border-blue-400 font-bold px-4 py-5">Status</th>
-						<th class="border-blue-400 font-bold px-4 py-5 rounded-r-xl">Actions</th>
+						<th class="font-bold px-4 py-5 rounded-l-xl">Full Name</th>
+						<th class="font-bold px-4 py-5">Email</th>
+						<th class="font-bold px-4 py-5">Role</th>
+						<th class="font-bold px-4 py-5">Status</th>
+						<th class="font-bold px-4 py-5 rounded-r-xl">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
-					@if($accounts->count())
+					@if($accounts->count() > 1)
 						@foreach ($accounts as $account)
 							@if($account->id == auth()->user()->id)
 								@continue
 							@endif
 
 							<tr class="bg-blue-800 text-white">
-								<td class="border-blue-300 px-4 py-5 rounded-l-xl"><a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $account->full_name }}</a></td>
-								<td class="border-blue-300 px-4 py-5 text-center">{{ $account->email }}</td>
-								<td class="border-blue-300 px-4 py-5 text-center">{{ $account->role->role_name }}</td>
-								<td class="border-blue-300 px-4 py-5 text-center">{{ $account->status }}</td>
-								<td class="border-blue-300 px-4 py-5 rounded-r-xl">
+								<td class="px-4 py-5 rounded-l-xl"><a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $account->full_name }}</a></td>
+								<td class="px-4 py-5 text-center">{{ $account->email }}</td>
+								<td class="px-4 py-5 text-center">{{ $account->role->role_name }}</td>
+								<td class="px-4 py-5 text-center">{{ $account->status }}</td>
+								<td class="px-4 py-5 rounded-r-xl">
 									<div class="flex w-full items-stretch gap-1 justify-center">
 										<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.show', $account->id) }}">
 											<i class="bi bi-eye"></i>
@@ -82,9 +82,6 @@
 				</tbody>
 			</table>
 		</div>
-	@else
-		<div class="text-blue-900">N/A</div>
-	@endif
 
 	<x-page-title class="mt-10">{{ __("Disabled Accounts") }}</x-page-title>
 	<div class="overflow-x-auto rounded-lg mt-8 px-10 py-5 bg-indigo-200">
@@ -92,11 +89,11 @@
 		border-spacing: 0 20px;">
 			<thead>
 				<tr class="bg-blue-900 text-white">
-					<th class="border-blue-400 font-bold px-4 py-5 rounded-l-xl">Full Name</th>
-					<th class="border-blue-400 font-bold px-4 py-5">Email</th>
-					<th class="border-blue-400 font-bold px-4 py-5">Role</th>
-					<th class="border-blue-400 font-bold px-4 py-5">Status</th>
-					<th class="border-blue-400 font-bold px-4 py-5 rounded-r-xl">Actions</th>
+					<th class="font-bold px-4 py-5 rounded-l-xl">Full Name</th>
+					<th class="font-bold px-4 py-5">Email</th>
+					<th class="font-bold px-4 py-5">Role</th>
+					<th class="font-bold px-4 py-5">Status</th>
+					<th class="font-bold px-4 py-5 rounded-r-xl">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -107,11 +104,11 @@
 						@endif
 
 						<tr class="bg-blue-800 text-white">
-							<td class="border-blue-300 px-4 py-5 rounded-l-xl"><a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $account->full_name }}</a></td>
-							<td class="border-blue-300 px-4 py-5 text-center">{{ $account->email }}</td>
-							<td class="border-blue-300 px-4 py-5 text-center">{{ $account->role->role_name }}</td>
-							<td class="border-blue-300 px-4 py-5 text-center">{{ $account->status }}</td>
-							<td class="border-blue-300 px-4 py-5 rounded-r-xl">
+							<td class="px-4 py-5 rounded-l-xl"><a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $account->full_name }}</a></td>
+							<td class="px-4 py-5 text-center">{{ $account->email }}</td>
+							<td class="px-4 py-5 text-center">{{ $account->role->role_name }}</td>
+							<td class="px-4 py-5 text-center">{{ $account->status }}</td>
+							<td class="px-4 py-5 rounded-r-xl">
 								<div class="flex w-full items-stretch justify-center gap-1">
 									<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.show', $account->id) }}">
 										<i class="bi bi-eye"></i>

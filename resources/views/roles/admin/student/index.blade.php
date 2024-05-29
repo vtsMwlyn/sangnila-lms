@@ -7,19 +7,19 @@
 @section("content")
 	<x-page-title>{{ __("List of Active Students") }}</x-page-title>
 
-	@if ($students->isNotEmpty())
-		<div class="overflow-x-auto rounded-3xl mt-8 px-10 py-5 bg-indigo-200">
-			<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate;
-			border-spacing: 0 20px;">
-				<thead>
-					<tr class="bg-blue-900 text-white">
-						<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4 rounded-l-xl">Student Name</th>
-						<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4">Email</th>
-						<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4" >Enrolled Courses</th>
-						<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4 rounded-r-xl">Actions</th>
-					</tr>
-				</thead>
-				<tbody>
+	<div class="overflow-x-auto rounded-3xl mt-10 px-10 py-5 bg-indigo-200">
+		<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate;
+		border-spacing: 0 20px;">
+			<thead>
+				<tr class="bg-blue-900 text-white">
+					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4 rounded-l-xl">Student Name</th>
+					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4">Email</th>
+					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4" >Enrolled Courses</th>
+					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4 rounded-r-xl">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@if ($students->isNotEmpty())
 					@foreach ($students as $student)
 						@if($student->status == "disabled")
 							@continue
@@ -57,7 +57,10 @@
 															}
 														}
 
-														echo "[Progress: " . $count . "/" . /*count($all_progress_in_current_course)*/"x" . "]";
+														$cs_data = App\Models\CourseStudent::where("user_id", $student->id)->where("course_id", $course->id)->first();
+														$maximum_sessions = $cs_data->max_course_session;
+
+														echo "[Progress: " . $count . "/" . /*count($all_progress_in_current_course)*/ $maximum_sessions . "]";
 													@endphp
 												</span>
 											</li>
@@ -81,10 +84,14 @@
 							</td>
 						</tr>
 					@endforeach
-				</tbody>
-			</table>
-		</div>
-	@else
-		<div class="text-blue-900">N/A</div>
-	@endif
+				@else
+					<tr class="bg-white">
+						<td colspan="4" class="rounded-xl text-center px-4 py-5 sm:w-1/4">
+							- No students yet -
+						</td>
+					</tr>
+				@endif
+			</tbody>
+		</table>
+	</div>
 @endsection

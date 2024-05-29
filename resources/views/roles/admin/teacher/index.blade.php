@@ -7,7 +7,7 @@
 @section("content")
 	<x-page-title>{{ __("List of Active Teachers") }}</x-page-title>
 
-	<div class="overflow-x-auto rounded-3xl mt-5 px-10 py-5 bg-indigo-200">
+	<div class="overflow-x-auto rounded-3xl mt-10 px-10 py-5 bg-indigo-200">
 		<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate;
 		border-spacing: 0 20px;">
 			<thead>
@@ -57,7 +57,7 @@
 					</tr>
 				@empty
 					<tr>
-						<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-xl" colspan="3">N/A</td>
+						<td class="bg-white text-center px-4 py-5 sm:w-1/4 rounded-xl" colspan="4">- No teachers yet -</td>
 					</tr>
 				@endforelse
 			</tbody>
