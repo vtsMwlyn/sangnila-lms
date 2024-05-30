@@ -38,8 +38,52 @@ class StudentController extends Controller {
 	public function admin_index() {
 		$role = Role::where('role_name', 'Student')->first();
 		$students = $role->users;
+
+		$current_progress = [];
+		$student_max_progress = [];
+		$percentage = [];
+
+		foreach($students as $student){
+			$cp = [];
+			$smp = [];
+			$p = [];
+
+			foreach ($student->enrolled_courses as $course){
+				$all_progress_in_current_course = [];
+				foreach($student->progress as $pgr){
+					if($pgr->course_id == $course->id){
+						array_push($all_progress_in_current_course, $pgr);
+					}
+				}
+
+				$count = 0;
+				foreach($all_progress_in_current_course as $curr_pgr){
+					if($curr_pgr->status == "unlocked"){
+						$count++;
+					}
+				}
+
+				$cs_data = CourseStudent::where("user_id", $student->id)->where("course_id", $course->id)->first();
+				$maximum_sessions = $cs_data->max_course_session;
+
+				array_push($cp, $count);
+				array_push($smp, $maximum_sessions);
+
+				$percent = round((float)($count / $maximum_sessions) * 100);
+
+				array_push($p, $percent);
+			}
+
+			array_push($current_progress, $cp);
+			array_push($student_max_progress, $smp);
+			array_push($percentage, $p);
+		}
+
 		return view('roles.admin.student.index', [
-			'students' => $students
+			'students' => $students,
+			"current_progress" => $current_progress,
+			"student_max_progress" => $student_max_progress,
+			"percentage" => $percentage
 		]);
 	}
 
@@ -100,6 +144,25 @@ class StudentController extends Controller {
 			"assignment_if_full" => $count_assignment_all,
 			"done_assignment" => $count_assignment_col
 		]);
+	}
+
+
+	// Update student's max sessions in a course
+	public function admin_update_max_session(Request $request, $student_id, $course_id){
+		$request->validate(
+			[
+				"max_course_session" . $student_id . $course_id => "required|integer|min:1"
+			],
+			[
+				"max_course_session" . $student_id . $course_id . ".min" => "The number must be greater than 1."
+			]
+		);
+
+		CourseStudent::where("course_id", $course_id)->where("user_id", $student_id)->update(["max_course_session" => $request["max_course_session" . $student_id . $course_id]]);
+
+		$course = Course::where("id", $course_id)->first();
+
+		return back()->with("successUpdateMaxSession", "Student's max course session in course " . $course->course_name . " has been updated successfully!");
 	}
 
 	// Edit student data page

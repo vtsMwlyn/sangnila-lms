@@ -20,7 +20,7 @@
 			</thead>
 			<tbody>
 				@if ($students->isNotEmpty())
-					@foreach ($students as $student)
+					@foreach ($students as $index1 => $student)
 						@if($student->status == "disabled")
 							@continue
 						@endif
@@ -37,32 +37,22 @@
 							<td class="border-blue-300 px-6 py-5 sm:w-1/4">
 								@if($student->enrolled_courses->count())
 									<ul>
-										@foreach ($student->enrolled_courses as $course)
-											<li class="flex justify-between">
-												<span>{{ $course->course_name }}</span>
-												{{-- <span>[Progress: 0/0]</span> --}}
-												<span>
-													@php
-														$all_progress_in_current_course = [];
-														foreach($student->progress as $pgr){
-															if($pgr->course_id == $course->id){
-																array_push($all_progress_in_current_course, $pgr);
-															}
-														}
-
-														$count = 0;
-														foreach($all_progress_in_current_course as $curr_pgr){
-															if($curr_pgr->status == "unlocked"){
-																$count++;
-															}
-														}
-
-														$cs_data = App\Models\CourseStudent::where("user_id", $student->id)->where("course_id", $course->id)->first();
-														$maximum_sessions = $cs_data->max_course_session;
-
-														echo "[Progress: " . $count . "/" . /*count($all_progress_in_current_course)*/ $maximum_sessions . "]";
-													@endphp
-												</span>
+										@foreach ($student->enrolled_courses as $index2 => $course)
+											<li class="flex justify-between items-center my-2">
+												<div class="w-2/3">
+													<span>{{ $course->course_name }}</span>
+												</div>
+												<div class="w-1/3">
+													<div class="w-full bg-gray-200 rounded-lg h-4 overflow-hidden relative">
+														<div class="absolute w-full h-full text-green-950 flex justify-center items-center font-semibold">
+															{{ __($current_progress[$index1][$index2] . "/" . $student_max_progress[$index1][$index2]) }}
+														</div>
+														<div class="bg-green-700 h-full" style="width: {{ $percentage[$index1][$index2] }}%;"></div>
+													</div>
+													{{-- <span>
+														{{ __("[Progress: " . $current_progress[$index1][$index2] . "/" . $student_max_progress[$index1][$index2] . "]") }}
+													</span> --}}
+												</div>
 											</li>
 										@endforeach
 									</ul>

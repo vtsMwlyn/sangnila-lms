@@ -83,6 +83,7 @@ Route::prefix('/admin')
 				// List of active students
 				Route::get('/', [StudentController::class, 'admin_index'])->name('index');
 				Route::get('/{student_id}', [StudentController::class, 'admin_show'])->name('show')->whereNumber('student_id');
+				Route::post('/{student_id}/{course_id}/max-session-update', [StudentController::class, 'admin_update_max_session'])->name('max-session.update');
 
 				// Edit student data
 				Route::get('/{student_id}/edit', [StudentController::class, 'admin_edit'])->name('edit')->whereNumber('student_id');

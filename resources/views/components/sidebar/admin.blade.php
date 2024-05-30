@@ -7,8 +7,8 @@
 
 	<div class="md:flex flex-col items-stretch sticky top-0 py-10 hidden px-5 z-0" id="navigation">
 		<!-- Brand -->
-		<div class="w-full flex justify-center">
-			<a href="{{ route('home') }}">
+		<div class="w-full flex justify-center hover:scale-110 transition duration-600">
+			<a href="{{ route('home') }}" style="cursor: url({{ asset('img/cursor2.cur') }}), pointer;">
 				<img src={{ asset("img/AR.W.png") }} alt="logo" width="100px">
 			</a>
 		</div>

@@ -17,14 +17,6 @@ return new class extends Migration {
 			$table->string('role_name');
 			$table->timestamps();
 		});
-
-		// // Insert the constant values
-		// DB::table('roles')->insert([
-		// 	['role_name' => 'SysAdmin'],
-		// 	['role_name' => 'Admin'],
-		// 	['role_name' => 'Teacher'],
-		// 	['role_name' => 'Student'],
-		// ]);
 	}
 
 	/**

@@ -19,6 +19,10 @@
 		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
 			<p class="text-green-900">{{ session("successUpdateStudentData") }}</p>
 		</div>
+	@elseif(session()->has("successUpdateMaxSession"))
+		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+			<p class="text-green-900">{{ session("successUpdateMaxSession") }}</p>
+		</div>
 	@endif
 
 	<div class="p-10 bg-indigo-200 rounded-3xl mt-10">
@@ -99,13 +103,25 @@
 			<hr>
 			<div class="flex gap-x-10 overflow-x-auto bg-blue-900 rounded-b-xl mt-5">
 				@forelse ($student->enrolled_courses as $course)
-					<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-5 flex items-center justify-center gap-3 font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">
-						{{ $course->course_name }}
-						<a
-							href="{{ route('admin.student.unassign.delete', ['student_id' => $student->id, 'course_id' => $course->id]) }}"
-							class="">
-							<i class="bi bi-x-circle-fill"></i>
-						</a>
+					<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-5 flex flex-col justify-center items-start font-semibold" style="min-width: 300px; max-width: 300px; min-height: 150px;">
+						<h1 class="mb-5">{{ $course->course_name }}</h1>
+
+						<span class="text-white text-xs">{{ __("Maximum Sessions") }}</span>
+						<div class="flex w-full items-center justify-between mt-3">
+							<form action="{{ route("admin.student.max-session.update", [$student->id, $course->id]) }}" method="post" class="flex justify-start gap-2">
+								@csrf
+								<input type="number" name="{{ __('max_course_session' . $student->id . $course->id) }}" class="rounded-md shadow-sm border text-blue-800 @error('max_course_session' . $student->id . $course->id) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50  @else border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50 @enderror" style="width: 40%;" value="{{ $attendance_if_full[$loop->index] }}"  />
+								<x-button class="bg-orange-700 text-white"><i class="bi bi-pencil-square"></i></x-button>
+							</form>
+							<x-anchor-button
+								href="{{ route('admin.student.unassign.delete', ['student_id' => $student->id, 'course_id' => $course->id]) }}"
+								class="bg-white text-orange-500 text-xs">
+								Unassign
+							</x-anchor-button>
+						</div>
+						@error('max_course_session' . $student->id . $course->id)
+							<p class="text-red-500 mt-2 text-left">{{ $message }}</p>
+						@enderror
 					</div>
 				@empty
 					<span class="text-white">No courses enrolled</span>
