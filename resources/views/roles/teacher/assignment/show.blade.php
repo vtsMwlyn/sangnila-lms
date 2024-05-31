@@ -41,7 +41,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				@if (count($assignments))
+				@if ($assignments->count())
 					@foreach($assignments as $asg)
 						<tr>
 							<td class="border px-3"><a class="text-blue-700 font-bold" href="{{ route("teacher.assignment.check", $asg->id) }}">{{ $asg->title }}</a></td>

@@ -26,7 +26,7 @@
 		@for($i = count($attendanceData) - 1; $i >= 0; $i--)
 			<div class="border rounded-lg p-5 mb-5 mt-5">
 				<p>Date/Time: {{ $attendanceData[$i][0]->created_at }}</p>
-				<p>Uploaded by: {{ $attendanceData[$i][0]->teacher->full_name }}</p>
+				<p>Uploaded by: [Teacher Name]</p>
 				<div class="mt-5">
 					<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
 						href="{{ route("teacher.attendance.edit", $attendanceData[$i][0]->id) }}">
@@ -51,13 +51,13 @@
 									<tr>
 										<td class="border px-3">{{ $attendanceData[$i][$j]->student->full_name }}</td>
 										<td class="border px-3">
-											@if($attendanceData[$i][$j]->is_attend == 1)
+											@if($attendanceData[$i][$j]->attendance->is_attend == 1)
 												Attended
-											@elseif($attendanceData[$i][$j]->is_attend == 0)
+											@elseif($attendanceData[$i][$j]->attendance->is_attend == 0)
 												Absent
 											@endif
 										</td>
-										<td class="border px-3">{{ $attendanceData[$i][$j]->attendance_detail }}</td>
+										<td class="border px-3">{{ $attendanceData[$i][$j]->attendance->attendance_detail }}</td>
 									</tr>
 								@endif
 							@endfor

@@ -30,14 +30,12 @@ class Course extends Model {
 		return $this->hasMany(CourseSchedule::class);
 	}
 
-	# SOON (Portfolios)
-
-	public function attendances() {
-		return $this->hasMany(StudentAttendance::class, 'course_id');
+	public function attendances(){
+		return $this->hasMany(Attendance::class);
 	}
 
 	public function assignments(){
-		return $this->hasMany(StudentAssignment::class, "course_id");
+		return $this->hasMany(Assignment::class);
 	}
 
 }

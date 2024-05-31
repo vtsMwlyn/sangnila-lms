@@ -9,6 +9,7 @@ use App\Models\CourseStudent;
 use App\Models\Attendance;
 use App\Models\AttendanceByTeacher;
 use App\Models\MaterialProgress;
+use App\Models\StudentAttendance;
 use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Constraint\Count;
 
@@ -22,15 +23,16 @@ class AttendanceController extends Controller {
 	// Showing all attendance data in the selected course
 	public function show($course_id) {
 		$course = Auth::user()->teached_courses->where('id', $course_id)->first();
-		$attendances_in_the_course = Attendance::where("course_id", $course->id)->get();
+
+		$attendances_in_the_course = StudentAttendance::all();
 
 		$attendanceData = [];
 		if($attendances_in_the_course->count()){
 			$atd_group = [];
 
-			for($i = 0; $i < $attendances_in_the_course->count(); $i++){
+			foreach($attendances_in_the_course as $i => $atd){
 				if($i == 0){
-					array_push($atd_group, $attendances_in_the_course[0]);
+					array_push($atd_group, $atd);
 
 					continue;
 				}
@@ -77,18 +79,18 @@ class AttendanceController extends Controller {
 		foreach($course->students as $student){
 			$attendanceDetail = $validatedData["attendance_detail"][$i];
 
-			if($attendanceDetail == "Account disabled"){
-				$isAttend = 2;
-			} else {
-				$isAttend = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
-			}
+			$isAttend = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
 
-			Attendance::create([
-				"course_id" => $course->id,
+			$newAttendance = Attendance::create([
 				"teacher_id" => $teacher->id,
-				"student_id" => $student->id,
 				"is_attend" => $isAttend,
-				"attendance_detail" => $attendanceDetail
+				"attendance_detail" => $attendanceDetail,
+				"course_id" => $course->id
+			]);
+
+			StudentAttendance::create([
+				"student_id" => $student->id,
+				"attendance_id" => $newAttendance->id
 			]);
 
 			$i++;

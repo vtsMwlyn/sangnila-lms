@@ -24,7 +24,7 @@
 
 	@forelse ($assignments as $asg)
 		<div class="rounded-md w-full mt-5 my-5 p-5 border">
-			<h3 class="text-xl font-semibold">{{ $asg->title }}</h3>
+			<h3 class="text-xl font-semibold">{{ $asg->assignment->title }}</h3>
 			@if($asg->submissions->count())
 				<p class="text-green-700 mt-2 mb-2"><i class="bi bi-check-circle-fill"></i> Submitted</p>
 				<a class="text-blue-500" href="{{ route("student.assignment.detail", [$course->id, $asg->id]) }}">Submission history and feedback</a>
@@ -43,17 +43,17 @@
 
 			<div class="flex items-center gap-1 mt-4">
 				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-					href="{{ $asg->link }}">
+					href="{{ $asg->assignment->link }}">
 					Download
 				</a>
 				@if($asg->submissions->count())
 					<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-						href="{{ route("student.assignment.submit", [$course->id, $asg->id]) }}">
+						href="{{ route("student.assignment.submit", [$course->id, $asg->assignment->id]) }}">
 						New submission
 					</a>
 				@else
 					<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-						href="{{ route("student.assignment.submit", [$course->id, $asg->id]) }}">
+						href="{{ route("student.assignment.submit", [$course->id, $asg->assignment->id]) }}">
 						Upload
 					</a>
 				@endif

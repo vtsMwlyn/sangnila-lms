@@ -47,7 +47,7 @@ Route::prefix('/student')
 				Route::post("/{course_id}/{assignment_id}/submit", [AssignmentController::class, "student_store"])->name("store");
 
 				// Check submission history
-				Route::get("/{course_id}/{assignment_id}/detail", [AssignmentController::class, "student_submission_detail"])->name("detail");
+				Route::get("/{course_id}/{student_assignment_id}/detail", [AssignmentController::class, "student_submission_detail"])->name("detail");
 
 			}
 		);

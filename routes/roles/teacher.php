@@ -149,9 +149,9 @@ Route::prefix('/teacher')
 				Route::get("/{assignment_id}/submission", [AssignmentController::class, "teacher_check_submission"])->name("check");
 
 				// Check assignment submissions history for the selected students and add/check feedback to submissions
-				Route::get("/{submission_id}/{student_id}/history", [AssignmentController::class, "teacher_check_history"])->name("submission-history");
+				Route::get("/{student_assignment_id}/{student_id}/history", [AssignmentController::class, "teacher_check_history"])->name("submission-history");
 				Route::post("/{submission_id}/{student_id}/history", [AssignmentController::class, "teacher_feedback"])->name("feedback");
-				
+
 			}
 		);
 

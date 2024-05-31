@@ -110,7 +110,7 @@
 						<div class="flex w-full items-center justify-between mt-3">
 							<form action="{{ route("admin.student.max-session.update", [$student->id, $course->id]) }}" method="post" class="flex justify-start gap-2">
 								@csrf
-								<input type="number" name="{{ __('max_course_session' . $student->id . $course->id) }}" class="rounded-md shadow-sm border text-blue-800 @error('max_course_session' . $student->id . $course->id) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50  @else border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50 @enderror" style="width: 40%;" value="{{ $attendance_if_full[$loop->index] }}"  />
+								<input type="number" name="{{ __('max_course_session' . $student->id . $course->id) }}" class="rounded-md shadow-sm border text-blue-800 @error('max_course_session' . $student->id . $course->id) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50  @else border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50 @enderror" style="width: 40%;" value="{{ /*$attendance_if_full[$loop->index]*/20 }}"  />
 								<x-button class="bg-orange-700 text-white"><i class="bi bi-pencil-square"></i></x-button>
 							</form>
 							<x-anchor-button
@@ -143,14 +143,14 @@
 						@for($i = 0; $i < $student->enrolled_courses->count(); $i++)
 							<tr class="bg-blue-800 text-white">
 								<td class="px-5 py-5 rounded-l-xl text-center">{{ $student->enrolled_courses[$i]->course_name }}</td>
-								<td class="px-5 py-5">
+								{{-- <td class="px-5 py-5">
 									<div class="flex w-full items-center justify-center gap-3">
 										<span>{{ $attended[$i] }}/{{ $attendance_if_full[$i] }} attended</span>
 										<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.atd-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
 											Details
 										</x-anchor-button>
 									</div>
-								</td>
+								</td> --}}
 								<td class="px-5 py-5 rounded-r-xl">
 									<div class="flex w-full items-center justify-center gap-3">
 										<span>{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done</span>
