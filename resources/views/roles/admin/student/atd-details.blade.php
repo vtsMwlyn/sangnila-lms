@@ -12,7 +12,7 @@
 		border-spacing: 0 20px;">
 			<thead>
 				<tr class="text-white bg-blue-900">
-					<th class="px-3 py-5 rounded-l-xl">Date and time</th>
+					<th class="px-3 py-5 rounded-l-xl">Date</th>
 					<th class="px-3 py-5">Attendance status</th>
 					<th class="px-3 py-5">Attendance detail</th>
 					<th class="px-3 py-5 rounded-r-xl">Uploaded by</th>
@@ -28,7 +28,7 @@
 							<td class="border border-blue-950 px-3 py-5 text-center rounded-l-xl">{{ $attendance->created_at }}</td>
 							<td class="border border-blue-950 px-3 py-5 text-center font-bold">@if($attendance->is_attend == 1) Present @else Absent @endif</td>
 							<td class="border border-blue-950 px-3 py-5 text-center">{{ $attendance->attendance_detail }}</td>
-							<td class="border border-blue-950 px-3 py-5 text-center rounded-r-xl">{{ $attendance->teacher->full_name }}</td>
+							<td class="border border-blue-950 px-3 py-5 text-center rounded-r-xl">{{ $attendance->attendance->posted_by->full_name }}</td>
 						</tr>
 					@endforeach
 				@else

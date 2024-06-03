@@ -99,20 +99,20 @@ class AttendanceController extends Controller {
 			"attendance_detail.*.required" => "The attendance detail field is required."
 		]);
 
-		$Attendance = Attendance::where("id", $attendance_data_id)->first();
-		$existingAttendanceData = Attendance::where("created_at", $Attendance->created_at)->get();
+		$attendance = Attendance::where("id", $attendance_data_id)->first();
+		$existingAttendanceData = $attendance->student_attendances;
 
 		$i = 0;
 		foreach($existingAttendanceData as $a){
 			$isAttend = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
 			$attendanceDetail = $validatedData["attendance_detail"][$i];
 
-			Attendance::where("id", $a->id)->update(["is_attend" => $isAttend, "attendance_detail" => $attendanceDetail]);
+			StudentAttendance::where("id", $a->id)->update(["is_attend" => $isAttend, "attendance_detail" => $attendanceDetail]);
 
 			$i++;
 		}
 
-		return redirect(route("teacher.attendance.show", $Attendance->course->id))->with("successEditAttendance", "Attendance edited successfully!");
+		return redirect(route("teacher.attendance.show", $attendance->course_id))->with("successEditAttendance", "Attendance edited successfully!");
 	}
 
 	// ===== STUDENT ====== //
@@ -125,9 +125,21 @@ class AttendanceController extends Controller {
 
 	// List of all attendance data in the selected course
 	public function student_show($course_id){
+		$student_id = Auth::user()->id;
+		$attendances = StudentAttendance::where("user_id", $student_id)->whereNot("attendance_detail", "Account disabled")->get();
+		$course = Course::where("id", $course_id)->first();
+		$student = User::where("id", $student_id)->first();
+
+		$student_attendances = [];
+		foreach($attendances as $atd){
+			if($atd->attendance->course_id == $course->id){
+				array_push($student_attendances, $atd);
+			}
+		}
+
 		return view("roles.student.attendance.show", [
-			"attendances" => Attendance::where("course_id", $course_id)->where("student_id", Auth::user()->id)->whereNot("attendance_detail", "Account disabled")->get(),
-			"course" => Course::where("id", $course_id)->first()
+			"attendances" => $student_attendances,
+			"course" => $course
 		]);
 	}
 
@@ -135,10 +147,21 @@ class AttendanceController extends Controller {
 	// ===== ADMIN ===== //
 	// Showing attendance data of a student in all enrolled course
 	public function admin_show($student_id, $course_id){
+		$attendances = StudentAttendance::where("user_id", $student_id)->whereNot("attendance_detail", "Account disabled")->get();
+		$course = Course::where("id", $course_id)->first();
+		$student = User::where("id", $student_id)->first();
+
+		$student_attendances = [];
+		foreach($attendances as $atd){
+			if($atd->attendance->course_id == $course->id){
+				array_push($student_attendances, $atd);
+			}
+		}
+
 		return view("roles.admin.student.atd-details", [
-			"attendances" => Attendance::where("course_id", $course_id)->where("student_id", $student_id)->get(),
-			"course" => Course::where("id", $course_id)->first(),
-			"student" => User::where("id", $student_id)->first()
+			"attendances" => $attendances,
+			"course" => $course,
+			"student" => $student
 		]);
 	}
 }

@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Course;
-use App\Models\UserDetail;
-use Illuminate\Http\Request;
 use App\Models\Assignment;
 use App\Models\Attendance;
-use App\Models\AssignmentSubmission;
+use App\Models\UserDetail;
+use Illuminate\Http\Request;
 use App\Models\CourseStudent;
 use App\Models\StudentAssignment;
+use App\Models\StudentAttendance;
+use App\Models\AssignmentSubmission;
 use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller {
@@ -117,38 +118,34 @@ class StudentController extends Controller {
 			array_push($count_assignment_col, $n_asg_subm);
 		}
 
-		//Counting attended sessions !!! JANGAN DIHAPUS
-		// $students_attendances = [];
-		// $count_full_attendance = [];
+		//Counting attended sessions
+		$count_curr_attendance = [];
+		$count_full_attendance = [];
 
-		// foreach($student->enrolled_courses as $course){
-		// 	$attendance_data_of_student = Attendance::where("course_id", $course->id)->where("student_id", $student->id)->whereNot("attendance_detail", "Account disabled")->get();
+		foreach($student->enrolled_courses as $course){
+			$attendance_data_in_the_course = Attendance::where("course_id", $course->id)->get();
+			array_push($count_full_attendance, $attendance_data_in_the_course->count());
 
-		// 	$cs = CourseStudent::where("user_id", $student_id)->where("course_id", $course->id)->first();
-		// 	$maximum_sessions = $cs->max_course_session;
+			$n = 0;
+			foreach($attendance_data_in_the_course as $atd){
+				$existingAttendances = $atd->student_attendances;
 
-		// 	array_push($count_full_attendance, $maximum_sessions);
-		// 	array_push($students_attendances, $attendance_data_of_student);
-		// }
+				foreach($existingAttendances as $sa){
+					if($sa->user_id == $student_id && $sa->is_attend == 1){
+						$n++;
+						break;
+					}
+				}
+			}
 
-		// $count_attendance_col = [];
-		// foreach($students_attendances as $atd){
-		// 	$count_attendance = 0;
-		// 	foreach($atd as $a){
-		// 		if($a->is_attend){
-		// 			$count_attendance++;
-		// 		}
-		// 	}
-
-		// 	array_push($count_attendance_col, $count_attendance);
-		// 	// array_push($count_full_attendance, $atd->count());
-		// }
+			array_push($count_curr_attendance, $n);
+		}
 
 		//Return view with data
 		return view('roles.admin.student.show', [
 			'student' => $student,
-			"attendance_if_full" => /*$count_full_attendance*/[],
-			"attended" => /*$count_attendance_col*/[],
+			"attendance_if_full" => $count_full_attendance,
+			"attended" => $count_curr_attendance,
 			"assignment_if_full" => $count_assignment_all,
 			"done_assignment" => $count_assignment_col
 		]);
