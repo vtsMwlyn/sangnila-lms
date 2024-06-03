@@ -24,30 +24,7 @@ class AttendanceController extends Controller {
 	public function show($course_id) {
 		$course = Auth::user()->teached_courses->where('id', $course_id)->first();
 
-		$attendances_in_the_course = StudentAttendance::all();
-
-		$attendanceData = [];
-		if($attendances_in_the_course->count()){
-			$atd_group = [];
-
-			foreach($attendances_in_the_course as $i => $atd){
-				if($i == 0){
-					array_push($atd_group, $atd);
-
-					continue;
-				}
-
-				if($attendances_in_the_course[$i]->created_at != $attendances_in_the_course[$i - 1]->created_at){
-					array_push($attendanceData, $atd_group);
-
-					$atd_group = [];
-				}
-
-				array_push($atd_group, $attendances_in_the_course[$i]);
-			}
-
-			array_push($attendanceData, $atd_group);
-		}
+		$attendanceData = Attendance::where("course_id", $course->id)->latest()->get();
 
 		return view('roles.teacher.attendance.show', [
 			'attendanceData' => $attendanceData,
@@ -67,7 +44,8 @@ class AttendanceController extends Controller {
 	public function store(Request $request, $course_id) {
 		$validatedData = $request->validate([
 			"checkbox_value.*" => "required",
-			"attendance_detail.*" => "required|min:3"
+			"attendance_detail.*" => "required|min:3",
+			"attendance_date" => "required"
 		], [
 			"attendance_detail.*.required" => "The attendance detail field is required."
 		]);
@@ -75,22 +53,26 @@ class AttendanceController extends Controller {
 		$course = Course::where("id", $course_id)->first();
 		$teacher = Auth::user();
 
+		$identifier = $course->id . "_" . $teacher->id . "/" . round(microtime(true) * 1000);
+
+		$newAttendance = Attendance::create([
+			"teacher_id" => $teacher->id,
+			"course_id" => $course->id,
+			"attendance_date" => $validatedData["attendance_date"],
+			"attendance_identifier" => $identifier
+		]);
+
 		$i = 0;
 		foreach($course->students as $student){
 			$attendanceDetail = $validatedData["attendance_detail"][$i];
 
 			$isAttend = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
 
-			$newAttendance = Attendance::create([
-				"teacher_id" => $teacher->id,
+			StudentAttendance::create([
+				"user_id" => $student->id,
+				"attendance_id" => $newAttendance->id,
 				"is_attend" => $isAttend,
 				"attendance_detail" => $attendanceDetail,
-				"course_id" => $course->id
-			]);
-
-			StudentAttendance::create([
-				"student_id" => $student->id,
-				"attendance_id" => $newAttendance->id
 			]);
 
 			$i++;
@@ -101,9 +83,10 @@ class AttendanceController extends Controller {
 
 	// Edit attendance data page
 	public function edit($attendance_data_id){
-		$Attendance = Attendance::where("id", $attendance_data_id)->first();
+		$attendance = Attendance::where("id", $attendance_data_id)->first();
+
 		return view("roles.teacher.attendance.edit", [
-			"attendanceData" => Attendance::where("created_at", $Attendance->created_at)->get()
+			"attendanceData" => $attendance
 		]);
 	}
 

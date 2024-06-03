@@ -13,7 +13,7 @@ class StudentAttendance extends Model
 
 	// Relationships
 	public function student(){
-		return $this->belongsTo(User::class, "student_id");
+		return $this->belongsTo(User::class, "user_id");
 	}
 
 	public function course(){

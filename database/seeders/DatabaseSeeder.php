@@ -2,20 +2,79 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
+use App\Models\User;
 use App\Models\Course;
-use App\Models\CourseMaterial;
+use App\Models\UserDetail;
+use App\Models\CourseTopic;
 use App\Models\CourseStudent;
 use App\Models\CourseTeacher;
-use App\Models\CourseTopic;
-use App\Models\Role;
-use App\Models\StudentAssignment;
-use App\Models\User;
-use App\Models\UserDetail;
+use App\Models\CourseMaterial;
 use Illuminate\Database\Seeder;
+use App\Models\MaterialProgress;
+use App\Models\StudentAssignment;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
+	private function newUser($email, $full_name, $role_id){
+		$user = User::create([
+			"full_name" => $full_name,
+			"email" => $email,
+			"password" => bcrypt("password"),
+			"email_verified_at" => now(),
+			"role_id" => $role_id,
+			"status" => "enabled"
+		]);
+
+		UserDetail::create(["user_id" => $user->id]);
+	}
+
+	private function assignStudent($student_name, $courses, $max_session){
+		$student = User::where("role_id", 3)->where("full_name", $student_name)->first();
+
+		foreach($courses as $c){
+			$course = Course::where("course_name", $c)->first();
+
+			CourseStudent::create([
+				"course_id" => $course->id,
+				"user_id" => $student->id,
+				"max_course_session" => $max_session
+			]);
+
+			foreach ($course->course_topics as $index1 => $topic) {
+				foreach($topic->course_materials as $index2 => $material) {
+					$newData = [
+						'student_id' => $student->id,
+						'material_id' => $material->id,
+						'course_id' => $course->id,
+					];
+
+					if($index1 == 0 && $index2 == 0){
+						$newData['status'] = 'unlocked';
+					} else {
+						$newData['status'] = 'locked';
+					}
+
+					MaterialProgress::create($newData);
+				}
+			}
+		}
+	}
+
+	private function assignTeacher($teacher_name, $courses){
+		$teacher = User::where("role_id", 2)->where("full_name", $teacher_name)->first();
+
+		foreach($courses as $c){
+			$course = Course::where("course_name", $c)->first();
+
+			CourseTeacher::create([
+				"user_id" => $teacher->id,
+				"course_id" => $course->id
+			]);
+		}
+	}
+
     public function run()
     {
 		//Generate Users and UserDetails
@@ -24,26 +83,45 @@ class DatabaseSeeder extends Seeder
 		Role::create(["role_name" => "Student"]);
 		// Role::create(["role_name" => "Parent"]); //postponed
 
-        User::create(["email" => "admin.sangnila@gmail.com", "full_name" => "Admin", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 1, "status" => "enabled"]); UserDetail::create(["user_id" => 1]);
+		// /*COMMENT BELOW COMMANDS TO SET THE APP DATA TO COMPLETELY EMPTY*/
 
-		/*COMMENT BELOW COMMANDS TO SET THE APP DATA TO COMPLETELY EMPTY*/
-		User::create(["email" => "hari.sangnila@gmail.com", "full_name" => "Hari", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 2, "status" => "enabled"]); UserDetail::create(["user_id" => 2]);
-		User::create(["email" => "benita.sangnila@gmail.com", "full_name" => "Benita", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 2, "status" => "enabled"]); UserDetail::create(["user_id" => 3]);
-		User::create(["email" => "emily.sangnila@gmail.com", "full_name" => "Emily", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 2, "status" => "enabled"]); UserDetail::create(["user_id" => 4]);
+		$this->newUser("vannestheo.sangnila@gmail.com", "Vannes Theo Sudarsono", 1);
+		$this->newUser("immanuelgiovano.sangnila@gmail.com", "Immanuel Giovano", 1);
+		$this->newUser("jessica.sangnila@gmail.com", "Jessica", 1);
+		$this->newUser("victor.sangnila@gmail.com", "Victor", 1);
+		$this->newUser("feby.sangnila@gmail.com", "Feby", 1);
+		$this->newUser("tiwi.sangnila@gmail.com", "Pratiwi", 1);
 
-		User::create(["email" => "jack.sangnila@gmail.com", "full_name" => "Jack", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]); UserDetail::create(["user_id" => 5]);
-		User::create(["email" => "jillian.sangnila@gmail.com", "full_name" => "Jillian P. Tanuwijaya", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]); UserDetail::create(["user_id" => 6]);
-		User::create(["email" => "jocheli.sangnila@gmail.com", "full_name" => "Jocheli Kensi Budianti", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]); UserDetail::create(["user_id" => 7]);
-		User::create(["email" => "bellrich.sangnila@gmail.com", "full_name" => "Bellrich Kevin Tjahyadi", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]); UserDetail::create(["user_id" => 8]);
-		User::create(["email" => "batara.sangnila@gmail.com", "full_name" => "Batara Feodore Setiawan", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]); UserDetail::create(["user_id" => 9]);
-		User::create(["email" => "benedict.sangnila@gmail.com", "full_name" => "Benedict Jacob", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]); UserDetail::create(["user_id" => 10]);
+		$this->newUser("hari.sangnila@gmail.com", "Hari", 2);
+		$this->newUser("lgaby.sangnila@gmail.com", "Gaby", 2);
+		$this->newUser("iswansudaryo.sangnila@gmail.com", "Iswan Sudaryo", 2);
+		$this->newUser("vincent.sangnila@gmail.com", "Vincent", 2);
 
-		User::create(["email" => "vannestheo.sangnila@gmail.com", "full_name" => "Vannes Theo Sudarsono", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 1, "status" => "enabled"]); UserDetail::create(["user_id" => 11]);
-		User::create(["email" => "immanuelgiovano.sangnila@gmail.com", "full_name" => "Immanuel Giovano", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 1, "status" => "enabled"]); UserDetail::create(["user_id" => 12]);
-		User::create(["email" => "jessica.sangnila@gmail.com", "full_name" => "Jessica", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 1, "status" => "enabled"]); UserDetail::create(["user_id" => 13]);
-		User::create(["email" => "victor.sangnila@gmail.com", "full_name" => "Victor", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 1, "status" => "enabled"]); UserDetail::create(["user_id" => 14]);
-		User::create(["email" => "feby.sangnila@gmail.com", "full_name" => "Feby", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 1, "status" => "enabled"]); UserDetail::create(["user_id" => 15]);
-		User::create(["email" => "pratiwi.sangnila@gmail.com", "full_name" => "Pratiwi", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 1, "status" => "enabled"]); UserDetail::create(["user_id" => 16]);
+		/*Hari's students: Digital Drawing, Roblox*/
+		$this->newUser("jack.sangnila@gmail.com", "Jack", 3);
+		$this->newUser("jillian.sangnila@gmail.com", "Jillian P. Tanuwijaya", 3);
+		$this->newUser("jocheli.sangnila@gmail.com", "Jocheli Kensi Budianti", 3);
+
+		$this->newUser("bellrich.sangnila@gmail.com", "Bellrich Kevin Tjahyadi", 3);
+		$this->newUser("batara.sangnila@gmail.com", "Batara Feodore Setiawan", 3);
+		$this->newUser("benedict.sangnila@gmail.com", "Benedict Jacob", 3);
+
+		/*Gaby's students: Digital Drawing*/
+		$this->newUser("melly.sangnila@gmail.com", "Melly Tanto", 3);
+		$this->newUser("zhafira.sangnila@gmail.com", "Zhafira Jasmine", 3);
+		$this->newUser("vanya.sangnila@gmail.com", "Vanya Farelia", 3);
+
+		/*Iswan's students: 3D Modelling*/
+		$this->newUser("louisha.sangnila@gmail.com", "Louisha Annabelle", 3);
+		$this->newUser("gayle.sangnila@gmail.com", "Gayle Farrel Patria", 3);
+		$this->newUser("angela.sangnila@gmail.com", "Angela Nathania", 3);
+		$this->newUser("balya.sangnila@gmail.com", "Balya Malkan Mahyuzar", 3);
+		$this->newUser("alvin.sangnila@gmail.com", "Alvin Edward", 3);
+
+		/*Vincent's students: 3D Modelling*/
+		$this->newUser("philia.sangnila@gmail.com", "Philia Valeraine Alverna", 3);
+		$this->newUser("kensi.sangnila@gmail.com", "Kensi Sinclair", 3);
+		$this->newUser("giselle.sangnila@gmail.com", "Giselle Saputra", 3);
 
 		//Generate Courses
 		Course::create([
@@ -171,17 +249,35 @@ class DatabaseSeeder extends Seeder
 			"link" => "https://www.google.com/"
 		]);
 
-		//Generate Course Assignments to Teachers and Students
-		CourseTeacher::create(["course_id" => 2, "user_id" => 2]);
-		CourseTeacher::create(["course_id" => 4, "user_id" => 2]);
-		CourseTeacher::create(["course_id" => 1, "user_id" => 3]);
-		CourseTeacher::create(["course_id" => 3, "user_id" => 4]);
 
-		CourseStudent::create(["course_id" => 2, "user_id" => 5, "max_course_session" => 15]);
-		CourseStudent::create(["course_id" => 2, "user_id" => 6, "max_course_session" => 20]);
-		CourseStudent::create(["course_id" => 2, "user_id" => 7, "max_course_session" => 20]);
-		CourseStudent::create(["course_id" => 4, "user_id" => 8, "max_course_session" => 15]);
-		CourseStudent::create(["course_id" => 4, "user_id" => 9, "max_course_session" => 30]);
-		CourseStudent::create(["course_id" => 4, "user_id" => 10, "max_course_session" => 40]);
+		// Assign students to courses
+		$this->assignStudent("Jack", ["Digital Drawing"], 20);
+		$this->assignStudent("Jillian P. Tanuwijaya", ["Digital Drawing"], 20);
+		$this->assignStudent("Jocheli Kensi Budianti", ["Digital Drawing"], 20);
+
+		$this->assignStudent("Bellrich Kevin Tjahyadi", ["Roblox"], 20);
+		$this->assignStudent("Batara Feodore Setiawan", ["Roblox"], 20);
+		$this->assignStudent("Benedict Jacob", ["Roblox"], 20);
+
+		$this->assignStudent("Melly Tanto", ["Digital Drawing"], 20);
+		$this->assignStudent("Zhafira Jasmine", ["Digital Drawing"], 20);
+		$this->assignStudent("Vanya Farelia", ["Digital Drawing"], 20);
+
+		$this->assignStudent("Louisha Annabelle", ["3D Modelling"], 20);
+		$this->assignStudent("Gayle Farrel Patria", ["3D Modelling"], 20);
+		$this->assignStudent("Angela Nathania", ["3D Modelling"], 20);
+		$this->assignStudent("Balya Malkan Mahyuzar", ["3D Modelling"], 20);
+		$this->assignStudent("Alvin Edward", ["3D Modelling"], 20);
+
+		$this->assignStudent("Philia Valeraine Alverna", ["3D Modelling"], 20);
+		$this->assignStudent("Kensi Sinclair", ["3D Modelling"], 20);
+		$this->assignStudent("Giselle Saputra", ["3D Modelling"], 20);
+
+
+		// Assign teachers to courses
+		$this->assignTeacher("Hari", ["Digital Drawing", "Roblox"]);
+		$this->assignTeacher("Gaby", ["Digital Drawing"]);
+		$this->assignTeacher("Iswan Sudaryo", ["3D Modelling"]);
+		$this->assignTeacher("Vincent", ["3D Modelling"]);
     }
 }
