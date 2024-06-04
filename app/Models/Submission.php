@@ -11,7 +11,11 @@ class Submission extends Model
 
 	protected $guarded = ["id"];
 
-	public function student_assignment(){
-		return $this->belongsTo(StudentAssignment::class);
+	public function student(){
+		return $this->belongsTo(User::class, "student_id");
+	}
+
+	public function assignment(){
+		return $this->belongsTo(Assignment::class);
 	}
 }

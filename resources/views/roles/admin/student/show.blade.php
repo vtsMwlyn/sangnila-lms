@@ -110,7 +110,7 @@
 						<div class="flex w-full items-center justify-between mt-3">
 							<form action="{{ route("admin.student.max-session.update", [$student->id, $course->id]) }}" method="post" class="flex justify-start gap-2">
 								@csrf
-								<input type="number" name="{{ __('max_course_session' . $student->id . $course->id) }}" class="rounded-md shadow-sm border text-blue-800 @error('max_course_session' . $student->id . $course->id) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50  @else border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50 @enderror" style="width: 40%;" value="{{ /*$attendance_if_full[$loop->index]*/20 }}"  />
+								<input type="number" name="{{ __('max_course_session' . $student->id . $course->id) }}" class="rounded-md shadow-sm border text-blue-800 @error('max_course_session' . $student->id . $course->id) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50  @else border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50 @enderror" style="width: 40%;" value="{{ App\Models\CourseStudent::where("course_id", $course->id)->where("user_id", $student->id)->first()->max_course_session }}"  />
 								<x-button class="bg-orange-700 text-white"><i class="bi bi-pencil-square"></i></x-button>
 							</form>
 							<x-anchor-button

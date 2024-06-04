@@ -75,6 +75,15 @@ class DatabaseSeeder extends Seeder
 		}
 	}
 
+	private function addTopicAndMaterial($course_name, $topic_name, $materials){
+		$course = Course::where("course_name", $course_name)->first();
+		$topic = CourseTopic::create(["course_id" => $course->id, "title" => $topic_name]);
+
+		foreach($materials as $material){
+			CourseMaterial::create(["course_topic_id" => $topic->id, "title" => $material, "link" => "https://www.google.com/"]);
+		}
+	}
+
     public function run()
     {
 		//Generate Users and UserDetails
@@ -102,23 +111,31 @@ class DatabaseSeeder extends Seeder
 		$this->newUser("jillian.sangnila@gmail.com", "Jillian P. Tanuwijaya", 3);
 		$this->newUser("jocheli.sangnila@gmail.com", "Jocheli Kensi Budianti", 3);
 
-		$this->newUser("bellrich.sangnila@gmail.com", "Bellrich Kevin Tjahyadi", 3);
 		$this->newUser("batara.sangnila@gmail.com", "Batara Feodore Setiawan", 3);
+		$this->newUser("bellrich.sangnila@gmail.com", "Bellrich Kevin Tjahyadi", 3);
 		$this->newUser("benedict.sangnila@gmail.com", "Benedict Jacob", 3);
 
 		/*Gaby's students: Digital Drawing*/
 		$this->newUser("melly.sangnila@gmail.com", "Melly Tanto", 3);
 		$this->newUser("zhafira.sangnila@gmail.com", "Zhafira Jasmine", 3);
 		$this->newUser("vanya.sangnila@gmail.com", "Vanya Farelia", 3);
+		$this->newUser("freya.sangnila@gmail.com", "Freya Pramudia", 3);
+		$this->newUser("kenzie.sangnila@gmail.com", "Kenzie Gautama Dirgantara", 3);
 
-		/*Iswan's students: 3D Modelling*/
+		/*Iswan's students: 3D Modelling, Concept Art*/
 		$this->newUser("louisha.sangnila@gmail.com", "Louisha Annabelle", 3);
 		$this->newUser("gayle.sangnila@gmail.com", "Gayle Farrel Patria", 3);
 		$this->newUser("angela.sangnila@gmail.com", "Angela Nathania", 3);
 		$this->newUser("balya.sangnila@gmail.com", "Balya Malkan Mahyuzar", 3);
 		$this->newUser("alvin.sangnila@gmail.com", "Alvin Edward", 3);
 
-		/*Vincent's students: 3D Modelling*/
+		$this->newUser("ethan.sangnila@gmail.com", "Ethan Alexander Irawan", 3);
+		$this->newUser("jezriel.sangnila@gmail.com", "Jezriel Connery", 3);
+		$this->newUser("martha.sangnila@gmail.com", "Martha Theresia Ramlie", 3);
+		$this->newUser("janicelyn.sangnila@gmail.com", "Janicelyn Daviena Godarma", 3);
+		$this->newUser("grace.sangnila@gmail.com", "Grace Devana Kusnandar", 3);
+
+		/*Vincent's students: 3D Modelling, 2D Modelling*/
 		$this->newUser("philia.sangnila@gmail.com", "Philia Valeraine Alverna", 3);
 		$this->newUser("kensi.sangnila@gmail.com", "Kensi Sinclair", 3);
 		$this->newUser("giselle.sangnila@gmail.com", "Giselle Saputra", 3);
@@ -129,10 +146,6 @@ class DatabaseSeeder extends Seeder
 			"course_description" => "This course serves as a comprehensive introduction to the exciting world of 3D modeling. Whether you're a beginner looking to delve into the realm of digital design or an enthusiast seeking to enhance your skills, this course provides a solid foundation in the principles and techniques of 3D modeling.  Throughout the course, students will explore the fundamental concepts of 3D modeling, learning how to create three-dimensional objects and environments using industry-standard software tools."
 		]);
 		Course::create([
-			"course_name" => "Roblox",
-			"course_description" => "Learn to create various of games using Roblox game engine, designed for easily understandable by kids. It's a good opportunity to learn game development with Roblox before getting started with more advanced game development technologies such as Unity and Unreal game engine."
-		]);
-		Course::create([
 			"course_name" => "Concept Art",
 			"course_description" => "This is the description of course Concept Art. You can modify or add anything here."
 		]);
@@ -140,135 +153,155 @@ class DatabaseSeeder extends Seeder
 			"course_name" => "Digital Drawing",
 			"course_description" => "This is the description of course Digital Drawing. You can modify or add anything here."
 		]);
-
-
-		//Generate Topics
-		CourseTopic::create(["title" => "TOPIC 01 - Introduction to Concept Art", "course_id" => 3]);
-		CourseTopic::create(["title" => "TOPIC 02 - Software Installation and Test Run", "course_id" => 3]);
-
-		CourseTopic::create(["title" => "Software Intro 101", "course_id" => 2]);
-		CourseTopic::create(["title" => "Properties Drawing", "course_id" => 2]);
-
-		CourseTopic::create(["title" => "[TOPIC 01] 3D Modelling Fundamentals", "course_id" => 1]);
-		CourseTopic::create(["title" => "[TOPIC 02] 3D Drawing Basics Techniques", "course_id" => 1]);
-		CourseTopic::create(["title" => "[TOPIC 03] 3D Drawing Advanced Techniques", "course_id" => 1]);
-
-		CourseTopic::create(["title" => "Character Design", "course_id" => 4]);
-		CourseTopic::create(["title" => "Properties", "course_id" => 4]);
-
-
-		//Generate Materials
-		/*Materials for Concept Art*/
-		CourseMaterial::create([
-			"course_topic_id" => 1,
-			"title" => "Introduction to Concept Art Video",
-			"link" => "https://youtu.be/61mkx_OV61s"
+		Course::create([
+			"course_name" => "2D Animation",
+			"course_description" => "This is the description of course 2D Animation. You can modify or add anything here."
 		]);
-		CourseMaterial::create([
-			"course_topic_id" => 1,
-			"title" => "Introduction to Concept Art Article",
-			"link" => "https://www.nfi.edu/concept-art/"
-		]);
-
-		CourseMaterial::create([
-			"course_topic_id" => 2,
-			"title" => "Creating your first concept art video",
-			"link" => "https://youtu.be/WVPwtsQ-RzI"
-		]);
-
-		/*Materials for Roblox*/
-		CourseMaterial::create([
-			"course_topic_id" => 3,
-			"title" => "Tool intoduction: Brush, Eraser Canvas, Layer",
-			"link" => "https://www.google.com/"
-		]);
-		CourseMaterial::create([
-			"course_topic_id" => 3,
-			"title" => "How to make basic shape, How to Use Gradient",
-			"link" => "https://www.google.com/"
-		]);
-
-		CourseMaterial::create([
-			"course_topic_id" => 4,
-			"title" => "Line art",
-			"link" => "https://www.google.com/"
-		]);
-		CourseMaterial::create([
-			"course_topic_id" => 4,
-			"title" => "Fill Color Object",
-			"link" => "https://www.google.com/"
-		]);
-		CourseMaterial::create([
-			"course_topic_id" => 4,
-			"title" => "Put basic shadow and Lighting",
-			"link" => "https://www.google.com/"
-		]);
-
-		/*Materials for 3D Modelling*/
-		CourseMaterial::create([
-			"course_topic_id" => 5,
-			"title" => "Get to know what is 3D modelling",
-			"link" => "https://www.futurelearn.com/info/blog/general/what-is-3d-modelling"
-		]);
-		CourseMaterial::create([
-			"course_topic_id" => 6,
-			"title" => "Learn to draw 3D objects",
-			"link" => "https://youtu.be/48_P5552638?si=ysyeVlA38_9v6CQY"
-		]);
-		CourseMaterial::create([
-			"course_topic_id" => 7,
-			"title" => "More advanced techniques in 3D drawing",
-			"link" => "https://youtu.be/PqysfuKMQbM?si=rwyVnJV7jhcI3wa-"
-		]);
-
-		/*Materials for Digital Drawing*/
-		CourseMaterial::create([
-			"course_topic_id" => 8,
-			"title" => "Head construction",
-			"link" => "https://www.google.com/"
-		]);
-		CourseMaterial::create([
-			"course_topic_id" => 8,
-			"title" => "Body construction",
-			"link" => "https://www.google.com/"
-		]);
-		CourseMaterial::create([
-			"course_topic_id" => 8,
-			"title" => "Gesture, ekspresi, dan tangan",
-			"link" => "https://www.google.com/"
-		]);
-
-		CourseMaterial::create([
-			"course_topic_id" => 9,
-			"title" => "Intro to Perspektif",
-			"link" => "https://www.google.com/"
-		]);
-		CourseMaterial::create([
-			"course_topic_id" => 9,
-			"title" => "Drawing boxes, (base cube)",
-			"link" => "https://www.google.com/"
+		Course::create([
+			"course_name" => "Roblox",
+			"course_description" => "This is the description of course Roblox. You can modify or add anything here."
 		]);
 
 
-		// Assign students to courses
+		// ===== Generate Topics and Materials ===== //
+		/*Topics for Concept Art*/
+		$this->addTopicAndMaterial("Concept Art", "Prop Design", [
+			"Additive and Subtractive Shape",
+			"Sketching Details",
+			"Line Art",
+			"Value and Ligthing",
+			"Color Theory and Exploration",
+			"Material Studies",
+			"Orthographic View / Turn Table",
+			"Blow Up and Detailing",
+			"Submission: Prop Design Portfolio"
+		]);
+		$this->addTopicAndMaterial("Concept Art", "Interior Environment", [
+			"Isometric Perspective: Simple Objects in 3D Space",
+			"Isometric Perspective: Complex Objects in 3D Space",
+			"Sketch and Detailing",
+			"Value and Lighting",
+			"Color Exploration",
+			"Consultation",
+			"Rendering",
+			"Consultation",
+			"Submission: Interior Environment Portfolio"
+		]);
+
+		/*Topics for 3D Modelling*/
+		$this->addTopicAndMaterial("3D Modelling", "Intermediate Modelling", [
+			"Expand your 3D Modelling by Using Different Tools and Edits"
+		]);
+		$this->addTopicAndMaterial("3D Modelling", "Product Design Modelling", [
+			"Design a Simple Product for Advertising by Using Image Texturing"
+		]);
+		$this->addTopicAndMaterial("3D Modelling", "Interior Visualization", [
+			"Exercise Modelling an Interior Room with Different Types of Objects"
+		]);
+
+		/*Topics for 2D Animation*/
+		$this->addTopicAndMaterial("2D Animation", "Introduction + Software Practice #1", [
+			"Penggunaan Drawing Tools",
+			"Penggunaan Deformers",
+			"Penggunaan Effects dan Animation",
+			"Workflow dan Interface"
+		]);
+		$this->addTopicAndMaterial("2D Animation", "Software Practice #2", [
+			"Simple Animation Using Deformer (Pendulum, Bouncing Ball)",
+			"Latihan Menggambar Rough Pose, Clean Up, Detail"
+		]);
+		$this->addTopicAndMaterial("2D Animation", "Timing #1", [
+			"Menggeser Bola",
+			"Bouncing Ball",
+			"Timing Cepat"
+		]);
+		$this->addTopicAndMaterial("2D Animation", "Timing #2", [
+			"Avoid Tweening: Raising Arms",
+			"Avoid Tweening: Jumping",
+			"Avoid Tweening: Half Body Turn"
+		]);
+		$this->addTopicAndMaterial("2D Animation", "Spacing #1", [
+			"Head Turn #1",
+			"Take #1 (Half Body)"
+		]);
+
+		/*Topics for Digital Drawing*/
+		$this->addTopicAndMaterial("Digital Drawing", "Logo Design", [
+			"Sketching and Ideation",
+			"Blocking and Clean Up",
+			"Color Exploration"
+		]);
+		$this->addTopicAndMaterial("Digital Drawing", "Flora and Fauna Drawing", [
+			"Optimize using Mirror",
+			"Simetrical Tools to Create Repetition",
+			"Export Pattern and Implementation into Drawing"
+		]);
+		$this->addTopicAndMaterial("Digital Drawing", "Gradient Background", [
+			"Sketching and Ideation",
+			"Lineart",
+			"Color and Shading with Gradients"
+		]);
+		// $this->addTopicAndMaterial("Digital Drawing", "Character Design", [
+		// 	"Head Construction",
+		// 	"Body Construction",
+		// 	"Gesture, Ekspresi, dan Tangan",
+		// 	"Gesture and Full Body Construction",
+		// 	"Take a Reference for Drawing"
+		// ]);
+		// $this->addTopicAndMaterial("Digital Drawing", "Properties", [
+		// 	"Intro to Perspektif",
+		// 	"Drawing Boxes (Base Cube)",
+		// 	"Drawing Vases (Base Tube)",
+		// 	"Drawing Any Still Life Object using Envelope, Cube",
+		// 	"Drawing Character with Properties"
+		// ]);
+		// $this->addTopicAndMaterial("Digital Drawing", "Flora and Fauna", [
+		// 	"Drawing Leaves",
+		// 	"Drawing Tree",
+		// 	"Drawing Flower",
+		// 	"Body Structure in Animal",
+		// 	"Drawing any Animal"
+		// ]);
+		// $this->addTopicAndMaterial("Digital Drawing", "Background", [
+		// 	"Drawing Living Room in 1 Perspective",
+		// 	"Drawing Bed Room in 2 Perspective",
+		// 	"Drawing Park",
+		// 	"Drawing Character in a Place #1",
+		// 	"Drawing Character in a Place #2"
+		// ]);
+
+
+		// ===== Assign students to courses + generate progress ===== //
+		/*Hari's students*/
 		$this->assignStudent("Jack", ["Digital Drawing"], 20);
 		$this->assignStudent("Jillian P. Tanuwijaya", ["Digital Drawing"], 20);
 		$this->assignStudent("Jocheli Kensi Budianti", ["Digital Drawing"], 20);
 
-		$this->assignStudent("Bellrich Kevin Tjahyadi", ["Roblox"], 20);
 		$this->assignStudent("Batara Feodore Setiawan", ["Roblox"], 20);
+		$this->assignStudent("Bellrich Kevin Tjahyadi", ["Roblox"], 20);
 		$this->assignStudent("Benedict Jacob", ["Roblox"], 20);
 
+		/*Gaby's students*/
 		$this->assignStudent("Melly Tanto", ["Digital Drawing"], 20);
 		$this->assignStudent("Zhafira Jasmine", ["Digital Drawing"], 20);
 		$this->assignStudent("Vanya Farelia", ["Digital Drawing"], 20);
+		$this->assignStudent("Freya Pramudia", ["Digital Drawing"], 20);
+		$this->assignStudent("Kenzie Gautama Dirgantara", ["Digital Drawing"], 20);
 
+		/*Iswan's students*/
 		$this->assignStudent("Louisha Annabelle", ["3D Modelling"], 20);
 		$this->assignStudent("Gayle Farrel Patria", ["3D Modelling"], 20);
 		$this->assignStudent("Angela Nathania", ["3D Modelling"], 20);
 		$this->assignStudent("Balya Malkan Mahyuzar", ["3D Modelling"], 20);
 		$this->assignStudent("Alvin Edward", ["3D Modelling"], 20);
 
+		$this->assignStudent("Ethan Alexander Irawan", ["Concept Art"], 20);
+		$this->assignStudent("Jezriel Connery", ["Concept Art"], 20);
+		$this->assignStudent("Martha Theresia Ramlie", ["Concept Art"], 20);
+		$this->assignStudent("Janicelyn Daviena Godarma", ["Concept Art"], 20);
+		$this->assignStudent("Grace Devana Kusnandar", ["Concept Art"], 20);
+
+		/*Vincent's students*/
 		$this->assignStudent("Philia Valeraine Alverna", ["3D Modelling"], 20);
 		$this->assignStudent("Kensi Sinclair", ["3D Modelling"], 20);
 		$this->assignStudent("Giselle Saputra", ["3D Modelling"], 20);
@@ -277,7 +310,7 @@ class DatabaseSeeder extends Seeder
 		// Assign teachers to courses
 		$this->assignTeacher("Hari", ["Digital Drawing", "Roblox"]);
 		$this->assignTeacher("Gaby", ["Digital Drawing"]);
-		$this->assignTeacher("Iswan Sudaryo", ["3D Modelling"]);
-		$this->assignTeacher("Vincent", ["3D Modelling"]);
+		$this->assignTeacher("Iswan Sudaryo", ["3D Modelling", "Concept Art"]);
+		$this->assignTeacher("Vincent", ["3D Modelling", "2D Animation"]);
     }
 }

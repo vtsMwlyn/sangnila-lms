@@ -136,15 +136,15 @@ class AssignmentController extends Controller
 		foreach($course->students as $index => $student){
 			$isAssigned = ($request->checkbox_value[$index] == "on")? 1 : 0;
 
-			if($isAssigned){
-				$exists = false;
-				foreach($existingStudentAssignments as $esa){
-					if($esa->student_id == $student->id){
-						$exists = true;
-						break;
-					}
+			$exists = false;
+			foreach($existingStudentAssignments as $esa){
+				if($esa->student_id == $student->id){
+					$exists = true;
+					break;
 				}
+			}
 
+			if($isAssigned){
 				if(!$exists){
 					StudentAssignment::create([
 						"student_id" => $student->id,
@@ -153,8 +153,10 @@ class AssignmentController extends Controller
 				}
 			}
 			else {
-				$target_del = StudentAssignment::where("student_id", $student->id)->first();
-				StudentAssignment::destroy($target_del->id);
+				if($exists){
+					$target_del = StudentAssignment::where("student_id", $student->id)->where("assignment_id", $assignment_id)->first();
+					StudentAssignment::destroy($target_del->id);
+				}
 			}
 		}
 
@@ -256,7 +258,7 @@ class AssignmentController extends Controller
 
 		$stdasg = StudentAssignment::where("student_id", Auth::user()->id)->where("assignment_id", $asg->id)->first();
 
-		if($stdasg->submissions->count() == 10){
+		if($stdasg->assignment->submissions->count() == 10){
 			return back()->with("maximumSubmission", "Sorry, your assignment submission is already in its limit!");
 		}
 
@@ -274,7 +276,6 @@ class AssignmentController extends Controller
 		]);
 
 		$assignment = Assignment::where("id", $assignment_id)->first();
-		$student_assignment = StudentAssignment::where("assignment_id", $assignment->id)->where("student_id", Auth::user()->id)->first();
 
 		//The time is currently set to Asia/Jakarta
 		$submissionTime = now();
@@ -289,7 +290,8 @@ class AssignmentController extends Controller
 		Submission::create([
 			"link" => $request->link,
 			"title" => $request->title,
-			"student_assignment_id" => $student_assignment->id,
+			"student_id" => Auth::user()->id,
+			"assignment_id" => $assignment->id,
 			"status" => $status,
 		]);
 
@@ -297,10 +299,9 @@ class AssignmentController extends Controller
 	}
 
 	// Shows submission history in an assignment
-	public function student_submission_detail($course_id, $student_assignment_id){
-		$student_assignment = StudentAssignment::where("id", $student_assignment_id)->first();
-		$submissions = $student_assignment->submissions;
-		$assignment = $student_assignment->assignment;
+	public function student_submission_detail($course_id, $student_id, $assignment_id){
+		$assignment = Assignment::where("id", $assignment_id)->first();
+		$submissions = Submission::where("assignment_id", $assignment->id)->where("student_id", $student_id)->get();
 
 		return view("roles.student.assignment.submission-detail", [
 			"course" => Course::where("id", $course_id)->first(),

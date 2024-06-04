@@ -19,8 +19,4 @@ class StudentAssignment extends Model
 	public function assignment(){
 		return $this->belongsTo(Assignment::class);
 	}
-
-	public function submissions(){
-		return $this->hasMany(Submission::class);
-	}
 }

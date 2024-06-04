@@ -16,13 +16,16 @@ return new class extends Migration
         Schema::create('submissions', function (Blueprint $table) {
             $table->id();
 
-			$table->unsignedBigInteger("student_assignment_id");
+			$table->unsignedBigInteger("student_id");
+			$table->unsignedBigInteger("assignment_id");
+
 			$table->string("link");
 			$table->string("title");
 			$table->longText("feedback")->nullable();
 			$table->string("status");
 
-			$table->foreign("student_assignment_id")->references("id")->on("student_assignments");
+			$table->foreign("student_id")->references("id")->on("users")->onDelete("cascade");
+			$table->foreign("assignment_id")->references("id")->on("assignments")->onDelete("cascade");
 
             $table->timestamps();
         });
