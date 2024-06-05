@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\CourseStudent;
+use App\Models\CourseTeacher;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,15 +15,23 @@ class CourseStudentController extends Controller {
 	public function create($student_id) {
 		$role = Role::where('role_name', 'Student')->first();
 		$student = User::where('role_id', $role->id)->where('id', $student_id)->first();
-		$existingCourseIds = CourseStudent::where('user_id', $student_id)->get()->pluck('course_id')->toArray();
 
-		$courses = Course::where('visibility', 'public')
-			->whereNotIn('id', $existingCourseIds)
-			->get();
+		$arr_ct = [];
+		foreach(Course::all() as $c){
+			$teacher_list = [];
+			foreach($c->teachers as $teacher){
+				array_push($teacher_list, $teacher->full_name);
+			}
+
+			array_push($arr_ct, ["course_name" => $c->course_name, "teachers" => $teacher_list]);
+		}
+
+		$courses = Course::where('visibility', 'public')->get();
 
 		return view('roles.admin.student.index-assign', [
 			'student' => $student,
 			'courses' => $courses,
+			"course_and_teachers" => $arr_ct
 		]);
 	}
 

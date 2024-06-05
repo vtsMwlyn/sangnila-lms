@@ -119,7 +119,7 @@ class AttendanceController extends Controller {
 	// Showing all enrolled course to pick before continue
 	public function student_index(){
 		return view("roles.student.attendance.index", [
-			"courseStudents" => CourseStudent::where("user_id", Auth::user()->id)->get()
+			"courseStudents" => CourseStudent::where("student_id", Auth::user()->id)->get()
 		]);
 	}
 

@@ -33,7 +33,7 @@
 							<td class="border px-3"><a href="{{ $submission->link }}" class="font-bold text-blue-600">{{ $submission->link }}</a></td>
 							<td class="border px-3">{{ $submission->status }}</td>
 							<td class="border">
-								<form action="{{ route("teacher.assignment.feedback", [$submission->id, $submission->student_assignment->student->id]) }}" method="post" class="flex gap-1 justify-center items-center w-full">
+								<form action="{{ route("teacher.assignment.feedback", [$submission->id, $submission->student->id]) }}" method="post" class="flex gap-1 justify-center items-center w-full">
 									@csrf
 									<!-- Feedback -->
 									<div>

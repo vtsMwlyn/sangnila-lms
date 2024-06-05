@@ -6,7 +6,7 @@
 
 @section("content")
 	<h1 class="text-3xl font-semibold text-blue-900 mb-4">Upload New Assignment to {{ $course->course_name }}</h1>
-	@if($course->students->count())
+	@if($course_students->count())
 		<form action="{{ route('teacher.assignment.store', $course->id) }}" method="post" class="mx-auto" id="assignment_form">
 			@csrf
 			<!-- Assignment Title -->
@@ -55,15 +55,15 @@
 			@enderror
 
 			<div class="flex flex-wrap gap-3 mt-2 rounded-lg @error("checkbox_value") border p-5 border-red-500 @enderror">
-				@foreach ($course->students as $student)
+				@foreach ($course_students as $cs)
 					{{--
 						Note:
 						Teacher can only assign assigments / edit assigning status to active student accounts
 					--}}
-					<div class="flex items-center gap-3 border rounded-lg p-5 checkbox-container" style="width: 30%; @if($student->status == "disabled") display: none; @endif">
+					<div class="flex items-center gap-3 border rounded-lg p-5 checkbox-container" style="width: 30%; @if($cs->student->status == "disabled") display: none; @endif">
 						<input type="checkbox" id="checkbox{{ $loop->iteration }}"
 						class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif>
-						<label for="checkbox{{ $loop->iteration }}">{{ $student->full_name }}</label>
+						<label for="checkbox{{ $loop->iteration }}">{{ $cs->student->full_name }}</label>
 					</div>
 				@endforeach
 			</div>

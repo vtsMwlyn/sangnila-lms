@@ -15,6 +15,7 @@
 				<div class="mt-3">
 					<x-label for="visibility" :value="__('Select a course to assign')" style="color: white;"/>
 					<select name="course_name" id="course_name" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full mt-1 py-2 px-4">
+						<option disabled selected>Pick a course</option>
 						@foreach ($courses as $course)
 							<option value="{{ $course->course_name }}">{{ $course->course_name }}</option>
 						@endforeach
@@ -22,9 +23,17 @@
 				</div>
 
 				<!-- Max Course Sessions -->
-				<div class="mt-3">
-					<x-label for="max_course_session" :value="__('Maximum sessions in this course')" style="color: white;"/>
-					<x-input id="max_course_session" class="block mt-1 w-full" type="number" name="max_course_session" placeholder="Maximum sessions"  />
+				<div class="mt-3 flex gap-3">
+					<div class="w-1/2">
+						<x-label for="visibility" :value="__('Select a teacher that will teach the student')" style="color: white;"/>
+						<select name="teacher_name" id="teacher_name" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full mt-1 py-2 px-4">
+							<option disabled selected>Pick a teacher</option>
+						</select>
+					</div>
+					<div class="w-1/2">
+						<x-label for="max_course_session" :value="__('Maximum sessions in this course')" style="color: white;"/>
+						<x-input id="max_course_session" class="block mt-1 w-full" type="number" name="max_course_session" placeholder="Maximum sessions"  />
+					</div>
 				</div>
 
 				<div class="flex mt-8 items-center gap-1">
@@ -38,6 +47,31 @@
 				</div>
 
 			</form>
+
+			<script>
+				const course_and_teachers = @json($course_and_teachers);
+				const selectedCourse = document.querySelector("#course_name");
+
+				selectedCourse.addEventListener("change", () => {
+						const selectedCourseName = selectedCourse.value;
+						console.log(selectedCourseName);
+						const teacherList = document.querySelector("#teacher_name");
+
+						teacherList.innerHTML = '';
+
+						const course = course_and_teachers.find(c => c.course_name === selectedCourseName);
+
+						if(course) {
+							course.teachers.forEach(teacher => {
+								const newOption = document.createElement("option");
+								newOption.setAttribute("value", teacher);
+								newOption.innerText = teacher;
+								teacherList.appendChild(newOption);
+							});
+						}
+					});
+
+			</script>
 		@else
 			<div class="rounded-lg py-5 px-10 bg-blue-800">
 				<p class="text-white italic">- No more courses to assign -</p>

@@ -30,15 +30,17 @@ class DatabaseSeeder extends Seeder
 		UserDetail::create(["user_id" => $user->id]);
 	}
 
-	private function assignStudent($student_name, $courses, $max_session){
+	private function assignStudent($student_name, $teacher_name, $courses, $max_session){
 		$student = User::where("role_id", 3)->where("full_name", $student_name)->first();
+		$teacher = User::where("role_id", 2)->where("full_name", $teacher_name)->first();
 
 		foreach($courses as $c){
 			$course = Course::where("course_name", $c)->first();
 
 			CourseStudent::create([
 				"course_id" => $course->id,
-				"user_id" => $student->id,
+				"student_id" => $student->id,
+				"teacher_id" => $teacher->id,
 				"max_course_session" => $max_session
 			]);
 
@@ -273,38 +275,38 @@ class DatabaseSeeder extends Seeder
 
 		// ===== Assign students to courses + generate progress ===== //
 		/*Hari's students*/
-		$this->assignStudent("Jack", ["Digital Drawing"], 20);
-		$this->assignStudent("Jillian P. Tanuwijaya", ["Digital Drawing"], 20);
-		$this->assignStudent("Jocheli Kensi Budianti", ["Digital Drawing"], 20);
+		$this->assignStudent("Jack", "Hari", ["Digital Drawing"], 20);
+		$this->assignStudent("Jillian P. Tanuwijaya", "Hari", ["Digital Drawing"], 20);
+		$this->assignStudent("Jocheli Kensi Budianti", "Hari", ["Digital Drawing"], 20);
 
-		$this->assignStudent("Batara Feodore Setiawan", ["Roblox"], 20);
-		$this->assignStudent("Bellrich Kevin Tjahyadi", ["Roblox"], 20);
-		$this->assignStudent("Benedict Jacob", ["Roblox"], 20);
+		$this->assignStudent("Batara Feodore Setiawan","Hari", ["Roblox"], 20);
+		$this->assignStudent("Bellrich Kevin Tjahyadi","Hari", ["Roblox"], 20);
+		$this->assignStudent("Benedict Jacob","Hari", ["Roblox"], 20);
 
 		/*Gaby's students*/
-		$this->assignStudent("Melly Tanto", ["Digital Drawing"], 20);
-		$this->assignStudent("Zhafira Jasmine", ["Digital Drawing"], 20);
-		$this->assignStudent("Vanya Farelia", ["Digital Drawing"], 20);
-		$this->assignStudent("Freya Pramudia", ["Digital Drawing"], 20);
-		$this->assignStudent("Kenzie Gautama Dirgantara", ["Digital Drawing"], 20);
+		$this->assignStudent("Melly Tanto", "Gaby", ["Digital Drawing"], 20);
+		$this->assignStudent("Zhafira Jasmine", "Gaby", ["Digital Drawing"], 20);
+		$this->assignStudent("Vanya Farelia", "Gaby", ["Digital Drawing"], 20);
+		$this->assignStudent("Freya Pramudia", "Gaby", ["Digital Drawing"], 20);
+		$this->assignStudent("Kenzie Gautama Dirgantara", "Gaby", ["Digital Drawing"], 20);
 
 		/*Iswan's students*/
-		$this->assignStudent("Louisha Annabelle", ["3D Modelling"], 20);
-		$this->assignStudent("Gayle Farrel Patria", ["3D Modelling"], 20);
-		$this->assignStudent("Angela Nathania", ["3D Modelling"], 20);
-		$this->assignStudent("Balya Malkan Mahyuzar", ["3D Modelling"], 20);
-		$this->assignStudent("Alvin Edward", ["3D Modelling"], 20);
+		$this->assignStudent("Louisha Annabelle", "Iswan Sudaryo", ["3D Modelling"], 20);
+		$this->assignStudent("Gayle Farrel Patria", "Iswan Sudaryo", ["3D Modelling"], 20);
+		$this->assignStudent("Angela Nathania", "Iswan Sudaryo", ["3D Modelling"], 20);
+		$this->assignStudent("Balya Malkan Mahyuzar", "Iswan Sudaryo", ["3D Modelling"], 20);
+		$this->assignStudent("Alvin Edward", "Iswan Sudaryo", ["3D Modelling"], 20);
 
-		$this->assignStudent("Ethan Alexander Irawan", ["Concept Art"], 20);
-		$this->assignStudent("Jezriel Connery", ["Concept Art"], 20);
-		$this->assignStudent("Martha Theresia Ramlie", ["Concept Art"], 20);
-		$this->assignStudent("Janicelyn Daviena Godarma", ["Concept Art"], 20);
-		$this->assignStudent("Grace Devana Kusnandar", ["Concept Art"], 20);
+		$this->assignStudent("Ethan Alexander Irawan", "Iswan Sudaryo", ["Concept Art"], 20);
+		$this->assignStudent("Jezriel Connery", "Iswan Sudaryo", ["Concept Art"], 20);
+		$this->assignStudent("Martha Theresia Ramlie", "Iswan Sudaryo", ["Concept Art"], 20);
+		$this->assignStudent("Janicelyn Daviena Godarma", "Iswan Sudaryo", ["Concept Art"], 20);
+		$this->assignStudent("Grace Devana Kusnandar", "Iswan Sudaryo", ["Concept Art"], 20);
 
 		/*Vincent's students*/
-		$this->assignStudent("Philia Valeraine Alverna", ["3D Modelling"], 20);
-		$this->assignStudent("Kensi Sinclair", ["3D Modelling"], 20);
-		$this->assignStudent("Giselle Saputra", ["3D Modelling"], 20);
+		$this->assignStudent("Philia Valeraine Alverna", "Vincent", ["3D Modelling"], 20);
+		$this->assignStudent("Kensi Sinclair", "Vincent", ["3D Modelling"], 20);
+		$this->assignStudent("Giselle Saputra", "Vincent", ["3D Modelling"], 20);
 
 
 		// Assign teachers to courses

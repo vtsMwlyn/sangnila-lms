@@ -12,7 +12,9 @@ use App\Rules\MinimumOneCheckbox;
 use App\Models\Submission;
 use App\Models\Role;
 use App\Models\StudentAssignment;
+use Error;
 use Illuminate\Support\Facades\Auth;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Return_;
 
 class AssignmentController extends Controller
@@ -35,8 +37,12 @@ class AssignmentController extends Controller
 
 	// New assignment input form page
 	public function teacher_upload($course_id){
+		$course = Course::where("id", $course_id)->first();
+		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+
 		return view("roles.teacher.assignment.upload", [
-			"course" => Course::where("id", $course_id)->first()
+			"course_students" => $course_students,
+			"course" => $course
 		]);
 	}
 
@@ -52,6 +58,7 @@ class AssignmentController extends Controller
 		]);
 
 		$course = Course::where("id", $course_id)->first();
+		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
 
 		$newAsg = Assignment::create([
 			"title" => $validatedData["title"],
@@ -64,12 +71,12 @@ class AssignmentController extends Controller
 		]);
 
 		$i = 0;
-		foreach($course->students as $student){
+		foreach($course_students as $cs){
 			$isAssigned = ($request->checkbox_value[$i] == "on")? 1 : 0;
 
 			if($isAssigned){
 				StudentAssignment::create([
-					"student_id" => $student->id,
+					"student_id" => $cs->student->id,
 					"assignment_id" => $newAsg->id
 				]);
 			}
@@ -84,13 +91,14 @@ class AssignmentController extends Controller
 	public function teacher_edit($assignment_id){
 		$target_asg = Assignment::where("id", $assignment_id)->first();
 		$course = Course::where("id", $target_asg->course_id)->first();
+		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
 		$students_assigned = StudentAssignment::where("assignment_id", $target_asg->id)->get();
 
 		$student_assignment_status = [];
-		foreach($course->students as $index => $student){
+		foreach($course_students as $index => $cs){
 			$is_assigned = false;
 			foreach($students_assigned as $sa){
-				if($sa->student_id == $student->id){
+				if($sa->student_id == $cs->student->id){
 					$is_assigned = true;
 					break;
 				}
@@ -106,6 +114,7 @@ class AssignmentController extends Controller
 		return view("roles.teacher.assignment.edit", [
 			"assignment" => $target_asg,
 			"course" => $course,
+			"course_students" => $course_students,
 			"checkboxes_values" => $student_assignment_status
 		]);
 	}
@@ -123,6 +132,7 @@ class AssignmentController extends Controller
 
 		$target_asg = Assignment::where("id", $assignment_id)->first();
 		$course = Course::where("id", $target_asg->course_id)->first();
+		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
 		$existingStudentAssignments = StudentAssignment::where("assignment_id", $target_asg->id)->get();
 
 		Assignment::where("id", $target_asg->id)->update([
@@ -133,12 +143,12 @@ class AssignmentController extends Controller
 			"deadline_time" => $validatedData["deadline_time"],
 		]);
 
-		foreach($course->students as $index => $student){
+		foreach($course_students as $index => $cs){
 			$isAssigned = ($request->checkbox_value[$index] == "on")? 1 : 0;
 
 			$exists = false;
 			foreach($existingStudentAssignments as $esa){
-				if($esa->student_id == $student->id){
+				if($esa->student_id == $cs->student->id){
 					$exists = true;
 					break;
 				}
@@ -147,14 +157,14 @@ class AssignmentController extends Controller
 			if($isAssigned){
 				if(!$exists){
 					StudentAssignment::create([
-						"student_id" => $student->id,
+						"student_id" => $cs->student->id,
 						"assignment_id" => $target_asg->id
 					]);
 				}
 			}
 			else {
 				if($exists){
-					$target_del = StudentAssignment::where("student_id", $student->id)->where("assignment_id", $assignment_id)->first();
+					$target_del = StudentAssignment::where("student_id", $cs->student->id)->where("assignment_id", $assignment_id)->first();
 					StudentAssignment::destroy($target_del->id);
 				}
 			}
@@ -188,33 +198,28 @@ class AssignmentController extends Controller
 		$assignment = Assignment::where("id", $assignment_id)->first();
 		$course = $assignment->course;
 
-		$student_assignments = StudentAssignment::where("assignment_id", $assignment_id)->get();
-
-		$nosubmissions = true;
-		foreach($student_assignments as $sa){
-			if($sa->submissions->count()){
-				$nosubmissions = false;
-				break;
+		$latest_submissions = [];
+		foreach($course->students as $student){
+			$submissions = $student->submissions->where("assignment_id", $assignment->id)->values()->all(); //biar jadi array kalo ngga dia bentuknya {{...}, {...}, ...}
+			$n = count($submissions);
+			if($n > 0){
+				array_push($latest_submissions, $submissions[$n - 1]);
 			}
 		}
 
 		return view("roles.teacher.assignment.check-submission", [
-			"student_assignments" => $student_assignments,
+			"latest_submissions" => $latest_submissions,
 			"assignment" => $assignment,
-			"students" => $course->students,
-			"nosubmissions" => $nosubmissions
 		]);
 	}
 
 	// Check submission history from a student
-	public function teacher_check_history($student_assignment_id, $student_id){
-		$student_assignment = StudentAssignment::where("id", $student_assignment_id)->first();
-		$submissions = $student_assignment->submissions;
-		$assignment = $student_assignment->assignment;
+	public function teacher_check_history($assignment_id, $student_id){
 		$student = User::where("id", $student_id)->first();
+		$assignment = Assignment::where("id", $assignment_id)->first();
 
 		return view("roles.teacher.assignment.submission-history", [
-			"history" => $submissions,
+			"history" => $student->submissions->where("assignment_id", $assignment_id)->values()->all(),
 			"assignment" => $assignment,
 			"student" => $student
 		]);
@@ -230,7 +235,7 @@ class AssignmentController extends Controller
 
 		Submission::where("id", $submission_id)->update(["feedback" => $request->feedback]);
 
-		return redirect(route("teacher.assignment.submission-history", [$asgsmt->student_assignment->id, $student_id]))->with("successModifFeedback", $msg);
+		return redirect(route("teacher.assignment.submission-history", [$asgsmt->assignment->id, $student_id]))->with("successModifFeedback", $msg);
 	}
 
 
@@ -238,7 +243,7 @@ class AssignmentController extends Controller
 	// Shows list of enrolled course to select before continue
 	public function student_index(){
 		return view("roles.student.assignment.index", [
-			"courseStudents" => CourseStudent::where("user_id", Auth::user()->id)->get()
+			"courseStudents" => CourseStudent::where("student_id", Auth::user()->id)->get()
 		]);
 	}
 

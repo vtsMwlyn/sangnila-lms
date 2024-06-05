@@ -19,11 +19,15 @@ class Course extends Model {
 	}
 
 	public function teachers() {
-		return $this->belongsToMany(User::class, 'course_teachers');
+		return $this->belongsToMany(User::class, "course_teachers");
 	}
 
 	public function students() {
-		return $this->belongsToMany(User::class, 'course_students');
+		return $this->belongsToMany(User::class, "course_students", "course_id", "student_id");
+	}
+
+	public function course_students(){
+		return $this->hasMany(CourseStudent::class);
 	}
 
 	public function schedules() {

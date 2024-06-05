@@ -14,11 +14,15 @@ class CourseStudent extends Model {
 		"max_course_session"
 	];
 
-	public function parent_user() {
-		return $this->belongsTo(User::class);
+	public function student() {
+		return $this->belongsTo(User::class, "student_id");
 	}
 
 	public function course() {
-		return $this->belongsTo(Course::class);
+		return $this->belongsTo(Course::class, "course_id");
+	}
+
+	public function teacher(){
+		return $this->belongsTo(User::class, "teacher_id");
 	}
 }

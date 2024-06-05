@@ -95,9 +95,12 @@ class CourseController extends Controller {
 
 	// Shows a course details also topics and materials
 	public function teacher_show($course_id) {
-		$lecturer = CourseTeacher::where('user_id', Auth::user()->id)->where('course_id', $course_id)->first();
+		$course = Course::where("id", $course_id)->first();
+		$course_students = CourseStudent::where("teacher_id", Auth::user()->id)->where("course_id", $course_id)->get();
+
 		return view('roles.teacher.mycourse.show', [
-			'course' => $lecturer->course
+			'course_students' => $course_students,
+			"course" => $course
 		]);
 	}
 
@@ -111,7 +114,7 @@ class CourseController extends Controller {
 	// Shows a course details with topics and materials
 	public function student_show($course_id) {
 		$materialProgresses = MaterialProgress::where('course_id', $course_id)->where('student_id', Auth::user()->id)->get();
-		$student = CourseStudent::where('user_id', Auth::user()->id)->where('course_id', $course_id)->first();
+		$student = CourseStudent::where('student_id', Auth::user()->id)->where('course_id', $course_id)->first();
 		return view('roles.student.course.show', [
 			'course' => $student->course,
 			'materialProgresses' => $materialProgresses

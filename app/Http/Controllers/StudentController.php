@@ -65,7 +65,7 @@ class StudentController extends Controller {
 					}
 				}
 
-				$cs_data = CourseStudent::where("user_id", $student->id)->where("course_id", $course->id)->first();
+				$cs_data = CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first();
 				$maximum_sessions = $cs_data->max_course_session;
 
 				array_push($cp, $count);
@@ -109,8 +109,11 @@ class StudentController extends Controller {
 
 			$n_asg_subm = 0;
 			foreach($student_assignments_in_the_course as $assg){
-				if($assg->submissions->count()){
-					$n_asg_subm++;
+				foreach($assg->assignment->submissions as $submission){
+					if($submission->student_id == $student_id){
+						$n_asg_subm++;
+						break;
+					}
 				}
 			}
 
@@ -163,7 +166,7 @@ class StudentController extends Controller {
 			]
 		);
 
-		CourseStudent::where("course_id", $course_id)->where("user_id", $student_id)->update(["max_course_session" => $request["max_course_session" . $student_id . $course_id]]);
+		CourseStudent::where("course_id", $course_id)->where("student_id", $student_id)->update(["max_course_session" => $request["max_course_session" . $student_id . $course_id]]);
 
 		$course = Course::where("id", $course_id)->first();
 
