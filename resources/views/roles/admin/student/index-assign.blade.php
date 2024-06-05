@@ -53,23 +53,23 @@
 				const selectedCourse = document.querySelector("#course_name");
 
 				selectedCourse.addEventListener("change", () => {
-						const selectedCourseName = selectedCourse.value;
-						console.log(selectedCourseName);
-						const teacherList = document.querySelector("#teacher_name");
+					const selectedCourseName = selectedCourse.value;
+					console.log(selectedCourseName);
+					const teacherList = document.querySelector("#teacher_name");
 
-						teacherList.innerHTML = '';
+					teacherList.innerHTML = '';
 
-						const course = course_and_teachers.find(c => c.course_name === selectedCourseName);
+					const course = course_and_teachers.find(c => c.course_name === selectedCourseName);
 
-						if(course) {
-							course.teachers.forEach(teacher => {
-								const newOption = document.createElement("option");
-								newOption.setAttribute("value", teacher);
-								newOption.innerText = teacher;
-								teacherList.appendChild(newOption);
-							});
-						}
-					});
+					if(course) {
+						course.teachers.forEach(teacher => {
+							const newOption = document.createElement("option");
+							newOption.setAttribute("value", teacher);
+							newOption.innerText = teacher;
+							teacherList.appendChild(newOption);
+						});
+					}
+				});
 
 			</script>
 		@else
