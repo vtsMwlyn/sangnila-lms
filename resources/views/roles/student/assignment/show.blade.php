@@ -22,22 +22,21 @@
 		</div>
 	@endif
 
-	@forelse ($assignments as $asg)
+	@forelse ($assignments as $index => $asg)
 		<div class="rounded-md w-full mt-5 my-5 p-5 border">
 			<h3 class="text-xl font-semibold">{{ $asg->title }}</h3>
-			@if($asg->submissions->count())
+			@if($submissions_per_assignment[$index] > 0)
 				<p class="text-green-700 mt-2 mb-2"><i class="bi bi-check-circle-fill"></i> Submitted</p>
-				<a class="text-blue-500" href="{{ route("student.assignment.detail", [$course->id, $asg->id]) }}">Submission history and feedback</a>
+				<a class="text-blue-500" href="{{ route("student.assignment.detail", [$course->id, Auth::user()->id ,$asg->id]) }}">Submission history and feedback</a>
 			@endif
 
 			<p class="mt-3 italic">Assignment Description:</p>
 			<p>{{ $asg->desc }}</p>
 			<p class="mt-3">Please submit before <span class="font-semibold">{{ $asg->deadline_date }} {{ $asg->deadline_time }}</span></p>
 
-
-			@if($asg->submissions->count() != 10)
-				<p class="font-semibold text-blue-700">New submissions allowed: {{ 10 - $asg->submissions->count() }} time(s)</p>
-			@elseif($asg->submissions->count() == 10)
+			@if($submissions_per_assignment[$index] < 10)
+				<p class="font-semibold text-blue-700">New submissions allowed: {{ 10 - $submissions_per_assignment[$index] }} time(s)</p>
+			@else
 				<p class="font-semibold text-red-500">Number of new submissions reached its limit!</p>
 			@endif
 

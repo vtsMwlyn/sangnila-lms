@@ -7,7 +7,7 @@
 @section("content")
 	<h1 class="text-3xl font-semibold text-blue-900 mb-4">Manage Students</h1>
 	<h1 class="text-2xl font-semibold text-blue-900 mb-4">Pick a Student</h1>
-	@if ($students->isNotEmpty())
+	@if ($course_students->isNotEmpty())
 		<div class="overflow-x-auto rounded-md">
 			<table class="min-w-full bg-white border-collapse ">
 				<thead>
@@ -16,13 +16,13 @@
 					</tr>
 				</thead>
 				<tbody>
-					@foreach ($students as $student)
-						@if($student->status != "disabled")
+					@foreach ($course_students as $cs)
+						@if($cs->student->status != "disabled")
 							<tr>
 								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 ">
-									<a href="{{ route('teacher.student.show.progress', ['student_id' => $student->id, 'course_id' => $course->id]) }}"
+									<a href="{{ route('teacher.student.show.progress', ['student_id' => $cs->student->id, 'course_id' => $course->id]) }}"
 										class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
-										{{ $student->full_name }}
+										{{ $cs->student->full_name }}
 									</a>
 								</td>
 							</tr>

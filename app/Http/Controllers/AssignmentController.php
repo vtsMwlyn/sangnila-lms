@@ -9,9 +9,12 @@ use App\Models\CourseStudent;
 use Illuminate\Support\Carbon;
 use App\Models\Assignment;
 use App\Rules\MinimumOneCheckbox;
-use App\Models\AssignmentSubmission;
+use App\Models\Submission;
 use App\Models\Role;
+use App\Models\StudentAssignment;
+use Error;
 use Illuminate\Support\Facades\Auth;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Return_;
 
 class AssignmentController extends Controller
@@ -24,28 +27,7 @@ class AssignmentController extends Controller
 
 	// List of all assignments in the selected course
 	public function teacher_show($course_id){
-		$all_asg_data = Assignment::where("course_id", $course_id)->get();
-
-		$assignments = [];
-
-		foreach($all_asg_data as $index => $asg_data){
-			if($index == 0){
-				array_push($assignments, $asg_data);
-			}
-			else {
-				$titleAlreadyExists = false;
-				foreach($assignments as $asg){
-					if($asg_data->title == $asg->title){
-						$titleAlreadyExists = true;
-						break;
-					}
-				}
-
-				if(!$titleAlreadyExists){
-					array_push($assignments, $asg_data);
-				}
-			}
-		}
+		$assignments = Assignment::where("teacher_id", Auth::user()->id)->where("course_id", $course_id)->get();
 
 		return view("roles.teacher.assignment.show", [
 			"assignments" => $assignments,
@@ -55,8 +37,12 @@ class AssignmentController extends Controller
 
 	// New assignment input form page
 	public function teacher_upload($course_id){
+		$course = Course::where("id", $course_id)->first();
+		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+
 		return view("roles.teacher.assignment.upload", [
-			"course" => Course::where("id", $course_id)->first()
+			"course_students" => $course_students,
+			"course" => $course
 		]);
 	}
 
@@ -72,22 +58,28 @@ class AssignmentController extends Controller
 		]);
 
 		$course = Course::where("id", $course_id)->first();
+		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+
+		$newAsg = Assignment::create([
+			"title" => $validatedData["title"],
+			"desc" => $validatedData["desc"],
+			"link" => $validatedData["link"],
+			"deadline_date" => $validatedData["deadline_date"],
+			"deadline_time" => $validatedData["deadline_time"],
+			"teacher_id" => Auth::user()->id,
+			"course_id" => $course->id,
+		]);
 
 		$i = 0;
-		foreach($course->students as $student){
+		foreach($course_students as $cs){
 			$isAssigned = ($request->checkbox_value[$i] == "on")? 1 : 0;
 
-			Assignment::create([
-				"title" => $validatedData["title"],
-				"desc" => $validatedData["desc"],
-				"link" => $validatedData["link"],
-				"deadline_date" => $validatedData["deadline_date"],
-				"deadline_time" => $validatedData["deadline_time"],
-				"student_is_assigned" => $isAssigned,
-				"teacher_id" => Auth::user()->id,
-				"course_id" => $course->id,
-				"student_id" => $student->id
-			]);
+			if($isAssigned){
+				StudentAssignment::create([
+					"student_id" => $cs->student->id,
+					"assignment_id" => $newAsg->id
+				]);
+			}
 
 			$i++;
 		}
@@ -99,49 +91,30 @@ class AssignmentController extends Controller
 	public function teacher_edit($assignment_id){
 		$target_asg = Assignment::where("id", $assignment_id)->first();
 		$course = Course::where("id", $target_asg->course_id)->first();
-		$all_asg = Assignment::where("title", $target_asg->title)->where("course_id", $course->id)->get();
+		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+		$students_assigned = StudentAssignment::where("assignment_id", $target_asg->id)->get();
 
 		$student_assignment_status = [];
-		// If the number students still the same within the record, then just check the student assignment status
-		if($all_asg->count() == $course->students->count()){
-			foreach($all_asg as $assignment){
-				if($assignment->student_is_assigned == 1){
-					array_push($student_assignment_status, "on");
-				}
-				else {
-					array_push($student_assignment_status, "off");
+		foreach($course_students as $index => $cs){
+			$is_assigned = false;
+			foreach($students_assigned as $sa){
+				if($sa->student_id == $cs->student->id){
+					$is_assigned = true;
+					break;
 				}
 			}
-		}
 
-		// If the number of student is increasing then should be checked first whether the student data is already in record or not, if it is already in the record then just check from the database its assignment status, but if it doesnt exist then give it default checkbox value off
-		else {
-			foreach($course->students as $std){
-				$studentExists = false;
-				foreach($all_asg as $assignment){
-					if($std->id == $assignment->student_id){
-						$studentExists = true;
-						break;
-					}
-				}
-
-				if($studentExists){
-					if($assignment->student_is_assigned == 1){
-						array_push($student_assignment_status, "on");
-					}
-					else {
-						array_push($student_assignment_status, "off");
-					}
-				}
-				else {
-					array_push($student_assignment_status, "off");
-				}
+			if($is_assigned){
+				$student_assignment_status[$index] = "on";
+			} else {
+				$student_assignment_status[$index] = "off";
 			}
 		}
 
 		return view("roles.teacher.assignment.edit", [
 			"assignment" => $target_asg,
 			"course" => $course,
+			"course_students" => $course_students,
 			"checkboxes_values" => $student_assignment_status
 		]);
 	}
@@ -159,64 +132,41 @@ class AssignmentController extends Controller
 
 		$target_asg = Assignment::where("id", $assignment_id)->first();
 		$course = Course::where("id", $target_asg->course_id)->first();
-		$existingAssignmentData = Assignment::where("title", $target_asg->title)->where("course_id", $course->id)->get();
+		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+		$existingStudentAssignments = StudentAssignment::where("assignment_id", $target_asg->id)->get();
 
-		if($existingAssignmentData->count() == $course->students->count()){
-			$i = 0;
-			foreach($existingAssignmentData as $a){
-				$isAssigned = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
-				// If the number of the students in the course and in the assignment record is still the same, just update the data
-					Assignment::where("id", $a->id)->update([
-						"title" => $validatedData["title"],
-						"desc" => $validatedData["desc"],
-						"link" => $validatedData["link"],
-						"deadline_date" => $validatedData["deadline_date"],
-						"deadline_time" => $validatedData["deadline_time"],
-						"student_is_assigned" => $isAssigned
-					]);
-				$i++;
+		Assignment::where("id", $target_asg->id)->update([
+			"title" => $validatedData["title"],
+			"desc" => $validatedData["desc"],
+			"link" => $validatedData["link"],
+			"deadline_date" => $validatedData["deadline_date"],
+			"deadline_time" => $validatedData["deadline_time"],
+		]);
+
+		foreach($course_students as $index => $cs){
+			$isAssigned = ($request->checkbox_value[$index] == "on")? 1 : 0;
+
+			$exists = false;
+			foreach($existingStudentAssignments as $esa){
+				if($esa->student_id == $cs->student->id){
+					$exists = true;
+					break;
+				}
 			}
-		}
 
-		// But if the number of students is increasing, if the student hasn't been in the assignment record yet, we have to add them into the record
-		else {
-			$i = 0;
-			foreach($course->students as $s){
-				$isAssigned = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
-
-				$studentIsFound = false;
-				foreach($existingAssignmentData as $a){
-					if($s->id == $a->student_id){
-						$studentIsFound = true;
-						break;
-					}
-				}
-
-				if(!$studentIsFound){
-					Assignment::create([
-						"title" => $validatedData["title"],
-						"desc" => $validatedData["desc"],
-						"link" => $validatedData["link"],
-						"deadline_date" => $validatedData["deadline_date"],
-						"deadline_time" => $validatedData["deadline_time"],
-						"student_is_assigned" => $isAssigned,
-						"teacher_id" => Auth::user()->id,
-						"course_id" => $course->id,
-						"student_id" => $s->id
+			if($isAssigned){
+				if(!$exists){
+					StudentAssignment::create([
+						"student_id" => $cs->student->id,
+						"assignment_id" => $target_asg->id
 					]);
 				}
-				else {
-					Assignment::where("id", $a->id)->update([
-						"title" => $validatedData["title"],
-						"desc" => $validatedData["desc"],
-						"link" => $validatedData["link"],
-						"deadline_date" => $validatedData["deadline_date"],
-						"deadline_time" => $validatedData["deadline_time"],
-						"student_is_assigned" => $isAssigned
-					]);
+			}
+			else {
+				if($exists){
+					$target_del = StudentAssignment::where("student_id", $cs->student->id)->where("assignment_id", $assignment_id)->first();
+					StudentAssignment::destroy($target_del->id);
 				}
-
-				$i++;
 			}
 		}
 
@@ -235,13 +185,10 @@ class AssignmentController extends Controller
 
 	// Delete assignment data from database
 	public function teacher_destroy($assignment_id){
-		$asg = Assignment::where("id", $assignment_id)->first();
-		$course = Course::where("id", $asg->course_id)->first();
-		$del_asg = Assignment::where("title", $asg->title)->get();
+		$del = Assignment::where("id", $assignment_id)->first();
+		$course = Course::where("id", $del->course_id)->first();
 
-		foreach($del_asg as $del){
-			Assignment::destroy("id", $del->id);
-		}
+		Assignment::destroy($del->id);
 
 		return redirect(route("teacher.assignment.show", $course->id))->with("successDeleteAssignment", "Assignment deleted successfully!");
 	}
@@ -251,50 +198,51 @@ class AssignmentController extends Controller
 		$assignment = Assignment::where("id", $assignment_id)->first();
 		$course = $assignment->course;
 
-		$latest_submission = [];
-		foreach($course->students as $student){
-			if($student->status == "disabled"){
+		$submissions = Submission::where("assignment_id", $assignment->id)->get();
+
+		$student_list = [];
+		foreach($submissions as $index => $sbm){
+			if($index == 0){
+				array_push($student_list, $sbm->student);
 				continue;
 			}
-			// $student_submissions = AssignmentSubmission::where("student_id", $student->id)->where("assignment_id", $assignment->id)->latest()->get();
-			$student_submissions = AssignmentSubmission::where("student_id", $student->id)->latest()->get();
 
-			foreach($student_submissions as $submission){
-				if($submission->assignment->title == $assignment->title){
-					array_push($latest_submission, $submission);
+			$alreadyIn = false;
+			foreach($student_list as $sl){
+				if($sbm->student->id == $sl->id){
+					$alreadyIn = true;
 					break;
 				}
+			}
+
+			if(!$alreadyIn){
+				array_push($student_list, $sbm->student);
+			}
+		}
+
+
+		$latest_submissions = [];
+		foreach($student_list as $student){
+			$submissions = $student->submissions->where("assignment_id", $assignment->id)->values()->all(); //biar jadi array kalo ngga dia bentuknya {{...}, {...}, ...}
+			$n = count($submissions);
+			if($n > 0){
+				array_push($latest_submissions, $submissions[$n - 1]);
 			}
 		}
 
 		return view("roles.teacher.assignment.check-submission", [
-			"submissions" => $latest_submission,
+			"latest_submissions" => $latest_submissions,
 			"assignment" => $assignment,
-			"students" => $course->students
 		]);
 	}
 
 	// Check submission history from a student
-	public function teacher_check_history($submission_id, $student_id){
-		$submission = AssignmentSubmission::where("id", $submission_id)->first();
-		$assignment = $submission->assignment;
+	public function teacher_check_history($assignment_id, $student_id){
 		$student = User::where("id", $student_id)->first();
-
-		// $students_submission = $student->assignment_submissions;
-
-		$students_submission = AssignmentSubmission::where("student_id", $student_id)->where("assignment_id", $assignment->id)->get();
-
-		$history = [];
-
-		for($i = $students_submission->count() - 1; $i >= 0; $i--){
-			// if($students_submission[$i]->assignment->title == $assignment->title){
-			if($students_submission[$i]->assignment->course_id == $assignment->course_id && $students_submission[$i]->assignment->title == $assignment->title){
-				array_push($history, $students_submission[$i]);
-			}
-		}
+		$assignment = Assignment::where("id", $assignment_id)->first();
 
 		return view("roles.teacher.assignment.submission-history", [
-			"history" => $history,
+			"history" => $student->submissions->where("assignment_id", $assignment_id)->values()->all(),
 			"assignment" => $assignment,
 			"student" => $student
 		]);
@@ -302,15 +250,15 @@ class AssignmentController extends Controller
 
 	// Save feedback added to a submission
 	public function teacher_feedback(Request $request, $submission_id, $student_id){
-		$asgsmt = AssignmentSubmission::where("id", $submission_id)->first();
+		$asgsmt = Submission::where("id", $submission_id)->first();
 		$msg = "Feedback added successfully!";
 		if($asgsmt->feedback){
 			$msg = "Feedback edited successfully!";
 		}
 
-		AssignmentSubmission::where("id", $submission_id)->update(["feedback" => $request->feedback]);
+		Submission::where("id", $submission_id)->update(["feedback" => $request->feedback]);
 
-		return redirect(route("teacher.assignment.submission-history", [$submission_id, $student_id]))->with("successModifFeedback", $msg);
+		return redirect(route("teacher.assignment.submission-history", [$asgsmt->assignment->id, $student_id]))->with("successModifFeedback", $msg);
 	}
 
 
@@ -318,15 +266,35 @@ class AssignmentController extends Controller
 	// Shows list of enrolled course to select before continue
 	public function student_index(){
 		return view("roles.student.assignment.index", [
-			"courseStudents" => CourseStudent::where("user_id", Auth::user()->id)->get()
+			"courseStudents" => CourseStudent::where("student_id", Auth::user()->id)->get()
 		]);
 	}
 
 	// List of assignments given to the student
 	public function student_show($course_id){
 		$course = Course::where("id", $course_id)->first();
+		$student_assignments = StudentAssignment::where("student_id", Auth::user()->id)->latest()->get();
+
+		$assignments_assigned = [];
+		$submissions_per_assignment = [];
+		foreach($student_assignments as $sa){
+			if($sa->assignment->course_id == $course_id){
+				array_push($assignments_assigned, $sa->assignment);
+				$submissions = $sa->assignment->submissions;
+				$n = 0;
+				foreach($submissions as $sbm){
+					if($sbm->student_id == Auth::user()->id && $sbm->assignment_id == $sa->assignment->id){
+						$n++;
+					}
+				}
+				array_push($submissions_per_assignment, $n);
+			}
+		}
+
+
 		return view("roles.student.assignment.show", [
-			"assignments" => Assignment::where("course_id", $course_id)->where("student_id", Auth::user()->id)->where("student_is_assigned", 1)->latest()->get(),
+			"assignments" => $assignments_assigned,
+			"submissions_per_assignment" => $submissions_per_assignment,
 			"course" => $course
 		]);
 	}
@@ -334,7 +302,15 @@ class AssignmentController extends Controller
 	// Submission input form page
 	public function student_submit($course_id, $assignment_id){
 		$asg = Assignment::where("id", $assignment_id)->first();
-		if($asg->submissions->count() == 10){
+
+		$n = 0;
+		foreach($asg->submissions as $sbm){
+			if($sbm->student_id == Auth::user()->id){
+				$n++;
+			}
+		}
+
+		if($n == 10){
 			return back()->with("maximumSubmission", "Sorry, your assignment submission is already in its limit!");
 		}
 
@@ -363,35 +339,48 @@ class AssignmentController extends Controller
 			$status = "On Time";
 		}
 
-		AssignmentSubmission::create([
+		Submission::create([
 			"link" => $request->link,
 			"title" => $request->title,
-			"assignment_id" => $assignment_id,
+			"student_id" => Auth::user()->id,
+			"assignment_id" => $assignment->id,
 			"status" => $status,
-			"student_id" => Auth::user()->id
 		]);
 
 		return redirect(route("student.assignment.show", $course_id))->with("successSubmitAssignment", "Assignment submitted successfully!");
 	}
 
 	// Shows submission history in an assignment
-	public function student_submission_detail($course_id, $assignment_id){
+	public function student_submission_detail($course_id, $student_id, $assignment_id){
+		$assignment = Assignment::where("id", $assignment_id)->first();
+		$submissions = Submission::where("assignment_id", $assignment->id)->where("student_id", $student_id)->get();
+
 		return view("roles.student.assignment.submission-detail", [
 			"course" => Course::where("id", $course_id)->first(),
-			"assignment" => Assignment::where("id", $assignment_id)->first()
+			"submissions" => $submissions,
+			"assignment" => $assignment
 		]);
 	}
 
 
 	// ===== ADMIN ===== //
-	// Showing selected student's attendance data in all course enrolled
+	// Showing selected student's assignment data in all course enrolled
 	public function admin_show($student_id, $course_id){
-		$assignments = Assignment::where("course_id", $course_id)->where("student_id", $student_id)->where("student_is_assigned", 1)->get();
+		$student = User::where("id", $student_id)->first();
+		$student_assignments = StudentAssignment::where("student_id", $student_id)->get();
+		$course = Course::where("id", $course_id)->first();
+
+		$assignments = [];
+		foreach($student_assignments as $sa){
+			if($sa->assignment->course_id == $course_id){
+				array_push($assignments, $sa->assignment);
+			}
+		}
 
 		return view("roles.admin.student.asg-details", [
 			"assignments" => $assignments,
-			"student" => User::where("id", $student_id)->first(),
-			"course" => Course::where("id", $course_id)->first()
+			"student" => $student,
+			"course" =>	$course
 		]);
 	}
 }

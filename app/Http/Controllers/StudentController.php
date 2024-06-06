@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Course;
-use App\Models\UserDetail;
-use Illuminate\Http\Request;
 use App\Models\Assignment;
 use App\Models\Attendance;
-use App\Models\AssignmentSubmission;
+use App\Models\UserDetail;
+use Illuminate\Http\Request;
 use App\Models\CourseStudent;
+use App\Models\StudentAssignment;
+use App\Models\StudentAttendance;
+use App\Models\AssignmentSubmission;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller {
@@ -26,9 +29,10 @@ class StudentController extends Controller {
 	// Showing all students in the selected course to select before continue
 	public function teacher_select_student($course_id) {
 		$course = Course::where("id", $course_id)->first();
-		$students = $course->students;
+		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+
 		return view('roles.teacher.student.select-student', [
-			'students' => $students,
+			'course_students' => $course_students,
 			"course" => $course
 		]);
 	}
@@ -63,7 +67,7 @@ class StudentController extends Controller {
 					}
 				}
 
-				$cs_data = CourseStudent::where("user_id", $student->id)->where("course_id", $course->id)->first();
+				$cs_data = CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first();
 				$maximum_sessions = $cs_data->max_course_session;
 
 				array_push($cp, $count);
@@ -96,51 +100,58 @@ class StudentController extends Controller {
 		$count_assignment_col = [];
 
 		foreach($student->enrolled_courses as $crs){
-			$all_assignments_data = Assignment::where("course_id", $crs->id)->where("student_id", $student->id)->where("student_is_assigned", 1)->get();
+			$student_assignments = StudentAssignment::where("student_id", $student_id)->get();
 
-			$n_asg_subm = 0;
-			foreach($all_assignments_data as $assg){
-				if($assg->submissions->count()){
-					$n_asg_subm++;
+			$student_assignments_in_the_course = [];
+			foreach($student_assignments as $asg){
+				if($asg->assignment->course_id == $crs->id){
+					array_push($student_assignments_in_the_course, $asg);
 				}
 			}
 
-			array_push($count_assignment_all, $all_assignments_data->count());
+			$n_asg_subm = 0;
+			foreach($student_assignments_in_the_course as $assg){
+				foreach($assg->assignment->submissions as $submission){
+					if($submission->student_id == $student_id){
+						$n_asg_subm++;
+						break;
+					}
+				}
+			}
+
+			array_push($count_assignment_all, count($student_assignments_in_the_course));
 			array_push($count_assignment_col, $n_asg_subm);
 		}
 
 		//Counting attended sessions
-		$students_attendances = [];
+		$count_curr_attendance = [];
 		$count_full_attendance = [];
 
 		foreach($student->enrolled_courses as $course){
-			$attendance_data_of_student = Attendance::where("course_id", $course->id)->where("student_id", $student->id)->whereNot("attendance_detail", "Account disabled")->get();
+			$attendance_data_in_the_course = Attendance::where("course_id", $course->id)->get();
+			$course_student = CourseStudent::where("course_id", $course->id)->where("student_id", $student->id)->first();
+			array_push($count_full_attendance, $course_student->max_course_session);
 
-			$cs = CourseStudent::where("user_id", $student_id)->where("course_id", $course->id)->first();
-			$maximum_sessions = $cs->max_course_session;
+			$n = 0;
+			foreach($attendance_data_in_the_course as $atd){
+				$existingAttendances = $atd->student_attendances;
 
-			array_push($count_full_attendance, $maximum_sessions);
-			array_push($students_attendances, $attendance_data_of_student);
-		}
-
-		$count_attendance_col = [];
-		foreach($students_attendances as $atd){
-			$count_attendance = 0;
-			foreach($atd as $a){
-				if($a->is_attend){
-					$count_attendance++;
+				foreach($existingAttendances as $sa){
+					if($sa->user_id == $student_id && $sa->is_attend == 1){
+						$n++;
+						break;
+					}
 				}
 			}
 
-			array_push($count_attendance_col, $count_attendance);
-			// array_push($count_full_attendance, $atd->count());
+			array_push($count_curr_attendance, $n);
 		}
 
 		//Return view with data
 		return view('roles.admin.student.show', [
 			'student' => $student,
 			"attendance_if_full" => $count_full_attendance,
-			"attended" => $count_attendance_col,
+			"attended" => $count_curr_attendance,
 			"assignment_if_full" => $count_assignment_all,
 			"done_assignment" => $count_assignment_col
 		]);
@@ -158,7 +169,7 @@ class StudentController extends Controller {
 			]
 		);
 
-		CourseStudent::where("course_id", $course_id)->where("user_id", $student_id)->update(["max_course_session" => $request["max_course_session" . $student_id . $course_id]]);
+		CourseStudent::where("course_id", $course_id)->where("student_id", $student_id)->update(["max_course_session" => $request["max_course_session" . $student_id . $course_id]]);
 
 		$course = Course::where("id", $course_id)->first();
 

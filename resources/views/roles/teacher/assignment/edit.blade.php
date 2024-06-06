@@ -54,17 +54,17 @@
 			<p class="text-red-500 mt-3">{{ $message }}</p>
 		@enderror
 		<div class="flex flex-wrap gap-3 mt-2 rounded-lg @error("checkbox_value") border p-5 border-red-500 @enderror">
-			@for ($i = 0; $i < $course->students->count(); $i++)
+			@foreach ($course_students as $i => $cs)
 				{{--
 					Note:
 					Teacher can only assign assigments / edit assigning status to active student accounts
 				--}}
-				<div class="flex items-center gap-3 border rounded-lg p-5 checkbox-container" style="width: 30%; @if($course->students[$i]->status == "disabled") display: none; @endif">
+				<div class="flex items-center gap-3 border rounded-lg p-5 checkbox-container" style="width: 30%; @if($cs->student->status == "disabled") display: none; @endif">
 					<input type="checkbox" id="checkbox{{ $i }}"
 					class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $i) == "on" ) checked @elseif($checkboxes_values[$i] == "on") checked @endif>
-					<label for="checkbox{{ $i }}">{{ $course->students[$i]->full_name }}</label>
+					<label for="checkbox{{ $i }}">{{ $cs->student->full_name }}</label>
 				</div>
-			@endfor
+			@endforeach
 		</div>
 
 		<div class="flex items-stretch gap-1 justify-end mt-6">

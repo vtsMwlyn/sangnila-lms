@@ -8,17 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 class CourseStudent extends Model {
 	use HasFactory;
 	protected $fillable = [
-		'user_id',
+		'student_id',
 		'course_id',
 		'student_type',
-		"max_course_session"
+		"max_course_session",
+		"teacher_id"
 	];
 
-	public function parent_user() {
-		return $this->belongsTo(User::class);
+	public function student() {
+		return $this->belongsTo(User::class, "student_id");
 	}
 
 	public function course() {
-		return $this->belongsTo(Course::class);
+		return $this->belongsTo(Course::class, "course_id");
+	}
+
+	public function teacher(){
+		return $this->belongsTo(User::class, "teacher_id");
 	}
 }

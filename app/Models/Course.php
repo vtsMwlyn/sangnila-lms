@@ -19,25 +19,27 @@ class Course extends Model {
 	}
 
 	public function teachers() {
-		return $this->belongsToMany(User::class, 'course_teachers');
+		return $this->belongsToMany(User::class, "course_teachers");
 	}
 
 	public function students() {
-		return $this->belongsToMany(User::class, 'course_students');
+		return $this->belongsToMany(User::class, "course_students", "course_id", "student_id");
+	}
+
+	public function course_students(){
+		return $this->hasMany(CourseStudent::class);
 	}
 
 	public function schedules() {
 		return $this->hasMany(CourseSchedule::class);
 	}
 
-	# SOON (Portfolios)
-
-	public function attendances() {
-		return $this->hasMany(StudentAttendance::class, 'course_id');
+	public function attendances(){
+		return $this->hasMany(Attendance::class);
 	}
 
 	public function assignments(){
-		return $this->hasMany(StudentAssignment::class, "course_id");
+		return $this->hasMany(Assignment::class);
 	}
 
 }

@@ -26,10 +26,11 @@
 		<!-- Visibility Selection -->
 		<div class="mb-4">
 			<x-label for="visibility" :value="__('Visibility')" />
-			<select name="visibility" id="visibility" class="rounded-md shadow-sm border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 border focus:ring-opacity-50 w-1/3 py-2 px-4 mt-1 text-blue-800">
-				<option value="public">Public</option>
-				<option value="private">Private</option>
-			</select>
+			<x-select name="visibility" id="visibility" class="mt-1 w-1/3">
+				<option selected disabled>Course Visibility</option>
+				<option value="public" @if(old("visibility") == "public") selected @endif>Public</option>
+				<option value="private" @if(old("visibility") == "private") selected @endif>Private</option>
+			</x-select>
 		</div>
 
 

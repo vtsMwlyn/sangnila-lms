@@ -104,13 +104,13 @@
 			<div class="flex gap-x-10 overflow-x-auto bg-blue-900 rounded-b-xl mt-5">
 				@forelse ($student->enrolled_courses as $course)
 					<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-5 flex flex-col justify-center items-start font-semibold" style="min-width: 300px; max-width: 300px; min-height: 150px;">
-						<h1 class="mb-5">{{ $course->course_name }}</h1>
-
+						<h1 class="mb-1 font-bold">{{ $course->course_name }}</h1>
+						<span class="text-white text-xs mb-5">{{ __("Teacher: " . App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->full_name) }}</span>
 						<span class="text-white text-xs">{{ __("Maximum Sessions") }}</span>
 						<div class="flex w-full items-center justify-between mt-3">
 							<form action="{{ route("admin.student.max-session.update", [$student->id, $course->id]) }}" method="post" class="flex justify-start gap-2">
 								@csrf
-								<input type="number" name="{{ __('max_course_session' . $student->id . $course->id) }}" class="rounded-md shadow-sm border text-blue-800 @error('max_course_session' . $student->id . $course->id) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50  @else border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50 @enderror" style="width: 40%;" value="{{ $attendance_if_full[$loop->index] }}"  />
+								<input type="number" name="{{ __('max_course_session' . $student->id . $course->id) }}" class="rounded-md shadow-sm border text-blue-800 @error('max_course_session' . $student->id . $course->id) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50  @else border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50 @enderror" style="width: 40%;" value="{{ App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", $student->id)->first()->max_course_session }}"  />
 								<x-button class="bg-orange-700 text-white"><i class="bi bi-pencil-square"></i></x-button>
 							</form>
 							<x-anchor-button

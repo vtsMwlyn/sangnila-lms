@@ -20,9 +20,9 @@
 	<p class="text-gray-700 mb-8">{{ $course->course_description }}</p>
 	<h2 class="text-xl font-semibold mb-2">Student List:</h2>
 	<ul class="list-disc pl-6 mb-6">
-		@forelse ($course->students as $student)
-			@if($student->status == "enabled")
-				<li class="text-black">{{ $student->full_name }}</li>
+		@forelse ($course_students as $cs)
+			@if($cs->student->status == "enabled")
+				<li class="text-black">{{ $cs->student->full_name }}</li>
 			@endif
 		@empty
 			<li class="text-gray-500">No student enrolled in this course</li>

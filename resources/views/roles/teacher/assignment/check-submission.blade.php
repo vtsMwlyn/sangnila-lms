@@ -18,18 +18,18 @@
 				</tr>
 			</thead>
 			<tbody>
-				@if (!empty($submissions))
-					@foreach ($submissions as $submission)
+				@if(count($latest_submissions))
+					@foreach($latest_submissions as $submission)
 						<tr @if($submission->status == "Late") class="bg-red-400" @endif>
 							<td class="border px-3">{{ $submission->created_at }}</td>
-							<td class="border px-3"><a href="{{ route("teacher.assignment.submission-history", [$submission->id, $submission->uploaded_by->id]) }}" class="text-blue-600 font-bold">{{ $submission->uploaded_by->full_name }}</a></td>
+							<td class="border px-3"><a href="{{ route("teacher.assignment.submission-history", [$assignment->id, $submission->student->id]) }}" class="text-blue-600 font-bold">{{ $submission->student->full_name }}</a></td>
 							<td class="border px-3">{{ $submission->title }}</td>
 							<td class="border px-3">{{ $submission->status }}</td>
 							<td class="border px-3"><a class="text-blue-600" href="{{ $submission->link }}">{{ $submission->link }}</a></td>
 						</tr>
 					@endforeach
 				@else
-					<tr><td class="border text-center px-3" colspan="5">- No submissions yet from students -</td></tr>
+					<tr><td class="border text-center px-3" colspan="5">- No submissions yet -</td></tr>
 				@endif
 			</tbody>
 		</table>

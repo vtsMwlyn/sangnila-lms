@@ -27,10 +27,10 @@
 		<!-- Course Visibility -->
 		<div class="mt-4">
 			<x-label for="visibility" :value="__('Course Visibility')" />
-			<select name="visibility" id="visibility" class="rounded-md shadow-sm border-blue-800 focus:border-indigo-200 focus:ring focus:ring-indigo-200 border focus:ring-opacity-50 w-1/3 py-2 px-4 mt-1 text-blue-800">
+			<x-select name="visibility" id="visibility" class="w-1/3 mt-1">
 				<option value="public" @if($course->visibility == "public") selected @endif>Public</option>
 				<option value="private" @if($course->visibility == "private") selected @endif>Private</option>
-			</select>
+			</x-select>
 		</div>
 
 

@@ -16,7 +16,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				@if ($attendances->count())
+				@if (count($attendances))
 					@foreach ($attendances as $attendance)
 						<tr class="@if($attendance->is_attend) bg-green-500 @else bg-red-400 @endif">
 							<td class="border border-black px-3">{{ $attendance->created_at }}</td>

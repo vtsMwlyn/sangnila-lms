@@ -2,20 +2,90 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
+use App\Models\User;
 use App\Models\Course;
-use App\Models\CourseMaterial;
+use App\Models\UserDetail;
+use App\Models\CourseTopic;
 use App\Models\CourseStudent;
 use App\Models\CourseTeacher;
-use App\Models\CourseTopic;
-use App\Models\Role;
-use App\Models\StudentAssignment;
-use App\Models\User;
-use App\Models\UserDetail;
+use App\Models\CourseMaterial;
 use Illuminate\Database\Seeder;
+use App\Models\MaterialProgress;
+use App\Models\StudentAssignment;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
+	private function newUser($email, $full_name, $role_id){
+		$user = User::create([
+			"full_name" => $full_name,
+			"email" => $email,
+			"password" => bcrypt("password"),
+			"email_verified_at" => now(),
+			"role_id" => $role_id,
+			"status" => "enabled"
+		]);
+
+		UserDetail::create(["user_id" => $user->id]);
+	}
+
+	private function assignStudent($student_name, $teacher_name, $courses, $max_session){
+		$student = User::where("role_id", 3)->where("full_name", $student_name)->first();
+		$teacher = User::where("role_id", 2)->where("full_name", $teacher_name)->first();
+
+		foreach($courses as $c){
+			$course = Course::where("course_name", $c)->first();
+
+			CourseStudent::create([
+				"course_id" => $course->id,
+				"student_id" => $student->id,
+				"teacher_id" => $teacher->id,
+				"max_course_session" => $max_session
+			]);
+
+			foreach ($course->course_topics as $index1 => $topic) {
+				foreach($topic->course_materials as $index2 => $material) {
+					$newData = [
+						'student_id' => $student->id,
+						'material_id' => $material->id,
+						'course_id' => $course->id,
+					];
+
+					if($index1 == 0 && $index2 == 0){
+						$newData['status'] = 'unlocked';
+					} else {
+						$newData['status'] = 'locked';
+					}
+
+					MaterialProgress::create($newData);
+				}
+			}
+		}
+	}
+
+	private function assignTeacher($teacher_name, $courses){
+		$teacher = User::where("role_id", 2)->where("full_name", $teacher_name)->first();
+
+		foreach($courses as $c){
+			$course = Course::where("course_name", $c)->first();
+
+			CourseTeacher::create([
+				"user_id" => $teacher->id,
+				"course_id" => $course->id
+			]);
+		}
+	}
+
+	private function addTopicAndMaterial($course_name, $topic_name, $materials){
+		$course = Course::where("course_name", $course_name)->first();
+		$topic = CourseTopic::create(["course_id" => $course->id, "title" => $topic_name]);
+
+		foreach($materials as $material){
+			CourseMaterial::create(["course_topic_id" => $topic->id, "title" => $material, "link" => "https://www.google.com/"]);
+		}
+	}
+
     public function run()
     {
 		//Generate Users and UserDetails
@@ -24,35 +94,58 @@ class DatabaseSeeder extends Seeder
 		Role::create(["role_name" => "Student"]);
 		// Role::create(["role_name" => "Parent"]); //postponed
 
-        User::create(["email" => "admin.sangnila@gmail.com", "full_name" => "Admin", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 1, "status" => "enabled"]); UserDetail::create(["user_id" => 1]);
+		// /*COMMENT BELOW COMMANDS TO SET THE APP DATA TO COMPLETELY EMPTY*/
 
-		/*COMMENT BELOW COMMANDS TO SET THE APP DATA TO COMPLETELY EMPTY*/
-		User::create(["email" => "hari.sangnila@gmail.com", "full_name" => "Hari", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 2, "status" => "enabled"]); UserDetail::create(["user_id" => 2]);
-		User::create(["email" => "benita.sangnila@gmail.com", "full_name" => "Benita", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 2, "status" => "enabled"]); UserDetail::create(["user_id" => 3]);
-		User::create(["email" => "emily.sangnila@gmail.com", "full_name" => "Emily", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 2, "status" => "enabled"]); UserDetail::create(["user_id" => 4]);
+		$this->newUser("vannestheo.sangnila@gmail.com", "Vannes Theo Sudarsono", 1);
+		$this->newUser("immanuelgiovano.sangnila@gmail.com", "Immanuel Giovano", 1);
+		$this->newUser("jessica.sangnila@gmail.com", "Jessica", 1);
+		$this->newUser("victor.sangnila@gmail.com", "Victor", 1);
+		$this->newUser("feby.sangnila@gmail.com", "Feby", 1);
+		$this->newUser("tiwi.sangnila@gmail.com", "Pratiwi", 1);
 
-		User::create(["email" => "jack.sangnila@gmail.com", "full_name" => "Jack", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]); UserDetail::create(["user_id" => 5]);
-		User::create(["email" => "jillian.sangnila@gmail.com", "full_name" => "Jillian P. Tanuwijaya", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]); UserDetail::create(["user_id" => 6]);
-		User::create(["email" => "jocheli.sangnila@gmail.com", "full_name" => "Jocheli Kensi Budianti", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]); UserDetail::create(["user_id" => 7]);
-		User::create(["email" => "bellrich.sangnila@gmail.com", "full_name" => "Bellrich Kevin Tjahyadi", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]); UserDetail::create(["user_id" => 8]);
-		User::create(["email" => "batara.sangnila@gmail.com", "full_name" => "Batara Feodore Setiawan", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]); UserDetail::create(["user_id" => 9]);
-		User::create(["email" => "benedict.sangnila@gmail.com", "full_name" => "Benedict Jacob", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 3, "status" => "enabled"]); UserDetail::create(["user_id" => 10]);
+		$this->newUser("hari.sangnila@gmail.com", "Hari", 2);
+		$this->newUser("lgaby.sangnila@gmail.com", "Gaby", 2);
+		$this->newUser("iswansudaryo.sangnila@gmail.com", "Iswan Sudaryo", 2);
+		$this->newUser("vincent.sangnila@gmail.com", "Vincent", 2);
 
-		User::create(["email" => "vannestheo.sangnila@gmail.com", "full_name" => "Vannes Theo Sudarsono", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 1, "status" => "enabled"]); UserDetail::create(["user_id" => 11]);
-		User::create(["email" => "immanuelgiovano.sangnila@gmail.com", "full_name" => "Immanuel Giovano", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 1, "status" => "enabled"]); UserDetail::create(["user_id" => 12]);
-		User::create(["email" => "jessica.sangnila@gmail.com", "full_name" => "Jessica", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 1, "status" => "enabled"]); UserDetail::create(["user_id" => 13]);
-		User::create(["email" => "victor.sangnila@gmail.com", "full_name" => "Victor", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 1, "status" => "enabled"]); UserDetail::create(["user_id" => 14]);
-		User::create(["email" => "feby.sangnila@gmail.com", "full_name" => "Feby", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 1, "status" => "enabled"]); UserDetail::create(["user_id" => 15]);
-		User::create(["email" => "pratiwi.sangnila@gmail.com", "full_name" => "Pratiwi", "password" => bcrypt("password"), "email_verified_at" => now(), "role_id" => 1, "status" => "enabled"]); UserDetail::create(["user_id" => 16]);
+		/*Hari's students: Digital Drawing, Roblox*/
+		$this->newUser("jack.sangnila@gmail.com", "Jack", 3);
+		$this->newUser("jillian.sangnila@gmail.com", "Jillian P. Tanuwijaya", 3);
+		$this->newUser("jocheli.sangnila@gmail.com", "Jocheli Kensi Budianti", 3);
+
+		$this->newUser("batara.sangnila@gmail.com", "Batara Feodore Setiawan", 3);
+		$this->newUser("bellrich.sangnila@gmail.com", "Bellrich Kevin Tjahyadi", 3);
+		$this->newUser("benedict.sangnila@gmail.com", "Benedict Jacob", 3);
+
+		/*Gaby's students: Digital Drawing*/
+		$this->newUser("melly.sangnila@gmail.com", "Melly Tanto", 3);
+		$this->newUser("zhafira.sangnila@gmail.com", "Zhafira Jasmine", 3);
+		$this->newUser("vanya.sangnila@gmail.com", "Vanya Farelia", 3);
+		$this->newUser("freya.sangnila@gmail.com", "Freya Pramudia", 3);
+		$this->newUser("kenzie.sangnila@gmail.com", "Kenzie Gautama Dirgantara", 3);
+
+		/*Iswan's students: 3D Modelling, Concept Art*/
+		$this->newUser("louisha.sangnila@gmail.com", "Louisha Annabelle", 3);
+		$this->newUser("gayle.sangnila@gmail.com", "Gayle Farrel Patria", 3);
+		$this->newUser("angela.sangnila@gmail.com", "Angela Nathania", 3);
+		$this->newUser("balya.sangnila@gmail.com", "Balya Malkan Mahyuzar", 3);
+		$this->newUser("alvin.sangnila@gmail.com", "Alvin Edward", 3);
+
+		$this->newUser("ethan.sangnila@gmail.com", "Ethan Alexander Irawan", 3);
+		$this->newUser("jezriel.sangnila@gmail.com", "Jezriel Connery", 3);
+		$this->newUser("martha.sangnila@gmail.com", "Martha Theresia Ramlie", 3);
+		$this->newUser("janicelyn.sangnila@gmail.com", "Janicelyn Daviena Godarma", 3);
+		$this->newUser("grace.sangnila@gmail.com", "Grace Devana Kusnandar", 3);
+
+		/*Vincent's students: 3D Modelling, 2D Modelling*/
+		$this->newUser("philia.sangnila@gmail.com", "Philia Valeraine Alverna", 3);
+		$this->newUser("kensi.sangnila@gmail.com", "Kensi Sinclair", 3);
+		$this->newUser("giselle.sangnila@gmail.com", "Giselle Saputra", 3);
 
 		//Generate Courses
 		Course::create([
 			"course_name" => "3D Modelling",
 			"course_description" => "This course serves as a comprehensive introduction to the exciting world of 3D modeling. Whether you're a beginner looking to delve into the realm of digital design or an enthusiast seeking to enhance your skills, this course provides a solid foundation in the principles and techniques of 3D modeling.  Throughout the course, students will explore the fundamental concepts of 3D modeling, learning how to create three-dimensional objects and environments using industry-standard software tools."
-		]);
-		Course::create([
-			"course_name" => "Roblox",
-			"course_description" => "Learn to create various of games using Roblox game engine, designed for easily understandable by kids. It's a good opportunity to learn game development with Roblox before getting started with more advanced game development technologies such as Unity and Unreal game engine."
 		]);
 		Course::create([
 			"course_name" => "Concept Art",
@@ -62,126 +155,165 @@ class DatabaseSeeder extends Seeder
 			"course_name" => "Digital Drawing",
 			"course_description" => "This is the description of course Digital Drawing. You can modify or add anything here."
 		]);
-
-
-		//Generate Topics
-		CourseTopic::create(["title" => "TOPIC 01 - Introduction to Concept Art", "course_id" => 3]);
-		CourseTopic::create(["title" => "TOPIC 02 - Software Installation and Test Run", "course_id" => 3]);
-
-		CourseTopic::create(["title" => "Software Intro 101", "course_id" => 2]);
-		CourseTopic::create(["title" => "Properties Drawing", "course_id" => 2]);
-
-		CourseTopic::create(["title" => "[TOPIC 01] 3D Modelling Fundamentals", "course_id" => 1]);
-		CourseTopic::create(["title" => "[TOPIC 02] 3D Drawing Basics Techniques", "course_id" => 1]);
-		CourseTopic::create(["title" => "[TOPIC 03] 3D Drawing Advanced Techniques", "course_id" => 1]);
-
-		CourseTopic::create(["title" => "Character Design", "course_id" => 4]);
-		CourseTopic::create(["title" => "Properties", "course_id" => 4]);
-
-
-		//Generate Materials
-		/*Materials for Concept Art*/
-		CourseMaterial::create([
-			"course_topic_id" => 1,
-			"title" => "Introduction to Concept Art Video",
-			"link" => "https://youtu.be/61mkx_OV61s"
+		Course::create([
+			"course_name" => "2D Animation",
+			"course_description" => "This is the description of course 2D Animation. You can modify or add anything here."
 		]);
-		CourseMaterial::create([
-			"course_topic_id" => 1,
-			"title" => "Introduction to Concept Art Article",
-			"link" => "https://www.nfi.edu/concept-art/"
+		Course::create([
+			"course_name" => "Roblox",
+			"course_description" => "This is the description of course Roblox. You can modify or add anything here."
 		]);
 
-		CourseMaterial::create([
-			"course_topic_id" => 2,
-			"title" => "Creating your first concept art video",
-			"link" => "https://youtu.be/WVPwtsQ-RzI"
+
+		// ===== Generate Topics and Materials ===== //
+		/*Topics for Concept Art*/
+		$this->addTopicAndMaterial("Concept Art", "Prop Design", [
+			"Additive and Subtractive Shape",
+			"Sketching Details",
+			"Line Art",
+			"Value and Ligthing",
+			"Color Theory and Exploration",
+			"Material Studies",
+			"Orthographic View / Turn Table",
+			"Blow Up and Detailing",
+			"Submission: Prop Design Portfolio"
+		]);
+		$this->addTopicAndMaterial("Concept Art", "Interior Environment", [
+			"Isometric Perspective: Simple Objects in 3D Space",
+			"Isometric Perspective: Complex Objects in 3D Space",
+			"Sketch and Detailing",
+			"Value and Lighting",
+			"Color Exploration",
+			"Consultation",
+			"Rendering",
+			"Consultation",
+			"Submission: Interior Environment Portfolio"
 		]);
 
-		/*Materials for Roblox*/
-		CourseMaterial::create([
-			"course_topic_id" => 3,
-			"title" => "Tool intoduction: Brush, Eraser Canvas, Layer",
-			"link" => "https://www.google.com/"
+		/*Topics for 3D Modelling*/
+		$this->addTopicAndMaterial("3D Modelling", "Intermediate Modelling", [
+			"Expand your 3D Modelling by Using Different Tools and Edits"
 		]);
-		CourseMaterial::create([
-			"course_topic_id" => 3,
-			"title" => "How to make basic shape, How to Use Gradient",
-			"link" => "https://www.google.com/"
+		$this->addTopicAndMaterial("3D Modelling", "Product Design Modelling", [
+			"Design a Simple Product for Advertising by Using Image Texturing"
 		]);
-
-		CourseMaterial::create([
-			"course_topic_id" => 4,
-			"title" => "Line art",
-			"link" => "https://www.google.com/"
-		]);
-		CourseMaterial::create([
-			"course_topic_id" => 4,
-			"title" => "Fill Color Object",
-			"link" => "https://www.google.com/"
-		]);
-		CourseMaterial::create([
-			"course_topic_id" => 4,
-			"title" => "Put basic shadow and Lighting",
-			"link" => "https://www.google.com/"
+		$this->addTopicAndMaterial("3D Modelling", "Interior Visualization", [
+			"Exercise Modelling an Interior Room with Different Types of Objects"
 		]);
 
-		/*Materials for 3D Modelling*/
-		CourseMaterial::create([
-			"course_topic_id" => 5,
-			"title" => "Get to know what is 3D modelling",
-			"link" => "https://www.futurelearn.com/info/blog/general/what-is-3d-modelling"
+		/*Topics for 2D Animation*/
+		$this->addTopicAndMaterial("2D Animation", "Introduction + Software Practice #1", [
+			"Penggunaan Drawing Tools",
+			"Penggunaan Deformers",
+			"Penggunaan Effects dan Animation",
+			"Workflow dan Interface"
 		]);
-		CourseMaterial::create([
-			"course_topic_id" => 6,
-			"title" => "Learn to draw 3D objects",
-			"link" => "https://youtu.be/48_P5552638?si=ysyeVlA38_9v6CQY"
+		$this->addTopicAndMaterial("2D Animation", "Software Practice #2", [
+			"Simple Animation Using Deformer (Pendulum, Bouncing Ball)",
+			"Latihan Menggambar Rough Pose, Clean Up, Detail"
 		]);
-		CourseMaterial::create([
-			"course_topic_id" => 7,
-			"title" => "More advanced techniques in 3D drawing",
-			"link" => "https://youtu.be/PqysfuKMQbM?si=rwyVnJV7jhcI3wa-"
+		$this->addTopicAndMaterial("2D Animation", "Timing #1", [
+			"Menggeser Bola",
+			"Bouncing Ball",
+			"Timing Cepat"
 		]);
-
-		/*Materials for Digital Drawing*/
-		CourseMaterial::create([
-			"course_topic_id" => 8,
-			"title" => "Head construction",
-			"link" => "https://www.google.com/"
+		$this->addTopicAndMaterial("2D Animation", "Timing #2", [
+			"Avoid Tweening: Raising Arms",
+			"Avoid Tweening: Jumping",
+			"Avoid Tweening: Half Body Turn"
 		]);
-		CourseMaterial::create([
-			"course_topic_id" => 8,
-			"title" => "Body construction",
-			"link" => "https://www.google.com/"
-		]);
-		CourseMaterial::create([
-			"course_topic_id" => 8,
-			"title" => "Gesture, ekspresi, dan tangan",
-			"link" => "https://www.google.com/"
+		$this->addTopicAndMaterial("2D Animation", "Spacing #1", [
+			"Head Turn #1",
+			"Take #1 (Half Body)"
 		]);
 
-		CourseMaterial::create([
-			"course_topic_id" => 9,
-			"title" => "Intro to Perspektif",
-			"link" => "https://www.google.com/"
+		/*Topics for Digital Drawing*/
+		// $this->addTopicAndMaterial("Digital Drawing", "Logo Design", [
+		// 	"Sketching and Ideation",
+		// 	"Blocking and Clean Up",
+		// 	"Color Exploration"
+		// ]);
+		// $this->addTopicAndMaterial("Digital Drawing", "Flora and Fauna Drawing", [
+		// 	"Optimize using Mirror",
+		// 	"Simetrical Tools to Create Repetition",
+		// 	"Export Pattern and Implementation into Drawing"
+		// ]);
+		// $this->addTopicAndMaterial("Digital Drawing", "Gradient Background", [
+		// 	"Sketching and Ideation",
+		// 	"Lineart",
+		// 	"Color and Shading with Gradients"
+		// ]);
+		$this->addTopicAndMaterial("Digital Drawing", "Character Design", [
+			"Head Construction",
+			"Body Construction",
+			"Gesture, Ekspresi, dan Tangan",
+			"Gesture and Full Body Construction",
+			"Take a Reference for Drawing"
 		]);
-		CourseMaterial::create([
-			"course_topic_id" => 9,
-			"title" => "Drawing boxes, (base cube)",
-			"link" => "https://www.google.com/"
+		$this->addTopicAndMaterial("Digital Drawing", "Properties", [
+			"Intro to Perspektif",
+			"Drawing Boxes (Base Cube)",
+			"Drawing Vases (Base Tube)",
+			"Drawing Any Still Life Object using Envelope, Cube",
+			"Drawing Character with Properties"
+		]);
+		$this->addTopicAndMaterial("Digital Drawing", "Flora and Fauna", [
+			"Drawing Leaves",
+			"Drawing Tree",
+			"Drawing Flower",
+			"Body Structure in Animal",
+			"Drawing any Animal"
+		]);
+		$this->addTopicAndMaterial("Digital Drawing", "Background", [
+			"Drawing Living Room in 1 Perspective",
+			"Drawing Bed Room in 2 Perspective",
+			"Drawing Park",
+			"Drawing Character in a Place #1",
+			"Drawing Character in a Place #2"
 		]);
 
-		//Generate Course Assignments to Teachers and Students
-		CourseTeacher::create(["course_id" => 2, "user_id" => 2]);
-		CourseTeacher::create(["course_id" => 4, "user_id" => 2]);
-		CourseTeacher::create(["course_id" => 1, "user_id" => 3]);
-		CourseTeacher::create(["course_id" => 3, "user_id" => 4]);
 
-		CourseStudent::create(["course_id" => 2, "user_id" => 5, "max_course_session" => 15]);
-		CourseStudent::create(["course_id" => 2, "user_id" => 6, "max_course_session" => 20]);
-		CourseStudent::create(["course_id" => 2, "user_id" => 7, "max_course_session" => 20]);
-		CourseStudent::create(["course_id" => 4, "user_id" => 8, "max_course_session" => 15]);
-		CourseStudent::create(["course_id" => 4, "user_id" => 9, "max_course_session" => 30]);
-		CourseStudent::create(["course_id" => 4, "user_id" => 10, "max_course_session" => 40]);
-    }
+		// ===== Assign students to courses + generate progress ===== //
+		/*Hari's students*/
+		$this->assignStudent("Jack", "Hari", ["Digital Drawing"], 20);
+		$this->assignStudent("Jillian P. Tanuwijaya", "Hari", ["Digital Drawing"], 20);
+		$this->assignStudent("Jocheli Kensi Budianti", "Hari", ["Digital Drawing"], 20);
+
+		$this->assignStudent("Batara Feodore Setiawan","Hari", ["Roblox"], 20);
+		$this->assignStudent("Bellrich Kevin Tjahyadi","Hari", ["Roblox"], 20);
+		$this->assignStudent("Benedict Jacob","Hari", ["Roblox"], 20);
+
+		/*Gaby's students*/
+		$this->assignStudent("Melly Tanto", "Gaby", ["Digital Drawing"], 20);
+		$this->assignStudent("Zhafira Jasmine", "Gaby", ["Digital Drawing"], 20);
+		$this->assignStudent("Vanya Farelia", "Gaby", ["Digital Drawing"], 20);
+		$this->assignStudent("Freya Pramudia", "Gaby", ["Digital Drawing"], 20);
+		$this->assignStudent("Kenzie Gautama Dirgantara", "Gaby", ["Digital Drawing"], 20);
+
+		/*Iswan's students*/
+		$this->assignStudent("Louisha Annabelle", "Iswan Sudaryo", ["3D Modelling"], 20);
+		$this->assignStudent("Gayle Farrel Patria", "Iswan Sudaryo", ["3D Modelling"], 20);
+		$this->assignStudent("Angela Nathania", "Iswan Sudaryo", ["3D Modelling"], 20);
+		$this->assignStudent("Balya Malkan Mahyuzar", "Iswan Sudaryo", ["3D Modelling"], 20);
+		$this->assignStudent("Alvin Edward", "Iswan Sudaryo", ["3D Modelling"], 20);
+
+		$this->assignStudent("Ethan Alexander Irawan", "Iswan Sudaryo", ["Concept Art"], 20);
+		$this->assignStudent("Jezriel Connery", "Iswan Sudaryo", ["Concept Art"], 20);
+		$this->assignStudent("Martha Theresia Ramlie", "Iswan Sudaryo", ["Concept Art"], 20);
+		$this->assignStudent("Janicelyn Daviena Godarma", "Iswan Sudaryo", ["Concept Art"], 20);
+		$this->assignStudent("Grace Devana Kusnandar", "Iswan Sudaryo", ["Concept Art"], 20);
+
+		/*Vincent's students*/
+		$this->assignStudent("Philia Valeraine Alverna", "Vincent", ["3D Modelling"], 20);
+		$this->assignStudent("Kensi Sinclair", "Vincent", ["3D Modelling"], 20);
+		$this->assignStudent("Giselle Saputra", "Vincent", ["3D Modelling"], 20);
+
+
+		// Assign teachers to courses
+		$this->assignTeacher("Hari", ["Digital Drawing", "Roblox"]);
+		$this->assignTeacher("Gaby", ["Digital Drawing"]);
+		$this->assignTeacher("Iswan Sudaryo", ["3D Modelling", "Concept Art"]);
+		$this->assignTeacher("Vincent", ["3D Modelling", "2D Animation"]);
+
+	}
 }

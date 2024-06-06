@@ -2,20 +2,16 @@
 
 namespace App\Models;
 
+use id;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail{
 	use HasApiTokens, HasFactory, Notifiable;
 
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array<int, string>
-	 */
 	protected $fillable = [
 		'full_name',
 		'email',
@@ -25,25 +21,16 @@ class User extends Authenticatable implements MustVerifyEmail{
 		"status"
 	];
 
-	/**
-	 * The attributes that should be hidden for serialization.
-	 *
-	 * @var array<int, string>
-	 */
 	protected $hidden = [
 		'password',
 		'remember_token',
 	];
 
-	/**
-	 * The attributes that should be cast.
-	 *
-	 * @var array<string, string>
-	 */
 	protected $casts = [
 		'email_verified_at' => 'datetime',
 	];
 
+	// Relationships
 	public function details() {
 		return $this->hasOne(UserDetail::class);
 	}
@@ -57,7 +44,7 @@ class User extends Authenticatable implements MustVerifyEmail{
 	}
 
 	public function enrolled_courses() {
-		return $this->belongsToMany(Course::class, 'course_students');
+		return $this->belongsToMany(Course::class, 'course_students', "student_id", "course_id");
 	}
 
 	public function progress() {
@@ -68,24 +55,24 @@ class User extends Authenticatable implements MustVerifyEmail{
 		return $this->hasMany(StudentSchedule::class, 'student_id');
 	}
 
-	public function course_attendances(){
-		return $this->hasMany(Attendance::class, "student_id");
+	public function attendances(){
+		return $this->hasMany(Attendance::class, "student_attendances");
 	}
 
-	public function submitted_attendances(){
-		return $this->hasMany(Attendance::class, "teacher_id");
+	public function assignments(){
+		return $this->hasMany(Assignment::class, "student_assignments");
 	}
 
-	public function assigned_assignments(){
-		return $this->hasMany(Assignment::class, "student_id");
+	public function posted_attendances(){
+		return $this->hasMany(Attendance::class);
 	}
 
-	public function course_assignments(){
-		return $this->hasMany(Assignment::class, "teacher_id");
+	public function posted_assignments(){
+		return $this->hasMany(Assignment::class);
 	}
 
-	public function assignment_submissions(){
-		return $this->hasMany(AssignmentSubmission::class, "student_id");
+	public function submissions(){
+		return $this->hasMany(Submission::class, "student_id");
 	}
 
 }
