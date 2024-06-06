@@ -25,7 +25,7 @@
 	@if($attendanceData->count())
 		@foreach($attendanceData as $atd)
 			<div class="border rounded-lg p-5 mb-5 mt-5">
-				<p>Date: {{ $atd->attendance_date }}</p>
+				<p>Attendance Date: {{ $atd->attendance_date }}</p>
 				<p>Uploaded by: {{ $atd->posted_by->full_name }}</p>
 				<div class="mt-5">
 					<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"

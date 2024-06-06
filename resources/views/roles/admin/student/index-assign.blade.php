@@ -6,29 +6,28 @@
 
 @section("content")
 	<x-page-title>{{ __("Assign Student to Course") }}</x-page-title>
-
 	<div class="rounded-xl bg-indigo-200 p-5 mt-10">
-		@if($courses->count())
+		@if(count($courses))
 			<form action="{{ route('admin.student.assign.store', $student->id) }}" method="post" class="rounded-lg py-5 px-10 bg-blue-800">
 				@csrf
 				<!-- Select course -->
 				<div class="mt-3">
 					<x-label for="visibility" :value="__('Select a course to assign')" style="color: white;"/>
-					<select name="course_name" id="course_name" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full mt-1 py-2 px-4">
+					<x-select name="course_name" id="course_name" class="mt-1 w-full">
 						<option disabled selected>Pick a course</option>
 						@foreach ($courses as $course)
 							<option value="{{ $course->course_name }}">{{ $course->course_name }}</option>
 						@endforeach
-					</select>
+					</x-select>
 				</div>
 
 				<!-- Max Course Sessions -->
 				<div class="mt-3 flex gap-3">
 					<div class="w-1/2">
 						<x-label for="visibility" :value="__('Select a teacher that will teach the student')" style="color: white;"/>
-						<select name="teacher_name" id="teacher_name" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full mt-1 py-2 px-4">
+						<x-select name="teacher_name" id="teacher_name" class="mt-1 w-full">
 							<option disabled selected>Pick a teacher</option>
-						</select>
+						</x-select>
 					</div>
 					<div class="w-1/2">
 						<x-label for="max_course_session" :value="__('Maximum sessions in this course')" style="color: white;"/>

@@ -40,7 +40,11 @@
 				@yield("title")
 				<a href="{{ route("profile.show") }}" class="flex flex-col absolute items-center right-10 invisible md:visible text-white hover:text-yellow-400 transition ease-in-out hover:scale-105 duration-600" style="cursor: url({{ asset('img/cursor2.cur') }}), pointer;">
 					<i class="bi bi-person-circle"></i>
-					<span class="text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
+					@if(Auth::user()->full_name == "Immanuel Giovano")
+						<span class="text-center text-sm mt-1">Pagi, Gi</span>
+					@else
+						<span class="text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
+					@endif
 				</a>
 			</div>
 

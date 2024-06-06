@@ -13,7 +13,7 @@
 					<tr>
 						<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Course Name</td>
 						<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Description</td>
-						<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Lecturers</td>
+						<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Lecturer</td>
 						<td class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Progress</td>
 					</tr>
 				</thead>
@@ -32,11 +32,7 @@
 							</td>
 
 							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
-								<ul>
-									@foreach($course->teachers as $t)
-										<li>{{ $t->full_name }}</li>
-									@endforeach
-								</ul>
+								{{ App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->full_name }}
 							</td>
 
 							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
@@ -55,7 +51,9 @@
 										}
 									}
 
-									echo "[Progress: " . $count . "/" . count($all_progress_in_current_course) . "]";
+									$max_course_session = App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->max_course_session;
+
+									echo "[Progress: " . $count . "/" . $max_course_session . "]";
 								@endphp
 							</td>
 

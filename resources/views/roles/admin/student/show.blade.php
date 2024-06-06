@@ -104,8 +104,8 @@
 			<div class="flex gap-x-10 overflow-x-auto bg-blue-900 rounded-b-xl mt-5">
 				@forelse ($student->enrolled_courses as $course)
 					<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-5 flex flex-col justify-center items-start font-semibold" style="min-width: 300px; max-width: 300px; min-height: 150px;">
-						<h1 class="mb-5">{{ $course->course_name }}</h1>
-
+						<h1 class="mb-1 font-bold">{{ $course->course_name }}</h1>
+						<span class="text-white text-xs mb-5">{{ __("Teacher: " . App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->full_name) }}</span>
 						<span class="text-white text-xs">{{ __("Maximum Sessions") }}</span>
 						<div class="flex w-full items-center justify-between mt-3">
 							<form action="{{ route("admin.student.max-session.update", [$student->id, $course->id]) }}" method="post" class="flex justify-start gap-2">

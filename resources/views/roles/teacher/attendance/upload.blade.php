@@ -12,8 +12,15 @@
 
 				<div class="my-4">
 					<x-label for="attendance_date">{{ __("Attendance Date") }}</x-label>
-					<x-input type="date" name="attendance_date" id="attendance_date" class="w-1/3 mt-1"/>
+					<div class="flex items-center gap-3 mt-1">
+						<div class="flex flex-col w-1/3">
+							<x-input type="date" name="attendance_date" id="attendance_date" class=""/>
+						</div>
+						<x-button type="button" id="todaybtn" class="bg-indigo-400">Today</x-button>
+					</div>
 				</div>
+
+				<!-- tambahin tombol now buat kasih tanggal hari ini -->
 
 				<div class="mt-6">
 				<x-label>{{ __("Attendance Details") }}</x-label>
@@ -23,7 +30,7 @@
 							<th class="border border-blue-900 px-5 py-3">Attendance Detail</th>
 						</thead>
 						<tbody>
-							@foreach ($course->students as $student)
+							@foreach ($course_students as $cs)
 							{{--
 								Note:
 								Teacher can only submit attendance for active students account, if disabled by admin then the checkbox and textarea for that student account will be disabled (showing "account disabled")
@@ -32,13 +39,13 @@
 									<td class="border border-blue-900 px-5 py-3 w-1/3">
 										<div class="flex items-center gap-3">
 											<input type="checkbox" id="checkbox{{ $loop->iteration }}"
-											class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif @if($student->status == "disabled") disabled @endif>
-											<span>{{ $student->full_name }}</span>
+											class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if($cs->student->status == "disabled") disabled @endif @if(old('checkbox_value.' . $loop->index) == "on") checked @endif >
+											<span>{{ $cs->student->full_name }}</span>
 										</div>
 									</td>
 									<td class="border px-5 border-blue-900 py-3">
 										<div class="flex flex-col items-stretch">
-											<textarea name="attendance_detail[]" rows="3" class="rounded-lg @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @enderror" placeholder="Enter student attendance details" style="resize: none; box-sizing: border-box; padding: 10px;" @if($student->status == "disabled") disabled @endif>@if($student->status == "disabled") Account disabled @else{{ old("attendance_detail." . $loop->index) }}@endif</textarea>
+											<textarea name="attendance_detail[]" rows="3" class="rounded-lg @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @enderror" placeholder="Enter student attendance details" style="resize: none; box-sizing: border-box; padding: 10px;" @if($cs->student->status == "disabled") disabled @endif>@if($cs->student->status == "disabled") Account disabled @else{{ old("attendance_detail." . $loop->index) }}@endif</textarea>
 
 											@error("attendance_detail." . $loop->index)
 												<span class="text-red-500 mt-2">{{ $message }}</span>
@@ -117,6 +124,16 @@
 				processDisabledTextAreas();
 				// Now you can submit the form with the additional hidden input containing checkbox values
 				form.submit();
+			});
+
+			const todayBtn = document.querySelector("#todaybtn");
+			todayBtn.addEventListener("click", () => {
+				const inpDate = document.querySelector("#attendance_date");
+				const currentDate = new Date();
+				const year = currentDate.getFullYear();
+				const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+				const day = String(currentDate.getDate()).padStart(2, '0');
+				inpDate.value = `${year}-${month}-${day}`;
 			});
 		</script>
 @endsection

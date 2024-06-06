@@ -38,14 +38,14 @@
 			<div class="mt-4">
 				<x-label for="role" class="text-white" :value="__('Select Role')" />
 
-				<select name="role" id="role"
-					class="rounded-md w-1/3 px-4 py-2 shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 mt-1">
+				<x-select name="role" id="role"
+					class="mt-1 w-1/3">
+					<option selected disabled>Pick a Role</option>
 					@forelse ($roles as $role)
-						<option value="{{ $role->role_name }}">{{ $role->role_name }}</option>
+						<option value="{{ $role->role_name }}" @if(old("role") == $role->role_name) selected @endif>{{ $role->role_name }}</option>
 					@empty
 					@endforelse
-
-				</select>
+				</x-select>
 			</div>
 
 			<div class="flex justify-end gap-1 items-center mt-8">

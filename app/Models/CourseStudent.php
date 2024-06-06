@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class CourseStudent extends Model {
 	use HasFactory;
 	protected $fillable = [
-		'user_id',
+		'student_id',
 		'course_id',
 		'student_type',
-		"max_course_session"
+		"max_course_session",
+		"teacher_id"
 	];
 
 	public function student() {

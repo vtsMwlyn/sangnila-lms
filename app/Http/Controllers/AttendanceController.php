@@ -24,7 +24,7 @@ class AttendanceController extends Controller {
 	public function show($course_id) {
 		$course = Auth::user()->teached_courses->where('id', $course_id)->first();
 
-		$attendanceData = Attendance::where("course_id", $course->id)->latest()->get();
+		$attendanceData = Attendance::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->latest()->get();
 
 		return view('roles.teacher.attendance.show', [
 			'attendanceData' => $attendanceData,
@@ -35,8 +35,11 @@ class AttendanceController extends Controller {
 	// New attendance data input form page
 	public function create($course_id){
 		$course = Auth::user()->teached_courses->where('id', $course_id)->first();
+		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+
 		return view("roles.teacher.attendance.upload", [
-			"course" => $course
+			"course" => $course,
+			"course_students" => $course_students
 		]);
 	}
 
@@ -62,14 +65,15 @@ class AttendanceController extends Controller {
 			"attendance_identifier" => $identifier
 		]);
 
-		$i = 0;
-		foreach($course->students as $student){
+		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+
+		foreach($course_students as $i => $cs){
 			$attendanceDetail = $validatedData["attendance_detail"][$i];
 
 			$isAttend = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
 
 			StudentAttendance::create([
-				"user_id" => $student->id,
+				"user_id" => $cs->student->id,
 				"attendance_id" => $newAttendance->id,
 				"is_attend" => $isAttend,
 				"attendance_detail" => $attendanceDetail,
@@ -86,7 +90,8 @@ class AttendanceController extends Controller {
 		$attendance = Attendance::where("id", $attendance_data_id)->first();
 
 		return view("roles.teacher.attendance.edit", [
-			"attendanceData" => $attendance
+			"attendance" => $attendance,
+			"attendanceData" => $attendance->student_attendances,
 		]);
 	}
 
@@ -94,13 +99,16 @@ class AttendanceController extends Controller {
 	public function update(Request $request, $attendance_data_id){
 		$validatedData = $request->validate([
 			"checkbox_value.*" => "required",
-			"attendance_detail.*" => "required|min:3"
+			"attendance_detail.*" => "required|min:3",
+			"attendance_date" => "required"
 		], [
 			"attendance_detail.*.required" => "The attendance detail field is required."
 		]);
 
 		$attendance = Attendance::where("id", $attendance_data_id)->first();
 		$existingAttendanceData = $attendance->student_attendances;
+
+		$attendance->update(["attendance_date" => $validatedData["attendance_date"]]);
 
 		$i = 0;
 		foreach($existingAttendanceData as $a){
@@ -159,7 +167,7 @@ class AttendanceController extends Controller {
 		}
 
 		return view("roles.admin.student.atd-details", [
-			"attendances" => $attendances,
+			"attendances" => $student_attendances,
 			"course" => $course,
 			"student" => $student
 		]);

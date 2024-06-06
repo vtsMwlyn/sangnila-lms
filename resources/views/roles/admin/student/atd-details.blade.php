@@ -19,7 +19,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				@if ($attendances->count())
+				@if (count($attendances))
 					@foreach ($attendances as $attendance)
 						@if($attendance->attendance_detail == "Account disabled")
 							@continue

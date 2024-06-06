@@ -13,6 +13,7 @@ use App\Models\CourseStudent;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
 use App\Models\AssignmentSubmission;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller {
@@ -28,9 +29,10 @@ class StudentController extends Controller {
 	// Showing all students in the selected course to select before continue
 	public function teacher_select_student($course_id) {
 		$course = Course::where("id", $course_id)->first();
-		$students = $course->students;
+		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+
 		return view('roles.teacher.student.select-student', [
-			'students' => $students,
+			'course_students' => $course_students,
 			"course" => $course
 		]);
 	}
@@ -127,7 +129,8 @@ class StudentController extends Controller {
 
 		foreach($student->enrolled_courses as $course){
 			$attendance_data_in_the_course = Attendance::where("course_id", $course->id)->get();
-			array_push($count_full_attendance, $attendance_data_in_the_course->count());
+			$course_student = CourseStudent::where("course_id", $course->id)->where("student_id", $student->id)->first();
+			array_push($count_full_attendance, $course_student->max_course_session);
 
 			$n = 0;
 			foreach($attendance_data_in_the_course as $atd){

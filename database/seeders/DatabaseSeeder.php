@@ -228,49 +228,49 @@ class DatabaseSeeder extends Seeder
 		]);
 
 		/*Topics for Digital Drawing*/
-		$this->addTopicAndMaterial("Digital Drawing", "Logo Design", [
-			"Sketching and Ideation",
-			"Blocking and Clean Up",
-			"Color Exploration"
+		// $this->addTopicAndMaterial("Digital Drawing", "Logo Design", [
+		// 	"Sketching and Ideation",
+		// 	"Blocking and Clean Up",
+		// 	"Color Exploration"
+		// ]);
+		// $this->addTopicAndMaterial("Digital Drawing", "Flora and Fauna Drawing", [
+		// 	"Optimize using Mirror",
+		// 	"Simetrical Tools to Create Repetition",
+		// 	"Export Pattern and Implementation into Drawing"
+		// ]);
+		// $this->addTopicAndMaterial("Digital Drawing", "Gradient Background", [
+		// 	"Sketching and Ideation",
+		// 	"Lineart",
+		// 	"Color and Shading with Gradients"
+		// ]);
+		$this->addTopicAndMaterial("Digital Drawing", "Character Design", [
+			"Head Construction",
+			"Body Construction",
+			"Gesture, Ekspresi, dan Tangan",
+			"Gesture and Full Body Construction",
+			"Take a Reference for Drawing"
 		]);
-		$this->addTopicAndMaterial("Digital Drawing", "Flora and Fauna Drawing", [
-			"Optimize using Mirror",
-			"Simetrical Tools to Create Repetition",
-			"Export Pattern and Implementation into Drawing"
+		$this->addTopicAndMaterial("Digital Drawing", "Properties", [
+			"Intro to Perspektif",
+			"Drawing Boxes (Base Cube)",
+			"Drawing Vases (Base Tube)",
+			"Drawing Any Still Life Object using Envelope, Cube",
+			"Drawing Character with Properties"
 		]);
-		$this->addTopicAndMaterial("Digital Drawing", "Gradient Background", [
-			"Sketching and Ideation",
-			"Lineart",
-			"Color and Shading with Gradients"
+		$this->addTopicAndMaterial("Digital Drawing", "Flora and Fauna", [
+			"Drawing Leaves",
+			"Drawing Tree",
+			"Drawing Flower",
+			"Body Structure in Animal",
+			"Drawing any Animal"
 		]);
-		// $this->addTopicAndMaterial("Digital Drawing", "Character Design", [
-		// 	"Head Construction",
-		// 	"Body Construction",
-		// 	"Gesture, Ekspresi, dan Tangan",
-		// 	"Gesture and Full Body Construction",
-		// 	"Take a Reference for Drawing"
-		// ]);
-		// $this->addTopicAndMaterial("Digital Drawing", "Properties", [
-		// 	"Intro to Perspektif",
-		// 	"Drawing Boxes (Base Cube)",
-		// 	"Drawing Vases (Base Tube)",
-		// 	"Drawing Any Still Life Object using Envelope, Cube",
-		// 	"Drawing Character with Properties"
-		// ]);
-		// $this->addTopicAndMaterial("Digital Drawing", "Flora and Fauna", [
-		// 	"Drawing Leaves",
-		// 	"Drawing Tree",
-		// 	"Drawing Flower",
-		// 	"Body Structure in Animal",
-		// 	"Drawing any Animal"
-		// ]);
-		// $this->addTopicAndMaterial("Digital Drawing", "Background", [
-		// 	"Drawing Living Room in 1 Perspective",
-		// 	"Drawing Bed Room in 2 Perspective",
-		// 	"Drawing Park",
-		// 	"Drawing Character in a Place #1",
-		// 	"Drawing Character in a Place #2"
-		// ]);
+		$this->addTopicAndMaterial("Digital Drawing", "Background", [
+			"Drawing Living Room in 1 Perspective",
+			"Drawing Bed Room in 2 Perspective",
+			"Drawing Park",
+			"Drawing Character in a Place #1",
+			"Drawing Character in a Place #2"
+		]);
 
 
 		// ===== Assign students to courses + generate progress ===== //
@@ -314,5 +314,6 @@ class DatabaseSeeder extends Seeder
 		$this->assignTeacher("Gaby", ["Digital Drawing"]);
 		$this->assignTeacher("Iswan Sudaryo", ["3D Modelling", "Concept Art"]);
 		$this->assignTeacher("Vincent", ["3D Modelling", "2D Animation"]);
-    }
+
+	}
 }

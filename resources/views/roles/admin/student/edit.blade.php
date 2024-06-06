@@ -49,8 +49,8 @@
 		<!-- Student Education Level -->
 		<div class="mt-4">
 			<x-label for="student_level" class="text-white" :value="__('Select Student Education Level')" />
-			<select name="student_level" id="student_level"
-			class="rounded-md shadow-sm border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 border focus:ring-opacity-50 w-full py-2 px-4 mt-1 text-blue-800">
+			<x-select name="student_level" id="student_level"
+			class="mt-1 w-1/3">
 				@if($student->details->student_level)
 					@forelse ($education_levels as $level)
 						<option value="{{ $student->details->student_level }}" @if($student->details->student_level == $level) selected @endif>{{ $level }}</option>
@@ -63,7 +63,7 @@
 					@empty
 					@endforelse
 				@endif
-			</select>
+			</x-select>
 		</div>
 
 		<!-- Student Parent's Name -->

@@ -198,8 +198,31 @@ class AssignmentController extends Controller
 		$assignment = Assignment::where("id", $assignment_id)->first();
 		$course = $assignment->course;
 
+		$submissions = Submission::where("assignment_id", $assignment->id)->get();
+
+		$student_list = [];
+		foreach($submissions as $index => $sbm){
+			if($index == 0){
+				array_push($student_list, $sbm->student);
+				continue;
+			}
+
+			$alreadyIn = false;
+			foreach($student_list as $sl){
+				if($sbm->student->id == $sl->id){
+					$alreadyIn = true;
+					break;
+				}
+			}
+
+			if(!$alreadyIn){
+				array_push($student_list, $sbm->student);
+			}
+		}
+
+
 		$latest_submissions = [];
-		foreach($course->students as $student){
+		foreach($student_list as $student){
 			$submissions = $student->submissions->where("assignment_id", $assignment->id)->values()->all(); //biar jadi array kalo ngga dia bentuknya {{...}, {...}, ...}
 			$n = count($submissions);
 			if($n > 0){
@@ -250,9 +273,28 @@ class AssignmentController extends Controller
 	// List of assignments given to the student
 	public function student_show($course_id){
 		$course = Course::where("id", $course_id)->first();
-		$assignments = StudentAssignment::where("student_id", Auth::user()->id)->latest()->get();
+		$student_assignments = StudentAssignment::where("student_id", Auth::user()->id)->latest()->get();
+
+		$assignments_assigned = [];
+		$submissions_per_assignment = [];
+		foreach($student_assignments as $sa){
+			if($sa->assignment->course_id == $course_id){
+				array_push($assignments_assigned, $sa->assignment);
+				$submissions = $sa->assignment->submissions;
+				$n = 0;
+				foreach($submissions as $sbm){
+					if($sbm->student_id == Auth::user()->id && $sbm->assignment_id == $sa->assignment->id){
+						$n++;
+					}
+				}
+				array_push($submissions_per_assignment, $n);
+			}
+		}
+
+
 		return view("roles.student.assignment.show", [
-			"assignments" => $assignments,
+			"assignments" => $assignments_assigned,
+			"submissions_per_assignment" => $submissions_per_assignment,
 			"course" => $course
 		]);
 	}
@@ -261,9 +303,14 @@ class AssignmentController extends Controller
 	public function student_submit($course_id, $assignment_id){
 		$asg = Assignment::where("id", $assignment_id)->first();
 
-		$stdasg = StudentAssignment::where("student_id", Auth::user()->id)->where("assignment_id", $asg->id)->first();
+		$n = 0;
+		foreach($asg->submissions as $sbm){
+			if($sbm->student_id == Auth::user()->id){
+				$n++;
+			}
+		}
 
-		if($stdasg->assignment->submissions->count() == 10){
+		if($n == 10){
 			return back()->with("maximumSubmission", "Sorry, your assignment submission is already in its limit!");
 		}
 
@@ -317,14 +364,23 @@ class AssignmentController extends Controller
 
 
 	// ===== ADMIN ===== //
-	// Showing selected student's attendance data in all course enrolled
+	// Showing selected student's assignment data in all course enrolled
 	public function admin_show($student_id, $course_id){
-		$assignments = Assignment::where("course_id", $course_id)->where("student_id", $student_id)->where("student_is_assigned", 1)->get();
+		$student = User::where("id", $student_id)->first();
+		$student_assignments = StudentAssignment::where("student_id", $student_id)->get();
+		$course = Course::where("id", $course_id)->first();
+
+		$assignments = [];
+		foreach($student_assignments as $sa){
+			if($sa->assignment->course_id == $course_id){
+				array_push($assignments, $sa->assignment);
+			}
+		}
 
 		return view("roles.admin.student.asg-details", [
 			"assignments" => $assignments,
-			"student" => User::where("id", $student_id)->first(),
-			"course" => Course::where("id", $course_id)->first()
+			"student" => $student,
+			"course" =>	$course
 		]);
 	}
 }
