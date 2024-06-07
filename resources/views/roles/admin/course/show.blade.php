@@ -61,13 +61,13 @@
 					<th class="border border-blue-400 px-5 py-3">Materials</th>
 				</thead>
 				<tbody>
-					@forelse ($course->course_topics as $topic)
+					@forelse ($course->topics as $topic)
 						<tr>
 							<td class="border border-blue-400 px-5 py-3">{{ $topic->title }}</td>
 							<td class="border border-blue-400 px-5 py-3">
-								@if($topic->course_materials->count())
+								@if($topic->materials->count())
 									<ul>
-										@foreach ($topic->course_materials as $material)
+										@foreach ($topic->materials as $material)
 											<li>{{ $material->title }}</li>
 										@endforeach
 									</ul>

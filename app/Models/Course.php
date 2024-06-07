@@ -14,8 +14,8 @@ class Course extends Model {
 		'visibility'
 	];
 
-	public function course_topics(){
-		return $this->hasMany(CourseTopic::class);
+	public function topics(){
+		return $this->hasMany(Topic::class);
 	}
 
 	public function teachers() {

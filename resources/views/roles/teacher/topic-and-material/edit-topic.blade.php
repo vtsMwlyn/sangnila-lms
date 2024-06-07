@@ -34,7 +34,7 @@
 				<th class="border px-3">Actions</th>
 			</thead>
 			<tbody>
-				@forelse ($topic->course_materials as $material)
+				@forelse ($topic->materials as $material)
 					<tr>
 						<td class="border px-3">{{ $material->title }}</td>
 						<td class="border px-3"><a href="{{ $material->link }}" class="text-blue-700">{{ $material->link }}</a></td>

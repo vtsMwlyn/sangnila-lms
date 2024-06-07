@@ -1,15 +1,15 @@
 @extends("layouts.main-teacher")
 
 @section("title")
-	<h1>{{ $material->course_topic->course->course_name }}</h1>
+	<h1>{{ $material->topic->course->course_name }}</h1>
 @endsection
 
 @section("content")
 	<h1 class="text-3xl font-semibold text-blue-900 mb-1">
-		<a href="{{ route("teacher.mycourse.show", $material->course_topic->course->id) }}">{{ $material->course_topic->course->course_name }}</a>
+		<a href="{{ route("teacher.mycourse.show", $material->topic->course->id) }}">{{ $material->topic->course->course_name }}</a>
 	</h1>
 	<h1 class="text-xl font-semibold text-blue-900 mb-4">
-		<a href="{{ route("teacher.mycourse.show", [$material->course_topic->course->id, $material->course_topic->id]) }}">{{ $material->course_topic->title }}</a>
+		<a href="{{ route("teacher.mycourse.show", [$material->topic->course->id, $material->topic->id]) }}">{{ $material->topic->title }}</a>
 	</h1>
 	<h1 class="text-2xl font-semibold text-blue-900 mb-4">Edit Material: "{{ $material->title }}"</h1>
 	<form action="{{ route('teacher.material.update', $material->id) }}" method="post">

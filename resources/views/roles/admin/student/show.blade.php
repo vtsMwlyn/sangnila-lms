@@ -51,7 +51,7 @@
 					</tr>
 				</tbody>
 
-				<tbody id="more_details" style="display: none;">
+				<tbody id="more_details" class="overflow-hidden opacity-0" style="display: none;">
 					<tr>
 						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">School Name</td>
 						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">@if($student->details->school_name){{ $student->details->school_name }}@else{{ __("N/A") }}@endif</td>
@@ -82,12 +82,29 @@
 			const button = document.getElementById('show_more_less_button');
 
 			button.addEventListener('click', function() {
-				if (moreDetails.style.display === 'none' || moreDetails.style.display === '') {
-					moreDetails.style.display = 'table-row-group';
+				if (moreDetails.classList.contains('opacity-0')) {
+					moreDetails.style.display = "table-row-group";
+
+					// Delaying animation (make the tbody is appeared then the button will go to bottom and finally play the animation)
+					setTimeout(() => {
+						// Fade in animation
+						moreDetails.classList.remove('opacity-0');
+						moreDetails.classList.add('transition-opacity', 'duration-300', 'ease-in', 'opacity-100', 'h-full');
+					}, 200);
+
 					button.textContent = 'Show Less';
+
 				} else {
-					moreDetails.style.display = 'none';
-					button.textContent = 'Show More';
+					// Fade out animation
+					moreDetails.classList.remove('opacity-100');
+					moreDetails.classList.add('transition-opacity', 'duration-300', 'ease-out', 'opacity-0', 'max-h-0');
+
+					// Display none the tbody after the animation ends and finally the button will go up back to it previous position
+					moreDetails.addEventListener("transitionend", function afterShowLessClicked(){
+						moreDetails.removeEventListener("transitionend", afterShowLessClicked);
+						moreDetails.style.display = "none";
+						button.textContent = 'Show More';
+					});
 				}
 			});
 		</script>

@@ -3,27 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
-use App\Models\MaterialProgress;
+use App\Models\Progress;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class MaterialProgressController extends Controller {
+class ProgressController extends Controller {
 	// ===== TEACHER ===== //
 	// Showing list of student's course materials accessibility status (locked/unlocked) and create progress data for the student
 	public function index($student_id, $course_id) {
 		$course = Course::where('visibility', 'public')->where('id', $course_id)->first();
 		$role = Role::where('role_name', 'Student')->first();
 		$student = User::where('role_id', $role->id)->where('id', $student_id)->first();
-		$existingProgress = MaterialProgress::where('student_id', $student->id)
+		$existingProgress = Progress::where('student_id', $student->id)
 			->where('course_id', $course->id)
 			->pluck('material_id')
 			->toArray();
 
-		foreach ($course->course_topics as $topic) {
-			foreach($topic->course_materials as $material) {
+		foreach ($course->topics as $topic) {
+			foreach($topic->materials as $material) {
 				if (!in_array($material->id, $existingProgress)) {
-					$progress = MaterialProgress::create([
+					$progress = Progress::create([
 						'student_id' => $student->id,
 						'material_id' => $material->id,
 						'course_id' => $course->id,
@@ -33,7 +33,7 @@ class MaterialProgressController extends Controller {
 			}
 		}
 
-		$newestProgress = MaterialProgress::where('student_id', $student->id)->where('course_id', $course->id)->get();
+		$newestProgress = Progress::where('student_id', $student->id)->where('course_id', $course->id)->get();
 
 		return view('roles.teacher.student.progress', [
 			'student' => $student,
@@ -45,15 +45,15 @@ class MaterialProgressController extends Controller {
 	// Update the material accessibility in the database
 	public function update(Request $request, $progress_id) {
 		$status = $request->access === 'on' ? 'unlocked' : 'locked';
-		$materialProgress = MaterialProgress::where("id", $progress_id)->first();
+		$Progress = Progress::where("id", $progress_id)->first();
 
-		MaterialProgress::findOrFail($progress_id)->update([
+		Progress::findOrFail($progress_id)->update([
 			'status' => $status
 		]);
 
 		return redirect(route('teacher.student.show.progress', [
-			'student_id' => $materialProgress->student_id,
-			'course_id' => $materialProgress->course_id
+			'student_id' => $Progress->student_id,
+			'course_id' => $Progress->course_id
 		]));
 	}
 

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
 	public function up() {
-		Schema::create('material_progress', function (Blueprint $table) {
+		Schema::create('progress', function (Blueprint $table) {
 			$table->id();
 			$table->unsignedBigInteger('student_id');
 			$table->unsignedBigInteger('material_id');
@@ -17,13 +17,13 @@ return new class extends Migration {
 			// ========================================================
 			$table->foreign('student_id')->references('id')->on('users')->onDelete("cascade");
 			$table->foreign('teacher_id')->references('id')->on('users')->onDelete("cascade");
-			$table->foreign('material_id')->references('id')->on('course_materials')->onDelete("cascade");
+			$table->foreign('material_id')->references('id')->on('materials')->onDelete("cascade");
 			$table->foreign('course_id')->references('id')->on('courses')->onDelete("cascade");
 			$table->timestamps();
 		});
 	}
 
 	public function down() {
-		Schema::dropIfExists('material_progress');
+		Schema::dropIfExists('progress');
 	}
 };

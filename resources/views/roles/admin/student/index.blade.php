@@ -14,7 +14,7 @@
 				<tr class="bg-blue-900 text-white">
 					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4 rounded-l-xl">Student Name</th>
 					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4">Email</th>
-					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4" >Enrolled Courses</th>
+					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4" >Enrolled Courses & Progress</th>
 					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4 rounded-r-xl">Actions</th>
 				</tr>
 			</thead>
@@ -25,13 +25,13 @@
 							@continue
 						@endif
 						<tr class="bg-blue-800 text-white">
-							<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-l-xl">
+							<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-l-xl text-center">
 								<a href="{{ route('admin.student.show', ['student_id' => $student->id]) }}"
 									class="text-blue-200 hover:text-blue-400 font-semibold hover:underline">
 									{{ $student->full_name }}
 								</a>
 							</td>
-							<td class="border-blue-300 px-4 py-5 sm:w-1/4">
+							<td class="border-blue-300 px-4 py-5 sm:w-1/4 text-center">
 								{{ $student->email }}
 							</td>
 							<td class="border-blue-300 px-6 py-5 sm:w-1/4">
@@ -49,9 +49,6 @@
 														</div>
 														<div class="bg-green-700 h-full" style="width: {{ $percentage[$index1][$index2] }}%;"></div>
 													</div>
-													{{-- <span>
-														{{ __("[Progress: " . $current_progress[$index1][$index2] . "/" . $student_max_progress[$index1][$index2] . "]") }}
-													</span> --}}
 												</div>
 											</li>
 										@endforeach

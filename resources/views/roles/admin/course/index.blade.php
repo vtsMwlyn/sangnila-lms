@@ -34,14 +34,14 @@
 				@if ($courses->isNotEmpty())
 					@foreach ($courses as $course)
 						<tr class="bg-blue-800 text-white">
-							<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-l-xl">
+							<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-l-xl text-center">
 								<a href="{{ route('admin.course.show', ['course_id' => $course->id]) }}"
 									class="text-blue-200 hover:text-blue-400 font-semibold hover:underline block">
 									{{ $course->course_name }}
 								</a>
 							</td>
 
-							<td class="border-blue-300 px-4 py-5 sm:w-1/4">
+							<td class="border-blue-300 px-4 py-5 sm:w-1/4 text-center">
 								{{ substr($course->course_description, 0, 100) }}...
 							</td>
 

@@ -23,12 +23,27 @@
 		<!-- Tailwind CDN -->
 		<script src="https://cdn.tailwindcss.com"></script>
 
+		<!-- Custom styles -->
+		<style>
+			a {
+				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
+			}
+
+			button[type="button"], button[type="submit"] {
+				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
+			}
+
+			body {
+				background: url("{{ asset('img/background.jpg') }}") no-repeat center center / cover;
+				cursor: url("{{ asset('img/kursor.cur') }}"), auto;
+			}
+		</style>
+
 		<!-- App title -->
 		<title>Sangnila Academy | LMS</title>
 	</head>
 
-	<body class="bg-cover min-h-screen flex flex-col md:flex-row"
-		style="background: url({{ asset('img/background.jpg') }}) no-repeat; cursor: url({{ asset('img/kursor.cur') }}), auto;">
+	<body class="bg-cover min-h-screen flex flex-col md:flex-row">
 
 		{{-- <x-navbar.admin></x-navbar.admin> --}}
 		<x-sidebar.admin></x-sidebar.admin>

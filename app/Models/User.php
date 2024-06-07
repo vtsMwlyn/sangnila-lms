@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use id;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -48,7 +47,7 @@ class User extends Authenticatable implements MustVerifyEmail{
 	}
 
 	public function progress() {
-		return $this->hasMany(MaterialProgress::class, 'student_id');
+		return $this->hasMany(Progress::class, 'student_id');
 	}
 
 	public function schedules() {

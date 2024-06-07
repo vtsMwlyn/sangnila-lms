@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CourseTopic extends Model
+class Topic extends Model
 {
     use HasFactory;
 
@@ -15,7 +15,7 @@ class CourseTopic extends Model
 		return $this->belongsTo(Course::class, "course_id");
 	}
 
-	public function course_materials(){
-		return $this->hasMany(CourseMaterial::class);
+	public function materials(){
+		return $this->hasMany(Material::class);
 	}
 }

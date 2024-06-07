@@ -6,14 +6,12 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\UserDetail;
-use App\Models\CourseTopic;
+use App\Models\Topic;
 use App\Models\CourseStudent;
 use App\Models\CourseTeacher;
-use App\Models\CourseMaterial;
+use App\Models\Material;
 use Illuminate\Database\Seeder;
-use App\Models\MaterialProgress;
-use App\Models\StudentAssignment;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Progress;
 
 class DatabaseSeeder extends Seeder
 {
@@ -44,8 +42,8 @@ class DatabaseSeeder extends Seeder
 				"max_course_session" => $max_session
 			]);
 
-			foreach ($course->course_topics as $index1 => $topic) {
-				foreach($topic->course_materials as $index2 => $material) {
+			foreach ($course->topics as $index1 => $topic) {
+				foreach($topic->materials as $index2 => $material) {
 					$newData = [
 						'student_id' => $student->id,
 						'material_id' => $material->id,
@@ -58,7 +56,7 @@ class DatabaseSeeder extends Seeder
 						$newData['status'] = 'locked';
 					}
 
-					MaterialProgress::create($newData);
+					Progress::create($newData);
 				}
 			}
 		}
@@ -79,10 +77,10 @@ class DatabaseSeeder extends Seeder
 
 	private function addTopicAndMaterial($course_name, $topic_name, $materials){
 		$course = Course::where("course_name", $course_name)->first();
-		$topic = CourseTopic::create(["course_id" => $course->id, "title" => $topic_name]);
+		$topic = Topic::create(["course_id" => $course->id, "title" => $topic_name]);
 
 		foreach($materials as $material){
-			CourseMaterial::create(["course_topic_id" => $topic->id, "title" => $material, "link" => "https://www.google.com/"]);
+			Material::create(["topic_id" => $topic->id, "title" => $material, "link" => "https://www.google.com/"]);
 		}
 	}
 

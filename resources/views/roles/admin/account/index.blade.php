@@ -29,28 +29,29 @@
 		<x-anchor-button class="bg-orange-500 mt-5" href="{{ route('admin.account.create') }}"><i class="bi bi-plus-lg"></i> Create New Account</x-anchor-button>
 	</div>
 
+	<div class="rounded-3xl mt-8 px-10 py-8 bg-indigo-200 {{--overflow-y-auto--}}" {{-- style="max-height: 550px" --}}>
 
-		<div class="overflow-x-auto rounded-3xl mt-8 px-10 py-5 bg-indigo-200 {{--overflow-y-auto--}}" {{-- style="max-height: 550px" --}}>
-			<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate;
-			border-spacing: 0 20px;">
-				<thead>
-					<tr class="bg-blue-900 text-white">
-						<th class="font-bold px-4 py-5 rounded-l-xl">Full Name</th>
-						<th class="font-bold px-4 py-5">Email</th>
-						<th class="font-bold px-4 py-5">Role</th>
-						<th class="font-bold px-4 py-5">Status</th>
-						<th class="font-bold px-4 py-5 rounded-r-xl">Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					@if($accounts->count() > 1)
-						@foreach ($accounts as $account)
+		@foreach (['admin_accounts', 'teacher_accounts', 'student_accounts'] as $index => $account_type)
+			<h1 class="text-lg font-semibold">{{ App\Models\Role::where("id", $index + 1)->first()->role_name }} Accounts</h1>
+			<div class="overflow-x-auto">
+				<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate; border-spacing: 0 20px;">
+					<thead>
+						<tr class="bg-blue-900 text-white">
+							<th class="font-bold px-4 py-5 rounded-l-xl">Full Name</th>
+							<th class="font-bold px-4 py-5">Email</th>
+							<th class="font-bold px-4 py-5">Role</th>
+							<th class="font-bold px-4 py-5">Status</th>
+							<th class="font-bold px-4 py-5 rounded-r-xl">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						@forelse($$account_type as $account)
 							@if($account->id == auth()->user()->id)
 								@continue
 							@endif
 
 							<tr class="bg-blue-800 text-white">
-								<td class="px-4 py-5 rounded-l-xl"><a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $account->full_name }}</a></td>
+								<td class="px-4 py-5 rounded-l-xl text-center"><a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $account->full_name }}</a></td>
 								<td class="px-4 py-5 text-center">{{ $account->email }}</td>
 								<td class="px-4 py-5 text-center">{{ $account->role->role_name }}</td>
 								<td class="px-4 py-5 text-center">{{ $account->status }}</td>
@@ -75,13 +76,21 @@
 
 								</td>
 							</tr>
-						@endforeach
-					@else
-						<tr><td colspan="5" class="bg-white px-4 py-5 rounded-xl text-center">- No accounts available to use yet -</td></tr>
-					@endif
-				</tbody>
-			</table>
-		</div>
+						@empty
+							<tr>
+								<td colspan="5" class="bg-white px-4 py-5 rounded-xl text-center">- No accounts available to use yet -</td>
+							</tr>
+						@endforelse
+					</tbody>
+				</table>
+			</div>
+
+			<div class="my-5 md:my-2 flex w-full justify-end">
+				{{ $$account_type->links() }}
+			</div>
+
+		@endforeach
+	</div>
 
 	<x-page-title class="mt-10">{{ __("Disabled Accounts") }}</x-page-title>
 	<div class="overflow-x-auto rounded-lg mt-8 px-10 py-5 bg-indigo-200">

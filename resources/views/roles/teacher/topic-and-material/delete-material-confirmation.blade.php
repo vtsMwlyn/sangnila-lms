@@ -1,7 +1,7 @@
 @extends("layouts.main-teacher")
 
 @section("title")
-	<h1>{{ $material->course_topic->course->course_name }}</h1>
+	<h1>{{ $material->topic->course->course_name }}</h1>
 @endsection
 
 @section("content")
@@ -15,9 +15,9 @@
 				Are you sure you want to delete material
 				<span class="text-red-500 font-bold">{{ $material->title }}</span>
 				from
-				<span class="text-green-500 font-bold">{{ $material->course_topic->title }}</span>
+				<span class="text-green-500 font-bold">{{ $material->topic->title }}</span>
 				in
-				<span class="text-green-500 font-bold">{{ $material->course_topic->course->course_name }}</span>
+				<span class="text-green-500 font-bold">{{ $material->topic->course->course_name }}</span>
 				?
 			</h1>
 		</div>

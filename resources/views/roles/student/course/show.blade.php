@@ -25,11 +25,12 @@
 				@forelse ($materialProgresses as $progress)
 					<tr class="hover:bg-gray-100 border-b border-solid border-blue-900">
 						<td class="px-4 py-2 border border-solid border-blue-900 {{ $progress->status === 'unlocked' ? 'text-white bg-green-400' : 'text-gray-500' }}">
-							{{ $progress->material->course_topic->title }}
+							{{ $progress->material->topic->title }}
 						</td>
 						<td class="px-4 py-2 border border-solid border-blue-900 {{ $progress->status === 'unlocked' ? 'text-white bg-green-400' : 'text-gray-500' }}">
 							@if ($progress->status === 'unlocked')
-								<a href="{{ $progress->material->link }}" class="text-white hover:underline font-bold">
+								<a {{-- href="{{ $progress->material->link }}" --}}
+									href="{{ route("student.mycourse.preview", $progress->material->id) }}" class="text-white hover:underline font-bold">
 									{{ $progress->material->title }}
 								</a>
 							@else

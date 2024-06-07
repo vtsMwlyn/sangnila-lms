@@ -18,26 +18,36 @@
 				</tr>
 			</thead>
 			<tbody>
-				@if ($course->course_topics->count())
-					@forelse ($course->course_topics[0]->course_materials as $material)
+				@if ($course->topics->count())
+					@if($course->topics[0]->materials->count())
+						@foreach ($course->topics[0]->materials as $index => $material)
+							@if($index < 3)
+								<tr class="hover:bg-gray-100 border-b border-blue-900 @if($index == 1) opacity-60 @elseif($index == 2) opacity-30 @endif">
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
+										{{ $course->topics[0]->title }}
+									</td>
+									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
+										@if($index < 1)
+											<a href="{{ $material->link }}" class="font-bold hover:underline text-blue-600">
+												{{ $material->title }}
+											</a>
+										@else
+										{{ $material->title }}
+										@endif
+									</td>
+								</tr>
+							@else
+								@break
+							@endif
+						@endforeach
+					@else
 						<tr class="hover:bg-gray-100 border-b border-blue-900">
 							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-								{{ $course->course_topics[0]->title }}
-							</td>
-							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-								<a href="{{ $material->link }}" class="font-bold hover:underline text-blue-600">
-									{{ $material->title }}
-								</a>
-							</td>
-						</tr>
-					@empty
-						<tr class="hover:bg-gray-100 border-b border-blue-900">
-							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-								{{ $course->course_topics[0]->title }}
+								{{ $course->topics[0]->title }}
 							</td>
 							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 text-center">This topic doesn't have any materials yet.</td>
 						</tr>
-					@endforelse
+					@endif
 				@else
 					<tr>
 						<td colspan="2" class="px-4 py-2 text-center border-t border-blue-900">This course doesn't have any topics and materials yet.</td>
@@ -45,5 +55,9 @@
 				@endif
 			</tbody>
 		</table>
+
+		<div class="mt-10 flex justify-center">
+			<div class="border border-orange-500 p-5 text-orange-500 font-bold">~ Want to find out more? Come join us now! ~</div>
+		</div>
 	</div>
 @endsection

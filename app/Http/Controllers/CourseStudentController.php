@@ -7,8 +7,7 @@ use App\Models\User;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
-use App\Models\CourseTeacher;
-use App\Models\MaterialProgress;
+use App\Models\Progress;
 
 class CourseStudentController extends Controller {
 	// ===== ADMIN ===== //
@@ -70,13 +69,13 @@ class CourseStudentController extends Controller {
 			"teacher_id" => $teacher->id
 		]);
 
-		$existingProgress = MaterialProgress::where('student_id', $student->id)
+		$existingProgress = Progress::where('student_id', $student->id)
 			->where('course_id', $course->id)
 			->pluck('material_id')
 			->toArray();
 
-		foreach ($course->course_topics as $index1 => $topic) {
-			foreach($topic->course_materials as $index2 => $material) {
+		foreach ($course->topics as $index1 => $topic) {
+			foreach($topic->materials as $index2 => $material) {
 				$newData = [
 					'student_id' => $student->id,
 					'material_id' => $material->id,
@@ -90,7 +89,7 @@ class CourseStudentController extends Controller {
 				}
 
 				if (!in_array($material->id, $existingProgress)) {
-					MaterialProgress::create($newData);
+					Progress::create($newData);
 				}
 			}
 		}

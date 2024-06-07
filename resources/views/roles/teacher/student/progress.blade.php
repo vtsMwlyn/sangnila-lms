@@ -24,7 +24,7 @@
 						<tr>
 							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 ">
 								<a href="">
-									{{ $progress->material->course_topic->title }}
+									{{ $progress->material->topic->title }}
 								</a>
 							</td>
 

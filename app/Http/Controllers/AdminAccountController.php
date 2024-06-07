@@ -5,15 +5,26 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminAccountController extends Controller {
 	// Shows all available accounts in Sangnila LMS
 	public function index() {
-		$accounts = User::where("status", "enabled")/*->paginate(5)*/->get();
+		// $accounts = User::where("status", "enabled")->orderBy('role_id')/*->paginate(5)*/->get();
+
+		$admin_accounts = User::where("status", "enabled")->where("role_id", 1)->whereNot("id", Auth::user()->id)->orderBy('full_name')->paginate(5, ['*'], 'admin_page');
+		$teacher_accounts = User::where("status", "enabled")->where("role_id", 2)->orderBy('full_name')->paginate(5, ['*'], 'teacher_page');
+		$student_accounts = User::where("status", "enabled")->where("role_id", 3)->orderBy('full_name')->paginate(10, ['*'], 'student_page');
+
+		$accounts = [];
+		array_push($accounts, $admin_accounts, $teacher_accounts, $student_accounts);
+
 		$disabled = User::where("status", "disabled")/*->paginate(5)*/->get();
 
 		return view('roles.admin.account.index', [
-			'accounts' => $accounts,
+			'admin_accounts' => $admin_accounts,
+			'teacher_accounts' => $teacher_accounts,
+			'student_accounts' => $student_accounts,
 			'disabled' => $disabled
 		]);
 	}

@@ -4,11 +4,10 @@ use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\MaterialController;
-use App\Http\Controllers\MaterialProgressController;
+use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TopicController;
-use App\Models\MaterialProgress;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/teacher')
@@ -25,7 +24,7 @@ Route::prefix('/teacher')
 				// Course Controller
 				Route::get('/', [CourseController::class, 'teacher_index'])->name('index'); // DONE
 				Route::get('/{course_id}', [CourseController::class, 'teacher_show'])->name('show')->whereNumber('course_id'); // DONE
-				Route::get('/{course_id}/progress', [MaterialProgressController::class, 'students_progress'])->name('progress');
+				Route::get('/{course_id}/progress', [ProgressController::class, 'students_progress'])->name('progress');
 			});
 
 		Route::prefix('/material') // ON HALT
@@ -62,11 +61,11 @@ Route::prefix('/teacher')
 				Route::get('/{course_id}', [StudentController::class, 'teacher_select_student'])->name('select-student')->whereNumber('course_id'); // DONE
 
 				// Progress Controller
-				Route::get('/{student_id}/progress/{course_id}', [MaterialProgressController::class, 'index']) // DONE
+				Route::get('/{student_id}/progress/{course_id}', [ProgressController::class, 'index']) // DONE
 					->name('show.progress')
 					->whereNumber('student_id')
 					->whereNumber('course_id'); // Show progression table // DONE
-				Route::patch('/progress/{progress_id}', [MaterialProgressController::class, 'update']) // DONE
+				Route::patch('/progress/{progress_id}', [ProgressController::class, 'update']) // DONE
 					->name('update.progress')
 					->whereNumber('progress_id');
 			});
