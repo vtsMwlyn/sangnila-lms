@@ -75,7 +75,7 @@ class MaterialController extends Controller {
 		if (strpos($original_link, '/view?usp=sharing') !== false) {
 			$preview_link = str_replace('/view?usp=sharing', '/preview', $original_link);
 		} else if (strpos($original_link, 'youtu.be') !== false) {
-			$cut_link = $newUrl = strstr($original_link, "?si=", true);
+			$cut_link = strstr($original_link, "?si=", true);
 			$preview_link = str_replace('youtu.be', 'youtube.com/embed/', $cut_link);
 			$preview_link .= "/embed";
 		}
