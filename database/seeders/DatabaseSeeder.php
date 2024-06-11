@@ -80,7 +80,7 @@ class DatabaseSeeder extends Seeder
 		$topic = Topic::create(["course_id" => $course->id, "title" => $topic_name]);
 
 		foreach($materials as $material){
-			Material::create(["topic_id" => $topic->id, "title" => $material, "link" => "https://www.google.com/"]);
+			Material::create(["topic_id" => $topic->id, "title" => $material, "link" => "https://www.google.com/", "desc" => "This is a description of a material."]);
 		}
 	}
 
@@ -100,11 +100,13 @@ class DatabaseSeeder extends Seeder
 		$this->newUser("victor.sangnila@gmail.com", "Victor", 1);
 		$this->newUser("feby.sangnila@gmail.com", "Feby", 1);
 		$this->newUser("tiwi.sangnila@gmail.com", "Pratiwi", 1);
+		$this->newUser("iswansudaryo.sangnila@gmail.com", "Iswan Sudaryo", 1);
 
 		$this->newUser("hari.sangnila@gmail.com", "Hari", 2);
 		$this->newUser("lgaby.sangnila@gmail.com", "Gaby", 2);
-		$this->newUser("iswansudaryo.sangnila@gmail.com", "Iswan Sudaryo", 2);
+		$this->newUser("iswansudaryo.teacher.sangnila@gmail.com", "Iswan Sudaryo (Teacher)", 2);
 		$this->newUser("vincent.sangnila@gmail.com", "Vincent", 2);
+		$this->newUser("immanuelgiovano.teacher.sangnila@gmail.com", "Immanuel Giovano (Teacher)", 2);
 
 		/*Hari's students: Digital Drawing, Roblox*/
 		$this->newUser("jack.sangnila@gmail.com", "Jack", 3);
@@ -160,6 +162,10 @@ class DatabaseSeeder extends Seeder
 		Course::create([
 			"course_name" => "Roblox",
 			"course_description" => "This is the description of course Roblox. You can modify or add anything here."
+		]);
+		Course::create([
+			"course_name" => "Web Development",
+			"course_description" => "Learn to build websites using HTML, CSS, JS, PHP, and MySQL."
 		]);
 
 
@@ -270,6 +276,33 @@ class DatabaseSeeder extends Seeder
 			"Drawing Character in a Place #2"
 		]);
 
+		/*Topic and material for web development*/
+		$this->addTopicAndMaterial("Web Development", "Construct a web page using HTML", [
+			"Introduction to HTML",
+			"Making simple article web page",
+			"Insert media to web page"
+		]);
+		$this->addTopicAndMaterial("Web Development", "Styling a web page using CSS", [
+			"Introduction to CSS",
+			"Decorating web page using CSS",
+			"Positioning elements using CSS"
+		]);
+		$this->addTopicAndMaterial("Web Development", "Using JavaScript to control the behavior and events in a web page", [
+			"Introduction to JS",
+			"Basics of JS",
+			"Manipulating HTML content and style",
+			"Handling events in a web page",
+			"Form validation using JS"
+		]);
+		$this->addTopicAndMaterial("Web Development", "Using PHP and MySQL to control and handle data from back end side", [
+			"Introduction to PHP",
+			"Basics of PHP",
+			"Retrieving data from forms",
+			"Introduction to MySQL",
+			"Insert and show data from tables",
+			"Update and delete data from tables"
+		]);
+
 
 		// ===== Assign students to courses + generate progress ===== //
 		/*Hari's students*/
@@ -289,17 +322,17 @@ class DatabaseSeeder extends Seeder
 		$this->assignStudent("Kenzie Gautama Dirgantara", "Gaby", ["Digital Drawing"], 20);
 
 		/*Iswan's students*/
-		$this->assignStudent("Louisha Annabelle", "Iswan Sudaryo", ["3D Modelling"], 20);
-		$this->assignStudent("Gayle Farrel Patria", "Iswan Sudaryo", ["3D Modelling"], 20);
-		$this->assignStudent("Angela Nathania", "Iswan Sudaryo", ["3D Modelling"], 20);
-		$this->assignStudent("Balya Malkan Mahyuzar", "Iswan Sudaryo", ["3D Modelling"], 20);
-		$this->assignStudent("Alvin Edward", "Iswan Sudaryo", ["3D Modelling"], 20);
+		$this->assignStudent("Louisha Annabelle", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 20);
+		$this->assignStudent("Gayle Farrel Patria", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 20);
+		$this->assignStudent("Angela Nathania", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 20);
+		$this->assignStudent("Balya Malkan Mahyuzar", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 20);
+		$this->assignStudent("Alvin Edward", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 20);
 
-		$this->assignStudent("Ethan Alexander Irawan", "Iswan Sudaryo", ["Concept Art"], 20);
-		$this->assignStudent("Jezriel Connery", "Iswan Sudaryo", ["Concept Art"], 20);
-		$this->assignStudent("Martha Theresia Ramlie", "Iswan Sudaryo", ["Concept Art"], 20);
-		$this->assignStudent("Janicelyn Daviena Godarma", "Iswan Sudaryo", ["Concept Art"], 20);
-		$this->assignStudent("Grace Devana Kusnandar", "Iswan Sudaryo", ["Concept Art"], 20);
+		$this->assignStudent("Ethan Alexander Irawan", "Iswan Sudaryo (Teacher)", ["Concept Art"], 20);
+		$this->assignStudent("Jezriel Connery", "Iswan Sudaryo (Teacher)", ["Concept Art"], 20);
+		$this->assignStudent("Martha Theresia Ramlie", "Iswan Sudaryo (Teacher)", ["Concept Art"], 20);
+		$this->assignStudent("Janicelyn Daviena Godarma", "Iswan Sudaryo (Teacher)", ["Concept Art"], 20);
+		$this->assignStudent("Grace Devana Kusnandar", "Iswan Sudaryo (Teacher)", ["Concept Art"], 20);
 
 		/*Vincent's students*/
 		$this->assignStudent("Philia Valeraine Alverna", "Vincent", ["3D Modelling"], 20);
@@ -310,8 +343,8 @@ class DatabaseSeeder extends Seeder
 		// Assign teachers to courses
 		$this->assignTeacher("Hari", ["Digital Drawing", "Roblox"]);
 		$this->assignTeacher("Gaby", ["Digital Drawing"]);
-		$this->assignTeacher("Iswan Sudaryo", ["3D Modelling", "Concept Art"]);
+		$this->assignTeacher("Iswan Sudaryo (Teacher)", ["3D Modelling", "Concept Art"]);
 		$this->assignTeacher("Vincent", ["3D Modelling", "2D Animation"]);
-
+		$this->assignTeacher("Immanuel Giovano (Teacher)", ["Web Development"]);
 	}
 }

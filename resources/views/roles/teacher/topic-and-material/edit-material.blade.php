@@ -18,14 +18,20 @@
 		<!-- Material Title -->
 		<div>
 			<x-label for="title" :value="__('Material Title')" />
-			<x-input id="title" class="block mt-1 w-full" type="text" name="title" value="{{ $material->title }}"
+			<x-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title', $material->title)"
 				autofocus />
 		</div>
 
 		<!-- Material Link -->
 		<div class="mt-4">
 			<x-label for="link" :value="__('Material Link')" />
-			<x-input id="link" class="block mt-1 w-full" type="text" name="link" value="{{ $material->link }}" />
+			<x-input id="link" class="block mt-1 w-full" type="text" name="link" :value="old('link', $material->link)" />
+		</div>
+
+		<!-- Material Description -->
+		<div class="mt-4">
+			<x-label for="desc" :value="__('Material Description')" />
+			<x-input id="desc" class="block mt-1 w-full" type="text" name="desc" :value="old('desc', $material->desc)" />
 		</div>
 
 		<div class="flex items-stretch justify-end mt-4">

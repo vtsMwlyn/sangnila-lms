@@ -14,8 +14,8 @@
 			Visit Link
 		</x-anchor-button>
 	</div>
-	<iframe src="{{ $preview_link }}" frameborder="1" width="100%" style="height: 70vh;" class="my-5" id="contentpreview"></iframe>
-	<p>Description</p>
+	<iframe src="{{ $preview_link }}" width="100%" style="height: 70vh;" class="my-5 border-2" id="contentpreview"></iframe>
+	<p>{{ $material->desc }}</p>
 
 	<script>
 		function adjustIframeHeight() {

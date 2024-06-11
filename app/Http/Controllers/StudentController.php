@@ -43,14 +43,19 @@ class StudentController extends Controller {
 		$role = Role::where('role_name', 'Student')->first();
 		$students = $role->users;
 
+		// Collect current progress, max progress, and percentage of progress for each student in their enrolled courses
 		$current_progress = [];
 		$student_max_progress = [];
 		$percentage = [];
+
+		$max_ratios = [];
 
 		foreach($students as $student){
 			$cp = [];
 			$smp = [];
 			$p = [];
+
+			$max_ratio = 0;
 
 			foreach ($student->enrolled_courses as $course){
 				$all_progress_in_current_course = [];
@@ -70,19 +75,52 @@ class StudentController extends Controller {
 				$cs_data = CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first();
 				$maximum_sessions = $cs_data->max_course_session;
 
+				if ($maximum_sessions > 0) {
+					$ratio = $count / $maximum_sessions;
+				} else {
+					$ratio = 0;
+				}
+
+				$percent = round($ratio * 100);
+
+				if ($ratio > $max_ratio) {
+					$max_ratio = $ratio;
+				}
+
 				array_push($cp, $count);
 				array_push($smp, $maximum_sessions);
-
-				$percent = round((float)($count / $maximum_sessions) * 100);
-
 				array_push($p, $percent);
 			}
 
 			array_push($current_progress, $cp);
 			array_push($student_max_progress, $smp);
 			array_push($percentage, $p);
+			array_push($max_ratios, $max_ratio);
 		}
 
+		// Sorting by progress (still not working well)
+		// $studentsArray = $students->toArray();
+
+		// $combined = array_map(null, $current_progress, $student_max_progress, $percentage, $studentsArray, $max_ratios);
+
+		// usort($combined, function($a, $b){
+		// 	return $b[4] <=> $a[4];
+		// });
+
+		// $current_progress = array_column($combined, 0);
+		// $student_max_progress = array_column($combined, 1);
+		// $percentage = array_column($combined, 2);
+		// $students = array_column($combined, 3);
+
+		// foreach($students as &$s){
+		// 	$s["enrolled_courses"] = collect($s["enrolled_courses"]);
+		// 	$s["progress"] = collect($s["progress"]);
+		// }
+		// unset($s);
+
+		// $students = collect($students);
+
+		// Return view with data
 		return view('roles.admin.student.index', [
 			'students' => $students,
 			"current_progress" => $current_progress,

@@ -10,6 +10,7 @@ return new class extends Migration {
 			$table->id();
 			$table->unsignedBigInteger('topic_id');
 			$table->string('title');
+			$table->longText("desc");
 			$table->string('link');
 			$table->foreign('topic_id')->references('id')->on('topics')->onDelete("cascade");
 			$table->timestamps();

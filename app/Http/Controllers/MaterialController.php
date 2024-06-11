@@ -22,10 +22,16 @@ class MaterialController extends Controller {
 		$topic = Topic::where("id", $topic_id)->first();
 		$validatedData = $request->validate([
 			"title" => "required|min:3",
-			"link" => "required|url"
+			"link" => "required|url",
+			"desc" => "required|min:3"
 		]);
 
-		Material::create(["topic_id" => $topic->id, "title" => $validatedData["title"], "link" => $validatedData["link"]]);
+		Material::create([
+			"topic_id" => $topic->id,
+			"title" => $validatedData["title"],
+			"link" => $validatedData["link"],
+			"desc" => $validatedData["desc"]
+		]);
 
 		return redirect(route('teacher.topic.show', [$topic->course->id, $topic->id]))->with("successUploadMaterial", "Successfully uploaded new material to the topic!");
 	}
@@ -43,7 +49,8 @@ class MaterialController extends Controller {
 		$material = Material::findOrFail($material_id);
 		$data = $request->validate([
 			"title" => "required|min:3",
-			"link" => "required|url"
+			"link" => "required|url",
+			"desc" => "required|min:3"
 		]);
 		Material::findOrFail($material_id)->update($data);
 

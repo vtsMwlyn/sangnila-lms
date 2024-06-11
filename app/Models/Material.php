@@ -11,7 +11,8 @@ class Material extends Model {
 	protected $fillable = [
 		'topic_id',
 		'title',
-		'link'
+		'link',
+		"desc"
 	];
 
 	public function topic() {

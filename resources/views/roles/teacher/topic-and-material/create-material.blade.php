@@ -17,6 +17,12 @@
 			<x-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" autofocus />
 		</div>
 
+		<!-- Material Description -->
+		<div class="mt-4">
+			<x-label for="desc" :value="__('Material Description')" />
+			<x-input id="desc" class="block mt-1 w-full" type="text" name="desc" :value="old('desc')" />
+		</div>
+
 		<!-- Material Link -->
 		<div class="mt-4">
 			<x-label for="link" :value="__('Material Link')" />
