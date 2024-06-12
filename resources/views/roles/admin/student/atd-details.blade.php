@@ -28,7 +28,7 @@
 							<td class="border border-blue-950 px-3 py-5 text-center rounded-l-xl">{{ $attendance->created_at }}</td>
 							<td class="border border-blue-950 px-3 py-5 text-center font-bold">@if($attendance->is_attend == 1) Present @else Absent @endif</td>
 							<td class="border border-blue-950 px-3 py-5 text-center">{{ $attendance->attendance_detail }}</td>
-							<td class="border border-blue-950 px-3 py-5 text-center rounded-r-xl">{{ $attendance->attendance->posted_by->full_name }}</td>
+							<td class="border border-blue-950 px-3 py-5 text-center rounded-r-xl">{{ ($attendance->attendance->posted_by->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $attendance->attendance->posted_by->full_name }}</td>
 						</tr>
 					@endforeach
 				@else

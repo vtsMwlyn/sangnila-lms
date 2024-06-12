@@ -25,7 +25,7 @@
 							<td class="border px-3"><a href="{{ route("teacher.assignment.submission-history", [$assignment->id, $submission->student->id]) }}" class="text-blue-600 font-bold">{{ $submission->student->full_name }}</a></td>
 							<td class="border px-3">{{ $submission->title }}</td>
 							<td class="border px-3">{{ $submission->status }}</td>
-							<td class="border px-3"><a class="text-blue-600" href="{{ $submission->link }}">{{ $submission->link }}</a></td>
+							<td class="border px-3"><a class="text-blue-600" href="{{ $submission->link }}" target="blank">{{ $submission->link }}</a></td>
 						</tr>
 					@endforeach
 				@else

@@ -30,7 +30,7 @@
 		<div class="rounded-xl py-5 px-10 text-white bg-blue-900">List of Assigned Teachers</div>
 		<div class="flex gap-x-10 overflow-x-auto bg-indigo-200 px-10 py-5 rounded-xl mt-3">
 			@forelse ($course->teachers as $teacher)
-				<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">{{ $teacher->full_name }}</div>
+				<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">{{ ($teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $teacher->full_name }}</div>
 			@empty
 				<div class="flex w-full justify-center">
 					<span>- No student enrolled in this course yet -</span>

@@ -25,10 +25,13 @@
 				<x-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('Material Title')"
 					autofocus />
 			</div>
-			<a href={{ route("teacher.mycourse.show", $course->id) }} class="inline-flex items-center px-4 py-2 bg-indigo-400 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">CANCEL</a>
-			<x-button class="mt-3 bg-indigo-400">
-				{{ __('SAVE') }}
-			</x-button>
+			<div class="flex gap-1 mt-3">
+				<x-button class="bg-indigo-400">
+					{{ __('Save') }}
+				</x-button>
+				<x-button type="button" onclick="if(confirm('The filled data will be discarded, are you sure want to cancel?')) history.back();" class="bg-indigo-400">
+					Cancel
+				</x-button>
 		</form>
 	</div>
 @endsection

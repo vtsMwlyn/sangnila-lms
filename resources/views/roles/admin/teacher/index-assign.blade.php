@@ -19,12 +19,11 @@
 				</x-select>
 
 				<div class="flex mt-4 items-center gap-1">
-					<x-button type="button" onclick="history.back()" class="bg-orange-500">
-						Cancel
-					</x-button>
-
 					<x-button class="bg-orange-500">
 						{{ __('Add') }}
+					</x-button>
+					<x-button type="button" onclick="if(confirm('Are you sure want to cancel?')) history.back();" class="bg-orange-500">
+						Cancel
 					</x-button>
 				</div>
 

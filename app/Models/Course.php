@@ -8,12 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Course extends Model {
 	use HasFactory;
 
-	protected $fillable = [
-		'course_name',
-		'course_description',
-		'visibility'
-	];
-
+	protected $guarded = ["id"];
+	
 	public function topics(){
 		return $this->hasMany(Topic::class);
 	}

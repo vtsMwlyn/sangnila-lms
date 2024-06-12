@@ -51,11 +51,11 @@
 		</div>
 
 		<div class="flex items-stretch gap-1 justify-end mt-4">
-			<button type="button" onclick="history.back()" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
-					Cancel
-			</button>
 			<x-button class="bg-indigo-400">
 				{{ __('Submit') }}
+			</x-button>
+			<x-button type="button" onclick="if(confirm('The changes will be discarded, are you sure want to cancel?')) history.back();" class="bg-indigo-400">
+				Cancel
 			</x-button>
 		</div>
 	</form>

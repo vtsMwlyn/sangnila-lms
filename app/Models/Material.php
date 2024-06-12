@@ -8,12 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Material extends Model {
 	use HasFactory;
 
-	protected $fillable = [
-		'topic_id',
-		'title',
-		'link',
-		"desc"
-	];
+	protected $guarded = ["id"];
 
 	public function topic() {
 		return $this->belongsTo(Topic::class, "topic_id");

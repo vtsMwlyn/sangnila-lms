@@ -15,7 +15,7 @@ use App\Models\Progress;
 
 class DatabaseSeeder extends Seeder
 {
-	private function newUser($email, $full_name, $role_id){
+	private function newUser($email, $full_name, $role_id, $gender){
 		$user = User::create([
 			"full_name" => $full_name,
 			"email" => $email,
@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
 			"status" => "enabled"
 		]);
 
-		UserDetail::create(["user_id" => $user->id]);
+		UserDetail::create(["user_id" => $user->id, "gender" => $gender]);
 	}
 
 	private function assignStudent($student_name, $teacher_name, $courses, $max_session){
@@ -84,6 +84,14 @@ class DatabaseSeeder extends Seeder
 		}
 	}
 
+	private function changeMaterialLink($course_name, $topic_name, $material_name, $new_link){
+		$course = Course::where("course_name", $course_name)->first();
+		$topic = Topic::where("course_id", $course->id)->where("title", $topic_name)->first();
+		$material = Material::where("topic_id", $topic->id)->where("title", $material_name);
+
+		$material->update(["link" => $new_link]);
+	}
+
     public function run()
     {
 		//Generate Users and UserDetails
@@ -94,53 +102,53 @@ class DatabaseSeeder extends Seeder
 
 		// /*COMMENT BELOW COMMANDS TO SET THE APP DATA TO COMPLETELY EMPTY*/
 
-		$this->newUser("vannestheo.sangnila@gmail.com", "Vannes Theo Sudarsono", 1);
-		$this->newUser("immanuelgiovano.sangnila@gmail.com", "Immanuel Giovano", 1);
-		$this->newUser("jessica.sangnila@gmail.com", "Jessica", 1);
-		$this->newUser("victor.sangnila@gmail.com", "Victor", 1);
-		$this->newUser("feby.sangnila@gmail.com", "Feby", 1);
-		$this->newUser("tiwi.sangnila@gmail.com", "Pratiwi", 1);
-		$this->newUser("iswansudaryo.sangnila@gmail.com", "Iswan Sudaryo", 1);
+		$this->newUser("vannestheo.sangnila@gmail.com", "Vannes Theo Sudarsono", 1, 1);
+		$this->newUser("immanuelgiovano.sangnila@gmail.com", "Immanuel Giovano", 1, 1);
+		$this->newUser("jessica.sangnila@gmail.com", "Jessica", 1, 2);
+		$this->newUser("victor.sangnila@gmail.com", "Victor", 1, 1);
+		$this->newUser("feby.sangnila@gmail.com", "Feby", 1, 2);
+		$this->newUser("tiwi.sangnila@gmail.com", "Pratiwi", 1, 2);
+		$this->newUser("iswansudaryo.sangnila@gmail.com", "Iswan Sudaryo", 1, 1);
 
-		$this->newUser("hari.sangnila@gmail.com", "Hari", 2);
-		$this->newUser("lgaby.sangnila@gmail.com", "Gaby", 2);
-		$this->newUser("iswansudaryo.teacher.sangnila@gmail.com", "Iswan Sudaryo (Teacher)", 2);
-		$this->newUser("vincent.sangnila@gmail.com", "Vincent", 2);
-		$this->newUser("immanuelgiovano.teacher.sangnila@gmail.com", "Immanuel Giovano (Teacher)", 2);
+		$this->newUser("hari.sangnila@gmail.com", "Hari", 2, 1);
+		$this->newUser("lgaby.sangnila@gmail.com", "Gaby", 2, 2);
+		$this->newUser("iswansudaryo.teacher.sangnila@gmail.com", "Iswan Sudaryo (Teacher)", 2, 1);
+		$this->newUser("vincent.sangnila@gmail.com", "Vincent", 2, 1);
+		$this->newUser("immanuelgiovano.teacher.sangnila@gmail.com", "Immanuel Giovano (Teacher)", 2, 1);
 
 		/*Hari's students: Digital Drawing, Roblox*/
-		$this->newUser("jack.sangnila@gmail.com", "Jack", 3);
-		$this->newUser("jillian.sangnila@gmail.com", "Jillian P. Tanuwijaya", 3);
-		$this->newUser("jocheli.sangnila@gmail.com", "Jocheli Kensi Budianti", 3);
+		$this->newUser("jack.sangnila@gmail.com", "Jack", 3, 1);
+		$this->newUser("jillian.sangnila@gmail.com", "Jillian P. Tanuwijaya", 3, 2);
+		$this->newUser("jocheli.sangnila@gmail.com", "Jocheli Kensi Budianti", 3, 2);
 
-		$this->newUser("batara.sangnila@gmail.com", "Batara Feodore Setiawan", 3);
-		$this->newUser("bellrich.sangnila@gmail.com", "Bellrich Kevin Tjahyadi", 3);
-		$this->newUser("benedict.sangnila@gmail.com", "Benedict Jacob", 3);
+		$this->newUser("batara.sangnila@gmail.com", "Batara Feodore Setiawan", 3, 1);
+		$this->newUser("bellrich.sangnila@gmail.com", "Bellrich Kevin Tjahyadi", 3, 1);
+		$this->newUser("benedict.sangnila@gmail.com", "Benedict Jacob", 3, 2);
 
 		/*Gaby's students: Digital Drawing*/
-		$this->newUser("melly.sangnila@gmail.com", "Melly Tanto", 3);
-		$this->newUser("zhafira.sangnila@gmail.com", "Zhafira Jasmine", 3);
-		$this->newUser("vanya.sangnila@gmail.com", "Vanya Farelia", 3);
-		$this->newUser("freya.sangnila@gmail.com", "Freya Pramudia", 3);
-		$this->newUser("kenzie.sangnila@gmail.com", "Kenzie Gautama Dirgantara", 3);
+		$this->newUser("melly.sangnila@gmail.com", "Melly Tanto", 3, 2);
+		$this->newUser("zhafira.sangnila@gmail.com", "Zhafira Jasmine", 3, 2);
+		$this->newUser("vanya.sangnila@gmail.com", "Vanya Farelia", 3, 2);
+		$this->newUser("freya.sangnila@gmail.com", "Freya Pramudia", 3, 2);
+		$this->newUser("kenzie.sangnila@gmail.com", "Kenzie Gautama Dirgantara", 3, 1);
 
 		/*Iswan's students: 3D Modelling, Concept Art*/
-		$this->newUser("louisha.sangnila@gmail.com", "Louisha Annabelle", 3);
-		$this->newUser("gayle.sangnila@gmail.com", "Gayle Farrel Patria", 3);
-		$this->newUser("angela.sangnila@gmail.com", "Angela Nathania", 3);
-		$this->newUser("balya.sangnila@gmail.com", "Balya Malkan Mahyuzar", 3);
-		$this->newUser("alvin.sangnila@gmail.com", "Alvin Edward", 3);
+		$this->newUser("louisha.sangnila@gmail.com", "Louisha Annabelle", 3, 2);
+		$this->newUser("gayle.sangnila@gmail.com", "Gayle Farrel Patria", 3, 1);
+		$this->newUser("angela.sangnila@gmail.com", "Angela Nathania", 3, 2);
+		$this->newUser("balya.sangnila@gmail.com", "Balya Malkan Mahyuzar", 3, 1);
+		$this->newUser("alvin.sangnila@gmail.com", "Alvin Edward", 3, 1);
 
-		$this->newUser("ethan.sangnila@gmail.com", "Ethan Alexander Irawan", 3);
-		$this->newUser("jezriel.sangnila@gmail.com", "Jezriel Connery", 3);
-		$this->newUser("martha.sangnila@gmail.com", "Martha Theresia Ramlie", 3);
-		$this->newUser("janicelyn.sangnila@gmail.com", "Janicelyn Daviena Godarma", 3);
-		$this->newUser("grace.sangnila@gmail.com", "Grace Devana Kusnandar", 3);
+		$this->newUser("ethan.sangnila@gmail.com", "Ethan Alexander Irawan", 3, 1);
+		$this->newUser("jezriel.sangnila@gmail.com", "Jezriel Connery", 3, 1);
+		$this->newUser("martha.sangnila@gmail.com", "Martha Theresia Ramlie", 3, 2);
+		$this->newUser("janicelyn.sangnila@gmail.com", "Janicelyn Daviena Godarma", 3, 2);
+		$this->newUser("grace.sangnila@gmail.com", "Grace Devana Kusnandar", 3, 2);
 
 		/*Vincent's students: 3D Modelling, 2D Modelling*/
-		$this->newUser("philia.sangnila@gmail.com", "Philia Valeraine Alverna", 3);
-		$this->newUser("kensi.sangnila@gmail.com", "Kensi Sinclair", 3);
-		$this->newUser("giselle.sangnila@gmail.com", "Giselle Saputra", 3);
+		$this->newUser("philia.sangnila@gmail.com", "Philia Valeraine Alverna", 3, 2);
+		$this->newUser("kensi.sangnila@gmail.com", "Kensi Sinclair", 3, 1);
+		$this->newUser("giselle.sangnila@gmail.com", "Giselle Saputra", 3, 2);
 
 		//Generate Courses
 		Course::create([
@@ -302,6 +310,15 @@ class DatabaseSeeder extends Seeder
 			"Insert and show data from tables",
 			"Update and delete data from tables"
 		]);
+
+		// Some example material links
+		$this->changeMaterialLink("Digital Drawing", "Character Design", "Head Construction", "https://stanprokopenko.com/2012/08/video-draw-head-angle-1/");
+		$this->changeMaterialLink("Digital Drawing", "Character Design", "Body Construction", "https://youtu.be/Lw0nZEw8IIk?si=pMEOKHi1CzI9_bXJ");
+		$this->changeMaterialLink("Digital Drawing", "Character Design", "Gesture, Ekspresi, dan Tangan", "https://drive.google.com/file/d/145xGbwJf43Ug58F2rxxmStfmLrWYx3px/view?usp=sharing");
+		$this->changeMaterialLink("Digital Drawing", "Character Design", "Gesture and Full Body Construction", "https://drive.google.com/file/d/1f4PVu3pYDRF-Dc_2GejbGnzHz31S4pZK/view?usp=sharing");
+		$this->changeMaterialLink("Web Development", "Construct a web page using HTML", "Introduction to HTML", "https://drive.google.com/file/d/1fqf2oSxdLTFjbC99khOpv5DcHTTvi6Xg/view?usp=sharing");
+		$this->changeMaterialLink("Web Development", "Styling a web page using CSS", "Introduction to CSS", "https://drive.google.com/file/d/1n_3G4wvHKxNH7u-PQWry8-ocGPcMnt8i/view?usp=sharing");
+		$this->changeMaterialLink("Web Development", "Using JavaScript to control the behavior and events in a web page", "Introduction to JS", "https://drive.google.com/file/d/1TM6T69eUs84B1RcEtbUcEMEQwW51LmbK/view?usp=sharing");
 
 
 		// ===== Assign students to courses + generate progress ===== //

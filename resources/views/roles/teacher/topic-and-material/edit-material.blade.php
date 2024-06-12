@@ -22,24 +22,24 @@
 				autofocus />
 		</div>
 
-		<!-- Material Link -->
-		<div class="mt-4">
-			<x-label for="link" :value="__('Material Link')" />
-			<x-input id="link" class="block mt-1 w-full" type="text" name="link" :value="old('link', $material->link)" />
-		</div>
-
 		<!-- Material Description -->
 		<div class="mt-4">
 			<x-label for="desc" :value="__('Material Description')" />
 			<x-input id="desc" class="block mt-1 w-full" type="text" name="desc" :value="old('desc', $material->desc)" />
 		</div>
 
-		<div class="flex items-stretch justify-end mt-4">
-			<button type="button" onclick="history.back()" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
-					Cancel
-			</button>
-			<x-button class="ml-4 bg-indigo-400">
-				{{ __('SAVE') }}
+		<!-- Material Link -->
+		<div class="mt-4">
+			<x-label for="link" :value="__('Material Link')" />
+			<x-input id="link" class="block mt-1 w-full" type="text" name="link" :value="old('link', $material->link)" />
+		</div>
+
+		<div class="flex gap-1 items-stretch justify-end mt-4">
+			<x-button class="bg-indigo-400">
+				{{ __('Save') }}
+			</x-button>
+			<x-button type="button" onclick="if(confirm('The changes will be discarded, are you sure want to cancel?')) history.back();" class="bg-indigo-400">
+				Cancel
 			</x-button>
 		</div>
 	</form>

@@ -29,7 +29,7 @@
 		<table class="w-full" style="border-collapse: separate; border-spacing: 15px 10px;">
 			<tr>
 				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Full name</td>
-				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">@if($user->full_name){{ $user->full_name }}@else{{ __("N/A") }}@endif</td>
+				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ ($user->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $user->full_name }}</td>
 			</tr>
 			<tr>
 				<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Phone number</td>

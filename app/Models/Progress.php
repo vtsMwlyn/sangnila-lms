@@ -7,14 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Progress extends Model {
 	use HasFactory;
-	protected $fillable = [
-		'student_id',
-		'material_id',
-		'teacher_id',
-		'course_id',
-		'status',
-		'note '
-	];
+
+	protected $guarded = ["id"];
 
 	public function teacher() {
 		return $this->belongsTo(User::class, 'teacher_id');

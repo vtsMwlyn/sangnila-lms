@@ -34,26 +34,40 @@
 					autocomplete="current-password" placeholder="Password Confirmation" />
 			</div>
 
-			<!-- Role Selection -->
-			<div class="mt-4">
-				<x-label for="role" class="text-white" :value="__('Select Role')" />
+			<div class="mt-4 flex gap-4 w-full">
+				<!-- Role Selection -->
+				<div class="w-1/2">
+					<x-label for="role" class="text-white" :value="__('Select Role')" />
+					<x-select name="role" id="role"
+						class="mt-1 w-full">
+						<option selected disabled>Pick a Role</option>
+						@forelse ($roles as $role)
+							<option value="{{ $role->role_name }}" @if(old("role") == $role->role_name) selected @endif>{{ $role->role_name }}</option>
+						@empty
+						@endforelse
+					</x-select>
+				</div>
 
-				<x-select name="role" id="role"
-					class="mt-1 w-1/3">
-					<option selected disabled>Pick a Role</option>
-					@forelse ($roles as $role)
-						<option value="{{ $role->role_name }}" @if(old("role") == $role->role_name) selected @endif>{{ $role->role_name }}</option>
-					@empty
-					@endforelse
-				</x-select>
+				<!-- Gender Selection -->
+				<div class="w-1/2">
+					<x-label for="gender" class="text-white" :value="__('Select Gender')" />
+					<x-select name="gender" id="gender"
+						class="mt-1 w-full">
+						<option selected disabled>Pick a Gender</option>
+						@forelse ($gender as $index => $g)
+							<option value="{{ $index + 1 }}" @if(old("gender") == $g) selected @endif>{{ $g }}</option>
+						@empty
+						@endforelse
+					</x-select>
+				</div>
 			</div>
 
 			<div class="flex justify-end gap-1 items-center mt-8">
-				<x-button type="button" onclick="history.back()" class="bg-orange-500">
-					Cancel
-				</x-button>
 				<x-button class="bg-orange-500 w-1/3">
 					{{ __('Create') }}
+				</x-button>
+				<x-button type="button" onclick="if(confirm('The filled data will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500">
+					Cancel
 				</x-button>
 			</div>
 		</form>

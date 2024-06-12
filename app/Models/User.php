@@ -11,14 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable implements MustVerifyEmail{
 	use HasApiTokens, HasFactory, Notifiable;
 
-	protected $fillable = [
-		'full_name',
-		'email',
-		'password',
-		'role_id',
-		'email_verified_at',
-		"status"
-	];
+	protected $guarded = ["id"];
 
 	protected $hidden = [
 		'password',

@@ -36,11 +36,11 @@
 		</div>
 
 		<div class="flex items-stretch justify-end mt-4 gap-1">
-			<x-button type="button" onclick="history.back()" class="bg-orange-500">
-				Cancel
-			</x-button>
 			<x-button class="bg-orange-500">
 				{{ __('Save') }}
+			</x-button>
+			<x-button type="button" onclick="if(confirm('The changes will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500">
+				Cancel
 			</x-button>
 		</div>
 	</form>

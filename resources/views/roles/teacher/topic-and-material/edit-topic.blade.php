@@ -18,10 +18,14 @@
 				<x-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title', $topic->title)"
 					autofocus />
 			</div>
-			<a href={{ route("teacher.topic.show", [$topic->course->id, $topic->id]) }} class="inline-flex items-center px-4 py-2 bg-indigo-400 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">CANCEL</a>
-			<x-button class="mt-3 bg-indigo-400">
-				{{ __('SAVE') }}
-			</x-button>
+			<div class="flex gap-1 mt-3">
+				<x-button class="bg-indigo-400">
+					{{ __('Save') }}
+				</x-button>
+				<x-button type="button" onclick="if(confirm('The changes will be discarded, are you sure want to cancel?')) history.back();" class="bg-indigo-400">
+					Cancel
+				</x-button>
+			</div>
 		</form>
 	</div>
 
@@ -37,7 +41,7 @@
 				@forelse ($topic->materials as $material)
 					<tr>
 						<td class="border px-3">{{ $material->title }}</td>
-						<td class="border px-3"><a href="{{ $material->link }}" class="text-blue-700">{{ $material->link }}</a></td>
+						<td class="border px-3"><a href="{{ $material->link }}" class="text-blue-700" target="blank">{{ $material->link }}</a></td>
 						<td class="border px-3">
 							<div class="flex gap-1">
 								<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"

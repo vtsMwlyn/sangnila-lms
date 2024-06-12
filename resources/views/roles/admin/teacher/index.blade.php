@@ -26,7 +26,7 @@
 					<tr class="bg-blue-800 text-white">
 						<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-l-xl text-center">
 							<a href="{{ route('admin.teacher.show', ['teacher_id' => $account->id]) }}" class="text-blue-200 hover:text-blue-400 font-semibold hover:underline">
-								{{ $account->full_name }}
+								{{ ($account->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $account->full_name }}
 							</a>
 						</td>
 						<td class="border-blue-300 px-4 py-5 sm:w-1/4 text-center">{{ $account->email }}</td>

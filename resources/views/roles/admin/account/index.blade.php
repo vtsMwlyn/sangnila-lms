@@ -51,7 +51,13 @@
 							@endif
 
 							<tr class="bg-blue-800 text-white">
-								<td class="px-4 py-5 rounded-l-xl text-center"><a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $account->full_name }}</a></td>
+								<td class="px-4 py-5 rounded-l-xl text-center">
+									@if($account->role_id == 2)
+										<a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ ($account->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $account->full_name }}</a>
+									@else
+										<a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $account->full_name }}</a>
+									@endif
+								</td>
 								<td class="px-4 py-5 text-center">{{ $account->email }}</td>
 								<td class="px-4 py-5 text-center">{{ $account->role->role_name }}</td>
 								<td class="px-4 py-5 text-center">{{ $account->status }}</td>
