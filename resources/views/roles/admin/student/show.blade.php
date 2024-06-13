@@ -152,7 +152,7 @@
 			border-spacing: 0 20px;">
 				<thead>
 					<th class="px-5 py-5 bg-blue-900 text-white rounded-l-xl">Course</th>
-					<th class="px-5 py-5 bg-blue-900 text-white">Attendance</th>
+					<th class="px-5 py-5 bg-blue-900 text-white">Progress</th>
 					<th class="px-5 py-5 bg-blue-900 text-white rounded-r-xl">Assignments</th>
 				</thead>
 				<tbody>
@@ -162,7 +162,7 @@
 								<td class="px-5 py-5 rounded-l-xl text-center">{{ $student->enrolled_courses[$i]->course_name }}</td>
 								<td class="px-5 py-5">
 									<div class="flex w-full items-center justify-center gap-3">
-										<span>{{ $attended[$i] }}/{{ $attendance_if_full[$i] }} attended</span>
+										<span>{{ $current_progress[$i] }}/{{ $full_progress[$i] }} done</span>
 										<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.atd-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
 											Details
 										</x-anchor-button>

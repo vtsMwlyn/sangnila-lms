@@ -13,6 +13,7 @@ use App\Models\CourseStudent;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
 use App\Models\AssignmentSubmission;
+use App\Models\Progress;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -40,92 +41,63 @@ class StudentController extends Controller {
 	// ===== ADMIN ===== //
 	// Showing list of all active students in Sangnila LMS
 	public function admin_index() {
-		$role = Role::where('role_name', 'Student')->first();
-		$students = $role->users;
+		$students = User::where("role_id", 3)->filter(request(["search"]))->get();
 
-		// Collect current progress, max progress, and percentage of progress for each student in their enrolled courses
-		$current_progress = [];
-		$student_max_progress = [];
-		$percentage = [];
-
-		$max_ratios = [];
+		$max_attendances = [];
+		$current_attendances = [];
+		$percentages = [];
 
 		foreach($students as $student){
-			$cp = [];
-			$smp = [];
-			$p = [];
+			$maiscec = [];
+			$caiscec = [];
+			$piscec = [];
 
-			$max_ratio = 0;
+			$sa = StudentAttendance::where("user_id", $student->id)->get();
 
-			foreach ($student->enrolled_courses as $course){
-				$all_progress_in_current_course = [];
-				foreach($student->progress as $pgr){
-					if($pgr->course_id == $course->id){
-						array_push($all_progress_in_current_course, $pgr);
-					}
-				}
+			foreach($student->enrolled_courses as $course){
+				$cs = CourseStudent::where("course_id", $course->id)->where("student_id", $student->id)->first();
+
+				array_push($maiscec, $cs->max_course_session);
 
 				$count = 0;
-				foreach($all_progress_in_current_course as $curr_pgr){
-					if($curr_pgr->status == "unlocked"){
+				foreach($sa as $atd){
+					if($atd->attendance->course_id == $course->id && $atd->is_attend == 1){
 						$count++;
 					}
 				}
 
-				$cs_data = CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first();
-				$maximum_sessions = $cs_data->max_course_session;
+				array_push($caiscec, $count);
+				array_push($piscec, round((float)($count / $cs->max_course_session) * 100));
 
-				if ($maximum_sessions > 0) {
-					$ratio = $count / $maximum_sessions;
-				} else {
-					$ratio = 0;
-				}
-
-				$percent = round($ratio * 100);
-
-				if ($ratio > $max_ratio) {
-					$max_ratio = $ratio;
-				}
-
-				array_push($cp, $count);
-				array_push($smp, $maximum_sessions);
-				array_push($p, $percent);
 			}
 
-			array_push($current_progress, $cp);
-			array_push($student_max_progress, $smp);
-			array_push($percentage, $p);
-			array_push($max_ratios, $max_ratio);
+			array_push($max_attendances, $maiscec);
+			array_push($current_attendances, $caiscec);
+			array_push($percentages, $piscec);
 		}
 
-		// Sorting by progress (still not working well)
-		// $studentsArray = $students->toArray();
+		// $studentArrays = $students->toArray();
 
-		// $combined = array_map(null, $current_progress, $student_max_progress, $percentage, $studentsArray, $max_ratios);
+		// // Combine the arrays into a single array of tuples
+		// $combined = array_map(null, $current_attendances, $max_attendances, $studentArrays, $percentages);
 
-		// usort($combined, function($a, $b){
-		// 	return $b[4] <=> $a[4];
+		// // Sort the combined array by current progress (index 0 of each tuple)
+		// usort($combined, function($a, $b) {
+		// 	return $b[3] <=> $a[3]; // Descending order
 		// });
 
-		// $current_progress = array_column($combined, 0);
-		// $student_max_progress = array_column($combined, 1);
-		// $percentage = array_column($combined, 2);
-		// $students = array_column($combined, 3);
-
-		// foreach($students as &$s){
-		// 	$s["enrolled_courses"] = collect($s["enrolled_courses"]);
-		// 	$s["progress"] = collect($s["progress"]);
-		// }
-		// unset($s);
-
-		// $students = collect($students);
+		// // Separate the arrays back
+		// $current_attendances = array_column($combined, 0);
+		// $max_attendances = array_column($combined, 1);
+		// // $students = array_column($combined, 2);
+		// $percentages = array_column($combined, 3);
 
 		// Return view with data
 		return view('roles.admin.student.index', [
 			'students' => $students,
-			"current_progress" => $current_progress,
-			"student_max_progress" => $student_max_progress,
-			"percentage" => $percentage
+			"max_attendances" => $max_attendances,
+			"current_attendances" => $current_attendances,
+			"percentages" => $percentages
 		]);
 	}
 
@@ -162,34 +134,29 @@ class StudentController extends Controller {
 		}
 
 		//Counting attended sessions
-		$count_curr_attendance = [];
-		$count_full_attendance = [];
+		$count_curr_progress = [];
+		$count_full_progress = [];
 
 		foreach($student->enrolled_courses as $course){
-			$attendance_data_in_the_course = Attendance::where("course_id", $course->id)->get();
-			$course_student = CourseStudent::where("course_id", $course->id)->where("student_id", $student->id)->first();
-			array_push($count_full_attendance, $course_student->max_course_session);
+			$cs = CourseStudent::where("course_id", $course->id)->where("student_id", $student_id)->first();
+			array_push($count_full_progress, $cs->max_course_session);
 
-			$n = 0;
-			foreach($attendance_data_in_the_course as $atd){
-				$existingAttendances = $atd->student_attendances;
+			$progresses = Progress::where("course_id", $course->id)->where("student_id", $student_id)->get();
 
-				foreach($existingAttendances as $sa){
-					if($sa->user_id == $student_id && $sa->is_attend == 1){
-						$n++;
-						break;
-					}
+			$count = 0;
+			foreach($progresses as $progress){
+				if($progress->status == "unlocked"){
+					$count++;
 				}
 			}
-
-			array_push($count_curr_attendance, $n);
+			array_push($count_curr_progress, $count);
 		}
 
 		//Return view with data
 		return view('roles.admin.student.show', [
 			'student' => $student,
-			"attendance_if_full" => $count_full_attendance,
-			"attended" => $count_curr_attendance,
+			"full_progress" => $count_full_progress,
+			"current_progress" => $count_curr_progress,
 			"assignment_if_full" => $count_assignment_all,
 			"done_assignment" => $count_assignment_col
 		]);

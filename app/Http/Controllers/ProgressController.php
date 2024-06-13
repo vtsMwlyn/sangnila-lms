@@ -43,18 +43,18 @@ class ProgressController extends Controller {
 	}
 
 	// Update the material accessibility in the database
-	public function update(Request $request, $progress_id) {
-		$status = $request->access === 'on' ? 'unlocked' : 'locked';
-		$Progress = Progress::where("id", $progress_id)->first();
+	public function update(Request $request, $course_id, $student_id) {
+		$student_progress = Progress::where("course_id", $course_id)->where("student_id", $student_id)->get();
 
-		Progress::findOrFail($progress_id)->update([
-			'status' => $status
-		]);
+		foreach($student_progress as $index => $progress){
+			$newStatus = ($request->checkbox_value[$index] == 'on')? "unlocked" : "locked";
+			Progress::where("id", $progress->id)->update(["status" => $newStatus]);
+		}
 
 		return redirect(route('teacher.student.show.progress', [
-			'student_id' => $Progress->student_id,
-			'course_id' => $Progress->course_id
-		]));
+			'student_id' => $student_id,
+			'course_id' => $course_id
+		]))->with("successUpdateProgress", "Student's progress updated successfully!");
 	}
 
 	public function students_progress($course_id) {

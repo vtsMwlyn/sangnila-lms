@@ -10,11 +10,23 @@ use Illuminate\Support\Facades\Auth;
 class AdminAccountController extends Controller {
 	// Shows all available accounts in Sangnila LMS
 	public function index() {
-		// $accounts = User::where("status", "enabled")->orderBy('role_id')/*->paginate(5)*/->get();
+		$admin_accounts = User::where("status", "enabled")->where("role_id", 1)->whereNot("id", Auth::user()->id)->orderBy('full_name')/*->paginate(5, ['*'], 'admin_page')*/->get();
+		$teacher_accounts = User::where("status", "enabled")->where("role_id", 2)->orderBy('full_name')/*->paginate(5, ['*'], 'teacher_page')*/->get();
+		$student_accounts = User::where("status", "enabled")->where("role_id", 3)->orderBy('full_name')/*->paginate(10, ['*'], 'student_page')*/->get();
 
-		$admin_accounts = User::where("status", "enabled")->where("role_id", 1)->whereNot("id", Auth::user()->id)->orderBy('full_name')->paginate(5, ['*'], 'admin_page');
-		$teacher_accounts = User::where("status", "enabled")->where("role_id", 2)->orderBy('full_name')->paginate(5, ['*'], 'teacher_page');
-		$student_accounts = User::where("status", "enabled")->where("role_id", 3)->orderBy('full_name')->paginate(10, ['*'], 'student_page');
+		if(request("role") && request("search")){
+			switch(request("role")){
+				case 1:
+					$admin_accounts = User::where("status", "enabled")->where("role_id", 1)->whereNot("id", Auth::user()->id)->orderBy('full_name')/*->paginate(5, ['*'], 'admin_page')*/->filter(request(["search", "role"]))->get();
+					break;
+				case 2:
+					$teacher_accounts = User::where("status", "enabled")->where("role_id", 2)->orderBy('full_name')/*->paginate(5, ['*'], 'teacher_page')*/->filter(request(["search", "role"]))->get();
+					break;
+				case 3:
+					$student_accounts = User::where("status", "enabled")->where("role_id", 3)->orderBy('full_name')/*->paginate(10, ['*'], 'student_page')*/->filter(request(["search", "role"]))->get();
+					break;
+			}
+		}
 
 		$accounts = [];
 		array_push($accounts, $admin_accounts, $teacher_accounts, $student_accounts);

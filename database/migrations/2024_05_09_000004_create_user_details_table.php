@@ -12,6 +12,7 @@ return new class extends Migration {
 			$table->unsignedBigInteger('user_id');
 
 			$table->string("gender");
+
 			$table->string("phone_number")->nullable();
 			$table->string("city_of_birth")->nullable();
 			$table->date("date_of_birth")->nullable();

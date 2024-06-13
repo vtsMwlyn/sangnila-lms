@@ -12,7 +12,7 @@ class CourseController extends Controller {
 	// ===== ADMIN ===== //
 	// Showing list of all available courses in Sangnila LMS
 	public function admin_index() {
-		$courses = Course::get();
+		$courses = Course::filter(request(["search"]))->get();
 		return view('roles.admin.course.index', [
 			'courses' => $courses,
 		]);

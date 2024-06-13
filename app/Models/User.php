@@ -22,6 +22,23 @@ class User extends Authenticatable implements MustVerifyEmail{
 		'email_verified_at' => 'datetime',
 	];
 
+
+	// Query Scopes
+	public function scopeFilter($query, array $filters){
+		$query->when($filters["search"] ?? false, function($query, $search){
+			return $query->where(function($query) use($search){
+				$query->where("full_name", "like", "%" . $search . "%");
+			});
+		});
+
+		$query->when($filters["role"] ?? false, function($query, $role){
+			return $query->whereHas("role", function($query) use($role){
+				$query->where("role_id", $role);
+			});
+		});
+	}
+
+
 	// Relationships
 	public function details() {
 		return $this->hasOne(UserDetail::class);
@@ -48,7 +65,7 @@ class User extends Authenticatable implements MustVerifyEmail{
 	}
 
 	public function attendances(){
-		return $this->hasMany(Attendance::class, "student_attendances");
+		return $this->belongsToMany(Attendance::class, "student_attendances");
 	}
 
 	public function assignments(){
@@ -65,6 +82,10 @@ class User extends Authenticatable implements MustVerifyEmail{
 
 	public function submissions(){
 		return $this->hasMany(Submission::class, "student_id");
+	}
+
+	public function payments(){
+		return $this->belongsToMany(Course::class, "payments");
 	}
 
 }

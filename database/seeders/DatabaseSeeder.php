@@ -10,6 +10,7 @@ use App\Models\Topic;
 use App\Models\CourseStudent;
 use App\Models\CourseTeacher;
 use App\Models\Material;
+use App\Models\Payment;
 use Illuminate\Database\Seeder;
 use App\Models\Progress;
 
@@ -40,6 +41,12 @@ class DatabaseSeeder extends Seeder
 				"student_id" => $student->id,
 				"teacher_id" => $teacher->id,
 				"max_course_session" => $max_session
+			]);
+
+			Payment::create([
+				"student_id" => $student->id,
+				"course_id" => $course->id,
+				"number_of_payment" => 1
 			]);
 
 			foreach ($course->topics as $index1 => $topic) {
@@ -323,38 +330,38 @@ class DatabaseSeeder extends Seeder
 
 		// ===== Assign students to courses + generate progress ===== //
 		/*Hari's students*/
-		$this->assignStudent("Jack", "Hari", ["Digital Drawing"], 20);
-		$this->assignStudent("Jillian P. Tanuwijaya", "Hari", ["Digital Drawing"], 20);
-		$this->assignStudent("Jocheli Kensi Budianti", "Hari", ["Digital Drawing"], 20);
+		$this->assignStudent("Jack", "Hari", ["Digital Drawing"], 8);
+		$this->assignStudent("Jillian P. Tanuwijaya", "Hari", ["Digital Drawing"], 8);
+		$this->assignStudent("Jocheli Kensi Budianti", "Hari", ["Digital Drawing"], 8);
 
-		$this->assignStudent("Batara Feodore Setiawan","Hari", ["Roblox"], 20);
-		$this->assignStudent("Bellrich Kevin Tjahyadi","Hari", ["Roblox"], 20);
-		$this->assignStudent("Benedict Jacob","Hari", ["Roblox"], 20);
+		$this->assignStudent("Batara Feodore Setiawan","Hari", ["Roblox"], 8);
+		$this->assignStudent("Bellrich Kevin Tjahyadi","Hari", ["Roblox"], 8);
+		$this->assignStudent("Benedict Jacob","Hari", ["Roblox"], 8);
 
 		/*Gaby's students*/
-		$this->assignStudent("Melly Tanto", "Gaby", ["Digital Drawing"], 20);
-		$this->assignStudent("Zhafira Jasmine", "Gaby", ["Digital Drawing"], 20);
-		$this->assignStudent("Vanya Farelia", "Gaby", ["Digital Drawing"], 20);
-		$this->assignStudent("Freya Pramudia", "Gaby", ["Digital Drawing"], 20);
-		$this->assignStudent("Kenzie Gautama Dirgantara", "Gaby", ["Digital Drawing"], 20);
+		$this->assignStudent("Melly Tanto", "Gaby", ["Digital Drawing"], 8);
+		$this->assignStudent("Zhafira Jasmine", "Gaby", ["Digital Drawing"], 8);
+		$this->assignStudent("Vanya Farelia", "Gaby", ["Digital Drawing"], 8);
+		$this->assignStudent("Freya Pramudia", "Gaby", ["Digital Drawing"], 8);
+		$this->assignStudent("Kenzie Gautama Dirgantara", "Gaby", ["Digital Drawing"], 8);
 
 		/*Iswan's students*/
-		$this->assignStudent("Louisha Annabelle", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 20);
-		$this->assignStudent("Gayle Farrel Patria", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 20);
-		$this->assignStudent("Angela Nathania", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 20);
-		$this->assignStudent("Balya Malkan Mahyuzar", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 20);
-		$this->assignStudent("Alvin Edward", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 20);
+		$this->assignStudent("Louisha Annabelle", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 8);
+		$this->assignStudent("Gayle Farrel Patria", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 8);
+		$this->assignStudent("Angela Nathania", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 8);
+		$this->assignStudent("Balya Malkan Mahyuzar", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 8);
+		$this->assignStudent("Alvin Edward", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 8);
 
-		$this->assignStudent("Ethan Alexander Irawan", "Iswan Sudaryo (Teacher)", ["Concept Art"], 20);
-		$this->assignStudent("Jezriel Connery", "Iswan Sudaryo (Teacher)", ["Concept Art"], 20);
-		$this->assignStudent("Martha Theresia Ramlie", "Iswan Sudaryo (Teacher)", ["Concept Art"], 20);
-		$this->assignStudent("Janicelyn Daviena Godarma", "Iswan Sudaryo (Teacher)", ["Concept Art"], 20);
-		$this->assignStudent("Grace Devana Kusnandar", "Iswan Sudaryo (Teacher)", ["Concept Art"], 20);
+		$this->assignStudent("Ethan Alexander Irawan", "Iswan Sudaryo (Teacher)", ["Concept Art"], 8);
+		$this->assignStudent("Jezriel Connery", "Iswan Sudaryo (Teacher)", ["Concept Art"], 8);
+		$this->assignStudent("Martha Theresia Ramlie", "Iswan Sudaryo (Teacher)", ["Concept Art"], 8);
+		$this->assignStudent("Janicelyn Daviena Godarma", "Iswan Sudaryo (Teacher)", ["Concept Art"], 8);
+		$this->assignStudent("Grace Devana Kusnandar", "Iswan Sudaryo (Teacher)", ["Concept Art"], 8);
 
 		/*Vincent's students*/
-		$this->assignStudent("Philia Valeraine Alverna", "Vincent", ["3D Modelling"], 20);
-		$this->assignStudent("Kensi Sinclair", "Vincent", ["3D Modelling"], 20);
-		$this->assignStudent("Giselle Saputra", "Vincent", ["3D Modelling"], 20);
+		$this->assignStudent("Philia Valeraine Alverna", "Vincent", ["3D Modelling"], 8);
+		$this->assignStudent("Kensi Sinclair", "Vincent", ["3D Modelling"], 8);
+		$this->assignStudent("Giselle Saputra", "Vincent", ["3D Modelling"], 8);
 
 
 		// Assign teachers to courses

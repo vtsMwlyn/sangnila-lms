@@ -91,7 +91,7 @@ Route::prefix('/teacher')
 					->whereNumber('course_id');
 
 				// Update student's material progress
-				Route::patch('/progress/{progress_id}', [ProgressController::class, 'update'])
+				Route::patch('/progress/{course_id}/{student_id}', [ProgressController::class, 'update'])
 					->name('update.progress')
 					->whereNumber('progress_id');
 

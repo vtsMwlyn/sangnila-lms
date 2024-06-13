@@ -41,6 +41,12 @@
 				background: url("{{ asset('img/background.jpg') }}") no-repeat center center / cover;
 				cursor: url("{{ asset('img/kursor.cur') }}"), auto;
 			}
+
+			/* Apply custom scrollbar styles to Firefox */
+			* {
+				scrollbar-width: thin; /* Thin scrollbar */
+				scrollbar-color: #888 #f7f7f7; /* Scrollbar thumb and track color */
+			}
 		</style>
 
 		<!-- App title -->
@@ -49,7 +55,7 @@
 
 	<body class="bg-cover min-h-screen flex flex-col md:flex-row">
 		<div class="fixed bottom-0 left-0 m-2 text-black md:text-white">
-			<div class="">v0.5.2-alpha</div>
+			<div class="">{{ trans("strings.version") }}</div>
 		</div>
 		<div class="fixed bottom-0 right-0 m-2 opacity-0 transition-opacity duration-500 ease-in-out" id="back-to-top">
 			<a href="#">

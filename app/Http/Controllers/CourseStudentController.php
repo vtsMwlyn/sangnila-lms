@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
+use App\Models\Payment;
 use App\Models\Progress;
 
 class CourseStudentController extends Controller {
