@@ -6,9 +6,6 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<!-- CSS -->
-		<link rel="stylesheet" href="{{ asset('css/app.css') }}">
-
 		<!-- App icon -->
 		<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
 		<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
@@ -17,11 +14,18 @@
 		<!-- Manifest(?) -->
 		<link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
+		<!-- CSS -->
+		<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
 		<!-- Bootstrap icons -->
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 		<!-- Tailwind CDN -->
 		<script src="https://cdn.tailwindcss.com"></script>
+
+		<!-- Include Select2 CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 
 		<!-- Custom styles -->
 		<style>
@@ -47,7 +51,20 @@
 				scrollbar-width: thin; /* Thin scrollbar */
 				scrollbar-color: #888 #f7f7f7; /* Scrollbar thumb and track color */
 			}
+
+			/* Center the Select2 dropdown arrow */
+			.select2-selection__arrow {
+				margin-top: 5px;
+				margin-right: 10px;
+			}
+
+			.select2-container .select2-selection--single {
+				color: rgb(30 64 175);
+			}
 		</style>
+
+		<!-- Include jQuery  -->
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 		<!-- App title -->
 		<title>Sangnila Academy | LMS</title>
@@ -91,6 +108,8 @@
 			</div>
 		</div>
 
+		<!-- Scripts -->
+		<!-- Back to top button -->
 		<script>
 			const backToTopButton = document.getElementById("back-to-top");
 
@@ -103,6 +122,11 @@
 				}
 			});
 		</script>
+
+		<!-- Include Select2 JavaScript -->
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
 	</body>
 
 </html>

@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
+use App\Models\CourseTeacher;
 use App\Models\Payment;
 use App\Models\Progress;
 
@@ -114,6 +115,89 @@ class CourseStudentController extends Controller {
 		$CourseStudent = CourseStudent::where('student_id', $student_id)->where('course_id', $course_id)->first();
 		CourseStudent::destroy($CourseStudent->id);
 		return redirect(route('admin.student.show', $student_id))->with("successUnassignFromCourse", "Successfully unassigned the student from the course!");;
+	}
+
+	// Batch assign student to course
+	public function batch_assign($course_id){
+		$course = Course::where("id", $course_id)->first();
+		$students = User::where("role_id", 3)->get();
+
+		$filtered = $students->filter(function($student) use($course){
+			$notEnrolledYet = true;
+			foreach($student->enrolled_courses as $ec){
+				if($ec->id == $course->id){
+					$notEnrolledYet = false;
+					break;
+				}
+			}
+
+			return $notEnrolledYet;
+		});
+
+		return view("roles.admin.student.batch-assign", [
+			"course" => $course,
+			"allStudents" => $filtered,
+			"allTeachers" => $course->teachers
+		]);
+	}
+
+	public function batch_assign_store(Request $request, $course_id){
+		$students = $request->studentName;
+		$teachers = $request->teacherName;
+		$maxcoursesessions = $request->maxCourseSession;
+
+		$course = Course::where("id", $course_id)->first();
+
+		foreach($students as $index => $student){
+			$targetStudent = User::where("id", $student)->first();
+			$targetTeacher = User::where("role_id", 2)->where("full_name", $teachers[$index])->first();
+
+			CourseStudent::create([
+				"student_id" => $targetStudent->id,
+				"teacher_id" => $targetTeacher->id,
+				"course_id" => $course->id,
+				"max_course_session" => $maxcoursesessions[$index]
+			]);
+
+			$existingProgress = Progress::where('student_id', $targetStudent->id)
+				->where('course_id', $course->id)
+				->pluck('material_id')
+				->toArray();
+
+			foreach ($course->topics as $index1 => $topic) {
+				foreach($topic->materials as $index2 => $material) {
+					$newData = [
+						'student_id' => $targetStudent->id,
+						'material_id' => $material->id,
+						'course_id' => $course->id,
+					];
+
+					if($index1 == 0 && $index2 == 0){
+						$newData['status'] = 'unlocked';
+					} else {
+						$newData['status'] = 'locked';
+					}
+
+					if (!in_array($material->id, $existingProgress)) {
+						Progress::create($newData);
+					}
+				}
+			}
+		}
+
+		//entah udah kelar atau belum datanya aman apa ngga
+
+	}
+
+	// Import old existing student data
+	public function import_student_data($course_id){
+		return view("roles.admin.student.import-student", [
+			"course" => Course::where("id", $course_id)->first()
+		]);
+	}
+
+	public function import_student_store(Request $request, $course_id){
+		return $request;
 	}
 
 }

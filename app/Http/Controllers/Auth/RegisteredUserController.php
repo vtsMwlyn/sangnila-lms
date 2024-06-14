@@ -23,7 +23,7 @@ class RegisteredUserController extends Controller {
 
 	public function admin_create() {
 		$roles = Role::get();
-		$gender = ["Male (Mr.)", "Female (Ms./Mrs.)"];
+		$gender = ["Male", "Female"];
 		return view('roles.admin.account.create', [
 			'roles' => $roles,
 			"gender" => $gender
