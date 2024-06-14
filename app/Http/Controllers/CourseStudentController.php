@@ -185,7 +185,7 @@ class CourseStudentController extends Controller {
 			}
 		}
 
-		//entah udah kelar atau belum datanya aman apa ngga
+		return redirect(route("admin.course.show", $course->id))->with("successBatchAssign", "Successfully batch-assigned students!");
 
 	}
 
