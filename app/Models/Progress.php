@@ -5,16 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MaterialProgress extends Model {
+class Progress extends Model {
 	use HasFactory;
-	protected $fillable = [
-		'student_id',
-		'material_id',
-		'teacher_id',
-		'course_id',
-		'status',
-		'note '
-	];
+
+	protected $guarded = ["id"];
 
 	public function teacher() {
 		return $this->belongsTo(User::class, 'teacher_id');
@@ -29,7 +23,7 @@ class MaterialProgress extends Model {
 	}
 
 	public function material() {
-		return $this->belongsTo(CourseMaterial::class, 'material_id');
+		return $this->belongsTo(Material::class, 'material_id');
 	}
 
 }

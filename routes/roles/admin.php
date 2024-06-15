@@ -38,6 +38,14 @@ Route::prefix('/admin')
 				// Course details
 				Route::get('/{course_id}', [CourseController::class, 'admin_show'])->name('show')->whereNumber('course_id');
 
+				// Batch assign student
+				Route::get("/{course_id}/batch-assign", [CourseStudentController::class, "batch_assign"])->name("batch-assign");
+				Route::post("/{course_id}/batch-assign", [CourseStudentController::class, "batch_assign_store"])->name("batch-assign.store");
+
+				// Batch import old student data
+				Route::get("/{course_id}/import-data", [CourseStudentController::class, "import_student_data"])->name("import-student-data");
+				Route::post("/{course_id}/import-data", [CourseStudentController::class, "import_student_data_store"])->name("import-student-data.store");
+
 				// Edit course data
 				Route::get('/{course_id}/edit', [CourseController::class, 'admin_edit'])->name('edit')->whereNumber('course_id');
 				Route::patch('/{course_id}', [CourseController::class, 'admin_update'])->name('update')->whereNumber('course_id');

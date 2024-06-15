@@ -8,14 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Course extends Model {
 	use HasFactory;
 
-	protected $fillable = [
-		'course_name',
-		'course_description',
-		'visibility'
-	];
+	protected $guarded = ["id"];
 
-	public function course_topics(){
-		return $this->hasMany(CourseTopic::class);
+	// Query scope
+	public function scopeFilter($query, array $filters){
+		$query->when($filters["search"] ?? false, function($query, $search){
+			return $query->where(function($query) use($search){
+				$query->where("course_name", "like", "%" . $search . "%");
+			});
+		});
+	}
+
+	// Relationships
+	public function topics(){
+		return $this->hasMany(Topic::class);
 	}
 
 	public function teachers() {
@@ -40,6 +46,10 @@ class Course extends Model {
 
 	public function assignments(){
 		return $this->hasMany(Assignment::class);
+	}
+
+	public function students_paid(){
+		return $this->belongsToMany(User::class, "payments", "student_id");
 	}
 
 }

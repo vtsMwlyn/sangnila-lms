@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\MaterialController;
 
 Route::prefix('/student')
 	->name('student.')
@@ -27,6 +28,8 @@ Route::prefix('/student')
 
 				// Course details and available topics and materials
 				Route::get('/{course_id}', [CourseController::class, 'student_show'])->name('show')->whereNumber('course_id');
+
+				Route::get("/{material_id}/preview", [MaterialController::class, "preview"])->name("preview");
 
 			}
 		);

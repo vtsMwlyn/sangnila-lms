@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CourseTopic extends Model
+class Payment extends Model
 {
     use HasFactory;
 
 	protected $guarded = ["id"];
 
 	public function course(){
-		return $this->belongsTo(Course::class, "course_id");
+		return $this->belongsTo(Course::class);
 	}
 
-	public function course_materials(){
-		return $this->hasMany(CourseMaterial::class);
+	public function student(){
+		return $this->belongsTo(User::class);
 	}
 }

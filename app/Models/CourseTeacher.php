@@ -7,10 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class CourseTeacher extends Model {
 	use HasFactory;
-	protected $fillable = [
-		'user_id',
-		'course_id',
-	];
+
+	protected $guarded = ["id"];
 
 	public function teacher() {
 		return $this->belongsTo(User::class);

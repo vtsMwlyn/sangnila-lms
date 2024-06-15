@@ -5,15 +5,38 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminAccountController extends Controller {
 	// Shows all available accounts in Sangnila LMS
 	public function index() {
-		$accounts = User::where("status", "enabled")/*->paginate(5)*/->get();
+		$admin_accounts = User::where("status", "enabled")->where("role_id", 1)->whereNot("id", Auth::user()->id)->orderBy('full_name')/*->paginate(5, ['*'], 'admin_page')*/->get();
+		$teacher_accounts = User::where("status", "enabled")->where("role_id", 2)->orderBy('full_name')/*->paginate(5, ['*'], 'teacher_page')*/->get();
+		$student_accounts = User::where("status", "enabled")->where("role_id", 3)->orderBy('full_name')/*->paginate(10, ['*'], 'student_page')*/->get();
+
+		if(request("role") && request("search")){
+			switch(request("role")){
+				case 1:
+					$admin_accounts = User::where("status", "enabled")->where("role_id", 1)->whereNot("id", Auth::user()->id)->orderBy('full_name')/*->paginate(5, ['*'], 'admin_page')*/->filter(request(["search", "role"]))->get();
+					break;
+				case 2:
+					$teacher_accounts = User::where("status", "enabled")->where("role_id", 2)->orderBy('full_name')/*->paginate(5, ['*'], 'teacher_page')*/->filter(request(["search", "role"]))->get();
+					break;
+				case 3:
+					$student_accounts = User::where("status", "enabled")->where("role_id", 3)->orderBy('full_name')/*->paginate(10, ['*'], 'student_page')*/->filter(request(["search", "role"]))->get();
+					break;
+			}
+		}
+
+		$accounts = [];
+		array_push($accounts, $admin_accounts, $teacher_accounts, $student_accounts);
+
 		$disabled = User::where("status", "disabled")/*->paginate(5)*/->get();
 
 		return view('roles.admin.account.index', [
-			'accounts' => $accounts,
+			'admin_accounts' => $admin_accounts,
+			'teacher_accounts' => $teacher_accounts,
+			'student_accounts' => $student_accounts,
 			'disabled' => $disabled
 		]);
 	}

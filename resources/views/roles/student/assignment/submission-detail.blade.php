@@ -12,6 +12,7 @@
 				<tr>
 					<th class="border px-3">Submission time</th>
 					<th class="border px-3">Submission title</th>
+					<th class="border px-3">Submission link</th>
 					<th class="border px-3">Submission status</th>
 					<th class="border px-3">Feedback</th>
 				</tr>
@@ -22,6 +23,7 @@
 						<tr @if($submission->status == "Late") class="bg-red-400" @endif>
 							<td class="border px-3">{{ $submission->created_at }}</td>
 							<td class="border px-3">{{ $submission->title }}</td>
+							<td class="border px-3"><a href="{{ $submission->link }}" class="font-bold text-blue-700" target="blank">{{ $submission->link }}</a></td>
 							<td class="border px-3">{{ $submission->status }}</td>
 							<td class="border px-3">@if($submission->feedback == "") - No feedback - @else {{ $submission->feedback }} @endif</td>
 						</tr>

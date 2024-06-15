@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
-use App\Models\CourseMaterial;
 use Illuminate\Http\Request;
 
 class GuestController extends Controller {

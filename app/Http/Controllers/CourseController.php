@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\CourseStudent;
-use App\Models\CourseTeacher;
-use App\Models\MaterialProgress;
+use App\Models\Progress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +12,7 @@ class CourseController extends Controller {
 	// ===== ADMIN ===== //
 	// Showing list of all available courses in Sangnila LMS
 	public function admin_index() {
-		$courses = Course::get();
+		$courses = Course::filter(request(["search"]))->get();
 		return view('roles.admin.course.index', [
 			'courses' => $courses,
 		]);
@@ -113,11 +112,11 @@ class CourseController extends Controller {
 
 	// Shows a course details with topics and materials
 	public function student_show($course_id) {
-		$materialProgresses = MaterialProgress::where('course_id', $course_id)->where('student_id', Auth::user()->id)->get();
+		$progresses = Progress::where('course_id', $course_id)->where('student_id', Auth::user()->id)->get();
 		$student = CourseStudent::where('student_id', Auth::user()->id)->where('course_id', $course_id)->first();
 		return view('roles.student.course.show', [
 			'course' => $student->course,
-			'materialProgresses' => $materialProgresses
+			'materialProgresses' => $progresses
 		]);
 	}
 

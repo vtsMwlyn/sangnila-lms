@@ -30,6 +30,9 @@
 
 	<body class="bg-cover min-h-screen flex items-center justify-center"
 		style="background-image: url({{ asset('img/background.jpg') }});">
+		<div class="fixed text-black md:text-white bottom-0 left-0 m-2">
+			{{ trans("strings.version") }}
+		</div>
 
 		@yield("content");
 	</body>

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use id;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -12,14 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable implements MustVerifyEmail{
 	use HasApiTokens, HasFactory, Notifiable;
 
-	protected $fillable = [
-		'full_name',
-		'email',
-		'password',
-		'role_id',
-		'email_verified_at',
-		"status"
-	];
+	protected $guarded = ["id"];
 
 	protected $hidden = [
 		'password',
@@ -29,6 +21,23 @@ class User extends Authenticatable implements MustVerifyEmail{
 	protected $casts = [
 		'email_verified_at' => 'datetime',
 	];
+
+
+	// Query Scopes
+	public function scopeFilter($query, array $filters){
+		$query->when($filters["search"] ?? false, function($query, $search){
+			return $query->where(function($query) use($search){
+				$query->where("full_name", "like", "%" . $search . "%");
+			});
+		});
+
+		$query->when($filters["role"] ?? false, function($query, $role){
+			return $query->whereHas("role", function($query) use($role){
+				$query->where("role_id", $role);
+			});
+		});
+	}
+
 
 	// Relationships
 	public function details() {
@@ -48,7 +57,7 @@ class User extends Authenticatable implements MustVerifyEmail{
 	}
 
 	public function progress() {
-		return $this->hasMany(MaterialProgress::class, 'student_id');
+		return $this->hasMany(Progress::class, 'student_id');
 	}
 
 	public function schedules() {
@@ -56,7 +65,7 @@ class User extends Authenticatable implements MustVerifyEmail{
 	}
 
 	public function attendances(){
-		return $this->hasMany(Attendance::class, "student_attendances");
+		return $this->belongsToMany(Attendance::class, "student_attendances");
 	}
 
 	public function assignments(){
@@ -73,6 +82,10 @@ class User extends Authenticatable implements MustVerifyEmail{
 
 	public function submissions(){
 		return $this->hasMany(Submission::class, "student_id");
+	}
+
+	public function payments(){
+		return $this->belongsToMany(Course::class, "payments");
 	}
 
 }

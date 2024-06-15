@@ -7,10 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class StudentSchedule extends Model {
 	use HasFactory;
-	protected $fillable = [
-		'schedule_id',
-		'student_id',
-	];
+
+	protected $guarded = ["id"];
 
 	public function schedule() {
 		return $this->belongsTo(CourseSchedule::class);

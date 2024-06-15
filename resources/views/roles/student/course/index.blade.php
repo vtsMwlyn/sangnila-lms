@@ -32,7 +32,7 @@
 							</td>
 
 							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
-								{{ App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->full_name }}
+								{{ (App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->details->gender == 1)? "Mrs." : "Ms./Mrs." }} {{ App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->full_name }}
 							</td>
 
 							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">

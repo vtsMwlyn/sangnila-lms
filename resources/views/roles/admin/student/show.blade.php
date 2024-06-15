@@ -51,7 +51,7 @@
 					</tr>
 				</tbody>
 
-				<tbody id="more_details" style="display: none;">
+				<tbody id="more_details" class="overflow-hidden opacity-0" style="display: none;">
 					<tr>
 						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">School Name</td>
 						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">@if($student->details->school_name){{ $student->details->school_name }}@else{{ __("N/A") }}@endif</td>
@@ -82,12 +82,29 @@
 			const button = document.getElementById('show_more_less_button');
 
 			button.addEventListener('click', function() {
-				if (moreDetails.style.display === 'none' || moreDetails.style.display === '') {
-					moreDetails.style.display = 'table-row-group';
+				if (moreDetails.classList.contains('opacity-0')) {
+					moreDetails.style.display = "table-row-group";
+
+					// Delaying animation (make the tbody is appeared then the button will go to bottom and finally play the animation)
+					setTimeout(() => {
+						// Fade in animation
+						moreDetails.classList.remove('opacity-0');
+						moreDetails.classList.add('transition-opacity', 'duration-300', 'ease-in', 'opacity-100', 'h-full');
+					}, 200);
+
 					button.textContent = 'Show Less';
+
 				} else {
-					moreDetails.style.display = 'none';
-					button.textContent = 'Show More';
+					// Fade out animation
+					moreDetails.classList.remove('opacity-100');
+					moreDetails.classList.add('transition-opacity', 'duration-300', 'ease-out', 'opacity-0', 'max-h-0');
+
+					// Display none the tbody after the animation ends and finally the button will go up back to it previous position
+					moreDetails.addEventListener("transitionend", function afterShowLessClicked(){
+						moreDetails.removeEventListener("transitionend", afterShowLessClicked);
+						moreDetails.style.display = "none";
+						button.textContent = 'Show More';
+					});
 				}
 			});
 		</script>
@@ -105,7 +122,7 @@
 				@forelse ($student->enrolled_courses as $course)
 					<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-5 flex flex-col justify-center items-start font-semibold" style="min-width: 300px; max-width: 300px; min-height: 150px;">
 						<h1 class="mb-1 font-bold">{{ $course->course_name }}</h1>
-						<span class="text-white text-xs mb-5">{{ __("Teacher: " . App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->full_name) }}</span>
+						<span class="text-white text-xs mb-5">Teacher: {{ (App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->full_name }}</span>
 						<span class="text-white text-xs">{{ __("Maximum Sessions") }}</span>
 						<div class="flex w-full items-center justify-between mt-3">
 							<form action="{{ route("admin.student.max-session.update", [$student->id, $course->id]) }}" method="post" class="flex justify-start gap-2">
@@ -135,7 +152,7 @@
 			border-spacing: 0 20px;">
 				<thead>
 					<th class="px-5 py-5 bg-blue-900 text-white rounded-l-xl">Course</th>
-					<th class="px-5 py-5 bg-blue-900 text-white">Attendance</th>
+					<th class="px-5 py-5 bg-blue-900 text-white">Progress</th>
 					<th class="px-5 py-5 bg-blue-900 text-white rounded-r-xl">Assignments</th>
 				</thead>
 				<tbody>
@@ -145,7 +162,7 @@
 								<td class="px-5 py-5 rounded-l-xl text-center">{{ $student->enrolled_courses[$i]->course_name }}</td>
 								<td class="px-5 py-5">
 									<div class="flex w-full items-center justify-center gap-3">
-										<span>{{ $attended[$i] }}/{{ $attendance_if_full[$i] }} attended</span>
+										<span>{{ $current_progress[$i] }}/{{ $full_progress[$i] }} done</span>
 										<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.atd-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
 											Details
 										</x-anchor-button>

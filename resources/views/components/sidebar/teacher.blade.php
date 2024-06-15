@@ -45,7 +45,7 @@
 		<form method="POST" action="{{ route('logout') }}" class="mt-5">
 			@csrf
 			<x-button
-				class="font-semibold w-full bg-red-600 hover:scale-105 transition duration-600">
+				class="font-semibold w-full bg-red-600 hover:scale-105 transition duration-600" onclick="return confirm('Are you sure want to logout from your account?');">
 					<i class="bi bi-box-arrow-left"></i> {{ __('Log Out') }}
 			</x-button>
 		</form>

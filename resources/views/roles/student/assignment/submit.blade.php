@@ -29,12 +29,12 @@
 			</div>
 
 			<div class="flex items-center justify-end mt-6 gap-1">
-				<button type="button" onclick="history.back()" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
-						Cancel
-				</button>
-				<button type="submit" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
-						Submit
-				</button>
+				<x-button type="submit" class="bg-indigo-400">
+					Submit
+				</x-button>
+				<x-button type="button" onclick="if(confirm('The filled data will be discarded, are you sure want to cancel?')) history.back();" class="bg-indigo-400">
+					Cancel
+				</x-button>
 			</div>
 		</form>
 

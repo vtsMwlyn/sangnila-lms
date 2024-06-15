@@ -23,8 +23,10 @@ class RegisteredUserController extends Controller {
 
 	public function admin_create() {
 		$roles = Role::get();
+		$gender = ["Male", "Female"];
 		return view('roles.admin.account.create', [
-			'roles' => $roles
+			'roles' => $roles,
+			"gender" => $gender
 		]);
 	}
 
@@ -34,7 +36,8 @@ class RegisteredUserController extends Controller {
 			'email' => ['required', 'email', 'max:255', 'unique:users'],
 			'password' => ['required', 'confirmed', 'min:8', Rules\Password::defaults()],
 			'password_confirmation' => ['required', 'min:8'],
-			'role' => ['required', 'in:Admin,Teacher,Student'], // Exclude admin
+			'role' => ['required', 'in:Admin,Teacher,Student'],
+			"gender" => "required"
 		]);
 
 		$role_id = Role::where('role_name', $request->role)->first();
@@ -47,7 +50,7 @@ class RegisteredUserController extends Controller {
 			"email_verified_at" => now() // soon email verification will be enabled
 		]);
 
-		UserDetail::create(["user_id" => $user->id]);
+		UserDetail::create(["user_id" => $user->id, "gender" => $request->gender]);
 
 		return redirect(route('admin.account.index'))->with("successCreateNewAccount", "Successfully created new account!");
 	}

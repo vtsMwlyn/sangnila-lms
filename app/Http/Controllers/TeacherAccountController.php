@@ -12,8 +12,8 @@ class TeacherAccountController extends Controller {
 	// ===== ADMIN ===== //
 	// List of all active teachers in Sangnila LMS
 	public function index() {
-		$role = Role::where('role_name', 'Teacher')->first();
-		$users = $role->users()->get(); // Use get() to retrieve the users
+		$users = User::where("role_id", 2)->filter(request(["search"]))->get();
+
 		return view('roles.admin.teacher.index', [
 			'accounts' => $users,
 		]);

@@ -7,6 +7,11 @@
 @section("content")
 	<x-page-title>{{ __("List of Active Students") }}</x-page-title>
 
+	<form class="flex w-full justify-center" action="{{ route("admin.student.index") }}">
+		<x-input type="text" class="border-slate-500 rounded-l-lg rounded-r-none" name="search" placeholder="Search..." />
+		<x-button class="bg-white rounded-l-none rounded-r-lg border border-slate-500 text-slate-500 hover:text-white"><i class="bi bi-search"></i></x-button>
+	</form>
+
 	<div class="overflow-x-auto rounded-3xl mt-10 px-10 py-5 bg-indigo-200">
 		<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate;
 		border-spacing: 0 20px;">
@@ -14,7 +19,7 @@
 				<tr class="bg-blue-900 text-white">
 					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4 rounded-l-xl">Student Name</th>
 					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4">Email</th>
-					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4" >Enrolled Courses</th>
+					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4" >Enrolled Courses & Progress</th>
 					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4 rounded-r-xl">Actions</th>
 				</tr>
 			</thead>
@@ -25,13 +30,13 @@
 							@continue
 						@endif
 						<tr class="bg-blue-800 text-white">
-							<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-l-xl">
+							<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-l-xl text-center">
 								<a href="{{ route('admin.student.show', ['student_id' => $student->id]) }}"
 									class="text-blue-200 hover:text-blue-400 font-semibold hover:underline">
 									{{ $student->full_name }}
 								</a>
 							</td>
-							<td class="border-blue-300 px-4 py-5 sm:w-1/4">
+							<td class="border-blue-300 px-4 py-5 sm:w-1/4 text-center">
 								{{ $student->email }}
 							</td>
 							<td class="border-blue-300 px-6 py-5 sm:w-1/4">
@@ -44,14 +49,11 @@
 												</div>
 												<div class="w-1/3">
 													<div class="w-full bg-gray-200 rounded-lg h-4 overflow-hidden relative">
-														<div class="absolute w-full h-full text-green-950 flex justify-center items-center font-semibold">
-															{{ __($current_progress[$index1][$index2] . "/" . $student_max_progress[$index1][$index2]) }}
+														<div class="absolute w-full h-full @if((($current_attendances[$index1][$index2] + 1) % 8 == 0 || $current_attendances[$index1][$index2] == $max_attendances[$index1][$index2]) && $current_attendances[$index1][$index2] != 0) text-red-100 @else text-green-950 @endif  flex justify-center items-center font-semibold">
+															{{ __($current_attendances[$index1][$index2] . "/" . $max_attendances[$index1][$index2]) }}
 														</div>
-														<div class="bg-green-700 h-full" style="width: {{ $percentage[$index1][$index2] }}%;"></div>
+														<div class="@if(($current_attendances[$index1][$index2] + 1) % 8 == 0 || $current_attendances[$index1][$index2] == $max_attendances[$index1][$index2]) bg-red-700 @else bg-green-700 @endif h-full" style="width: {{ $percentages[$index1][$index2] }}%;"></div>
 													</div>
-													{{-- <span>
-														{{ __("[Progress: " . $current_progress[$index1][$index2] . "/" . $student_max_progress[$index1][$index2] . "]") }}
-													</span> --}}
 												</div>
 											</li>
 										@endforeach

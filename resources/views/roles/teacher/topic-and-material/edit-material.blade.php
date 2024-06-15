@@ -1,15 +1,15 @@
 @extends("layouts.main-teacher")
 
 @section("title")
-	<h1>{{ $material->course_topic->course->course_name }}</h1>
+	<h1>{{ $material->topic->course->course_name }}</h1>
 @endsection
 
 @section("content")
 	<h1 class="text-3xl font-semibold text-blue-900 mb-1">
-		<a href="{{ route("teacher.mycourse.show", $material->course_topic->course->id) }}">{{ $material->course_topic->course->course_name }}</a>
+		<a href="{{ route("teacher.mycourse.show", $material->topic->course->id) }}">{{ $material->topic->course->course_name }}</a>
 	</h1>
 	<h1 class="text-xl font-semibold text-blue-900 mb-4">
-		<a href="{{ route("teacher.mycourse.show", [$material->course_topic->course->id, $material->course_topic->id]) }}">{{ $material->course_topic->title }}</a>
+		<a href="{{ route("teacher.mycourse.show", [$material->topic->course->id, $material->topic->id]) }}">{{ $material->topic->title }}</a>
 	</h1>
 	<h1 class="text-2xl font-semibold text-blue-900 mb-4">Edit Material: "{{ $material->title }}"</h1>
 	<form action="{{ route('teacher.material.update', $material->id) }}" method="post">
@@ -18,22 +18,28 @@
 		<!-- Material Title -->
 		<div>
 			<x-label for="title" :value="__('Material Title')" />
-			<x-input id="title" class="block mt-1 w-full" type="text" name="title" value="{{ $material->title }}"
+			<x-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title', $material->title)"
 				autofocus />
+		</div>
+
+		<!-- Material Description -->
+		<div class="mt-4">
+			<x-label for="desc" :value="__('Material Description')" />
+			<x-input id="desc" class="block mt-1 w-full" type="text" name="desc" :value="old('desc', $material->desc)" />
 		</div>
 
 		<!-- Material Link -->
 		<div class="mt-4">
 			<x-label for="link" :value="__('Material Link')" />
-			<x-input id="link" class="block mt-1 w-full" type="text" name="link" value="{{ $material->link }}" />
+			<x-input id="link" class="block mt-1 w-full" type="text" name="link" :value="old('link', $material->link)" />
 		</div>
 
-		<div class="flex items-stretch justify-end mt-4">
-			<button type="button" onclick="history.back()" class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
-					Cancel
-			</button>
-			<x-button class="ml-4 bg-indigo-400">
-				{{ __('SAVE') }}
+		<div class="flex gap-1 items-stretch justify-end mt-4">
+			<x-button class="bg-indigo-400">
+				{{ __('Save') }}
+			</x-button>
+			<x-button type="button" onclick="if(confirm('The changes will be discarded, are you sure want to cancel?')) history.back();" class="bg-indigo-400">
+				Cancel
 			</x-button>
 		</div>
 	</form>

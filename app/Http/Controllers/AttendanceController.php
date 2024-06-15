@@ -7,11 +7,8 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
 use App\Models\Attendance;
-use App\Models\AttendanceByTeacher;
-use App\Models\MaterialProgress;
 use App\Models\StudentAttendance;
 use Illuminate\Support\Facades\Auth;
-use PHPUnit\Framework\Constraint\Count;
 
 class AttendanceController extends Controller {
 	// ===== TEACHER ===== //

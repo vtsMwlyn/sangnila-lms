@@ -47,20 +47,20 @@
 				<th class="border px-3">Action</th>
 			</thead>
 			<tbody>
-				@if ($course->course_topics->count())
-					@foreach ($course->course_topics as $topic)
-						@if($topic->course_materials->count())
-							@foreach ($topic->course_materials as $material)
+				@if ($course->topics->count())
+					@foreach ($course->topics as $topic)
+						@if($topic->materials->count())
+							@foreach ($topic->materials as $material)
 								<tr>
 									@if($loop->iteration == 1)
-										<td class="border px-3" rowspan={{ $topic->course_materials->count() }}>
+										<td class="border px-3" rowspan={{ $topic->materials->count() }}>
 											<a href="{{ route("teacher.topic.show", [$course->id, $topic->id]) }}" class="font-bold text-blue-700">{{ $topic->title }}</a>
 										</td>
 									@endif
 									<td class="border px-3">{{ $material->title }}</td>
 									{{-- <td class="border px-3"><a href="{{ $material->link }}" class="text-blue-600">{{ $material->link }}</a></td> --}}
 									@if($loop->iteration == 1)
-										<td class="border px-3" rowspan={{ $topic->course_materials->count() }}>
+										<td class="border px-3" rowspan={{ $topic->materials->count() }}>
 											<div class="flex gap-1">
 												<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
 													href="{{ route("teacher.topic.edit", [$topic->course->id, $topic->id]) }}">

@@ -17,7 +17,13 @@
 		</div>
 	@endif
 
-	<x-anchor-button class="bg-orange-500 mt-5" href="{{ route('admin.course.create') }}"><i class="bi bi-plus-lg"></i> Add New Course</x-anchor-button>
+	<div class="flex justify-between items-center mt-5">
+		<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.create') }}"><i class="bi bi-plus-lg"></i> Add New Course</x-anchor-button>
+		<form class="flex" action="{{ route("admin.course.index") }}">
+			<x-input type="text" class="border-slate-500 rounded-l-lg rounded-r-none" name="search" placeholder="Search..." />
+			<x-button class="bg-white rounded-l-none rounded-r-lg border border-slate-500 text-slate-500 hover:text-white"><i class="bi bi-search"></i></x-button>
+		</form>
+	</div>
 
 	<div class="overflow-x-auto rounded-3xl mt-7 px-10 py-5 bg-indigo-200">
 		<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate;
@@ -34,14 +40,14 @@
 				@if ($courses->isNotEmpty())
 					@foreach ($courses as $course)
 						<tr class="bg-blue-800 text-white">
-							<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-l-xl">
+							<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-l-xl text-center">
 								<a href="{{ route('admin.course.show', ['course_id' => $course->id]) }}"
 									class="text-blue-200 hover:text-blue-400 font-semibold hover:underline block">
 									{{ $course->course_name }}
 								</a>
 							</td>
 
-							<td class="border-blue-300 px-4 py-5 sm:w-1/4">
+							<td class="border-blue-300 px-4 py-5 sm:w-1/4 text-center">
 								{{ substr($course->course_description, 0, 100) }}...
 							</td>
 

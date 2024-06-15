@@ -35,11 +35,11 @@
 
 
 		<div class="flex items-stretch gap-1 justify-end mt-6">
-			<x-button type="button" onclick="history.back()" class="bg-orange-500">
-				Cancel
-			</x-button>
 			<x-button class="bg-orange-500">
 				{{ __('Submit') }}
+			</x-button>
+			<x-button type="button" onclick="if(confirm('The filled data will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500">
+				Cancel
 			</x-button>
 		</div>
 	</form>

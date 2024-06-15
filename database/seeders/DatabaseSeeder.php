@@ -6,18 +6,17 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\UserDetail;
-use App\Models\CourseTopic;
+use App\Models\Topic;
 use App\Models\CourseStudent;
 use App\Models\CourseTeacher;
-use App\Models\CourseMaterial;
+use App\Models\Material;
+use App\Models\Payment;
 use Illuminate\Database\Seeder;
-use App\Models\MaterialProgress;
-use App\Models\StudentAssignment;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Progress;
 
 class DatabaseSeeder extends Seeder
 {
-	private function newUser($email, $full_name, $role_id){
+	private function newUser($email, $full_name, $role_id, $gender){
 		$user = User::create([
 			"full_name" => $full_name,
 			"email" => $email,
@@ -27,7 +26,7 @@ class DatabaseSeeder extends Seeder
 			"status" => "enabled"
 		]);
 
-		UserDetail::create(["user_id" => $user->id]);
+		UserDetail::create(["user_id" => $user->id, "gender" => $gender]);
 	}
 
 	private function assignStudent($student_name, $teacher_name, $courses, $max_session){
@@ -44,8 +43,14 @@ class DatabaseSeeder extends Seeder
 				"max_course_session" => $max_session
 			]);
 
-			foreach ($course->course_topics as $index1 => $topic) {
-				foreach($topic->course_materials as $index2 => $material) {
+			Payment::create([
+				"student_id" => $student->id,
+				"course_id" => $course->id,
+				"number_of_payment" => 1
+			]);
+
+			foreach ($course->topics as $index1 => $topic) {
+				foreach($topic->materials as $index2 => $material) {
 					$newData = [
 						'student_id' => $student->id,
 						'material_id' => $material->id,
@@ -58,7 +63,7 @@ class DatabaseSeeder extends Seeder
 						$newData['status'] = 'locked';
 					}
 
-					MaterialProgress::create($newData);
+					Progress::create($newData);
 				}
 			}
 		}
@@ -79,11 +84,19 @@ class DatabaseSeeder extends Seeder
 
 	private function addTopicAndMaterial($course_name, $topic_name, $materials){
 		$course = Course::where("course_name", $course_name)->first();
-		$topic = CourseTopic::create(["course_id" => $course->id, "title" => $topic_name]);
+		$topic = Topic::create(["course_id" => $course->id, "title" => $topic_name]);
 
 		foreach($materials as $material){
-			CourseMaterial::create(["course_topic_id" => $topic->id, "title" => $material, "link" => "https://www.google.com/"]);
+			Material::create(["topic_id" => $topic->id, "title" => $material, "link" => "https://www.google.com/", "desc" => "This is a description of a material."]);
 		}
+	}
+
+	private function changeMaterialLink($course_name, $topic_name, $material_name, $new_link){
+		$course = Course::where("course_name", $course_name)->first();
+		$topic = Topic::where("course_id", $course->id)->where("title", $topic_name)->first();
+		$material = Material::where("topic_id", $topic->id)->where("title", $material_name);
+
+		$material->update(["link" => $new_link]);
 	}
 
     public function run()
@@ -96,51 +109,53 @@ class DatabaseSeeder extends Seeder
 
 		// /*COMMENT BELOW COMMANDS TO SET THE APP DATA TO COMPLETELY EMPTY*/
 
-		$this->newUser("vannestheo.sangnila@gmail.com", "Vannes Theo Sudarsono", 1);
-		$this->newUser("immanuelgiovano.sangnila@gmail.com", "Immanuel Giovano", 1);
-		$this->newUser("jessica.sangnila@gmail.com", "Jessica", 1);
-		$this->newUser("victor.sangnila@gmail.com", "Victor", 1);
-		$this->newUser("feby.sangnila@gmail.com", "Feby", 1);
-		$this->newUser("tiwi.sangnila@gmail.com", "Pratiwi", 1);
+		$this->newUser("vannestheo.sangnila@gmail.com", "Vannes Theo Sudarsono", 1, 1);
+		$this->newUser("immanuelgiovano.sangnila@gmail.com", "Immanuel Giovano", 1, 1);
+		$this->newUser("jessica.sangnila@gmail.com", "Jessica", 1, 2);
+		$this->newUser("victor.sangnila@gmail.com", "Victor", 1, 1);
+		$this->newUser("feby.sangnila@gmail.com", "Feby", 1, 2);
+		$this->newUser("tiwi.sangnila@gmail.com", "Pratiwi", 1, 2);
+		$this->newUser("iswansudaryo.sangnila@gmail.com", "Iswan Sudaryo", 1, 1);
 
-		$this->newUser("hari.sangnila@gmail.com", "Hari", 2);
-		$this->newUser("lgaby.sangnila@gmail.com", "Gaby", 2);
-		$this->newUser("iswansudaryo.sangnila@gmail.com", "Iswan Sudaryo", 2);
-		$this->newUser("vincent.sangnila@gmail.com", "Vincent", 2);
+		$this->newUser("hari.sangnila@gmail.com", "Hari", 2, 1);
+		$this->newUser("lgaby.sangnila@gmail.com", "Gaby", 2, 2);
+		$this->newUser("iswansudaryo.teacher.sangnila@gmail.com", "Iswan Sudaryo (Teacher)", 2, 1);
+		$this->newUser("vincent.sangnila@gmail.com", "Vincent", 2, 1);
+		$this->newUser("immanuelgiovano.teacher.sangnila@gmail.com", "Immanuel Giovano (Teacher)", 2, 1);
 
 		/*Hari's students: Digital Drawing, Roblox*/
-		$this->newUser("jack.sangnila@gmail.com", "Jack", 3);
-		$this->newUser("jillian.sangnila@gmail.com", "Jillian P. Tanuwijaya", 3);
-		$this->newUser("jocheli.sangnila@gmail.com", "Jocheli Kensi Budianti", 3);
+		$this->newUser("jack.sangnila@gmail.com", "Jack", 3, 1);
+		$this->newUser("jillian.sangnila@gmail.com", "Jillian P. Tanuwijaya", 3, 2);
+		$this->newUser("jocheli.sangnila@gmail.com", "Jocheli Kensi Budianti", 3, 2);
 
-		$this->newUser("batara.sangnila@gmail.com", "Batara Feodore Setiawan", 3);
-		$this->newUser("bellrich.sangnila@gmail.com", "Bellrich Kevin Tjahyadi", 3);
-		$this->newUser("benedict.sangnila@gmail.com", "Benedict Jacob", 3);
+		$this->newUser("batara.sangnila@gmail.com", "Batara Feodore Setiawan", 3, 1);
+		$this->newUser("bellrich.sangnila@gmail.com", "Bellrich Kevin Tjahyadi", 3, 1);
+		$this->newUser("benedict.sangnila@gmail.com", "Benedict Jacob", 3, 2);
 
 		/*Gaby's students: Digital Drawing*/
-		$this->newUser("melly.sangnila@gmail.com", "Melly Tanto", 3);
-		$this->newUser("zhafira.sangnila@gmail.com", "Zhafira Jasmine", 3);
-		$this->newUser("vanya.sangnila@gmail.com", "Vanya Farelia", 3);
-		$this->newUser("freya.sangnila@gmail.com", "Freya Pramudia", 3);
-		$this->newUser("kenzie.sangnila@gmail.com", "Kenzie Gautama Dirgantara", 3);
+		$this->newUser("melly.sangnila@gmail.com", "Melly Tanto", 3, 2);
+		$this->newUser("zhafira.sangnila@gmail.com", "Zhafira Jasmine", 3, 2);
+		$this->newUser("vanya.sangnila@gmail.com", "Vanya Farelia", 3, 2);
+		$this->newUser("freya.sangnila@gmail.com", "Freya Pramudia", 3, 2);
+		$this->newUser("kenzie.sangnila@gmail.com", "Kenzie Gautama Dirgantara", 3, 1);
 
 		/*Iswan's students: 3D Modelling, Concept Art*/
-		$this->newUser("louisha.sangnila@gmail.com", "Louisha Annabelle", 3);
-		$this->newUser("gayle.sangnila@gmail.com", "Gayle Farrel Patria", 3);
-		$this->newUser("angela.sangnila@gmail.com", "Angela Nathania", 3);
-		$this->newUser("balya.sangnila@gmail.com", "Balya Malkan Mahyuzar", 3);
-		$this->newUser("alvin.sangnila@gmail.com", "Alvin Edward", 3);
+		$this->newUser("louisha.sangnila@gmail.com", "Louisha Annabelle", 3, 2);
+		$this->newUser("gayle.sangnila@gmail.com", "Gayle Farrel Patria", 3, 1);
+		$this->newUser("angela.sangnila@gmail.com", "Angela Nathania", 3, 2);
+		$this->newUser("balya.sangnila@gmail.com", "Balya Malkan Mahyuzar", 3, 1);
+		$this->newUser("alvin.sangnila@gmail.com", "Alvin Edward", 3, 1);
 
-		$this->newUser("ethan.sangnila@gmail.com", "Ethan Alexander Irawan", 3);
-		$this->newUser("jezriel.sangnila@gmail.com", "Jezriel Connery", 3);
-		$this->newUser("martha.sangnila@gmail.com", "Martha Theresia Ramlie", 3);
-		$this->newUser("janicelyn.sangnila@gmail.com", "Janicelyn Daviena Godarma", 3);
-		$this->newUser("grace.sangnila@gmail.com", "Grace Devana Kusnandar", 3);
+		$this->newUser("ethan.sangnila@gmail.com", "Ethan Alexander Irawan", 3, 1);
+		$this->newUser("jezriel.sangnila@gmail.com", "Jezriel Connery", 3, 1);
+		$this->newUser("martha.sangnila@gmail.com", "Martha Theresia Ramlie", 3, 2);
+		$this->newUser("janicelyn.sangnila@gmail.com", "Janicelyn Daviena Godarma", 3, 2);
+		$this->newUser("grace.sangnila@gmail.com", "Grace Devana Kusnandar", 3, 2);
 
 		/*Vincent's students: 3D Modelling, 2D Modelling*/
-		$this->newUser("philia.sangnila@gmail.com", "Philia Valeraine Alverna", 3);
-		$this->newUser("kensi.sangnila@gmail.com", "Kensi Sinclair", 3);
-		$this->newUser("giselle.sangnila@gmail.com", "Giselle Saputra", 3);
+		$this->newUser("philia.sangnila@gmail.com", "Philia Valeraine Alverna", 3, 2);
+		$this->newUser("kensi.sangnila@gmail.com", "Kensi Sinclair", 3, 1);
+		$this->newUser("giselle.sangnila@gmail.com", "Giselle Saputra", 3, 2);
 
 		//Generate Courses
 		Course::create([
@@ -162,6 +177,10 @@ class DatabaseSeeder extends Seeder
 		Course::create([
 			"course_name" => "Roblox",
 			"course_description" => "This is the description of course Roblox. You can modify or add anything here."
+		]);
+		Course::create([
+			"course_name" => "Web Development",
+			"course_description" => "Learn to build websites using HTML, CSS, JS, PHP, and MySQL."
 		]);
 
 
@@ -272,48 +291,84 @@ class DatabaseSeeder extends Seeder
 			"Drawing Character in a Place #2"
 		]);
 
+		/*Topic and material for web development*/
+		$this->addTopicAndMaterial("Web Development", "Construct a web page using HTML", [
+			"Introduction to HTML",
+			"Making simple article web page",
+			"Insert media to web page"
+		]);
+		$this->addTopicAndMaterial("Web Development", "Styling a web page using CSS", [
+			"Introduction to CSS",
+			"Decorating web page using CSS",
+			"Positioning elements using CSS"
+		]);
+		$this->addTopicAndMaterial("Web Development", "Using JavaScript to control the behavior and events in a web page", [
+			"Introduction to JS",
+			"Basics of JS",
+			"Manipulating HTML content and style",
+			"Handling events in a web page",
+			"Form validation using JS"
+		]);
+		$this->addTopicAndMaterial("Web Development", "Using PHP and MySQL to control and handle data from back end side", [
+			"Introduction to PHP",
+			"Basics of PHP",
+			"Retrieving data from forms",
+			"Introduction to MySQL",
+			"Insert and show data from tables",
+			"Update and delete data from tables"
+		]);
+
+		// Some example material links
+		$this->changeMaterialLink("Digital Drawing", "Character Design", "Head Construction", "https://stanprokopenko.com/2012/08/video-draw-head-angle-1/");
+		$this->changeMaterialLink("Digital Drawing", "Character Design", "Body Construction", "https://youtu.be/Lw0nZEw8IIk?si=pMEOKHi1CzI9_bXJ");
+		$this->changeMaterialLink("Digital Drawing", "Character Design", "Gesture, Ekspresi, dan Tangan", "https://drive.google.com/file/d/145xGbwJf43Ug58F2rxxmStfmLrWYx3px/view?usp=sharing");
+		$this->changeMaterialLink("Digital Drawing", "Character Design", "Gesture and Full Body Construction", "https://drive.google.com/file/d/1f4PVu3pYDRF-Dc_2GejbGnzHz31S4pZK/view?usp=sharing");
+		$this->changeMaterialLink("Web Development", "Construct a web page using HTML", "Introduction to HTML", "https://drive.google.com/file/d/1fqf2oSxdLTFjbC99khOpv5DcHTTvi6Xg/view?usp=sharing");
+		$this->changeMaterialLink("Web Development", "Styling a web page using CSS", "Introduction to CSS", "https://drive.google.com/file/d/1n_3G4wvHKxNH7u-PQWry8-ocGPcMnt8i/view?usp=sharing");
+		$this->changeMaterialLink("Web Development", "Using JavaScript to control the behavior and events in a web page", "Introduction to JS", "https://drive.google.com/file/d/1TM6T69eUs84B1RcEtbUcEMEQwW51LmbK/view?usp=sharing");
+
 
 		// ===== Assign students to courses + generate progress ===== //
 		/*Hari's students*/
-		$this->assignStudent("Jack", "Hari", ["Digital Drawing"], 20);
-		$this->assignStudent("Jillian P. Tanuwijaya", "Hari", ["Digital Drawing"], 20);
-		$this->assignStudent("Jocheli Kensi Budianti", "Hari", ["Digital Drawing"], 20);
+		$this->assignStudent("Jack", "Hari", ["Digital Drawing"], 8);
+		$this->assignStudent("Jillian P. Tanuwijaya", "Hari", ["Digital Drawing"], 8);
+		$this->assignStudent("Jocheli Kensi Budianti", "Hari", ["Digital Drawing"], 8);
 
-		$this->assignStudent("Batara Feodore Setiawan","Hari", ["Roblox"], 20);
-		$this->assignStudent("Bellrich Kevin Tjahyadi","Hari", ["Roblox"], 20);
-		$this->assignStudent("Benedict Jacob","Hari", ["Roblox"], 20);
+		$this->assignStudent("Batara Feodore Setiawan","Hari", ["Roblox"], 8);
+		$this->assignStudent("Bellrich Kevin Tjahyadi","Hari", ["Roblox"], 8);
+		$this->assignStudent("Benedict Jacob","Hari", ["Roblox"], 8);
 
 		/*Gaby's students*/
-		$this->assignStudent("Melly Tanto", "Gaby", ["Digital Drawing"], 20);
-		$this->assignStudent("Zhafira Jasmine", "Gaby", ["Digital Drawing"], 20);
-		$this->assignStudent("Vanya Farelia", "Gaby", ["Digital Drawing"], 20);
-		$this->assignStudent("Freya Pramudia", "Gaby", ["Digital Drawing"], 20);
-		$this->assignStudent("Kenzie Gautama Dirgantara", "Gaby", ["Digital Drawing"], 20);
+		$this->assignStudent("Melly Tanto", "Gaby", ["Digital Drawing"], 8);
+		$this->assignStudent("Zhafira Jasmine", "Gaby", ["Digital Drawing"], 8);
+		$this->assignStudent("Vanya Farelia", "Gaby", ["Digital Drawing"], 8);
+		$this->assignStudent("Freya Pramudia", "Gaby", ["Digital Drawing"], 8);
+		$this->assignStudent("Kenzie Gautama Dirgantara", "Gaby", ["Digital Drawing"], 8);
 
 		/*Iswan's students*/
-		$this->assignStudent("Louisha Annabelle", "Iswan Sudaryo", ["3D Modelling"], 20);
-		$this->assignStudent("Gayle Farrel Patria", "Iswan Sudaryo", ["3D Modelling"], 20);
-		$this->assignStudent("Angela Nathania", "Iswan Sudaryo", ["3D Modelling"], 20);
-		$this->assignStudent("Balya Malkan Mahyuzar", "Iswan Sudaryo", ["3D Modelling"], 20);
-		$this->assignStudent("Alvin Edward", "Iswan Sudaryo", ["3D Modelling"], 20);
+		$this->assignStudent("Louisha Annabelle", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 8);
+		$this->assignStudent("Gayle Farrel Patria", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 8);
+		$this->assignStudent("Angela Nathania", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 8);
+		$this->assignStudent("Balya Malkan Mahyuzar", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 8);
+		$this->assignStudent("Alvin Edward", "Iswan Sudaryo (Teacher)", ["3D Modelling"], 8);
 
-		$this->assignStudent("Ethan Alexander Irawan", "Iswan Sudaryo", ["Concept Art"], 20);
-		$this->assignStudent("Jezriel Connery", "Iswan Sudaryo", ["Concept Art"], 20);
-		$this->assignStudent("Martha Theresia Ramlie", "Iswan Sudaryo", ["Concept Art"], 20);
-		$this->assignStudent("Janicelyn Daviena Godarma", "Iswan Sudaryo", ["Concept Art"], 20);
-		$this->assignStudent("Grace Devana Kusnandar", "Iswan Sudaryo", ["Concept Art"], 20);
+		$this->assignStudent("Ethan Alexander Irawan", "Iswan Sudaryo (Teacher)", ["Concept Art"], 8);
+		$this->assignStudent("Jezriel Connery", "Iswan Sudaryo (Teacher)", ["Concept Art"], 8);
+		$this->assignStudent("Martha Theresia Ramlie", "Iswan Sudaryo (Teacher)", ["Concept Art"], 8);
+		$this->assignStudent("Janicelyn Daviena Godarma", "Iswan Sudaryo (Teacher)", ["Concept Art"], 8);
+		$this->assignStudent("Grace Devana Kusnandar", "Iswan Sudaryo (Teacher)", ["Concept Art"], 8);
 
 		/*Vincent's students*/
-		$this->assignStudent("Philia Valeraine Alverna", "Vincent", ["3D Modelling"], 20);
-		$this->assignStudent("Kensi Sinclair", "Vincent", ["3D Modelling"], 20);
-		$this->assignStudent("Giselle Saputra", "Vincent", ["3D Modelling"], 20);
+		$this->assignStudent("Philia Valeraine Alverna", "Vincent", ["3D Modelling"], 8);
+		$this->assignStudent("Kensi Sinclair", "Vincent", ["3D Modelling"], 8);
+		$this->assignStudent("Giselle Saputra", "Vincent", ["3D Modelling"], 8);
 
 
 		// Assign teachers to courses
 		$this->assignTeacher("Hari", ["Digital Drawing", "Roblox"]);
 		$this->assignTeacher("Gaby", ["Digital Drawing"]);
-		$this->assignTeacher("Iswan Sudaryo", ["3D Modelling", "Concept Art"]);
+		$this->assignTeacher("Iswan Sudaryo (Teacher)", ["3D Modelling", "Concept Art"]);
 		$this->assignTeacher("Vincent", ["3D Modelling", "2D Animation"]);
-
+		$this->assignTeacher("Immanuel Giovano (Teacher)", ["Web Development"]);
 	}
 }

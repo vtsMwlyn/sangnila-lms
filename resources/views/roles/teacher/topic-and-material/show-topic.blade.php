@@ -45,23 +45,25 @@
 		<table class="w-full mt-4">
 			<thead>
 				<th class="border px-3">Material Title</th>
-				<th class="border px-3">Link</th>
+				<th class="border px-3" style="min-width: 30vw;">Material Description</th>
+				<th class="border px-3" style="max-width: 20vw;">Link</th>
 				<th class="border px-3">Actions</th>
 			</thead>
 			<tbody>
-				@forelse ($topic->course_materials as $material)
+				@forelse ($topic->materials as $material)
 					<tr>
 						<td class="border px-3">{{ $material->title }}</td>
-						<td class="border px-3"><a href="{{ $material->link }}" class="text-blue-700">{{ $material->link }}</a></td>
+						<td class="border px-3" style="min-width: 30vw;">{{ $material->desc }}</td>
+						<td class="border px-3" style="max-width: 20vw; word-wrap: break-word;"><a href="{{ $material->link }}" target="blank" class="text-blue-700">{{ $material->link }}</a></td>
 						<td class="border px-3">
 							<div class="flex gap-1">
 								<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
 									href="{{ route("teacher.material.edit", $material->id) }}">
-									Edit Material
+									Edit
 								</a>
 								<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
 									href="{{ route("teacher.material.remove", $material->id) }}">
-									Delete Material
+									Delete
 								</a>
 							</div>
 						</td>
