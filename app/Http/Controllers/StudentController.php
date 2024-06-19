@@ -13,6 +13,7 @@ use App\Models\CourseStudent;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
 use App\Models\AssignmentSubmission;
+use App\Models\ImportedStudent;
 use App\Models\Progress;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -48,9 +49,9 @@ class StudentController extends Controller {
 		$percentages = [];
 
 		foreach($students as $student){
-			$maiscec = [];
-			$caiscec = [];
-			$piscec = [];
+			$maiscec = []; //max attendances in student current enrolled course
+			$caiscec = []; //current attendances in student current enrolled course
+			$piscec = []; //percentage in student current enrolled course
 
 			$sa = StudentAttendance::where("user_id", $student->id)->get();
 
@@ -59,7 +60,14 @@ class StudentController extends Controller {
 
 				array_push($maiscec, $cs->max_course_session);
 
-				$count = 0;
+				// Number of attendances (separated for imported students and unimported students)
+				$courseStudent = CourseStudent::where("course_id", $course->id)->where("student_id", $student->id)->first();
+				if($courseStudent->is_imported){
+					$count = ImportedStudent::where("course_id", $course->id)->where("student_id", $student->id)->first()->last_attendance_count;
+				} else {
+					$count = 0;
+				}
+
 				foreach($sa as $atd){
 					if($atd->attendance->course_id == $course->id && $atd->is_attend == 1){
 						$count++;

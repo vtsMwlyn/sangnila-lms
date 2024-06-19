@@ -8,8 +8,11 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
 use App\Models\CourseTeacher;
+use App\Models\ImportedStudent;
 use App\Models\Payment;
 use App\Models\Progress;
+use App\Models\UserDetail;
+use Illuminate\Support\Facades\Hash;
 
 class CourseStudentController extends Controller {
 	// ===== ADMIN ===== //
@@ -68,7 +71,8 @@ class CourseStudentController extends Controller {
 			'student_id' => $student_id,
 			'course_id' => $course->id,
 			'max_course_session' => $validatedData["max_course_session"],
-			"teacher_id" => $teacher->id
+			"teacher_id" => $teacher->id,
+			"is_imported" => 0
 		]);
 
 		$existingProgress = Progress::where('student_id', $student->id)
@@ -156,7 +160,8 @@ class CourseStudentController extends Controller {
 				"student_id" => $targetStudent->id,
 				"teacher_id" => $targetTeacher->id,
 				"course_id" => $course->id,
-				"max_course_session" => $maxcoursesessions[$index]
+				"max_course_session" => $maxcoursesessions[$index],
+				"is_imported" => 0
 			]);
 
 			$existingProgress = Progress::where('student_id', $targetStudent->id)
@@ -191,13 +196,97 @@ class CourseStudentController extends Controller {
 
 	// Import old existing student data
 	public function import_student_data($course_id){
+		$course = Course::where("id", $course_id)->first();
+
 		return view("roles.admin.student.import-student", [
-			"course" => Course::where("id", $course_id)->first()
+			"course" => $course,
+			"education_levels" => ["Elementary School", "Junior High School", "Senior High School", "College", "Professional"]
 		]);
 	}
 
-	public function import_student_store(Request $request, $course_id){
-		return $request;
+	public function import_student_data_store(Request $request, $course_id){
+		$course = Course::where("id", $course_id)->first();
+
+		foreach($request->inp_full_name as $index => $student_name){
+			// Prevent duplicate email
+			$existingUserWithSameEmail = User::where("email", $request->inp_email[$index])->get();
+			$n = $existingUserWithSameEmail->count();
+
+			if($n == 0){
+				$generatedEmail = $request->inp_email[$index];
+			} else {
+				$dotPosition = strpos($request->inp_email[$index], '.');
+				$localPart = substr($request->inp_email[$index], 0, $dotPosition);
+				$domainPart = substr($request->inp_email[$index], $dotPosition);
+
+				$generatedEmail = $localPart . ($n + 1) . $domainPart;
+			}
+
+			$newUser = User::create([
+				"full_name" => $student_name,
+				"email" => $generatedEmail,
+				"role_id" => 3,
+				"status" => "enabled",
+				"email_verified_at" => now(), //soon will be removed
+				"password" => Hash::make("password")
+			]);
+
+			UserDetail::create([
+				"user_id" => $newUser->id,
+				"gender" => $request->inp_gender[$index],
+				"phone_number" => $request->inp_phone_number[$index],
+				"city_of_birth" => $request->inp_cob[$index],
+				"date_of_birth" => $request->inp_dob[$index],
+				"name_parent" => $request->inp_name_parent[$index],
+				"phone_parent" => $request->inp_phone_parent[$index],
+				"school_name" => $request->inp_school_name[$index],
+				"student_level" => $request->inp_student_level[$index],
+			]);
+
+			CourseStudent::create([
+				"course_id" => $course->id,
+				"student_id" => $newUser->id,
+				"teacher_id" => $request->inp_teacher_name[$index],
+				"is_imported" => 1,
+				"max_course_session" => $request->inp_max_course_session[$index]
+			]);
+
+			ImportedStudent::create([
+				"student_id" => $newUser->id,
+				"course_id" => $course->id,
+				"last_attendance_count" => $request->inp_last_attendance_count[$index]
+			]);
+
+			$targetFound = false;
+			foreach($course->topics as $topic){
+				foreach($topic->materials as $material){
+					if($material->id != $request->inp_last_material_unlocked[$index]){
+						Progress::create([
+							"student_id" => $newUser->id,
+							"material_id" => $material->id,
+							"course_id" => $course->id,
+							"status" => "unlocked"
+						]);
+					} else {
+						Progress::create([
+							"student_id" => $newUser->id,
+							"material_id" => $material->id,
+							"course_id" => $course->id,
+							"status" => "unlocked"
+						]);
+
+						$targetFound = true;
+						break;
+					}
+				}
+
+				if($targetFound){
+					break;
+				}
+			}
+		}
+
+		return redirect(route("admin.course.show", $course_id))->with("successImportStudent", "Students data imported successfully!");
 	}
 
 }

@@ -33,6 +33,7 @@
 				scroll-behavior: smooth;
 			}
 
+			/* Custom Cursor */
 			a {
 				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
 			}
@@ -46,21 +47,41 @@
 				cursor: url("{{ asset('img/kursor.cur') }}"), auto;
 			}
 
-			/* Apply custom scrollbar styles to Firefox */
+			/* Thin Scrollbar */
 			* {
-				scrollbar-width: thin; /* Thin scrollbar */
-				scrollbar-color: #888 #f7f7f7; /* Scrollbar thumb and track color */
+				scrollbar-width: thin;
+				scrollbar-color: #888 #f7f7f7;
 			}
 
-			/* Center the Select2 dropdown arrow */
+			/* Select2 */
 			.select2-selection__arrow {
-				margin-top: 5px;
+				margin-top: 7px;
 				margin-right: 10px;
 			}
 
-			.select2-container .select2-selection--single {
-				color: rgb(30 64 175);
+			/* Import student table */
+			table#student-to-import thead th.fixed1 {
+				min-width: 200px;
+				max-width: 200px;
 			}
+
+			table#student-to-import thead th.fixed2 {
+				min-width: 150px;
+				max-width: 150px;
+			}
+
+			table#student-to-import tbody td.fixed1 {
+				min-width: 200px;
+				max-width: 200px;
+				word-wrap: break-word;
+			}
+
+			table#student-to-import tbody td.fixed2 {
+				min-width: 150px;
+				max-width: 150px;
+				word-wrap: break-word;
+			}
+
 		</style>
 
 		<!-- Include jQuery  -->

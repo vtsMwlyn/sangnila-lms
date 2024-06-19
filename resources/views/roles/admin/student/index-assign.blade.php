@@ -12,7 +12,7 @@
 				@csrf
 				<!-- Select course -->
 				<div class="mt-3">
-					<x-label for="visibility" :value="__('Select a course to assign')" style="color: white;"/>
+					<x-label for="course_name" :value="__('Select a course to assign')" style="color: white;"/>
 					<x-select name="course_name" id="course_name" class="mt-1 w-full">
 						<option disabled selected>Pick a course</option>
 						@foreach ($courses as $course)
@@ -24,7 +24,7 @@
 				<!-- Max Course Sessions -->
 				<div class="mt-3 flex gap-3">
 					<div class="w-1/2">
-						<x-label for="visibility" :value="__('Select a teacher that will teach the student')" style="color: white;"/>
+						<x-label for="teacher_name" :value="__('Select a teacher that will teach the student')" style="color: white;"/>
 						<x-select name="teacher_name" id="teacher_name" class="mt-1 w-full">
 							<option disabled selected>Pick a teacher</option>
 						</x-select>

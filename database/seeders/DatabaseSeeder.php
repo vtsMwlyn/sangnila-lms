@@ -40,7 +40,8 @@ class DatabaseSeeder extends Seeder
 				"course_id" => $course->id,
 				"student_id" => $student->id,
 				"teacher_id" => $teacher->id,
-				"max_course_session" => $max_session
+				"max_course_session" => $max_session,
+				"is_imported" => 0
 			]);
 
 			Payment::create([

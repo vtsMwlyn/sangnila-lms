@@ -13,6 +13,7 @@ return new class extends Migration {
 			$table->unsignedBigInteger('course_id');
 			$table->unsignedBigInteger("teacher_id");
 			$table->enum('student_type', ['regular', 'private']);
+			$table->unsignedInteger("is_imported");
 
 			$table->unsignedInteger("max_course_session");
 

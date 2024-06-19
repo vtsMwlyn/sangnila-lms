@@ -107,7 +107,6 @@
 
 			// Select2 initialization + MAKING THIS SH*T FOLLOW THE RESIZING OF ITS CONTAINER SO YOU NO NEED TO REFRESH
 			$('#student_name').select2({
-				placeholder: "Select a Student",
 				allowClear: false
 			});
 
@@ -123,7 +122,6 @@
 			const container = document.getElementById('inpStudentField');
 			const resizeObserver = new ResizeObserver(() => {
 				$('#student_name').select2('destroy').select2({
-					placeholder: "Select a Student",
 					allowClear: false
 				});
 

@@ -16,6 +16,10 @@
 		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
 			<p class="text-green-900">{{ session("successBatchAssign") }}</p>
 		</div>
+	@elseif(session()->has("successImportStudent"))
+		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+			<p class="text-green-900">{{ session("successImportStudent") }}</p>
+		</div>
 	@endif
 
 	<div class="px-10 py-5 bg-indigo-200 rounded-3xl my-10">
