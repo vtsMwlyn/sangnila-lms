@@ -50,7 +50,7 @@
 		<div class="mt-4">
 			<x-label for="student_level" class="text-white" :value="__('Select Student Education Level')" />
 			<x-select name="student_level" id="student_level"
-			class="mt-1 w-1/3">
+			class="mt-1 w-full md:w-1/3">
 				@if($student->details->student_level)
 					@forelse ($education_levels as $level)
 						<option value="{{ $student->details->student_level }}" @if($student->details->student_level == $level) selected @endif>{{ $level }}</option>
@@ -78,11 +78,11 @@
 			<x-input id="phone_parent" class="block mt-1 w-full" type="text" name="phone_parent" :value="$student->details->phone_parent" placeholder="Add parent's phone number"  />
 		</div>
 
-		<div class="flex items-stretch justify-end mt-8 gap-1">
-			<x-button class="bg-orange-500">
+		<div class="flex items-stretch justify-center mt-8 gap-3">
+			<x-button class="bg-orange-500 w-full md:w-1/5">
 				{{ __('Save') }}
 			</x-button>
-			<x-button type="button" onclick="if(confirm('The changes will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500">
+			<x-button type="button" onclick="if(confirm('The changes will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500 w-full md:w-1/5">
 				Cancel
 			</x-button>
 		</div>

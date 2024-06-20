@@ -5,16 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Course;
+use App\Models\Progress;
 use App\Models\Assignment;
 use App\Models\Attendance;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
+use App\Models\ImportedStudent;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
+use Illuminate\Support\Facades\Log;
 use App\Models\AssignmentSubmission;
-use App\Models\ImportedStudent;
-use App\Models\Progress;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -47,22 +48,28 @@ class StudentController extends Controller {
 		$max_attendances = [];
 		$current_attendances = [];
 		$percentages = [];
+		$studentList = [];
+
+		// To contain prioritized students with current attendance of max attendance - 1
+		$max_attendances2 = [];
+		$current_attendances2 = [];
+		$percentages2 = [];
+		$studentList2 = [];
 
 		foreach($students as $student){
 			$maiscec = []; //max attendances in student current enrolled course
 			$caiscec = []; //current attendances in student current enrolled course
 			$piscec = []; //percentage in student current enrolled course
 
+			$prioritized = false;
+
 			$sa = StudentAttendance::where("user_id", $student->id)->get();
 
 			foreach($student->enrolled_courses as $course){
+				// Number of attendances (separated for imported students and unimported students)
 				$cs = CourseStudent::where("course_id", $course->id)->where("student_id", $student->id)->first();
 
-				array_push($maiscec, $cs->max_course_session);
-
-				// Number of attendances (separated for imported students and unimported students)
-				$courseStudent = CourseStudent::where("course_id", $course->id)->where("student_id", $student->id)->first();
-				if($courseStudent->is_imported){
+				if($cs->is_imported){
 					$count = ImportedStudent::where("course_id", $course->id)->where("student_id", $student->id)->first()->last_attendance_count;
 				} else {
 					$count = 0;
@@ -74,31 +81,34 @@ class StudentController extends Controller {
 					}
 				}
 
+				if((($count + 1) % $cs->max_course_session == 0) || $count == $cs->max_course_session){
+					$prioritized = true;
+				}
+
+				array_push($maiscec, $cs->max_course_session);
 				array_push($caiscec, $count);
 				array_push($piscec, round((float)($count / $cs->max_course_session) * 100));
 
 			}
 
-			array_push($max_attendances, $maiscec);
-			array_push($current_attendances, $caiscec);
-			array_push($percentages, $piscec);
+			if($prioritized){
+				array_push($max_attendances2, $maiscec);
+				array_push($current_attendances2, $caiscec);
+				array_push($percentages2, $piscec);
+				array_push($studentList2, $student);
+			} else {
+				array_push($max_attendances, $maiscec);
+				array_push($current_attendances, $caiscec);
+				array_push($percentages, $piscec);
+				array_push($studentList, $student);
+			}
+
 		}
 
-		// $studentArrays = $students->toArray();
-
-		// // Combine the arrays into a single array of tuples
-		// $combined = array_map(null, $current_attendances, $max_attendances, $studentArrays, $percentages);
-
-		// // Sort the combined array by current progress (index 0 of each tuple)
-		// usort($combined, function($a, $b) {
-		// 	return $b[3] <=> $a[3]; // Descending order
-		// });
-
-		// // Separate the arrays back
-		// $current_attendances = array_column($combined, 0);
-		// $max_attendances = array_column($combined, 1);
-		// // $students = array_column($combined, 2);
-		// $percentages = array_column($combined, 3);
+		$students = collect(array_merge($studentList2, $studentList));
+		$current_attendances = array_merge($current_attendances2, $current_attendances);
+		$max_attendances = array_merge($max_attendances2, $max_attendances);
+		$percentages = array_merge($percentages2, $percentages);
 
 		// Return view with data
 		return view('roles.admin.student.index', [

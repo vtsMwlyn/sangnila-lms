@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\AssignmentController;
 use App\Models\StudentAttendance;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
-use App\Http\Controllers\ScheduleController;
-use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\AttendanceController;
 
 Route::prefix('/student')
 	->name('student.')
@@ -17,6 +18,10 @@ Route::prefix('/student')
 		Route::get('/', function() {
 			return redirect(route('dashboard'));
 		});
+
+		// Ceritanya bayar
+		Route::get("/payment", [PaymentController::class, "student_pay"])->name("pay");
+		Route::post("/payment", [PaymentController::class, "student_pay_proceed"])->name("pay.proceed");
 
 		// My courses
 		Route::prefix('/mycourse')

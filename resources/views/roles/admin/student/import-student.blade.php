@@ -13,24 +13,24 @@
 				<x-button class="bg-orange-500" id="show-details-button">Show Details</x-button>
 			</div>
 			<hr>
-			<div class="flex gap-3 mt-3">
+			<div class="flex flex-col md:flex-row gap-3 mt-3">
 				<!-- Student Name -->
-				<div class="w-1/2" id="container_full_name">
+				<div class="w-full md:w-1/2" id="container_full_name">
 					<x-label for="full_name" :value="__('Student Name')" />
 					<x-input id="full_name" class="block mt-1 w-full" type="text" name="full_name" placeholder="Student's Name" :value="old('full_name')" autofocus />
 					<p class="text-red-500" style="display: none" id="err_full_name">This field is required.</p>
 				</div>
 
-				<div class="w-1/2 flex gap-3">
+				<div class="w-full md:w-1/2 flex flex-col md:flex-row gap-3">
 					<!-- Student Email -->
-					<div class="w-2/3" id="container_email">
+					<div class="w-full md:w-2/3" id="container_email">
 						<x-label for="email" :value="__('Student Email')" />
 						<x-input id="email" class="block mt-1 w-full" type="text" name="email" placeholder="Student's Email" :value="old('email')"
 							autofocus />
 						<p class="text-red-500" style="display: none" id="err_email">This field is required.</p>
 					</div>
 					<!-- Student Gender -->
-					<div class="w-1/3" id="container_gender">
+					<div class="w-full md:w-1/3" id="container_gender">
 						<x-label for="gender" :value="__('Student Name')" />
 						<x-select name="gender" id="gender"
 						class="mt-1 w-full">
@@ -44,37 +44,37 @@
 			</div>
 
 			<div class="" id="form-details" style="display: none;">
-				<div class="flex gap-3 mt-3">
+				<div class="flex flex-col md:flex-row gap-3 mt-3">
 					<!-- Student Phone Number -->
-					<div class="w-1/2">
+					<div class="w-full md:w-1/2">
 						<x-label for="phone_number" :value="__('Student Phone Number')"/>
 						<x-input id="phone_number" class="block mt-1 w-full" type="text" name="phone_number" :value="old('phone_number')" placeholder="Add phone number"  />
 					</div>
 
-					<div class="w-1/2 flex gap-3">
+					<div class="w-full md:w-1/2 flex flex-col md:flex-row gap-3">
 						<!-- Student City of Birth -->
-						<div class="w-1/2">
+						<div class="w-full md:w-1/2">
 							<x-label for="city_of_birth" :value="__('Student City of Birth')"/>
 							<x-input id="city_of_birth" class="block mt-1 w-full" type="text" name="city_of_birth" :value="old('city_of_birth')" placeholder="Add city of birth"  />
 						</div>
 
 						<!-- Student Date of Birth -->
-						<div class="w-1/2">
+						<div class="w-full md:w-1/2">
 							<x-label for="date_of_birth" :value="__('Student Date of Birth')"/>
 							<x-input id="date_of_birth" class="block mt-1 w-full" type="date" name="date_of_birth" :value="old('date_of_birth')" placeholder="Add date of birth"  />
 						</div>
 					</div>
 				</div>
 
-				<div class="flex gap-3 mt-6">
+				<div class="flex flex-col md:flex-row gap-3 mt-6">
 					<!-- Student School Name -->
-					<div class="w-1/2">
+					<div class="w-full md:w-1/2">
 						<x-label for="school_name" :value="__('Student School Name')"/>
 						<x-input id="school_name" class="block mt-1 w-full" type="text" name="school_name" :value="old('school_name')" placeholder="Add school name"  />
 					</div>
 
 					<!-- Student Education Level -->
-					<div class="w-1/2">
+					<div class="w-full md:w-1/2">
 						<x-label for="student_level" class="text-white" :value="__('Select Student Education Level')" />
 						<x-select name="student_level" id="student_level"
 						class="mt-1 w-full">
@@ -87,15 +87,15 @@
 					</div>
 				</div>
 
-				<div class="flex gap-3 mt-3">
+				<div class="flex flex-col md:flex-row gap-3 mt-3">
 					<!-- Student Parent's Name -->
-					<div class="w-1/2" id="container_parent_name">
+					<div class="w-full md:w-1/2" id="container_parent_name">
 						<x-label for="name_parent" :value="__('Student Parent\'s Name')"/>
 						<x-input id="name_parent" class="block mt-1 w-full" type="text" name="name_parent" :value="old('name_parent')" placeholder="Add parent's name"  />
 					</div>
 
 					<!-- Student Parent's Phone Number -->
-					<div class="w-1/2" id="container_phone_number">
+					<div class="w-full md:w-1/2" id="container_phone_number">
 						<x-label for="phone_parent" :value="__('Student Parent\'s Phone Number')"/>
 						<x-input id="phone_parent" class="block mt-1 w-full" type="text" name="phone_parent" :value="old('phone_parent')" placeholder="Add parent's phone number"  />
 					</div>
@@ -104,9 +104,9 @@
 
 			<h1 class="font-semibold text-lg mt-10 mb-3">Student's Course Data</h1>
 			<hr>
-			<div class="mt-3 flex gap-3">
+			<div class="mt-3 flex flex-col md:flex-row gap-3">
 				<!-- Student's Teacher -->
-				<div class="w-1/2" id="container_teacher_name">
+				<div class="w-full md:w-1/2" id="container_teacher_name">
 					<x-label for="teacher_name" :value="__('Select Student\'s Teacher')" />
 					<x-select name="teacher_name" id="teacher_name" class="mt-1 w-full">
 						<option value="" disabled selected>Pick a teacher</option>
@@ -117,7 +117,7 @@
 					<p class="text-red-500" style="display: none" id="err_teacher_name">This field is required.</p>
 				</div>
 
-				<div class="w-1/2 flex gap-3">
+				<div class="w-full md:w-1/2 flex gap-3">
 					<!-- Student's last attendance count -->
 					<div class="w-1/2" id="container_last_attendance_count">
 						<x-label for="last_attendance_count" :value="__('Student\'s Last Attendance Count')" />

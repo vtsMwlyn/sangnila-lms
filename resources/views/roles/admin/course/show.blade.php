@@ -48,7 +48,7 @@
 	</div>
 
 	<div class="flex flex-col items-stretch mt-10">
-		<div class="rounded-xl py-5 px-10 text-white bg-blue-900 flex items-center justify-between">
+		<div class="rounded-xl py-5 px-10 text-white bg-blue-900 flex flex-col md:flex-row gap-5 md:gap-0 items-center justify-between">
 			<div class="">List of Assigned Students</div>
 			<div class="flex gap-5">
 				<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.batch-assign', $course->id) }}">Batch Assign</x-anchor-button>

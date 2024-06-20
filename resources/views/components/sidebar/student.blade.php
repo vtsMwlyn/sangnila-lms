@@ -1,5 +1,5 @@
 <!-- Main sidebar -->
-<div class="w-full md:w-1/5 bg-blue-950 text-white md:min-h-screen sticky top-0 md:static" >
+<div class="w-full md:w-1/5 bg-blue-950 text-white md:min-h-screen sticky top-0 md:static z-30" >
 	<!-- Sidebar toggler for mobile -->
 	<button id="mobileMenuButton" class="md:hidden bg-blue-950 text-white font-semibold text-xl transition duration-300 absolute m-2 px-4 py-3 z-10">
 		<span class="inline-block">&#9776;</span>
@@ -48,9 +48,8 @@
 
 	<script>
 		// Toggle mobile menu visibility
-		document.getElementById('mobileMenuButton').addEventListener('click', function () {
-			var mobileMenu = document.getElementById('navigation');
-			mobileMenu.style.display = (mobileMenu.style.display === 'none' || mobileMenu.style.display === '') ? 'block' : 'none';
+		$("#mobileMenuButton").click(() => {
+			$("#navigation").slideToggle();
 		});
 	</script>
 </div>

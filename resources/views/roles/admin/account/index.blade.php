@@ -38,7 +38,7 @@
 			<div class="rounded-3xl px-5 py-4 transition duration-500 ease-in-out
 				@if($index != 0) mt-10 @endif
 				@if(request("search") && request("role") == $role->id) bg-indigo-100 @else bg-indigo-200 @endif">
-				<div class="flex w-full justify-between items-center mb-6">
+				<div class="flex flex-col md:flex-row gap-5 md:gap-0 w-full justify-between items-center mb-6">
 					@if(request("role") == $role->id)
 						<h1 class="text-lg font-semibold">{{ $role->role_name }} Accounts <span class="italic">(Showing results for "{{ request("search") }}")</span></h1>
 					@else

@@ -17,7 +17,7 @@
 		</div>
 	@endif
 
-	<div class="flex justify-between items-center mt-5">
+	<div class="flex flex-col-reverse md:flex-row gap-5 md:gap-0 justify-between items-center mt-5">
 		<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.create') }}"><i class="bi bi-plus-lg"></i> Add New Course</x-anchor-button>
 		<form class="flex" action="{{ route("admin.course.index") }}">
 			<x-input type="text" class="border-slate-500 rounded-l-lg rounded-r-none" name="search" placeholder="Search..." />

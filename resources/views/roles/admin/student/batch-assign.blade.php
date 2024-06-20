@@ -9,15 +9,15 @@
 
 	<div class="border rounded-xl p-5">
 		<h1 class="font-semibold text-lg">Input New Data</h1>
-		<div class="flex gap-3">
-			<div class="mt-3 w-1/3" id="inpStudentField">
+		<div class="flex flex-col md:flex-row gap-3">
+			<div class="mt-3 w-full md:w-1/3" id="inpStudentField">
 				<x-label class="mb-1">{{ __("Student Name") }}</x-label>
 				<x-select name="student_name" id="student_name" class="w-full" required>
 					<option disabled selected>Select Student</option>
 				</x-select>
 				<p class="text-red-500" id="errStudent">This field is required.</p>
 			</div>
-			<div class="mt-3 w-1/3" id="inpTeacherField">
+			<div class="mt-3 w-full md:w-1/3" id="inpTeacherField">
 				<x-label class="mb-1">{{ __("Teacher Name") }}</x-label>
 				<x-select name="teacher_name" id="teacher_name" class="w-full" required>
 					<option disabled selected>Pick a teacher</option>
@@ -27,7 +27,7 @@
 				</x-select>
 				<p class="text-red-500" id="errTeacher">This field is required.</p>
 			</div>
-			<div class="mt-3 w-1/3" id="inpMaxCourseSessionField">
+			<div class="mt-3 w-full md:w-1/3" id="inpMaxCourseSessionField">
 				<x-label class="mb-1">{{ __("Max Course Session") }}</x-label>
 				<x-input id="max_course_session" class="w-full" type="number" name="max_course_session" placeholder="Maximum sessions" value="8" />
 				<p class="text-red-500" id="errMaxCourseSession">Invalid input.</p>
