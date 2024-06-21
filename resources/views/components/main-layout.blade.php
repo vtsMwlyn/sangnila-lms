@@ -93,7 +93,7 @@
 
 	<body class="bg-cover min-h-screen flex flex-col md:flex-row">
 		<!-- Back to top button and version -->
-		<div class="fixed bottom-0 left-0 m-2 text-black md:text-white">
+		<div class="fixed z-50 bottom-0 left-0 m-2 text-black md:text-white">
 			<div class="">{{ trans("strings.version") }}</div>
 		</div>
 		<div class="fixed bottom-0 right-0 m-2 opacity-0 transition-opacity duration-500 ease-in-out" id="back-to-top">

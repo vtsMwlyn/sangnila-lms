@@ -131,7 +131,7 @@ class CourseController extends Controller {
 				}
 			}
 
-			if((($count + 1) % $cs->max_course_session == 0) || $count == $cs->max_course_session){
+			if((($count + 1) % $cs->max_course_session == 0) || $count >= $cs->max_course_session){
 				$shouldPaySoon = true;
 			} else {
 				$shouldPaySoon = false;

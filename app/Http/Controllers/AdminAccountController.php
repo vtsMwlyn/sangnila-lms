@@ -86,9 +86,11 @@ class AdminAccountController extends Controller {
 	}
 
 	// Disable account in database
-	public function disable_acc($user_id){
+	public function disable_acc(Request $request, $user_id){
+		$request->validate(["disable_reason" => "required|min:3"]);
+
 		$user = User::findOrFail($user_id);
-		User::where("id", $user->id)->update(["status" => "disabled"]);
+		User::where("id", $user->id)->update(["status" => "disabled", "disable_reason" => $request->disable_reason]);
 
 		return redirect(route("admin.account.index"))->with("successDisableAccount", "Successfully disabled account!");
 	}
@@ -103,7 +105,7 @@ class AdminAccountController extends Controller {
 	// Account enable confirmation page
 	public function enable_acc($user_id){
 		$user = User::findOrFail($user_id);
-		User::where("id", $user->id)->update(["status" => "enabled"]);
+		User::where("id", $user->id)->update(["status" => "enabled", "disable_reason" => null]);
 
 		return redirect(route("admin.account.index"))->with("successEnableAccount", "Successfully enabled account!");
 	}

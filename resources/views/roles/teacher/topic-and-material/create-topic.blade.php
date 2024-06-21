@@ -32,6 +32,7 @@
 				<x-button type="button" onclick="if(confirm('The filled data will be discarded, are you sure want to cancel?')) history.back();" class="bg-indigo-400">
 					Cancel
 				</x-button>
+			</div>
 		</form>
 	</div>
 @endsection

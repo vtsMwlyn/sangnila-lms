@@ -35,17 +35,17 @@
 								Note:
 								Teacher can only submit attendance for active students account, if disabled by admin then the checkbox and textarea for that student account will be disabled (showing "account disabled")
 							--}}
-								<tr>
+								<tr style="@if($cs->student->status == "disabled") display: none; @endif">
 									<td class="border border-blue-900 px-5 py-3 w-1/3">
 										<div class="flex items-center gap-3">
 											<input type="checkbox" id="checkbox{{ $loop->iteration }}"
-											class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if($cs->student->status == "disabled") disabled @endif @if(old('checkbox_value.' . $loop->index) == "on") checked @endif >
+											class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif >
 											<span>{{ $cs->student->full_name }}</span>
 										</div>
 									</td>
 									<td class="border px-5 border-blue-900 py-3">
 										<div class="flex flex-col items-stretch">
-											<textarea name="attendance_detail[]" rows="3" class="rounded-lg @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @enderror" placeholder="Enter student attendance details" style="resize: none; box-sizing: border-box; padding: 10px;" @if($cs->student->status == "disabled") disabled @endif>@if($cs->student->status == "disabled") Account disabled @else{{ old("attendance_detail." . $loop->index) }}@endif</textarea>
+											<textarea name="attendance_detail[]" rows="3" class="rounded-lg @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @enderror" placeholder="Enter student attendance details" style="resize: none; box-sizing: border-box; padding: 10px;">@if($cs->student->status == "disabled"){{ __("Account disabled") }}@else{{ old("attendance_detail." . $loop->index) }}@endif</textarea>
 
 											@error("attendance_detail." . $loop->index)
 												<span class="text-red-500 mt-2">{{ $message }}</span>
@@ -69,9 +69,9 @@
 			</form>
 		@else
 			<h1 class="text-md font-semibold italic">- No students assigned to this course yet, cannot upload assignment -</h1>
-			<button type="button" onclick="history.back()" class="mt-6 px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
+			<x-button type="button" onclick="history.back()" class="bg-indigo-400">
 				Return
-			</button>
+			</x-button>
 		@endif
 
 		<script>

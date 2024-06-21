@@ -36,7 +36,7 @@
 				$role = App\Models\Role::where("id", $index + 1)->first();
 			@endphp
 			<div class="rounded-3xl px-5 py-4 transition duration-500 ease-in-out
-				@if($index != 0) mt-10 @endif
+				@if($index != 0) mt-5 @endif
 				@if(request("search") && request("role") == $role->id) bg-indigo-100 @else bg-indigo-200 @endif">
 				<div class="flex flex-col md:flex-row gap-5 md:gap-0 w-full justify-between items-center mb-6">
 					@if(request("role") == $role->id)

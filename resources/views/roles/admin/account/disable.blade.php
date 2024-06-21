@@ -13,16 +13,22 @@
 			<!-- Confirmation Text -->
 			<div class="mb-6">
 				<h1 class="text-xl font-semibold text-white">
-					Are you sure you want to <span class="text-red-500 font-bold">disable</span> account
+					You are about to <span class="text-red-500 font-bold">disable</span> account
 					<span class="text-yellow-400 font-bold">{{ $account->full_name }}</span>
-					from Sangnila LMS? Disabled accounts can't be used again by the user.
+					from Sangnila LMS. Disabled accounts can't be used again by the user. Please enter the reason then proceed to continue.
 				</h1>
 			</div>
 
+			<!-- Input disabling reason -->
+			<div class="">
+				<x-label style="color: white;">{{ __("Account disabling reason:") }}</x-label>
+				<x-input type="text" name="disable_reason" id="disable_reason" class="w-full mt-1" placeholder="Enter the account disabling reason" :value="old('disable_reason')"/>
+			</div>
+
 			<!-- Yes/No Buttons -->
-			<div class="flex gap-3 w-full justify-center">
-				<x-button type="submit" class="bg-orange-500 w-full md:w-1/12">Yes</x-button>
-				<x-button type="button" onclick="history.back()" class="bg-orange-500 w-full md:w-1/12">No</x-button>
+			<div class="flex gap-3 w-full justify-center mt-8">
+				<x-button type="submit" class="bg-orange-500 w-full md:w-1/6">Proceed</x-button>
+				<x-button type="button" onclick="history.back()" class="bg-orange-500 w-full md:w-1/6">Cancel</x-button>
 			</div>
 		</form>
 	</div>

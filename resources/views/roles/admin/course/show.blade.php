@@ -57,7 +57,12 @@
 		</div>
 		<div class="flex flex-wrap gap-x-10 overflow-y-auto bg-indigo-200 px-10 py-5 rounded-xl mt-3" style="max-height: 300px;">
 			@forelse ($course->students as $student)
-				<div class="text-white border-4 border-white bg-yellow-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 80px; max-height: 80px;">{{ $student->full_name }}</div>
+				<div class="text-white border-4 border-white bg-yellow-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 80px; max-height: 80px;">
+					{{ $student->full_name }}
+					@if($student->status == "disabled")
+						<span class="text-red-500">(Disabled)</span>
+					@endif
+				</div>
 			@empty
 				<div class="flex w-full justify-center">
 					<span>- No student enrolled in this course yet -</span>

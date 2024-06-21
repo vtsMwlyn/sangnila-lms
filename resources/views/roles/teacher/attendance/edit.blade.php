@@ -28,7 +28,7 @@
 							Note:
 							Even tought teacher can only submit attendance for active students account, previously submitted attendance for the student account still can be edited(?)
 						--}}
-						<tr>
+						<tr style="@if($atd->attendance_detail == "Account disabled") display: none; @endif">
 							<td class="border border-blue-900 px-5 w-1/3">
 								<div class="flex items-center gap-3">
 									<input type="checkbox" id="checkbox{{ $loop->iteration }}"
@@ -38,7 +38,7 @@
 							</td>
 							<td class="border border-blue-900 px-5 py-3">
 								<div class="flex flex-col items-stretch">
-									<textarea name="attendance_detail[]" rows="3" class="rounded-lg @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @enderror" placeholder="Enter student attendance details" style="resize: none; box-sizing: border-box; padding: 10px;" @if($atd->attendance_detail == "Account disabled") disabled @endif>{{ old("attendance_detail." . $loop->index, $atd->attendance_detail) }}</textarea>
+									<textarea name="attendance_detail[]" rows="3" class="rounded-lg @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @enderror" placeholder="Enter student attendance details" style="resize: none; box-sizing: border-box; padding: 10px;">{{ old("attendance_detail." . $loop->index, $atd->attendance_detail) }}</textarea>
 									@error("attendance_detail." . $loop->index)
 										<span class="text-red-500 mt-2">{{ $message }}</span>
 									@enderror
