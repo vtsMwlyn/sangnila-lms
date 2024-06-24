@@ -26,7 +26,7 @@
 		<!-- Visibility Selection -->
 		<div class="mb-4">
 			<x-label for="visibility" :value="__('Visibility')" />
-			<x-select name="visibility" id="visibility" class="mt-1 w-1/3">
+			<x-select name="visibility" id="visibility" class="mt-1 w-full md:w-1/3">
 				<option selected disabled>Course Visibility</option>
 				<option value="public" @if(old("visibility") == "public") selected @endif>Public</option>
 				<option value="private" @if(old("visibility") == "private") selected @endif>Private</option>
@@ -34,11 +34,11 @@
 		</div>
 
 
-		<div class="flex items-stretch gap-1 justify-end mt-6">
-			<x-button class="bg-orange-500">
+		<div class="flex items-stretch gap-3 justify-center mt-6">
+			<x-button class="bg-orange-500 w-full md:w-1/5">
 				{{ __('Submit') }}
 			</x-button>
-			<x-button type="button" onclick="if(confirm('The filled data will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500">
+			<x-button type="button" onclick="if(confirm('The filled data will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500 w-full md:w-1/5">
 				Cancel
 			</x-button>
 		</div>

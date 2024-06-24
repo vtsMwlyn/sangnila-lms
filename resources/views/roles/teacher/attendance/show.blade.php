@@ -17,23 +17,27 @@
 		</div>
 	@endif
 
-	<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white"
+	<x-anchor-button class="bg-indigo-400 mb-3"
 		href="{{ route('teacher.attendance.upload', $course->id) }}">
 		Upload New Attendance
-	</a>
+	</x-anchor-button>
 
 	@if($attendanceData->count())
 		@foreach($attendanceData as $atd)
 			<div class="border rounded-lg p-5 mb-5 mt-5">
-				<p>Attendance Date: {{ $atd->attendance_date }}</p>
-				{{-- <p>Uploaded by: {{ ($atd->posted_by->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $atd->posted_by->full_name }}</p> --}}
-				<div class="mt-5">
-					<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-						href="{{ route("teacher.attendance.edit", $atd->id) }}">
-						Edit
-					</a>
+				<div class="flex w-full items-center justify-between">
+					<p>Attendance Date:<br><span class="font-semibold">{{ $atd->attendance_date }}</span></p>
+					<div class="flex gap-3">
+						<x-anchor-button class="bg-indigo-400" href="{{ route('teacher.attendance.edit', $atd->id) }}">
+							Edit Data
+						</x-anchor-button>
+						<x-button type="button" class="bg-orange-500 toggleBtn">Show Details</x-button>
+					</div>
 				</div>
-				<div class="overflow-x-auto">
+
+				{{-- <p>Uploaded by: {{ ($atd->posted_by->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $atd->posted_by->full_name }}</p> --}}
+
+				<div class="overflow-x-auto contentTable" style="display: none;">
 					<table class="w-full mt-5 mb-5">
 						<thead>
 							<th class="border px-3">Students</th>
@@ -73,4 +77,22 @@
 	@else
 		<div class="mt-5">- No attendance data yet -</div>
 	@endif
+
+	<script>
+		const allToggleBtn = $(".toggleBtn");
+		const allContentTable = $(".contentTable");
+
+		allToggleBtn.each(function(index, element) {
+			$(element).click(() => {
+				allContentTable.eq(index).slideToggle(() => {
+				if (allContentTable.eq(index).is(":visible")) {
+					$(element).text("Hide Details");
+				} else {
+					$(element).text("Show Details");
+				}
+			});
+			});
+		});
+	</script>
+
 @endsection

@@ -140,6 +140,10 @@ Route::prefix('/admin')
 				Route::get("/{user_id}/enable", [AdminAccountController::class, "enable_conf"])->name("acc_enable.conf");
 				Route::post("/{user_id}/enable", [AdminAccountController::class, "enable_acc"])->name("acc_enable");
 
+				// Reset password
+				Route::get("/{user_id}/reset-password", [AdminAccountController::class, "reset_password"])->name("reset-password");
+				Route::post("/{user_id}/reset-password", [AdminAccountController::class, "reset_password_proceed"])->name("reset-password.proceed");
+
 			}
 		);
 	});

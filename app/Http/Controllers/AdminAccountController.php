@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminAccountController extends Controller {
 	// Shows all available accounts in Sangnila LMS
@@ -86,9 +87,11 @@ class AdminAccountController extends Controller {
 	}
 
 	// Disable account in database
-	public function disable_acc($user_id){
+	public function disable_acc(Request $request, $user_id){
+		$request->validate(["disable_reason" => "required|min:3"]);
+
 		$user = User::findOrFail($user_id);
-		User::where("id", $user->id)->update(["status" => "disabled"]);
+		User::where("id", $user->id)->update(["status" => "disabled", "disable_reason" => $request->disable_reason]);
 
 		return redirect(route("admin.account.index"))->with("successDisableAccount", "Successfully disabled account!");
 	}
@@ -103,7 +106,7 @@ class AdminAccountController extends Controller {
 	// Account enable confirmation page
 	public function enable_acc($user_id){
 		$user = User::findOrFail($user_id);
-		User::where("id", $user->id)->update(["status" => "enabled"]);
+		User::where("id", $user->id)->update(["status" => "enabled", "disable_reason" => null]);
 
 		return redirect(route("admin.account.index"))->with("successEnableAccount", "Successfully enabled account!");
 	}
@@ -123,5 +126,19 @@ class AdminAccountController extends Controller {
 		User::destroy("id", $user->id);
 
 		return redirect(route("admin.account.index"))->with("successDeleteAccount", "Successfully deleted account!");
+	}
+
+	// Reset password confirmation
+	public function reset_password($user_id){
+		return view("roles.admin.account.reset-password-conf", [
+			"account" => User::where("id", $user_id)->first()
+		]);
+	}
+
+	// Reset password in the database
+	public function reset_password_proceed($user_id){
+		User::where("id", $user_id)->update(["password" => Hash::make(trans("strings.default_password"))]);
+
+		return redirect(route("admin.account.show", $user_id))->with("successResetPassword", "Successfully reset this account's password");
 	}
 }

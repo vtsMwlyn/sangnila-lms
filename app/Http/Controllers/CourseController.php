@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendance;
 use App\Models\Course;
 use App\Models\CourseStudent;
+use App\Models\ImportedStudent;
 use App\Models\Progress;
+use App\Models\StudentAssignment;
+use App\Models\StudentAttendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -107,7 +111,38 @@ class CourseController extends Controller {
 	// ===== STUDENT ===== //
 	// List of enrolled courses
 	public function student_index() {
-		return view('roles.student.course.index');
+		$enrolled_courses = Auth::user()->enrolled_courses;
+		$paymentReminders = [];
+
+		foreach($enrolled_courses as $c){
+			$cs = CourseStudent::where("student_id", Auth::user()->id)->where("course_id", $c->id)->first();
+
+			if($cs->is_imported){
+				$count = ImportedStudent::where("course_id", $c->id)->where("student_id", Auth::user()->id)->first()->last_attendance_count;
+			} else {
+				$count = 0;
+			}
+
+			$stdatd = StudentAttendance::where("user_id", Auth::user()->id)->get();
+
+			foreach($stdatd as $atd){
+				if($atd->attendance->course_id == $c->id && $atd->is_attend == 1){
+					$count++;
+				}
+			}
+
+			if((($count + 1) % $cs->max_course_session == 0) || $count >= $cs->max_course_session){
+				$shouldPaySoon = true;
+			} else {
+				$shouldPaySoon = false;
+			}
+
+			array_push($paymentReminders, ["course" => $c->course_name, "should_pay_soon" => $shouldPaySoon]);
+		}
+
+		return view('roles.student.course.index', [
+			"payment_reminders" => $paymentReminders
+		]);
 	}
 
 	// Shows a course details with topics and materials

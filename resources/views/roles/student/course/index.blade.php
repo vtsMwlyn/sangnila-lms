@@ -6,8 +6,16 @@
 
 @section("content")
 	<h1 class="text-3xl font-semibold text-blue-900 mb-4">Courses</h1>
+	@foreach ($payment_reminders as $reminder)
+		@if($reminder["should_pay_soon"])
+			<div class="bg-yellow-400 text-orange-700 py-3 px-6 rounded-lg font-semibold mb-3">
+				<i class="bi bi-exclamation-square"></i>
+				<span>Your progress in <span class="font-bold">{{ $reminder["course"] }}</span> course is reaching its maximum session. Please do the payment to extend your study in the course.</span>
+			</div>
+		@endif
+	@endforeach
 	@if (Auth::user()->enrolled_courses->where('visibility', 'public')->isNotEmpty())
-		<div class="overflow-x-auto rounded-md">
+		<div class="overflow-x-auto rounded-md mt-8">
 			<table class="min-w-full bg-white border-collapse ">
 				<thead>
 					<tr>
@@ -32,7 +40,7 @@
 							</td>
 
 							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
-								{{ (App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->details->gender == 1)? "Mrs." : "Ms./Mrs." }} {{ App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->full_name }}
+								{{ (App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->full_name }}
 							</td>
 
 							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">

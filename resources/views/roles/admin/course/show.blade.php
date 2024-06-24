@@ -16,6 +16,10 @@
 		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
 			<p class="text-green-900">{{ session("successBatchAssign") }}</p>
 		</div>
+	@elseif(session()->has("successImportStudent"))
+		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+			<p class="text-green-900">{{ session("successImportStudent") }}</p>
+		</div>
 	@endif
 
 	<div class="px-10 py-5 bg-indigo-200 rounded-3xl my-10">
@@ -44,7 +48,7 @@
 	</div>
 
 	<div class="flex flex-col items-stretch mt-10">
-		<div class="rounded-xl py-5 px-10 text-white bg-blue-900 flex items-center justify-between">
+		<div class="rounded-xl py-5 px-10 text-white bg-blue-900 flex flex-col md:flex-row gap-5 md:gap-0 items-center justify-between">
 			<div class="">List of Assigned Students</div>
 			<div class="flex gap-5">
 				<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.batch-assign', $course->id) }}">Batch Assign</x-anchor-button>
@@ -53,7 +57,12 @@
 		</div>
 		<div class="flex flex-wrap gap-x-10 overflow-y-auto bg-indigo-200 px-10 py-5 rounded-xl mt-3" style="max-height: 300px;">
 			@forelse ($course->students as $student)
-				<div class="text-white border-4 border-white bg-yellow-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 80px; max-height: 80px;">{{ $student->full_name }}</div>
+				<div class="text-white border-4 border-white bg-yellow-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 80px; max-height: 80px;">
+					{{ $student->full_name }}
+					@if($student->status == "disabled")
+						<span class="text-red-500">(Disabled)</span>
+					@endif
+				</div>
 			@empty
 				<div class="flex w-full justify-center">
 					<span>- No student enrolled in this course yet -</span>

@@ -7,6 +7,7 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
 use App\Models\Attendance;
+use App\Models\ImportedStudent;
 use App\Models\StudentAttendance;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,9 +35,35 @@ class AttendanceController extends Controller {
 		$course = Auth::user()->teached_courses->where('id', $course_id)->first();
 		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
 
+		// Mechanism to remove student's who reached his/her maximum session and haven't paid yet (if agreed to be implemented)
+		// $studentsToRemove = [];
+
+		// foreach($course_students as $cs){
+		// 	$sa = StudentAttendance::where("user_id", $cs->student_id)->get();
+		// 	if($cs->is_imported){
+		// 		$count = ImportedStudent::where("student_id", $cs->student_id)->where("course_id", $course_id)->first()->last_attendance_count;
+		// 	} else {
+		// 		$count = 0;
+		// 	}
+
+		// 	foreach($sa as $atd){
+		// 		if($atd->attendance->course_id == $course_id && $atd->is_attend == 1){
+		// 			$count++;
+		// 		}
+		// 	}
+
+		// 	if($cs->max_course_session == $count){
+		// 		array_push($studentsToRemove, $cs->student->id);
+		// 	}
+		// }
+
+		// $filteredUsers = $course_students->reject(function ($courseStudent) use ($studentsToRemove) {
+		// 	return in_array($courseStudent->student_id, $studentsToRemove);
+		// });
+
 		return view("roles.teacher.attendance.upload", [
 			"course" => $course,
-			"course_students" => $course_students
+			"course_students" => $course_students/*$filteredUsers*/
 		]);
 	}
 

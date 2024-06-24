@@ -1,8 +1,8 @@
 @extends("layouts.login-register")
 
 @section("content")
-	<div class="flex rounded-2xl w-2/3 bg-orange-500" style="height: 80vh">
-		<form method="POST" action="{{ route('login') }}" class="flex flex-col justify-center items-stretch w-1/2 p-10 bg-blue-950 rounded-2xl">
+	<div class="flex rounded-2xl w-11/12 md:w-2/3 bg-orange-500" style="min-height: 80vh;">
+		<form method="POST" action="{{ route('login') }}" class="flex flex-col justify-center items-stretch w-full md:w-1/2 m-5 md:m-0 p-10 bg-blue-950 rounded-2xl">
 			@csrf
 
 			<h1 class="text-center text-2xl font-bold text-white">LOGIN</h1>
@@ -31,7 +31,7 @@
 			</div>
 		</form>
 
-		<div class="flex flex-col items-center justify-center w-1/2">
+		<div class="hidden md:flex flex-col items-center justify-center w-full md:w-1/2">
 			<img src={{ asset("img/AR.W.png") }} alt="logo" width="100px">
 			<img src={{ asset("img/loginpict.png") }} alt="logo" width="400px">
 		</div>

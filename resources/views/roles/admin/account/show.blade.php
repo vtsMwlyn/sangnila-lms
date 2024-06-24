@@ -11,17 +11,27 @@
 		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
 			<p class="text-green-900">{{ session("successUpdateAccountData") }}</p>
 		</div>
+	@elseif(session()->has("successResetPassword"))
+		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+			<p class="text-green-900">{{ session("successResetPassword") }}</p>
+		</div>
 	@endif
 
-	<div class="flex items-stretch gap-1 mt-10 mb-5">
-		<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_edit', $user->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
-		@if($user->status == "enabled")
-			<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_disable.conf', $user->id) }}"><i class="bi bi-ban"></i> Disable</x-anchor-button>
-		@elseif($user->status == "disabled")
-			<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_enable.conf', $user->id) }}"><i class="bi bi-check-circle"></i> Enable</x-anchor-button>
-		@endif
-		<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_delete', $user->id) }}">
-			<i class="bi bi-trash3"></i> Delete
+	<div class="flex justify-between items-center mt-10 mb-5">
+		<div class="flex items-stretch gap-1">
+			<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_edit', $user->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
+			@if($user->status == "enabled")
+				<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_disable.conf', $user->id) }}"><i class="bi bi-ban"></i> Disable</x-anchor-button>
+			@elseif($user->status == "disabled")
+				<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_enable.conf', $user->id) }}"><i class="bi bi-check-circle"></i> Enable</x-anchor-button>
+			@endif
+			<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_delete', $user->id) }}">
+				<i class="bi bi-trash3"></i> Delete
+			</x-anchor-button>
+		</div>
+
+		<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.reset-password', $user->id) }}">
+			Reset Password
 		</x-anchor-button>
 	</div>
 

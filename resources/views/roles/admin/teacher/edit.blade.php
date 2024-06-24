@@ -38,11 +38,11 @@
 			@endif
 		</div>
 
-		<div class="flex items-stretch justify-end mt-8 gap-1">
-			<x-button class="bg-orange-500">
+		<div class="flex items-stretch justify-center mt-8 gap-3">
+			<x-button class="bg-orange-500 w-full md:w-1/5">
 				{{ __('Save') }}
 			</x-button>
-			<x-button type="button" onclick="if(confirm('The changes will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500">
+			<x-button type="button" onclick="if(confirm('The changes will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500 w-full md:w-1/5">
 				Cancel
 			</x-button>
 		</div>

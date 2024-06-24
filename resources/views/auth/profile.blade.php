@@ -4,6 +4,10 @@
 	<div class="w-full bg-green-500 px-5 py-3 mt-5 rounded-lg">
 		<p class="text-green-900">{{ session("successUpdateProfile") }}</p>
 	</div>
+@elseif(session()->has("successPay"))
+	<div class="w-full bg-green-500 px-5 py-3 rounded-lg">
+		<p class="text-green-900">{{ session("successPay") }}</p>
+	</div>
 @endif
 
 <div class="bg-indigo-200 rounded-xl p-10 mt-5">

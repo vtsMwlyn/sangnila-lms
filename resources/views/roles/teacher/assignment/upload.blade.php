@@ -79,9 +79,9 @@
 		</form>
 	@else
 		<h1 class="text-md font-semibold italic">- No students assigned to this course yet, cannot upload assignment -</h1>
-		<button type="button" onclick="history.back()" class="mt-6 px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300">
+		<x-button type="button" onclick="history.back()" class="bg-indigo-400">
 			Return
-		</button>
+		</x-button>
 	@endif
 
 	<script>

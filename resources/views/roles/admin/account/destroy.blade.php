@@ -21,9 +21,9 @@
 			</div>
 
 			<!-- Yes/No Buttons -->
-			<div class="flex gap-1">
-				<x-button type="submit" class="bg-orange-500">Yes</x-button>
-				<x-button type="button" onclick="history.back()" class="bg-orange-500">No</x-button>
+			<div class="flex gap-3 justify-center w-full">
+				<x-button type="submit" class="bg-orange-500 w-full md:w-1/12">Yes</x-button>
+				<x-button type="button" onclick="history.back()" class="bg-orange-500 w-full md:w-1/12">No</x-button>
 			</div>
 		</form>
 	</div>

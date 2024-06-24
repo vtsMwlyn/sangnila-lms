@@ -45,7 +45,7 @@
 					</tr>
 				@empty
 					<tr>
-						<td class="bg-white px-3 py-5 text-center rounded-xl" colspan="4">- No assignments assigned to the student yet -</td>
+						<td class="bg-white px-3 py-5 text-center rounded-xl" colspan="5">- No assignments assigned to the student yet -</td>
 					</tr>
 				@endforelse
 			</tbody>

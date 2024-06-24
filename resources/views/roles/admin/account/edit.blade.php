@@ -27,7 +27,7 @@
 		<div class="mt-4">
 			<x-label for="role_id" class="text-white" :value="__('Select New Role')" />
 			<x-select name="role_id" id="role_id"
-			class="mt-1 w-1/3">
+			class="mt-1 w-full md:w-1/3">
 				@forelse ($roles as $role)
 					<option value="{{ $role->id }}" @if($account->role->role_name == $role->role_name) selected @endif>{{ $role->role_name }}</option>
 				@empty
@@ -35,11 +35,11 @@
 			</x-select>
 		</div>
 
-		<div class="flex items-stretch justify-end mt-4 gap-1">
-			<x-button class="bg-orange-500">
+		<div class="flex items-stretch justify-center mt-4 gap-3">
+			<x-button class="bg-orange-500 w-full md:w-1/5">
 				{{ __('Save') }}
 			</x-button>
-			<x-button type="button" onclick="if(confirm('The changes will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500">
+			<x-button type="button" onclick="if(confirm('The changes will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500 w-full md:w-1/5">
 				Cancel
 			</x-button>
 		</div>

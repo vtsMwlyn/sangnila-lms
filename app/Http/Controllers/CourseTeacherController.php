@@ -28,14 +28,11 @@ class CourseTeacherController extends Controller {
 
 	// Save the course into database to teacher's assigned course
 	public function assign(Request $request, $teacher_id){
-		$selectedNewCourse = Course::where("course_name", $request["course_name"])->first();
-		$alreadyExist = CourseTeacher::where("course_id", $selectedNewCourse["id"])->where("user_id", $teacher_id)->first();
+		foreach($request->courses_list as $course_to_assign){
+			$selectedNewCourse = Course::where("id", $course_to_assign)->first();
 
-		if($alreadyExist){
-			return back()->with("duplicateCourseAssignment", "This teacher is already assigned to the course!");
+			CourseTeacher::create(["user_id" => $teacher_id, "course_id" => $selectedNewCourse->id]);
 		}
-
-		CourseTeacher::create(["user_id" => $teacher_id, "course_id" => $selectedNewCourse["id"]]);
 
 		return redirect(route("admin.teacher.show", $teacher_id))->with("successAssignToCourse", "Successfully assigned the teacher to the course!");
 	}

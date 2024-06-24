@@ -1,12 +1,12 @@
 @extends("layouts.login-register")
 
 @section("content")
-	<div class="flex items-center rounded-2xl w-2/3 bg-orange-500 p-5">
-		<div class="flex flex-col items-center justify-center w-1/2">
+	<div class="flex items-center rounded-2xl w-11/12 md:w-2/3 bg-orange-500 p-5">
+		<div class="md:flex flex-col items-center justify-center hidden w-0 md:w-1/2">
 			<img src={{ asset("img/AR.W.png") }} alt="logo" width="100px">
 			<img src={{ asset("img/loginpict.png") }} alt="logo" width="400px">
 		</div>
-		<form method="POST" action="{{ route('admin.account.store') }}" class="flex flex-col justify-center items-stretch w-1/2 py-6 px-10 bg-blue-950 rounded-2xl">
+		<form method="POST" action="{{ route('admin.account.store') }}" class="flex flex-col justify-center items-stretch w-full md:w-1/2 py-6 px-10 bg-blue-950 rounded-2xl">
 			@csrf
 
 			<h1 class="text-center text-2xl font-bold text-white">CREATE NEW ACCOUNT</h1>
@@ -34,9 +34,9 @@
 					autocomplete="current-password" placeholder="Password Confirmation" />
 			</div>
 
-			<div class="mt-4 flex gap-4 w-full">
+			<div class="mt-4 flex flex-col md:flex-row gap-4 w-full">
 				<!-- Role Selection -->
-				<div class="w-1/2">
+				<div class="w-full md:w-1/2">
 					<x-label for="role" class="text-white" :value="__('Select Role')" />
 					<x-select name="role" id="role"
 						class="mt-1 w-full">
@@ -49,7 +49,7 @@
 				</div>
 
 				<!-- Gender Selection -->
-				<div class="w-1/2">
+				<div class="w-full md:w-1/2">
 					<x-label for="gender" class="text-white" :value="__('Select Gender')" />
 					<x-select name="gender" id="gender"
 						class="mt-1 w-full">
@@ -62,11 +62,11 @@
 				</div>
 			</div>
 
-			<div class="flex justify-end gap-1 items-center mt-8">
-				<x-button class="bg-orange-500 w-1/3">
+			<div class="flex justify-center w-full gap-3 items-center mt-8">
+				<x-button class="bg-orange-500 w-full md:w-1/3">
 					{{ __('Create') }}
 				</x-button>
-				<x-button type="button" onclick="if(confirm('The filled data will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500">
+				<x-button type="button" onclick="if(confirm('The filled data will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500 w-full md:w-1/3">
 					Cancel
 				</x-button>
 			</div>

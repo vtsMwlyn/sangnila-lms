@@ -12,7 +12,7 @@
 				@csrf
 				<!-- Select course -->
 				<div class="mt-3">
-					<x-label for="visibility" :value="__('Select a course to assign')" style="color: white;"/>
+					<x-label for="course_name" :value="__('Select a course to assign')" style="color: white;"/>
 					<x-select name="course_name" id="course_name" class="mt-1 w-full">
 						<option disabled selected>Pick a course</option>
 						@foreach ($courses as $course)
@@ -24,7 +24,7 @@
 				<!-- Max Course Sessions -->
 				<div class="mt-3 flex gap-3">
 					<div class="w-1/2">
-						<x-label for="visibility" :value="__('Select a teacher that will teach the student')" style="color: white;"/>
+						<x-label for="teacher_name" :value="__('Select a teacher that will teach the student')" style="color: white;"/>
 						<x-select name="teacher_name" id="teacher_name" class="mt-1 w-full">
 							<option disabled selected>Pick a teacher</option>
 						</x-select>
@@ -79,12 +79,12 @@
 		@endif
 	</div>
 
-	<div class="rounded-xl py-5 px-10 mt-10 text-white bg-blue-900">List of Assigned Courses</div>
+	<div class="rounded-xl py-5 px-10 mt-10 text-white bg-blue-900">Courses Already Assigned to This Student</div>
 
 	<div class="rounded-xl bg-indigo-200 py-5 px-10 mt-3">
-		<div class="flex gap-x-10 overflow-x-auto">
+		<div class="flex gap-x-10 flex-wrap">
 			@forelse ($student->enrolled_courses as $course)
-				<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center gap-3 font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">
+				<div class="text-white border-4 border-white bg-yellow-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">
 					{{ $course->course_name }}
 				</div>
 			@empty

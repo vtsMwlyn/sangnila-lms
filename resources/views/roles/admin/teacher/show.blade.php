@@ -53,9 +53,9 @@
 				</x-anchor-button>
 			</div>
 			<hr>
-			<div class="flex gap-x-10 overflow-x-auto bg-blue-900 rounded-b-xl mt-5">
+			<div class="flex gap-x-10 flex-wrap bg-blue-900 rounded-b-xl mt-5">
 				@forelse ($user->teached_courses as $course)
-					<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center gap-3 font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">
+					<div class="text-white border-4 border-white bg-yellow-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-between font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">
 						{{ $course->course_name }}
 						<a
 							href="{{ route('admin.teacher.unassign.delete', ['teacher_id' => $user->id, 'course_id' => $course->id]) }}"

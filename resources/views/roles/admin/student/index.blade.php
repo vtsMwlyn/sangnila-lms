@@ -26,15 +26,15 @@
 			<tbody>
 				@if ($students->isNotEmpty())
 					@foreach ($students as $index1 => $student)
-						@if($student->status == "disabled")
-							@continue
-						@endif
 						<tr class="bg-blue-800 text-white">
 							<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-l-xl text-center">
 								<a href="{{ route('admin.student.show', ['student_id' => $student->id]) }}"
 									class="text-blue-200 hover:text-blue-400 font-semibold hover:underline">
 									{{ $student->full_name }}
 								</a>
+								@if($student->status == "disabled")
+									<span class="text-red-500">(Disabled)</span>
+								@endif
 							</td>
 							<td class="border-blue-300 px-4 py-5 sm:w-1/4 text-center">
 								{{ $student->email }}
@@ -49,10 +49,10 @@
 												</div>
 												<div class="w-1/3">
 													<div class="w-full bg-gray-200 rounded-lg h-4 overflow-hidden relative">
-														<div class="absolute w-full h-full @if((($current_attendances[$index1][$index2] + 1) % 8 == 0 || $current_attendances[$index1][$index2] == $max_attendances[$index1][$index2]) && $current_attendances[$index1][$index2] != 0) text-red-100 @else text-green-950 @endif  flex justify-center items-center font-semibold">
+														<div class="absolute w-full h-full @if((($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) && $current_attendances[$index1][$index2] != 0) text-red-950 @else text-green-950 @endif  flex justify-center items-center font-semibold">
 															{{ __($current_attendances[$index1][$index2] . "/" . $max_attendances[$index1][$index2]) }}
 														</div>
-														<div class="@if(($current_attendances[$index1][$index2] + 1) % 8 == 0 || $current_attendances[$index1][$index2] == $max_attendances[$index1][$index2]) bg-red-700 @else bg-green-700 @endif h-full" style="width: {{ $percentages[$index1][$index2] }}%;"></div>
+														<div class="@if(($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) bg-red-600 @else bg-green-700 @endif h-full" style="width: {{ $percentages[$index1][$index2] }}%;"></div>
 													</div>
 												</div>
 											</li>

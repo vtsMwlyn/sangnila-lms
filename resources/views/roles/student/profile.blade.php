@@ -7,7 +7,7 @@
 @section("content")
 	@include("auth.profile")
 
-	<form action="#" class="mt-10 w-full flex justify-center">
-		<x-button class="bg-yellow-500 transition hover:scale-110"><i class="bi bi-cash-coin"></i> Ceritanya bayar buat 8 pertemuan selanjutnya</x-button>
-	</form>
+	<div class="mt-10 w-full flex justify-center">
+		<x-anchor-button class="bg-yellow-500 transition hover:scale-110" href="{{ route('student.pay') }}"><i class="bi bi-cash-coin"></i> Ceritanya bayar buat 8 pertemuan selanjutnya</x-anchor-button>
+	</div>
 @endsection
