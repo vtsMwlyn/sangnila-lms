@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
 		$user = User::create([
 			"full_name" => $full_name,
 			"email" => $email,
-			"password" => bcrypt("password"),
+			"password" => Hash::make(trans("strings.default_password")),
 			"email_verified_at" => now(),
 			"role_id" => $role_id,
 			"status" => "enabled"
@@ -107,7 +107,7 @@ class DatabaseSeeder extends Seeder
 		$newStudent = User::create([
 			"full_name" => $new_student_name,
 			"email" => $new_student_email,
-			"password" => Hash::make("password"),
+			"password" => Hash::make(trans("strings.default_password")),
 			"email_verified_at" => now(),
 			"role_id" => 3,
 			"status" => "enabled"
@@ -205,7 +205,6 @@ class DatabaseSeeder extends Seeder
 
 		$this->newUser("vannestheo.sangnila@gmail.com", "Vannes Theo Sudarsono", 1, 1);
 		$this->newUser("immanuelgiovano.sangnila@gmail.com", "Immanuel Giovano", 1, 1);
-		$this->newUser("jessica.sangnila@gmail.com", "Jessica", 1, 2);
 		$this->newUser("victor.sangnila@gmail.com", "Victor", 1, 1);
 		$this->newUser("feby.sangnila@gmail.com", "Feby", 1, 2);
 		$this->newUser("tiwi.sangnila@gmail.com", "Pratiwi", 1, 2);

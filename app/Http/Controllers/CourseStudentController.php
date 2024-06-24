@@ -228,7 +228,7 @@ class CourseStudentController extends Controller {
 				"role_id" => 3,
 				"status" => "enabled",
 				"email_verified_at" => now(), //soon will be removed
-				"password" => Hash::make("password")
+				"password" => Hash::make(trans("strings.default_password"))
 			]);
 
 			UserDetail::create([

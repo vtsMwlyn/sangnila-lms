@@ -118,7 +118,7 @@
 				</x-anchor-button>
 			</div>
 			<hr>
-			<div class="flex gap-x-10 overflow-x-auto bg-blue-900 rounded-b-xl mt-5">
+			<div class="flex gap-x-10 flex-wrap bg-blue-900 rounded-b-xl mt-5">
 				@forelse ($student->enrolled_courses as $course)
 					<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-5 flex flex-col justify-center items-start font-semibold" style="min-width: 300px; max-width: 300px; min-height: 150px;">
 						<h1 class="mb-1 font-bold">{{ $course->course_name }}</h1>

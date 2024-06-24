@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminAccountController extends Controller {
 	// Shows all available accounts in Sangnila LMS
@@ -125,5 +126,19 @@ class AdminAccountController extends Controller {
 		User::destroy("id", $user->id);
 
 		return redirect(route("admin.account.index"))->with("successDeleteAccount", "Successfully deleted account!");
+	}
+
+	// Reset password confirmation
+	public function reset_password($user_id){
+		return view("roles.admin.account.reset-password-conf", [
+			"account" => User::where("id", $user_id)->first()
+		]);
+	}
+
+	// Reset password in the database
+	public function reset_password_proceed($user_id){
+		User::where("id", $user_id)->update(["password" => Hash::make(trans("strings.default_password"))]);
+
+		return redirect(route("admin.account.show", $user_id))->with("successResetPassword", "Successfully reset this account's password");
 	}
 }
