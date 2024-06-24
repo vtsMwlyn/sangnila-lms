@@ -5,9 +5,9 @@
 @endsection
 
 @section("content")
-	<x-page-title>{{ __("Delete Course") }}</x-page-title>
+	<x-section-container>
+		<x-page-title>{{ __("Delete Course") }}</x-page-title>
 
-	<div class="bg-indigo-200 rounded-3xl p-5 mt-10">
 		<form method="POST" action="{{ route('admin.course.destroy', $course->id) }}" class="bg-blue-800 rounded-2xl py-5 px-10">
 			@csrf
 			@method('delete')
@@ -26,5 +26,5 @@
 				<x-button type="button" onclick="history.back()" class="bg-orange-500 w-full md:w-1/12">No</x-button>
 			</div>
 		</form>
-	</div>
+	</x-section-container>
 @endsection

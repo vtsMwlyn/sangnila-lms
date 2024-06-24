@@ -28,11 +28,9 @@
 
 
 		<!-- Custom styles -->
-		<style>
-			html {
-				scroll-behavior: smooth;
-			}
+		<link rel="stylesheet" href="{{ asset("css/custom_styles.css") }}">
 
+		<style>
 			/* Custom Cursor */
 			a {
 				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
@@ -46,42 +44,6 @@
 				background: url("{{ asset('img/background.jpg') }}") no-repeat center center / cover;
 				cursor: url("{{ asset('img/kursor.cur') }}"), auto;
 			}
-
-			/* Thin Scrollbar */
-			* {
-				scrollbar-width: thin;
-				scrollbar-color: #888 #f7f7f7;
-			}
-
-			/* Select2 */
-			.select2-selection__arrow {
-				margin-top: 7px;
-				margin-right: 10px;
-			}
-
-			/* Import student table */
-			table#student-to-import thead th.fixed1 {
-				min-width: 200px;
-				max-width: 200px;
-			}
-
-			table#student-to-import thead th.fixed2 {
-				min-width: 150px;
-				max-width: 150px;
-			}
-
-			table#student-to-import tbody td.fixed1 {
-				min-width: 200px;
-				max-width: 200px;
-				word-wrap: break-word;
-			}
-
-			table#student-to-import tbody td.fixed2 {
-				min-width: 150px;
-				max-width: 150px;
-				word-wrap: break-word;
-			}
-
 		</style>
 
 		<!-- Include jQuery  -->
@@ -107,7 +69,7 @@
 		<!-- Content Section -->
 		{{ $slot }}
 
-		<div class="p-10">
+		<div class="p-10 grow" style="background-color: rgba(0, 0, 0, 0.35);">
 			@yield("content")
 		</div>
 

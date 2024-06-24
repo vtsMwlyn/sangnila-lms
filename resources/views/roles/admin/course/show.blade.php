@@ -5,9 +5,6 @@
 @endsection
 
 @section("content")
-	<x-page-title style="margin-bottom: 0">{{ __("Course Details") }}</x-page-title>
-	<h6 class="text-sm italic text-gray-500 text-center mb-4">(Visibility: {{ $course->visibility }})</h6>
-
 	@if(session()->has("successUpdateCourseData"))
 		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
 			<p class="text-green-900">{{ session("successUpdateCourseData") }}</p>
@@ -22,86 +19,107 @@
 		</div>
 	@endif
 
-	<div class="px-10 py-5 bg-indigo-200 rounded-3xl my-10">
+	<x-section-container class="mb-10">
+		<x-page-title>{{ __("Course Details") }}</x-page-title>
+		{{-- <h6 class="text-sm italic text-gray-500 text-center mb-4">(Visibility: {{ $course->visibility }})</h6> --}}
 
-		<x-page-title>{{ __("About Course") }}</x-page-title>
+		{{-- <p class="text-gray-700 mb-3">{{ $course->course_description }}</p>--}}
 
-		<p class="text-gray-700 mb-3">{{ $course->course_description }}</p>
-
-		<div class="flex justify-center gap-5 mt-8">
-			<x-anchor-button class="bg-orange-500 w-1/2 md:w-1/5" href="{{ route('admin.course.edit', $course->id) }}"><i class="bi bi-pencil-square"></i> Edit Course</x-anchor-button>
-			<x-anchor-button class="bg-orange-500 w-1/2 md:w-1/5" href="{{ route('admin.course.delete', $course->id) }}"><i class="bi bi-trash3"></i> Delete Course</x-anchor-button>
+		<div class="flex gap-5 mt-8">
+			<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.edit', $course->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
+			<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.delete', $course->id) }}"><i class="bi bi-trash3"></i> Delete</x-anchor-button>
 		</div>
-	</div>
 
-	<div class="flex flex-col items-stretch mt-10">
-		<div class="rounded-xl py-5 px-10 text-white bg-blue-900">List of Assigned Teachers</div>
-		<div class="flex flex-wrap gap-x-10 overflow-y-auto bg-indigo-200 px-10 py-5 rounded-xl mt-3" style="max-height: 300px;">
-			@forelse ($course->teachers as $teacher)
-				<div class="text-white border-4 border-white bg-yellow-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 80px; max-height: 80px;">{{ ($teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $teacher->full_name }}</div>
-			@empty
-				<div class="flex w-full justify-center">
-					<span>- No student enrolled in this course yet -</span>
-				</div>
-			@endforelse
-		</div>
-	</div>
-
-	<div class="flex flex-col items-stretch mt-10">
-		<div class="rounded-xl py-5 px-10 text-white bg-blue-900 flex flex-col md:flex-row gap-5 md:gap-0 items-center justify-between">
-			<div class="">List of Assigned Students</div>
-			<div class="flex gap-5">
-				<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.batch-assign', $course->id) }}">Batch Assign</x-anchor-button>
-				<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.import-student-data', $course->id) }}">Import Student</x-anchor-button>
-			</div>
-		</div>
-		<div class="flex flex-wrap gap-x-10 overflow-y-auto bg-indigo-200 px-10 py-5 rounded-xl mt-3" style="max-height: 300px;">
-			@forelse ($course->students as $student)
-				<div class="text-white border-4 border-white bg-yellow-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 80px; max-height: 80px;">
-					{{ $student->full_name }}
-					@if($student->status == "disabled")
-						<span class="text-red-500">(Disabled)</span>
-					@endif
-				</div>
-			@empty
-				<div class="flex w-full justify-center">
-					<span>- No student enrolled in this course yet -</span>
-				</div>
-			@endforelse
-		</div>
-	</div>
-
-	<div class="rounded-xl py-5 px-10 mt-10 bg-indigo-200">
-		<x-page-title>{{ __("Course Topics and Materials") }}</x-page-title>
-		<div class="mb-6 overflow-x-auto">
-			<table class="w-full bg-white">
-				<thead class="bg-blue-900 text-white">
-					<th class="border border-blue-400 px-5 py-3">Topic name</th>
-					<th class="border border-blue-400 px-5 py-3">Materials</th>
-				</thead>
-				<tbody>
-					@forelse ($course->topics as $topic)
-						<tr>
-							<td class="border border-blue-400 px-5 py-3">{{ $topic->title }}</td>
-							<td class="border border-blue-400 px-5 py-3">
-								@if($topic->materials->count())
-									<ul>
-										@foreach ($topic->materials as $material)
-											<li>{{ $material->title }}</li>
-										@endforeach
-									</ul>
-								@else
-									<span class="text-gray-500">- No materials yet -</span>
-								@endif
-							</td>
-						</tr>
-					@empty
-						<tr class="text-gray-500 border border-blue-900"><td colspan="2" class="text-center py-3">- No topics yet -</td></tr>
-					@endforelse
-				</tbody>
+		<div class="overflow-x-auto mt-5">
+			<table class="w-full" style="border-collapse: separate; border-spacing: 15px 10px;">
+				<tr>
+					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Course Name</td>
+					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $course->course_name }}</td>
+				</tr>
+				<tr>
+					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Course Visibility</td>
+					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $course->visibility }}</td>
+				</tr>
+				<tr>
+					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Course Description</td>
+					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $course->course_description }}</td>
+				</tr>
 			</table>
 		</div>
-	</div>
+	</x-section-container>
+
+	<x-section-container>
+		<div class="flex flex-col items-stretch">
+			<div class="rounded-2xl py-5 px-10 text-white bg-blue-900">List of Assigned Teachers</div>
+			<div class="flex flex-wrap gap-x-10 overflow-y-auto px-10 py-5 mt-3" style="max-height: 300px;">
+				@forelse ($course->teachers as $teacher)
+					<div class="text-white border-4 border-white bg-yellow-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 80px; max-height: 80px;">{{ ($teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $teacher->full_name }}</div>
+				@empty
+					<div class="flex w-full justify-center">
+						<span>- No student enrolled in this course yet -</span>
+					</div>
+				@endforelse
+			</div>
+		</div>
+
+		<div class="flex flex-col items-stretch mt-10">
+			<div class="rounded-2xl py-5 px-10 text-white bg-blue-900 flex flex-col md:flex-row gap-5 md:gap-0 items-center justify-between">
+				<div class="">List of Assigned Students</div>
+				<div class="flex gap-5">
+					<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.batch-assign', $course->id) }}">Batch Assign</x-anchor-button>
+					<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.import-student-data', $course->id) }}">Import Student</x-anchor-button>
+				</div>
+			</div>
+			<div class="flex flex-wrap gap-x-10 overflow-y-auto px-10 py-5 mt-3" style="max-height: 300px;">
+				@forelse ($course->students as $student)
+					<div class="text-white border-4 border-white bg-yellow-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 80px; max-height: 80px;">
+						{{ $student->full_name }}
+						@if($student->status == "disabled")
+							<span class="text-red-500">(Disabled)</span>
+						@endif
+					</div>
+				@empty
+					<div class="flex w-full justify-center">
+						<span>- No student enrolled in this course yet -</span>
+					</div>
+				@endforelse
+			</div>
+		</div>
+
+		<div class="flex flex-col w-full mt-10">
+			<div class="rounded-2xl py-5 px-10 text-white bg-blue-900">Course Topics and Materials</div>
+			<div class="mt-3">
+				<div class="overflow-x-auto">
+					<table class="w-full bg-white">
+						<thead class="bg-blue-500 text-white">
+							<th class="border border-blue-400 px-5 py-3">Topic name</th>
+							<th class="border border-blue-400 px-5 py-3">Materials</th>
+						</thead>
+						<tbody>
+							@forelse ($course->topics as $topic)
+								<tr>
+									<td class="border border-blue-400 px-5 py-3">{{ $topic->title }}</td>
+									<td class="border border-blue-400 px-5 py-3">
+										@if($topic->materials->count())
+											<ul>
+												@foreach ($topic->materials as $material)
+													<li>{{ $material->title }}</li>
+												@endforeach
+											</ul>
+										@else
+											<span class="text-gray-500">- No materials yet -</span>
+										@endif
+									</td>
+								</tr>
+							@empty
+								<tr class="text-gray-500 border border-blue-900"><td colspan="2" class="text-center py-3">- No topics yet -</td></tr>
+							@endforelse
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</x-section-container>
 
 		{{-- Schedule --}}
 		{{-- <h2 class="text-xl font-semibold mb-2">Schedule List:</h2>

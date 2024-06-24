@@ -28,11 +28,9 @@
 
 
 		<!-- Custom styles -->
+		<link rel="stylesheet" href="{{ asset("css/custom_styles.css") }}">
+		
 		<style>
-			html {
-				scroll-behavior: smooth;
-			}
-
 			/* Custom Cursor */
 			a {
 				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
@@ -46,60 +44,6 @@
 				background: url("{{ asset('img/background.jpg') }}") no-repeat center center / cover;
 				cursor: url("{{ asset('img/kursor.cur') }}"), auto;
 			}
-
-			/* Thin Scrollbar */
-			::-webkit-scrollbar {
-				width: 8px;
-			}
-
-			::-webkit-scrollbar-track {
-				background: #f1f1f1;
-			}
-
-			::-webkit-scrollbar-thumb {
-				background-color: #888;
-				border-radius: 10px;
-				border: 2px solid #f1f1f1;
-			}
-
-			::-webkit-scrollbar-thumb:hover {
-				background: #555;
-			}
-
-			* {
-				scrollbar-width: thin;
-				scrollbar-color: #888 #f7f7f7;
-			}
-
-			/* Select2 */
-			.select2-selection__arrow {
-				margin-top: 7px;
-				margin-right: 10px;
-			}
-
-			/* Import student table */
-			table#student-to-import thead th.fixed1 {
-				min-width: 200px;
-				max-width: 200px;
-			}
-
-			table#student-to-import thead th.fixed2 {
-				min-width: 150px;
-				max-width: 150px;
-			}
-
-			table#student-to-import tbody td.fixed1 {
-				min-width: 200px;
-				max-width: 200px;
-				word-wrap: break-word;
-			}
-
-			table#student-to-import tbody td.fixed2 {
-				min-width: 150px;
-				max-width: 150px;
-				word-wrap: break-word;
-			}
-
 		</style>
 
 		<!-- Include jQuery  -->

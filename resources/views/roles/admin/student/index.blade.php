@@ -5,29 +5,27 @@
 @endsection
 
 @section("content")
-	<x-page-title>{{ __("List of Active Students") }}</x-page-title>
+	<x-section-container>
+		<x-page-title class="mt-5">{{ __("List of Active Students") }}</x-page-title>
 
-	<form class="flex w-full justify-center" action="{{ route("admin.student.index") }}">
-		<x-input type="text" class="border-slate-500 rounded-l-lg rounded-r-none" name="search" placeholder="Search..." />
-		<x-button class="bg-white rounded-l-none rounded-r-lg border border-slate-500 text-slate-500 hover:text-white"><i class="bi bi-search"></i></x-button>
-	</form>
+		<form class="flex w-full justify-center" action="{{ route("admin.student.index") }}">
+			<x-input type="text" class="border-slate-500 rounded-l-lg rounded-r-none" name="search" placeholder="Search..." />
+			<x-button class="bg-white rounded-l-none rounded-r-lg border border-slate-500 text-slate-500 hover:text-white"><i class="bi bi-search"></i></x-button>
+		</form>
 
-	<div class="overflow-x-auto rounded-3xl mt-10 px-10 py-5 bg-indigo-200">
-		<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate;
-		border-spacing: 0 20px;">
-			<thead>
-				<tr class="bg-blue-900 text-white">
-					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4 rounded-l-xl">Student Name</th>
-					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4">Email</th>
-					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4" >Enrolled Courses & Progress</th>
-					<th class="border-blue-400 font-bold px-4 py-5 sm:w-1/4 rounded-r-xl">Actions</th>
-				</tr>
-			</thead>
-			<tbody>
+		<div class="overflow-x-auto mt-8">
+			<x-table>
+				<x-slot name="head">
+					<th class="template-heads sm:w-1/4 rounded-l-xl">Student Name</th>
+					<th class="template-heads sm:w-1/4">Email</th>
+					<th class="template-heads sm:w-1/4" >Enrolled Courses & Progress</th>
+					<th class="template-heads sm:w-1/4 rounded-r-xl">Actions</th>
+				</x-slot>
+
 				@if ($students->isNotEmpty())
 					@foreach ($students as $index1 => $student)
-						<tr class="bg-blue-800 text-white">
-							<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-l-xl text-center">
+						<tr>
+							<td class="template-bodies sm:w-1/4 rounded-l-xl text-center">
 								<a href="{{ route('admin.student.show', ['student_id' => $student->id]) }}"
 									class="text-blue-200 hover:text-blue-400 font-semibold hover:underline">
 									{{ $student->full_name }}
@@ -36,10 +34,10 @@
 									<span class="text-red-500">(Disabled)</span>
 								@endif
 							</td>
-							<td class="border-blue-300 px-4 py-5 sm:w-1/4 text-center">
+							<td class="template-bodies sm:w-1/4 text-center">
 								{{ $student->email }}
 							</td>
-							<td class="border-blue-300 px-6 py-5 sm:w-1/4">
+							<td class="template-bodies sm:w-1/4">
 								@if($student->enrolled_courses->count())
 									<ul>
 										@foreach ($student->enrolled_courses as $index2 => $course)
@@ -62,7 +60,7 @@
 									<p class="text-center">- No courses assigned yet -</p>
 								@endif
 							</td>
-							<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-r-xl">
+							<td class="template-bodies sm:w-1/4 rounded-r-xl">
 								<div class="flex w-full justify-center gap-1">
 									<x-anchor-button class="bg-orange-500"
 									href="{{ route('admin.student.show', $student->id) }}">
@@ -83,7 +81,7 @@
 						</td>
 					</tr>
 				@endif
-			</tbody>
-		</table>
-	</div>
+			</x-table>
+		</div>
+	</x-section-container>
 @endsection

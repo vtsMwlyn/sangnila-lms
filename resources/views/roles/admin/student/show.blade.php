@@ -5,27 +5,27 @@
 @endsection
 
 @section("content")
-	<x-page-title>{{ __("Student's Details") }}</x-page-title>
-
-	@if(session()->has("successAssignToCourse"))
-		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-green-900">{{ session("successAssignToCourse") }}</p>
-		</div>
-	@elseif(session()->has("successUnassignFromCourse"))
-		<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-yellow-600" >{{ session("successUnassignFromCourse") }}</p>
-		</div>
-	@elseif(session()->has("successUpdateStudentData"))
-		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-green-900">{{ session("successUpdateStudentData") }}</p>
-		</div>
-	@elseif(session()->has("successUpdateMaxSession"))
-		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-green-900">{{ session("successUpdateMaxSession") }}</p>
-		</div>
-	@endif
-
 	<div class="p-10 bg-indigo-200 rounded-3xl mt-10">
+		<x-page-title>{{ __("Student's Details") }}</x-page-title>
+
+		@if(session()->has("successAssignToCourse"))
+			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-green-900">{{ session("successAssignToCourse") }}</p>
+			</div>
+		@elseif(session()->has("successUnassignFromCourse"))
+			<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-yellow-600" >{{ session("successUnassignFromCourse") }}</p>
+			</div>
+		@elseif(session()->has("successUpdateStudentData"))
+			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-green-900">{{ session("successUpdateStudentData") }}</p>
+			</div>
+		@elseif(session()->has("successUpdateMaxSession"))
+			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-green-900">{{ session("successUpdateMaxSession") }}</p>
+			</div>
+		@endif
+
 		<div class="h-fit mb-5">
 			<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.edit', $student->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		</div>
