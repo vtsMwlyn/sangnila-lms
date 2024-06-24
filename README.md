@@ -1,23 +1,8 @@
-# LMS v0.0.3
+# LMS v0.5.19-alpha
 
-## Migrations:
-php artisan migrate
-php artisan migrate --path database\migrations\01
-php artisan migrate --path database\migrations\02
-php artisan migrate --path database\migrations\03
-php artisan migrate --path database\migrations\04
-php artisan migrate --path database\migrations\05
-
-
-php artisan migrate:status --path database\migrations\01
-php artisan migrate:status --path database\migrations\02
-php artisan migrate:status --path database\migrations\03
-php artisan migrate:status --path database\migrations\04
-php artisan migrate:status --path database\migrations\05
-
-
-# TODO
-implement topic material grouping
-implement unlock topic for student
-
-Implement absensi oleh guru
+# Change Logs
+- Added batch import for old students data
+- Added batch assign students to a course
+- Added batch assign courses to students
+- Layout, view, responsiveness, and UX improvements
+- Confirmation on some page cancellation and deletion actions
