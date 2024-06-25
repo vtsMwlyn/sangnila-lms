@@ -5,24 +5,23 @@
 @endsection
 
 @section("content")
-	<x-page-title>{{ __($student->full_name . "'s Assignments in Course: " . $course->course_name) }}</x-page-title>
+	<x-section-container>
+		<x-page-title class="mt-5">{{ __($student->full_name . "'s Assignments in Course: " . $course->course_name) }}</x-page-title>
 
-	<div class="overflow-x-auto py-5 px-10 bg-indigo-200 rounded-3xl mt-10">
-		<table class="w-full text-sm" style="border-collapse: separate;
-		border-spacing: 0 20px;">
-			<thead class="bg-blue-900 text-white">
-				<th class="px-3 py-5 rounded-l-xl">Assignment Title</th>
-				<th class="px-3 py-5">Assignment Description</th>
-				<th class="px-3 py-5">Uploaded by</th>
-				<th class="px-3 py-5">Submission Status</th>
-				<th class="px-3 py-5 rounded-r-xl">Latest Submission Time</th>
-			</thead>
-			<tbody>
+		<div class="overflow-x-auto mt-10">
+			<x-table>
+				<x-slot name="head">
+					<th class="template-heads rounded-l-xl">Assignment Title</th>
+					<th class="template-heads">Assignment Description</th>
+					<th class="template-heads">Uploaded by</th>
+					<th class="template-heads">Submission Status</th>
+					<th class="template-heads rounded-r-xl">Latest Submission Time</th>
+				</x-slot>
 				@forelse ($assignments as $asg)
-					<tr class="bg-blue-800 text-white">
-						<td class="border border-blue-950 px-3 py-5 text-center rounded-l-xl">{{ $asg->title }}</td>
-						<td class="border border-blue-950 px-3 py-5 text-center">{{ $asg->desc }}</td>
-						<td class="border border-blue-950 px-3 py-5 text-center">{{ ($asg->posted_by->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $asg->posted_by->full_name }}</td>
+					<tr>
+						<td class="template-bodies rounded-l-xl">{{ $asg->title }}</td>
+						<td class="template-bodies">{{ $asg->desc }}</td>
+						<td class="template-bodies">{{ ($asg->posted_by->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $asg->posted_by->full_name }}</td>
 						@php
 							$submissions = $asg->submissions;
 							$found = false;
@@ -36,9 +35,9 @@
 							}
 
 							if($found){
-								echo "<td class='border border-blue-950 px-3 py-5 font-bold text-green-500 text-center'>Submitted</td><td class='border border-blue-950 px-3 py-5 rounded-r-xl text-center'>". $latest_submission->created_at ."</td>";
+								echo "<td class='template-bodies font-bold text-center'>Submitted</td><td class='template-bodies rounded-r-xl text-center' style='color: rgb(74 222 128);'>". $latest_submission->created_at ."</td>";
 							} else {
-								echo "<td class='border border-blue-950 px-3 py-5 text-center font-bold text-red-400 rounded-r-xl' colspan='2'>No Submissions Yet</td>";
+								echo "<td class='template-bodies font-bold rounded-r-xl' colspan='2' style='color: rgb(248 113 113);'>No Submissions Yet</td>";
 							}
 						@endphp
 
@@ -48,7 +47,7 @@
 						<td class="bg-white px-3 py-5 text-center rounded-xl" colspan="5">- No assignments assigned to the student yet -</td>
 					</tr>
 				@endforelse
-			</tbody>
-		</table>
-	</div>
+			</x-table>
+		</div>
+	</x-section-container>
 @endsection

@@ -5,15 +5,14 @@
 @endsection
 
 @section("content")
-	<x-page-title>{{ __("Unassign Teacher from Course") }}</x-page-title>
-
-	<div class="bg-indigo-200 rounded-3xl p-5">
-		<form method="POST" action="{{ route('admin.teacher.unassign.destroy', ['teacher_id' => $teacher->id, 'course_id' => $course->id]) }}" class="bg-blue-800 rounded-2xl py-5 px-10">
+	<x-section-container>
+		<x-page-title>{{ __("Unassign Teacher from Course") }}</x-page-title>
+		<form method="POST" action="{{ route('admin.teacher.unassign.destroy', ['teacher_id' => $teacher->id, 'course_id' => $course->id]) }}" class="bg-blue-800 rounded-2xl py-5 px-10 mt-8">
 			@csrf
 			@method('delete')
 			<!-- Confirmation Text -->
 			<div class="mb-6">
-				<h1 class="text-xl font-semibold text-white">
+				<h1 class="text-xl font-semibold text-white text-center">
 					Are you sure you want to unassign
 					<span class="text-red-500 font-bold">{{ $teacher->full_name }}</span>
 					from
@@ -22,10 +21,10 @@
 			</div>
 
 			<!-- Yes/No Buttons -->
-			<div class="flex gap-1">
-				<x-button type="submit" class="bg-orange-500">Yes</x-button>
-				<x-button type="button" onclick="history.back()" class="bg-orange-500">No</x-button>
+			<div class="flex gap-3 justify-center w-full">
+				<x-button type="submit" class="bg-orange-500 w-full md:w-1/12">Yes</x-button>
+				<x-button type="button" onclick="history.back()" class="bg-orange-500 w-full md:w-1/12">No</x-button>
 			</div>
 		</form>
-	</div>
+	</x-section-container>
 @endsection

@@ -31,29 +31,29 @@
 		</div>
 
 		<div class="overflow-x-auto mt-5">
-			<table class="w-full" style="border-collapse: separate; border-spacing: 15px 10px;">
+			<x-horizontal-table>
 				<tr>
-					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Course Name</td>
-					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $course->course_name }}</td>
+					<td class="template-hheads w-1/3">Course Name</td>
+					<td class="template-hbodies">{{ $course->course_name }}</td>
 				</tr>
 				<tr>
-					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Course Visibility</td>
-					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $course->visibility }}</td>
+					<td class="template-hheads w-1/3">Course Visibility</td>
+					<td class="template-hbodies">{{ $course->visibility }}</td>
 				</tr>
 				<tr>
-					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Course Description</td>
-					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $course->course_description }}</td>
+					<td class="template-hheads w-1/3">Course Description</td>
+					<td class="template-hbodies">{{ $course->course_description }}</td>
 				</tr>
-			</table>
+			</x-horizontal-table>
 		</div>
 	</x-section-container>
 
 	<x-section-container>
-		<div class="flex flex-col items-stretch">
-			<div class="rounded-2xl py-5 px-10 text-white bg-blue-900">List of Assigned Teachers</div>
+		<div class="flex flex-col items-stretch mt-5">
+			<div class="rounded-2xl py-5 px-10 text-white bg-blue-950">List of Assigned Teachers</div>
 			<div class="flex flex-wrap gap-x-10 overflow-y-auto px-10 py-5 mt-3" style="max-height: 300px;">
 				@forelse ($course->teachers as $teacher)
-					<div class="text-white border-4 border-white bg-yellow-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 80px; max-height: 80px;">{{ ($teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $teacher->full_name }}</div>
+					<div class="text-white border-2 border-white bg-blue-900 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 100px; max-height: 100px;">{{ ($teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $teacher->full_name }}</div>
 				@empty
 					<div class="flex w-full justify-center">
 						<span>- No student enrolled in this course yet -</span>
@@ -63,7 +63,7 @@
 		</div>
 
 		<div class="flex flex-col items-stretch mt-10">
-			<div class="rounded-2xl py-5 px-10 text-white bg-blue-900 flex flex-col md:flex-row gap-5 md:gap-0 items-center justify-between">
+			<div class="rounded-2xl py-5 px-10 text-white bg-blue-950 flex flex-col md:flex-row gap-5 md:gap-0 items-center justify-between">
 				<div class="">List of Assigned Students</div>
 				<div class="flex gap-5">
 					<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.batch-assign', $course->id) }}">Batch Assign</x-anchor-button>
@@ -72,7 +72,7 @@
 			</div>
 			<div class="flex flex-wrap gap-x-10 overflow-y-auto px-10 py-5 mt-3" style="max-height: 300px;">
 				@forelse ($course->students as $student)
-					<div class="text-white border-4 border-white bg-yellow-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 80px; max-height: 80px;">
+					<div class="text-white border-4 border-white bg-blue-900 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 100px; max-height: 100px;">
 						{{ $student->full_name }}
 						@if($student->status == "disabled")
 							<span class="text-red-500">(Disabled)</span>
@@ -87,11 +87,11 @@
 		</div>
 
 		<div class="flex flex-col w-full mt-10">
-			<div class="rounded-2xl py-5 px-10 text-white bg-blue-900">Course Topics and Materials</div>
+			<div class="rounded-2xl py-5 px-10 text-white bg-blue-950">Course Topics and Materials</div>
 			<div class="mt-3">
 				<div class="overflow-x-auto">
 					<table class="w-full bg-white">
-						<thead class="bg-blue-500 text-white">
+						<thead class="bg-blue-800 text-white">
 							<th class="border border-blue-400 px-5 py-3">Topic name</th>
 							<th class="border border-blue-400 px-5 py-3">Materials</th>
 						</thead>

@@ -9,8 +9,8 @@
 		<x-page-title class="mt-5">{{ __("List of Active Teachers") }}</x-page-title>
 
 		<form class="flex w-full justify-center" action="{{ route("admin.teacher.index") }}">
-			<x-input type="text" class="border-slate-500 rounded-l-lg rounded-r-none" name="search" placeholder="Search..." />
-			<x-button class="bg-white rounded-l-none rounded-r-lg border border-slate-500 text-slate-500 hover:text-white"><i class="bi bi-search"></i></x-button>
+			<x-input type="text" class="border-blue-900 border-2 rounded-l-lg rounded-r-none w-full lg:w-1/3" name="search" placeholder="Search..." :value="request('search')"/>
+			<x-button class="bg-white rounded-l-none rounded-r-lg border-blue-900 border-t-2 border-r-2 border-b-2 text-blue-900 hover:text-white"><i class="bi bi-search"></i></x-button>
 		</form>
 
 		<div class="overflow-x-auto mt-8">

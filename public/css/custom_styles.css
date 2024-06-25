@@ -27,9 +27,17 @@ html {
 }
 
 /* Select2 */
-.select2-selection__arrow {
-	margin-top: 7px;
-	margin-right: 10px;
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: 0.75rem;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+	color: rgb(30 64 175);
+	font-weight: 600;
 }
 
 /* Import student table */
@@ -79,4 +87,35 @@ table.template-tables tbody tr td.template-bodies {
 	text-align: center;
 	color: white;
 	word-wrap: break-word;
+}
+
+table.template-htables tr td.template-hheads {
+	background-color: white;
+
+	padding-top: 0.75rem;
+	padding-bottom: 0.75rem;
+	padding-left: 1.5rem;
+	padding-right: 1.5rem;
+
+	font-weight: bold;
+	color: #283785;
+
+	border: solid 2px #283785;
+	border-radius: 15px;
+}
+
+table.template-htables tr td.template-hbodies {
+	background-color: white;
+
+	padding-top: 0.75rem;
+	padding-bottom: 0.75rem;
+	padding-left: 1.5rem;
+	padding-right: 1.5rem;
+
+	color: #283785;
+	word-wrap: break-word;
+	font-weight: bold;
+
+	border: solid 2px #283785;
+	border-radius: 15px;
 }

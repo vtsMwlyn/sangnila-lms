@@ -5,8 +5,8 @@
 @endsection
 
 @section("content")
-	<div class="p-10 bg-indigo-200 rounded-3xl ">
-		<x-page-title>{{ __("Account's Details") }}</x-page-title>
+	<x-section-container>
+		<x-page-title class="mt-5">{{ __("Account's Details") }}</x-page-title>
 
 		@if(session()->has("successUpdateAccountData"))
 			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
@@ -19,7 +19,7 @@
 		@endif
 
 		<div class="flex justify-between items-center mt-10 mb-5">
-			<div class="flex items-stretch gap-1">
+			<div class="flex items-stretch gap-2">
 				<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_edit', $user->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 				@if($user->status == "enabled")
 					<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_disable.conf', $user->id) }}"><i class="bi bi-ban"></i> Disable</x-anchor-button>
@@ -37,28 +37,28 @@
 		</div>
 
 		<div class="overflow-x-auto">
-			<table class="w-full" style="border-collapse: separate; border-spacing: 15px 10px;">
+			<x-horizontal-table>
 				<tr>
-					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Full name</td>
+					<td class="template-hheads w-1/3">Full Name</td>
 					@if($user->role_id == 2)
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ ($user->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $user->full_name }}</td>
+						<td class="template-hbodies">{{ ($user->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $user->full_name }}</td>
 					@else
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $user->full_name }}</td>
+						<td class="template-hbodies">{{ $user->full_name }}</td>
 					@endif
 				</tr>
 				<tr>
-					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Email</td>
-					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $user->email }}</td>
+					<td class="template-hheads w-1/3">Email</td>
+					<td class="template-hbodies">{{ $user->email }}</td>
 				</tr>
 				<tr>
-					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Role</td>
-					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $user->role->role_name }}</td>
+					<td class="template-hheads w-1/3">Role</td>
+					<td class="template-hbodies">{{ $user->role->role_name }}</td>
 				</tr>
 				<tr>
-					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Account Status</td>
-					<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">{{ $user->status }}</td>
+					<td class="template-hheads w-1/3">Account Status</td>
+					<td class="template-hbodies">{{ $user->status }}</td>
 				</tr>
-			</table>
+			</x-horizontal-table>
 		</div>
-	</div>
+	</x-section-container>
 @endsection

@@ -38,14 +38,19 @@
 				<div class="flex flex-col md:flex-row gap-5 md:gap-0 w-full justify-between items-center mb-6">
 					@if(request("role") == $role->id)
 						<h1 class="text-xl text-blue-950 font-bold">{{ $role->role_name }} Accounts <span class="italic">(Showing results for "{{ request("search") }}")</span></h1>
+						<form class="flex" action="{{ route("admin.account.index") }}" onsubmit="handleFormSubmit();">
+							<x-input type="text" class="border-blue-900 border-2 rounded-l-lg rounded-r-none" name="search" placeholder="Search..." :value="request('search')"/>
+							<input type="hidden" name="role" value="{{ $role->id }}">
+							<x-button class="bg-white rounded-l-none rounded-r-lg border-blue-900 border-t-2 border-r-2 border-b-2 text-blue-900 hover:text-white"><i class="bi bi-search"></i></x-button>
+						</form>
 					@else
 						<h1 class="text-xl text-blue-950 font-bold">{{ $role->role_name }} Accounts</h1>
+						<form class="flex" action="{{ route("admin.account.index") }}" onsubmit="handleFormSubmit();">
+							<x-input type="text" class="border-blue-900 border-2 rounded-l-lg rounded-r-none" name="search" placeholder="Search..." />
+							<input type="hidden" name="role" value="{{ $role->id }}">
+							<x-button class="bg-white rounded-l-none rounded-r-lg border-blue-900 border-t-2 border-r-2 border-b-2 text-blue-900 hover:text-white"><i class="bi bi-search"></i></x-button>
+						</form>
 					@endif
-					<form class="flex" action="{{ route("admin.account.index") }}" onsubmit="handleFormSubmit();">
-						<x-input type="text" class="border-slate-500 rounded-l-lg rounded-r-none" name="search" placeholder="Search..." />
-						<input type="hidden" name="role" value="{{ $role->id }}">
-						<x-button class="bg-white rounded-l-none rounded-r-lg border border-slate-500 text-slate-500 hover:text-white"><i class="bi bi-search"></i></x-button>
-					</form>
 				</div>
 				<div class="overflow-x-auto relative" style="max-height: 500px;">
 					<table class="template-tables min-w-full border-collapse sm:table" style="border-collapse: separate; border-spacing: 0 20px;">

@@ -5,8 +5,8 @@
 @endsection
 
 @section("content")
-	<div class="p-10 bg-indigo-200 rounded-3xl mt-10">
-		<x-page-title>{{ __("Student's Details") }}</x-page-title>
+	<x-section-container>
+		<x-page-title class="mt-5">{{ __("Student's Details") }}</x-page-title>
 
 		@if(session()->has("successAssignToCourse"))
 			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
@@ -31,46 +31,46 @@
 		</div>
 
 		<div class="overflow-x-auto">
-			<table class="w-full" style="border-collapse: separate; border-spacing: 15px 10px;">
+			<x-horizontal-table>
 				<tbody>
 					<tr>
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Full name</td>
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">@if($student->full_name){{ $student->full_name }}@else{{ __("N/A") }}@endif</td>
+						<td class="template-hheads w-1/3">Full Name</td>
+						<td class="template-hbodies">@if($student->full_name){{ $student->full_name }}@else{{ __("N/A") }}@endif</td>
 					</tr>
 					<tr>
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Phone number</td>
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">@if($student->details->phone_number){{ $student->details->phone_number }}@else{{ __("N/A") }}@endif</td>
+						<td class="template-hheads w-1/3">Phone number</td>
+						<td class="template-hbodies">@if($student->details->phone_number){{ $student->details->phone_number }}@else{{ __("N/A") }}@endif</td>
 					</tr>
 					<tr>
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">City of Birth</td>
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">@if($student->details->city_of_birth){{ $student->details->city_of_birth }}@else{{ __("N/A") }}@endif</td>
+						<td class="template-hheads w-1/3">City of Birth</td>
+						<td class="template-hbodies">@if($student->details->city_of_birth){{ $student->details->city_of_birth }}@else{{ __("N/A") }}@endif</td>
 					</tr>
 					<tr>
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Date of Birth</td>
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">@if($student->details->date_of_birth){{ $student->details->date_of_birth }}@else{{ __("N/A") }}@endif</td>
+						<td class="template-hheads w-1/3">Date of Birth</td>
+						<td class="template-hbodies">@if($student->details->date_of_birth){{ $student->details->date_of_birth }}@else{{ __("N/A") }}@endif</td>
 					</tr>
 				</tbody>
 
 				<tbody id="more_details" class="overflow-hidden opacity-0" style="display: none;">
 					<tr>
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">School Name</td>
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">@if($student->details->school_name){{ $student->details->school_name }}@else{{ __("N/A") }}@endif</td>
+						<td class="template-hheads w-1/3">School Name</td>
+						<td class="template-hbodies">@if($student->details->school_name){{ $student->details->school_name }}@else{{ __("N/A") }}@endif</td>
 					</tr>
 					<tr>
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Education Level</td>
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">@if($student->details->student_level){{ $student->details->student_level }}@else{{ __("N/A") }}@endif</td>
+						<td class="template-hheads w-1/3">Education Level</td>
+						<td class="template-hbodies">@if($student->details->student_level){{ $student->details->student_level }}@else{{ __("N/A") }}@endif</td>
 					</tr>
 					<tr>
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Parent's Name
+						<td class="template-hheads w-1/3">Parent's Name
 						</td>
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">@if($student->details->name_parent){{ $student->details->name_parent }}@else{{ __("N/A") }}@endif</td>
+						<td class="template-hbodies">@if($student->details->name_parent){{ $student->details->name_parent }}@else{{ __("N/A") }}@endif</td>
 					</tr>
 					<tr>
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2 font-bold w-1/3">Parent's Phone Number</td>
-						<td class="bg-white border-2 border-blue-800 rounded-xl text-blue-800 px-5 py-2">@if($student->details->phone_parent){{ $student->details->phone_parent }}@else{{ __("N/A") }}@endif</td>
+						<td class="template-hheads w-1/3">Parent's Phone Number</td>
+						<td class="template-hbodies">@if($student->details->phone_parent){{ $student->details->phone_parent }}@else{{ __("N/A") }}@endif</td>
 					</tr>
 				</tbody>
-			</table>
+			</x-horizontal-table>
 		</div>
 
 		<div class="flex justify-center mt-4">
@@ -110,7 +110,7 @@
 		</script>
 
 		<x-page-title class="mt-8" style="text-align: left;">{{ __("Courses Enrolled") }}</x-page-title>
-		<div class="px-10 py-5 border rounded-xl bg-blue-900">
+		<div class="px-10 py-5 border rounded-xl bg-blue-900 mt-8">
 			<div class="py-5">
 				<x-anchor-button class="bg-orange-500"
 					href="{{ route('admin.student.assign.create', $student->id) }}">
@@ -148,44 +148,41 @@
 
 		<x-page-title class="mt-10" style="text-align: left;">{{ __("Student's Attendances and Assignments") }}</x-page-title>
 		<div class="overflow-x-auto">
-			<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate;
-			border-spacing: 0 20px;">
-				<thead>
-					<th class="px-5 py-5 bg-blue-900 text-white rounded-l-xl">Course</th>
-					<th class="px-5 py-5 bg-blue-900 text-white">Progress</th>
-					<th class="px-5 py-5 bg-blue-900 text-white rounded-r-xl">Assignments</th>
-				</thead>
-				<tbody>
-					@if($student->enrolled_courses->count())
-						@for($i = 0; $i < $student->enrolled_courses->count(); $i++)
-							<tr class="bg-blue-800 text-white">
-								<td class="px-5 py-5 rounded-l-xl text-center">{{ $student->enrolled_courses[$i]->course_name }}</td>
-								<td class="px-5 py-5">
-									<div class="flex w-full items-center justify-center gap-3">
-										<span>{{ $current_progress[$i] }}/{{ $full_progress[$i] }} done</span>
-										<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.atd-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
-											Details
-										</x-anchor-button>
-									</div>
-								</td>
-								<td class="px-5 py-5 rounded-r-xl">
-									<div class="flex w-full items-center justify-center gap-3">
-										<span>{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done</span>
-										<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.asg-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
-											Details
-										</x-anchor-button>
-									</div>
-								</td>
-							</tr>
-						@endfor
-					@else
-						<tr><td colspan="3" class="text-center px-5 py-5">- Student isn't assigned to any courses yet -</td></tr>
-					@endif
-				</tbody>
-			</table>
+			<x-table>
+				<x-slot name="head">
+					<th class="template-heads rounded-l-xl">Course</th>
+					<th class="template-heads">Progress</th>
+					<th class="template-heads rounded-r-xl">Assignments</th>
+				</x-slot>
+				@if($student->enrolled_courses->count())
+					@for($i = 0; $i < $student->enrolled_courses->count(); $i++)
+						<tr>
+							<td class="template-bodies rounded-l-xl">{{ $student->enrolled_courses[$i]->course_name }}</td>
+							<td class="template-bodies">
+								<div class="flex w-full items-center justify-center gap-3">
+									<span>{{ $current_progress[$i] }}/{{ $full_progress[$i] }} done</span>
+									<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.atd-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
+										Details
+									</x-anchor-button>
+								</div>
+							</td>
+							<td class="template-bodies rounded-r-xl">
+								<div class="flex w-full items-center justify-center gap-3">
+									<span>{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done</span>
+									<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.asg-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
+										Details
+									</x-anchor-button>
+								</div>
+							</td>
+						</tr>
+					@endfor
+				@else
+					<tr><td colspan="3" class="text-center px-5 py-5">- Student isn't assigned to any courses yet -</td></tr>
+				@endif
+			</x-table>
 		</div>
 
-	</div>
+	</x-section-container>
 
 
 

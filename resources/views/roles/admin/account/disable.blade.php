@@ -5,10 +5,10 @@
 @endsection
 
 @section("content")
-	<x-page-title>{{ __("Disable Account") }}</x-page-title>
+	<x-section-container>
+		<x-page-title class="mt-5">{{ __("Disable Account") }}</x-page-title>
 
-	<div class="bg-indigo-200 rounded-3xl p-5 mt-10">
-		<form method="POST" action="{{ route('admin.account.acc_disable', $account->id) }}" class="bg-blue-800 rounded-2xl py-5 px-10">
+		<form method="POST" action="{{ route('admin.account.acc_disable', $account->id) }}" class="bg-blue-800 rounded-2xl py-5 px-10 mt-8">
 			@csrf
 			<!-- Confirmation Text -->
 			<div class="mb-6">
@@ -31,5 +31,6 @@
 				<x-button type="button" onclick="history.back()" class="bg-orange-500 w-full md:w-1/6">Cancel</x-button>
 			</div>
 		</form>
-	</div>
+
+	</x-section-container>
 @endsection

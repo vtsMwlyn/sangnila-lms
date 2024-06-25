@@ -15,24 +15,24 @@
 
 		<!-- Sidebar navigations -->
 		<div class="flex flex-col lg:flex-row items-stretch justify-center gap-4 mx-10 py-4 px-6 rounded-3xl border border-white grow lg:w-auto my-5 lg:my-0" style="background-color: rgba(217, 217, 217, 0.45);">
-			<x-anchor-button class="{{ Request::is('admin*course*')? 'bg-orange-500' : 'bg-blue-800' }} grow"
+			<x-anchor-button class="{{ Request::is('admin*course*')? 'bg-orange-500' : 'bg-blue-900' }} grow"
 				href="{{ route('admin.course.index') }}">
-				<i class="bi bi-grid"></i> Courses
+				<i class="bi bi-grid"></i> Manage Courses
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('admin*teacher*')? 'bg-orange-500' : 'bg-blue-800' }} grow"
+			<x-anchor-button class="{{ Request::is('admin*teacher*')? 'bg-orange-500' : 'bg-blue-900' }} grow"
 				href="{{ route('admin.teacher.index') }}">
-				<i class="bi bi-person-lines-fill"></i> Teachers
+				<i class="bi bi-person-lines-fill"></i> Manage Teachers
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('admin*student*')? 'bg-orange-500' : 'bg-blue-800' }} grow"
+			<x-anchor-button class="{{ Request::is('admin*student*')? 'bg-orange-500' : 'bg-blue-900' }} grow"
 				href="{{ route('admin.student.index') }}">
-				<i class="bi bi-person-workspace"></i> Students
+				<i class="bi bi-person-workspace"></i> Manage Students
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('admin*account*')? 'bg-orange-500' : 'bg-blue-800' }} grow"
+			<x-anchor-button class="{{ Request::is('admin*account*')? 'bg-orange-500' : 'bg-blue-900' }} grow"
 				href="{{ route('admin.account.index') }}">
-				<i class="bi bi-person-gear"></i> Accounts
+				<i class="bi bi-person-gear"></i> Manage Accounts
 			</x-anchor-button>
 
 			<!-- Logout Button -->
@@ -45,7 +45,7 @@
 			</form>
 		</div>
 
-		<a href="{{ route("profile.show") }}" class="flex flex-col items-center font-bold mx-5 hover:text-yellow-400 hover:scale-110 transition ease-in-out text-white">
+		<a href="{{ route("profile.show") }}" class="flex flex-col items-center font-bold mx-5 hover:text-yellow-400 hover:scale-110 transition ease-in-out text-white absolute top-4 lg:top-0 right-0 lg:relative" style="max-width: 90px;">
 			<i class="bi bi-person-circle text-3xl "></i>
 			<span class=" text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
 		</a>

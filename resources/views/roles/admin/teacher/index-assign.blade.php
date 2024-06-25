@@ -5,66 +5,82 @@
 @endsection
 
 @section("content")
-	<x-page-title>{{ __("Assign Teacher to Course") }}</x-page-title>
+	<x-section-container>
+		<x-page-title class="mt-5">{{ __("Assign Teacher to Course") }}</x-page-title>
 
-	<div class="rounded-xl bg-indigo-200 p-5 mt-6">
-		@if($courses->count())
-			<form action="#" class="rounded-lg py-5 px-10 bg-blue-800" id="foomu">
-				<div class="flex items-end gap-3 w-full" id="serekushon">
-					<div class="w-5/6">
-						<x-label for="visibility" :value="__('Select a course to assign')" style="color: white;"/>
-						<x-select name="course_name" id="course_name" class="mt-1 w-full">
-						</x-select>
+		<div class="rounded-xl py-5 px-10 mt-10 text-white bg-blue-950">Select a Course to Assign</div>
+		<div class="mt-3 rounded-xl">
+			@if($courses->count())
+				<form action="#" id="foomu" class="mt-5">
+					<div class="flex flex-col gap-3 w-full" id="serekushon">
+						<div class="flex items-stretch gap-3">
+							<x-boxed-label for="visibility" :value="__('Course Name')"/>
+							<x-select name="course_name" id="course_name" class="w-full">
+							</x-select>
+						</div>
+
+						<div class="flex gap-3 w-full justify-end">
+							<x-button class="bg-orange-500 w-1/6 mt-5" type="button" id="botan">
+								{{ __('Add to List') }}
+							</x-button>
+							<x-button class="bg-orange-500 w-1/6 mt-5" type="button" onclick="if(confirm('The inputted data will be discarded, are you sure want to cancel?')) history.back();">
+								{{ __('Back') }}
+							</x-button>
+						</div>
 					</div>
 
-					<x-button class="bg-orange-500 w-1/6" type="button" id="botan">
-						{{ __('Add') }}
+					<div class="flex w-full" id="notifikeshon" style="display: none;">
+						<div class="text-white italic font-semibold">- No more courses to assign -</div>
+						<div class="flex w-full justify-end">
+							<x-button class="bg-orange-500 w-1/6 mt-5" type="button" onclick="if(confirm('The inputted data will be discarded, are you sure want to cancel?')) history.back();">
+								{{ __('Back') }}
+							</x-button>
+						</div>
+					</div>
+
+				</form>
+			@else
+				<div class="rounded-lg py-5 px-10 bg-blue-800">
+					<p class="text-white italic">- No more courses to assign -</p>
+					<x-button type="button" onclick="history.back()" class="bg-orange-500 mt-4">
+						Return
 					</x-button>
 				</div>
-
-				<div class="flex w-full" id="notifikeshon" style="display: none;">
-					<x-label :value="__('Select a course to assign')" class="mb-5" style="color: white;"/>
-					<div class="text-white italic font-semibold">- No more courses to assign -</div>
-				</div>
-
-			</form>
-		@else
-			<div class="rounded-lg py-5 px-10 bg-blue-800">
-				<p class="text-white italic">- No more courses to assign -</p>
-				<x-button type="button" onclick="history.back()" class="bg-orange-500 mt-4">
-					Return
-				</x-button>
-			</div>
-		@endif
-	</div>
-
-	<div class="rounded-xl py-5 px-10 mt-10 text-white bg-blue-900">List of Courses to Assign to this Teacher</div>
-	<div class="rounded-xl bg-indigo-200 py-5 px-10 mt-3">
-		<div class="flex w-full flex-wrap gap-x-10 overflow-x-auto" id="risuto">
-			<div class="w-full text-center px-4 py-2 flex items-center justify-center font-semibold" id="emputii">
-				- N/A -
-			</div>
+			@endif
 		</div>
-		<form action="{{ route("admin.teacher.assign.store", $user->id) }}" method="post" class="mt-3" id="riiru">
-			@csrf
-			<x-button class="bg-orange-500" style="display: none;" id="assain">Assign Courses</x-button>
-		</form>
-	</div>
+	</x-section-container>
 
-	<div class="rounded-xl py-5 px-10 mt-10 text-white bg-blue-900">Courses Already Assigned to this Teacher</div>
-	<div class="rounded-xl bg-indigo-200 py-5 px-10 mt-3">
-		<div class="flex gap-x-10 overflow-x-auto">
-			@forelse ($user->teached_courses as $course)
-				<div class="text-white border-4 border-white bg-yellow-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">
-					{{ $course->course_name }}
-				</div>
-			@empty
-				<div class="w-full text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">
+	<x-section-container class="mt-5">
+		<div class="rounded-xl py-5 px-10 mt-10 flex items-center justify-between text-white bg-blue-950">
+			<div>List of Courses to Assign to this Teacher</div>
+			<form action="{{ route("admin.teacher.assign.store", $user->id) }}" method="post" id="riiru">
+				@csrf
+				<x-button class="bg-orange-500" style="display: none;" id="assain">Assign Courses</x-button>
+			</form>
+		</div>
+		<div class="mt-3">
+			<div class="flex w-full flex-wrap gap-x-10 overflow-x-auto" id="risuto">
+				<div class="w-full bg-white text-center p-4 rounded-xl flex items-center justify-center font-semibold" id="emputii">
 					- N/A -
 				</div>
-			@endforelse
+			</div>
 		</div>
-	</div>
+
+		<div class="rounded-xl py-5 px-10 mt-10 text-white bg-blue-950">Courses Already Assigned to this Teacher</div>
+		<div class="mt-3">
+			<div class="flex gap-x-10 overflow-x-auto">
+				@forelse ($user->teached_courses as $course)
+					<div class="text-white border-2 border-white bg-blue-900 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 200px; min-height: 100px; max-height: 100px;">
+						{{ $course->course_name }}
+					</div>
+				@empty
+					<div class="w-full text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">
+						- N/A -
+					</div>
+				@endforelse
+			</div>
+		</div>
+	</x-section-container>
 
 	<script>
 		const courseList = @json($courses);
@@ -115,7 +131,7 @@
 
 		$("#botan").click(() => {
 			const beryu = JSON.parse($("#course_name").val());
-			const nyuuAitemu = $("<div>").addClass("text-white border-4 border-white bg-yellow-500 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-between font-semibold").attr({"style": "min-width: 200px; max-width: 200px; min-height: 50px; max-height: 50px;"});
+			const nyuuAitemu = $("<div>").addClass("text-white border-2 border-white bg-blue-900 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-between font-semibold").attr({"style": "min-width: 200px; max-width: 200px; min-height: 100px; max-height: 100px;"});
 			const tekusu = $("<div>").text(beryu.course_name);
 			const kyanseru = $("<button>").html("<i class='bi bi-x-circle'></i>");
 
@@ -128,14 +144,16 @@
 			alreadySelected.push(beryu.id);
 
 			$(kyanseru).click(() => {
-				nyuuAitemu.remove();
-				nyuuHiden.remove();
+				if(confirm("Are you sure want to remove this item from the list?")){
+					nyuuAitemu.remove();
+					nyuuHiden.remove();
 
-				alreadySelected = alreadySelected.filter((value) => {
-					return value != beryu.id;
-				});
+					alreadySelected = alreadySelected.filter((value) => {
+						return value != beryu.id;
+					});
 
-				document.dispatchEvent(ibento);
+					document.dispatchEvent(ibento);
+				}
 			});
 
 			document.dispatchEvent(ibento);
