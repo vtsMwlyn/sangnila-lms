@@ -28,9 +28,9 @@ php artisan migrate
 ```bash
 php artisan db:seed
 ```
-Then to run the web application, first make sure that MySQL is activated and the database is already set. Next you can either type this in the browser URL if you have installed XAMPP and already set symbol link from the project folder to htdocs folder:
+Then to run the web application, first make sure that MySQL is activated and the database is already set. Next you can either type this in the browser URL if you have installed XAMPP and already set symbol link from the `project folder` to `htdocs` folder:
 ```bash
-localhost/<project-folder>/public/
+localhost/project-folder/public/
 ```
 or by run this command in the terminal:
 ```bash
