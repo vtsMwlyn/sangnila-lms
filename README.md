@@ -2,6 +2,8 @@
 ## About
 A web based learning management system application designed for admins, teachers, and students in Sangnila Arts Academy. The web application is still in development and is not ready to use yet. This web application is using Tailwind CSS and JQuery to manage its front end side and Laravel and MySQL to handle its backend side.
 
+![Example Page](readme_imgs/example-page.png)
+
 ## Roles
 There are 5 roles (types of account) in Sangnila LMS:
 - **Admins**: Those who are in charge in observing and managing the whole LMS system including `courses`, `teachers`, `students`, and `accounts`
