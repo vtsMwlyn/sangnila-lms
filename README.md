@@ -4,11 +4,11 @@ A web based learning management system application designed for admins, teachers
 
 ## Roles
 There are 5 roles (types of account) in Sangnila LMS:
-- `Admins`: Those who are in charge in observing and managing the whole LMS system including `courses`, `teachers`, `students`, and `accounts`
-- `Teachers`: Those who are assigned to manage `topic and materials` also teaching and managing students' `progress`, `attendance`, and `assignment` in Sangnila courses
-- `Students`: Those who are enrolled and is currently in learning progress in Sangnila courses, they are able to access learning `materials`, `attendance` data, and upload `assignments`
-- `Parents`: Students' parents, those who are observing students' progress and learning results
-- `Guests`: Public user, those who are don't have any account to use, can only view few parts of Sangnila LMS
+- **Admins**: Those who are in charge in observing and managing the whole LMS system including `courses`, `teachers`, `students`, and `accounts`
+- **Teachers**: Those who are assigned to manage `topic and materials` also teaching and managing students' `progress`, `attendance`, and `assignment` in Sangnila courses
+- **Students**: Those who are enrolled and is currently in learning progress in Sangnila courses, they are able to access learning `materials`, `attendance` data, and upload `assignments`
+- **Parents**: Students' parents, those who are observing students' progress and learning results
+- **Guests**: Public user, those who are don't have any account to use, can only view few parts of Sangnila LMS
 
 ## Change Logs (current version: v0.5.22-alpha)
 - Added batch import for old students data
