@@ -28,11 +28,9 @@
 
 
 		<!-- Custom styles -->
-		<style>
-			html {
-				scroll-behavior: smooth;
-			}
+		<link rel="stylesheet" href="{{ asset("css/custom_styles.css") }}">
 
+		<style>
 			/* Custom Cursor */
 			a {
 				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
@@ -43,45 +41,8 @@
 			}
 
 			body {
-				background: url("{{ asset('img/background.jpg') }}") no-repeat center center / cover;
 				cursor: url("{{ asset('img/kursor.cur') }}"), auto;
 			}
-
-			/* Thin Scrollbar */
-			* {
-				scrollbar-width: thin;
-				scrollbar-color: #888 #f7f7f7;
-			}
-
-			/* Select2 */
-			.select2-selection__arrow {
-				margin-top: 7px;
-				margin-right: 10px;
-			}
-
-			/* Import student table */
-			table#student-to-import thead th.fixed1 {
-				min-width: 200px;
-				max-width: 200px;
-			}
-
-			table#student-to-import thead th.fixed2 {
-				min-width: 150px;
-				max-width: 150px;
-			}
-
-			table#student-to-import tbody td.fixed1 {
-				min-width: 200px;
-				max-width: 200px;
-				word-wrap: break-word;
-			}
-
-			table#student-to-import tbody td.fixed2 {
-				min-width: 150px;
-				max-width: 150px;
-				word-wrap: break-word;
-			}
-
 		</style>
 
 		<!-- Include jQuery  -->
@@ -92,26 +53,36 @@
 	</head>
 
 	<body class="bg-cover min-h-screen flex flex-col">
-		<!-- Back to top button and version -->
-		<div class="fixed z-50 bottom-0 left-0 m-2 text-black md:text-white">
-			<div class="">{{ trans("strings.version") }}</div>
-		</div>
-		<div class="fixed bottom-0 right-0 m-2 opacity-0 transition-opacity duration-500 ease-in-out" id="back-to-top">
-			<a href="#">
-				<div class="bg-orange-500 rounded-full w-full text-xl p-2.5 flex justify-center align-center font-bold" style="width: 50px; height: 50px;">
-					<i class="text-white text-center bi bi-arrow-up"></i>
+		<!-- Fixed background image -->
+		<img src="{{ asset("img/background.jpg") }}" alt="" height="100vh" class="w-screen h-screen fixed top-0 z-0" style="object-fit: cover; object-position: center;">
+
+		<!-- Page -->
+		<div class="absolute z-10 w-full min-h-full flex flex-col justify-between" style="background-color: rgba(0, 0, 0, 0.4);">
+			<!-- Back to top button and version -->
+			<div class="fixed z-50 bottom-0 left-0 m-2 text-white">
+				<div class="">{{ trans("strings.version") }}</div>
+			</div>
+			<div class="fixed bottom-0 right-0 m-2 opacity-0 transition-opacity duration-500 ease-in-out" id="back-to-top">
+				<a href="#">
+					<div class="bg-orange-500 rounded-full w-full text-xl p-2.5 flex justify-center align-center font-bold" style="width: 50px; height: 50px;">
+						<i class="text-white text-center bi bi-arrow-up"></i>
+					</div>
+				</a>
+			</div>
+
+			<!-- Navbar/sidebar -->
+			{{ $slot }}
+
+			<!-- Content Section -->
+			<div class="p-10 grow">
+				<div class="flex flex-col items-center w-full">
+					@yield("content")
 				</div>
-			</a>
+			</div>
+
+			<!-- Footer -->
+			<x-footer></x-footer>
 		</div>
-
-		<!-- Content Section -->
-		{{ $slot }}
-
-		<div class="p-10">
-			@yield("content")
-		</div>
-
-		<x-footer></x-footer>
 
 		<!-- Scripts -->
 		<!-- Back to top button -->
@@ -130,8 +101,5 @@
 
 		<!-- Include Select2 JavaScript -->
 		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-
 	</body>
-
 </html>

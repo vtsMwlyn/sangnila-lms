@@ -170,16 +170,18 @@ class DatabaseSeeder extends Seeder
 			"attendance_identifier" => $course->id . "_" . $teacher->id . "/" . round(microtime(true) * 1000)
 		]);
 
-		foreach($course->students as $student){
+		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", $teacher->id)->get();
+
+		foreach($course_students as $cs){
 			$is_attend = false;
 			foreach($students_attended as $sattend){
-				if($student->full_name == $sattend){
+				if($cs->student->full_name == $sattend){
 					$is_attend = true;
 					break;
 				}
 			}
 
-			$newData = ["user_id" => $student->id, "attendance_id" => $newAttendance->id,];
+			$newData = ["user_id" => $cs->student->id, "attendance_id" => $newAttendance->id,];
 
 			if($is_attend){
 				$newData["is_attend"] = 1;
@@ -212,9 +214,9 @@ class DatabaseSeeder extends Seeder
 
 		$this->newUser("hari.sangnila@gmail.com", "Hari", 2, 1);
 		$this->newUser("lgaby.sangnila@gmail.com", "Gaby", 2, 2);
-		$this->newUser("iswansudaryo.teacher.sangnila@gmail.com", "Iswan Sudaryo (Teacher)", 2, 1);
+		$this->newUser("iswansudaryo02.sangnila@gmail.com", "Iswan Sudaryo (Teacher)", 2, 1);
 		$this->newUser("vincent.sangnila@gmail.com", "Vincent", 2, 1);
-		$this->newUser("immanuelgiovano.teacher.sangnila@gmail.com", "Immanuel Giovano (Teacher)", 2, 1);
+		$this->newUser("immanuelgiovano02.sangnila@gmail.com", "Immanuel Giovano (Teacher)", 2, 1);
 
 		/*Hari's students: Digital Drawing, Roblox*/
 		$this->newUser("jack.sangnila@gmail.com", "Jack", 3, 1);

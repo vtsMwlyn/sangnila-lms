@@ -5,11 +5,12 @@
 @endsection
 
 @section("content")
-	<x-page-title>Import Old Student Data</x-page-title>
+	<x-section-container>
+		<x-page-title class="mt-5 mb-8">Import Old Student Data</x-page-title>
 
 		@if($course->teachers->count() && $course->topics->count() && $course->topics[0]->materials->count())
 			<form action="#" id="le-form">
-				<div class="border rounded-xl p-5 my-5">
+				<div class="border rounded-xl p-5 my-5 bg-white border-blue-800">
 					<div class="flex w-full items-center justify-between mb-3">
 						<h1 class="font-semibold text-lg">Student's Profile</h1>
 						<x-button class="bg-orange-500" id="show-details-button">Show Details</x-button>
@@ -153,7 +154,7 @@
 				</div>
 			</form>
 
-			<div class="border rounded-xl p-5">
+			<div class="border rounded-xl p-5 border-blue-800 bg-white">
 				<h1 class="font-semibold text-lg">Students Data to Import</h1>
 				<form class="w-full" action="{{ route("admin.course.import-student-data.store", $course->id) }}" method="post" id="real-form">
 					@csrf
@@ -370,4 +371,5 @@
 				</x-button>
 			</div>
 		@endif
+	</x-section-container>
 @endsection

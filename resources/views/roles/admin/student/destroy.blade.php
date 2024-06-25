@@ -5,10 +5,9 @@
 @endsection
 
 @section("content")
-	<x-page-title>{{ __("Unassign Student from Course") }}</x-page-title>
-
-	<div class="bg-indigo-200 rounded-3xl p-5 mt-10">
-		<form method="POST" action="{{ route('admin.student.unassign.destroy', ['student_id' => $student->id, 'course_id' => $course->id]) }}" class="bg-blue-800 rounded-2xl py-5 px-10">
+	<x-section-container>
+		<x-page-title>{{ __("Unassign Student from Course") }}</x-page-title>
+		<form method="POST" action="{{ route('admin.student.unassign.destroy', ['student_id' => $student->id, 'course_id' => $course->id]) }}" class="bg-blue-800 rounded-2xl py-5 px-10 mt-8">
 			@csrf
 			@method('delete')
 			<!-- Confirmation Text -->
@@ -22,10 +21,10 @@
 			</div>
 
 			<!-- Yes/No Buttons -->
-			<div class="flex gap-1">
-				<x-button type="submit" class="bg-orange-500">Yes</x-button>
-				<x-button type="button" onclick="history.back()" class="bg-orange-500">No</x-button>
+			<div class="flex gap-3 justify-center w-full">
+				<x-button type="submit" class="bg-orange-500 w-full md:w-1/12">Yes</x-button>
+				<x-button type="button" onclick="history.back()" class="bg-orange-500 w-full md:w-1/12">No</x-button>
 			</div>
 		</form>
-	</div>
+	</x-section-container>
 @endsection

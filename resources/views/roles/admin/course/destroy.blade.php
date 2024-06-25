@@ -5,15 +5,15 @@
 @endsection
 
 @section("content")
-	<x-page-title>{{ __("Delete Course") }}</x-page-title>
+	<x-section-container>
+		<x-page-title>{{ __("Delete Course") }}</x-page-title>
 
-	<div class="bg-indigo-200 rounded-3xl p-5 mt-10">
-		<form method="POST" action="{{ route('admin.course.destroy', $course->id) }}" class="bg-blue-800 rounded-2xl py-5 px-10">
+		<form method="POST" action="{{ route('admin.course.destroy', $course->id) }}" class="bg-blue-800 rounded-2xl py-5 px-10 mt-8">
 			@csrf
 			@method('delete')
 			<!-- Confirmation Text -->
 			<div class="mb-6">
-				<h1 class="text-xl font-semibold text-white">
+				<h1 class="text-xl font-semibold text-white text-center">
 					Are you sure you want to permanently delete course
 					<span class="text-red-500 font-bold">{{ $course->course_name }}</span>
 					from Sangnila LMS?
@@ -26,5 +26,5 @@
 				<x-button type="button" onclick="history.back()" class="bg-orange-500 w-full md:w-1/12">No</x-button>
 			</div>
 		</form>
-	</div>
+	</x-section-container>
 @endsection

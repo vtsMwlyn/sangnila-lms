@@ -5,56 +5,53 @@
 @endsection
 
 @section("content")
-	<x-page-title>{{ __("List of All Courses") }}</x-page-title>
+	<x-section-container>
+		<x-page-title class="mt-5">{{ __("List of All Courses") }}</x-page-title>
 
-	@if(session()->has("successCreateNewCourse"))
-		<div class="w-full bg-green-500 px-5 py-3 rounded-lg">
-			<p class="text-green-900">{{ session("successCreateNewCourse") }}</p>
-		</div>
-	@elseif(session()->has("successDeleteCourse"))
-		<div class="w-full bg-yellow-300 px-5 py-3 rounded-lg">
-			<p class="text-yellow-600" >{{ session("successDeleteCourse") }}</p>
-		</div>
-	@endif
-
-	<div class="flex flex-col-reverse md:flex-row gap-5 md:gap-0 justify-between items-center mt-5">
-		<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.create') }}"><i class="bi bi-plus-lg"></i> Add New Course</x-anchor-button>
-		<form class="flex" action="{{ route("admin.course.index") }}">
-			<x-input type="text" class="border-slate-500 rounded-l-lg rounded-r-none" name="search" placeholder="Search..." />
-			<x-button class="bg-white rounded-l-none rounded-r-lg border border-slate-500 text-slate-500 hover:text-white"><i class="bi bi-search"></i></x-button>
+		<form class="flex w-full justify-center" action="{{ route("admin.course.index") }}">
+			<x-input type="text" class="border-blue-900 border-2 rounded-l-lg rounded-r-none w-full lg:w-1/3" name="search" placeholder="Search..." :value="request('search')"/>
+			<x-button class="bg-white rounded-l-none rounded-r-lg border-blue-900 border-t-2 border-r-2 border-b-2 text-blue-900 hover:text-white"><i class="bi bi-search"></i></x-button>
 		</form>
-	</div>
 
-	<div class="overflow-x-auto rounded-3xl mt-7 px-10 py-5 bg-indigo-200">
-		<table class="min-w-full border-collapse sm:table text-sm" style="border-collapse: separate;
-		border-spacing: 0 20px;">
-			<thead>
-				<tr class="bg-blue-900">
-					<th class="text-white py-5 rounded-l-xl border-blue-400 font-bold px-4 sm:w-1/4">Course Name</th>
-					<th class="text-white py-5 border-blue-400 font-bold px-4 sm:w-1/4">Description</th>
-					<th class="text-white py-5 border-blue-400 font-bold px-4 sm:w-1/4">Visibility</th>
-					<th class="text-white py-5 rounded-r-xl border-blue-400 font-bold px-4 sm:w-1/4">Actions</th>
-				</tr>
-			</thead>
-			<tbody>
+		@if(session()->has("successCreateNewCourse"))
+			<div class="w-full bg-green-500 px-5 py-3 rounded-lg">
+				<p class="text-green-900">{{ session("successCreateNewCourse") }}</p>
+			</div>
+		@elseif(session()->has("successDeleteCourse"))
+			<div class="w-full bg-yellow-300 px-5 py-3 rounded-lg">
+				<p class="text-yellow-600" >{{ session("successDeleteCourse") }}</p>
+			</div>
+		@endif
+
+		<x-anchor-button class="bg-orange-500 mt-8" href="{{ route('admin.course.create') }}"><i class="bi bi-plus-lg"></i> Add New Course</x-anchor-button>
+
+		<div class="overflow-x-auto">
+			<x-table>
+				<x-slot name="head">
+					<th class="template-heads rounded-l-xl sm:w-1/4">Course Name</th>
+					<th class="template-heads sm:w-1/4">Description</th>
+					<th class="template-heads sm:w-1/4">Visibility</th>
+					<th class="template-heads rounded-r-xl sm:w-1/4">Actions</th>
+				</x-slot>
+
 				@if ($courses->isNotEmpty())
 					@foreach ($courses as $course)
-						<tr class="bg-blue-800 text-white">
-							<td class="border-blue-300 px-4 py-5 sm:w-1/4 rounded-l-xl text-center">
+						<tr>
+							<td class="template-bodies sm:w-1/4 rounded-l-xl">
 								<a href="{{ route('admin.course.show', ['course_id' => $course->id]) }}"
 									class="text-blue-200 hover:text-blue-400 font-semibold hover:underline block">
 									{{ $course->course_name }}
 								</a>
 							</td>
 
-							<td class="border-blue-300 px-4 py-5 sm:w-1/4 text-center">
+							<td class="template-bodies sm:w-1/4">
 								{{ substr($course->course_description, 0, 100) }}...
 							</td>
 
-							<td class="border-blue-300 px-4 py-5 sm:w-1/4 text-center">
+							<td class="template-bodies sm:w-1/4">
 								{{ $course->visibility }}
 							</td>
-							<td class="border-blue-300 px-4 py-5 sm:w-1/4 text-center rounded-r-xl">
+							<td class="template-bodies sm:w-1/4 rounded-r-xl">
 								<div class="flex gap-1 w-full justify-center">
 									<x-anchor-button class="bg-orange-500"
 										href="{{ route('admin.course.show', ['course_id' => $course->id]) }}">
@@ -80,8 +77,8 @@
 						</td>
 					</tr>
 				@endif
-			</tbody>
-		</table>
-	</div>
+			</x-table>
+		</div>
+	</x-section-container>
 
 @endsection
