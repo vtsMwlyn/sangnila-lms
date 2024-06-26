@@ -15,6 +15,15 @@ There are 5 roles (types of account) in Sangnila LMS:
 ## Change Logs
 ### v0.6.1-alpha
 - Implemented UI designs for teachers pages
+## Change Logs (current version: v0.5.22-alpha)
+- Added batch import for old students data
+- Added batch assign students to a course
+- Added batch assign courses to students
+- Layout, view, responsiveness, and UX improvements
+- Confirmation on some page cancellation and deletion actions
+- Simple payment simulation
+- Student categorization (imported and normal)
+- UI implementations for admin pages
 
 ## Clone Project
 Clone the repository in any desired directory. Web resources such as images, videos, scripts, and styles are included in `public` folder. To generate the database system and fill it will sample data, run this command in the terminal:
