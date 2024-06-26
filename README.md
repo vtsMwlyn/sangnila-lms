@@ -12,15 +12,9 @@ There are 5 roles (types of account) in Sangnila LMS:
 - **Parents**: Students' parents, those who are observing students' progress and learning results
 - **Guests**: Public user, those who are don't have any account to use, can only view few parts of Sangnila LMS
 
-## Change Logs (current version: v0.5.22-alpha)
-- Added batch import for old students data
-- Added batch assign students to a course
-- Added batch assign courses to students
-- Layout, view, responsiveness, and UX improvements
-- Confirmation on some page cancellation and deletion actions
-- Simple payment simulation
-- Student categorization (imported and normal)
-- UI implementations for admin pages
+## Change Logs
+### v0.6.1-alpha
+- Implemented UI designs for teachers pages
 
 ## Clone Project
 Clone the repository in any desired directory. Web resources such as images, videos, scripts, and styles are included in `public` folder. To generate the database system and fill it will sample data, run this command in the terminal:
