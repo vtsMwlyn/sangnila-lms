@@ -5,75 +5,77 @@
 @endsection
 
 @section("content")
-	<h1 class="text-3xl font-semibold text-blue-900 mb-4">List of Assignments in {{ $course->course_name }}</h1>
+	<x-section-container>
+		<x-page-title class="mt-5 mb-8">List of Assignments in {{ $course->course_name }}</x-page-title>
 
-	<div class="mt-5 mb-5">
-		<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white"
-			href="{{ route('teacher.assignment.upload', $course->id) }}">
-			Upload New Assignment
-		</a>
-	</div>
+		@if(session()->has("successUploadAssignment"))
+			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-green-900">{{ session("successUploadAssignment") }}</p>
+			</div>
+		@elseif(session()->has("successEditAssignment"))
+			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-green-900">{{ session("successEditAssignment") }}</p>
+			</div>
+		@elseif(session()->has("successDeleteAssignment"))
+			<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-yellow-600" >{{ session("successDeleteAssignment") }}</p>
+			</div>
+		@endif
 
-	@if(session()->has("successUploadAssignment"))
-		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-green-900">{{ session("successUploadAssignment") }}</p>
+		<div class="mt-5 mb-5">
+			<x-anchor-button class="bg-orange-500"
+				href="{{ route('teacher.assignment.upload', $course->id) }}">
+				<i class="bi bi-plus-lg"></i> Upload New Assignment
+			</x-anchor-button>
 		</div>
-	@elseif(session()->has("successEditAssignment"))
-		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-green-900">{{ session("successEditAssignment") }}</p>
-		</div>
-	@elseif(session()->has("successDeleteAssignment"))
-		<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-yellow-600" >{{ session("successDeleteAssignment") }}</p>
-		</div>
-	@endif
 
-	<div class="overflow-x-auto rounded-md">
-		<table class="min-w-full bg-white">
-			<thead>
-				<tr>
-					<th class="border px-3">Title</th>
-					<th class="border px-3">Description</th>
-					<th class="border px-3">Deadline</th>
-					<th class="border px-3">Download link</th>
-					{{-- <th class="border px-3">Assigned to</th> --}}
-					<th class="border px-3">Actions</th>
-				</tr>
-			</thead>
-			<tbody>
+		<div class="overflow-x-auto rounded-md">
+			<x-table>
+				<x-slot name="head">
+					<th class="template-heads rounded-l-xl">Title</th>
+					<th class="template-heads">Description</th>
+					<th class="template-heads">Deadline</th>
+					<th class="template-heads">Download link</th>
+					{{-- <th class="template-heads">Assigned to</th> --}}
+					<th class="template-heads rounded-r-xl">Actions</th>
+				</x-slot>
+
 				@if ($assignments->count())
 					@foreach($assignments as $asg)
 						<tr>
-							<td class="border px-3"><a class="text-blue-700 font-bold" href="{{ route("teacher.assignment.check", $asg->id) }}">{{ $asg->title }}</a></td>
-							<td class="border px-3">{{ $asg->desc }}</td>
-							<td class="border px-3">{{ $asg->deadline_date }}<br>{{ $asg->deadline_time }}</td>
-							<td class="border px-3 text-blue-600"><a href="{{ $asg->link }}">{{ $asg->link }}</a></td>
-							{{-- <td class="border px-3">{{ $asg->assigned_to->full_name }}</td> --}}
-							{{-- <td class="border px-3">
+							<td class="template-bodies rounded-l-xl">
+								<a class="text-blue-200 hover:text-blue-400 hover:underline font-bold" href="{{ route("teacher.assignment.check", $asg->id) }}">{{ $asg->title }}</a>
+							</td>
+							<td class="template-bodies">{{ $asg->desc }}</td>
+							<td class="template-bodies">{{ $asg->deadline_date }}<br>{{ $asg->deadline_time }}</td>
+							<td class="template-bodies text-blue-600">
+								<a href="{{ $asg->link }}" class="text-blue-200 hover:text-blue-400 hover:underline font-bold">{{ $asg->link }}</a>
+							</td>
+							{{-- <td class="template-bodies">{{ $asg->assigned_to->full_name }}</td> --}}
+							{{-- <td class="template-bodies">
 								<ul>
 									@for ($j = $i; $assignments[$j]->title == $assignments[$j + 1]->title; $j++)
 										<li>{{ $assignments[$j]->assigned_to->full_name }}</li>
 									@endfor
 								</ul>
 							</td> --}}
-							<td class="border px-3">
+							<td class="template-bodies rounded-r-xl">
 								<div class="flex gap-1">
-									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-										href="{{ route("teacher.assignment.edit", $asg->id) }}">
-										Edit
-									</a>
-									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-										href="{{ route("teacher.assignment.delete", $asg->id) }}">
-										Delete
-									</a>
+									<x-anchor-button class="bg-orange-500" href="{{ route('teacher.assignment.edit', $asg->id) }}">
+										<i class="bi bi-pencil-square"></i>
+									</x-anchor-button>
+									<x-anchor-button class="bg-orange-500" href="{{ route('teacher.assignment.delete', $asg->id) }}">
+										<i class="bi bi-trash3"></i>
+									</x-anchor-button>
 								</div>
 							</td>
 						</tr>
 					@endforeach
 				@else
-					<tr ><td colspan="5" class="border px-3 text-center">- No assignments yet -</td></tr>
+					<tr ><td colspan="5" class="template-bodies text-center">- No assignments yet -</td></tr>
 				@endif
-			</tbody>
-		</table>
-	</div>
+
+			</x-table>
+		</div>
+	</x-section-container>
 @endsection

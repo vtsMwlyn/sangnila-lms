@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
 use App\Models\Topic;
+use App\Models\Course;
 use Illuminate\Http\Request;
+use App\Models\CourseStudent;
+use Illuminate\Support\Facades\Auth;
 
 class TopicController extends Controller
 {
@@ -18,8 +20,12 @@ class TopicController extends Controller
 
 	// Create new topic input page
     public function teacher_create($course_id){
+		$course = Course::where("id", $course_id)->first();
+		$course_students = CourseStudent::where("teacher_id", Auth::user()->id)->where("course_id", $course_id)->get();
+
 		return view("roles.teacher.topic-and-material.create-topic", [
-			"course" => Course::where("id", $course_id)->where("visibility", "public")->first()
+			"course" => $course,
+			"course_students" => $course_students
 		]);
 	}
 
@@ -36,8 +42,13 @@ class TopicController extends Controller
 
 	// Edit topic input page
 	public function teacher_edit($course_id, $topic_id){
+		$course = Course::where("id", $course_id)->first();
+		$course_students = CourseStudent::where("teacher_id", Auth::user()->id)->where("course_id", $course_id)->get();
+
 		return view("roles.teacher.topic-and-material.edit-topic", [
-			"topic" => Topic::where("course_id", $course_id)->where("id", $topic_id)->first()
+			"topic" => Topic::where("course_id", $course_id)->where("id", $topic_id)->first(),
+			"course" => $course,
+			"course_students" => $course_students
 		]);
 	}
 

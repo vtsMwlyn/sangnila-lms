@@ -5,31 +5,28 @@
 @endsection
 
 @section("content")
-	<h1 class="text-3xl font-semibold text-blue-900 mb-4">Manage Student</h1>
-	<h1 class="text-2xl font-semibold text-blue-900 mb-4">Pick a Course</h1>
-	<div class="overflow-x-auto rounded-md">
-		<table class="min-w-full bg-white border-collapse ">
-			<thead>
-				<tr>
-					<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Course Name</th>
-				</tr>
-			</thead>
-			<tbody>
-				@if ($courses->isNotEmpty())
-					@foreach ($courses as $course)
-						<tr>
-							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-								<a href="{{ route('teacher.student.select-student', $course->id) }}"
-									class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
+	<x-section-container>
+		<x-page-title class="mt-5">Manage Students</x-page-title>
+		<h1 class="text-2xl font-semibold text-blue-900 text-center mb-8">Pick a Course</h1>
+		<div class="flex flex-col">
+			<div class="border-t border-l border-r border-blue-950 bg-slate-300 rounded-t-xl w-full">
+				<h2 class="text-xl text-center font-semibold my-2 text-blue-950">Course Name</h2>
+			</div>
+			<div class="border border-blue-950 bg-slate-300 rounded-b-xl w-full flex justify-center">
+				<ul class="list-disc my-5">
+					@if ($courses->isNotEmpty())
+						@foreach ($courses as $course)
+							<li class="text-blue-950 font-semibold">
+								<a href="{{ route('teacher.student.select-student', $course->id) }}" class="hover:underline">
 									{{ $course->course_name }}
 								</a>
-							</td>
-						</tr>
-					@endforeach
-				@else
-					<tr class="text-blue-900"><td>N/A</td></tr>
-				@endif
-			</tbody>
-		</table>
-	</div>
+							</li>
+						@endforeach
+					@else
+						<tr class="text-blue-900"><td>N/A</td></tr>
+					@endif
+				</ul>
+			</div>
+		</div>
+	</x-section-container>
 @endsection

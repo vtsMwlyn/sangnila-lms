@@ -5,97 +5,118 @@
 @endsection
 
 @section("content")
-	<h1 class="text-3xl font-semibold text-blue-900 mb-4">{{ $course->course_name }}</h1>
+	<x-section-container>
+		<x-page-title class="mt-5 mb-8">{{ $course->course_name }}</x-page-title>
 
-	@if(session()->has("successAddTopic"))
-		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-green-900">{{ session("successAddTopic") }}</p>
-		</div>
-	@elseif(session()->has("successDeleteTopic"))
-		<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-yellow-600" >{{ session("successDeleteTopic") }}</p>
-		</div>
-	@endif
+		@if(session()->has("successAddTopic"))
+			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-green-900">{{ session("successAddTopic") }}</p>
+			</div>
+		@elseif(session()->has("successDeleteTopic"))
+			<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-yellow-600" >{{ session("successDeleteTopic") }}</p>
+			</div>
+		@endif
 
-	<p class="text-gray-700 mb-8">{{ $course->course_description }}</p>
-	<h2 class="text-xl font-semibold mb-2">Student List:</h2>
-	<ul class="list-disc pl-6 mb-6">
-		@forelse ($course_students as $cs)
-			<li class="text-black">{{ $cs->student->full_name }} @if($cs->student->status == "disabled")<span class="text-red-500">(Disabled)</span>@endif</li>
-		@empty
-			<li class="text-gray-500">No student enrolled in this course</li>
-		@endforelse
-	</ul>
-	<h2 class="text-xl font-semibold mb-2">Course Topic and Materials:</h2>
-	<div class="relative flex items-center py-2 grou">
-		<span class="mr-2">
-			<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-				{{-- href=" route('teacher.material.upload', $course->id) " }}" --}}
-				href="{{ route("teacher.topic.create", $course->id) }}">
-				Add new topic
-			</a>
-		</span>
-	</div>
-	<div class="mt-5 mb-5 overflow-x-auto">
-		<table class="w-full">
-			<thead>
-				<th class="border px-3">Topic Title</th>
-				<th class="border px-3">List of Materials</th>
-				{{-- <th class="border px-3">Material Link</th> --}}
-				<th class="border px-3">Action</th>
-			</thead>
-			<tbody>
-				@if ($course->topics->count())
-					@foreach ($course->topics as $topic)
-						@if($topic->materials->count())
-							@foreach ($topic->materials as $material)
+		<p class="text-blue-950 font-semibold mb-8">{{ $course->course_description }}</p>
+
+		<div class="flex flex-col">
+			<div class="border-t border-l border-r border-blue-950 bg-slate-300 rounded-t-xl w-full">
+				<h2 class="text-xl text-center font-semibold my-2 text-blue-950">Student List</h2>
+			</div>
+			<div class="border border-blue-950 bg-slate-300 rounded-b-xl w-full">
+				<div class="flex justify-evenly w-full">
+					@php
+						$number_of_data_separation = 3;
+						$n = ceil($course_students->count() / $number_of_data_separation);
+					@endphp
+					@for($i = 0; $i < $number_of_data_separation; $i++)
+						<div class="my-5">
+							<ul class="list-disc pl-6">
+								@if($i < $number_of_data_separation - 1)
+									@for($j = $n * $i; $j < $n * ($i + 1); $j++)
+										<li class="text-blue-950">{{ $course_students[$j]->student->full_name }} @if($course_students[$j]->student->status == "disabled")<span class="text-red-500">(Disabled)</span>@endif</li>
+									@endfor
+								@else
+									@for($j = $n * $i; $j < $course_students->count(); $j++)
+										<li class="text-blue-950">{{ $course_students[$j]->student->full_name }} @if($course_students[$j]->student->status == "disabled")<span class="text-red-500">(Disabled)</span>@endif</li>
+									@endfor
+								@endif
+							</ul>
+						</div>
+					@endfor
+				</div>
+			</div>
+		</div>
+
+		<h2 class="text-xl font-semibold mb-2 text-white mt-5">Course Topic and Materials:</h2>
+		<x-anchor-button class="bg-orange-500 mt-5"
+			{{-- href=" route('teacher.material.upload', $course->id) " }}" --}}
+			href="{{ route('teacher.topic.create', $course->id) }}">
+			<i class="bi bi-plus-lg"></i> Add new topic
+		</x-anchor-button>
+
+		<div class="mt-5 mb-5 overflow-x-auto">
+			<table class="w-full bg-white">
+				<thead class="bg-blue-800 text-white">
+					<th class="border px-4 py-2">Topic Title</th>
+					<th class="border px-4 py-2">List of Materials</th>
+					{{-- <th class="border px-4 py-2">Material Link</th> --}}
+					<th class="border px-4 py-2">Action</th>
+				</thead>
+				<tbody>
+					@if ($course->topics->count())
+						@foreach ($course->topics as $topic)
+							@if($topic->materials->count())
+								@foreach ($topic->materials as $material)
+									<tr>
+										@if($loop->iteration == 1)
+											<td class="border px-4 py-2" rowspan={{ $topic->materials->count() }}>
+												<a href="{{ route("teacher.topic.show", [$course->id, $topic->id]) }}" class="font-bold text-blue-700">{{ $topic->title }}</a>
+											</td>
+										@endif
+										<td class="border px-4 py-2">{{ $material->title }}</td>
+										{{-- <td class="border px-4 py-2"><a href="{{ $material->link }}" class="text-blue-600">{{ $material->link }}</a></td> --}}
+										@if($loop->iteration == 1)
+											<td class="border px-4 py-2" rowspan={{ $topic->materials->count() }}>
+												<div class="flex w-full justify-center gap-1">
+													<x-anchor-button class="bg-orange-500"
+														href="{{ route('teacher.topic.edit', [$topic->course->id, $topic->id]) }}">
+														Edit Topic
+													</x-anchor-button>
+													<x-anchor-button class="bg-orange-500"
+														href="{{ route('teacher.topic.delete', [$topic->course->id, $topic->id]) }}">
+														Delete Topic
+													</x-anchor-button>
+												</div>
+											</td>
+										@endif
+									</tr>
+								@endforeach
+							@else
 								<tr>
-									@if($loop->iteration == 1)
-										<td class="border px-3" rowspan={{ $topic->materials->count() }}>
-											<a href="{{ route("teacher.topic.show", [$course->id, $topic->id]) }}" class="font-bold text-blue-700">{{ $topic->title }}</a>
-										</td>
-									@endif
-									<td class="border px-3">{{ $material->title }}</td>
-									{{-- <td class="border px-3"><a href="{{ $material->link }}" class="text-blue-600">{{ $material->link }}</a></td> --}}
-									@if($loop->iteration == 1)
-										<td class="border px-3" rowspan={{ $topic->materials->count() }}>
-											<div class="flex gap-1">
-												<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-													href="{{ route("teacher.topic.edit", [$topic->course->id, $topic->id]) }}">
-													Edit Topic
-												</a>
-												<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-													href="{{ route("teacher.topic.delete", [$topic->course->id, $topic->id]) }}">
-													Delete Topic
-												</a>
-											</div>
-										</td>
-									@endif
+									<td class="border px-4 py-2"><a href="{{ route("teacher.topic.show", [$course->id, $topic->id]) }}" class="font-bold text-blue-700">{{ $topic->title }}</a></td>
+									<td class="border px-4 py-2 text-center">- No materials added yet to this topic -</td>
+									<td class="border px-4 py-2">
+										<div class="flex w-full justify-center gap-1">
+											<x-anchor-button class="bg-orange-500"
+												href="{{ route('teacher.topic.edit', [$topic->course->id, $topic->id]) }}">
+												Edit Topic
+											</x-anchor-button>
+											<x-anchor-button class="bg-orange-500"
+												href="{{ route('teacher.topic.delete', [$topic->course->id, $topic->id]) }}">
+												Delete Topic
+											</x-anchor-button>
+										</div>
+									</td>
 								</tr>
-							@endforeach
-						@else
-							<tr>
-								<td class="border px-3"><a href="{{ route("teacher.topic.show", [$course->id, $topic->id]) }}" class="font-bold text-blue-700">{{ $topic->title }}</a></td>
-								<td class="border px-3 text-center">- No materials added yet to this topic -</td>
-								<td class="border px-3">
-									<div class="flex gap-1">
-										<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-											href="{{ route('teacher.topic.edit', [$topic->course->id, $topic->id]) }}">
-											Edit Topic
-										</a>
-										<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-											href="{{ route("teacher.topic.delete", [$topic->course->id, $topic->id]) }}">
-											Delete Topic
-										</a>
-									</div>
-								</td>
-							</tr>
-						@endif
-					@endforeach
-				@else
-					<tr><td colspan="4" class="border px-3 text-center">- No topics added yet to this course -</td></tr>
-				@endif
-			</tbody>
-		</table>
-	</div>
+							@endif
+						@endforeach
+					@else
+						<tr><td colspan="4" class="border px-4 py-2 text-center">- No topics added yet to this course -</td></tr>
+					@endif
+				</tbody>
+			</table>
+		</div>
+	</x-section-container>
 @endsection

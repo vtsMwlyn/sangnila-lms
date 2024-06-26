@@ -1,5 +1,68 @@
-<!-- Updated Navbar -->
-<nav class="bg-blue-200 w-full py-3 sticky top-0">
+<!-- Main sidebar -->
+<div class="w-full text-white sticky top-0 z-20" style="background-color: rgba(17, 41, 102, 0.5);">
+	<!-- Sidebar toggler for mobile -->
+	<button id="mobileMenuButton" class="lg:hidden bg-blue-950 text-white font-semibold text-xl transition duration-300 absolute m-2 px-4 py-3 z-10">
+		<span class="inline-block">&#9776;</span>
+	</button>
+
+	<div class="lg:flex flex-col lg:flex-row items-center justify-between sticky top-0 py-6 px-5 w-full hidden" id="navigation">
+		<!-- Logo/Brand Image -->
+		<div class="flex justify-center hover:scale-110 transition duration-600 mx-5">
+			<a href="{{ route('home') }}" style="cursor: url({{ asset('img/cursor2.cur') }}), pointer;">
+				<img src={{ asset("img/AR.W.png") }} alt="logo" width="90px">
+			</a>
+		</div>
+
+		<!-- Sidebar navigations -->
+		<div class="flex flex-col lg:flex-row items-stretch justify-center gap-4 mx-10 py-4 px-6 rounded-3xl border border-white grow lg:w-auto my-5 lg:my-0" style="background-color: rgba(217, 217, 217, 0.45);">
+			<x-anchor-button class="{{ (Request::is('teacher*mycourse*') || Request::is('teacher*topic*') || Request::is('teacher*material*'))? 'bg-orange-500' : 'bg-blue-900' }} grow"
+				href="{{ route('teacher.mycourse.index') }}">
+				<i class="bi bi-grid"></i> Manage Courses
+			</x-anchor-button>
+
+			<x-anchor-button class="{{ Request::is('teacher*student*')? 'bg-orange-500' : 'bg-blue-900' }} grow"
+				href="{{ route('teacher.student.select-course') }}">
+				<i class="bi bi-file-earmark-lock"></i> Materials Access
+			</x-anchor-button>
+
+			<x-anchor-button class="{{ Request::is('teacher*attendance*')? 'bg-orange-500' : 'bg-blue-900' }} grow"
+				href="{{ route('teacher.attendance.index') }}">
+				<i class="bi bi-file-earmark-check"></i> Attendances & Progress
+			</x-anchor-button>
+
+			<x-anchor-button class="{{ Request::is('teacher*assignment*')? 'bg-orange-500' : 'bg-blue-900' }} grow"
+				href="{{ route('teacher.assignment.index') }}">
+				<i class="bi bi-file-earmark-text"></i> Manage Assignments
+			</x-anchor-button>
+
+			<!-- Logout Button -->
+			<form method="POST" action="{{ route('logout') }}" class="grow">
+				@csrf
+				<x-button
+					class="font-semibold bg-red-600 w-full" onclick="return confirm('Are you sure want to logout from your account?');">
+						<i class="bi bi-box-arrow-left"></i> {{ __('Log Out') }}
+				</x-button>
+			</form>
+		</div>
+
+		<a href="{{ route("profile.show") }}" class="flex flex-col items-center font-bold mx-5 hover:text-yellow-400 hover:scale-110 transition ease-in-out text-white absolute top-4 lg:top-0 right-0 lg:relative" style="max-width: 90px;">
+			<i class="bi bi-person-circle text-3xl "></i>
+			<span class=" text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
+		</a>
+	</div>
+
+    <script>
+        // Toggle mobile menu visibility
+        document.getElementById('mobileMenuButton').addEventListener('click', function () {
+            var mobileMenu = document.getElementById('navigation');
+            mobileMenu.style.display = (mobileMenu.style.display === 'none' || mobileMenu.style.display === '') ? 'block' : 'none';
+        });
+    </script>
+</div>
+
+
+
+{{-- <nav class="bg-blue-200 w-full py-3 sticky top-0">
     <div class="container mx-auto flex flex-col md:flex-row items-center">
         <div class="flex items-center  ">
            	<!-- Logo/Brand Image -->
@@ -108,4 +171,4 @@
             mobileMenu.style.display = (mobileMenu.style.display === 'none' || mobileMenu.style.display === '') ? 'block' : 'none';
         });
     </script>
-</nav>
+</nav> --}}

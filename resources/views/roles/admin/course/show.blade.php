@@ -5,25 +5,23 @@
 @endsection
 
 @section("content")
-	@if(session()->has("successUpdateCourseData"))
-		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-green-900">{{ session("successUpdateCourseData") }}</p>
-		</div>
-	@elseif(session()->has("successBatchAssign"))
-		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-green-900">{{ session("successBatchAssign") }}</p>
-		</div>
-	@elseif(session()->has("successImportStudent"))
-		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-green-900">{{ session("successImportStudent") }}</p>
-		</div>
-	@endif
-
 	<x-section-container class="mb-10">
 		<x-page-title>{{ __("Course Details") }}</x-page-title>
 		{{-- <h6 class="text-sm italic text-gray-500 text-center mb-4">(Visibility: {{ $course->visibility }})</h6> --}}
 
-		{{-- <p class="text-gray-700 mb-3">{{ $course->course_description }}</p>--}}
+		@if(session()->has("successUpdateCourseData"))
+			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-green-900">{{ session("successUpdateCourseData") }}</p>
+			</div>
+		@elseif(session()->has("successBatchAssign"))
+			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-green-900">{{ session("successBatchAssign") }}</p>
+			</div>
+		@elseif(session()->has("successImportStudent"))
+			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-green-900">{{ session("successImportStudent") }}</p>
+			</div>
+		@endif
 
 		<div class="flex gap-5 mt-8">
 			<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.edit', $course->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>

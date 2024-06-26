@@ -5,7 +5,8 @@
 @endsection
 
 @section("content")
-        <h1 class="text-3xl font-semibold text-blue-900 mb-4">Upload New Attendance Data</h1>
+	<x-section-container>
+        <x-page-title class="text-3xl font-semibold text-blue-900 mt-5 mb-8">Upload New Attendance Data</x-page-title>
 		@if($course->students->count())
 			<form action="{{ route('teacher.attendance.store', $course->id) }}" method="post" class="mx-auto" id="attendance_form">
 				@csrf
@@ -16,7 +17,7 @@
 						<div class="flex flex-col w-1/3">
 							<x-input type="date" name="attendance_date" id="attendance_date" class=""/>
 						</div>
-						<x-button type="button" id="todaybtn" class="bg-indigo-400">Today</x-button>
+						<x-button type="button" id="todaybtn" class="bg-orange-500">Today</x-button>
 					</div>
 				</div>
 
@@ -25,27 +26,19 @@
 				<div class="mt-6">
 				<x-label>{{ __("Attendance Details") }}</x-label>
 					<table class="w-full mt-1">
-						<thead>
-							<th class="border border-blue-900 px-5 py-3">Student Name</th>
-							<th class="border border-blue-900 px-5 py-3">Attendance Detail</th>
-						</thead>
 						<tbody>
 							@foreach ($course_students as $cs)
-							{{--
-								Note:
-								Teacher can only submit attendance for active students account, if disabled by admin then the checkbox and textarea for that student account will be disabled (showing "account disabled")
-							--}}
 								<tr style="@if($cs->student->status == "disabled") display: none; @endif">
-									<td class="border border-blue-900 px-5 py-3 w-1/3">
-										<div class="flex items-center gap-3">
+									<td class="px-5 py-3 w-1/3">
+										<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
 											<input type="checkbox" id="checkbox{{ $loop->iteration }}"
 											class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif >
-											<span>{{ $cs->student->full_name }}</span>
+											<span class="font-semibold text-blue-900">{{ $cs->student->full_name }}</span>
 										</div>
 									</td>
-									<td class="border px-5 border-blue-900 py-3">
+									<td class="px-5 py-3">
 										<div class="flex flex-col items-stretch">
-											<textarea name="attendance_detail[]" rows="3" class="rounded-lg @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @enderror" placeholder="Enter student attendance details" style="resize: none; box-sizing: border-box; padding: 10px;">@if($cs->student->status == "disabled"){{ __("Account disabled") }}@else{{ old("attendance_detail." . $loop->index) }}@endif</textarea>
+											<textarea name="attendance_detail[]" rows="3" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student attendance details" style="resize: none; box-sizing: border-box; padding: 10px;">@if($cs->student->status == "disabled"){{ __("Account disabled") }}@else{{ old("attendance_detail." . $loop->index) }}@endif</textarea>
 
 											@error("attendance_detail." . $loop->index)
 												<span class="text-red-500 mt-2">{{ $message }}</span>
@@ -58,11 +51,11 @@
 					</table>
 				</div>
 
-				<div class="flex items-stretch gap-1 justify-end mt-4">
-					<x-button class="bg-indigo-400">
+				<div class="flex items-stretch gap-2 justify-center w-full mt-20 mb-3">
+					<x-button class="bg-orange-500 w-full md:w-1/6">
 						{{ __('Submit') }}
 					</x-button>
-					<x-button type="button" onclick="if(confirm('The filled data will be discarded, are you sure want to cancel?')) history.back();" class="bg-indigo-400">
+					<x-button type="button" onclick="if(confirm('The filled data will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500 w-full md:w-1/6">
 						Cancel
 					</x-button>
 				</div>
@@ -136,4 +129,5 @@
 				inpDate.value = `${year}-${month}-${day}`;
 			});
 		</script>
+	</x-section-container>
 @endsection
