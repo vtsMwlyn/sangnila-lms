@@ -103,7 +103,7 @@
 								</tr>
 							@empty
 								<tr>
-									<td colspan="5" class="bg-white px-4 py-5 rounded-xl text-center">- No accounts available to use yet -</td>
+									<td colspan="5" class="bg-white p-5 rounded-xl text-center font-semibold">- No accounts available found for this role -</td>
 								</tr>
 							@endforelse
 						</tbody>
@@ -165,7 +165,7 @@
 							</tr>
 						@endforeach
 					@else
-						<tr><td colspan="5" class="bg-white px-4 py-5 rounded-xl text-center">- No accounts disabled yet -</td></tr>
+						<tr><td colspan="5" class="bg-white p-5 rounded-xl text-center font-semibold">- No disabled accounts yet -</td></tr>
 					@endif
 				</tbody>
 			</table>

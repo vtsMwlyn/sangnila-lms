@@ -65,7 +65,7 @@
 						</a>
 					</div>
 				@empty
-					<span class="text-white">No courses teached</span>
+					<div class="flex w-full justify-center rounded-xl p-5 bg-white text-center font-semibold">- No courses assigned yet -</div>
 				@endforelse
 			</div>
 		</div>

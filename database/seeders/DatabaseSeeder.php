@@ -18,6 +18,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Progress;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
+use App\Models\Submission;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -193,6 +194,26 @@ class DatabaseSeeder extends Seeder
 
 			StudentAttendance::create($newData);
 		}
+	}
+
+	private function newSubmissions($course_name, $teacher_name, $student_name, $assignment_title, $submissions){
+		$course = Course::where("course_name", $course_name)->first();
+		$teacher = User::where("role_id", 2)->where("full_name", $teacher_name)->first();
+		$student = User::where("role_id", 3)->where("full_name", $student_name)->first();
+
+		foreach($submissions as $submission){
+			$assignment = Assignment::where("course_id", $course->id)->where("teacher_id", $teacher->id)->where("title", $assignment_title)->first();
+
+			Submission::create([
+				"student_id" => $student->id,
+				"assignment_id" => $assignment->id,
+				"link" => "https://www.google.com/",
+				"title" => $submission,
+				"status" => (now() > $assignment->deadline_date . " " . $assignment->deadline_time)? "Late" : "On Time",
+				"feedback" => null
+			]);
+		}
+
 	}
 
     public function run()
@@ -538,5 +559,43 @@ class DatabaseSeeder extends Seeder
 		/* For Immanuel Giovano (Teacher)'s Students */
 		$this->newAttendance("Web Development", "Immanuel Giovano (Teacher)", ["Jack", "Jillian P. Tanuwijaya"], "2024-06-09");
 		$this->newAttendance("Web Development", "Immanuel Giovano (Teacher)", ["Jack", "Jocheli Kensi Budianti"], "2025-06-16");
+
+		// ===== GENERATE SUBMISSIONS ===== //
+		/* Submissions for assignments in Hari's courses */
+		$this->newSubmissions("Digital Drawing", "Hari", "Jack", "Assignment 1 Digital Drawing", ["Submission Assignment 1 Digital Drawing - Jack", "Revision Assignment 1 Digital Drawing - Jack"]);
+		$this->newSubmissions("Digital Drawing", "Hari", "Jillian P. Tanuwijaya", "Assignment 1 Digital Drawing", ["Submission Assignment 1 Digital Drawing - Jillian P. Tanuwijaya"]);
+		$this->newSubmissions("Digital Drawing", "Hari", "Jocheli Kensi Budianti", "Assignment 1 Digital Drawing", ["Submission 1 Assignment 1 Digital Drawing - Jocheli Kensi Budianti", "Submission 2 Assignment 1 Digital Drawing - Jocheli Kensi Budianti", "Submission 3 Assignment 1 Digital Drawing - Jocheli Kensi Budianti"]);
+
+		$this->newSubmissions("Digital Drawing", "Hari", "Jack", "Assignment 2 Digital Drawing", ["Submission Assignment 2 Digital Drawing - Jack"]);
+		$this->newSubmissions("Digital Drawing", "Hari", "Jillian P. Tanuwijaya", "Assignment 2 Digital Drawing", ["Submission Assignment 2 Digital Drawing - Jillian P. Tanuwijaya", "Revision Assignment 2 Digital Drawing - Jillian P. Tanuwijaya"]);
+
+		/* Submissions for assignments in Iswan Sudaryo (Teacher)'s courses */
+		$this->newSubmissions("Concept Art", "Iswan Sudaryo (Teacher)", "Ethan Alexander Irawan", "Assignment 1 Concept Art", ["Submission Assignment 1 Concept Art - Ethan Alexander Irawan", "Revision Assignment 1 Concept Art - Ethan Alexander Irawan"]);
+		$this->newSubmissions("Concept Art", "Iswan Sudaryo (Teacher)", "Jezriel Connery", "Assignment 1 Concept Art", ["Submission Assignment 1 Concept Art - Jezriel Connery", "Revision Assignment 1 Concept Art - Jezriel Connery"]);
+		$this->newSubmissions("Concept Art", "Iswan Sudaryo (Teacher)", "Martha Theresia Ramlie", "Assignment 1 Concept Art", ["Submission Assignment 1 Concept Art - Martha Theresia Ramlie"]);
+		$this->newSubmissions("Concept Art", "Iswan Sudaryo (Teacher)", "Janicelyn Daviena Godarma", "Assignment 1 Concept Art", ["Submission Assignment 1 Concept Art - Janicelyn Daviena Godarma", "Revision Assignment 1 Concept Art - Janicelyn Daviena Godarma"]);
+		$this->newSubmissions("Concept Art", "Iswan Sudaryo (Teacher)", "Grace Devana Kusnandar", "Assignment 1 Concept Art", ["Submission Assignment 1 Concept Art - Grace Devana Kusnandar"]);
+
+		$this->newSubmissions("Concept Art", "Iswan Sudaryo (Teacher)", "Jezriel Connery", "Assignment 2 Concept Art", ["Submission Assignment 2 Concept Art - Jezriel Connery"]);
+		$this->newSubmissions("Concept Art", "Iswan Sudaryo (Teacher)", "Janicelyn Daviena Godarma", "Assignment 2 Concept Art", ["Submission Assignment 2 Concept Art - Janicelyn Daviena Godarma", "Revision Assignment 2 Concept Art - Janicelyn Daviena Godarma"]);
+		$this->newSubmissions("Concept Art", "Iswan Sudaryo (Teacher)", "Grace Devana Kusnandar", "Assignment 2 Concept Art", ["Submission Assignment 2 Concept Art - Grace Devana Kusnandar", "Revision Assignment 2 Concept Art - Grace Devana Kusnandar"]);
+
+		/* Submissions for assignments in Vincent's courses */
+		$this->newSubmissions("3D Modelling", "Vincent", "Philia Valeraine Alverna", "Assignment 1 3D Modelling", ["Submission Assignment 1 3D Modelling - Philia Valeraine Alverna", "Revision Assignment 1 3D Modelling - Philia Valeraine Alverna"]);
+		$this->newSubmissions("3D Modelling", "Vincent", "Kensi Sinclair", "Assignment 1 3D Modelling", ["Submission Assignment 1 3D Modelling - Kensi Sinclair", "Revision Assignment 1 3D Modelling - Kensi Sinclair"]);
+		$this->newSubmissions("3D Modelling", "Vincent", "Giselle Saputra", "Assignment 1 3D Modelling", ["Submission 1 Assignment 1 3D Modelling - Giselle Saputra", "Submission 2 Assignment 1 3D Modelling - Giselle Saputra", "Revision Assignment 1 3D Modelling - Giselle Saputra"]);
+
+		/* Submissions for assignments in Gaby's courses */
+		$this->newSubmissions("Digital Drawing", "Gaby", "Melly Tanto", "Assignment 1 Digital Drawing", ["Submission Assignment 1 Digital Drawing - Melly Tanto"]);
+		$this->newSubmissions("Digital Drawing", "Gaby", "Zhafira Jasmine", "Assignment 1 Digital Drawing", ["Submission Assignment 1 Digital Drawing - Zhafira Jasmine", "Revision Assignment 1 Digital Drawing - Zhafira Jasmine"]);
+		$this->newSubmissions("Digital Drawing", "Gaby", "Freya Pramudia", "Assignment 1 Digital Drawing", ["Submission Assignment 1 Digital Drawing - Freya Pramudia"]);
+
+		$this->newSubmissions("Digital Drawing", "Gaby", "Melly Tanto", "Assignment 2 Digital Drawing", ["Submission Assignment 2 Digital Drawing - Melly Tanto", "Revision Assignment 2 Digital Drawing - Melly Tanto"]);
+		$this->newSubmissions("Digital Drawing", "Gaby", "Zhafira Jasmine", "Assignment 2 Digital Drawing", ["Submission Assignment 2 Digital Drawing - Zhafira Jasmine"]);
+		$this->newSubmissions("Digital Drawing", "Gaby", "Vanya Farelia", "Assignment 2 Digital Drawing", ["Submission Assignment 2 Digital Drawing - Vanya Farelia", "Revision Assignment 2 Digital Drawing - Vanya Farelia"]);
+		$this->newSubmissions("Digital Drawing", "Gaby", "Freya Pramudia", "Assignment 2 Digital Drawing", ["Submission Assignment 2 Digital Drawing - Freya Pramudia"]);
+
+		$this->newSubmissions("Digital Drawing", "Gaby", "Vanya Farelia", "Assignment 3 Digital Drawing", ["Submission Assignment 3 Digital Drawing - Vanya Farelia", "Revision Assignment 3 Digital Drawing - Vanya Farelia"]);
+		$this->newSubmissions("Digital Drawing", "Gaby", "Freya Pramudia", "Assignment 3 Digital Drawing", ["Submission Assignment 3 Digital Drawing - Freya Pramudia"]);
 	}
 }

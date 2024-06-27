@@ -141,7 +141,7 @@
 				{{ $attendanceData->links() }}
 			</div> --}}
 		@else
-			<div class="mt-5">- No attendance data yet -</div>
+			<div class="mt-5 p-5 w-full flex justify-center rounded-xl bg-white font-semibold">- No attendance data yet -</div>
 		@endif
 
 		<script>

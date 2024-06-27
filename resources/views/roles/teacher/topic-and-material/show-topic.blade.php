@@ -72,7 +72,7 @@
 					</tr>
 				@empty
 					<tr>
-						<td colspan="3" class="template-bodies rounded-xl text-center">- No materials added yet to this topic -</td>
+						<td colspan="4" class="bg-white rounded-xl p-5 text-center">- No materials added yet to this topic -</td>
 					</tr>
 				@endforelse
 			</x-table>

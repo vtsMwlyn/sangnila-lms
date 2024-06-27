@@ -76,7 +76,7 @@
 					@endforeach
 				@else
 					<tr class="bg-white">
-						<td colspan="4" class="rounded-xl text-center px-4 py-5 sm:w-1/4">
+						<td colspan="4" class="rounded-xl text-center p-5 sm:w-1/4">
 							- No students yet -
 						</td>
 					</tr>

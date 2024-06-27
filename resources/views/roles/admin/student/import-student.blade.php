@@ -365,7 +365,7 @@
 			</script>
 		@else
 			<div class="rounded-lg py-5 px-10 bg-blue-800">
-				<p class="text-white italic">- This course still has no teachers assigned to it -</p>
+				<p class="text-white italic">- This course still has no teachers assigned or topic and materials added to it -</p>
 				<x-button type="button" onclick="history.back()" class="bg-orange-500 mt-4">
 					Return
 				</x-button>

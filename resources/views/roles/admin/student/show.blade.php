@@ -141,7 +141,7 @@
 						@enderror
 					</div>
 				@empty
-					<span class="text-white">No courses enrolled</span>
+					<span class="text-white py-3 font-semibold">- No courses enrolled yet -</span>
 				@endforelse
 			</div>
 		</div>
@@ -177,7 +177,7 @@
 						</tr>
 					@endfor
 				@else
-					<tr><td colspan="3" class="text-center px-5 py-5">- Student isn't assigned to any courses yet -</td></tr>
+					<tr><td colspan="3" class="text-center font-semibold p-5 bg-white rounded-xl">- Student isn't assigned to any courses yet -</td></tr>
 				@endif
 			</x-table>
 		</div>

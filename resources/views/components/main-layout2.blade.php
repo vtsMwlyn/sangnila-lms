@@ -59,10 +59,10 @@
 		<!-- Page -->
 		<div class="absolute z-10 w-full min-h-full flex flex-col justify-between" style="background-color: rgba(0, 0, 0, 0.4);">
 			<!-- Back to top button and version -->
-			<div class="fixed z-50 bottom-0 left-0 m-2 text-white">
+			<div class="fixed z-60 bottom-1 left-1 m-2 text-white">
 				<div class="">{{ trans("strings.version") }}</div>
 			</div>
-			<div class="fixed bottom-0 right-0 m-2 opacity-0 transition-opacity duration-500 ease-in-out" id="back-to-top">
+			<div class="fixed bottom-1 right-1 m-2 opacity-0 transition-opacity duration-500 ease-in-out animate-bounce" id="back-to-top">
 				<a href="#">
 					<div class="bg-orange-500 rounded-full w-full text-xl p-2.5 flex justify-center align-center font-bold" style="width: 50px; height: 50px;">
 						<i class="text-white text-center bi bi-arrow-up"></i>

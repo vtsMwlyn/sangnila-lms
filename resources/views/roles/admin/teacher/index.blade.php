@@ -60,7 +60,7 @@
 					</tr>
 				@empty
 					<tr>
-						<td class="bg-white text-center px-4 py-5 sm:w-1/4 rounded-xl" colspan="4">- No teachers yet -</td>
+						<td class="bg-white text-center p-5 font-semibold sm:w-1/4 rounded-xl" colspan="4">- No teachers yet -</td>
 					</tr>
 				@endforelse
 			</x-table>

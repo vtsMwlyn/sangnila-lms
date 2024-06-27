@@ -5,33 +5,32 @@
 @endsection
 
 @section("content")
-	<h1 class="text-3xl font-semibold text-blue-900 mb-4">Students Submissions in assignment "{{ $assignment->title }}"</h1>
-	<div class="overflow-x-auto">
-		<table class="min-w-full bg-white border mt-3" style="border-radius: 0;">
-			<thead>
-				<tr>
-					<th class="border px-3">Submission time</th>
-					<th class="border px-3">Student</th>
-					<th class="border px-3">Submission title</th>
-					<th class="border px-3">Submission status</th>
-					<th class="border px-3">Submission link</th>
-				</tr>
-			</thead>
-			<tbody>
+	<x-section-container>
+		<x-page-title class="mt-5 mb-8">Students Submissions in assignment "{{ $assignment->title }}"</x-page-title>
+		<div class="overflow-x-auto">
+			<x-table>
+				<x-slot name="head">
+					<th class="template-heads rounded-l-xl">Submission time</th>
+					<th class="template-heads">Student</th>
+					<th class="template-heads">Submission title</th>
+					<th class="template-heads">Submission status</th>
+					<th class="template-heads rounded-r-xl">Submission link</th>
+				</x-slot>
+
 				@if(count($latest_submissions))
 					@foreach($latest_submissions as $submission)
 						<tr @if($submission->status == "Late") class="bg-red-400" @endif>
-							<td class="border px-3">{{ $submission->created_at }}</td>
-							<td class="border px-3"><a href="{{ route("teacher.assignment.submission-history", [$assignment->id, $submission->student->id]) }}" class="text-blue-600 font-bold">{{ $submission->student->full_name }}</a></td>
-							<td class="border px-3">{{ $submission->title }}</td>
-							<td class="border px-3">{{ $submission->status }}</td>
-							<td class="border px-3"><a class="text-blue-600" href="{{ $submission->link }}" target="blank">{{ $submission->link }}</a></td>
+							<td class="template-bodies rounded-l-xl">{{ $submission->created_at }}</td>
+							<td class="template-bodies"><a href="{{ route("teacher.assignment.submission-history", [$assignment->id, $submission->student->id]) }}" class="text-blue-200 hover:text-blue-400 hover:underline font-bold">{{ $submission->student->full_name }}</a></td>
+							<td class="template-bodies">{{ $submission->title }}</td>
+							<td class="template-bodies">{{ $submission->status }}</td>
+							<td class="template-bodies rounded-r-xl"><a class="text-blue-200 hover:text-blue-400 hover:underline font-bold" href="{{ $submission->link }}" target="blank">{{ $submission->link }}</a></td>
 						</tr>
 					@endforeach
 				@else
-					<tr><td class="border text-center px-3" colspan="5">- No submissions yet -</td></tr>
+					<tr><td class="rounded-xl bg-white text-center font-semibold p-5" colspan="5">- No submissions yet -</td></tr>
 				@endif
-			</tbody>
-		</table>
-	</div>
+			</x-table>
+		</div>
+	</x-section-container>
 @endsection
