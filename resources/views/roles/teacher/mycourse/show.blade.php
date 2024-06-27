@@ -18,34 +18,38 @@
 			</div>
 		@endif
 
-		<p class="text-blue-950 font-semibold mb-8">{{ $course->course_description }}</p>
+		<p class="text-blue-950 font-semibold mb-8 text-center">{{ $course->course_description }}</p>
 
 		<div class="flex flex-col">
 			<div class="border-t border-l border-r border-blue-950 bg-slate-300 rounded-t-xl w-full">
 				<h2 class="text-xl text-center font-semibold my-2 text-blue-950">Student List</h2>
 			</div>
 			<div class="border border-blue-950 bg-slate-300 rounded-b-xl w-full">
-				<div class="flex justify-evenly w-full">
-					@php
-						$number_of_data_separation = 3;
-						$n = ceil($course_students->count() / $number_of_data_separation);
-					@endphp
-					@for($i = 0; $i < $number_of_data_separation; $i++)
-						<div class="my-5">
-							<ul class="list-disc pl-6">
-								@if($i < $number_of_data_separation - 1)
-									@for($j = $n * $i; $j < $n * ($i + 1); $j++)
-										<li class="text-blue-950">{{ $course_students[$j]->student->full_name }} @if($course_students[$j]->student->status == "disabled")<span class="text-red-500">(Disabled)</span>@endif</li>
-									@endfor
-								@else
-									@for($j = $n * $i; $j < $course_students->count(); $j++)
-										<li class="text-blue-950">{{ $course_students[$j]->student->full_name }} @if($course_students[$j]->student->status == "disabled")<span class="text-red-500">(Disabled)</span>@endif</li>
-									@endfor
-								@endif
-							</ul>
-						</div>
-					@endfor
-				</div>
+				@if($course_students->count())
+					<div class="flex justify-evenly w-full">
+						@php
+							$number_of_data_separation = 3;
+							$n = ceil($course_students->count() / $number_of_data_separation);
+						@endphp
+						@for($i = 0; $i < $number_of_data_separation; $i++)
+							<div class="my-5">
+								<ul class="list-disc pl-6">
+									@if($i < $number_of_data_separation - 1)
+										@for($j = $n * $i; $j < $n * ($i + 1); $j++)
+											<li class="text-blue-950">{{ $course_students[$j]->student->full_name }} @if($course_students[$j]->student->status == "disabled")<span class="text-red-500">(Disabled)</span>@endif</li>
+										@endfor
+									@else
+										@for($j = $n * $i; $j < $course_students->count(); $j++)
+											<li class="text-blue-950">{{ $course_students[$j]->student->full_name }} @if($course_students[$j]->student->status == "disabled")<span class="text-red-500">(Disabled)</span>@endif</li>
+										@endfor
+									@endif
+								</ul>
+							</div>
+						@endfor
+					</div>
+				@else
+					<p class="text-center py-3 text-blue-950">- No students assigned yet -</p>
+				@endif
 			</div>
 		</div>
 

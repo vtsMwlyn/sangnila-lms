@@ -13,33 +13,37 @@
 				<h2 class="text-xl text-center font-semibold my-2 text-blue-950">Student Name</h2>
 			</div>
 			<div class="border border-blue-950 bg-slate-300 rounded-b-xl w-full flex justify-center">
-				<div class="flex justify-evenly w-full">
-					@php
-						$number_of_data_separation = 3;
-						$n = ceil($course_students->count() / $number_of_data_separation);
-					@endphp
-					@for($i = 0; $i < $number_of_data_separation; $i++)
-						<div class="my-5">
-							<ul class="list-disc pl-6 font-semibold">
-								@if($i < $number_of_data_separation - 1)
-									@for($j = $n * $i; $j < $n * ($i + 1); $j++)
-										<li class="text-blue-950">
-											<a href="{{ route('teacher.student.show.progress', ['student_id' => $course_students[$j]->student->id, 'course_id' => $course->id]) }}" class="hover:underline">{{ $course_students[$j]->student->full_name }} @if($course_students[$j]->student->status == "disabled")<span class="text-red-500">(Disabled)</span>@endif
-											</a>
-										</li>
-									@endfor
-								@else
-									@for($j = $n * $i; $j < $course_students->count(); $j++)
-										<li class="text-blue-950">
-											<a href="{{ route('teacher.student.show.progress', ['student_id' => $course_students[$j]->student->id, 'course_id' => $course->id]) }}" class="hover:underline">{{ $course_students[$j]->student->full_name }} @if($course_students[$j]->student->status == "disabled")<span class="text-red-500">(Disabled)</span>@endif
-											</a>
-										</li>
-									@endfor
-								@endif
-							</ul>
-						</div>
-					@endfor
-				</div>
+				@if($course_students->count())
+					<div class="flex justify-evenly w-full">
+						@php
+							$number_of_data_separation = 3;
+							$n = ceil($course_students->count() / $number_of_data_separation);
+						@endphp
+						@for($i = 0; $i < $number_of_data_separation; $i++)
+							<div class="my-5">
+								<ul class="list-disc pl-6 font-semibold">
+									@if($i < $number_of_data_separation - 1)
+										@for($j = $n * $i; $j < $n * ($i + 1); $j++)
+											<li class="text-blue-950">
+												<a href="{{ route('teacher.student.show.progress', ['student_id' => $course_students[$j]->student->id, 'course_id' => $course->id]) }}" class="hover:underline">{{ $course_students[$j]->student->full_name }} @if($course_students[$j]->student->status == "disabled")<span class="text-red-500">(Disabled)</span>@endif
+												</a>
+											</li>
+										@endfor
+									@else
+										@for($j = $n * $i; $j < $course_students->count(); $j++)
+											<li class="text-blue-950">
+												<a href="{{ route('teacher.student.show.progress', ['student_id' => $course_students[$j]->student->id, 'course_id' => $course->id]) }}" class="hover:underline">{{ $course_students[$j]->student->full_name }} @if($course_students[$j]->student->status == "disabled")<span class="text-red-500">(Disabled)</span>@endif
+												</a>
+											</li>
+										@endfor
+									@endif
+								</ul>
+							</div>
+						@endfor
+					</div>
+				@else
+					<p class="text-blue-950 font-semibold py-3">- No students assigned yet to the course -</p>
+				@endif
 			</div>
 		</div>
 	</x-section-container>

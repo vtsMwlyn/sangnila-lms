@@ -15,7 +15,7 @@
 					<x-label for="attendance_date">{{ __("Attendance Date") }}</x-label>
 					<div class="flex items-center gap-3 mt-1">
 						<div class="flex flex-col w-1/3">
-							<x-input type="date" name="attendance_date" id="attendance_date" class=""/>
+							<x-input onfocus="this.type='date'" onblur="this.type='text'" name="attendance_date" id="attendance_date" placeholder="Enter attendance date"/>
 						</div>
 						<x-button type="button" id="todaybtn" class="bg-orange-500">Today</x-button>
 					</div>
@@ -32,8 +32,8 @@
 									<td class="px-5 py-3 w-1/3">
 										<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
 											<input type="checkbox" id="checkbox{{ $loop->iteration }}"
-											class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif >
-											<span class="font-semibold text-blue-900">{{ $cs->student->full_name }}</span>
+											class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif >
+											<label for="checkbox{{ $loop->iteration }}">{{ $cs->student->full_name }}</label>
 										</div>
 									</td>
 									<td class="px-5 py-3">
@@ -68,6 +68,15 @@
 		@endif
 
 		<script>
+			$("#attendance_date").on({
+				"focus": function(){
+					this.showPicker();
+				},
+				"click": function(){
+					this.showPicker();
+				}
+			});
+
 			const collectCheckboxValues = () => {
 				const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 				const checkboxValues = [];

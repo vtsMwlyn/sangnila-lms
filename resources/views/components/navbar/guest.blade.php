@@ -53,10 +53,9 @@
 
     <script>
         // Toggle mobile menu visibility
-        document.getElementById('mobileMenuButton').addEventListener('click', function () {
-            var mobileMenu = document.getElementById('navigation');
-            mobileMenu.style.display = (mobileMenu.style.display === 'none' || mobileMenu.style.display === '') ? 'block' : 'none';
-        });
+        $("#mobileMenuButton").click(() => {
+			$("#navigation").slideToggle();
+		});
     </script>
 </div>
 

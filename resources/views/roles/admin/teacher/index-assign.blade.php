@@ -60,8 +60,8 @@
 		</div>
 		<div class="mt-3">
 			<div class="flex w-full flex-wrap gap-x-10 overflow-x-auto" id="risuto">
-				<div class="w-full bg-white text-center p-4 rounded-xl flex items-center justify-center font-semibold" id="emputii">
-					- N/A -
+				<div class="w-full bg-white text-center p-5 rounded-xl flex items-center justify-center font-semibold" id="emputii">
+					- No courses added yet -
 				</div>
 			</div>
 		</div>
@@ -74,8 +74,8 @@
 						{{ $course->course_name }}
 					</div>
 				@empty
-					<div class="w-full text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">
-						- N/A -
+					<div class="w-full bg-white text-center p-5 rounded-xl flex items-center justify-center font-semibold">
+						- No courses assigned yet -
 					</div>
 				@endforelse
 			</div>

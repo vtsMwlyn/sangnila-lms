@@ -24,7 +24,7 @@
 							</li>
 						@endforeach
 					@else
-						<tr class="text-blue-900"><td>N/A</td></tr>
+						<p class="text-blue-950 font-semibold">- No courses assigned yet -</p>
 					@endif
 				</ul>
 			</div>

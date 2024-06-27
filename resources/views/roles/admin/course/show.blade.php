@@ -49,11 +49,11 @@
 	<x-section-container>
 		<div class="flex flex-col items-stretch mt-5">
 			<div class="rounded-2xl py-5 px-10 text-white bg-blue-950">List of Assigned Teachers</div>
-			<div class="flex flex-wrap gap-x-10 overflow-y-auto px-10 py-5 mt-3" style="max-height: 300px;">
+			<div class="flex flex-wrap gap-x-10 overflow-y-auto py-3 mt-3" style="max-height: 300px;">
 				@forelse ($course->teachers as $teacher)
 					<div class="text-white border-2 border-white bg-blue-900 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 100px; max-height: 100px;">{{ ($teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $teacher->full_name }}</div>
 				@empty
-					<div class="flex w-full justify-center">
+					<div class="flex w-full justify-center bg-white rounded-xl p-5">
 						<span>- No student enrolled in this course yet -</span>
 					</div>
 				@endforelse
@@ -68,7 +68,7 @@
 					<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.import-student-data', $course->id) }}">Import Student</x-anchor-button>
 				</div>
 			</div>
-			<div class="flex flex-wrap gap-x-10 overflow-y-auto px-10 py-5 mt-3" style="max-height: 300px;">
+			<div class="flex flex-wrap gap-x-10 overflow-y-auto py-3 mt-3" style="max-height: 300px;">
 				@forelse ($course->students as $student)
 					<div class="text-white border-4 border-white bg-blue-900 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 100px; max-height: 100px;">
 						{{ $student->full_name }}
@@ -77,7 +77,7 @@
 						@endif
 					</div>
 				@empty
-					<div class="flex w-full justify-center">
+					<div class="flex w-full justify-center font-semibold bg-white rounded-xl p-5">
 						<span>- No student enrolled in this course yet -</span>
 					</div>
 				@endforelse
@@ -105,12 +105,12 @@
 												@endforeach
 											</ul>
 										@else
-											<span class="text-gray-500">- No materials yet -</span>
+											<span class="text-gray-500 font-semibold">- No materials yet -</span>
 										@endif
 									</td>
 								</tr>
 							@empty
-								<tr class="text-gray-500 border border-blue-900"><td colspan="2" class="text-center py-3">- No topics yet -</td></tr>
+								<tr class="text-gray-500 border border-blue-900"><td colspan="2" class="text-center py-3 font-semibold">- No topics yet -</td></tr>
 							@endforelse
 						</tbody>
 					</table>

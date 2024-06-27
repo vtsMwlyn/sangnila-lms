@@ -6,32 +6,28 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5">Manage Assignment</x-page-title>
+		<x-page-title class="mt-5">Manage Attendance</x-page-title>
 		<h1 class="text-2xl font-semibold text-blue-900 mb-8 text-center">Pick a Course</h1>
-		<div class="overflow-x-auto rounded-md">
-			<table class="min-w-full bg-white border-collapse ">
-				<thead>
-					<tr>
-						<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Course Name</th>
-					</tr>
-				</thead>
-				<tbody>
+
+		<div class="flex flex-col">
+			<div class="border-t border-l border-r border-blue-950 bg-slate-300 rounded-t-xl w-full">
+				<h2 class="text-xl text-center font-semibold my-2 text-blue-950">Course Name</h2>
+			</div>
+			<div class="border border-blue-950 bg-slate-300 rounded-b-xl w-full flex justify-center">
+				<ul class="list-disc my-5">
 					@if (Auth::user()->teached_courses->isNotEmpty())
 						@foreach (Auth::user()->teached_courses as $course)
-							<tr>
-								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 text-center">
-									<a href="{{ route('teacher.assignment.show', $course->id) }}"
-										class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
-										{{ $course->course_name }}
-									</a>
-								</td>
-							</tr>
+							<li class="text-blue-950 font-semibold">
+								<a href="{{ route('teacher.assignment.show', $course->id) }}" class="hover:underline">
+									{{ $course->course_name }}
+								</a>
+							</li>
 						@endforeach
 					@else
-						<tr class="text-blue-900"><td>N/A</td></tr>
+						<p class="text-blue-950 font-semibold">- No courses assigned yet -</p>
 					@endif
-				</tbody>
-			</table>
+				</ul>
+			</div>
 		</div>
 	</x-section-container>
 @endsection

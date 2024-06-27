@@ -72,7 +72,7 @@
 						</tr>
 					@endforeach
 				@else
-					<tr ><td colspan="5" class="template-bodies text-center">- No assignments yet -</td></tr>
+					<tr ><td colspan="5" class="bg-white rounded-xl p-5 font-semibold text-center">- No assignments yet -</td></tr>
 				@endif
 
 			</x-table>

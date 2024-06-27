@@ -72,7 +72,7 @@
 					@endforeach
 				@else
 					<tr>
-						<td colspan="4" class="bg-white rounded-xl px-4 py-5 sm:w-1/4 text-center">
+						<td colspan="4" class="bg-white rounded-xl p-5 sm:w-1/4 text-center">
 							- No courses yet -
 						</td>
 					</tr>

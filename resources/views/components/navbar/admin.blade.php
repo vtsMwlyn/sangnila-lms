@@ -1,5 +1,34 @@
 <!-- Main sidebar -->
 <div class="w-full text-white sticky top-0 z-20" style="background-color: rgba(17, 41, 102, 0.5);">
+	@php
+		$students = App\Models\User::where("role_id", 3)->get();
+		$n = 0;
+
+		foreach($students as $student){
+			$sa = App\Models\StudentAttendance::where("user_id", $student->id)->get();
+
+			foreach($student->enrolled_courses as $course){
+				$cs = App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", $student->id)->first();
+
+				if($cs->is_imported){
+					$count = App\Models\ImportedStudent::where("course_id", $course->id)->where("student_id", $student->id)->first()->last_attendance_count;
+				} else {
+					$count = 0;
+				}
+
+				foreach($sa as $atd){
+					if($atd->attendance->course_id == $course->id && $atd->is_attend == 1){
+						$count++;
+					}
+				}
+
+				if((($count + 1) % $cs->max_course_session == 0) || $count >= $cs->max_course_session){
+					$n++;
+				}
+			}
+		}
+	@endphp
+
 	<!-- Sidebar toggler for mobile -->
 	<button id="mobileMenuButton" class="lg:hidden bg-blue-950 text-white font-semibold text-xl transition duration-300 absolute m-2 px-4 py-3 z-10">
 		<span class="inline-block">&#9776;</span>
@@ -25,10 +54,15 @@
 				<i class="bi bi-person-lines-fill"></i> Manage Teachers
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('admin*student*')? 'bg-orange-500' : 'bg-blue-900' }} grow"
-				href="{{ route('admin.student.index') }}">
-				<i class="bi bi-person-workspace"></i> Manage Students
-			</x-anchor-button>
+			<div class="relative grow">
+				@if($n > 0)
+					<div class="absolute h-6 w-7 bg-red-600 rounded-full flex justify-center items-center" style="top: -0.5rem; right: -0.5rem;">{{ $n }}</div>
+				@endif
+				<x-anchor-button class="{{ Request::is('admin*student*')? 'bg-orange-500' : 'bg-blue-900' }} w-full"
+					href="{{ route('admin.student.index') }}">
+					<i class="bi bi-person-workspace"></i> Manage Students
+				</x-anchor-button>
+			</div>
 
 			<x-anchor-button class="{{ Request::is('admin*account*')? 'bg-orange-500' : 'bg-blue-900' }} grow"
 				href="{{ route('admin.account.index') }}">
@@ -53,10 +87,9 @@
 
     <script>
         // Toggle mobile menu visibility
-        document.getElementById('mobileMenuButton').addEventListener('click', function () {
-            var mobileMenu = document.getElementById('navigation');
-            mobileMenu.style.display = (mobileMenu.style.display === 'none' || mobileMenu.style.display === '') ? 'block' : 'none';
-        });
+        $("#mobileMenuButton").click(() => {
+			$("#navigation").slideToggle();
+		});
     </script>
 </div>
 

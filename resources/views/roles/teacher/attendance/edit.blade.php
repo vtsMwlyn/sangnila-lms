@@ -11,7 +11,7 @@
 			@csrf
 			<div class="my-4">
 				<div class="flex items-center gap-3 mt-1">
-					<x-input type="date" name="attendance_date" id="attendance_date" :value="$attendance->attendance_date" class="w-1/3"/>
+					<x-input onfocus="this.type='date'" onblur="this.type='text'" name="attendance_date" id="attendance_date" :value="$attendance->attendance_date" class="w-1/3"/>
 					<x-button type="button" id="todaybtn" class="bg-orange-500">Today</x-button>
 				</div>
 			</div>
@@ -57,6 +57,15 @@
 		</form>
 
 		<script>
+			$("#attendance_date").on({
+				"focus": function(){
+					this.showPicker();
+				},
+				"click": function(){
+					this.showPicker();
+				}
+			});
+
 			const collectCheckboxValues = () => {
 				const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 				const checkboxValues = [];
