@@ -5,31 +5,41 @@
 @endsection
 
 @section("content")
-	<h1 class="text-3xl font-semibold text-blue-900 mb-4">My Attendance</h1>
-	<h1 class="text-2xl font-semibold text-blue-900 mb-4">Pick a Course</h1>
-	<div class="overflow-x-auto rounded-md">
-		<table class="min-w-full bg-white border-collapse ">
-			<thead>
-				<tr>
-					<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Course Name</th>
-				</tr>
-			</thead>
-			<tbody>
+	<x-section-container>
+		<x-page-title class="mt-5">My Attendances</x-page-title>
+		<h1 class="text-2xl font-semibold text-blue-900 mb-4 text-center">Pick a Course</h1>
+		<div class="overflow-x-auto rounded-md">
+			<x-table>
+				<x-slot name="head">
+					<th class="template-heads rounded-xl">Course Name</th>
+				</x-slot>
 				@if ($courseStudents->count())
 					@foreach ($courseStudents as $cs)
 						<tr>
-							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-								<a href="{{ route('student.attendance.show', $cs->course->id) }}"
-									class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
-									{{ $cs->course->course_name }}
-								</a>
+							<td class="template-bodies rounded-xl selections transition ease-in-out duration-500" style="cursor: url('{{ asset('img/cursor2.cur') }}'), pointer; padding: 0;">
+								<div class="flex w-full h-full items-stretch p-5">
+									<a href="{{ route('student.attendance.show', $cs->course->id) }}" class="font-bold h-full w-full">
+										{{ $cs->course->course_name }}
+									</a>
+								</div>
 							</td>
 						</tr>
 					@endforeach
 				@else
-					<tr class="text-blue-900"><td>N/A</td></tr>
+					<tr class="bg-white rounded-xl p-5"><td>N/A</td></tr>
 				@endif
-			</tbody>
-		</table>
-	</div>
+			</x-table>
+		</div>
+
+		<script>
+			$(".selections").on({
+				"mouseover": function(){
+					$(this).css({"background-color": "rgb(250 204 21)"});
+				},
+				"mouseout": function(){
+					$(this).css({"background-color": "#283785"});
+				}
+			})
+		</script>
+	</x-section-container>
 @endsection

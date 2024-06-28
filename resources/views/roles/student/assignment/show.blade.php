@@ -5,60 +5,67 @@
 @endsection
 
 @section("content")
-	<h1 class="text-3xl font-semibold text-blue-900 mb-4">My Assignments</h1>
-	<h1 class="text-xl font-semibold text-blue-900 mb-4">Course: {{ $course->course_name }}</h1>
+	<x-section-container>
+		<x-page-title class="mt-5">My Assignments</x-page-title>
+		<h1 class="text-xl font-semibold text-center text-blue-900 mb-8">Course: {{ $course->course_name }}</h1>
 
-	@if(session()->has("successSubmitAssignment"))
-		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-green-900">{{ session("successSubmitAssignment") }}</p>
-		</div>
-	@elseif(session()->has("successEditSubmission"))
-		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-green-900">{{ session("successEditSubmission") }}</p>
-		</div>
-	@elseif(session()->has("maximumSubmission"))
-		<div class="w-full bg-red-400 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-red-900">{{ session("maximumSubmission") }}</p>
-		</div>
-	@endif
-
-	@forelse ($assignments as $index => $asg)
-		<div class="rounded-md w-full mt-5 my-5 p-5 border">
-			<h3 class="text-xl font-semibold">{{ $asg->title }}</h3>
-			@if($submissions_per_assignment[$index] > 0)
-				<p class="text-green-700 mt-2 mb-2"><i class="bi bi-check-circle-fill"></i> Submitted</p>
-				<a class="text-blue-500" href="{{ route("student.assignment.detail", [$course->id, Auth::user()->id ,$asg->id]) }}">Submission history and feedback</a>
-			@endif
-
-			<p class="mt-3 italic">Assignment Description:</p>
-			<p>{{ $asg->desc }}</p>
-			<p class="mt-3">Please submit before <span class="font-semibold">{{ $asg->deadline_date }} {{ $asg->deadline_time }}</span></p>
-
-			@if($submissions_per_assignment[$index] < 10)
-				<p class="font-semibold text-blue-700">New submissions allowed: {{ 10 - $submissions_per_assignment[$index] }} time(s)</p>
-			@else
-				<p class="font-semibold text-red-500">Number of new submissions reached its limit!</p>
-			@endif
-
-			<div class="flex items-center gap-1 mt-4">
-				<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-					href="{{ $asg->link }}">
-					Download
-				</a>
-				@if($asg->submissions->count())
-					<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-						href="{{ route("student.assignment.submit", [$course->id, $asg->id]) }}">
-						New submission
-					</a>
-				@else
-					<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white hover:bg-gray-700 transition duration-300"
-						href="{{ route("student.assignment.submit", [$course->id, $asg->id]) }}">
-						Upload
-					</a>
-				@endif
+		@if(session()->has("successSubmitAssignment"))
+			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-green-900">{{ session("successSubmitAssignment") }}</p>
 			</div>
-		</div>
-	@empty
-		<p class="italic text-slate-500">- No assignments given yet -</p>
-	@endforelse
+		@elseif(session()->has("successEditSubmission"))
+			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-green-900">{{ session("successEditSubmission") }}</p>
+			</div>
+		@elseif(session()->has("maximumSubmission"))
+			<div class="w-full bg-red-400 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-red-900">{{ session("maximumSubmission") }}</p>
+			</div>
+		@endif
+
+		@forelse ($assignments as $index => $asg)
+			<div class="rounded-md w-full mt-5 my-5 p-5 border" style="background: rgba(256, 256, 256, 0.4)">
+				<h3 class="text-xl font-semibold text-blue-950">{{ $asg->title }}</h3>
+
+				@if($submissions_per_assignment[$index] > 0)
+					<div class="flex items-center gap-2">
+						<p class="mt-2 mb-2">Submitted</p>
+						<i class="bi bi-patch-check-fill text-2xl text-green-800"></i>
+					</div>
+					<a class="text-blue-800 hover:underline font-bold" href="{{ route("student.assignment.detail", [$course->id, Auth::user()->id ,$asg->id]) }}">Submission history and feedback</a>
+				@endif
+
+				<p class="mt-3 italic ">Assignment Description:</p>
+				<p class="mt-1 ">{{ $asg->desc }}</p>
+
+				<p class="mt-3 text-blue-950 ">Please submit before <span class="font-bold">{{ $asg->deadline_date }} {{ $asg->deadline_time }}</span></p>
+
+				@if($submissions_per_assignment[$index] < 10)
+					<p class="font-bold  text-blue-950">New submissions allowed: {{ 10 - $submissions_per_assignment[$index] }} time(s)</p>
+				@else
+					<p class="font-bold  text-red-500">Number of new submissions reached its limit!</p>
+				@endif
+
+				<div class="flex items-center gap-3 mt-5 mb-3">
+					<x-anchor-button class="bg-orange-500"
+						href="{{ $asg->link }}">
+						Download
+					</x-anchor-button>
+					@if($asg->submissions->count())
+						<x-anchor-button class="bg-orange-500"
+							href="{{ route('student.assignment.submit', [$course->id, $asg->id]) }}">
+							New submission
+						</x-anchor-button>
+					@else
+						<x-anchor-button class="bg-orange-500"
+							href="{{ route('student.assignment.submit', [$course->id, $asg->id]) }}">
+							Upload
+						</x-anchor-button>
+					@endif
+				</div>
+			</div>
+		@empty
+			<p class="italic text-slate-500">- No assignments given yet -</p>
+		@endforelse
+	</x-section-container>
 @endsection

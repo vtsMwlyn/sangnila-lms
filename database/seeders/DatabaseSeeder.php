@@ -92,7 +92,7 @@ class DatabaseSeeder extends Seeder
 		$topic = Topic::create(["course_id" => $course->id, "title" => $topic_name]);
 
 		foreach($materials as $material){
-			Material::create(["topic_id" => $topic->id, "title" => $material, "link" => "https://www.google.com/", "desc" => "This is a description of a material."]);
+			Material::create(["topic_id" => $topic->id, "title" => $material, "link" => "https://www.google.com/", "desc" => "This is the description of the material. It serves as a comprehensive overview, providing a clear explanation or summary of the content. By reading or watching this material, students will gain a solid understanding of the main concepts and topics covered. They can expect to learn key insights, practical applications, and theoretical foundations that are essential for mastering the subject matter. The description aims to orientate students, helping them to grasp the significance of the material and its relevance to their learning journey."]);
 		}
 	}
 
