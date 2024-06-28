@@ -9,46 +9,37 @@
 		<!-- Logo/Brand Image -->
 		<div class="flex justify-center hover:scale-110 transition duration-600 mx-5">
 			<a href="{{ route('home') }}" style="cursor: url({{ asset('img/cursor2.cur') }}), pointer;">
-				<img src={{ asset("img/AR.W.png") }} alt="logo" width="90px">
+				<img src={{ asset("img/AR.W.png") }} alt="logo" style="min-width: 90px; max-width: 90px;">
 			</a>
 		</div>
 
 		<!-- Sidebar navigations -->
 		<div class="flex flex-col lg:flex-row items-stretch justify-center gap-4 mx-10 py-4 px-6 rounded-3xl border border-white grow lg:w-auto my-5 lg:my-0" style="background-color: rgba(217, 217, 217, 0.45);">
-			<x-anchor-button class="{{ Request::is('admin*course*')? 'bg-orange-500' : 'bg-blue-900' }} grow"
-				href="{{ route('admin.course.index') }}">
-				<i class="bi bi-grid"></i> Manage Courses
+			<x-anchor-button class="{{ Request::is('guest*')? 'bg-orange-500' : 'bg-blue-900' }} grow"
+				href="{{ route('guest.index') }}">
+				<i class="bi bi-grid"></i> Courses Available
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('admin*teacher*')? 'bg-orange-500' : 'bg-blue-900' }} grow"
-				href="{{ route('admin.teacher.index') }}">
-				<i class="bi bi-person-lines-fill"></i> Manage Teachers
+			<x-anchor-button class="bg-blue-900 grow"
+				href="https://academy.sangnilaindonesia.com/">
+				<i class="bi bi-info-circle"></i> About Us
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('admin*student*')? 'bg-orange-500' : 'bg-blue-900' }} grow"
-				href="{{ route('admin.student.index') }}">
-				<i class="bi bi-person-workspace"></i> Manage Students
+			<x-anchor-button class="bg-blue-900 grow"
+				href="https://www.sangnilaindonesia.com/">
+				<i class="bi bi-globe2"></i> Our Website
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('admin*account*')? 'bg-orange-500' : 'bg-blue-900' }} grow"
-				href="{{ route('admin.account.index') }}">
-				<i class="bi bi-person-gear"></i> Manage Accounts
+			<x-anchor-button class="bg-blue-900 grow"
+				href="https://register.sangnilaindonesia.com/">
+				<i class="bi bi-person-check-fill"></i> Register Now!
 			</x-anchor-button>
-
-			<!-- Logout Button -->
-			<form method="POST" action="{{ route('logout') }}" class="grow">
-				@csrf
-				<x-button
-					class="font-semibold bg-red-600 w-full" onclick="return confirm('Are you sure want to logout from your account?');">
-						<i class="bi bi-box-arrow-left"></i> {{ __('Log Out') }}
-				</x-button>
-			</form>
 		</div>
 
-		<a href="{{ route("profile.show") }}" class="flex flex-col items-center font-bold mx-5 hover:text-yellow-400 hover:scale-110 transition ease-in-out text-white absolute top-4 lg:top-0 right-0 lg:relative" style="max-width: 90px;">
+		<div class="flex flex-col font-bold items-center" style="min-width: 90px; max-width: 90px;">
 			<i class="bi bi-person-circle text-3xl "></i>
-			<span class=" text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
-		</a>
+			<span class="text-center text-sm mt-1">Guest</span>
+		</div>
 	</div>
 
     <script>
