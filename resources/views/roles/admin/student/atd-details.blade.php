@@ -25,7 +25,12 @@
 						<tr class="@if($attendance->is_attend == 1) bg-green-700 @else bg-red-800 @endif text-white">
 							<td class="px-3 py-5 text-center rounded-l-xl">{{ $attendance->created_at }}</td>
 							<td class="px-3 py-5 text-center font-bold">@if($attendance->is_attend == 1) Present @else Absent @endif</td>
-							<td class="px-3 py-5 text-center">{{ $attendance->attendance_detail }}</td>
+							<td class="px-3 py-5 text-center">
+								<div class="flex flex-col gap-3">
+									<p>{{ $attendance->attendance_detail }}</p>
+									<p class="font-semibold italic text-yellow-200">{{ $attendance->material_progress }} - {{ $attendance->learning_status }}</p>
+								</div>
+							</td>
 							<td class="px-3 py-5 text-center rounded-r-xl">{{ ($attendance->attendance->posted_by->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $attendance->attendance->posted_by->full_name }}</td>
 						</tr>
 					@endforeach

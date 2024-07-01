@@ -73,8 +73,11 @@
 							<div class="w-1/4 bg-slate-300">
 								<div class="border-l border-r border-b border-blue-950 px-4 py-2 font-bold text-blue-950 text-center">Attendance Status</div>
 							</div>
-							<div class="w-1/2 bg-slate-300">
-								<div class="border-b border-blue-950 px-4 py-2 font-bold text-blue-950 text-center">Attendance Details</div>
+							<div class="w-1/4 bg-slate-300">
+								<div class="border-r border-b border-blue-950 px-4 py-2 font-bold text-blue-950 text-center">Attendance Details</div>
+							</div>
+							<div class="w-1/4 bg-slate-300">
+								<div class="border-b border-blue-950 px-4 py-2 font-bold text-blue-950 text-center">Progress</div>
 							</div>
 						</div>
 
@@ -86,7 +89,10 @@
 							<div class="w-1/4 bg-slate-300">
 								<div class="border-l border-r border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
 							</div>
-							<div class="w-1/2 bg-slate-300">
+							<div class="w-1/4 bg-slate-300">
+								<div class="border-r border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
+							</div>
+							<div class="w-1/4 bg-slate-300">
 								<div class="border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
 							</div>
 						</div>
@@ -111,9 +117,14 @@
 											</li>
 										</div>
 									</div>
-									<div class="w-1/2">
+									<div class="w-1/4 border-r border-blue-950">
 										<div class="px-4 text-blue-950">
 											<li>{{ $sa->attendance_detail }}</li>
+										</div>
+									</div>
+									<div class="w-1/4">
+										<div class="px-4 text-blue-950">
+											<li>{{ $sa->material_progress }} [{{ $sa->learning_status }}]</li>
 										</div>
 									</div>
 								</div>
@@ -128,7 +139,10 @@
 							<div class="w-1/4 bg-slate-300">
 								<div class="border-l border-r border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
 							</div>
-							<div class="w-1/2 bg-slate-300">
+							<div class="w-1/4 bg-slate-300">
+								<div class="border-r border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
+							</div>
+							<div class="w-1/4 bg-slate-300">
 								<div class="border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
 							</div>
 						</div>

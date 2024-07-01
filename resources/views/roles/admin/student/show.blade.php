@@ -8,9 +8,19 @@
 	<x-section-container>
 		<x-page-title class="mt-5">{{ __("Student's Details") }}</x-page-title>
 
+		@if(App\Models\ImportedStudent::where("student_id", $student->id)->first())
+			<div class="w-full bg-yellow-300 px-5 py-3 my-8 rounded-lg">
+				<p class="text-yellow-700 font-semibold" ><i class="bi bi-info-circle"></i> <span class="font-bold">This student is imported.</span> You can unset the imported status when the attendance data of the students are fully inserted by <a href="{{ route("admin.student.normalize.confirmation", [$student->id]) }}" class="hover:underline font-bold hover:font-extrabold">clicking here</a>.</p>
+			</div>
+		@endif
+
 		@if(session()->has("successAssignToCourse"))
 			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
 				<p class="text-green-900">{{ session("successAssignToCourse") }}</p>
+			</div>
+		@elseif(session()->has("successNormalize"))
+			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
+				<p class="text-green-900">{{ session("successNormalize") }}</p>
 			</div>
 		@elseif(session()->has("successUnassignFromCourse"))
 			<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">

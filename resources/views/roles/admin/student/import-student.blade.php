@@ -105,6 +105,11 @@
 						</div>
 					</div>
 
+					<div class="mt-5 flex items-center">
+						<input type="checkbox" id="new_student" name="new_student" class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300">
+						<label for="new_student">Add as a new student</label>
+					</div>
+
 					<h1 class="font-semibold text-lg mt-10 mb-3">Student's Course Data</h1>
 					<hr>
 					<div class="mt-3 flex flex-col md:flex-row gap-3">
@@ -163,6 +168,7 @@
 							<thead>
 								<tr>
 									<th class="border px-4 fixed1" rowspan="2">Name</th>
+									<th class="border px-4" rowspan="2">Is New</th>
 									<th class="border px-4 fixed1" rowspan="2">Email</th>
 									<th class="border px-4 fixed1" rowspan="2">Teacher</th>
 									<th class="border px-4" colspan="2">Session</th>
@@ -212,6 +218,9 @@
 					$.each(formDataArray, function() {
 						formData[this.name] = this.value;
 					});
+
+					// Checkbox value
+					const cbv = $('input[type="checkbox"]').is(":checked")? "Yes" : "No";
 
 					// Validations
 					const contFullName = $("#container_full_name");
@@ -300,6 +309,7 @@
 					const colLastAttendanceCount = $("<td>").addClass("border px-4 py-2").text(formData.last_attendance_count);
 					const colMaxCourseSession = $("<td>").addClass("border px-4 py-2").text(formData.max_course_session);
 					const colLastMaterialUnlocked = $("<td>").addClass("border px-4 py-2 fixed1").text(JSON.parse(formData.last_material_unlocked).title);
+					const colNewStudent = $("<td>").addClass("border px-4 py-2 fixed1").text(cbv);
 
 					const delBtn = $("<button>").attr({"type": "button"}).addClass("text-center px-5 py-2 border border-transparent rounded-lg text-white bg-red-700 hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 transition ease-in-out duration-150").html("<i class='bi bi-trash3'></i>");
 					const colAction = $("<td>").addClass("border px-4 py-2").append(delBtn);
@@ -313,7 +323,7 @@
 					const colNameParent = $("<td>").addClass("border px-4 py-2 fixed2").text(formData.name_parent);
 					const colPhoneParent = $("<td>").addClass("border px-4 py-2 fixed2").text(formData.phone_parent);
 
-					newRow.append(colFullName, colEmail, colTeacherName, colLastAttendanceCount, colMaxCourseSession, colLastMaterialUnlocked, colAction, colGender, colPhoneNumber, colCityOfBirth, colDateOfBirth, colSchoolName, colStudentLevel, colNameParent, colPhoneParent);
+					newRow.append(colFullName, colNewStudent, colEmail, colTeacherName, colLastAttendanceCount, colMaxCourseSession, colLastMaterialUnlocked, colAction, colGender, colPhoneNumber, colCityOfBirth, colDateOfBirth, colSchoolName, colStudentLevel, colNameParent, colPhoneParent);
 
 					$("#table-body").append(newRow);
 
@@ -327,6 +337,7 @@
 					const hidLastAttendanceCount = $("<input>").attr({"type": "hidden", "name": "inp_last_attendance_count[]", "value": formData.last_attendance_count});
 					const hidMaxCourseSession = $("<input>").attr({"type": "hidden", "name": "inp_max_course_session[]", "value": formData.max_course_session});
 					const hidLastMaterialUnlocked = $("<input>").attr({"type": "hidden", "name": "inp_last_material_unlocked[]", "value": JSON.parse(formData.last_material_unlocked).id});
+					const hidNewStudent = $("<input>").attr({"type": "hidden", "name": "is_new_student[]", "value": cbv});
 
 					const hidPhoneNumber = $("<input>").attr({"type": "hidden", "name": "inp_phone_number[]", "value": formData.phone_number});
 					const hidCityOfBirth = $("<input>").attr({"type": "hidden", "name": "inp_cob[]", "value": formData.city_of_birth});
@@ -336,7 +347,7 @@
 					const hidNameParent = $("<input>").attr({"type": "hidden", "name": "inp_name_parent[]", "value": formData.name_parent});
 					const hidPhoneParent = $("<input>").attr({"type": "hidden", "name": "inp_phone_parent[]", "value": formData.phone_parent});
 
-					$(hiddenInputsContainer).append(hidFullName, hidEmail, hidTeacherName, hidLastAttendanceCount, hidMaxCourseSession, hidLastMaterialUnlocked, hidGender, hidPhoneNumber, hidCityOfBirth, hidDateOfBirth, hidSchoolName, hidStudentLevel, hidNameParent, hidPhoneParent);
+					$(hiddenInputsContainer).append(hidFullName, hidEmail, hidTeacherName, hidLastAttendanceCount, hidMaxCourseSession, hidLastMaterialUnlocked, hidNewStudent, hidPhoneNumber, hidCityOfBirth, hidDateOfBirth, hidSchoolName, hidStudentLevel, hidNameParent, hidPhoneParent);
 					$("#real-form").append(hiddenInputsContainer);
 
 					$(delBtn).click(() => {
