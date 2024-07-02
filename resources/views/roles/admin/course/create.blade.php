@@ -39,9 +39,9 @@
 				<x-button class="bg-orange-500 w-full md:w-1/5">
 					{{ __('Submit') }}
 				</x-button>
-				<x-button type="button" onclick="if(confirm('The filled data will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500 w-full md:w-1/5">
+				<x-cancel-button msg="The filled data will be discarded, are you sure want to cancel?" class="w-full md:w-1/5">
 					Cancel
-				</x-button>
+				</x-cancel-button>
 			</div>
 		</form>
 	</x-section-container>

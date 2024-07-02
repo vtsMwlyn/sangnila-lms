@@ -28,7 +28,7 @@
 			<!-- Yes/No Buttons -->
 			<div class="flex gap-3 w-full justify-center mt-8">
 				<x-button type="submit" class="bg-orange-500 w-full md:w-1/6">Proceed</x-button>
-				<x-button type="button" onclick="history.back()" class="bg-orange-500 w-full md:w-1/6">Cancel</x-button>
+				<x-button type="button" onclick="history.back()" class="bg-slate-600 w-full md:w-1/6">Cancel</x-button>
 			</div>
 		</form>
 

@@ -10,17 +10,11 @@
 		{{-- <h6 class="text-sm italic text-gray-500 text-center mb-4">(Visibility: {{ $course->visibility }})</h6> --}}
 
 		@if(session()->has("successUpdateCourseData"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successUpdateCourseData") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successUpdateCourseData') }}"></x-badge-success>
 		@elseif(session()->has("successBatchAssign"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successBatchAssign") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successBatchAssign') }}"></x-badge-success>
 		@elseif(session()->has("successImportStudent"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successImportStudent") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successImportStudent') }}"></x-badge-success>
 		@endif
 
 		<div class="flex gap-5 mt-8">
@@ -86,35 +80,34 @@
 
 		<div class="flex flex-col w-full mt-10">
 			<div class="rounded-2xl py-5 px-10 text-white bg-blue-950">Course Topics and Materials</div>
-			<div class="mt-3">
-				<div class="overflow-x-auto">
-					<table class="w-full bg-white">
-						<thead class="bg-blue-800 text-white">
-							<th class="border border-blue-400 px-5 py-3">Topic name</th>
-							<th class="border border-blue-400 px-5 py-3">Materials</th>
-						</thead>
-						<tbody>
-							@forelse ($course->topics as $topic)
-								<tr>
-									<td class="border border-blue-400 px-5 py-3">{{ $topic->title }}</td>
-									<td class="border border-blue-400 px-5 py-3">
-										@if($topic->materials->count())
-											<ul>
-												@foreach ($topic->materials as $material)
-													<li>{{ $material->title }}</li>
-												@endforeach
-											</ul>
-										@else
-											<span class="text-gray-500 font-semibold">- No materials yet -</span>
-										@endif
-									</td>
-								</tr>
-							@empty
-								<tr class="text-gray-500 border border-blue-900"><td colspan="2" class="text-center py-3 font-semibold">- No topics yet -</td></tr>
-							@endforelse
-						</tbody>
-					</table>
-				</div>
+
+			<div class="overflow-x-auto mt-3">
+				<x-table>
+					<x-slot name="head">
+						<th class="template-heads rounded-l-xl">Topic name</th>
+						<th class="template-heads rounded-r-xl">Materials</th>
+					</x-slot>
+					@forelse ($course->topics as $topic)
+						<tr>
+							<td class="template-bodies rounded-l-xl">{{ $topic->title }}</td>
+							<td class="template-bodies rounded-r-xl">
+								@if($topic->materials->count())
+									<ul>
+										@foreach ($topic->materials as $material)
+											<li>{{ $material->title }}</li>
+										@endforeach
+									</ul>
+								@else
+									<span class="text-gray-500 font-semibold">- No materials yet -</span>
+								@endif
+							</td>
+						</tr>
+					@empty
+						<tr class="text-gray-500 border border-blue-900"><td colspan="2" class="text-center py-3 font-semibold">- No topics yet -</td></tr>
+					@endforelse
+				</x-table>
+			</div>
+
 			</div>
 		</div>
 	</x-section-container>

@@ -9,21 +9,13 @@
 		<x-page-title class="mt-5">{{ __("List of All Accounts") }}</x-page-title>
 
 		@if(session()->has("successCreateNewAccount"))
-			<div class="w-full bg-green-500 px-5 py-3 rounded-lg">
-				<p class="text-green-900">{{ session("successCreateNewAccount") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successCreateNewAccount') }}"></x-badge-success>
 		@elseif(session()->has("successDeleteAccount"))
-			<div class="w-full bg-yellow-300 px-5 py-3 rounded-lg">
-				<p class="text-yellow-600" >{{ session("successDeleteAccount") }}</p>
-			</div>
+			<x-badge-warning badge_text="{{ session('successDeleteAccount') }}"></x-badge-warning>
 		@elseif(session()->has("successEnableAccount"))
-			<div class="w-full bg-green-500 px-5 py-3 rounded-lg">
-				<p class="text-green-900">{{ session("successEnableAccount") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successEnableAccount') }}"></x-badge-success>
 		@elseif(session()->has("successDisableAccount"))
-			<div class="w-full bg-yellow-300 px-5 py-3 rounded-lg">
-				<p class="text-yellow-600" >{{ session("successDisableAccount") }}</p>
-			</div>
+			<x-badge-warning badge_text="{{ session('successDisableAccount') }}"></x-badge-warning>
 		@endif
 
 		<div class="mb-5">

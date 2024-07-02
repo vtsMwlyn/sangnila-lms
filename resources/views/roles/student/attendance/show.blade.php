@@ -24,7 +24,7 @@
 						</tr>
 					@endforeach
 				@else
-					<tr><td colspan="3" class="border border-black px-3 text-center">- The teacher haven't uploaded any attendance data yet -</td></tr>
+					<tr><td colspan="3" class="p-5 rounded-xl bg-white font-semibold text-center">- The teacher haven't uploaded any attendance data yet -</td></tr>
 				@endif
 			</x-table>
 		</div>

@@ -10,12 +10,11 @@
 
 		@if($course->teachers->count() && $course->topics->count() && $course->topics[0]->materials->count())
 			<form action="#" id="le-form">
-				<div class="border rounded-xl p-5 my-5 bg-white border-blue-800">
+				<div class="my-10">
 					<div class="flex w-full items-center justify-between mb-3">
-						<h1 class="font-semibold text-lg">Student's Profile</h1>
-						<x-button class="bg-orange-500" id="show-details-button">Show Details</x-button>
+						<h1 class="font-semibold text-lg text-blue-950 px-5 py-2 border-2 border-blue-950 rounded-xl">Student's Profile</h1>
+						<x-button class="bg-orange-500 w-1/2 md:w-1/6" id="show-details-button">Show Details</x-button>
 					</div>
-					<hr>
 					<div class="flex flex-col md:flex-row gap-3 mt-3">
 						<!-- Student Name -->
 						<div class="w-full md:w-1/2" id="container_full_name">
@@ -64,7 +63,7 @@
 								<!-- Student Date of Birth -->
 								<div class="w-full md:w-1/2">
 									<x-label for="date_of_birth" :value="__('Student Date of Birth')"/>
-									<x-input id="date_of_birth" class="block mt-1 w-full" type="date" name="date_of_birth" :value="old('date_of_birth')" placeholder="Add date of birth"  />
+									<x-input id="date_of_birth" class="block mt-1 w-full" onfocus="this.type = 'date';" onblur="this.type = 'text'" name="date_of_birth" :value="old('date_of_birth')" placeholder="Add date of birth"  />
 								</div>
 							</div>
 						</div>
@@ -105,8 +104,14 @@
 						</div>
 					</div>
 
-					<h1 class="font-semibold text-lg mt-10 mb-3">Student's Course Data</h1>
-					<hr>
+					<div class="mt-5 flex items-center">
+						<input type="checkbox" id="new_student" name="new_student" class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300">
+						<label for="new_student" class="font-semibold text-blue-950">Add as a new student</label>
+					</div>
+
+					<div class="flex mt-10">
+						<h1 class="font-semibold text-lg text-blue-950 px-5 py-2 border-2 border-blue-950 rounded-xl">Student's Course Data</h1>
+					</div>
 					<div class="mt-3 flex flex-col md:flex-row gap-3">
 						<!-- Student's Teacher -->
 						<div class="w-full md:w-1/2" id="container_teacher_name">
@@ -150,47 +155,68 @@
 						</x-select>
 						<p class="text-red-500" style="display: none" id="err_last_material_unlocked">This field is required.</p>
 					</div>
-					<x-button class="bg-green-600 mt-5" type="submit" id="addBtn">Add Data</x-button>
+					<div class="flex w-full justify-end">
+						<x-button class="bg-orange-500 mt-8 w-1/2 md:w-1/6" type="submit" id="addBtn">Add Data</x-button>
+					</div>
 				</div>
 			</form>
+		</x-section-container>
 
-			<div class="border rounded-xl p-5 border-blue-800 bg-white">
-				<h1 class="font-semibold text-lg">Students Data to Import</h1>
+		<x-section-container class="mt-10">
+			<div class="py-5">
+				<div class="flex">
+					<h1 class="font-semibold text-lg text-blue-950 px-5 py-2 border-2 border-blue-950 rounded-xl">Students Data to Import</h1>
+				</div>
 				<form class="w-full" action="{{ route("admin.course.import-student-data.store", $course->id) }}" method="post" id="real-form">
 					@csrf
-					<div class="overflow-x-auto w-full">
-						<table class="w-full mt-3" id="student-to-import">
-							<thead>
-								<tr>
-									<th class="border px-4 fixed1" rowspan="2">Name</th>
-									<th class="border px-4 fixed1" rowspan="2">Email</th>
-									<th class="border px-4 fixed1" rowspan="2">Teacher</th>
-									<th class="border px-4" colspan="2">Session</th>
-									<th class="border px-4 fixed1" rowspan="2">Last Material</th>
-									<th class="border px-4" rowspan="2">Action</th>
-									<th class="border px-4" rowspan="2">Gender</th>
-									<th class="border px-4 fixed2" rowspan="2">Phone</th>
-									<th class="border px-4 fixed2" rowspan="2">COB</th>
-									<th class="border px-4 fixed2" rowspan="2">DOB</th>
-									<th class="border px-4 fixed2" rowspan="2">School</th>
-									<th class="border px-4 fixed2" rowspan="2">Level</th>
-									<th class="border px-4 fixed2" rowspan="2">Parent</th>
-									<th class="border px-4 fixed2" rowspan="2">Parent Phone</th>
-								</tr>
-								<tr>
-									<th class="border px-4">Last</th>
-									<th class="border px-4">Max</th>
-								</tr>
-							</thead>
-							<tbody id="table-body">
-							</tbody>
-						</table>
+					<div class="rounded-xl mt-5 overflow-hidden border-blue-950 border">
+						<div class="overflow-x-auto w-full">
+							<table class="w-full bg-slate-200 text-blue-950" id="student-to-import">
+								<thead>
+									<tr>
+										<th class="border-r border-blue-950 px-4 fixed1" rowspan="2">Name</th>
+										<th class="border-r border-blue-950 px-4" rowspan="2">Is New</th>
+										<th class="border-r border-blue-950 px-4 fixed1" rowspan="2">Email</th>
+										<th class="border-r border-blue-950 px-4 fixed1" rowspan="2">Teacher</th>
+										<th class="border-r border-blue-950 px-4" colspan="2">Session</th>
+										<th class="border-r border-blue-950 px-4 fixed1" rowspan="2">Last Material</th>
+										<th class="border-r border-blue-950 px-4" rowspan="2">Action</th>
+										<th class="border-r border-blue-950 px-4" rowspan="2">Gender</th>
+										<th class="border-r border-blue-950 px-4 fixed2" rowspan="2">Phone</th>
+										<th class="border-r border-blue-950 px-4 fixed2" rowspan="2">COB</th>
+										<th class="border-r border-blue-950 px-4 fixed2" rowspan="2">DOB</th>
+										<th class="border-r border-blue-950 px-4 fixed2" rowspan="2">School</th>
+										<th class="border-r border-blue-950 px-4 fixed2" rowspan="2">Level</th>
+										<th class="border-r border-blue-950 px-4 fixed2" rowspan="2">Parent</th>
+										<th class="px-4 fixed2" rowspan="2">Parent Phone</th>
+									</tr>
+									<tr>
+										<th class="border-r border-t border-blue-950 px-4">Last</th>
+										<th class="border-r border-t border-blue-950 px-4">Max</th>
+									</tr>
+								</thead>
+								<tbody id="table-body">
+								</tbody>
+							</table>
+						</div>
 					</div>
-					<x-button class="bg-indigo-400 mt-3" type="submit">Import Data</x-button>
+					<div class="flex w-full items-center gap-3 justify-end mt-8">
+						<x-cancel-button class="w-1/2 md:w-1/6" msg="The data will be discarded. Are you sure want to cancel?">Cancel</x-cancel-button>
+						<x-button class="bg-orange-500 w-1/2 md:w-1/6" type="submit">Import Data</x-button>
+					</div>
 				</form>
 			</div>
 
 			<script>
+				$("#date_of_birth").on({
+					"focus": function(){
+						this.showPicker();
+					},
+					"click": function(){
+						this.showPicker();
+					}
+				});
+
 				$("#show-details-button").click((e) => {
 					e.preventDefault();
 
@@ -212,6 +238,9 @@
 					$.each(formDataArray, function() {
 						formData[this.name] = this.value;
 					});
+
+					// Checkbox value
+					const cbv = $('input[type="checkbox"]').is(":checked")? "Yes" : "No";
 
 					// Validations
 					const contFullName = $("#container_full_name");
@@ -294,26 +323,27 @@
 					// Generate new row of data to show in the table
 					const newRow = $("<tr>");
 
-					const colFullName = $("<td>").addClass("border px-4 py-2 fixed1").text(formData.full_name);
-					const colEmail = $("<td>").addClass("border px-4 py-2 fixed1").text(formData.email);
-					const colTeacherName = $("<td>").addClass("border px-4 py-2 fixed1").text(JSON.parse(formData.teacher_name).full_name);
-					const colLastAttendanceCount = $("<td>").addClass("border px-4 py-2").text(formData.last_attendance_count);
-					const colMaxCourseSession = $("<td>").addClass("border px-4 py-2").text(formData.max_course_session);
-					const colLastMaterialUnlocked = $("<td>").addClass("border px-4 py-2 fixed1").text(JSON.parse(formData.last_material_unlocked).title);
+					const colFullName = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(formData.full_name);
+					const colEmail = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(formData.email);
+					const colTeacherName = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(JSON.parse(formData.teacher_name).full_name);
+					const colLastAttendanceCount = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.last_attendance_count);
+					const colMaxCourseSession = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.max_course_session);
+					const colLastMaterialUnlocked = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(JSON.parse(formData.last_material_unlocked).title);
+					const colNewStudent = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(cbv);
 
 					const delBtn = $("<button>").attr({"type": "button"}).addClass("text-center px-5 py-2 border border-transparent rounded-lg text-white bg-red-700 hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 transition ease-in-out duration-150").html("<i class='bi bi-trash3'></i>");
-					const colAction = $("<td>").addClass("border px-4 py-2").append(delBtn);
+					const colAction = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").append(delBtn);
 
-					const colGender = $("<td>").addClass("border px-4 py-2").text(formData.phone_number);
-					const colPhoneNumber = $("<td>").addClass("border px-4 py-2 fixed2").text(formData.phone_number);
-					const colCityOfBirth = $("<td>").addClass("border px-4 py-2 fixed2").text(formData.city_of_birth);
-					const colDateOfBirth = $("<td>").addClass("border px-4 py-2 fixed2").text(formData.date_of_birth);
-					const colSchoolName = $("<td>").addClass("border px-4 py-2 fixed2").text(formData.school_name);
-					const colStudentLevel = $("<td>").addClass("border px-4 py-2 fixed2").text(formData.student_level);
-					const colNameParent = $("<td>").addClass("border px-4 py-2 fixed2").text(formData.name_parent);
-					const colPhoneParent = $("<td>").addClass("border px-4 py-2 fixed2").text(formData.phone_parent);
+					const colGender = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.phone_number);
+					const colPhoneNumber = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.phone_number);
+					const colCityOfBirth = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.city_of_birth);
+					const colDateOfBirth = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.date_of_birth);
+					const colSchoolName = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.school_name);
+					const colStudentLevel = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.student_level);
+					const colNameParent = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.name_parent);
+					const colPhoneParent = $("<td>").addClass("border-t border-blue-950 px-4 py-2 fixed2").text(formData.phone_parent);
 
-					newRow.append(colFullName, colEmail, colTeacherName, colLastAttendanceCount, colMaxCourseSession, colLastMaterialUnlocked, colAction, colGender, colPhoneNumber, colCityOfBirth, colDateOfBirth, colSchoolName, colStudentLevel, colNameParent, colPhoneParent);
+					newRow.append(colFullName, colNewStudent, colEmail, colTeacherName, colLastAttendanceCount, colMaxCourseSession, colLastMaterialUnlocked, colAction, colGender, colPhoneNumber, colCityOfBirth, colDateOfBirth, colSchoolName, colStudentLevel, colNameParent, colPhoneParent);
 
 					$("#table-body").append(newRow);
 
@@ -327,6 +357,7 @@
 					const hidLastAttendanceCount = $("<input>").attr({"type": "hidden", "name": "inp_last_attendance_count[]", "value": formData.last_attendance_count});
 					const hidMaxCourseSession = $("<input>").attr({"type": "hidden", "name": "inp_max_course_session[]", "value": formData.max_course_session});
 					const hidLastMaterialUnlocked = $("<input>").attr({"type": "hidden", "name": "inp_last_material_unlocked[]", "value": JSON.parse(formData.last_material_unlocked).id});
+					const hidNewStudent = $("<input>").attr({"type": "hidden", "name": "is_new_student[]", "value": cbv});
 
 					const hidPhoneNumber = $("<input>").attr({"type": "hidden", "name": "inp_phone_number[]", "value": formData.phone_number});
 					const hidCityOfBirth = $("<input>").attr({"type": "hidden", "name": "inp_cob[]", "value": formData.city_of_birth});
@@ -336,7 +367,7 @@
 					const hidNameParent = $("<input>").attr({"type": "hidden", "name": "inp_name_parent[]", "value": formData.name_parent});
 					const hidPhoneParent = $("<input>").attr({"type": "hidden", "name": "inp_phone_parent[]", "value": formData.phone_parent});
 
-					$(hiddenInputsContainer).append(hidFullName, hidEmail, hidTeacherName, hidLastAttendanceCount, hidMaxCourseSession, hidLastMaterialUnlocked, hidGender, hidPhoneNumber, hidCityOfBirth, hidDateOfBirth, hidSchoolName, hidStudentLevel, hidNameParent, hidPhoneParent);
+					$(hiddenInputsContainer).append(hidFullName, hidEmail, hidTeacherName, hidLastAttendanceCount, hidMaxCourseSession, hidLastMaterialUnlocked, hidNewStudent, hidPhoneNumber, hidCityOfBirth, hidDateOfBirth, hidSchoolName, hidStudentLevel, hidNameParent, hidPhoneParent);
 					$("#real-form").append(hiddenInputsContainer);
 
 					$(delBtn).click(() => {

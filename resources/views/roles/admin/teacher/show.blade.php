@@ -9,17 +9,11 @@
 		<x-page-title>{{ __("Teacher's Details") }}</x-page-title>
 
 		@if(session()->has("successAssignToCourse"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successAssignToCourse") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successAssignToCourse') }}"></x-badge-success>
 		@elseif(session()->has("successUnassignFromCourse"))
-			<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-yellow-600" >{{ session("successUnassignFromCourse") }}</p>
-			</div>
+			<x-badge-warning badge_text="{{ session('successUnassignFromCourse') }}"></x-badge-warning>
 		@elseif(session()->has("successUpdateTeacherData"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successUpdateTeacherData") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successUpdateTeacherData') }}"></x-badge-success>
 		@endif
 
 		<div class="mb-5">

@@ -8,12 +8,12 @@
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">{{ $material->title }}</x-page-title>
 		<div class="flex gap-3 my-4">
-			<x-button type="button" onclick="history.back()" class="bg-orange-500">
-				Back
-			</x-button>
 			<x-anchor-button type="button" target="blank" href="{{ $material->link }}" class="bg-orange-500">
 				Visit Link
 			</x-anchor-button>
+			<x-button type="button" onclick="history.back()" class="bg-slate-600">
+				Back
+			</x-button>
 		</div>
 
 		<iframe src="{{ $preview_link }}" width="100%" style="height: 70vh;" class="my-5 border-2" id="contentpreview"></iframe>

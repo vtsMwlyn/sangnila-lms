@@ -10,9 +10,7 @@
 		<h1 class="text-xl font-semibold text-blue-900 mb-8 text-center">In Course: {{ $course->course_name }}</h1>
 
 		@if(session()->has("successUpdateProgress"))
-			<div class="w-full bg-green-500 px-5 py-3 rounded-lg">
-				<p class="text-green-900">{{ session("successUpdateProgress") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successUpdateProgress') }}"></x-badge-success>
 		@endif
 
 		<div class="overflow-x-auto rounded-md mt-8">
@@ -60,7 +58,7 @@
 				@if($newestprogress->isNotEmpty())
 					<div class="flex gap-2 mt-10 mb-3 w-full justify-center">
 						<x-button class="bg-orange-500 w-full md:w-1/6">Save</x-button>
-						<x-button class="bg-orange-500 w-full md:w-1/6" type="button" onclick="if(confirm('All changes will be discarded, are you sure want to cancel?'))history.back();">Cancel</x-button>
+						<x-cancel-button class=" w-full md:w-1/6" msg="All changes will be discarded, are you sure want to cancel?">Cancel</x-cancel-button>
 					</div>
 				@endif
 

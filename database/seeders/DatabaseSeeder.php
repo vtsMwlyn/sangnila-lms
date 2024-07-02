@@ -182,14 +182,20 @@ class DatabaseSeeder extends Seeder
 				}
 			}
 
-			$newData = ["user_id" => $cs->student->id, "attendance_id" => $newAttendance->id,];
+			$newData = [
+				"user_id" => $cs->student->id,
+				"attendance_id" => $newAttendance->id,
+				"material_progress" => "Ceritanya ini suatu material"
+			];
 
 			if($is_attend){
 				$newData["is_attend"] = 1;
 				$newData["attendance_detail"] = "Hadir dan telah menyelesaikan materi tertentu pada topic tertentu pada pertemuan kali ini. Kenapa tertentu karena ini adalah fake data yang dibuat pakai seeder biar kelihatan keterangan attendance minimal 30 kata.";
+				$newData["learning_status"] = "On Progress";
 			} else {
 				$newData["is_attend"] = 0;
 				$newData["attendance_detail"] = "Student sakit/izin/alfa.";
+				$newData["learning_status"] = "Absent";
 			}
 
 			StudentAttendance::create($newData);
@@ -272,6 +278,9 @@ class DatabaseSeeder extends Seeder
 		$this->newUser("philia.sangnila@gmail.com", "Philia Valeraine Alverna", 3, 2);
 		$this->newUser("kensi.sangnila@gmail.com", "Kensi Sinclair", 3, 1);
 		$this->newUser("giselle.sangnila@gmail.com", "Giselle Saputra", 3, 2);
+
+		$this->newUser("chelsea.sangnila@gmail.com", "Chelsea", 3, 2);
+		$this->newUser("ken.sangnila@gmail.com", "Ken", 3, 1);
 
 		//Generate Courses
 		Course::create([
@@ -483,9 +492,8 @@ class DatabaseSeeder extends Seeder
 		$this->assignStudent("Kensi Sinclair", "Vincent", "3D Modelling", 24);
 		$this->assignStudent("Giselle Saputra", "Vincent", "3D Modelling", 24);
 
-		$this->importAndAssign("Melissa", "melissa.sangnila@gmail.com", 2, "2D Animation", "Vincent", 16, 15);
-		$this->importAndAssign("Chelsea", "chelsea.sangnila@gmail.com", 2, "2D Animation", "Vincent", 8, 4);
-		$this->importAndAssign("Kenzo", "kenzo.sangnila@gmail.com", 2, "2D Animation", "Vincent", 8, 7);
+		$this->assignStudent("Chelsea", "Vincent", "2D Animation", 8);
+		$this->assignStudent("Ken", "Vincent", "2D Animation", 8);
 
 		// Assign teachers to courses
 		$this->assignTeacher("Hari", ["Digital Drawing", "Roblox"]);
@@ -493,6 +501,44 @@ class DatabaseSeeder extends Seeder
 		$this->assignTeacher("Iswan Sudaryo (Teacher)", ["3D Modelling", "Concept Art"]);
 		$this->assignTeacher("Vincent", ["3D Modelling", "2D Animation"]);
 		$this->assignTeacher("Immanuel Giovano (Teacher)", ["Web Development"]);
+
+
+		// ===== Generate Attendances Data ===== //
+		/* For Iswan Sudaryo (Teacher)'s Students */
+		$this->newAttendance("3D Modelling", "Iswan Sudaryo (Teacher)", ["Louisha Annabelle", "Gayle Farrel Patria", "Angela Nathania", "Balya Malkan Mahyuzar", "Alvin Edward"], "2024-06-20");
+		$this->newAttendance("3D Modelling", "Iswan Sudaryo (Teacher)", ["Gayle Farrel Patria", "Angela Nathania", "Balya Malkan Mahyuzar", "Alvin Edward"], "2024-06-27");
+
+		$this->newAttendance("Concept Art", "Iswan Sudaryo (Teacher)", ["Martha Theresia Ramlie", "Janicelyn Daviena Godarma", "Grace Devana Kusnandar"], "2024-06-21");
+
+		/* For Vincent's Students */
+		$this->newAttendance("3D Modelling", "Vincent", ["Philia Valeraine Alverna", "Kensi Sinclair", "Giselle Saputra"], "2024-06-18");
+		$this->newAttendance("3D Modelling", "Vincent", ["Philia Valeraine Alverna", "Kensi Sinclair", "Giselle Saputra"], "2025-06-26");
+
+		$this->newAttendance("2D Animation", "Vincent", ["Ken", "Chelsea"], "2024-06-10");
+		$this->newAttendance("2D Animation", "Vincent", ["Chelsea"], "2024-06-17");
+
+		$this->importAndAssign("Kenzo", "kenzo.sangnila@gmail.com", 2, "2D Animation", "Vincent", 8, 7);
+		$this->newAttendance("2D Animation", "Vincent", ["Ken", "Chelsea", "Kenzo"], "2024-06-17");
+		$this->newAttendance("2D Animation", "Vincent", ["Ken", "Kenzo"], "2024-06-17");
+
+		$this->importAndAssign("Melissa", "melissa.sangnila@gmail.com", 2, "2D Animation", "Vincent", 16, 15);
+
+		/* For Hari's Students */
+		$this->newAttendance("Digital Drawing", "Hari", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "2024-06-15");
+		$this->newAttendance("Digital Drawing", "Hari", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "2024-06-22");
+		$this->newAttendance("Digital Drawing", "Hari", ["Jack", "Jocheli Kensi Budianti"], "2024-06-29");
+		$this->newAttendance("Digital Drawing", "Hari", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "2024-07-06");
+		$this->newAttendance("Digital Drawing", "Hari", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "2024-07-13");
+		$this->newAttendance("Digital Drawing", "Hari", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "2024-07-20");
+		$this->newAttendance("Digital Drawing", "Hari", ["Jocheli Kensi Budianti"], "2024-07-27");
+		$this->newAttendance("Digital Drawing", "Hari", ["Jillian P. Tanuwijaya"], "2024-08-03");
+
+		/* For Gaby's Students */
+		$this->newAttendance("Digital Drawing", "Gaby", ["Melly Tanto", "Zhafira Jasmine", "Vanya Farelia", "Freya Pramudia", "Kenzie Gautama Dirgantara"], "2024-06-01");
+
+		/* For Immanuel Giovano (Teacher)'s Students */
+		$this->newAttendance("Web Development", "Immanuel Giovano (Teacher)", ["Jack", "Jillian P. Tanuwijaya"], "2024-06-09");
+		$this->newAttendance("Web Development", "Immanuel Giovano (Teacher)", ["Jack", "Jocheli Kensi Budianti"], "2025-06-16");
 
 
 		// ===== Generate Assignments ===== //
@@ -507,9 +553,9 @@ class DatabaseSeeder extends Seeder
 		$this->newAssignment("3D Modelling", "Vincent", ["Philia Valeraine Alverna", "Kensi Sinclair", "Giselle Saputra"], "Assignment 1 3D Modelling", "2024-06-18");
 		$this->newAssignment("3D Modelling", "Vincent", ["Philia Valeraine Alverna", "Kensi Sinclair", "Giselle Saputra"], "Assignment 2 3D Modelling", "2025-06-26");
 
-		$this->newAssignment("2D Animation", "Vincent", ["Melissa", "Chelsea", "Kenzo"], "Assignment 1 2D Animation", "2024-06-10");
-		$this->newAssignment("2D Animation", "Vincent", ["Melissa", "Chelsea", "Kenzo"], "Assignment 2 2D Animation", "2025-06-17");
-		$this->newAssignment("2D Animation", "Vincent", ["Melissa", "Chelsea", "Kenzo"], "Assignment 3 2D Animation", "2026-06-24");
+		$this->newAssignment("2D Animation", "Vincent", ["Chelsea", "Kenzo"], "Assignment 1 2D Animation", "2024-06-10");
+		$this->newAssignment("2D Animation", "Vincent", ["Chelsea", "Kenzo"], "Assignment 2 2D Animation", "2025-06-17");
+		$this->newAssignment("2D Animation", "Vincent", ["Ken", "Chelsea", "Kenzo"], "Assignment 3 2D Animation", "2026-06-24");
 
 		/* For Hari's Students */
 		$this->newAssignment("Digital Drawing", "Hari", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "Assignment 1 Digital Drawing", "2024-06-15");
@@ -529,36 +575,6 @@ class DatabaseSeeder extends Seeder
 		$this->newAssignment("Web Development", "Immanuel Giovano (Teacher)", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "Assignment 3 Web Development", "2026-06-23");
 		$this->newAssignment("Web Development", "Immanuel Giovano (Teacher)", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "Assignment 4 Web Development", "2027-06-30");
 
-
-		// ===== Generate Attendances Data ===== //
-		/* For Iswan Sudaryo (Teacher)'s Students */
-		$this->newAttendance("3D Modelling", "Iswan Sudaryo (Teacher)", ["Louisha Annabelle", "Gayle Farrel Patria", "Angela Nathania", "Balya Malkan Mahyuzar", "Alvin Edward"], "2024-06-20");
-		$this->newAttendance("3D Modelling", "Iswan Sudaryo (Teacher)", ["Gayle Farrel Patria", "Angela Nathania", "Balya Malkan Mahyuzar", "Alvin Edward"], "2024-06-27");
-
-		$this->newAttendance("Concept Art", "Iswan Sudaryo (Teacher)", ["Martha Theresia Ramlie", "Janicelyn Daviena Godarma", "Grace Devana Kusnandar"], "2024-06-21");
-
-		/* For Vincent's Students */
-		$this->newAttendance("3D Modelling", "Vincent", ["Philia Valeraine Alverna", "Kensi Sinclair", "Giselle Saputra"], "2024-06-18");
-		$this->newAttendance("3D Modelling", "Vincent", ["Philia Valeraine Alverna", "Kensi Sinclair", "Giselle Saputra"], "2025-06-26");
-
-		$this->newAttendance("2D Animation", "Vincent", ["Chelsea", "Kenzo"], "2024-06-10");
-
-		/* For Hari's Students */
-		$this->newAttendance("Digital Drawing", "Hari", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "2024-06-15");
-		$this->newAttendance("Digital Drawing", "Hari", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "2024-06-22");
-		$this->newAttendance("Digital Drawing", "Hari", ["Jack", "Jocheli Kensi Budianti"], "2024-06-29");
-		$this->newAttendance("Digital Drawing", "Hari", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "2024-07-06");
-		$this->newAttendance("Digital Drawing", "Hari", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "2024-07-13");
-		$this->newAttendance("Digital Drawing", "Hari", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "2024-07-20");
-		$this->newAttendance("Digital Drawing", "Hari", ["Jocheli Kensi Budianti"], "2024-07-27");
-		$this->newAttendance("Digital Drawing", "Hari", ["Jillian P. Tanuwijaya"], "2024-08-03");
-
-		/* For Gaby's Students */
-		$this->newAttendance("Digital Drawing", "Gaby", ["Melly Tanto", "Zhafira Jasmine", "Vanya Farelia", "Freya Pramudia", "Kenzie Gautama Dirgantara"], "2024-06-01");
-
-		/* For Immanuel Giovano (Teacher)'s Students */
-		$this->newAttendance("Web Development", "Immanuel Giovano (Teacher)", ["Jack", "Jillian P. Tanuwijaya"], "2024-06-09");
-		$this->newAttendance("Web Development", "Immanuel Giovano (Teacher)", ["Jack", "Jocheli Kensi Budianti"], "2025-06-16");
 
 		// ===== GENERATE SUBMISSIONS ===== //
 		/* Submissions for assignments in Hari's courses */

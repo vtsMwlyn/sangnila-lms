@@ -72,9 +72,13 @@ class AttendanceController extends Controller {
 		$validatedData = $request->validate([
 			"checkbox_value.*" => "required",
 			"attendance_detail.*" => "required|min:3",
-			"attendance_date" => "required"
+			"attendance_date" => "required",
+			"material_progress.*" => "required",
+			"learning_status.*" => "required",
 		], [
-			"attendance_detail.*.required" => "The attendance detail field is required."
+			"attendance_detail.*.required" => "The attendance detail field is required.",
+			"material_progress.*.required" => "The material progress field is required.",
+			"learning_status.*.required" => "The learning status field is required."
 		]);
 
 		$course = Course::where("id", $course_id)->first();
@@ -101,6 +105,8 @@ class AttendanceController extends Controller {
 				"attendance_id" => $newAttendance->id,
 				"is_attend" => $isAttend,
 				"attendance_detail" => $attendanceDetail,
+				"material_progress" => $validatedData["material_progress"][$i],
+				"learning_status" => $validatedData["learning_status"][$i]
 			]);
 
 			$i++;
@@ -121,27 +127,81 @@ class AttendanceController extends Controller {
 
 	// Update attendance data in the database
 	public function update(Request $request, $attendance_data_id){
-		$validatedData = $request->validate([
-			"checkbox_value.*" => "required",
-			"attendance_detail.*" => "required|min:3",
-			"attendance_date" => "required"
-		], [
-			"attendance_detail.*.required" => "The attendance detail field is required."
-		]);
+		// $validatedData = $request->validate([
+		// 	"checkbox_value.*" => "required",
+		// 	"attendance_detail.*" => "required|min:3",
+		// 	"attendance_date" => "required",
+		// 	"material_progress.*" => "required",
+		// 	"learning_status.*" => "required",
+		// ], [
+		// 	"attendance_detail.*.required" => "The attendance detail field is required.",
+		// 	"material_progress.*.required" => "The material progress field is required.",
+		// 	"learning_status.*.required" => "The learning status field is required."
+		// ]);
 
 		$attendance = Attendance::where("id", $attendance_data_id)->first();
 		$existingAttendanceData = $attendance->student_attendances;
+		$course_students = CourseStudent::where("teacher_id", Auth::user()->id)->where("course_id", $attendance->course_id)->get();
 
-		$attendance->update(["attendance_date" => $validatedData["attendance_date"]]);
+		$attendance->update(["attendance_date" => $request["attendance_date"]]);
 
-		$i = 0;
-		foreach($existingAttendanceData as $a){
-			$isAttend = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
-			$attendanceDetail = $validatedData["attendance_detail"][$i];
+		foreach($course_students as $i => $cs){
+			// Validation mechanism
+			$invalid = false;
 
-			StudentAttendance::where("id", $a->id)->update(["is_attend" => $isAttend, "attendance_detail" => $attendanceDetail]);
+			// If the student is not imported and the attendance detail is empty ...
+			if(!$request["attendance_detail"][$i] && !$cs->is_imported){
+				$invalid = true;
+			}
 
-			$i++;
+			// ... or if the student is imported, marked as attended but the material progress, attendance detail, and learning status are empty (if unchecked then the student is assumed to not ready yet added attendance or not attended)
+			if($cs->is_imported && $request["checkbox_value"][$i] == "on"){
+				if(!$request["material_progress"][$i] || !$request["learning_status"][$i] || !$request["attendance_detail"][$i]){
+					$invalid = true;
+				}
+			}
+
+			// ... then notify user and do not proceed
+			if($invalid){
+				return back()->with("failedEditAttendance", "Attendance detail, material progress, or learning status of student " . $cs->student->full_name . " is emptied. Make sure you fill all the data (excluding imported student)");
+			}
+
+			// Modify data in database mechanism if the data valid for each students data in the course
+			$isAttend = ($request["checkbox_value"][$i] == "on")? 1 : 0;
+			$attendanceDetail = $request["attendance_detail"][$i];
+
+			// If the student is normal student just update the attendance data then
+			if(!$cs->is_imported){
+				StudentAttendance::where("user_id", $cs->student->id)->where("attendance_id", $attendance->id)->update([
+					"is_attend" => $isAttend,
+					"attendance_detail" => $attendanceDetail,
+					"material_progress" => $request["material_progress"][$i],
+					"learning_status" => $request["learning_status"][$i]
+				]);
+			}
+			// If the student is imported
+			else {
+				// ... and the student is already exists in the attendance, update the attendance data
+				if($existingAttendanceData->where("user_id", $cs->student->id)->first()){
+					StudentAttendance::where("user_id", $cs->student->id)->where("attendance_id", $attendance->id)->update([
+						"is_attend" => $isAttend,
+						"attendance_detail" => $attendanceDetail,
+						"material_progress" => $request["material_progress"][$i],
+						"learning_status" => $request["learning_status"][$i]
+					]);
+				}
+				// ... and the attendance detail is filled (this means student will be added to the attendance data whether the student is absent or attended, if not filled then it will be ignored, assumed that the imported student is not ready yet to be added to the student attendance), the student is not yet exist in the attendance, create new student attendance, so next time it will be detected and updated normally
+				else if($request["attendance_detail"][$i]) {
+					StudentAttendance::create([
+						"user_id" => $cs->student->id,
+						"attendance_id" => $attendance->id,
+						"is_attend" => $isAttend,
+						"attendance_detail" => $attendanceDetail,
+						"material_progress" => $request["material_progress"][$i],
+						"learning_status" => $request["learning_status"][$i]
+					]);
+				}
+			}
 		}
 
 		return redirect(route("teacher.attendance.show", $attendance->course_id))->with("successEditAttendance", "Attendance edited successfully!");

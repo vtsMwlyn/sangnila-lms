@@ -64,14 +64,14 @@
 					<x-button class="bg-orange-500 w-full md:w-1/6">
 						{{ __('Submit') }}
 					</x-button>
-					<x-button type="button" onclick="if(confirm('The filled data will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500 w-full md:w-1/6">
+					<x-cancel-button msg="The filled data will be discarded, are you sure want to cancel?" class="w-full md:w-1/6">
 						Cancel
-					</x-button>
+					</x-cancel-button>
 				</div>
 			</form>
 		@else
 			<h1 class="text-md font-semibold italic">- No students assigned to this course yet, cannot upload assignment -</h1>
-			<x-button type="button" onclick="history.back()" class="bg-indigo-400">
+			<x-button type="button" onclick="history.back()" class="bg-slate-600">
 				Return
 			</x-button>
 		@endif

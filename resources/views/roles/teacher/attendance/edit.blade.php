@@ -7,34 +7,60 @@
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">Edit Attendance Data</x-page-title>
+
+		@if(session()->has("failedEditAttendance"))
+			<x-badge-danger badge_text="{{ session('failedEditAttendance') }}"></x-badge-danger>
+		@endif
+
 		<form action="{{ route('teacher.attendance.update', $attendance->id) }}" method="post" class="mx-auto" id="attendance_form">
 			@csrf
 			<div class="my-4">
+				<x-label for="attendance_date">{{ __("Attendance Date") }}</x-label>
 				<div class="flex items-center gap-3 mt-1">
 					<x-input onfocus="this.type='date'" onblur="this.type='text'" name="attendance_date" id="attendance_date" :value="$attendance->attendance_date" class="w-1/3"/>
 					<x-button type="button" id="todaybtn" class="bg-orange-500">Today</x-button>
 				</div>
 			</div>
 
-			<div class="overflow-x-auto">
-				<table class="w-full">
+			<div class="overflow-x-auto mt-6">
+				<x-label>{{ __("Attendance Details") }}</x-label>
+				<table class="w-full" style="border-collapse: separate; border-spacing: 0 20px;">
 					<tbody>
-						@foreach ($attendanceData as $atd)
-							{{--
-								Note:
-								Even tought teacher can only submit attendance for active students account, previously submitted attendance for the student account still can be edited(?)
-							--}}
-							<tr style="@if($atd->attendance_detail == "Account disabled") display: none; @endif">
-								<td class="px-5 w-1/3">
+						@foreach (App\Models\CourseStudent::where("course_id", $attendance->course_id)->where("teacher_id", Auth::user()->id)->get() as $course_student)
+							@php
+								$atd = $attendanceData->where("user_id", $course_student->student->id)->first();
+							@endphp
+
+							<tr style="@if($atd && $atd->attendance_detail == "Account disabled") display: none; @endif background: rgba(256, 256, 256, 0.4);">
+								<td class="p-5 w-1/2 rounded-l-xl">
 									<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
 										<input type="checkbox" id="checkbox{{ $loop->iteration }}"
-										class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @elseif($atd->is_attend == 1) checked @endif @if($atd->attendance_detail == "Account disabled") disabled @endif>
-										<span>{{ $atd->student->full_name }}</span>
+										class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @elseif($atd && $atd->is_attend == 1) checked @endif @if($atd && $atd->attendance_detail == "Account disabled") disabled @endif>
+										<label for="checkbox{{ $loop->iteration }}">{{ $course_student->student->full_name }}</label>
+									</div>
+									<div class="flex w-full gap-2 mt-2 material_progress_detail">
+										<x-select class="material_progress w-2/3">
+											<option selected disabled>Select Material Progress</option>
+											@foreach ($attendance->course->topics as $topic)
+												@foreach ($topic->materials as $material)
+													<option value="{{ $material->title }}" @if($atd && $atd->material_progress == $material->title) selected @endif>{{ $material->title }}</option>
+												@endforeach
+											@endforeach
+										</x-select>
+
+										<x-select class="learning_status w-1/3">
+											<option value="On Progress" @if($atd && $atd->learning_status == "On Progress") selected @endif>On Progress</option>
+											<option value="Done" @if($atd && $atd->learning_status == "Done") selected @endif>Done</option>
+										</x-select>
 									</div>
 								</td>
-								<td class="px-5 py-3">
+								<td class="p-5 w-1/2 rounded-r-xl">
 									<div class="flex flex-col items-stretch">
-										<textarea name="attendance_detail[]" rows="3" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student attendance details" style="resize: none; box-sizing: border-box; padding: 10px;">{{ old("attendance_detail." . $loop->index, $atd->attendance_detail) }}</textarea>
+										@if($atd)
+											<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student attendance details" style="resize: none; box-sizing: border-box; padding: 10px;">{{ old("attendance_detail." . $loop->index, $atd->attendance_detail) }}</textarea>
+										@else
+											<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student attendance details" style="resize: none; box-sizing: border-box; padding: 10px;"></textarea>
+										@endif
 										@error("attendance_detail." . $loop->index)
 											<span class="text-red-500 mt-2">{{ $message }}</span>
 										@enderror
@@ -50,33 +76,81 @@
 				<x-button class="bg-orange-500 w-full md:w-1/6">
 					{{ __('Submit') }}
 				</x-button>
-				<x-button type="button" onclick="if(confirm('The changes will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500 w-full md:w-1/6">
+				<x-cancel-button msg="The changes will be discarded, are you sure want to cancel?" class="w-full md:w-1/6">
 					Cancel
-				</x-button>
+				</x-cancel-button>
 			</div>
 		</form>
 
 		<script>
-			$("#attendance_date").on({
-				"focus": function(){
-					this.showPicker();
-				},
-				"click": function(){
-					this.showPicker();
-				}
-			});
-
-			const collectCheckboxValues = () => {
-				const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-				const checkboxValues = [];
-				checkboxes.forEach((checkbox) => {
-					if(checkbox.disabled){
-						checkboxValues.push('off');
-					} else {
-						checkboxValues.push(checkbox.checked ? 'on' : 'off');
+			$(document).ready(() => {
+				$("#attendance_date").on({
+					"focus": function(){
+						this.showPicker();
+					},
+					"click": function(){
+						this.showPicker();
 					}
 				});
-				return checkboxValues;
+
+				// Mechanism to hide and unhide selects for material progress detail depending if the student name checkbox is checked or not
+				const allCheckBoxes = $('input[type="checkbox"]');
+
+				allCheckBoxes.each(function() {
+					const correspondingDetail = $(this).closest('td').find('.material_progress_detail');
+
+					if ($(this).is(":checked")) {
+						correspondingDetail.css("display", "flex");
+					}
+					else {
+						correspondingDetail.css("display", "none");
+					}
+				});
+
+				allCheckBoxes.change(function(){
+					const correspondingDetail = $(this).closest('td').find('.material_progress_detail');
+
+					if ($(this).is(":checked")) {
+						correspondingDetail.css("display", "flex");
+					}
+					else {
+						correspondingDetail.css("display", "none");
+					}
+				});
+			});
+
+
+			// Helper mechanism to send data to Laravel when form is submitted
+			const collectCheckboxValues = () => {
+				const checkboxes = $('input[type="checkbox"]');
+				const checkboxValues = [];
+				const materialProgressValues = [];
+				const learningStatusValues = [];
+
+				checkboxes.each(function(){
+					const correspondingDetail = $(this).closest('td').find('.material_progress_detail');
+
+					if($(this).is(":disabled")){
+						checkboxValues.push('off');
+						materialProgressValues.push("Absent");
+						learningStatusValues.push("Absent");
+					} else {
+						const cb = $(this).is(":checked") ? 'on' : 'off';
+						checkboxValues.push(cb);
+
+						if(cb == "on"){
+							materialProgressValues.push(correspondingDetail.find('.material_progress').val());
+							learningStatusValues.push(correspondingDetail.find('.learning_status').val());
+						}
+						else {
+							materialProgressValues.push("Absent");
+							learningStatusValues.push("Absent");
+						}
+
+					}
+				});
+
+				return [checkboxValues, materialProgressValues, learningStatusValues];
 			}
 
 			const processDisabledTextAreas = () => {
@@ -94,38 +168,38 @@
 				});
 			}
 
-			// Example of using the function when submitting the form
 			const form = document.querySelector('#attendance_form');
 			form.addEventListener('submit', (event) => {
-				event.preventDefault(); // Prevent the form from submitting normally
-				const checkboxValues = collectCheckboxValues();
-				// Create a hidden input field in the form
-				const hiddenInput = document.createElement('input');
-				hiddenInput.type = 'hidden';
-				hiddenInput.name = 'checkbox_value[]'; // Make sure to use [] in the name to indicate an array
+				event.preventDefault();
+
+				const [checkboxValues, materialProgressValues, learningStatusValues] = collectCheckboxValues();
+
+				console.log(checkboxValues);
+				console.log(materialProgressValues);
+				console.log(learningStatusValues);
+
 				checkboxValues.forEach((value, index) => {
-					const inputValue = document.createElement('input');
-					inputValue.type = 'hidden';
-					inputValue.name = 'checkbox_value[]';
-					inputValue.value = value;
-					form.appendChild(inputValue);
+					const hiddenInput1 = $("<input>").attr({"type": "hidden", "name": "checkbox_value[]", "value": value});
+					const hiddenInput2 = $("<input>").attr({"type": "hidden", "name": "material_progress[]", "value": materialProgressValues[index]});
+					const hiddenInput3 = $("<input>").attr({"type": "hidden", "name": "learning_status[]", "value": learningStatusValues[index]});
+
+					$(form).append(hiddenInput1, hiddenInput2, hiddenInput3);
 				});
 
 				processDisabledTextAreas();
 
-				// Now you can submit the form with the additional hidden input containing checkbox values
 				form.submit();
 			});
 
 			const todayBtn = document.querySelector("#todaybtn");
-				todayBtn.addEventListener("click", () => {
-					const inpDate = document.querySelector("#attendance_date");
-					const currentDate = new Date();
-					const year = currentDate.getFullYear();
-					const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-					const day = String(currentDate.getDate()).padStart(2, '0');
-					inpDate.value = `${year}-${month}-${day}`;
-				});
+			todayBtn.addEventListener("click", () => {
+				const inpDate = document.querySelector("#attendance_date");
+				const currentDate = new Date();
+				const year = currentDate.getFullYear();
+				const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+				const day = String(currentDate.getDate()).padStart(2, '0');
+				inpDate.value = `${year}-${month}-${day}`;
+			});
 		</script>
 	</x-section-container>
 @endsection

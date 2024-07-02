@@ -9,13 +9,9 @@
 		<x-page-title class="mt-5 mb-8">Student Attendance for {{ $course->course_name }}</x-page-title>
 
 		@if(session()->has("successUploadAttendance"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successUploadAttendance") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successUploadAttendance') }}"></x-badge-success>
 		@elseif(session()->has("successEditAttendance"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successEditAttendance") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successEditAttendance') }}"></x-badge-success>
 		@endif
 
 		<x-anchor-button class="bg-orange-500 mb-3" href="{{ route('teacher.attendance.upload', $course->id) }}">
@@ -24,9 +20,9 @@
 
 		@if($attendanceData->count())
 			@foreach($attendanceData as $atd)
-				<div class="rounded-xl p-5 mb-5 mt-5 bg-blue-800">
+				<div class="p-5 my-8 rounded-xl" style="background-color: rgba(255, 255, 255, 0.3)">
 					<div class="flex w-full items-center justify-between">
-						<p class="text-white">Attendance Date:<br><span class="font-semibold text-white">{{ $atd->attendance_date }}</span></p>
+						<p class="text-white font-semibold">Attendance Date:<br><span class="font-bold text-white">{{ $atd->attendance_date }}</span></p>
 						<div class="flex gap-3">
 							<x-anchor-button class="bg-orange-500" href="{{ route('teacher.attendance.edit', $atd->id) }}">
 								Edit Data
@@ -37,34 +33,36 @@
 
 					{{-- <p>Uploaded by: {{ ($atd->posted_by->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $atd->posted_by->full_name }}</p> --}}
 
-					{{-- <div class="overflow-x-auto contentTable" style="display: none;">
-						<table class="w-full mt-5 mb-5 bg-slate-300">
-							<thead>
-								<th class="border border-blue-950 text-blue-950 px-3 py-2">Students</th>
-								<th class="border border-blue-950 text-blue-950 px-3 py-2">Attendance status</th>
-								<th class="border border-blue-950 text-blue-950 px-3 py-2">Attendance detail</th>
-							</thead>
-							<tbody>
-								@foreach($atd->student_attendances as $sa)
-									@if($sa->attendance_detail != "Account disabled")
-										<tr>
-											<td class="border border-blue-950 text-blue-950 px-3 py-2">{{ $sa->student->full_name }}</td>
-											<td class="border border-blue-950 text-blue-950 px-3 py-2">
-												@if($sa->is_attend == 1)
-													Attended
-												@elseif($sa->is_attend == 0)
-													Absent
-												@endif
-											</td>
-											<td class="border border-blue-950 text-blue-950 px-3 py-2">{{ $sa->attendance_detail }}</td>
-										</tr>
-									@endif
-								@endforeach
-							</tbody>
-						</table>
-					</div> --}}
+					<div class="overflow-x-auto contentTable" style="display: none;">
+						<x-table>
+							<x-slot name="head">
+								<th class="template-heads rounded-l-xl">Students</th>
+								<th class="template-heads">Attendance status</th>
+								<th class="template-heads">Attendance detail</th>
+								<th class="template-heads rounded-r-xl">Material Progress</th>
+							</x-slot>
 
-					<div class="flex flex-col overflow-hidden rounded-xl mt-5 border border-blue-950 contentTable my-5" style="display: none;">
+							@foreach($atd->student_attendances as $sa)
+								@if($sa->attendance_detail != "Account disabled")
+									<tr>
+										<td class="template-bodies rounded-l-xl">{{ $sa->student->full_name }}</td>
+										<td class="template-bodies">
+											@if($sa->is_attend == 1)
+												Attended
+											@elseif($sa->is_attend == 0)
+												Absent
+											@endif
+										</td>
+										<td class="template-bodies">{{ $sa->attendance_detail }}</td>
+										<td class="template-bodies rounded-r-xl">{{ $sa->material_progress }} [{{ $sa->learning_status }}]</td>
+									</tr>
+								@endif
+							@endforeach
+
+						</x-table>
+					</div>
+
+					{{-- <div class="flex flex-col overflow-hidden rounded-xl mt-5 border border-blue-950 contentTable my-5" style="display: none;">
 						<!-- Header -->
 						<div class="flex w-full">
 							<div class="w-1/4 bg-slate-300">
@@ -73,8 +71,11 @@
 							<div class="w-1/4 bg-slate-300">
 								<div class="border-l border-r border-b border-blue-950 px-4 py-2 font-bold text-blue-950 text-center">Attendance Status</div>
 							</div>
-							<div class="w-1/2 bg-slate-300">
-								<div class="border-b border-blue-950 px-4 py-2 font-bold text-blue-950 text-center">Attendance Details</div>
+							<div class="w-1/4 bg-slate-300">
+								<div class="border-r border-b border-blue-950 px-4 py-2 font-bold text-blue-950 text-center">Attendance Details</div>
+							</div>
+							<div class="w-1/4 bg-slate-300">
+								<div class="border-b border-blue-950 px-4 py-2 font-bold text-blue-950 text-center">Progress</div>
 							</div>
 						</div>
 
@@ -86,7 +87,10 @@
 							<div class="w-1/4 bg-slate-300">
 								<div class="border-l border-r border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
 							</div>
-							<div class="w-1/2 bg-slate-300">
+							<div class="w-1/4 bg-slate-300">
+								<div class="border-r border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
+							</div>
+							<div class="w-1/4 bg-slate-300">
 								<div class="border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
 							</div>
 						</div>
@@ -111,9 +115,14 @@
 											</li>
 										</div>
 									</div>
-									<div class="w-1/2">
+									<div class="w-1/4 border-r border-blue-950">
 										<div class="px-4 text-blue-950">
 											<li>{{ $sa->attendance_detail }}</li>
+										</div>
+									</div>
+									<div class="w-1/4">
+										<div class="px-4 text-blue-950">
+											<li>{{ $sa->material_progress }} [{{ $sa->learning_status }}]</li>
 										</div>
 									</div>
 								</div>
@@ -128,12 +137,15 @@
 							<div class="w-1/4 bg-slate-300">
 								<div class="border-l border-r border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
 							</div>
-							<div class="w-1/2 bg-slate-300">
+							<div class="w-1/4 bg-slate-300">
+								<div class="border-r border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
+							</div>
+							<div class="w-1/4 bg-slate-300">
 								<div class="border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
 							</div>
 						</div>
 
-					</div>
+					</div> --}}
 				</div>
 			@endforeach
 

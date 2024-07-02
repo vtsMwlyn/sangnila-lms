@@ -10,17 +10,11 @@
 		<h1 class="text-xl font-semibold text-center text-blue-900 mb-8">Course: {{ $course->course_name }}</h1>
 
 		@if(session()->has("successSubmitAssignment"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successSubmitAssignment") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successSubmitAssignment') }}"></x-badge-success>
 		@elseif(session()->has("successEditSubmission"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successEditSubmission") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successEditSubmission') }}"></x-badge-success>
 		@elseif(session()->has("maximumSubmission"))
-			<div class="w-full bg-red-400 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-red-900">{{ session("maximumSubmission") }}</p>
-			</div>
+			<x-badge-danger badge_text="{{ session('maximumSubmission') }}"></x-badge-danger>
 		@endif
 
 		@forelse ($assignments as $index => $asg)

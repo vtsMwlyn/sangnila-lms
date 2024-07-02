@@ -41,13 +41,13 @@
 								@if($student->enrolled_courses->count())
 									<ul>
 										@foreach ($student->enrolled_courses as $index2 => $course)
-											<li class="flex justify-between items-center my-2">
+											<li class="flex justify-between gap-3 items-center my-2">
 												<div class="w-2/3">
 													<span>{{ $course->course_name }}</span>
 												</div>
 												<div class="w-1/3">
 													<div class="w-full bg-gray-200 rounded-lg h-4 overflow-hidden relative">
-														<div class="absolute w-full h-full @if((($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) && $current_attendances[$index1][$index2] != 0) text-red-950 @else text-green-950 @endif  flex justify-center items-center font-semibold">
+														<div class="absolute w-full h-full @if((($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) && $current_attendances[$index1][$index2] != 0) text-red-100 @else text-green-950 @endif  flex justify-center items-center font-semibold">
 															{{ __($current_attendances[$index1][$index2] . "/" . $max_attendances[$index1][$index2]) }}
 														</div>
 														<div class="@if(($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) bg-red-600 @else bg-green-700 @endif h-full" style="width: {{ $percentages[$index1][$index2] }}%;"></div>

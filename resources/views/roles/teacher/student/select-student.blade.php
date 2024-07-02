@@ -6,45 +6,45 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5">Manage Students</x-page-title>
+		<x-page-title class="mt-5">Manage Students' Material Access</x-page-title>
 		<h1 class="text-2xl font-semibold text-blue-900 text-center mb-8">Pick a Student</h1>
-		<div class="flex flex-col">
-			<div class="border-t border-l border-r border-blue-950 bg-slate-300 rounded-t-xl w-full">
-				<h2 class="text-xl text-center font-semibold my-2 text-blue-950">Student Name</h2>
-			</div>
-			<div class="border border-blue-950 bg-slate-300 rounded-b-xl w-full flex justify-center">
-				@if($course_students->count())
-					<div class="flex justify-evenly w-full">
-						@php
-							$number_of_data_separation = 3;
-							$n = ceil($course_students->count() / $number_of_data_separation);
-						@endphp
-						@for($i = 0; $i < $number_of_data_separation; $i++)
-							<div class="my-5">
-								<ul class="list-disc pl-6 font-semibold">
-									@if($i < $number_of_data_separation - 1)
-										@for($j = $n * $i; $j < $n * ($i + 1); $j++)
-											<li class="text-blue-950">
-												<a href="{{ route('teacher.student.show.progress', ['student_id' => $course_students[$j]->student->id, 'course_id' => $course->id]) }}" class="hover:underline">{{ $course_students[$j]->student->full_name }} @if($course_students[$j]->student->status == "disabled")<span class="text-red-500">(Disabled)</span>@endif
-												</a>
-											</li>
-										@endfor
-									@else
-										@for($j = $n * $i; $j < $course_students->count(); $j++)
-											<li class="text-blue-950">
-												<a href="{{ route('teacher.student.show.progress', ['student_id' => $course_students[$j]->student->id, 'course_id' => $course->id]) }}" class="hover:underline">{{ $course_students[$j]->student->full_name }} @if($course_students[$j]->student->status == "disabled")<span class="text-red-500">(Disabled)</span>@endif
-												</a>
-											</li>
-										@endfor
-									@endif
-								</ul>
-							</div>
-						@endfor
-					</div>
-				@else
-					<p class="text-blue-950 font-semibold py-3">- No students assigned yet to the course -</p>
-				@endif
-			</div>
+
+		<div class="w-full">
+			@if($course_students->count())
+				<div class="w-full py-6 text-white rounded-xl font-bold text-center" style="background: #000C48;">
+					Student List
+				</div>
+				<div class="flex flex-col gap-5 mt-5">
+					@foreach ($course_students as $index => $cs)
+						@if ($index % 3 == 0)
+							@if ($index != 0)
+								</div> <!-- Close previous row -->
+							@endif
+							<div class="flex w-full rounded-xl overflow-hidden text-white h-16" style="background-color: #283785;">
+						@endif
+
+						<a href="{{ route('teacher.student.show.progress', ['student_id' => $cs->student->id, 'course_id' => $course->id]) }}" class="text-center w-1/3 h-full selections transition ease-in-out duration-500 flex justify-center items-center">
+							{{ $cs->student->full_name }}
+						</a>
+
+					@endforeach
+
+					</div> <!-- Close last row -->
+				</div>
+			@else
+				<p class="text-center py-3 text-blue-950">- No students assigned yet -</p>
+			@endif
 		</div>
+
+		<script>
+			$(".selections").on({
+				"mouseover": function(){
+					$(this).css({"background-color": "rgb(250 204 21)"});
+				},
+				"mouseout": function(){
+					$(this).css({"background-color": "#283785"});
+				}
+			})
+		</script>
 	</x-section-container>
 @endsection

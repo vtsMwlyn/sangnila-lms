@@ -11,8 +11,8 @@ class Attendance extends Model {
 	protected $guarded = ["id"];
 
 	// Relationships
-	public function courses(){
-		return $this->belongsToMany(Course::class, "student_atendances");
+	public function course(){
+		return $this->belongsTo(Course::class);
 	}
 
 	public function posted_by(){

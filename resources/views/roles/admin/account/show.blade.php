@@ -9,13 +9,9 @@
 		<x-page-title class="mt-5">{{ __("Account's Details") }}</x-page-title>
 
 		@if(session()->has("successUpdateAccountData"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successUpdateAccountData") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successUpdateAccountData') }}"></x-badge-success>
 		@elseif(session()->has("successResetPassword"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successResetPassword") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successResetPassword') }}"></x-badge-success>
 		@endif
 
 		<div class="flex justify-between items-center mt-10 mb-5">

@@ -75,11 +75,12 @@
 
 			<div class="w-full flex flex-wrap justify-center my-8 gap-16">
 				@foreach (Auth::user()->enrolled_courses->where('visibility', 'public') as $course)
-					<!-- Course card -->
+					<!-- Course card  -->
 					<a href="{{ route('student.mycourse.show', ['course_id' => $course->id]) }}" class="w-full md:w-1/3">
 						<div class="flex flex-col justify-center items-center gap-5 border-2 border-white rounded-xl text-white px-8  hover:scale-105 transition duration-300 ease-in-out" style="background: linear-gradient(to bottom, rgba(40, 55, 133, 0.53) 25%, rgba(235, 126, 37, 0.58)); min-height: 400px; cursor: url('{{ asset('img/cursor2.cur') }}'), pointer;">
 							<h1 class="text-3xl font-bold">{{ $course->course_name }}</h1>
 							<div class="border border-white rounded-lg px-4 py-2 text-md">Teacher: {{ (App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->full_name }}</div>
+
 							<h3 class="text-sm">Progress</h3>
 							<div class="w-full h-8 bg-slate-400 rounded-lg overflow-hidden relative">
 								@php
