@@ -5,12 +5,12 @@
         </div>
         <div class="flex flex-col w-full md:w-1/4 items-start">
             <span class="font-bold">Find Us</span>
-            <a href="https://maps.app.goo.gl/Did4dZueYwVNtSM9A" class="hover:scale-105 hover:font-semibold transition-all ease-in-out duration-300" target="blank">Paskal Hyper Square B70, Jl.Pasir Kaliki No.23, Kec. Cicendo, Kota Bandung</a>
+            <a href="https://maps.app.goo.gl/Did4dZueYwVNtSM9A" class="hover:underline hover:font-semibold" target="blank">Paskal Hyper Square B70, Jl.Pasir Kaliki No.23, Kec. Cicendo, Kota Bandung</a>
         </div>
         <div class="w-full md:w-1/4 flex flex-col items-start">
             <span class="font-bold">Contact Us</span>
-            <a href="https://wa.me/6285693257411" class="hover:scale-105 hover:font-semibold hover:bg-rounded-lg transition-all ease-in-out duration-300" target="blank"><i class="bi bi-telephone"></i> +62 856-9325-7411</a>
-            <a href="mailto:admin@sangnilaindonesia.com" class="hover:scale-105 hover:font-semibold hover:bg-rounded-lg transition-all ease-in-out duration-300" target="blank"><i class="bi bi-envelope"></i> admin@sangnilaindonesia.com</a>
+            <a href="https://wa.me/6285693257411" class="hover:underline hover:font-semibold hover:bg-rounded-lg" target="blank"><i class="bi bi-telephone"></i> +62 856-9325-7411</a>
+            <a href="mailto:admin@sangnilaindonesia.com" class="hover:underline hover:font-semibold hover:bg-rounded-lg" target="blank"><i class="bi bi-envelope"></i> admin@sangnilaindonesia.com</a>
         </div>
     </div>
 

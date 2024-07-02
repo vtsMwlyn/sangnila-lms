@@ -9,9 +9,7 @@
 		<x-page-title class="mt-5 mb-8">{{ $student->full_name }}'s Submissions History in Assignment "{{ $assignment->title }}"</x-page-title>
 
 		@if(session()->has("successModifFeedback"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successModifFeedback") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successModifFeedback') }}"></x-badge-success>
 		@endif
 
 		<div class="overflow-x-auto">

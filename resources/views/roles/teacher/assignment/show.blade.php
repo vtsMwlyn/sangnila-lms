@@ -9,17 +9,11 @@
 		<x-page-title class="mt-5 mb-8">List of Assignments in {{ $course->course_name }}</x-page-title>
 
 		@if(session()->has("successUploadAssignment"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successUploadAssignment") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successUploadAssignment') }}"></x-badge-success>
 		@elseif(session()->has("successEditAssignment"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successEditAssignment") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successEditAssignment') }}"></x-badge-success>
 		@elseif(session()->has("successDeleteAssignment"))
-			<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-yellow-600" >{{ session("successDeleteAssignment") }}</p>
-			</div>
+			<x-badge-warning badge_text="{{ session('successDeleteAssignment') }}"></x-badge-warning>
 		@endif
 
 		<div class="mt-5 mb-5">

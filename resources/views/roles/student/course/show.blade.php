@@ -48,7 +48,7 @@
 					</tr>
 				@empty
 					<tr>
-						<td colspan="2" class="px-4 py-2 text-center border-t border-solid border-blue-900">No materials found.</td>
+						<td colspan="4" class="p-5 text-center rounded-xl bg-white font-semibold">- No materials found -</td>
 					</tr>
 				@endforelse
 			</x-table>

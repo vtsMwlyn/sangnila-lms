@@ -9,9 +9,7 @@
 		<x-page-title class="mt-5 mb-8">Edit Attendance Data</x-page-title>
 
 		@if(session()->has("failedEditAttendance"))
-			<div class="w-full bg-red-700 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-red-100">{{ session("failedEditAttendance") }}</p>
-			</div>
+			<x-badge-danger badge_text="{{ session('failedEditAttendance') }}"></x-badge-danger>
 		@endif
 
 		<form action="{{ route('teacher.attendance.update', $attendance->id) }}" method="post" class="mx-auto" id="attendance_form">
@@ -78,9 +76,9 @@
 				<x-button class="bg-orange-500 w-full md:w-1/6">
 					{{ __('Submit') }}
 				</x-button>
-				<x-button type="button" onclick="if(confirm('The changes will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500 w-full md:w-1/6">
+				<x-cancel-button msg="The changes will be discarded, are you sure want to cancel?" class="w-full md:w-1/6">
 					Cancel
-				</x-button>
+				</x-cancel-button>
 			</div>
 		</form>
 

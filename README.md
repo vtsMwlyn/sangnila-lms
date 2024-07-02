@@ -28,9 +28,15 @@ There are 5 roles (types of account) in Sangnila LMS:
 - Some fixes on navigation bars responsiveness
 
 ### v0.6.4-alpha
-- Added last material progress and learning status to attendance upload, edit, and show
+- Added last material progress and learning status to attendance upload, edit, and show (undone)
 - Improvement on import student page
 - Normalization of imported student
+
+### v0.6.5-alpha
+- Added last material progress and learning status to attendance upload, edit, and show (done)
+- Improvements and revision implementation in UI design
+- Some elements templating (cancel buttons and notification badges)
+- Notification for students (how many assignments undone)
 
 ## Clone Project
 Clone the repository in any desired directory. Web resources such as images, videos, scripts, and styles are included in `public` folder. To generate the database system and fill it will sample data, run this command in the terminal:

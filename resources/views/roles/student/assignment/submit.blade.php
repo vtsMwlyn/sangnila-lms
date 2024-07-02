@@ -35,9 +35,9 @@
 					<x-button type="submit" class="bg-orange-500 w-full md:w-1/6">
 						Submit
 					</x-button>
-					<x-button type="button" onclick="if(confirm('The filled data will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500 w-full md:w-1/6">
+					<x-cancel-button msg="The filled data will be discarded, are you sure want to cancel?" class="w-full md:w-1/6">
 						Cancel
-					</x-button>
+					</x-cancel-button>
 				</div>
 			</form>
 

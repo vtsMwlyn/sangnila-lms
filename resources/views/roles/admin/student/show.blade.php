@@ -15,29 +15,19 @@
 		@endif
 
 		@if(session()->has("successAssignToCourse"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successAssignToCourse") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successAssignToCourse') }}"></x-badge-success>
 		@elseif(session()->has("successNormalize"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successNormalize") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successNormalize') }}"></x-badge-success>
 		@elseif(session()->has("successUnassignFromCourse"))
-			<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-yellow-600" >{{ session("successUnassignFromCourse") }}</p>
-			</div>
+			<x-badge-warning badge_text="{{ session('successUnassignFromCourse') }}"></x-badge-warning>
 		@elseif(session()->has("successUpdateStudentData"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successUpdateStudentData") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successUpdateStudentData') }}"></x-badge-success>
 		@elseif(session()->has("successUpdateMaxSession"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successUpdateMaxSession") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successUpdateMaxSession') }}"></x-badge-success>
 		@endif
 
 		<div class="h-fit mb-5">
-			<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.edit', $student->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
+			<x-anchor-button type="button" class="bg-orange-500" href="{{ route('admin.student.edit', $student->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		</div>
 
 		<div class="overflow-x-auto">
@@ -120,32 +110,34 @@
 		</script>
 
 		<x-page-title class="mt-8" style="text-align: left;">{{ __("Courses Enrolled") }}</x-page-title>
-		<div class="px-10 py-5 border rounded-xl bg-blue-900 mt-8">
+		<div class="mt-8">
 			<div class="py-5">
 				<x-anchor-button class="bg-orange-500"
 					href="{{ route('admin.student.assign.create', $student->id) }}">
 					<i class="bi bi-plus-lg"></i> Assign to course
 				</x-anchor-button>
 			</div>
-			<hr>
-			<div class="flex gap-x-10 flex-wrap bg-blue-900 rounded-b-xl mt-5">
+			<div class="flex gap-10 flex-wrap mt-5">
 				@forelse ($student->enrolled_courses as $course)
-					<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-5 flex flex-col justify-center items-start font-semibold" style="min-width: 300px; max-width: 300px; min-height: 150px;">
-						<h1 class="mb-1 font-bold">{{ $course->course_name }}</h1>
-						<span class="text-white text-xs mb-5">Teacher: {{ (App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->full_name }}</span>
-						<span class="text-white text-xs">{{ __("Maximum Sessions") }}</span>
-						<div class="flex w-full items-center justify-between mt-3">
-							<form action="{{ route("admin.student.max-session.update", [$student->id, $course->id]) }}" method="post" class="flex justify-start gap-2">
+					<!-- Card -->
+					<div class="flex flex-col justify-center items-center gap-5 border-2 border-white rounded-xl text-white w-full md:w-1/3 px-8 " style="background: linear-gradient(to bottom, rgba(40, 55, 133, 0.53) 25%, rgba(235, 126, 37, 0.58)); min-height: 400px;">
+						<h1 class="text-3xl font-bold">{{ $course->course_name }}</h1>
+						<span class="border border-white rounded-lg px-4 py-2 text-md">Teacher: {{ (App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->full_name }}</span>
+
+						<span class="text-white">{{ __("Maximum Sessions") }}</span>
+						<div class="flex flex-col md:flex-row w-full items-center justify-center mt-3 gap-5">
+							<form action="{{ route("admin.student.max-session.update", [$student->id, $course->id]) }}" method="post" class="flex gap-2">
 								@csrf
-								<input type="number" name="{{ __('max_course_session' . $student->id . $course->id) }}" class="rounded-md shadow-sm border text-blue-800 @error('max_course_session' . $student->id . $course->id) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50  @else border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50 @enderror" style="width: 40%;" value="{{ App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", $student->id)->first()->max_course_session }}"  />
-								<x-button class="bg-orange-700 text-white"><i class="bi bi-pencil-square"></i></x-button>
+								<input type="number" name="{{ __('max_course_session' . $student->id . $course->id) }}" class="rounded-md shadow-sm border text-blue-800 @error('max_course_session' . $student->id . $course->id) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50  @else border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50 @enderror" value="{{ App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", $student->id)->first()->max_course_session }}"  style="max-width: 100px;"/>
+								<x-button class="bg-orange-700 text-white" onclick="return confirm('Are you sure want to change the maximum session of this student in this course?');"><i class="bi bi-pencil-square"></i></x-button>
 							</form>
 							<x-anchor-button
 								href="{{ route('admin.student.unassign.delete', ['student_id' => $student->id, 'course_id' => $course->id]) }}"
-								class="bg-white text-orange-500 text-xs">
+								class="bg-white text-orange-500 text-sm">
 								Unassign
 							</x-anchor-button>
 						</div>
+
 						@error('max_course_session' . $student->id . $course->id)
 							<p class="text-red-500 mt-2 text-left">{{ $message }}</p>
 						@enderror

@@ -42,9 +42,9 @@
 						<x-button class="bg-orange-500 w-full md:w-1/6">
 							{{ __('Assign') }}
 						</x-button>
-						<x-button type="button" onclick="if(confirm('The filled in data will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500 w-full md:w-1/6">
+						<x-cancel-button msg="The filled in data will be discarded, are you sure want to cancel?" class="w-full md:w-1/6">
 							Cancel
-						</x-button>
+						</x-cancel-button>
 					</div>
 				</form>
 
@@ -75,7 +75,7 @@
 			@else
 				<div class="rounded-lg py-5 px-10 bg-blue-800">
 					<p class="text-white italic">- No more courses to assign -</p>
-					<x-button type="button" onclick="history.back()" class="bg-orange-500 mt-4">
+					<x-button type="button" onclick="history.back()" class="bg-slate-400 mt-4">
 						Return
 					</x-button>
 				</div>

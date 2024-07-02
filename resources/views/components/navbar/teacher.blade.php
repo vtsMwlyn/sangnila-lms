@@ -15,28 +15,28 @@
 
 		<!-- Sidebar navigations -->
 		<div class="flex flex-col lg:flex-row items-stretch justify-center gap-4 mx-10 py-4 px-6 rounded-3xl border border-white grow lg:w-auto my-5 lg:my-0" style="background-color: rgba(217, 217, 217, 0.45);">
-			<x-anchor-button class="{{ (Request::is('teacher*mycourse*') || Request::is('teacher*topic*') || Request::is('teacher*material*'))? 'bg-orange-500' : 'bg-blue-900' }} grow flex items-center justify-center"
+			<x-anchor-button class="{{ (Request::is('teacher*mycourse*') || Request::is('teacher*topic*') || Request::is('teacher*material*'))? 'bg-orange-500' : 'bg-blue-900' }} grow flex items-center gap-2 justify-center"
 				href="{{ route('teacher.mycourse.index') }}">
 				<i class="bi bi-grid"></i> Manage Courses
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('teacher*student*')? 'bg-orange-500' : 'bg-blue-900' }} grow flex items-center justify-center"
+			<x-anchor-button class="{{ Request::is('teacher*student*')? 'bg-orange-500' : 'bg-blue-900' }} grow flex items-center gap-2 justify-center"
 				href="{{ route('teacher.student.select-course') }}">
 				<i class="bi bi-file-earmark-lock"></i> Materials Access
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('teacher*attendance*')? 'bg-orange-500' : 'bg-blue-900' }} grow flex items-center justify-center"
+			<x-anchor-button class="{{ Request::is('teacher*attendance*')? 'bg-orange-500' : 'bg-blue-900' }} grow flex items-center gap-2 justify-center"
 				href="{{ route('teacher.attendance.index') }}">
 				<i class="bi bi-file-earmark-check"></i> Attendances & Progress
 			</x-anchor-button>
 
-			<x-anchor-button class="{{ Request::is('teacher*assignment*')? 'bg-orange-500' : 'bg-blue-900' }} grow flex items-center justify-center"
+			<x-anchor-button class="{{ Request::is('teacher*assignment*')? 'bg-orange-500' : 'bg-blue-900' }} grow flex items-center gap-2 justify-center"
 				href="{{ route('teacher.assignment.index') }}">
 				<i class="bi bi-file-earmark-text"></i> Manage Assignments
 			</x-anchor-button>
 
 			<!-- Logout Button -->
-			<form method="POST" action="{{ route('logout') }}" class="grow flex items-center justify-center">
+			<form method="POST" action="{{ route('logout') }}" class="grow flex items-center gap-2 justify-center">
 				@csrf
 				<x-button
 					class="font-semibold bg-red-600 w-full" onclick="return confirm('Are you sure want to logout from your account?');">

@@ -23,18 +23,18 @@
 							<x-button class="bg-orange-500 w-1/6 mt-5" type="button" id="botan">
 								{{ __('Add to List') }}
 							</x-button>
-							<x-button class="bg-orange-500 w-1/6 mt-5" type="button" onclick="if(confirm('The inputted data will be discarded, are you sure want to cancel?')) history.back();">
+							<x-cancel-button class="w-1/6 mt-5" msg="The inputted data will be discarded, are you sure want to cancel?">
 								{{ __('Back') }}
-							</x-button>
+							</x-cancel-button>
 						</div>
 					</div>
 
 					<div class="flex w-full" id="notifikeshon" style="display: none;">
-						<div class="text-white italic font-semibold">- No more courses to assign -</div>
+						<div class="bg-white p-5 rounded-xl font-semibold text-center italic font-semibold">- No more courses to assign -</div>
 						<div class="flex w-full justify-end">
-							<x-button class="bg-orange-500 w-1/6 mt-5" type="button" onclick="if(confirm('The inputted data will be discarded, are you sure want to cancel?')) history.back();">
+							<x-cancel-button class="w-1/6 mt-5" msg="The inputted data will be discarded, are you sure want to cancel?'))">
 								{{ __('Back') }}
-							</x-button>
+							</x-cancel-button>
 						</div>
 					</div>
 

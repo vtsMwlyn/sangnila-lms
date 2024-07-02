@@ -12,25 +12,15 @@
 		<h1 class="text-2xl font-semibold text-blue-900 mb-8 text-center">{{ $topic->title }}</h1>
 
 		@if(session()->has("successUpdateTopic"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successUpdateTopic") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successUpdateTopic') }}"></x-badge-success>
 		@elseif(session()->has("successEditTopic"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successEditTopic") }}</p>
-			</div>
-		@elseif(session()->has("successUploadMaterial"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successUploadMaterial") }}</p>
-			</div>
-		@elseif(session()->has("successEditMaterial"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successEditMaterial") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successEditTopic') }}"></x-badge-success>
+		@elseif(session()->has('successUploadMaterial'))
+			<x-badge-success badge_text="{{ session('successUploadMaterial') }}"></x-badge-success>
+		@elseif(session()->has('successEditMaterial'))
+			<x-badge-success badge_text="{{ session('successEditMaterial') }}"></x-badge-success>
 		@elseif(session()->has("successDeleteMaterial"))
-			<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-yellow-600" >{{ session("successDeleteMaterial") }}</p>
-			</div>
+			<x-badge-warning badge_text="{{ session('successDeleteMaterial') }}"></x-badge-warning>
 		@endif
 
 		<div class="flex gap-2 mb-6">
@@ -54,8 +44,10 @@
 
 				@forelse ($topic->materials as $material)
 					<tr>
-						<td class="template-bodies rounded-l-xl">{{ $material->title }}</td>
-						<td class="template-bodies" style="min-width: 30vw;">{{ $material->desc }}</td>
+						<td class="template-bodies rounded-l-xl w-1/4">{{ $material->title }}</td>
+						<td class="template-bodies w-1/3">
+							<div class="h-full w-full overflow-y-auto" style="max-height: 5.5rem;">{{ $material->desc }}</div>
+						</td>
 						<td class="template-bodies" style="max-width: 20vw; word-wrap: break-word;"><a href="{{ $material->link }}" target="blank" class="text-blue-200 font-bold hover:text-blue-400 hover:underline">{{ $material->link }}</a></td>
 						<td class="template-bodies rounded-r-xl">
 							<div class="flex gap-1">

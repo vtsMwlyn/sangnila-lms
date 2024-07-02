@@ -66,9 +66,9 @@
 				<x-button class="bg-orange-500 w-full md:w-1/3">
 					{{ __('Create') }}
 				</x-button>
-				<x-button type="button" onclick="if(confirm('The filled data will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500 w-full md:w-1/3">
+				<x-cancel-button msg="The filled data will be discarded, are you sure want to cancel?" class="w-full md:w-1/3">
 					Cancel
-				</x-button>
+				</x-cancel-button>
 			</div>
 		</form>
 	</div>

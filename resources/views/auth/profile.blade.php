@@ -2,13 +2,10 @@
 	<x-page-title class="mt-5 mb-8">{{ __("Account Profile") }}</x-page-title>
 
 	@if(session()->has("successUpdateProfile"))
-		<div class="w-full bg-green-500 px-5 py-3 mt-5 rounded-lg">
-			<p class="text-green-900">{{ session("successUpdateProfile") }}</p>
-		</div>
+		<x-badge-success badge_text="session('successUpdateProfile') }}">
+		</x-badge-success>
 	@elseif(session()->has("successPay"))
-		<div class="w-full bg-green-500 px-5 py-3 rounded-lg">
-			<p class="text-green-900">{{ session("successPay") }}</p>
-		</div>
+		<x-badge-success badge_text="session('successPay') }}"></x-badge-success>
 	@endif
 
 	<div class="mt-5">
@@ -46,7 +43,7 @@
 				<x-button class="bg-orange-500 w-full md:w-1/6">
 					{{ __('Save') }}
 				</x-button>
-				<x-button type="button" onclick="history.back()" class="bg-orange-500 w-full md:w-1/6">
+				<x-button type="button" onclick="history.back()" class="bg-slate-600 w-full md:w-1/6">
 					Return
 				</x-button>
 			</div>
