@@ -28,9 +28,9 @@
 				<x-label>{{ __("Attendance Details") }}</x-label>
 				<table class="w-full" style="border-collapse: separate; border-spacing: 0 20px;">
 					<tbody>
-						@foreach ($attendance->course->students as $student)
+						@foreach (App\Models\CourseStudent::where("course_id", $attendance->course_id)->where("teacher_id", Auth::user()->id)->get() as $course_student)
 							@php
-								$atd = $attendanceData->where("user_id", $student->id)->first();
+								$atd = $attendanceData->where("user_id", $course_student->student->id)->first();
 							@endphp
 
 							<tr style="@if($atd && $atd->attendance_detail == "Account disabled") display: none; @endif background: rgba(256, 256, 256, 0.4);">
@@ -38,7 +38,7 @@
 									<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
 										<input type="checkbox" id="checkbox{{ $loop->iteration }}"
 										class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @elseif($atd && $atd->is_attend == 1) checked @endif @if($atd && $atd->attendance_detail == "Account disabled") disabled @endif>
-										<label for="checkbox{{ $loop->iteration }}">{{ $student->full_name }}</label>
+										<label for="checkbox{{ $loop->iteration }}">{{ $course_student->student->full_name }}</label>
 									</div>
 									<div class="flex w-full gap-2 mt-2 material_progress_detail">
 										<x-select class="material_progress w-2/3">
