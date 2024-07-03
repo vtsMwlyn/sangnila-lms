@@ -64,7 +64,7 @@
 								<tr>
 									<td class="template-bodies rounded-l-xl" style="min-width: 200px; max-width: 200px; text-wrap: wrap;">
 										@if($account->role_id == 2)
-											<a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ ($account->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $account->full_name }}</a>
+											<a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ ($account->details->gender == 1)? "Mr." : "Ms." }} {{ $account->full_name }}</a>
 										@else
 											<a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $account->full_name }}</a>
 										@endif
@@ -95,7 +95,7 @@
 								</tr>
 							@empty
 								<tr>
-									<td colspan="5" class="bg-white p-5 rounded-xl text-center font-semibold">- No accounts available found for this role -</td>
+									<td colspan="5" class="bg-white p-5 rounded-xl text-center font-semibold">{{ (request("search") && (request("role") == $role->id))? "- No data found -" : "- No accounts available found for this role -" }}</td>
 								</tr>
 							@endforelse
 						</tbody>

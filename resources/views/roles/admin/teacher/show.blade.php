@@ -6,7 +6,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title>{{ __("Teacher's Details") }}</x-page-title>
+		<x-page-title class="mt-5 mb-8">{{ __("Teacher's Details") }}</x-page-title>
 
 		@if(session()->has("successAssignToCourse"))
 			<x-badge-success badge_text="{{ session('successAssignToCourse') }}"></x-badge-success>
@@ -16,14 +16,14 @@
 			<x-badge-success badge_text="{{ session('successUpdateTeacherData') }}"></x-badge-success>
 		@endif
 
-		<div class="mb-5">
+		<div class="my-8">
 			<x-anchor-button class="bg-orange-500" href="{{ route('admin.teacher.edit', $user->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		</div>
 
 		<x-horizontal-table>
 			<tr>
 				<td class="template-hheads w-1/3">Full name</td>
-				<td class="template-hbodies">{{ ($user->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $user->full_name }}</td>
+				<td class="template-hbodies">{{ ($user->details->gender == 1)? "Mr." : "Ms." }} {{ $user->full_name }}</td>
 			</tr>
 			<tr>
 				<td class="template-hheads w-1/3">Phone number</td>

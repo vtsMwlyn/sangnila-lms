@@ -18,9 +18,9 @@
 				@if (count($attendances))
 					@foreach ($attendances as $attendance)
 						<tr>
-							<td class="template-bodies font-semibold rounded-l-xl" style="background-color: @if($attendance->is_attend == 1) #219926 @else rgb(153 27 27) @endif;">{{ $attendance->created_at }}</td>
-							<td class="template-bodies font-semibold" style="background-color: @if($attendance->is_attend == 1) #219926 @else rgb(153 27 27) @endif;">@if($attendance->is_attend) Present @else Absent @endif</td>
-							<td class="template-bodies font-semibold rounded-r-xl" style="background-color: @if($attendance->is_attend == 1) #219926 @else rgb(153 27 27) @endif;">{{ $attendance->attendance_detail }}</td>
+							<td class="template-bodies font-semibold rounded-l-xl">{{ $attendance->created_at }}</td>
+							<td class="template-bodies font-semibold" style="color: @if($attendance->is_attend == 1) #219926 @else rgb(248 113 113) @endif;">@if($attendance->is_attend) Present @else Absent @endif</td>
+							<td class="template-bodies font-semibold rounded-r-xl">{{ $attendance->attendance_detail }}</td>
 						</tr>
 					@endforeach
 				@else

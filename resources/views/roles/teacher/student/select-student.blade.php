@@ -10,10 +10,11 @@
 		<h1 class="text-2xl font-semibold text-blue-900 text-center mb-8">Pick a Student</h1>
 
 		<div class="w-full">
+			<div class="w-full py-6 text-white rounded-xl font-bold text-center" style="background: #000C48;">
+				Student List
+			</div>
+
 			@if($course_students->count())
-				<div class="w-full py-6 text-white rounded-xl font-bold text-center" style="background: #000C48;">
-					Student List
-				</div>
 				<div class="flex flex-col gap-5 mt-5">
 					@foreach ($course_students as $index => $cs)
 						@if ($index % 3 == 0)
@@ -32,7 +33,7 @@
 					</div> <!-- Close last row -->
 				</div>
 			@else
-				<p class="text-center py-3 text-blue-950">- No students assigned yet -</p>
+				<div class="text-center bg-white rounded-xl w-full font-semibold p-5 mt-5">- No students assigned yet -</div>
 			@endif
 		</div>
 

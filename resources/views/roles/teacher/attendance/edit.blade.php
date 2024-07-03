@@ -31,42 +31,44 @@
 								$atd = $attendanceData->where("user_id", $course_student->student->id)->first();
 							@endphp
 
-							<tr style="@if($atd && $atd->attendance_detail == "Account disabled") display: none; @endif background: rgba(256, 256, 256, 0.4);">
-								<td class="p-5 w-1/2 rounded-l-xl">
-									<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
-										<input type="checkbox" id="checkbox{{ $loop->iteration }}"
-										class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @elseif($atd && $atd->is_attend == 1) checked @endif @if($atd && $atd->attendance_detail == "Account disabled") disabled @endif>
-										<label for="checkbox{{ $loop->iteration }}">{{ $course_student->student->full_name }}</label>
-									</div>
-									<div class="flex w-full gap-2 mt-2 material_progress_detail">
-										<x-select class="material_progress w-2/3">
-											<option selected disabled>Select Material Progress</option>
-											@foreach ($attendance->course->topics as $topic)
-												@foreach ($topic->materials as $material)
-													<option value="{{ $material->title }}" @if($atd && $atd->material_progress == $material->title) selected @endif>{{ $material->title }}</option>
+							@if($atd)
+								<tr style="@if($atd->attendance_detail == "Account disabled") display: none; @endif background: rgba(256, 256, 256, 0.4);">
+									<td class="p-5 w-1/2 rounded-l-xl">
+										<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
+											<input type="checkbox" id="checkbox{{ $loop->iteration }}"
+											class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @elseif($atd->is_attend == 1) checked @endif @if($atd->attendance_detail == "Account disabled") disabled @endif>
+											<label for="checkbox{{ $loop->iteration }}">{{ $course_student->student->full_name }}</label>
+										</div>
+										<div class="flex w-full gap-2 mt-2 material_progress_detail">
+											<x-select class="material_progress w-2/3">
+												<option selected disabled>Select Material Progress</option>
+												@foreach ($attendance->course->topics as $topic)
+													@foreach ($topic->materials as $material)
+														<option value="{{ $material->title }}" @if($atd->material_progress == $material->title) selected @endif>{{ $material->title }}</option>
+													@endforeach
 												@endforeach
-											@endforeach
-										</x-select>
+											</x-select>
 
-										<x-select class="learning_status w-1/3">
-											<option value="On Progress" @if($atd && $atd->learning_status == "On Progress") selected @endif>On Progress</option>
-											<option value="Done" @if($atd && $atd->learning_status == "Done") selected @endif>Done</option>
-										</x-select>
-									</div>
-								</td>
-								<td class="p-5 w-1/2 rounded-r-xl">
-									<div class="flex flex-col items-stretch">
-										@if($atd)
-											<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student attendance details" style="resize: none; box-sizing: border-box; padding: 10px;">{{ old("attendance_detail." . $loop->index, $atd->attendance_detail) }}</textarea>
-										@else
-											<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student attendance details" style="resize: none; box-sizing: border-box; padding: 10px;"></textarea>
-										@endif
-										@error("attendance_detail." . $loop->index)
-											<span class="text-red-500 mt-2">{{ $message }}</span>
-										@enderror
-									</div>
-								</td>
-							</tr>
+											<x-select class="learning_status w-1/3">
+												<option value="On Progress" @if($atd->learning_status == "On Progress") selected @endif>On Progress</option>
+												<option value="Done" @if($atd->learning_status == "Done") selected @endif>Done</option>
+											</x-select>
+										</div>
+									</td>
+									<td class="p-5 w-1/2 rounded-r-xl">
+										<div class="flex flex-col items-stretch">
+											@if($atd)
+												<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px;">{{ old("attendance_detail." . $loop->index, $atd->attendance_detail) }}</textarea>
+											@else
+												<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px;"></textarea>
+											@endif
+											@error("attendance_detail." . $loop->index)
+												<span class="text-red-500 mt-2">{{ $message }}</span>
+											@enderror
+										</div>
+									</td>
+								</tr>
+							@endif
 						@endforeach
 					</tbody>
 				</table>

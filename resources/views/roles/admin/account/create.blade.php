@@ -1,10 +1,10 @@
 @extends("layouts.login-register")
 
 @section("content")
-	<div class="flex items-center rounded-2xl w-11/12 md:w-2/3 bg-orange-500 p-5">
-		<div class="md:flex flex-col items-center justify-center hidden w-0 md:w-1/2">
-			<img src={{ asset("img/AR.W.png") }} alt="logo" width="100px">
-			<img src={{ asset("img/loginpict.png") }} alt="logo" width="400px">
+	<div class="flex items-stretch gap-5 rounded-2xl w-11/12 md:w-2/3 bg-orange-500 p-10">
+		<div class="md:flex flex-col items-center py-10 hidden w-0 md:w-1/2 gap-10">
+			<img src={{ asset("img/AR.W.png") }} alt="logo" width="160px">
+			<h1 class="text-white font-semibold text-2xl">Welcome to Sangnila</h1>
 		</div>
 		<form method="POST" action="{{ route('admin.account.store') }}" class="flex flex-col justify-center items-stretch w-full md:w-1/2 py-6 px-10 bg-blue-950 rounded-2xl">
 			@csrf

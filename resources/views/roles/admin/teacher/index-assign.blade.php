@@ -40,9 +40,9 @@
 
 				</form>
 			@else
-				<div class="rounded-lg py-5 px-10 bg-blue-800">
+				<div class="rounded-lg py-5 px-10 bg-blue-900">
 					<p class="text-white italic">- No more courses to assign -</p>
-					<x-button type="button" onclick="history.back()" class="bg-orange-500 mt-4">
+					<x-button type="button" onclick="history.back()" class="bg-slate-600 mt-4">
 						Return
 					</x-button>
 				</div>

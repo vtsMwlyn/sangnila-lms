@@ -11,7 +11,7 @@
 		<div class="rounded-xl py-5 px-10 mt-10 text-white bg-blue-950">Select a Course to Assign</div>
 		<div class="mt-5">
 			@if(count($courses))
-				<form action="{{ route('admin.student.assign.store', $student->id) }}" method="post" class="">
+				<form action="{{ route('admin.student.assign.store', $student->id) }}" method="post" id="student_assign_form">
 					@csrf
 					<!-- Select course -->
 					<div class="mt-3">
@@ -48,9 +48,27 @@
 					</div>
 				</form>
 
+				<div class="rounded-lg py-5 px-10 bg-blue-900" id="when_empty" style="display: none;">
+					<p class="text-white italic">- No more courses to assign -</p>
+					<x-button type="button" onclick="history.back()" class="bg-orange-500 mt-4">
+						Return
+					</x-button>
+				</div>
+
 				<script>
 					const course_and_teachers = @json($course_and_teachers);
 					const selectedCourse = document.querySelector("#course_name");
+
+					course_and_teachers.forEach(element => {
+						if(element.teachers.length == 0){
+							$("#course_name").find(`option[value="${element.course_name}"]`).remove();
+						}
+					});
+
+					if($("#course_name").children().length == 1){
+						$("#student_assign_form").css({"display": "none"});
+						$("#when_empty").css({"display": "block"});
+					}
 
 					selectedCourse.addEventListener("change", () => {
 						const selectedCourseName = selectedCourse.value;
@@ -75,7 +93,7 @@
 			@else
 				<div class="rounded-lg py-5 px-10 bg-blue-800">
 					<p class="text-white italic">- No more courses to assign -</p>
-					<x-button type="button" onclick="history.back()" class="bg-slate-400 mt-4">
+					<x-button type="button" onclick="history.back()" class="bg-slate-600 mt-4">
 						Return
 					</x-button>
 				</div>
@@ -90,7 +108,7 @@
 						{{ $course->course_name }}
 					</div>
 				@empty
-					<li class="text-gray-500">No course</li>
+					<div class="font-semibold mt-3 text-center p-5 rounded-xl w-full bg-white">- No courses assigned yet -</div>
 				@endforelse
 			</div>
 		</div>

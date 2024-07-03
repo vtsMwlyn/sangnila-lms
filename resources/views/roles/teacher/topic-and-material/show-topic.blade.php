@@ -23,7 +23,7 @@
 			<x-badge-warning badge_text="{{ session('successDeleteMaterial') }}"></x-badge-warning>
 		@endif
 
-		<div class="flex gap-2 mb-6">
+		<div class="flex gap-2 my-8">
 			<x-anchor-button class="bg-orange-500" href="{{ route('teacher.topic.edit', [$topic->course->id, $topic->id]) }}"><i class="bi bi-pencil-square"></i> Edit Topic</x-anchor-button>
 			<x-anchor-button class="bg-orange-500" href="{{ route('teacher.topic.delete', [$topic->course->id, $topic->id]) }}"><i class="bi bi-trash3"></i> Delete Topic</x-anchor-button>
 		</div>
@@ -64,7 +64,7 @@
 					</tr>
 				@empty
 					<tr>
-						<td colspan="4" class="bg-white rounded-xl p-5 text-center">- No materials added yet to this topic -</td>
+						<td colspan="4" class="bg-white rounded-xl p-5 text-center font-semibold">- No materials added yet to this topic -</td>
 					</tr>
 				@endforelse
 			</x-table>

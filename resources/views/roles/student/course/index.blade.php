@@ -42,7 +42,7 @@
 								</td>
 
 								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
-									{{ (App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->full_name }}
+									{{ (App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->details->gender == 1)? "Mr." : "Ms." }} {{ App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->full_name }}
 								</td>
 
 								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
@@ -79,7 +79,7 @@
 					<a href="{{ route('student.mycourse.show', ['course_id' => $course->id]) }}" class="w-full md:w-1/3">
 						<div class="flex flex-col justify-center items-center gap-5 border-2 border-white rounded-xl text-white px-8  hover:scale-105 transition duration-300 ease-in-out" style="background: linear-gradient(to bottom, rgba(40, 55, 133, 0.53) 25%, rgba(235, 126, 37, 0.58)); min-height: 400px; cursor: url('{{ asset('img/cursor2.cur') }}'), pointer;">
 							<h1 class="text-3xl font-bold">{{ $course->course_name }}</h1>
-							<div class="border border-white rounded-lg px-4 py-2 text-md">Teacher: {{ (App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->full_name }}</div>
+							<div class="border border-white rounded-lg px-4 py-2 text-md">Teacher: {{ (App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->details->gender == 1)? "Mr." : "Ms." }} {{ App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher->full_name }}</div>
 
 							<h3 class="text-sm">Progress</h3>
 							<div class="w-full h-8 bg-slate-400 rounded-lg overflow-hidden relative">
@@ -114,7 +114,7 @@
 				@endforeach
 			</div>
 		@else
-			<div class="text-blue-900">N/A</div>
+			<div class="bg-white rounded-xl text-center font-semibold w-full mt-5 p-5">- No courses assigned yet -</div>
 		@endif
 	</x-section-container>
 @endsection

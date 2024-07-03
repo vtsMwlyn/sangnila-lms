@@ -70,10 +70,12 @@
 				</div>
 			</form>
 		@else
-			<h1 class="text-md font-semibold italic">- No students assigned to this course yet, cannot upload assignment -</h1>
-			<x-button type="button" onclick="history.back()" class="bg-slate-600">
-				Return
-			</x-button>
+			<div class="bg-blue-900 rounded-xl p-8">
+				<h1 class="font-semibold italic text-white">- No students assigned to this course yet, cannot upload assignment -</h1>
+				<x-button type="button" onclick="history.back()" class="bg-slate-600 mt-5">
+					Return
+				</x-button>
+			</div>
 		@endif
 
 		<script>

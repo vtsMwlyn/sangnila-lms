@@ -27,7 +27,7 @@
 							<x-select name="teacher_name" id="teacher_name" class="w-full" required>
 								<option disabled selected>Pick a teacher</option>
 								@foreach ($allTeachers as $t)
-									<option value="{{ $t->full_name }}">{{ ($t->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $t->full_name }}</option>
+									<option value="{{ $t->full_name }}">{{ ($t->details->gender == 1)? "Mr." : "Ms." }} {{ $t->full_name }}</option>
 								@endforeach
 							</x-select>
 							<p class="text-red-500" id="errTeacher">This field is required.</p>

@@ -70,8 +70,8 @@
 					@endforeach
 				@else
 					<tr>
-						<td colspan="4" class="bg-white rounded-xl p-5 sm:w-1/4 text-center">
-							- No courses yet -
+						<td colspan="4" class="bg-white rounded-xl p-5 sm:w-1/4 text-center font-semibold">
+							{{ request("search")? "- No data found -" : "- No courses yet -" }}
 						</td>
 					</tr>
 				@endif

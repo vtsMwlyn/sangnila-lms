@@ -31,11 +31,11 @@
 									<p class="font-semibold italic text-yellow-200">{{ $attendance->material_progress }} - {{ $attendance->learning_status }}</p>
 								</div>
 							</td>
-							<td class="px-3 py-5 text-center rounded-r-xl">{{ ($attendance->attendance->posted_by->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $attendance->attendance->posted_by->full_name }}</td>
+							<td class="px-3 py-5 text-center rounded-r-xl">{{ ($attendance->attendance->posted_by->details->gender == 1)? "Mr." : "Ms." }} {{ $attendance->attendance->posted_by->full_name }}</td>
 						</tr>
 					@endforeach
 				@else
-					<tr><td colspan="4" class="bg-white px-3 py-5 text-center rounded-xl">- The teacher haven't uploaded any attendance data yet -</td></tr>
+					<tr><td colspan="4" class="bg-white px-3 py-5 text-center rounded-xl font-semibold">- The teacher haven't uploaded any attendance data yet -</td></tr>
 				@endif
 			</x-table>
 		</div>
