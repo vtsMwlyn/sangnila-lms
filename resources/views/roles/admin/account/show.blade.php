@@ -37,7 +37,7 @@
 				<tr>
 					<td class="template-hheads w-1/3">Full Name</td>
 					@if($user->role_id == 2)
-						<td class="template-hbodies">{{ ($user->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $user->full_name }}</td>
+						<td class="template-hbodies">{{ ($user->details->gender == 1)? "Mr." : "Ms." }} {{ $user->full_name }}</td>
 					@else
 						<td class="template-hbodies">{{ $user->full_name }}</td>
 					@endif

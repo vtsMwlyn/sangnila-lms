@@ -45,9 +45,9 @@
 			<div class="rounded-2xl py-5 px-10 text-white bg-blue-950">List of Assigned Teachers</div>
 			<div class="flex flex-wrap gap-x-10 overflow-y-auto py-3 mt-3" style="max-height: 300px;">
 				@forelse ($course->teachers as $teacher)
-					<div class="text-white border-2 border-white bg-blue-900 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 100px; max-height: 100px;">{{ ($teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $teacher->full_name }}</div>
+					<div class="text-white border-2 border-white bg-blue-900 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 100px; max-height: 100px;">{{ ($teacher->details->gender == 1)? "Mr." : "Ms." }} {{ $teacher->full_name }}</div>
 				@empty
-					<div class="flex w-full justify-center bg-white rounded-xl p-5">
+					<div class="flex w-full justify-center bg-white rounded-xl p-5 font-semibold">
 						<span>- No student enrolled in this course yet -</span>
 					</div>
 				@endforelse
@@ -103,7 +103,7 @@
 							</td>
 						</tr>
 					@empty
-						<tr class="text-gray-500 border border-blue-900"><td colspan="2" class="text-center py-3 font-semibold">- No topics yet -</td></tr>
+						<tr><td colspan="2" class="text-center font-semibold rounded-xl p-5 bg-white">- No topics and materials yet -</td></tr>
 					@endforelse
 				</x-table>
 			</div>

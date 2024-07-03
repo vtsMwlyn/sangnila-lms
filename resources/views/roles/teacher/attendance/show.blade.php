@@ -14,7 +14,7 @@
 			<x-badge-success badge_text="{{ session('successEditAttendance') }}"></x-badge-success>
 		@endif
 
-		<x-anchor-button class="bg-orange-500 mb-3" href="{{ route('teacher.attendance.upload', $course->id) }}">
+		<x-anchor-button class="bg-orange-500 mt-5 mb-3" href="{{ route('teacher.attendance.upload', $course->id) }}">
 			<i class="bi bi-plus-lg"></i> Upload New Attendance
 		</x-anchor-button>
 
@@ -31,14 +31,14 @@
 						</div>
 					</div>
 
-					{{-- <p>Uploaded by: {{ ($atd->posted_by->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $atd->posted_by->full_name }}</p> --}}
+					{{-- <p>Uploaded by: {{ ($atd->posted_by->details->gender == 1)? "Mr." : "Ms." }} {{ $atd->posted_by->full_name }}</p> --}}
 
 					<div class="overflow-x-auto contentTable" style="display: none;">
 						<x-table>
 							<x-slot name="head">
 								<th class="template-heads rounded-l-xl">Students</th>
 								<th class="template-heads">Attendance status</th>
-								<th class="template-heads">Attendance detail</th>
+								<th class="template-heads">In Class Progress</th>
 								<th class="template-heads rounded-r-xl">Material Progress</th>
 							</x-slot>
 

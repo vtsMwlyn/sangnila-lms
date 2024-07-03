@@ -69,18 +69,6 @@ class AttendanceController extends Controller {
 
 	// Insert new attendance data into database
 	public function store(Request $request, $course_id) {
-		$validatedData = $request->validate([
-			"checkbox_value.*" => "required",
-			"attendance_detail.*" => "required|min:3",
-			"attendance_date" => "required",
-			"material_progress.*" => "required",
-			"learning_status.*" => "required",
-		], [
-			"attendance_detail.*.required" => "The attendance detail field is required.",
-			"material_progress.*.required" => "The material progress field is required.",
-			"learning_status.*.required" => "The learning status field is required."
-		]);
-
 		$course = Course::where("id", $course_id)->first();
 		$teacher = Auth::user();
 
@@ -89,24 +77,24 @@ class AttendanceController extends Controller {
 		$newAttendance = Attendance::create([
 			"teacher_id" => $teacher->id,
 			"course_id" => $course->id,
-			"attendance_date" => $validatedData["attendance_date"],
+			"attendance_date" => $request["attendance_date"],
 			"attendance_identifier" => $identifier
 		]);
 
 		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
 
 		foreach($course_students as $i => $cs){
-			$attendanceDetail = $validatedData["attendance_detail"][$i];
+			$attendanceDetail = $request["attendance_detail"][$i];
 
-			$isAttend = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
+			$isAttend = ($request["checkbox_value"][$i] == "on")? 1 : 0;
 
 			StudentAttendance::create([
 				"user_id" => $cs->student->id,
 				"attendance_id" => $newAttendance->id,
 				"is_attend" => $isAttend,
 				"attendance_detail" => $attendanceDetail,
-				"material_progress" => $validatedData["material_progress"][$i],
-				"learning_status" => $validatedData["learning_status"][$i]
+				"material_progress" => $request["material_progress"][$i],
+				"learning_status" => $request["learning_status"][$i]
 			]);
 
 			$i++;
@@ -127,18 +115,6 @@ class AttendanceController extends Controller {
 
 	// Update attendance data in the database
 	public function update(Request $request, $attendance_data_id){
-		// $validatedData = $request->validate([
-		// 	"checkbox_value.*" => "required",
-		// 	"attendance_detail.*" => "required|min:3",
-		// 	"attendance_date" => "required",
-		// 	"material_progress.*" => "required",
-		// 	"learning_status.*" => "required",
-		// ], [
-		// 	"attendance_detail.*.required" => "The attendance detail field is required.",
-		// 	"material_progress.*.required" => "The material progress field is required.",
-		// 	"learning_status.*.required" => "The learning status field is required."
-		// ]);
-
 		$attendance = Attendance::where("id", $attendance_data_id)->first();
 		$existingAttendanceData = $attendance->student_attendances;
 		$course_students = CourseStudent::where("teacher_id", Auth::user()->id)->where("course_id", $attendance->course_id)->get();
@@ -146,6 +122,10 @@ class AttendanceController extends Controller {
 		$attendance->update(["attendance_date" => $request["attendance_date"]]);
 
 		foreach($course_students as $i => $cs){
+			if(!$existingAttendanceData->where("user_id", $cs->student->id)->first()){
+				continue;
+			}
+
 			// Validation mechanism
 			$invalid = false;
 

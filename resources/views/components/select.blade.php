@@ -13,6 +13,6 @@
 	{{ $slot }}
 </select>
 
-@error($attributes->get('name'))
+@if($errors->has($attributes->get('name')))
     <p class="text-red-500 mt-2">{{ $message }}</p>
-@enderror
+@endif

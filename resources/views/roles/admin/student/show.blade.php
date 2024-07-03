@@ -26,7 +26,7 @@
 			<x-badge-success badge_text="{{ session('successUpdateMaxSession') }}"></x-badge-success>
 		@endif
 
-		<div class="h-fit mb-5">
+		<div class="h-fit my-8">
 			<x-anchor-button type="button" class="bg-orange-500" href="{{ route('admin.student.edit', $student->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		</div>
 
@@ -109,9 +109,9 @@
 			});
 		</script>
 
-		<x-page-title class="mt-8" style="text-align: left;">{{ __("Courses Enrolled") }}</x-page-title>
+		<h1 class="mt-8 text-blue-950 font-bold text-2xl" style="text-align: left;">{{ __("Courses Enrolled") }}</h1>
 		<div class="mt-8">
-			<div class="py-5">
+			<div class="">
 				<x-anchor-button class="bg-orange-500"
 					href="{{ route('admin.student.assign.create', $student->id) }}">
 					<i class="bi bi-plus-lg"></i> Assign to course
@@ -122,7 +122,7 @@
 					<!-- Card -->
 					<div class="flex flex-col justify-center items-center gap-5 border-2 border-white rounded-xl text-white w-full md:w-1/3 px-8 " style="background: linear-gradient(to bottom, rgba(40, 55, 133, 0.53) 25%, rgba(235, 126, 37, 0.58)); min-height: 400px;">
 						<h1 class="text-3xl font-bold">{{ $course->course_name }}</h1>
-						<span class="border border-white rounded-lg px-4 py-2 text-md">Teacher: {{ (App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->full_name }}</span>
+						<span class="border border-white rounded-lg px-4 py-2 text-md">Teacher: {{ (App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->details->gender == 1)? "Mr." : "Ms." }} {{ App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->full_name }}</span>
 
 						<span class="text-white">{{ __("Maximum Sessions") }}</span>
 						<div class="flex flex-col md:flex-row w-full items-center justify-center mt-3 gap-5">
@@ -143,12 +143,12 @@
 						@enderror
 					</div>
 				@empty
-					<span class="text-white py-3 font-semibold">- No courses enrolled yet -</span>
+					<div class="bg-white p-5 w-full rounded-xl font-semibold text-center">- No courses enrolled yet -</div>
 				@endforelse
 			</div>
 		</div>
 
-		<x-page-title class="mt-10" style="text-align: left;">{{ __("Student's Attendances and Assignments") }}</x-page-title>
+		<h1 class="mt-10 text-blue-950 font-bold text-2xl" style="text-align: left;">{{ __("Student's Attendances and Assignments") }}</h1>
 		<div class="overflow-x-auto">
 			<x-table>
 				<x-slot name="head">

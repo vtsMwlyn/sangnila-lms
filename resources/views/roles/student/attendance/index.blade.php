@@ -26,7 +26,7 @@
 						</tr>
 					@endforeach
 				@else
-					<tr class="bg-white rounded-xl p-5"><td>N/A</td></tr>
+				<tr><td class="bg-white rounded-xl p-5 font-semibold text-center">- No courses assigned yet -</td></tr>
 				@endif
 			</x-table>
 		</div>

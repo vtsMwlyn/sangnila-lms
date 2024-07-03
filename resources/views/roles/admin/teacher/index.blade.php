@@ -29,7 +29,7 @@
 					<tr>
 						<td class="template-bodies sm:w-1/4 rounded-l-xl">
 							<a href="{{ route('admin.teacher.show', ['teacher_id' => $account->id]) }}" class="text-blue-200 hover:text-blue-400 font-semibold hover:underline">
-								{{ ($account->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $account->full_name }}
+								{{ ($account->details->gender == 1)? "Mr." : "Ms." }} {{ $account->full_name }}
 							</a>
 						</td>
 						<td class="template-bodies sm:w-1/4">{{ $account->email }}</td>
@@ -60,7 +60,7 @@
 					</tr>
 				@empty
 					<tr>
-						<td class="bg-white text-center p-5 font-semibold sm:w-1/4 rounded-xl" colspan="4">- No teachers yet -</td>
+						<td class="bg-white text-center p-5 font-semibold sm:w-1/4 rounded-xl" colspan="4">{{ request("search")? "- No data found -" : "- No teachers yet -" }}</td>
 					</tr>
 				@endforelse
 			</x-table>

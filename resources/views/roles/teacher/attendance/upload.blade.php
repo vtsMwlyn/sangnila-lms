@@ -7,7 +7,7 @@
 @section("content")
 	<x-section-container>
         <x-page-title class="text-3xl font-semibold text-blue-900 mt-5 mb-8">Upload New Attendance Data</x-page-title>
-		@if($course->students->count())
+		@if($course_students->count() && $course->topics->count())
 			<form action="{{ route('teacher.attendance.store', $course->id) }}" method="post" class="mx-auto" id="attendance_form">
 				@csrf
 
@@ -34,24 +34,24 @@
 											<label for="checkbox{{ $loop->iteration }}">{{ $cs->student->full_name }}</label>
 										</div>
 										<div class="flex w-full gap-2 mt-2 material_progress_detail" style="display: none;">
-											<x-select class="material_progress w-2/3">
+											<x-select class="material_progress w-2/3" name="fake_material_progress[]">
 												<option selected disabled>Select Material Progress</option>
 												@foreach ($course->topics as $topic)
 													@foreach ($topic->materials as $material)
-														<option value="{{ $material->title }}">{{ $material->title }}</option>
+														<option value="{{ $material->title }}" @if(old("material_progress[]") == $material->title) selected @endif>{{ $material->title }}</option>
 													@endforeach
 												@endforeach
 											</x-select>
 
-											<x-select class="learning_status w-1/3">
-												<option value="On Progress">On Progress</option>
-												<option value="Done">Done</option>
+											<x-select class="learning_status w-1/3" name="fake_learning_status[]">
+												<option value="On Progress" @if(old("learning_status[]") == "On Progress") selected @endif>On Progress</option>
+												<option value="Done" @if(old("learning_status[]") == "Done" ) selected @endif>Done</option>
 											</x-select>
 										</div>
 									</td>
 									<td class="p-5 rounded-r-xl w-1/2">
 										<div class="flex flex-col items-stretch">
-											<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student attendance details" style="resize: none; box-sizing: border-box; padding: 10px;">@if($cs->student->status == "disabled"){{ __("Account disabled") }}@else{{ old("attendance_detail." . $loop->index) }}@endif</textarea>
+											<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px;">@if($cs->student->status == "disabled"){{ __("Account disabled") }}@else{{ old("attendance_detail." . $loop->index) }}@endif</textarea>
 
 											@error("attendance_detail." . $loop->index)
 												<span class="text-red-500 mt-2">{{ $message }}</span>
@@ -74,10 +74,12 @@
 				</div>
 			</form>
 		@else
-			<h1 class="text-md font-semibold italic">- No students assigned to this course yet, cannot upload assignment -</h1>
-			<x-button type="button" onclick="history.back()" class="bg-slate-600">
-				Return
-			</x-button>
+			<div class="bg-blue-900 rounded-xl p-8">
+				<h1 class="font-semibold italic text-white">- No students assigned or topics and materials added to this course yet, cannot upload assignment -</h1>
+				<x-button type="button" onclick="history.back()" class="bg-slate-600 mt-5">
+					Return
+				</x-button>
+			</div>
 		@endif
 
 		<script>
@@ -172,9 +174,39 @@
 
 				const [checkboxValues, materialProgressValues, learningStatusValues] = collectCheckboxValues();
 
-				console.log(checkboxValues);
-				console.log(materialProgressValues);
-				console.log(learningStatusValues);
+				$invalid = false;
+
+				$("#attendance_date").css({"border": "rgb(30 58 138) solid 2px"});
+				$("textarea").css({"border": "rgb(30 58 138) solid 2px"});
+				$(".material_progress").each(function(){
+					$(this).css({"border": "rgb(30 58 138) solid 2px"});
+				})
+
+				if(!$("#attendance_date").val()){
+					$("#attendance_date").css({"border": "red solid 2px"});
+					$("#attendance_date").after($("<p>").text("The attendance date field is required.").css("color", "red"));
+					$invalid = true;
+				}
+
+				$("textarea").each(function(){
+					if($(this).val() == ""){
+						$(this).after($("<p>").text("The attendance detail field is required.").css("color", "red"));
+						$(this).css({"border": "red solid 2px"});
+						$invalid = true;
+					}
+				});
+
+				checkboxValues.forEach((value, index) => {
+					if(value === "on" && !materialProgressValues[index]){
+						$($(".material_progress")[index]).css({"border": "red solid 2px"});
+						$($(".material_progress")[index]).after($("<p>").text("The material progress field is required.").css("color", "red"));
+						$invalid = true;
+					}
+				});
+
+				if($invalid){
+					return;
+				}
 
 				checkboxValues.forEach((value, index) => {
 					const hiddenInput1 = $("<input>").attr({"type": "hidden", "name": "checkbox_value[]", "value": value});

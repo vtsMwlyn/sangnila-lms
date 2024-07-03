@@ -34,7 +34,7 @@
 					</div> <!-- Close last row -->
 				</div>
 			@else
-				<p class="text-center py-3 text-blue-950">- No students assigned yet -</p>
+				<div class="text-center p-5 bg-white rounded-xl mt-5 w-full font-semibold">- No students assigned yet -</div>
 			@endif
 		</div>
 
@@ -115,7 +115,7 @@
 						@endif
 					@endforeach
 				@else
-					<tr><td colspan="4" class="border px-4 py-2 text-center">- No topics added yet to this course -</td></tr>
+					<tr><td colspan="4" class="text-center p-5 bg-white rounded-xl w-full font-semibold">- No topics and materials added yet to this course -</td></tr>
 				@endif
 
 			</x-table>

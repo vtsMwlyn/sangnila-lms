@@ -47,7 +47,7 @@
 
 		<a href="{{ route("profile.show") }}" class="flex flex-col items-center font-bold mx-5 hover:text-yellow-400 hover:scale-110 transition ease-in-out text-white absolute top-4 lg:top-0 right-0 lg:relative" style="min-width: 90px; max-width: 90px;">
 			<i class="bi bi-person-circle text-3xl "></i>
-			<span class=" text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
+			<span class=" text-center text-sm mt-1">{{ (Auth::user()->details->gender == 1)? "Mr." : "Ms." }} {{ Auth::user()->full_name }}</span>
 		</a>
 	</div>
 

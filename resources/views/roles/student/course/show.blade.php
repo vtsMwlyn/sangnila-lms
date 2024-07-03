@@ -22,10 +22,10 @@
 
 				@forelse ($materialProgresses as $progress)
 					<tr>
-						<td class="template-bodies rounded-l-xl" style="@if ($progress->status === 'unlocked') background: #219926; font-weight: bold; @endif">
+						<td class="template-bodies rounded-l-xl" style="@if ($progress->status === 'locked') color: rgb(156 163 175); @endif">
 							{{ $progress->material->topic->title }}
 						</td>
-						<td class="template-bodies" style="@if ($progress->status === 'unlocked') background: #219926; @endif">
+						<td class="template-bodies">
 							@if ($progress->status === 'unlocked')
 								<a {{-- href="{{ $progress->material->link }}" --}}
 									href="{{ route("student.mycourse.preview", $progress->material->id) }}" class="text-white hover:text-green-900 hover:underline font-bold">
@@ -37,18 +37,18 @@
 								</span>
 							@endif
 						</td>
-						<td class="template-bodies" style="@if ($progress->status === 'unlocked') background: #219926; @endif">
-							<span class="@if ($progress->status === 'unlocked') font-bold @endif">
+						<td class="template-bodies">
+							<span class="@if ($progress->status === 'unlocked') font-bold text-green-700 @else text-gray-400 @endif">
 								{{ $progress->status }}
 							</span>
 						</td>
-						<td class="template-bodies rounded-r-xl" style="@if ($progress->status === 'unlocked') background: #219926; @endif">
+						<td class="template-bodies rounded-r-xl">
 							<x-anchor-button class="bg-orange-500" href="{{ route('student.mycourse.preview', $progress->material->id) }}">View</x-anchor-button>
 						</td>
 					</tr>
 				@empty
 					<tr>
-						<td colspan="4" class="p-5 text-center rounded-xl bg-white font-semibold">- No materials found -</td>
+						<td colspan="4" class="p-5 text-center rounded-xl bg-white font-semibold">- The teacher haven't uploaded any topics and materials yet -</td>
 					</tr>
 				@endforelse
 			</x-table>

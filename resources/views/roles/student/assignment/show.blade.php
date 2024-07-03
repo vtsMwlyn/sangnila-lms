@@ -59,7 +59,7 @@
 				</div>
 			</div>
 		@empty
-			<p class="italic text-slate-500">- No assignments given yet -</p>
+			<div class="bg-white rounded-xl text-center font-semibold w-full mt-5 p-5">- No assignments given yet -</div>
 		@endforelse
 	</x-section-container>
 @endsection
