@@ -33,7 +33,7 @@
 							</div>
 							<!-- Student Gender -->
 							<div class="w-full md:w-1/3" id="container_gender">
-								<x-label for="gender" :value="__('Student Name')" />
+								<x-label for="gender" :value="__('Student Gender')" />
 								<x-select name="gender" id="gender"
 								class="mt-1 w-full">
 									<option value="" selected disabled>Select Gender
@@ -325,6 +325,7 @@
 
 					const colFullName = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(formData.full_name);
 					const colEmail = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(formData.email);
+
 					const colTeacherName = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(JSON.parse(formData.teacher_name).full_name);
 					const colLastAttendanceCount = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.last_attendance_count);
 					const colMaxCourseSession = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.max_course_session);
@@ -334,7 +335,7 @@
 					const delBtn = $("<button>").attr({"type": "button"}).addClass("text-center px-5 py-2 border border-transparent rounded-lg text-white bg-red-700 hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 transition ease-in-out duration-150").html("<i class='bi bi-trash3'></i>");
 					const colAction = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").append(delBtn);
 
-					const colGender = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.phone_number);
+					const colGender = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.gender);
 					const colPhoneNumber = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.phone_number);
 					const colCityOfBirth = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.city_of_birth);
 					const colDateOfBirth = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.date_of_birth);
@@ -367,7 +368,7 @@
 					const hidNameParent = $("<input>").attr({"type": "hidden", "name": "inp_name_parent[]", "value": formData.name_parent});
 					const hidPhoneParent = $("<input>").attr({"type": "hidden", "name": "inp_phone_parent[]", "value": formData.phone_parent});
 
-					$(hiddenInputsContainer).append(hidFullName, hidEmail, hidTeacherName, hidLastAttendanceCount, hidMaxCourseSession, hidLastMaterialUnlocked, hidNewStudent, hidPhoneNumber, hidCityOfBirth, hidDateOfBirth, hidSchoolName, hidStudentLevel, hidNameParent, hidPhoneParent);
+					$(hiddenInputsContainer).append(hidFullName, hidEmail, hidGender, hidTeacherName, hidLastAttendanceCount, hidMaxCourseSession, hidLastMaterialUnlocked, hidNewStudent, hidPhoneNumber, hidCityOfBirth, hidDateOfBirth, hidSchoolName, hidStudentLevel, hidNameParent, hidPhoneParent);
 					$("#real-form").append(hiddenInputsContainer);
 
 					$(delBtn).click(() => {
