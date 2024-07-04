@@ -1,5 +1,5 @@
 <!-- Main sidebar -->
-<div class="w-full text-white sticky top-0 z-20" style="background-color: rgba(17, 41, 102, 0.5);">
+<div class="w-full text-white sticky top-0 z-20" style="background-color: rgba(17, 41, 102, 0.5); backdrop-filter: blur(3px);">
 	@php
 		$students = App\Models\User::where("role_id", 3)->get();
 		$n = 0;

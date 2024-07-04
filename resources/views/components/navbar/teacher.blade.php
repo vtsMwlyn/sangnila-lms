@@ -1,5 +1,5 @@
 <!-- Main sidebar -->
-<div class="w-full text-white sticky top-0 z-20" style="background-color: rgba(17, 41, 102, 0.5);">
+<div class="w-full text-white sticky top-0 z-20" style="background-color: rgba(17, 41, 102, 0.5); backdrop-filter: blur(3px);">
 	<!-- Sidebar toggler for mobile -->
 	<button id="mobileMenuButton" class="lg:hidden bg-blue-950 text-white font-semibold text-xl transition duration-300 absolute m-2 px-4 py-3 z-10">
 		<span class="inline-block">&#9776;</span>
