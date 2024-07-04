@@ -1,6 +1,6 @@
 <?php
 
 return [
-	"version" => "v0.6.6-alpha",
-	"default_password" => "password"
+	"version" => "v0.7.0-beta",
+	"default_password" => "s4ngnil4@7xB"
 ];
