@@ -43,7 +43,11 @@
 							</span>
 						</td>
 						<td class="template-bodies rounded-r-xl">
-							<x-anchor-button class="bg-orange-500" href="{{ route('student.mycourse.preview', $progress->material->id) }}">View</x-anchor-button>
+							@if ($progress->status === 'unlocked')
+								<x-anchor-button class="bg-orange-500" href="{{ route('student.mycourse.preview', $progress->material->id) }}">View</x-anchor-button>
+							@else
+								<div class="bg-slate-800 rounded-xl px-5 py-2">View</div>
+							@endif
 						</td>
 					</tr>
 				@empty
