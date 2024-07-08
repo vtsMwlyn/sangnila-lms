@@ -8,6 +8,8 @@
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">Import Old Student Data</x-page-title>
 
+		<x-badge-danger id="emptyDataNotif" badge_text="Please input minimum 1 data to proceed." style="display: none;"></x-badge-danger>
+
 		@if($course->teachers->count() && $course->topics->count() && $course->topics[0]->materials->count())
 			<form action="#" id="le-form">
 				<div class="my-10">
@@ -19,7 +21,7 @@
 						<!-- Student Name -->
 						<div class="w-full md:w-1/2" id="container_full_name">
 							<x-label for="full_name" :value="__('Student Name')" />
-							<x-input id="full_name" class="block mt-1 w-full" type="text" name="full_name" placeholder="Student's Name" :value="old('full_name')" autofocus />
+							<x-input id="full_name" class="block mt-1 w-full" type="text" name="full_name" placeholder="Full Name" :value="old('full_name')" autofocus />
 							<p class="text-red-500" style="display: none" id="err_full_name">This field is required.</p>
 						</div>
 
@@ -31,9 +33,9 @@
 									autofocus />
 								<p class="text-red-500" style="display: none" id="err_email">This field is required.</p>
 							</div>
-							<!-- Student Gender -->
+							<!-- Gender -->
 							<div class="w-full md:w-1/3" id="container_gender">
-								<x-label for="gender" :value="__('Student Gender')" />
+								<x-label for="gender" :value="__('Gender')" />
 								<x-select name="gender" id="gender"
 								class="mt-1 w-full">
 									<option value="" selected disabled>Select Gender
@@ -47,40 +49,40 @@
 
 					<div class="" id="form-details" style="display: none;">
 						<div class="flex flex-col md:flex-row gap-3 mt-3">
-							<!-- Student Phone Number -->
+							<!-- Phone Number -->
 							<div class="w-full md:w-1/2">
-								<x-label for="phone_number" :value="__('Student Phone Number')"/>
+								<x-label for="phone_number" :value="__('Phone Number')"/>
 								<x-input id="phone_number" class="block mt-1 w-full" type="text" name="phone_number" :value="old('phone_number')" placeholder="Add phone number"  />
 							</div>
 
 							<div class="w-full md:w-1/2 flex flex-col md:flex-row gap-3">
-								<!-- Student City of Birth -->
+								<!-- City of Birth -->
 								<div class="w-full md:w-1/2">
-									<x-label for="city_of_birth" :value="__('Student City of Birth')"/>
+									<x-label for="city_of_birth" :value="__('City of Birth')"/>
 									<x-input id="city_of_birth" class="block mt-1 w-full" type="text" name="city_of_birth" :value="old('city_of_birth')" placeholder="Add city of birth"  />
 								</div>
 
-								<!-- Student Date of Birth -->
+								<!-- Date of Birth -->
 								<div class="w-full md:w-1/2">
-									<x-label for="date_of_birth" :value="__('Student Date of Birth')"/>
+									<x-label for="date_of_birth" :value="__('Date of Birth')"/>
 									<x-input id="date_of_birth" class="block mt-1 w-full" onfocus="this.type = 'date';" onblur="this.type = 'text'" name="date_of_birth" :value="old('date_of_birth')" placeholder="Add date of birth"  />
 								</div>
 							</div>
 						</div>
 
 						<div class="flex flex-col md:flex-row gap-3 mt-6">
-							<!-- Student School Name -->
+							<!-- School Name -->
 							<div class="w-full md:w-1/2">
-								<x-label for="school_name" :value="__('Student School Name')"/>
+								<x-label for="school_name" :value="__('School Name')"/>
 								<x-input id="school_name" class="block mt-1 w-full" type="text" name="school_name" :value="old('school_name')" placeholder="Add school name"  />
 							</div>
 
-							<!-- Student Education Level -->
+							<!-- Education Level -->
 							<div class="w-full md:w-1/2">
-								<x-label for="student_level" class="text-white" :value="__('Select Student Education Level')" />
+								<x-label for="student_level" class="text-white" :value="__('Select Education Level')" />
 								<x-select name="student_level" id="student_level"
 								class="mt-1 w-full">
-									<option value="" selected disabled>Add Student Education Level</option>
+									<option value="" selected disabled>Add Education Level</option>
 									@forelse ($education_levels as $level)
 										<option value="{{ $level }}">{{ $level }}</option>
 									@empty
@@ -90,22 +92,22 @@
 						</div>
 
 						<div class="flex flex-col md:flex-row gap-3 mt-3">
-							<!-- Student Parent's Name -->
+							<!-- Parent's Name -->
 							<div class="w-full md:w-1/2" id="container_parent_name">
-								<x-label for="name_parent" :value="__('Student Parent\'s Name')"/>
+								<x-label for="name_parent" :value="__('Parent\'s Name')"/>
 								<x-input id="name_parent" class="block mt-1 w-full" type="text" name="name_parent" :value="old('name_parent')" placeholder="Add parent's name"  />
 							</div>
 
-							<!-- Student Parent's Phone Number -->
+							<!-- Parent's Phone Number -->
 							<div class="w-full md:w-1/2" id="container_phone_number">
-								<x-label for="phone_parent" :value="__('Student Parent\'s Phone Number')"/>
+								<x-label for="phone_parent" :value="__('Parent\'s Phone Number')"/>
 								<x-input id="phone_parent" class="block mt-1 w-full" type="text" name="phone_parent" :value="old('phone_parent')" placeholder="Add parent's phone number"  />
 							</div>
 						</div>
 					</div>
 
 					<div class="mt-5 flex items-center">
-						<input type="checkbox" id="new_student" name="new_student" class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300">
+						<input type="checkbox" id="new_student" name="new_student" class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" checked>
 						<label for="new_student" class="font-semibold text-blue-950">Add as a new student</label>
 					</div>
 
@@ -115,7 +117,7 @@
 					<div class="mt-3 flex flex-col md:flex-row gap-3">
 						<!-- Student's Teacher -->
 						<div class="w-full md:w-1/2" id="container_teacher_name">
-							<x-label for="teacher_name" :value="__('Select Student\'s Teacher')" />
+							<x-label for="teacher_name" :value="__('Student\'s Teacher')" />
 							<x-select name="teacher_name" id="teacher_name" class="mt-1 w-full">
 								<option value="" disabled selected>Pick a teacher</option>
 								@foreach ($course->teachers as $teacher)
@@ -126,16 +128,16 @@
 						</div>
 
 						<div class="w-full md:w-1/2 flex gap-3">
-							<!-- Student's last attendance count -->
+							<!-- Last attendance count -->
 							<div class="w-1/2" id="container_last_attendance_count">
-								<x-label for="last_attendance_count" :value="__('Student\'s Last Attendance Count')" />
+								<x-label for="last_attendance_count" :value="__('Last Attendance Count')" />
 								<x-input id="last_attendance_count" class="block mt-1 w-full" type="number" name="last_attendance_count" placeholder="Maximum sessions" value="0" />
 								<p class="text-red-500" style="display: none" id="err_last_attendance_count">Invalid input.</p>
 							</div>
 
 							<!-- Student's max course session -->
 							<div class="w-1/2" id="container_max_course_session">
-								<x-label for="max_course_session" :value="__('Student\'s Maximum Sessions')"/>
+								<x-label for="max_course_session" :value="__('Maximum Sessions')"/>
 								<x-input id="max_course_session" class="block mt-1 w-full" type="number" name="max_course_session" placeholder="Maximum sessions" value="8" />
 								<p class="text-red-500" style="display: none" id="err_max_course_session">Invalid input.</p>
 							</div>
@@ -144,7 +146,7 @@
 
 					<!-- Student's last mnaterial unlocked -->
 					<div class="w-full mt-3" id="container_last_material_unlocked">
-						<x-label for="last_material_unlocked" :value="__('Student\'s Last Material Unlock')"/>
+						<x-label for="last_material_unlocked" :value="__('Last Material Unlock')"/>
 						<x-select name="last_material_unlocked" id="last_material_unlocked" class="mt-1 w-full">
 							<option value="" disabled selected>Pick a material</option>
 							@foreach ($course->topics as $topic)
@@ -208,6 +210,8 @@
 			</div>
 
 			<script>
+				$import_data_count = 0;
+
 				$("#date_of_birth").on({
 					"focus": function(){
 						this.showPicker();
@@ -371,10 +375,13 @@
 					$(hiddenInputsContainer).append(hidFullName, hidEmail, hidGender, hidTeacherName, hidLastAttendanceCount, hidMaxCourseSession, hidLastMaterialUnlocked, hidNewStudent, hidPhoneNumber, hidCityOfBirth, hidDateOfBirth, hidSchoolName, hidStudentLevel, hidNameParent, hidPhoneParent);
 					$("#real-form").append(hiddenInputsContainer);
 
+					console.log($(hiddenInputsContainer).children());
+
 					$(delBtn).click(() => {
 						if(confirm("Are you sure want to remove this student from the list?")){
 							$(newRow).remove();
 							$(hiddenInputsContainer).remove();
+							$import_data_count--;
 						}
 					});
 
@@ -389,11 +396,25 @@
 					$("#student_level").val("");
 					$("#name_parent").val("");
 					$("#phone_parent").val("");
-					$("#teacher_name").val("");
 					$("#last_attendance_count").val("0");
 					$("#max_course_session").val("8");
 					$("#last_material_unlocked").val("");
+
+					$import_data_count++;
 				});
+
+				$("#real-form").on("submit", function(e){
+					e.preventDefault();
+
+					if($import_data_count == 0){
+						$("#emptyDataNotif").css("display", "flex");
+						$("html, body").scrollTop(0);
+
+						return;
+					}
+
+					this.submit();
+				})
 			</script>
 		@else
 			<div class="rounded-lg py-5 px-10 bg-blue-800">

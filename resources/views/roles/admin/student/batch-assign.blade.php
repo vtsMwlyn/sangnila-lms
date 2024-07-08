@@ -8,6 +8,8 @@
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">Batch Assign</x-page-title>
 
+		<x-badge-danger id="emptyDataNotif" badge_text="Please input minimum 1 data to proceed." style="display: none;"></x-badge-danger>
+
 		@if($allStudents->count() && $course->teachers->count())
 			<div class="my-10">
 				<div class="flex">
@@ -252,6 +254,18 @@
 						without.push(studentObj.full_name);
 
 						document.dispatchEvent(itemListModifiedEvent);
+					});
+
+					$("#leForm").on("submit", function(e){
+						e.preventDefault();
+
+						if(without.length == 0){
+							$("#emptyDataNotif").css("display", "flex");
+
+							return;
+						}
+
+						this.submit();
 					});
 				});
 			</script>
