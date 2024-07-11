@@ -23,6 +23,9 @@
 		<!-- Tailwind CDN -->
 		<script src="https://cdn.tailwindcss.com"></script>
 
+		<!-- Include jQuery  -->
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 		<!-- Poppins font -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

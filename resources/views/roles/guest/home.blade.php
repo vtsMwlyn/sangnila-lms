@@ -50,9 +50,15 @@
 			</div>
 
 			<!-- Password -->
-			<div class="mt-8">
-				<x-input id="password" class="w-full rounded-xl" type="password" name="password" style="height: 50px"
+			<div class="mt-8 relative">
+				<button type="button" class="absolute right-3 top-3.5 text-slate-500 font-bold" id="togglePassword"></button>
+				<x-input id="password" class="w-full rounded-xl" type="password" name="password" style="height: 50px; padding-right: 50px;"
 					autocomplete="current-password" placeholder="Password" />
+			</div>
+
+			<div class="mt-8 flex items-center">
+				<input type="checkbox" name="remember_me" id="remember_me" class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" />
+				<label for="remember_me" class="text-white">Remember me</label>
 			</div>
 
 			<div class="mt-12 w-full flex justify-center">
@@ -67,5 +73,25 @@
 			{{ __('Login As Guest') }}
 		</a>
 
+		<script>
+			let toggleStatus = 0;
+
+			$(document).ready(function(){
+				$("#togglePassword").html('<i class="bi bi-eye"></i>');
+			});
+
+			$("#togglePassword").click(function(){
+				if(toggleStatus == 0){
+					$(this).html('<i class="bi bi-eye-slash"></i>');
+					$("#password").attr("type", "text");
+					toggleStatus = 1;
+				}
+				else {
+					$(this).html('<i class="bi bi-eye"></i>');
+					$("#password").attr("type", "password");
+					toggleStatus = 0;
+				}
+			});
+		</script>
 	</div>
 @endsection
