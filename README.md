@@ -13,33 +13,14 @@ There are 5 roles (types of account) in Sangnila LMS:
 - **Guests**: Public user, those who are don't have any account to use, can only view few parts of Sangnila LMS
 
 ## Change Logs
-### v0.6.1-alpha
-- Implemented UI designs for teachers pages (undone)
-
-### v0.6.2-alpha
-- Implemented UI designs for teachers pages (done)
-- Notification for admins (how many students is reaching their maximum sessions)
-- Improvements on admins' and teachers' UIs especially when data empty
-- Some transition and animations detailing for navbars and pages bottom components (footer and back to top button)
-
-### v0.6.3-alpha
-- Implemented UI designs for students pages (done)
-- Implemented UI designs for guests pages (undone)
-- Some fixes on navigation bars responsiveness
-
-### v0.6.4-alpha
-- Added last material progress and learning status to attendance upload, edit, and show (undone)
-- Improvement on import student page
-- Normalization of imported student
-
-### v0.6.5-alpha
-- Added last material progress and learning status to attendance upload, edit, and show (done)
-- Improvements and revision implementation in UI design
-- Some elements templating (cancel buttons and notification badges)
-- Notification for students (how many assignments undone)
-
-### v0.6.6-alpha
-- Implemented UI designs for guests pages (done)
+### v0.7.0-beta
+- Logic fixes and UI/UX improvement in import student and batch assign student for admin pages
+- Applied glass morphism for content containers
+- Improvements in text displays (resizing and transforming)
+- Improvements in table data highlighting and column sizing/positioning
+- Optimizing default password for accounts
+- Improvements in notification badges for post-actions
+- UI/UX improvement in login pages
 
 ## Clone Project
 Clone the repository in any desired directory. Web resources such as images, videos, scripts, and styles are included in `public` folder. To generate the database system and fill it will sample data, run this command in the terminal:
