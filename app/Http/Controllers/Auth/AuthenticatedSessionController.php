@@ -25,16 +25,11 @@ class AuthenticatedSessionController extends Controller {
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function store(LoginRequest $request) {
-		$validatedData = $request->validate([
-			"email" => "required|email:dns",
-			"password" => "required|min:8"
-		]);
+		dd($request);
 
 		$request->authenticate();
 
 		$request->session()->regenerate();
-
-		$user = Auth::user();
 
 		return redirect(route('dashboard'));
 	}

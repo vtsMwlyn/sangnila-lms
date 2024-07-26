@@ -9,6 +9,9 @@
 		<!-- CSS -->
 		<link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
+		<!-- Scripts -->
+        <script src="{{ asset('js/app.js') }}" defer></script>
+
 		<!-- App icon -->
 		<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
 		<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">

@@ -1,47 +1,12 @@
 @extends("layouts.login-register")
 
 @section("content")
-	{{-- <div class="flex rounded-2xl w-11/12 md:w-2/3 bg-orange-500" style="min-height: 80vh;">
-		<form method="POST" action="{{ route('login') }}" class="flex flex-col justify-center items-stretch w-full md:w-1/2 m-5 md:m-0 p-10 bg-blue-950 rounded-2xl">
-			@csrf
-
-			<h1 class="text-center text-2xl font-bold text-white">LOGIN</h1>
-			<h1 class="text-center text-md text-white">Login to your account</h1>
-
-			<!-- Email Address -->
-			<div class="mt-8">
-				<x-input id="email" class="w-full rounded-xl" type="email" name="email" :value="old('email')" placeholder="Email Address" style="height: 50px" autofocus />
-			</div>
-
-			<!-- Password -->
-			<div class="mt-4">
-				<x-input id="password" class="w-full rounded-xl" type="password" name="password" style="height: 50px"
-					autocomplete="current-password" placeholder="Password" />
-			</div>
-
-			<div class="flex flex-col items-center mt-8">
-				<x-button class="bg-orange-500 w-1/2">
-					{{ __('LOGIN') }}
-				</x-button>
-
-				<a class="text-sm mt-3 text-white hover:text-slate-400 hover:scale-110 transition duration-300 px-5 py-2 rounded-lg"
-					href="{{ route('guest.index') }}">
-					{{ __('Login As Guest') }}
-				</a>
-			</div>
-		</form>
-
-		<div class="hidden md:flex flex-col items-center justify-center w-full md:w-1/2">
-			<img src={{ asset("img/AR.W.png") }} alt="logo" width="100px">
-			<img src={{ asset("img/loginpict.png") }} alt="logo" width="400px">
-		</div>
-	</div> --}}
 	<div class="flex flex-col items-center justify-center rounded-2xl w-5/6 md:w-3/5 bg-orange-500 p-10">
 		<div class="my-10 w-32 md:w-52">
 			<img src={{ asset("img/AR.W.png") }} alt="logo" width="100%">
 		</div>
 
-		<form method="POST" action="{{ route('login') }}" class="flex flex-col justify-center items-stretch w-full md:w-1/2 mt-3 md:mt-10 md:m-0 p-5 md:p-10 bg-blue-950 rounded-2xl">
+		<form method="POST" action="{{ route('login') }}" class="flex flex-col justify-center items-stretch w-full md:w-1/2 mt-3 md:mt-10 md:m-0 p-5 md:p-10 bg-blue-950 rounded-2xl" id="login-form">
 			@csrf
 
 			<!-- Email Address -->
@@ -56,10 +21,24 @@
 					autocomplete="current-password" placeholder="Password" />
 			</div>
 
+			<!-- Remember Me -->
 			<div class="mt-8 flex items-center">
-				<input type="checkbox" name="remember_me" id="remember_me" class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" />
+				<input type="checkbox" name="remember" id="remember_me" class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" />
 				<label for="remember_me" class="text-white">Remember me</label>
 			</div>
+
+            {{-- <div class="block mt-4">
+                <label for="remember_me" class="inline-flex items-center">
+                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember_me">
+                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                </label>
+            </div> --}}
+
+			@if (Route::has('password.request'))
+				<a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
+					{{ __('Forgot your password?') }}
+				</a>
+			@endif
 
 			<div class="mt-12 w-full flex justify-center">
 				<x-button class="bg-orange-500 w-1/2">
@@ -91,6 +70,25 @@
 					$("#password").attr("type", "password");
 					toggleStatus = 0;
 				}
+			});
+
+			$("#login-form").on("submit", function(e) {
+				e.preventDefault();
+
+				// Remove any existing hidden input with the name "remember"
+				$('input[type="hidden"][name="remember"]').remove();
+
+				// Determine the value for the hidden input based on the checkbox state
+				let cbv = $("#remember_me").is(":checked") ? 1 : 0;
+
+				// Append the new hidden input with the appropriate value
+				$(this).append($("<input>").attr({
+					"type": "hidden",
+					"name": "remember",
+					"value": cbv
+				}));
+
+				this.submit();
 			});
 		</script>
 	</div>
