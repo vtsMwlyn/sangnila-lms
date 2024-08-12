@@ -72,24 +72,24 @@
 				}
 			});
 
-			$("#login-form").on("submit", function(e) {
-				e.preventDefault();
+			// $("#login-form").on("submit", function(e) {
+			// 	e.preventDefault();
 
-				// Remove any existing hidden input with the name "remember"
-				$('input[type="hidden"][name="remember"]').remove();
+			// 	// Remove any existing hidden input with the name "remember"
+			// 	$('input[type="hidden"][name="remember"]').remove();
 
-				// Determine the value for the hidden input based on the checkbox state
-				let cbv = $("#remember_me").is(":checked") ? 1 : 0;
+			// 	// Determine the value for the hidden input based on the checkbox state
+			// 	let cbv = $("#remember_me").is(":checked") ? 1 : 0;
 
-				// Append the new hidden input with the appropriate value
-				$(this).append($("<input>").attr({
-					"type": "hidden",
-					"name": "remember",
-					"value": cbv
-				}));
+			// 	// Append the new hidden input with the appropriate value
+			// 	$(this).append($("<input>").attr({
+			// 		"type": "hidden",
+			// 		"name": "remember",
+			// 		"value": cbv
+			// 	}));
 
-				this.submit();
-			});
+			// 	this.submit();
+			// });
 		</script>
 	</div>
 @endsection
