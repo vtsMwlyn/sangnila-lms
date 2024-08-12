@@ -23,8 +23,8 @@
 
 			<!-- Password -->
 			<div class="mt-8 relative">
-				<button type="button" class="absolute right-3 top-3.5 text-slate-500 font-bold" id="togglePassword"></button>
-				<x-input id="password" class="w-full rounded-xl" type="password" name="password" style="height: 50px; padding-right: 50px;"
+				<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="togglePassword"></button>
+				<x-input id="password" class="w-full rounded-xl" type="password" name="password" style="height: 50px; padding-right: 60px;"
 					autocomplete="current-password" placeholder="Password" />
 			</div>
 
@@ -78,25 +78,6 @@
 					toggleStatus = 0;
 				}
 			});
-
-			// $("#login-form").on("submit", function(e) {
-			// 	e.preventDefault();
-
-			// 	// Remove any existing hidden input with the name "remember"
-			// 	$('input[type="hidden"][name="remember"]').remove();
-
-			// 	// Determine the value for the hidden input based on the checkbox state
-			// 	let cbv = $("#remember_me").is(":checked") ? 1 : 0;
-
-			// 	// Append the new hidden input with the appropriate value
-			// 	$(this).append($("<input>").attr({
-			// 		"type": "hidden",
-			// 		"name": "remember",
-			// 		"value": cbv
-			// 	}));
-
-			// 	this.submit();
-			// });
 		</script>
 	</div>
 @endsection

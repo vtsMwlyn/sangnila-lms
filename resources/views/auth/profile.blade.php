@@ -26,15 +26,21 @@
 			<!-- Password -->
 			<div class="mt-8 flex gap-3 items-stretch">
 				<x-boxed-label for="password">{{ __("Change Password") }}<span class="font-bold">*</span></x-boxed-label>
-				<x-input id="password" class="w-full" type="password" name="password"
-					autocomplete="current-password" placeholder="New Password" />
+				<div class="relative w-full h-full">
+					<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="togglePassword"></button>
+					<x-input id="password" class="w-full rounded-xl" type="password" name="password" style="padding-right: 60px;"
+						autocomplete="current-password" placeholder="New Password" />
+				</div>
 			</div>
 
 			<!-- Password Confirmation -->
 			<div class="mt-4 flex gap-3 items-stretch">
 				<x-boxed-label for="password_confirmation">{{ __("Confirm Password") }}<span class="font-bold">*</span></x-boxed-label>
-				<x-input id="password_confirmation" class="w-full" type="password" name="password_confirmation"
-					autocomplete="current-password" placeholder="New Password Confirmation" />
+				<div class="relative w-full h-full">
+					<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="toggleConfPassword"></button>
+					<x-input id="password_confirmation" class="w-full rounded-xl" type="password" name="password_confirmation" style="padding-right: 60px;"
+						autocomplete="current-password" placeholder="Confirm New Password" />
+				</div>
 			</div>
 
 			<p class="text-red-900 font-bold mt-5 text-sm">*Only fill these if you want to change your password</p>
@@ -49,4 +55,39 @@
 			</div>
 		</form>
 	</div>
+
+	<script>
+		let toggleStatus = 0;
+
+		$(document).ready(function(){
+			$("#togglePassword").html('<i class="bi bi-eye"></i>');
+			$("#toggleConfPassword").html('<i class="bi bi-eye"></i>');
+		});
+
+		$("#togglePassword").click(function(){
+			if(toggleStatus == 0){
+				$(this).html('<i class="bi bi-eye-slash"></i>');
+				$("#password").attr("type", "text");
+				toggleStatus = 1;
+			}
+			else {
+				$(this).html('<i class="bi bi-eye"></i>');
+				$("#password").attr("type", "password");
+				toggleStatus = 0;
+			}
+		});
+
+		$("#toggleConfPassword").click(function(){
+			if(toggleStatus == 0){
+				$(this).html('<i class="bi bi-eye-slash"></i>');
+				$("#password_confirmation").attr("type", "text");
+				toggleStatus = 1;
+			}
+			else {
+				$(this).html('<i class="bi bi-eye"></i>');
+				$("#password_confirmation").attr("type", "password");
+				toggleStatus = 0;
+			}
+		});
+	</script>
 </x-section-container>

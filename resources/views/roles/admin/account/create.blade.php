@@ -23,14 +23,16 @@
 			</div>
 
 			<!-- Password -->
-			<div class="mt-4">
-				<x-input id="password" class="w-full rounded-xl" type="password" name="password" style="height: 50px"
+			<div class="mt-4 relative">
+				<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="togglePassword"></button>
+				<x-input id="password" class="w-full rounded-xl" type="password" name="password" style="height: 50px; padding-right: 60px;"
 					autocomplete="current-password" placeholder="Password" />
 			</div>
 
 			<!-- Password Confirmation -->
-			<div class="mt-4">
-				<x-input id="password_confirmation" class="w-full rounded-xl" type="password" name="password_confirmation" style="height: 50px"
+			<div class="mt-4 relative">
+				<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="toggleConfPassword"></button>
+				<x-input id="password_confirmation" class="w-full rounded-xl" type="password" name="password_confirmation" style="height: 50px; padding-right: 60px;"
 					autocomplete="current-password" placeholder="Password Confirmation" />
 			</div>
 
@@ -72,4 +74,39 @@
 			</div>
 		</form>
 	</div>
+
+	<script>
+		let toggleStatus = 0;
+
+		$(document).ready(function(){
+			$("#togglePassword").html('<i class="bi bi-eye"></i>');
+			$("#toggleConfPassword").html('<i class="bi bi-eye"></i>');
+		});
+
+		$("#togglePassword").click(function(){
+			if(toggleStatus == 0){
+				$(this).html('<i class="bi bi-eye-slash"></i>');
+				$("#password").attr("type", "text");
+				toggleStatus = 1;
+			}
+			else {
+				$(this).html('<i class="bi bi-eye"></i>');
+				$("#password").attr("type", "password");
+				toggleStatus = 0;
+			}
+		});
+
+		$("#toggleConfPassword").click(function(){
+			if(toggleStatus == 0){
+				$(this).html('<i class="bi bi-eye-slash"></i>');
+				$("#password_confirmation").attr("type", "text");
+				toggleStatus = 1;
+			}
+			else {
+				$(this).html('<i class="bi bi-eye"></i>');
+				$("#password_confirmation").attr("type", "password");
+				toggleStatus = 0;
+			}
+		});
+	</script>
 @endsection
