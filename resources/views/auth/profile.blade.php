@@ -2,10 +2,10 @@
 	<x-page-title class="mt-5 mb-8">{{ __("Account Profile") }}</x-page-title>
 
 	@if(session()->has("successUpdateProfile"))
-		<x-badge-success badge_text="session('successUpdateProfile') }}">
+		<x-badge-success badge_text="{{ session('successUpdateProfile') }}">
 		</x-badge-success>
 	@elseif(session()->has("successPay"))
-		<x-badge-success badge_text="session('successPay') }}"></x-badge-success>
+		<x-badge-success badge_text="{{ session('successPay') }}"></x-badge-success>
 	@endif
 
 	<div class="mt-5">

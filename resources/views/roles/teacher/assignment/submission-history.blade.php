@@ -4,6 +4,13 @@
 	<h1>Student Assignment</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <a href="{{ route('teacher.assignment.show', $assignment->course->id) }}" class="font-bold text-yellow-500">{{ $assignment->course->course_name }}</a>
+	> <span>{{ $assignment->title }}</span>
+	> <a href="{{ route('teacher.assignment.check', $assignment->id) }}" class="font-bold text-yellow-500">Submissions</a>
+	> <span>{{ $student->full_name }}</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">{{ $student->full_name }}'s Submissions History in Assignment "{{ $assignment->title }}"</x-page-title>

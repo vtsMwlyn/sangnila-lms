@@ -4,6 +4,15 @@
 	<h1>{{ $account->full_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	@if($account->role_id == 2)
+		> <a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-yellow-500">{{ (($account->details->gender == 1)? "Mr. " : "Ms. ") . $account->full_name }}</a>
+	@else
+		> <a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-yellow-500">{{ $account->full_name }}</a>
+	@endif
+	> <span>Delete</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5">{{ __("Delete Account") }}</x-page-title>

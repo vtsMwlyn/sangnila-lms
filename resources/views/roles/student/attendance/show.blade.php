@@ -4,6 +4,10 @@
 	<h1>My Attendances</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <span>{{ $course->course_name }}</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">My Attendance in Course {{ $course->course_name }}</x-page-title>

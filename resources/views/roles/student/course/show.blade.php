@@ -4,6 +4,10 @@
 	<h1>{{ $course->course_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <span>{{ $course->course_name }}</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">{{ $course->course_name }}</x-page-title>
@@ -46,7 +50,7 @@
 							@if ($progress->status === 'unlocked')
 								<x-anchor-button class="bg-orange-500" href="{{ route('student.mycourse.preview', $progress->material->id) }}">View</x-anchor-button>
 							@else
-								<div class="bg-slate-800 rounded-xl px-5 py-2">View</div>
+								<x-button class="bg-slate-800" type="button">View</x-button>
 							@endif
 						</td>
 					</tr>

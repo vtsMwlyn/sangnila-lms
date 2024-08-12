@@ -24,7 +24,7 @@ Route::prefix('/student')
 		Route::post("/payment", [PaymentController::class, "student_pay_proceed"])->name("pay.proceed");
 
 		// My courses
-		Route::prefix('/mycourse')
+		Route::prefix('/my-course')
 			->name('mycourse.')
 			->group(function(){
 

@@ -47,7 +47,7 @@ class RegisteredUserController extends Controller {
 			'password' => Hash::make($request->password),
 			'role_id' => $role_id->id,
 			"status" => "enabled",
-			"email_verified_at" => now() // soon email verification will be enabled
+			// "email_verified_at" => now() // soon email verification will be enabled
 		]);
 
 		UserDetail::create(["user_id" => $user->id, "gender" => $request->gender]);

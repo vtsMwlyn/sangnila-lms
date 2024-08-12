@@ -4,6 +4,13 @@
 	<h1>{{ $material->topic->course->course_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <a href="{{ route('teacher.mycourse.show', $material->topic->course->id) }}" class="font-bold text-yellow-500">{{ $material->topic->course->course_name }}</a>
+	> <a href="{{ route('teacher.topic.show', [$material->topic->course->id, $material->topic->id]) }}" class="font-bold text-yellow-500">{{ $material->topic->title }}</a>
+	> <span>{{ $material->title }}</span>
+	> <span>Delete</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">Delete Material</x-page-title>

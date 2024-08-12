@@ -4,6 +4,11 @@
 	<h1>{{ $user->full_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <a href="{{ route('admin.teacher.show', $user->id) }}" class="font-bold text-yellow-500">{{ (($user->details->gender == 1)? "Mr. " : "Ms. ") . $user->full_name }}</a>
+	> <span>Assign</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5">{{ __("Assign Teacher to Course") }}</x-page-title>

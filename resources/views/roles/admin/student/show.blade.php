@@ -4,6 +4,10 @@
 	<h1>{{ $student->full_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <span>{{ $student->full_name }}</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5">{{ __("Student's Details") }}</x-page-title>
@@ -148,12 +152,12 @@
 			</div>
 		</div>
 
-		<h1 class="mt-10 text-blue-950 font-bold text-2xl" style="text-align: left;">{{ __("Student's Attendances and Assignments") }}</h1>
+		<h1 class="mt-10 text-blue-950 font-bold text-2xl" style="text-align: left;" id="student-summary">{{ __("Student's Attendances and Assignments") }}</h1>
 		<div class="overflow-x-auto">
 			<x-table>
 				<x-slot name="head">
 					<th class="template-heads rounded-l-xl">Course</th>
-					<th class="template-heads">Progress</th>
+					<th class="template-heads">Attendance & Progress</th>
 					<th class="template-heads rounded-r-xl">Assignments</th>
 				</x-slot>
 				@if($student->enrolled_courses->count())

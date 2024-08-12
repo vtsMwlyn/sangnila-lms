@@ -79,8 +79,34 @@
 			{{ $slot }}
 
 			<!-- Content Section -->
-			<div class="p-10 grow">
+			<div class="px-10 pb-10 grow">
 				<div class="flex flex-col items-center w-full">
+					<!-- Breadcrumbs -->
+					{{-- <div class="text-white w-full lg:w-4/5 p-5 text-lg">
+						@php $link = ""; @endphp
+						@foreach(Request::segments() as $index => $segment)
+							<!-- Construct the full URL -->
+							@php
+								$link .= "/" . $segment;
+							@endphp
+
+							@if($index != 0)
+								<!-- Separator -->
+								>
+							@endif
+
+							<!-- Link activation logic -->
+							@if ($index < count(Request::segments()) - 1 && !is_numeric($segment))
+								<a href="{{ url($link) }}" class="font-bold text-yellow-500">{{ ucwords(str_replace('-', ' ', $segment)) }}</a>
+							@else
+								{{ ucwords(str_replace('-', ' ', $segment)) }}
+							@endif
+						@endforeach
+					</div> --}}
+					<x-breadcrumbs>
+						@yield("breadcrumbs-extension")
+					</x-breadcrumbs>
+
 					@yield("content")
 				</div>
 			</div>

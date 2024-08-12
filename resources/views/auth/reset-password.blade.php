@@ -1,48 +1,51 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+@extends("layouts.login-register")
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+@section("content")
+	<div class="flex flex-col items-center justify-center rounded-2xl w-5/6 md:w-3/5 bg-orange-500 p-10">
+		<div class="my-10 w-32 md:w-40">
+			<img src={{ asset("img/AR.W.png") }} alt="logo" width="100%">
+		</div>
 
-        <form method="POST" action="{{ route('password.update') }}">
-            @csrf
+		<div class="w-full md:w-4/5 bg-indigo-950 p-10 rounded-xl">
+			<div class="mb-4 text-md text-white">
+				{{ __('Your action to do password reset for the email inputted has been confirmed. Now you can enter the new password for your account. After clicking reset password, you can login to your account using your new password.') }}
+			</div>
 
-            <!-- Password Reset Token -->
-            <input type="hidden" name="token" value="{{ $request->route('token') }}">
+			<form method="POST" action="{{ route('password.update') }}">
+				@csrf
 
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
+				<!-- Password Reset Token -->
+				<input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus />
-            </div>
+				<!-- Email Address -->
+				<div>
+					<x-label for="email" :value="__('Email')" style="color: white;"/>
 
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
+					<x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" autofocus />
+				</div>
 
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required />
-            </div>
+				<!-- Password -->
+				<div class="mt-4">
+					<x-label for="password" :value="__('Password')" style="color: white;"/>
 
-            <!-- Confirm Password -->
-            <div class="mt-4">
-                <x-label for="password_confirmation" :value="__('Confirm Password')" />
+					<x-input id="password" class="block mt-1 w-full" type="password" name="password" required />
+				</div>
 
-                <x-input id="password_confirmation" class="block mt-1 w-full"
-                                    type="password"
-                                    name="password_confirmation" required />
-            </div>
+				<!-- Confirm Password -->
+				<div class="mt-4">
+					<x-label for="password_confirmation" :value="__('Confirm Password')" style="color: white;"/>
 
-            <div class="flex items-center justify-end mt-4">
-                <x-button class="bg-indigo-950" style="background: gray">
-                    {{ __('Reset Password') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+					<x-input id="password_confirmation" class="block mt-1 w-full"
+										type="password"
+										name="password_confirmation" required />
+				</div>
+
+				<div class="flex items-center justify-center mt-8">
+					<x-button class="bg-orange-500">
+						{{ __('Reset Password') }}
+					</x-button>
+				</div>
+			</form>
+		</div>
+	</div>
+@endsection

@@ -4,6 +4,11 @@
 	<h1>{{ $student->full_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <a href="{{ route('teacher.student.select-course', $course->id) }}" class="text-yellow-500 font-bold">{{ $course->course_name }}</a>
+	> <span>{{ $student->full_name }}</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5">{{ $student->full_name }}'s Material Access</x-page-title>

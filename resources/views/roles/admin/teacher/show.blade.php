@@ -4,6 +4,10 @@
 	<h1>{{ $user->full_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <span>{{ (($user->details->gender == 1)? "Mr. " : "Ms. ") . $user->full_name }}</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">{{ __("Teacher's Details") }}</x-page-title>

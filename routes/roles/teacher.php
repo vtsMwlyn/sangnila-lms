@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\AssignmentController;
-use App\Http\Controllers\AttendanceController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TopicController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\ProgressController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\TopicController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\AttendanceController;
+use Illuminate\Http\Request;
 
 Route::prefix('/teacher')
 	->name('teacher.')
@@ -20,7 +21,7 @@ Route::prefix('/teacher')
 		});
 
 		// Manage courses, topics, and materials
-		Route::prefix('/mycourse')
+		Route::prefix('/my-course')
 			->name('mycourse.')
 			->group(function () {
 
@@ -35,6 +36,9 @@ Route::prefix('/teacher')
 		Route::prefix("/topic")
 			->name("topic.")
 			->group(function(){
+				// Route::get('/', function(){
+				// 	return redirect(route("teacher.mycourse.index"));
+				// })->name("index");
 
 				// Add new topic
 				Route::get("/{course_id}", [TopicController::class, "teacher_create"])->name("create");
@@ -57,6 +61,9 @@ Route::prefix('/teacher')
 		Route::prefix('/material')
 			->name('material.')
 			->group(function () {
+				// Route::get('/', function(){
+				// 	return redirect(route("teacher.mycourse.index"));
+				// })->name("index");
 
 				// Add new material
 				Route::get('/upload/{topic_id}', [MaterialController::class, 'teacher_create'])->name('upload')->whereNumber('course_id');

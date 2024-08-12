@@ -4,6 +4,11 @@
 	<h1>{{ $material->topic->title }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <a href="{{ route('student.mycourse.show', $material->topic->course->id) }}" class="text-yellow-500 font-bold">{{ $material->topic->course->course_name }}</a>
+	> <span>{{ $material->title }}</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">{{ $material->title }}</x-page-title>

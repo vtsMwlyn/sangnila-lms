@@ -9,6 +9,13 @@
 		<form method="POST" action="{{ route('login') }}" class="flex flex-col justify-center items-stretch w-full md:w-1/2 mt-3 md:mt-10 md:m-0 p-5 md:p-10 bg-blue-950 rounded-2xl" id="login-form">
 			@csrf
 
+			<!-- Session Status -->
+			<x-auth-session-status class="mb-4" :status="session('status')" />
+
+			@if(session()->has("status"))
+				<x-badge-success badge_text="{{ session('status') }}"></x-badge-success>
+			@endif
+
 			<!-- Email Address -->
 			<div class="mt-5">
 				<x-input id="email" class="w-full rounded-xl" type="email" name="email" :value="old('email')" placeholder="Email Address" style="height: 50px" autofocus />
@@ -35,7 +42,7 @@
             </div> --}}
 
 			@if (Route::has('password.request'))
-				<a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
+				<a class="underline text-sm text-white hover:text-yellow-500 text-right" href="{{ route('password.request') }}">
 					{{ __('Forgot your password?') }}
 				</a>
 			@endif

@@ -4,6 +4,14 @@
 	<h1>{{ $user->full_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	@if($user->role_id == 2)
+		> <span>{{ (($user->details->gender == 1)? "Mr. " : "Ms. ") . $user->full_name }}</span>
+	@else
+		> <span>{{ $user->full_name }}</span>
+	@endif
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5">{{ __("Account's Details") }}</x-page-title>

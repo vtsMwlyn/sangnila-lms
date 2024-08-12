@@ -4,6 +4,11 @@
 	<h1>{{ $course->course_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <a href="{{ route('admin.course.show', $course->id) }}" class="font-bold text-yellow-500">{{ $course->course_name }}</a>
+	> <span>Batch Assign</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">Batch Assign</x-page-title>
@@ -201,7 +206,7 @@
 							invalidInput = true;
 						}
 
-						if(inpMaxCourseSession < 1 || inpMaxCourseSession % 8 != 0){
+						if(inpMaxCourseSession < 1){
 							$("#inpMaxCourseSessionField").css({"border": "1px solid red", "padding": "10px"});
 							$("#errMaxCourseSession").css({"display": "block"});
 							invalidInput = true;

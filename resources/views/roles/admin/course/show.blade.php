@@ -4,6 +4,10 @@
 	<h1>{{ $course->course_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <span>{{ $course->course_name }}</span>
+@endsection
+
 @section("content")
 	<x-section-container class="mb-10">
 		<x-page-title>{{ __("Course Details") }}</x-page-title>
