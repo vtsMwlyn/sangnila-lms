@@ -5,7 +5,9 @@
 @endsection
 
 @section("breadcrumbs-extension")
-	> <a href="{{ route('teacher.student.select-course', $course->id) }}" class="text-yellow-500 font-bold">{{ $course->course_name }}</a>
+	> <a href="{{ route('teacher.student.select-course') }}" class="text-yellow-500 font-bold">Select Course</a>
+	> <span>{{ $course->course_name }}</span>
+	> <a href="{{ route('teacher.student.select-student', $course->id) }}" class="text-yellow-500 font-bold">Select Student</a>
 	> <span>{{ $student->full_name }}</span>
 @endsection
 

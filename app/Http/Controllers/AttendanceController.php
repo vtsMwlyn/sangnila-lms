@@ -9,6 +9,7 @@ use App\Models\CourseStudent;
 use App\Models\Attendance;
 use App\Models\ImportedStudent;
 use App\Models\StudentAttendance;
+use App\Models\Topic;
 use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends Controller {
@@ -34,6 +35,8 @@ class AttendanceController extends Controller {
 	public function create($course_id){
 		$course = Auth::user()->teached_courses->where('id', $course_id)->first();
 		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+
+		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
 
 		// Mechanism to remove student's who reached his/her maximum session and haven't paid yet (if agreed to be implemented)
 		// $studentsToRemove = [];
@@ -63,6 +66,7 @@ class AttendanceController extends Controller {
 
 		return view("roles.teacher.attendance.upload", [
 			"course" => $course,
+			"topics" => $topics,
 			"course_students" => $course_students/*$filteredUsers*/
 		]);
 	}

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
-use App\Models\Progress;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Topic;
+use App\Models\Course;
+use App\Models\Progress;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProgressController extends Controller {
 	// ===== TEACHER ===== //
@@ -20,7 +22,9 @@ class ProgressController extends Controller {
 			->pluck('material_id')
 			->toArray();
 
-		foreach ($course->topics as $topic) {
+		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+
+		foreach ($topics as $topic) {
 			foreach($topic->materials as $material) {
 				if (!in_array($material->id, $existingProgress)) {
 					$progress = Progress::create([
@@ -38,6 +42,7 @@ class ProgressController extends Controller {
 		return view('roles.teacher.student.progress', [
 			'student' => $student,
 			'course' => $course,
+			"topics" => $topics,
 			'newestprogress' => $newestProgress
 		]);
 	}

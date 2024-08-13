@@ -9,6 +9,7 @@ use App\Models\ImportedStudent;
 use App\Models\Progress;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -101,9 +102,12 @@ class CourseController extends Controller {
 		$course = Course::where("id", $course_id)->first();
 		$course_students = CourseStudent::where("teacher_id", Auth::user()->id)->where("course_id", $course_id)->get();
 
+		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+
 		return view('roles.teacher.mycourse.show', [
 			'course_students' => $course_students,
-			"course" => $course
+			"course" => $course,
+			"topics" => $topics
 		]);
 	}
 

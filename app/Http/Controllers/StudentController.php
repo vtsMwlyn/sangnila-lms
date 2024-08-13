@@ -238,9 +238,7 @@ class StudentController extends Controller {
 		$dataToUpdate = $validator->validate();
 
 		User::where("id", $student->id)->update(["full_name" => $dataToUpdate["full_name"]]);
-
 		unset($dataToUpdate["full_name"]);
-
 		UserDetail::where("user_id", $student->id)->update($dataToUpdate);
 
 		return redirect(route("admin.student.show", $student_id))->with("successUpdateStudentData", "Successfully updated student data!");

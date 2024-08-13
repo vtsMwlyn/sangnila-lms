@@ -12,7 +12,7 @@
 @section("content")
 	<x-section-container>
         <x-page-title class="text-3xl font-semibold text-blue-900 mt-5 mb-8">Upload New Attendance Data</x-page-title>
-		@if($course_students->count() && $course->topics->count())
+		@if($course_students->count() && $topics->count())
 			<form action="{{ route('teacher.attendance.store', $course->id) }}" method="post" class="mx-auto" id="attendance_form">
 				@csrf
 
@@ -41,7 +41,7 @@
 										<div class="flex w-full gap-2 mt-2 material_progress_detail" style="display: none;">
 											<x-select class="material_progress w-2/3" name="fake_material_progress[]">
 												<option selected disabled>Select Material Progress</option>
-												@foreach ($course->topics as $topic)
+												@foreach ($topics as $topic)
 													@foreach ($topic->materials as $material)
 														<option value="{{ $material->title }}" @if(old("material_progress[]") == $material->title) selected @endif>{{ $material->title }}</option>
 													@endforeach

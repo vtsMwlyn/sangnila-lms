@@ -73,8 +73,8 @@
 					<th class="template-heads rounded-r-xl">Action</th>
 				</x-slot>
 
-				@if ($course->topics->count())
-					@foreach ($course->topics as $topic)
+				@if ($topics->count())
+					@foreach ($topics as $topic)
 						@if($topic->materials->count())
 							@foreach ($topic->materials as $material)
 								<tr>

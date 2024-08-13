@@ -13,7 +13,13 @@
 			<x-button class="bg-white rounded-l-none rounded-r-lg border-blue-900 border-t-2 border-r-2 border-b-2 text-blue-900 hover:text-white"><i class="bi bi-search"></i></x-button>
 		</form>
 
-		<div class="overflow-x-auto mt-8">
+		@if(session()->has("successImportExcelStudent"))
+			<x-badge-success badge_text="{{ session('successImportExcelStudent') }}" class="mb-4"></x-badge-success>
+		@endif
+
+		<x-anchor-button class="bg-orange-500 mt-8" href="{{ route('admin.student.import-excel') }}"><i class="bi bi-file-earmark-arrow-up"></i> Import From Excel</x-anchor-button>
+
+		<div class="overflow-x-auto mt-4">
 			<x-table>
 				<x-slot name="head">
 					<th class="template-heads sm:w-1/4 rounded-l-xl">Student Name</th>

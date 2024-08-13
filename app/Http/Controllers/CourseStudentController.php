@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Topic;
 use App\Models\Course;
 use App\Models\Payment;
 use App\Models\Progress;
@@ -13,6 +14,7 @@ use App\Models\CourseStudent;
 use App\Models\CourseTeacher;
 use App\Models\ImportedStudent;
 use App\Rules\MinimumOneCheckbox;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class CourseStudentController extends Controller {
@@ -81,7 +83,9 @@ class CourseStudentController extends Controller {
 			->pluck('material_id')
 			->toArray();
 
-		foreach ($course->topics as $index1 => $topic) {
+		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+
+		foreach ($topics as $index1 => $topic) {
 			foreach($topic->materials as $index2 => $material) {
 				$newData = [
 					'student_id' => $student->id,
@@ -170,7 +174,9 @@ class CourseStudentController extends Controller {
 				->pluck('material_id')
 				->toArray();
 
-			foreach ($course->topics as $index1 => $topic) {
+			$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+
+			foreach ($topics as $index1 => $topic) {
 				foreach($topic->materials as $index2 => $material) {
 					$newData = [
 						'student_id' => $targetStudent->id,
@@ -199,8 +205,14 @@ class CourseStudentController extends Controller {
 	public function import_student_data($course_id){
 		$course = Course::where("id", $course_id)->first();
 
+		$materials = [];
+		foreach($course->topics as $topic){
+			array_push($materials, $topic->materials);
+		}
+
 		return view("roles.admin.student.import-student", [
 			"course" => $course,
+			"materials" => $materials,
 			"education_levels" => ["Elementary School", "Junior High School", "Senior High School", "College", "Professional"]
 		]);
 	}
@@ -266,8 +278,10 @@ class CourseStudentController extends Controller {
 				"last_attendance_count" => $request->inp_last_attendance_count[$index]
 			]);
 
+			$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+
 			$targetFound = false;
-			foreach($course->topics as $topic){
+			foreach($topics as $topic){
 				foreach($topic->materials as $material){
 					if($material->id != $request->inp_last_material_unlocked[$index]){
 						Progress::create([

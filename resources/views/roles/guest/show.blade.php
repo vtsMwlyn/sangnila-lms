@@ -17,13 +17,13 @@
 					<th class="template-heads rounded-r-xl">Material Name</th>
 				</x-slot>
 
-				@if ($course->topics->count())
-					@if($course->topics[0]->materials->count())
-						@foreach ($course->topics[0]->materials as $index => $material)
+				@if ($topics->count())
+					@if($topics[0]->materials->count())
+						@foreach ($topics[0]->materials as $index => $material)
 							@if($index < 3)
 								<tr class="@if($index == 1) opacity-60 @elseif($index == 2) opacity-30 @endif">
 									<td class="template-bodies rounded-l-xl">
-										{{ $course->topics[0]->title }}
+										{{ $topics[0]->title }}
 									</td>
 									<td class="template-bodies rounded-r-xl">
 										@if($index < 1)
@@ -42,7 +42,7 @@
 					@else
 						<tr class="hover:bg-gray-100 border-b border-blue-900">
 							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-								{{ $course->topics[0]->title }}
+								{{ $topics[0]->title }}
 							</td>
 							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 text-center">This topic doesn't have any materials yet.</td>
 						</tr>

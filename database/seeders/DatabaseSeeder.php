@@ -55,7 +55,9 @@ class DatabaseSeeder extends Seeder
 			"number_of_payment" => 1
 		]);
 
-		foreach ($course->topics as $index1 => $topic) {
+		$topics = Topic::where("course_id", $course->id)->where("user_id", $teacher->id)->get();
+
+		foreach ($topics as $index1 => $topic) {
 			foreach($topic->materials as $index2 => $material) {
 				$newData = [
 					'student_id' => $student->id,
@@ -87,9 +89,11 @@ class DatabaseSeeder extends Seeder
 		}
 	}
 
-	private function addTopicAndMaterial($course_name, $topic_name, $materials){
+	private function addTopicAndMaterial($course_name, $topic_name, $materials, $teacher_name){
 		$course = Course::where("course_name", $course_name)->first();
-		$topic = Topic::create(["course_id" => $course->id, "title" => $topic_name]);
+		$teacher = User::where("role_id", 2)->where("full_name", $teacher_name)->first();
+
+		$topic = Topic::create(["course_id" => $course->id, "title" => $topic_name, "user_id" => $teacher->id]);
 
 		foreach($materials as $material){
 			Material::create(["topic_id" => $topic->id, "title" => $material, "link" => "https://www.google.com/", "desc" => "This is the description of the material. It serves as a comprehensive overview, providing a clear explanation or summary of the content. By reading or watching this material, students will gain a solid understanding of the main concepts and topics covered. They can expect to learn key insights, practical applications, and theoretical foundations that are essential for mastering the subject matter. The description aims to orientate students, helping them to grasp the significance of the material and its relevance to their learning journey."]);
@@ -322,7 +326,7 @@ class DatabaseSeeder extends Seeder
 			"Orthographic View / Turn Table",
 			"Blow Up and Detailing",
 			"Submission: Prop Design Portfolio"
-		]);
+		], "Iswan Sudaryo (Teacher)");
 		$this->addTopicAndMaterial("Concept Art", "Interior Environment", [
 			"Isometric Perspective: Simple Objects in 3D Space",
 			"Isometric Perspective: Complex Objects in 3D Space",
@@ -333,18 +337,28 @@ class DatabaseSeeder extends Seeder
 			"Rendering",
 			"Consultation",
 			"Submission: Interior Environment Portfolio"
-		]);
+		], "Iswan Sudaryo (Teacher)");
 
 		/*Topics for 3D Modelling*/
 		$this->addTopicAndMaterial("3D Modelling", "Intermediate Modelling", [
 			"Expand your 3D Modelling by Using Different Tools and Edits"
-		]);
+		], "Vincent");
 		$this->addTopicAndMaterial("3D Modelling", "Product Design Modelling", [
 			"Design a Simple Product for Advertising by Using Image Texturing"
-		]);
+		], "Vincent");
 		$this->addTopicAndMaterial("3D Modelling", "Interior Visualization", [
 			"Exercise Modelling an Interior Room with Different Types of Objects"
-		]);
+		], "Vincent");
+
+		$this->addTopicAndMaterial("3D Modelling", "Intermediate Modelling", [
+			"Expand your 3D Modelling by Using Different Tools and Edits"
+		], "Iswan Sudaryo (Teacher)");
+		$this->addTopicAndMaterial("3D Modelling", "Product Design Modelling", [
+			"Design a Simple Product for Advertising by Using Image Texturing"
+		], "Iswan Sudaryo (Teacher)");
+		$this->addTopicAndMaterial("3D Modelling", "Interior Visualization", [
+			"Exercise Modelling an Interior Room with Different Types of Objects"
+		], "Iswan Sudaryo (Teacher)");
 
 		/*Topics for 2D Animation*/
 		$this->addTopicAndMaterial("2D Animation", "Introduction + Software Practice #1", [
@@ -352,89 +366,90 @@ class DatabaseSeeder extends Seeder
 			"Penggunaan Deformers",
 			"Penggunaan Effects dan Animation",
 			"Workflow dan Interface"
-		]);
+		], "Vincent");
 		$this->addTopicAndMaterial("2D Animation", "Software Practice #2", [
 			"Simple Animation Using Deformer (Pendulum, Bouncing Ball)",
 			"Latihan Menggambar Rough Pose, Clean Up, Detail"
-		]);
+		], "Vincent");
 		$this->addTopicAndMaterial("2D Animation", "Timing #1", [
 			"Menggeser Bola",
 			"Bouncing Ball",
 			"Timing Cepat"
-		]);
+		], "Vincent");
 		$this->addTopicAndMaterial("2D Animation", "Timing #2", [
 			"Avoid Tweening: Raising Arms",
 			"Avoid Tweening: Jumping",
 			"Avoid Tweening: Half Body Turn"
-		]);
+		], "Vincent");
 		$this->addTopicAndMaterial("2D Animation", "Spacing #1", [
 			"Head Turn #1",
 			"Take #1 (Half Body)"
-		]);
+		], "Vincent");
 
 		/*Topics for Digital Drawing*/
-		// $this->addTopicAndMaterial("Digital Drawing", "Logo Design", [
-		// 	"Sketching and Ideation",
-		// 	"Blocking and Clean Up",
-		// 	"Color Exploration"
-		// ]);
-		// $this->addTopicAndMaterial("Digital Drawing", "Flora and Fauna Drawing", [
-		// 	"Optimize using Mirror",
-		// 	"Simetrical Tools to Create Repetition",
-		// 	"Export Pattern and Implementation into Drawing"
-		// ]);
-		// $this->addTopicAndMaterial("Digital Drawing", "Gradient Background", [
-		// 	"Sketching and Ideation",
-		// 	"Lineart",
-		// 	"Color and Shading with Gradients"
-		// ]);
+		$this->addTopicAndMaterial("Digital Drawing", "Logo Design", [
+			"Sketching and Ideation",
+			"Blocking and Clean Up",
+			"Color Exploration"
+		], "Gaby");
+		$this->addTopicAndMaterial("Digital Drawing", "Flora and Fauna Drawing", [
+			"Optimize using Mirror",
+			"Simetrical Tools to Create Repetition",
+			"Export Pattern and Implementation into Drawing"
+		], "Gaby");
+		$this->addTopicAndMaterial("Digital Drawing", "Gradient Background", [
+			"Sketching and Ideation",
+			"Lineart",
+			"Color and Shading with Gradients"
+		], "Gaby");
+
 		$this->addTopicAndMaterial("Digital Drawing", "Character Design", [
 			"Head Construction",
 			"Body Construction",
 			"Gesture, Ekspresi, dan Tangan",
 			"Gesture and Full Body Construction",
 			"Take a Reference for Drawing"
-		]);
+		], "Hari");
 		$this->addTopicAndMaterial("Digital Drawing", "Properties", [
 			"Intro to Perspektif",
 			"Drawing Boxes (Base Cube)",
 			"Drawing Vases (Base Tube)",
 			"Drawing Any Still Life Object using Envelope, Cube",
 			"Drawing Character with Properties"
-		]);
+		], "Hari");
 		$this->addTopicAndMaterial("Digital Drawing", "Flora and Fauna", [
 			"Drawing Leaves",
 			"Drawing Tree",
 			"Drawing Flower",
 			"Body Structure in Animal",
 			"Drawing any Animal"
-		]);
+		], "Hari");
 		$this->addTopicAndMaterial("Digital Drawing", "Background", [
 			"Drawing Living Room in 1 Perspective",
 			"Drawing Bed Room in 2 Perspective",
 			"Drawing Park",
 			"Drawing Character in a Place #1",
 			"Drawing Character in a Place #2"
-		]);
+		], "Hari");
 
 		/*Topic and material for web development*/
 		$this->addTopicAndMaterial("Web Development", "Construct a web page using HTML", [
 			"Introduction to HTML",
 			"Making simple article web page",
 			"Insert media to web page"
-		]);
+		], "Immanuel Giovano (Teacher)");
 		$this->addTopicAndMaterial("Web Development", "Styling a web page using CSS", [
 			"Introduction to CSS",
 			"Decorating web page using CSS",
 			"Positioning elements using CSS"
-		]);
+		], "Immanuel Giovano (Teacher)");
 		$this->addTopicAndMaterial("Web Development", "Using JavaScript to control the behavior and events in a web page", [
 			"Introduction to JS",
 			"Basics of JS",
 			"Manipulating HTML content and style",
 			"Handling events in a web page",
 			"Form validation using JS"
-		]);
+		], "Immanuel Giovano (Teacher)");
 		$this->addTopicAndMaterial("Web Development", "Using PHP and MySQL to control and handle data from back end side", [
 			"Introduction to PHP",
 			"Basics of PHP",
@@ -442,7 +457,7 @@ class DatabaseSeeder extends Seeder
 			"Introduction to MySQL",
 			"Insert and show data from tables",
 			"Update and delete data from tables"
-		]);
+		], "Immanuel Giovano (Teacher)");
 
 		// Some example material links
 		$this->changeMaterialLink("Digital Drawing", "Character Design", "Head Construction", "https://stanprokopenko.com/2012/08/video-draw-head-angle-1/");

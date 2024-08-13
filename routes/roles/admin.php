@@ -7,6 +7,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\ExcelImportController;
 use App\Http\Controllers\AdminAccountController;
 use App\Http\Controllers\CourseStudentController;
 use App\Http\Controllers\CourseTeacherController;
@@ -111,6 +112,10 @@ Route::prefix('/admin')
 				// Make student status is not imported again
 				Route::get("{student_id}/normalize", [CourseStudentController::class, "normalize_confirmation"])->name("normalize.confirmation");
 				Route::post("{student_id}/normalize", [CourseStudentController::class, "normalize_proceed"])->name("normalize.proceed");
+
+				// Import from excel
+				Route::get("/import-excel-student", [ExcelImportController::class, "import_excel_student_index"])->name("import-excel");
+				Route::post("/import-excel-student", [ExcelImportController::class, "import_excel_student_store"])->name("import-excel.store");
 			}
 		);
 
@@ -146,7 +151,6 @@ Route::prefix('/admin')
 				// Reset password
 				Route::get("/{user_id}/reset-password", [AdminAccountController::class, "reset_password"])->name("reset-password");
 				Route::post("/{user_id}/reset-password", [AdminAccountController::class, "reset_password_proceed"])->name("reset-password.proceed");
-
 			}
 		);
 	});

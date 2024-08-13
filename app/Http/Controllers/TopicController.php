@@ -21,10 +21,12 @@ class TopicController extends Controller
 	// Create new topic input page
     public function teacher_create($course_id){
 		$course = Course::where("id", $course_id)->first();
+		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
 		$course_students = CourseStudent::where("teacher_id", Auth::user()->id)->where("course_id", $course_id)->get();
 
 		return view("roles.teacher.topic-and-material.create-topic", [
 			"course" => $course,
+			"topics" => $topics,
 			"course_students" => $course_students
 		]);
 	}
@@ -35,7 +37,7 @@ class TopicController extends Controller
 			"title" => "required|min:3"
 		]);
 
-		Topic::create(["course_id" => $course_id, "title" => $validatedData["title"]]);
+		Topic::create(["course_id" => $course_id, "title" => $validatedData["title"], "user_id" => Auth::user()->id]);
 
 		return redirect(route("teacher.mycourse.show", $course_id))->with("successAddTopic", "Successfully added new topic to the course!");
 	}
@@ -43,11 +45,13 @@ class TopicController extends Controller
 	// Edit topic input page
 	public function teacher_edit($course_id, $topic_id){
 		$course = Course::where("id", $course_id)->first();
+		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
 		$course_students = CourseStudent::where("teacher_id", Auth::user()->id)->where("course_id", $course_id)->get();
 
 		return view("roles.teacher.topic-and-material.edit-topic", [
-			"topic" => Topic::where("course_id", $course_id)->where("id", $topic_id)->first(),
+			"topic" => Topic::where("id", $topic_id)->first(),
 			"course" => $course,
+			"topics" => $topics,
 			"course_students" => $course_students
 		]);
 	}
@@ -58,7 +62,7 @@ class TopicController extends Controller
 			"title" => "required|min:3"
 		]);
 
-		Topic::where("course_id", $course_id)->where("id", $topic_id)->update(["title" => $validatedData["title"]]);
+		Topic::where("id", $topic_id)->update(["title" => $validatedData["title"]]);
 
 		return redirect(route("teacher.topic.show", [$course_id, $topic_id]))->with("successEditTopic", "Successfully updated topic data!");
 	}

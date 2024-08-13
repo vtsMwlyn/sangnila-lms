@@ -59,8 +59,8 @@
 					<th class="template-heads rounded-r-xl w-1/3">Action</th>
 				</x-slot>
 
-				@if ($course->topics->count())
-					@foreach ($course->topics as $topic)
+				@if ($topics->count())
+					@foreach ($topics as $topic)
 						@if($topic->materials->count())
 							<tr>
 								<td class="template-bodies rounded-l-xl w-1/3">

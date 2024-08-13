@@ -83,12 +83,15 @@
 		</div>
 
 		<div class="flex flex-col w-full mt-10">
-			<div class="rounded-2xl py-5 px-10 text-white bg-blue-950">Course Topics and Materials</div>
+			<div class="rounded-2xl py-5 px-10 text-white bg-blue-950 flex items-center justify-between">
+				<span>Course Curriculum</span>
+				<x-anchor-button class="bg-orange-500" href="#">Manage Curriculum</x-anchor-button>
+			</div>
 
 			<div class="overflow-x-auto mt-3">
 				<x-table>
 					<x-slot name="head">
-						<th class="template-heads rounded-l-xl">Topic name</th>
+						<th class="template-heads rounded-l-xl">Topic</th>
 						<th class="template-heads rounded-r-xl">Materials</th>
 					</x-slot>
 					@forelse ($course->topics as $topic)

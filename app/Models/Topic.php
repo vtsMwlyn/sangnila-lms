@@ -18,4 +18,8 @@ class Topic extends Model
 	public function materials(){
 		return $this->hasMany(Material::class);
 	}
+
+	public function uploader(){
+		return $this->belongsTo(User::class);
+	}
 }
