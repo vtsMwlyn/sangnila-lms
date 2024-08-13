@@ -28,6 +28,10 @@ There are 5 roles (types of account) in Sangnila LMS:
 - Implementation of forgot password and remember me feature
 - Implementation of breadcrumbs feature
 
+### v0.7.2-beta
+- Added password visibility toggle in all password input fields
+- Now course topics and materials setup will be separated for teachers that hold the same course
+
 ## Clone Project
 Clone the repository in any desired directory. Web resources such as images, videos, scripts, and styles are included in `public` folder. To generate the database system and fill it will sample data, run this command in the terminal:
 ```bash
