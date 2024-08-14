@@ -115,7 +115,7 @@
 									<span class="text-gray-500 font-semibold">- No materials yet -</span>
 								@endif
 							</td>
-							<td class="template-bodies rounded-r-xl">
+							<td class="template-bodies rounded-r-xl w-1/4">
 								<div class="w-full flex flex-col items-center justify-center gap-3">
 									<x-anchor-button href="{{ route('admin.course.curriculum.topic.edit', [$course->id, $topic->id]) }}" class="bg-orange-500 w-1/2"><i class="bi bi-pencil-square"></i> Edit Topic</x-anchor-button>
 									<x-anchor-button href="{{ route('admin.course.curriculum.topic.delete', [$course->id, $topic->id]) }}" class="bg-orange-500 w-1/2"><i class="bi bi-trash3"></i> Delete Topic</x-anchor-button>
