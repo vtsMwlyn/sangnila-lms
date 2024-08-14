@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attendance;
 use App\Models\Course;
 use App\Models\CourseStudent;
+use App\Models\CurriculumTopic;
 use App\Models\ImportedStudent;
 use App\Models\Progress;
 use App\Models\StudentAssignment;
@@ -44,6 +45,7 @@ class CourseController extends Controller {
 	// Shows a course details
 	public function admin_show($course_id) {
 		$course = Course::findOrFail($course_id);
+
 		return view('roles.admin.course.show', [
 			'course' => $course
 		]);
@@ -101,13 +103,15 @@ class CourseController extends Controller {
 	public function teacher_show($course_id) {
 		$course = Course::where("id", $course_id)->first();
 		$course_students = CourseStudent::where("teacher_id", Auth::user()->id)->where("course_id", $course_id)->get();
+		$curriculum = CurriculumTopic::where("course_id", $course->id)->get();
 
 		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
 
 		return view('roles.teacher.mycourse.show', [
 			'course_students' => $course_students,
 			"course" => $course,
-			"topics" => $topics
+			"topics" => $topics,
+			"has_curriculum" => $curriculum->count()
 		]);
 	}
 

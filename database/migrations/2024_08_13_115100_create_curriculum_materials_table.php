@@ -18,7 +18,7 @@ return new class extends Migration
 			$table->unsignedBigInteger('curriculum_topic_id');
 			$table->string('title');
 			$table->longText("desc");
-			$table->string('link');
+			$table->longText("link");
 			$table->foreign('curriculum_topic_id')->references('id')->on('curriculum_topics')->onDelete("cascade");
 			$table->timestamps();
         });

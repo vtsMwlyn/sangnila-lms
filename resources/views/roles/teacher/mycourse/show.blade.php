@@ -14,6 +14,8 @@
 
 		@if(session()->has("successAddTopic"))
 			<x-badge-success badge_text="{{ session('successAddTopic') }}"></x-badge-success>
+		@elseif(session()->has("successSynchronizeCurriculum"))
+			<x-badge-success badge_text="{{ session('successSynchronizeCurriculum') }}"></x-badge-success>
 		@elseif(session()->has("successDeleteTopic"))
 			<x-badge-warning badge_text="{{ session('successDeleteTopic') }}"></x-badge-warning>
 		@endif
@@ -44,11 +46,19 @@
 		</div>
 
 		<h2 class="text-xl font-semibold mb-2 text-white mt-10">Course Topic and Materials:</h2>
-		<x-anchor-button class="bg-orange-500 mt-5"
-			{{-- href=" route('teacher.material.upload', $course->id) " }}" --}}
-			href="{{ route('teacher.topic.create', $course->id) }}">
-			<i class="bi bi-plus-lg"></i> Add new topic
-		</x-anchor-button>
+		<div class="flex justify-between items-stretch w-full mt-5">
+			<x-anchor-button class="bg-orange-500"
+				{{-- href=" route('teacher.material.upload', $course->id) " }}" --}}
+				href="{{ route('teacher.topic.create', $course->id) }}">
+				<i class="bi bi-plus-lg"></i> Add new topic
+			</x-anchor-button>
+			@if($has_curriculum > 0)
+				<form action="{{ route('teacher.mycourse.synchronize', $course->id) }}" method="post">
+					@csrf
+					<x-button class="bg-orange-500" onclick="return confirm('Synchronizing with topics and material in curriculum will erase all of your posted topics and materials. Are your sure want to proceed?')"><i class="bi bi-arrow-repeat"></i> Synchronize with curriculum</x-button>
+				</form>
+			@endif
+		</div>
 
 		<div class="mt-5 mb-5 overflow-x-auto">
 			<x-table>
@@ -80,11 +90,11 @@
 									<div class="flex flex-col w-full justify-center items-center gap-2">
 										<x-anchor-button class="bg-orange-500 w-1/2"
 											href="{{ route('teacher.topic.edit', [$topic->course->id, $topic->id]) }}">
-											Edit Topic
+											<i class="bi bi-pencil-square"></i> Edit Topic
 										</x-anchor-button>
 										<x-anchor-button class="bg-orange-500 w-1/2"
 											href="{{ route('teacher.topic.delete', [$topic->course->id, $topic->id]) }}">
-											Delete Topic
+											<i class="bi bi-trash3"></i> Delete Topic
 										</x-anchor-button>
 									</div>
 								</td>

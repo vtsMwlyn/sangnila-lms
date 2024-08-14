@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class CurriculumMaterial extends Model
 {
     use HasFactory;
+
+	protected $guarded = ["id"];
+
+	public function curriculum_topic(){
+		return $this->belongsTo(CurriculumTopic::class);
+	}
 }

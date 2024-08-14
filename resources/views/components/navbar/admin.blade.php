@@ -44,7 +44,7 @@
 
 		<!-- Sidebar navigations -->
 		<div class="flex flex-col lg:flex-row items-stretch justify-center gap-4 mx-10 py-4 px-6 rounded-3xl border border-white grow lg:w-auto my-5 lg:my-0" style="background-color: rgba(217, 217, 217, 0.45);">
-			<x-anchor-button class="{{ Request::is('admin*course*')? 'bg-orange-500' : 'bg-blue-900' }} grow flex items-center gap-2 justify-center"
+			<x-anchor-button class="{{ Request::is('*admin*course*')? 'bg-orange-500' : 'bg-blue-900' }} grow flex items-center gap-2 justify-center"
 				href="{{ route('admin.course.index') }}">
 				<i class="bi bi-grid"></i> Manage Courses
 			</x-anchor-button>

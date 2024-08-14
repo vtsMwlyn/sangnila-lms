@@ -13,6 +13,7 @@ use App\Http\Controllers\CourseStudentController;
 use App\Http\Controllers\CourseTeacherController;
 use App\Http\Controllers\TeacherAccountController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CurriculumController;
 
 Route::prefix('/admin')
 	->name('admin.')
@@ -55,6 +56,31 @@ Route::prefix('/admin')
 				Route::get("/{course_id}/delete", [CourseController::class, "admin_delete"])->name("delete");
 				Route::delete('/{course_id}/delete', [CourseController::class, 'admin_destroy'])->name('destroy')->whereNumber('course_id');
 
+				// Manage curriculum
+					Route::prefix('/{course_id}/curriculum')
+					->name('curriculum.')
+					->group(function () {
+						Route::get("/create", [CurriculumController::class, "admin_create_topic"])->name("topic.create");
+						Route::post("/create", [CurriculumController::class, "admin_store_topic"])->name("topic.store");
+
+						Route::get("/{curriculum_topic_id}/edit", [CurriculumController::class, "admin_edit_topic"])->name("topic.edit");
+						Route::post("/{curriculum_topic_id}/edit", [CurriculumController::class, "admin_update_topic"])->name("topic.update");
+
+						Route::get("/{curriculum_topic_id}/delete", [CurriculumController::class, "admin_delete_topic"])->name("topic.delete");
+						Route::post("/{curriculum_topic_id}/delete", [CurriculumController::class, "admin_destroy_topic"])->name("topic.destroy");
+
+						Route::get("/{curriculum_topic_id}", [CurriculumController::class, "admin_topic_details"])->name("topic.details");
+
+						Route::get("/{curriculum_topic_id}/create", [CurriculumController::class, "admin_create_material"])->name("material.create");
+						Route::post("/{curriculum_topic_id}/create", [CurriculumController::class, "admin_store_material"])->name("material.store");
+
+						Route::get("/{curriculum_topic_id}/{curriculum_material_id}/edit", [CurriculumController::class, "admin_edit_material"])->name("material.edit");
+						Route::post("/{curriculum_topic_id}/{curriculum_material_id}/edit", [CurriculumController::class, "admin_update_material"])->name("material.update");
+
+						Route::get("/{curriculum_topic_id}/{curriculum_material_id}/delete", [CurriculumController::class, "admin_delete_material"])->name("material.delete");
+						Route::post("/{curriculum_topic_id}/{curriculum_material_id}/delete", [CurriculumController::class, "admin_destroy_material"])->name("material.destroy");
+					}
+				);
 			}
 		);
 

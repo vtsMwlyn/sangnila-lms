@@ -8,6 +8,7 @@ use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\CurriculumController;
 use Illuminate\Http\Request;
 
 Route::prefix('/teacher')
@@ -30,6 +31,9 @@ Route::prefix('/teacher')
 
 				// Course details
 				Route::get('/{course_id}', [CourseController::class, 'teacher_show'])->name('show')->whereNumber('course_id');
+
+				// Synchronize with curriculum
+				Route::post("/{course_id}/synchronize", [CurriculumController::class, "teacher_synchronize"])->name("synchronize");
 			}
 		);
 

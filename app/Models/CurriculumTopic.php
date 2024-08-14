@@ -11,4 +11,11 @@ class CurriculumTopic extends Model
 
 	protected $guarded = ["id"];
 
+	public function course(){
+		return $this->belongsTo(Course::class);
+	}
+
+	public function curriculum_materials(){
+		return $this->hasMany(CurriculumMaterial::class);
+	}
 }

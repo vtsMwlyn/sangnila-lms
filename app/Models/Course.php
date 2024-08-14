@@ -52,6 +52,10 @@ class Course extends Model {
 		return $this->belongsToMany(User::class, "payments", "student_id");
 	}
 
+	public function curriculum_topics(){
+		return $this->hasMany(CurriculumTopic::class);
+	}
+
 }
 
 
