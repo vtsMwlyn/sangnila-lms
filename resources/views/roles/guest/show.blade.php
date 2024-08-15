@@ -18,8 +18,8 @@
 				</x-slot>
 
 				@if ($topics->count())
-					@if($topics[0]->materials->count())
-						@foreach ($topics[0]->materials as $index => $material)
+					@if($topics[0]->curriculum_materials->count())
+						@foreach ($topics[0]->curriculum_materials as $index => $material)
 							@if($index < 3)
 								<tr class="@if($index == 1) opacity-60 @elseif($index == 2) opacity-30 @endif">
 									<td class="template-bodies rounded-l-xl">

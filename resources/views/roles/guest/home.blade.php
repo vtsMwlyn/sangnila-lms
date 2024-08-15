@@ -1,8 +1,8 @@
 @extends("layouts.login-register")
 
 @section("content")
-	<div class="flex flex-col items-center justify-center rounded-2xl w-5/6 md:w-3/5 bg-orange-500 p-10">
-		<div class="my-10 w-32 md:w-52">
+	<div class="flex flex-col items-center justify-center rounded-2xl w-5/6 md:w-3/5 bg-orange-500 p-6">
+		<div class="my-6 w-32 md:w-44">
 			<img src={{ asset("img/AR.W.png") }} alt="logo" width="100%">
 		</div>
 

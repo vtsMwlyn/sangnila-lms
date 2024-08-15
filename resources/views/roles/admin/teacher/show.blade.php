@@ -54,12 +54,23 @@
 			</div>
 			<div class="flex gap-x-10 flex-wrap mt-5">
 				@forelse ($user->teached_courses as $course)
-					<div class="text-white border-2 border-white bg-blue-900 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-between font-semibold" style="min-width: 200px; min-height: 100px; max-height: 100px;">
+					{{-- <div class="text-white border-4 border-white bg-blue-900 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-between font-semibold" style="min-width: 200px; min-height: 100px; max-height: 100px;">
 						{{ $course->course_name }}
 						<a
 							href="{{ route('admin.teacher.unassign.delete', ['teacher_id' => $user->id, 'course_id' => $course->id]) }}"
 							class="">
 							<i class="bi bi-x-circle-fill"></i>
+						</a>
+					</div> --}}
+
+					<div class="text-white hover:text-yellow-500 border-4 border-white hover:border-yellow-500 bg-blue-900 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-between font-semibold" style="min-width: 220px; max-width: 220px; min-height: 100px; max-height: 100px;">
+						<a href="{{ route('admin.course.show', $course->id) }}" class="h-full w-full flex items-center">
+						{{ $course->course_name }}
+							<a
+								href="{{ route('admin.teacher.unassign.delete', ['teacher_id' => $user->id, 'course_id' => $course->id]) }}"
+								class="">
+								<i class="bi bi-x-circle-fill"></i>
+							</a>
 						</a>
 					</div>
 				@empty

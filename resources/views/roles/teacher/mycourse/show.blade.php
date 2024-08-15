@@ -16,6 +16,8 @@
 			<x-badge-success badge_text="{{ session('successAddTopic') }}"></x-badge-success>
 		@elseif(session()->has("successSynchronizeCurriculum"))
 			<x-badge-success badge_text="{{ session('successSynchronizeCurriculum') }}"></x-badge-success>
+		@elseif(session()->has("successImportExcelTopicsAndMaterials"))
+			<x-badge-success badge_text="{{ session('successImportExcelTopicsAndMaterials') }}"></x-badge-success>
 		@elseif(session()->has("successDeleteTopic"))
 			<x-badge-warning badge_text="{{ session('successDeleteTopic') }}"></x-badge-warning>
 		@endif
@@ -48,16 +50,23 @@
 		<h2 class="text-xl font-semibold mb-2 text-white mt-10">Course Topic and Materials:</h2>
 		<div class="flex justify-between items-stretch w-full mt-5">
 			<x-anchor-button class="bg-orange-500"
-				{{-- href=" route('teacher.material.upload', $course->id) " }}" --}}
 				href="{{ route('teacher.topic.create', $course->id) }}">
 				<i class="bi bi-plus-lg"></i> Add new topic
 			</x-anchor-button>
-			@if($has_curriculum > 0)
-				<form action="{{ route('teacher.mycourse.synchronize', $course->id) }}" method="post">
-					@csrf
-					<x-button class="bg-orange-500" onclick="return confirm('Synchronizing with topics and material in curriculum will erase all of your posted topics and materials. Are your sure want to proceed?')"><i class="bi bi-arrow-repeat"></i> Synchronize with curriculum</x-button>
-				</form>
-			@endif
+
+			<div class="flex gap-5">
+				<x-anchor-button class="bg-orange-500"
+					href="{{ route('teacher.mycourse.import-excel-topicsandmaterials', $course->id) }}">
+					<i class="bi bi-file-earmark-arrow-up"></i> Import from Excel
+				</x-anchor-button>
+
+				@if($has_curriculum > 0)
+					<form action="{{ route('teacher.mycourse.synchronize', $course->id) }}" method="post">
+						@csrf
+						<x-button class="bg-orange-500" onclick="return confirm('Synchronizing with topics and material in curriculum will erase all of your posted topics and materials. Are your sure want to proceed?')"><i class="bi bi-arrow-repeat"></i> Sync with curriculum</x-button>
+					</form>
+				@endif
+			</div>
 		</div>
 
 		<div class="mt-5 mb-5 overflow-x-auto">

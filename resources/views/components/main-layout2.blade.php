@@ -79,33 +79,15 @@
 			{{ $slot }}
 
 			<!-- Content Section -->
-			<div class="px-10 pb-10 grow">
+			<div class="px-10 @auth pb-10 @else py-10 @endauth grow">
 				<div class="flex flex-col items-center w-full">
 					<!-- Breadcrumbs -->
-					{{-- <div class="text-white w-full lg:w-4/5 p-5 text-lg">
-						@php $link = ""; @endphp
-						@foreach(Request::segments() as $index => $segment)
-							<!-- Construct the full URL -->
-							@php
-								$link .= "/" . $segment;
-							@endphp
+					@auth
+						<x-breadcrumbs>
+							@yield("breadcrumbs-extension")
+						</x-breadcrumbs>
+					@endauth
 
-							@if($index != 0)
-								<!-- Separator -->
-								>
-							@endif
-
-							<!-- Link activation logic -->
-							@if ($index < count(Request::segments()) - 1 && !is_numeric($segment))
-								<a href="{{ url($link) }}" class="font-bold text-yellow-500">{{ ucwords(str_replace('-', ' ', $segment)) }}</a>
-							@else
-								{{ ucwords(str_replace('-', ' ', $segment)) }}
-							@endif
-						@endforeach
-					</div> --}}
-					<x-breadcrumbs>
-						@yield("breadcrumbs-extension")
-					</x-breadcrumbs>
 
 					@yield("content")
 				</div>
@@ -119,13 +101,21 @@
 		<!-- Back to top button -->
 		<script>
 			const backToTopButton = document.getElementById("back-to-top");
+			const navbar = document.getElementById("navbar-container");
 
 			window.addEventListener("scroll", function() {
 				if (window.scrollY > window.innerHeight * 0.3) {
 					backToTopButton.classList.remove("opacity-0");
 					backToTopButton.classList.add("opacity-100");
+
+					navbar.style.backdropFilter = "none";
+					navbar.style.backgroundColor = "rgb(17, 41, 102)";
+
 				} else {
 					backToTopButton.classList.remove("opacity-100");backToTopButton.classList.add("opacity-0");
+
+					navbar.style.backdropFilter = "blur(3px)";
+					navbar.style.backgroundColor = "rgba(17, 41, 102, 0.5)";
 				}
 			});
 		</script>
