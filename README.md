@@ -37,6 +37,12 @@ There are 5 roles (types of account) in Sangnila LMS:
 - Added curriculum topics and materials for admins
 - Teacher now can synchronize topic and materials in his/her class to the curriculum
 
+### v0.7.4-beta
+- Added import from excel for importing curriculums for admins
+- Added import from excel for importing topics and materials for teachers
+- Provided template excel import file, available for download
+- UI/UX improvements in cards display and navbars
+
 ## Clone Project
 Clone the repository in any desired directory. Web resources such as images, videos, scripts, and styles are included in `public` folder. To generate the database system and fill it will sample data, run this command in the terminal:
 ```bash
