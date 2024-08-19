@@ -85,9 +85,8 @@ class AttendanceController extends Controller {
 			"attendance_identifier" => $identifier
 		]);
 
-		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
-
-		foreach($course_students as $i => $cs){
+		foreach($request->students as $i => $student_id){
+			$cs = CourseStudent::where("student_id", $student_id)->where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->first();
 			$attendanceDetail = $request["attendance_detail"][$i];
 
 			$isAttend = ($request["checkbox_value"][$i] == "on")? 1 : 0;
@@ -121,70 +120,35 @@ class AttendanceController extends Controller {
 	public function update(Request $request, $attendance_data_id){
 		$attendance = Attendance::where("id", $attendance_data_id)->first();
 		$existingAttendanceData = $attendance->student_attendances;
-		$course_students = CourseStudent::where("teacher_id", Auth::user()->id)->where("course_id", $attendance->course_id)->get();
 
 		$attendance->update(["attendance_date" => $request["attendance_date"]]);
 
-		foreach($course_students as $i => $cs){
-			if(!$existingAttendanceData->where("user_id", $cs->student->id)->first()){
-				continue;
-			}
-
-			// Validation mechanism
-			$invalid = false;
-
-			// If the student is not imported and the attendance detail is empty ...
-			if(!$request["attendance_detail"][$i] && !$cs->is_imported){
-				$invalid = true;
-			}
-
-			// ... or if the student is imported, marked as attended but the material progress, attendance detail, and learning status are empty (if unchecked then the student is assumed to not ready yet added attendance or not attended)
-			if($cs->is_imported && $request["checkbox_value"][$i] == "on"){
-				if(!$request["material_progress"][$i] || !$request["learning_status"][$i] || !$request["attendance_detail"][$i]){
-					$invalid = true;
-				}
-			}
-
-			// ... then notify user and do not proceed
-			if($invalid){
-				return back()->with("failedEditAttendance", "Attendance detail, material progress, or learning status of student " . $cs->student->full_name . " is emptied. Make sure you fill all the data (excluding imported student)");
-			}
+		foreach($request->students as $i => $student_id){
+			$cs = CourseStudent::where("student_id", $student_id)->where("course_id", $attendance->course->id)->where("teacher_id", Auth::user()->id)->first();
 
 			// Modify data in database mechanism if the data valid for each students data in the course
 			$isAttend = ($request["checkbox_value"][$i] == "on")? 1 : 0;
 			$attendanceDetail = $request["attendance_detail"][$i];
 
-			// If the student is normal student just update the attendance data then
-			if(!$cs->is_imported){
+			// If the student is not recorded in current attendance data, add them to the list
+			if(!$existingAttendanceData->where("user_id", $cs->student->id)->first()){
+				StudentAttendance::create([
+					"is_attend" => $isAttend,
+					"attendance_detail" => $attendanceDetail,
+					"material_progress" => $request["material_progress"][$i],
+					"learning_status" => $request["learning_status"][$i],
+					"user_id" => $student_id,
+					"attendance_id" => $attendance->id
+				]);
+			}
+			// If the student is already recorded in current attendance data, update the attendance data
+			else {
 				StudentAttendance::where("user_id", $cs->student->id)->where("attendance_id", $attendance->id)->update([
 					"is_attend" => $isAttend,
 					"attendance_detail" => $attendanceDetail,
 					"material_progress" => $request["material_progress"][$i],
 					"learning_status" => $request["learning_status"][$i]
 				]);
-			}
-			// If the student is imported
-			else {
-				// ... and the student is already exists in the attendance, update the attendance data
-				if($existingAttendanceData->where("user_id", $cs->student->id)->first()){
-					StudentAttendance::where("user_id", $cs->student->id)->where("attendance_id", $attendance->id)->update([
-						"is_attend" => $isAttend,
-						"attendance_detail" => $attendanceDetail,
-						"material_progress" => $request["material_progress"][$i],
-						"learning_status" => $request["learning_status"][$i]
-					]);
-				}
-				// ... and the attendance detail is filled (this means student will be added to the attendance data whether the student is absent or attended, if not filled then it will be ignored, assumed that the imported student is not ready yet to be added to the student attendance), the student is not yet exist in the attendance, create new student attendance, so next time it will be detected and updated normally
-				else if($request["attendance_detail"][$i]) {
-					StudentAttendance::create([
-						"user_id" => $cs->student->id,
-						"attendance_id" => $attendance->id,
-						"is_attend" => $isAttend,
-						"attendance_detail" => $attendanceDetail,
-						"material_progress" => $request["material_progress"][$i],
-						"learning_status" => $request["learning_status"][$i]
-					]);
-				}
 			}
 		}
 

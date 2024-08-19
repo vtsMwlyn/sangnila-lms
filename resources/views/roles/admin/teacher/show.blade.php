@@ -78,5 +78,30 @@
 				@endforelse
 			</div>
 		</div>
+
+		<div class="rounded-xl py-5 px-10 mt-10 text-white bg-blue-950">List of Students</div>
+		@forelse($user->teached_courses as $course)
+			<p class="mt-8"><a class="text-blue-950 font-bold text-xl hover:text-yellow-500" href="{{ route('admin.course.show', $course->id) }}">{{ $course->course_name }}</a></p>
+			<div class="flex flex-wrap gap-x-10 overflow-y-auto py-3" style="max-height: 300px;">
+				@forelse(App\Models\CourseStudent::where("course_id", $course->id)->where("teacher_id", $user->id)->get() as $courseteacher)
+					<a href="{{ route('admin.student.show', $courseteacher->student->id) }}">
+						<div class="text-white hover:text-yellow-500 border-4 border-white hover:border-yellow-500 bg-blue-900 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 100px; max-height: 100px;">
+							{{ $courseteacher->student->full_name }}
+							@if($courseteacher->student->status == "disabled")
+								<span class="text-red-500">(Disabled)</span>
+							@endif
+						</div>
+					</a>
+				@empty
+					<div class="flex w-full justify-center font-semibold bg-white rounded-xl p-5 mt-5">
+						<span>- No students teacher by the teacher in this course yet -</span>
+					</div>
+				@endforelse
+			</div>
+		@empty
+			<div class="flex w-full justify-center font-semibold bg-white rounded-xl p-5 mt-5">
+				<span>- No courses assigned yet to the teacher -</span>
+			</div>
+		@endforelse
 	</x-section-container>
 @endsection

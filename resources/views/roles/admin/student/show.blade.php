@@ -163,7 +163,7 @@
 				@if($student->enrolled_courses->count())
 					@for($i = 0; $i < $student->enrolled_courses->count(); $i++)
 						<tr>
-							<td class="template-bodies rounded-l-xl">{{ $student->enrolled_courses[$i]->course_name }}</td>
+							<td class="template-bodies rounded-l-xl"><a href="{{ route('admin.course.show', $student->enrolled_courses[$i]->id) }}" class="font-bold text-blue-200 hover:underline hover:text-blue-400">{{ $student->enrolled_courses[$i]->course_name }}</a></td>
 							<td class="template-bodies">
 								<div class="flex w-full items-center justify-center gap-3">
 									<span>{{ $current_progress[$i] }}/{{ $full_progress[$i] }} done</span>

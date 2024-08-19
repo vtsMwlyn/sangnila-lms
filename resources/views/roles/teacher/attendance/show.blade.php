@@ -26,7 +26,7 @@
 			@foreach($attendanceData as $atd)
 				<div class="p-5 my-8 rounded-xl" style="background-color: rgba(255, 255, 255, 0.3)">
 					<div class="flex w-full items-center justify-between">
-						<p class="text-white font-semibold">Attendance Date:<br><span class="font-bold text-white">{{ $atd->attendance_date }}</span></p>
+						<p class="text-blue-950 font-semibold">Attendance Date:<br><span class="font-bold text-blue-950">{{ $atd->attendance_date }}</span></p>
 						<div class="flex gap-3">
 							<x-anchor-button class="bg-orange-500" href="{{ route('teacher.attendance.edit', $atd->id) }}">
 								Edit Data

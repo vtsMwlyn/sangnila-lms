@@ -29,7 +29,7 @@
 							@continue
 						@endif
 						<tr class="@if($attendance->is_attend == 1) bg-green-700 @else bg-red-800 @endif text-white">
-							<td class="px-3 py-5 text-center rounded-l-xl">{{ $attendance->created_at }}</td>
+							<td class="px-3 py-5 text-center rounded-l-xl">{{ $attendance->attendance->attendance_date }}</td>
 							<td class="px-3 py-5 text-center font-bold">@if($attendance->is_attend == 1) Present @else Absent @endif</td>
 							<td class="px-3 py-5 text-center">
 								<div class="flex flex-col gap-3">

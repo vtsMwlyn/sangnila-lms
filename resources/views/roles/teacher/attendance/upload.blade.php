@@ -29,14 +29,15 @@
 				<div class="mt-6 overflow-x-auto">
 					<x-label>{{ __("Attendance Details") }}</x-label>
 					<table class="w-full mt-1" style="border-collapse: separate; border-spacing: 0 20px;">
-						<tbody>
-							@foreach ($course_students as $cs)
-								<tr style="@if($cs->student->status == "disabled") display: none; @endif background: rgba(256, 256, 256, 0.4);">
-									<td class="p-5 w-1/2 rounded-l-xl">
+						<tbody id="table-body">
+							@foreach ($course_students as $index => $cs)
+								<tr class="table-row" style="@if($cs->student->status == "disabled") display: none; @endif background: rgba(256, 256, 256, 0.4);">
+									<td class="p-5 grow rounded-l-xl">
 										<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
 											<input type="checkbox" id="checkbox{{ $loop->iteration }}"
 											class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif >
 											<label for="checkbox{{ $loop->iteration }}">{{ $cs->student->full_name }}</label>
+											<input type="hidden" name="students[]" value="{{ $cs->student->id }}">
 										</div>
 										<div class="flex w-full gap-2 mt-2 material_progress_detail" style="display: none;">
 											<x-select class="material_progress w-2/3" name="fake_material_progress[]">
@@ -54,13 +55,18 @@
 											</x-select>
 										</div>
 									</td>
-									<td class="p-5 rounded-r-xl w-1/2">
+									<td class="p-5 w-1/2">
 										<div class="flex flex-col items-stretch">
 											<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px;">@if($cs->student->status == "disabled"){{ __("Account disabled") }}@else{{ old("attendance_detail." . $loop->index) }}@endif</textarea>
 
 											@error("attendance_detail." . $loop->index)
 												<span class="text-red-500 mt-2">{{ $message }}</span>
 											@enderror
+										</div>
+									</td>
+									<td class="p-5 rounded-r-xl shrink">
+										<div class="flex justify-center items-center w-full h-full">
+											<x-button class="bg-red-600 remove-row" type="button"><i class="bi bi-trash3"></i></x-button>
 										</div>
 									</td>
 								</tr>
@@ -124,6 +130,15 @@
 				});
 			});
 
+			// Remove row of data if a student doesnt want to be included in attendance data
+			const removebuttons = $(".remove-row");
+			for(let btn of removebuttons){
+				$(btn).click(function(){
+					if(confirm("This student will be removed from current attendance, are you sure want to proceed?")){
+						$(this).closest('.table-row').remove();
+					}
+				});
+			}
 
 			// Helper mechanism to send data to Laravel when form is submitted
 			const collectCheckboxValues = () => {

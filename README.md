@@ -43,6 +43,11 @@ There are 5 roles (types of account) in Sangnila LMS:
 - Provided template excel import file, available for download
 - UI/UX improvements in cards display and navbars
 
+### v0.7.5-beta
+- Now attendances are made flexible
+- Some improvements in edit attendance
+- Now admin can see student list in each teacher's teacher courses
+
 ## Clone Project
 Clone the repository in any desired directory. Web resources such as images, videos, scripts, and styles are included in `public` folder. To generate the database system and fill it will sample data, run this command in the terminal:
 ```bash
