@@ -54,7 +54,10 @@
 			<!-- Select Students to Assign -->
 			<div class="flex items-center gap-3 mt-8">
 				<x-label :value="__('Pick students to assign or')" style="color: white;"></x-label>
-				<x-button class="bg-orange-500" id="checkall">Assign to all</x-button>
+				<div class="flex gap-3">
+					<x-button class="bg-orange-500" type="button" id="checkall">Assign to all</x-button>
+					<x-button class="bg-slate-600" type="button" id="undo" style="display: none;">Undo</x-button>
+				</div>
 			</div>
 
 			@error("checkbox_value")
@@ -82,60 +85,83 @@
 		</form>
 
 		<script>
-			$("#deadline_date").on({
-				"focus": function(){
-					this.showPicker();
-				},
-				"click": function(){
-					this.showPicker();
-				}
-			});
+			$(document).ready(() => {
+				let prevCheckBoxValues = [];
 
-			const collectCheckboxValues = () => {
-				const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-				const checkboxValues = [];
-				checkboxes.forEach((checkbox) => {
-					checkboxValues.push(checkbox.checked ? 'on' : 'off');
-				});
-				return checkboxValues;
-			}
-
-			// Example of using the function when submitting the form
-			const form = document.querySelector('#assignment_form');
-			form.addEventListener('submit', (event) => {
-				event.preventDefault(); // Prevent the form from submitting normally
-				const checkboxValues = collectCheckboxValues();
-
-				// Create a hidden input field in the form
-				const hiddenInput = document.createElement('input');
-				hiddenInput.type = 'hidden';
-				hiddenInput.name = 'checkbox_value[]'; // Make sure to use [] in the name to indicate an array
-				checkboxValues.forEach((value, index) => {
-					const inputValue = document.createElement('input');
-					inputValue.type = 'hidden';
-					inputValue.name = 'checkbox_value[]';
-					inputValue.value = value;
-					form.appendChild(inputValue);
-				});
-				// Now you can submit the form with the additional hidden input containing checkbox values
-				form.submit();
-			});
-
-			const checkAllBtn = document.querySelector("#checkall");
-			checkAllBtn.addEventListener("click", (e) => {
-				e.preventDefault();
-				const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-				const checkboxContainers = document.querySelectorAll(".checkbox-container");
-				let i = 0;
-				checkboxes.forEach((checkbox) => {
-					if(checkboxContainers[i].style.display != "none"){
-						checkbox.checked = true;
-					} else {
-						checkbox.checked = false;
+				$("#deadline_date").on({
+					"focus": function(){
+						this.showPicker();
+					},
+					"click": function(){
+						this.showPicker();
 					}
-					i++;
 				});
-			})
+
+				const collectCheckboxValues = () => {
+					const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+					const checkboxValues = [];
+					checkboxes.forEach((checkbox) => {
+						checkboxValues.push(checkbox.checked ? 'on' : 'off');
+					});
+					return checkboxValues;
+				}
+
+				// Example of using the function when submitting the form
+				const form = document.querySelector('#assignment_form');
+				form.addEventListener('submit', (event) => {
+					event.preventDefault(); // Prevent the form from submitting normally
+					const checkboxValues = collectCheckboxValues();
+
+					// Create a hidden input field in the form
+					const hiddenInput = document.createElement('input');
+					hiddenInput.type = 'hidden';
+					hiddenInput.name = 'checkbox_value[]'; // Make sure to use [] in the name to indicate an array
+					checkboxValues.forEach((value, index) => {
+						const inputValue = document.createElement('input');
+						inputValue.type = 'hidden';
+						inputValue.name = 'checkbox_value[]';
+						inputValue.value = value;
+						form.appendChild(inputValue);
+					});
+					// Now you can submit the form with the additional hidden input containing checkbox values
+					form.submit();
+				});
+
+				const checkAllBtn = document.querySelector("#checkall");
+				checkAllBtn.addEventListener("click", (e) => {
+					e.preventDefault();
+
+					prevCheckBoxValues = collectCheckboxValues();
+
+					const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+					const checkboxContainers = document.querySelectorAll(".checkbox-container");
+					let i = 0;
+					checkboxes.forEach((checkbox) => {
+						if(checkboxContainers[i].style.display != "none"){
+							checkbox.checked = true;
+						} else {
+							checkbox.checked = false;
+						}
+						i++;
+					});
+
+					$("#undo").show();
+				});
+
+				$("#undo").click(function(){
+					const checkboxes = $('input[type="checkbox"]');
+					checkboxes.each((i, checkbox) => {
+						if(prevCheckBoxValues[i] == "on"){
+							checkbox.checked = true;
+						} else {
+							checkbox.checked = false;
+						}
+						i++;
+					});
+
+					$(this).hide();
+				});
+			});
 		</script>
 	</x-section-container>
 @endsection

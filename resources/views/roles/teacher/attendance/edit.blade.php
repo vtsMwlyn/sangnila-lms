@@ -32,15 +32,6 @@
 					<x-label for="student_add">{{ __("Add Student to Attendance") }}</x-label>
 					<div class="flex items-center gap-3 mt-1">
 						<x-select class="w-full" id="student_add">
-							@foreach (App\Models\CourseStudent::where("course_id", $attendance->course->id)->where("teacher_id", Auth::user()->id)->get() as $cs)
-								@php
-									$atd = $attendanceData->where("user_id", $cs->student->id)->first();
-								@endphp
-
-								@if(!$atd)
-									<option value="{{ $cs->student }}">{{ $cs->student->full_name }}</option>
-								@endif
-							@endforeach
 						</x-select>
 						<x-button type="button" id="add_student" class="bg-orange-500">Add</x-button>
 					</div>
@@ -53,7 +44,6 @@
 					<tbody id="table-body">
 						@php
 							$exclude_from_dropdown = [];
-							$id_counter = 0;
 						@endphp
 						@foreach (App\Models\CourseStudent::where("course_id", $attendance->course_id)->where("teacher_id", Auth::user()->id)->get() as $course_student)
 							@php
@@ -62,16 +52,15 @@
 
 							@if($atd)
 								@php
-									$id_counter++;
 									array_push($exclude_from_dropdown, $course_student->student->id);
 								@endphp
 
 								<tr class="table-row" style="@if($atd->attendance_detail == "Account disabled") display: none; @endif background: rgba(256, 256, 256, 0.4);">
 									<td class="p-5 grow rounded-l-xl">
 										<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
-											<input type="checkbox" id="checkbox{{ $id_counter }}"
+											<input type="checkbox" id="checkbox{{ $course_student->student->id }}"
 											class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @elseif($atd->is_attend == 1) checked @endif @if($atd->attendance_detail == "Account disabled") disabled @endif>
-											<label for="checkbox{{ $id_counter }}">{{ $course_student->student->full_name }}</label>
+											<label for="checkbox{{ $course_student->student->id }}">{{ $course_student->student->full_name }}</label>
 											<input type="hidden" name="students[]" value="{{ $course_student->student->id }}">
 										</div>
 										<div class="flex w-full gap-2 mt-2 material_progress_detail">
@@ -165,7 +154,18 @@
 
 				const itemListModifiedEvent = new Event("item_list_modified");
 				$(document).on("item_list_modified", () => {
+					refreshAddStudent();
+					reapplyEventListeners();
+				});
+
+				// Initialization
+				applyHideAndUnhideProgress();
+				applyRemoveRowButton();
+				refreshAddStudent();
+
+				function refreshAddStudent(){
 					$("#student_add").html("");
+					console.log(`To exclude length: ${exclude_dropdown.length}, all students count: ${allStudents.length}`);
 					if(exclude_dropdown.length < allStudents.length){
 						for(let std of allStudents){
 							if(!exclude_dropdown.includes(std.id)){
@@ -176,7 +176,9 @@
 					else {
 						$("#student_add").append($("<option>").attr({"value": ""}).text("No more students can be added"));
 					}
+				}
 
+				function reapplyEventListeners(){
 					// Remove event listeners
 					const allCheckBoxes = $('input[type="checkbox"]');
 					allCheckBoxes.off("change", evlisToggleProgress);
@@ -187,11 +189,7 @@
 					// Reapply event listeners
 					applyHideAndUnhideProgress();
 					applyRemoveRowButton();
-				});
-
-				// Initialing event listeners
-				applyHideAndUnhideProgress();
-				applyRemoveRowButton();
+				}
 
 				// Mechanism to hide and unhide selects for material progress detail depending if the student name checkbox is checked or not
 				function toggleProgress(element) {
@@ -257,11 +255,9 @@
 					const checkNameContainer = $("<div>").addClass("flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl");
 					const progressContainer = $("<div>").addClass("flex w-full gap-2 mt-2 material_progress_detail");
 
-					const rowCount = $("input[type='checkbox']").length;
-					console.log(`There are currently ${rowCount} rows of student list`);
 					const studentToAdd = JSON.parse($("#student_add").val());
-					const newCheckBox = $("<input>").attr({"type": "checkbox", "id": `checkbox${rowCount + 1}`}).addClass("mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300");
-					const newLabelCheckBox = $("<label>").attr({"for": `checkbox${rowCount + 1}`}).text(studentToAdd.full_name);
+					const newCheckBox = $("<input>").attr({"type": "checkbox", "id": `checkbox${studentToAdd.id}`}).addClass("mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300");
+					const newLabelCheckBox = $("<label>").attr({"for": `checkbox${studentToAdd.id}`}).text(studentToAdd.full_name);
 					const newHiddenInput = $("<input>").attr({"type": "hidden", "name": "students[]", "value": studentToAdd.id});
 					checkNameContainer.append(newCheckBox).append(newLabelCheckBox).append(newHiddenInput);
 

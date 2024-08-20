@@ -123,6 +123,12 @@ class AttendanceController extends Controller {
 
 		$attendance->update(["attendance_date" => $request["attendance_date"]]);
 
+		foreach($existingAttendanceData as $existingAtd){
+			if(!in_array($existingAtd->student->id, $request->students)){
+				StudentAttendance::where("user_id", $existingAtd->student->id)->where("attendance_id", $attendance->id)->delete();
+			}
+		}
+
 		foreach($request->students as $i => $student_id){
 			$cs = CourseStudent::where("student_id", $student_id)->where("course_id", $attendance->course->id)->where("teacher_id", Auth::user()->id)->first();
 
@@ -187,21 +193,33 @@ class AttendanceController extends Controller {
 	// ===== ADMIN ===== //
 	// Showing attendance data of a student in all enrolled course
 	public function admin_show($student_id, $course_id){
-		$attendances = StudentAttendance::where("user_id", $student_id)->whereNot("attendance_detail", "Account disabled")->get();
-		$course = Course::where("id", $course_id)->first();
-		$student = User::where("id", $student_id)->first();
+		// Eager load the 'attendance' relationship and order by 'attendance_date'
+		$attendances = StudentAttendance::where("user_id", $student_id)
+			->whereNot("attendance_detail", "Account disabled")
+			->with(['attendance' => function($query) {
+				$query->orderBy('attendance_date', 'asc'); // or 'desc' for descending order
+			}])
+			->get();
 
-		$student_attendances = [];
-		foreach($attendances as $atd){
-			if($atd->attendance->course_id == $course->id){
-				array_push($student_attendances, $atd);
-			}
-		}
+		$course = Course::findOrFail($course_id);
+		$student = User::findOrFail($student_id);
 
+		// Filter the attendances by the related course_id
+		$student_attendances = $attendances->filter(function ($atd) use ($course) {
+			return $atd->attendance->course_id == $course->id;
+		});
+
+		// Sort the filtered attendances by 'attendance_date'
+		$student_attendances = $student_attendances->sortBy(function ($atd) {
+			return $atd->attendance->attendance_date;
+		});
+
+		// Render the view with the sorted attendances
 		return view("roles.admin.student.atd-details", [
 			"attendances" => $student_attendances,
 			"course" => $course,
 			"student" => $student
 		]);
+
 	}
 }
