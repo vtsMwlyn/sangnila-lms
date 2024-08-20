@@ -1,4 +1,4 @@
-<div class="text-white w-full lg:w-4/5 p-5 text-lg">
+<div class="text-white grow py-5 text-lg">
 	@php $link = ""; @endphp
 
 	<a href="{{ route('home') }}" class="font-bold text-yellow-500">Home</a>

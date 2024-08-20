@@ -49,7 +49,7 @@
 						href="{{ $asg->link }}">
 						Download
 					</x-anchor-button>
-					@if($asg->submissions->count())
+					@if($asg->submissions && $asg->submissions->where("student_id", Auth::user()->id)->count())
 						<x-anchor-button class="bg-orange-500"
 							href="{{ route('student.assignment.submit', [$course->id, $asg->id]) }}">
 							New submission

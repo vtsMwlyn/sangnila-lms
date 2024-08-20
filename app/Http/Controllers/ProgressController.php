@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Topic;
 use App\Models\Course;
+use App\Models\Notification;
 use App\Models\Progress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -52,8 +53,21 @@ class ProgressController extends Controller {
 		$student_progress = Progress::where("course_id", $course_id)->where("student_id", $student_id)->get();
 
 		foreach($student_progress as $index => $progress){
-			$newStatus = ($request->checkbox_value[$index] == 'on')? "unlocked" : "locked";
-			Progress::where("id", $progress->id)->update(["status" => $newStatus]);
+			$newStatus = ($request->checkbox_value[$index] == 'on') ? "unlocked" : "locked";
+
+			if ($progress->status == "locked" && $newStatus == "unlocked") {
+				$updateStatus = Progress::where("id", $progress->id)->update(["status" => $newStatus]);
+
+				if ($updateStatus > 0) {
+					Notification::create([
+						"user_id" => $student_id,
+						"status" => "unread",
+						"message" => "New material \"" . $progress->material->title . "\" in course " . $progress->course->course_name . " is now accessible!"
+					]);
+				}
+			} else {
+				Progress::where("id", $progress->id)->update(["status" => $newStatus]);
+			}
 		}
 
 		return redirect(route('teacher.student.show.progress', [

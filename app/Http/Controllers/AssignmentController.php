@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\CourseStudent;
 use Illuminate\Support\Carbon;
 use App\Models\Assignment;
+use App\Models\Notification;
 use App\Rules\MinimumOneCheckbox;
 use App\Models\Submission;
 use App\Models\Role;
@@ -78,6 +79,12 @@ class AssignmentController extends Controller
 				StudentAssignment::create([
 					"student_id" => $cs->student->id,
 					"assignment_id" => $newAsg->id
+				]);
+
+				Notification::create([
+					"user_id" => $cs->student->id,
+					"status" => "unread",
+					"message" => ((Auth::user()->details->gender == 1)? "Mr. " : "Ms. ") . Auth::user()->full_name . " has uploaded a new assignment \"" . $newAsg->title . "\" in course " . $course->course_name . ". Please do the assignment and submit before " . $newAsg->deadline_date . " at " . $newAsg->deadline_time . "."
 				]);
 			}
 
@@ -258,6 +265,12 @@ class AssignmentController extends Controller
 
 		Submission::where("id", $submission_id)->update(["feedback" => $request->feedback]);
 
+		Notification::create([
+			"user_id" => $asgsmt->student->id,
+			"status" => "unread",
+			"message" => ((Auth::user()->details->gender == 1)? "Mr. " : "Ms. ") . Auth::user()->full_name . " has commented on your submission \"" . $asgsmt->title . "\" in assignment \"" . $asgsmt->assignment->title . "\" in course " . $asgsmt->assignment->course->course_name . "."
+		]);
+
 		return redirect(route("teacher.assignment.submission-history", [$asgsmt->assignment->id, $student_id]))->with("successModifFeedback", $msg);
 	}
 
@@ -345,6 +358,12 @@ class AssignmentController extends Controller
 			"student_id" => Auth::user()->id,
 			"assignment_id" => $assignment->id,
 			"status" => $status,
+		]);
+
+		Notification::create([
+			"user_id" => $assignment->teacher_id,
+			"status" => "unread",
+			"message" => Auth::user()->full_name . " has made new submission on assignment \"" . $assignment->title . "\" in course " . $assignment->course->course_name
 		]);
 
 		return redirect(route("student.assignment.show", $course_id))->with("successSubmitAssignment", "Assignment submitted successfully!");

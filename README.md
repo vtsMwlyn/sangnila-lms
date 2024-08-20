@@ -48,6 +48,12 @@ There are 5 roles (types of account) in Sangnila LMS:
 - Some improvements in edit attendance
 - Now admin can see student list in each teacher's teacher courses
 
+### v0.7.6-beta
+- Added notification inboxes for teachers after students submit their assignment
+- Added notification inboxes for students after the teacher posted assignments, unlocked materials, and commented on submissions
+- Added undo button for undo check all students when teachers uploading new assignments
+- Bug fixes in edit attendance page
+
 ## Clone Project
 Clone the repository in any desired directory. Web resources such as images, videos, scripts, and styles are included in `public` folder. To generate the database system and fill it will sample data, run this command in the terminal:
 ```bash

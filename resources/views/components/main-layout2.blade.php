@@ -81,13 +81,15 @@
 			<!-- Content Section -->
 			<div class="px-10 @auth pb-10 @else py-10 @endauth grow">
 				<div class="flex flex-col items-center w-full">
-					<!-- Breadcrumbs -->
-					@auth
-						<x-breadcrumbs>
-							@yield("breadcrumbs-extension")
-						</x-breadcrumbs>
-					@endauth
-
+					<div class="w-full lg:w-5/6 flex justify-between items-center">
+						<!-- Breadcrumbs -->
+						@auth
+							<x-breadcrumbs>
+								@yield("breadcrumbs-extension")
+							</x-breadcrumbs>
+						@endauth
+						<x-inbox></x-inbox>
+					</div>
 
 					@yield("content")
 				</div>

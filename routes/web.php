@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAccountController;
@@ -58,6 +59,12 @@ Route::prefix("/profile")->name("profile.")->middleware(["auth", "verified"])->g
 	Route::get("/", [UserAccountController::class, "show"])->name("show");
 	Route::post("/", [UserAccountController::class, "update"])->name("update");
 });
+
+Route::prefix("/notification")->name("notification.")->middleware(["auth", "verified"])->group(function(){
+	Route::post("/{notification_id}", [NotificationController::class, "mark_as_read"])->name("mark-read")->whereNumber("notification_id");
+	Route::post("/mark-read-all", [NotificationController::class, "mark_all_as_read"])->name("mark-all-read");
+});
+
 
 require __DIR__ . '/auth.php'; // to be deleted
 
