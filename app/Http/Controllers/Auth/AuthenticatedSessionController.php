@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use App\Providers\RouteServiceProvider;
+use App\Http\Requests\Auth\LoginRequest;
 
 class AuthenticatedSessionController extends Controller {
 	/**
@@ -28,6 +29,21 @@ class AuthenticatedSessionController extends Controller {
 		$request->authenticate();
 
 		$request->session()->regenerate();
+
+		// To make announcement re-appear after 1 hours since last opened
+		$announcementKey = 'announcement_displayed_at';
+		$redisplayInterval = now()->subHours(1); // 1 hours ago
+
+		// Check if the announcement should be redisplayed
+		if (!Cache::has($announcementKey) || Cache::get($announcementKey) < $redisplayInterval) {
+			// Set the cache timestamp to now
+			Cache::put($announcementKey, now());
+
+			// Set session flag to show the announcement
+			session(['show_announcement' => true]);
+		} else {
+			session(['show_announcement' => false]);
+		}
 
 		return redirect()->intended(route('dashboard'));
 	}

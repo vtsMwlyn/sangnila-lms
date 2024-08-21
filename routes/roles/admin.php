@@ -7,14 +7,15 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\ExcelImportController;
 use App\Http\Controllers\AdminAccountController;
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\CourseStudentController;
 use App\Http\Controllers\CourseTeacherController;
 use App\Http\Controllers\TeacherAccountController;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\DownloadResourceController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 Route::prefix('/admin')
 	->name('admin.')
@@ -197,5 +198,19 @@ Route::prefix('/admin')
 				Route::post("/{user_id}/reset-password", [AdminAccountController::class, "reset_password_proceed"])->name("reset-password.proceed")->whereNumber('user_id');
 			}
 		);
+
+		// Manage announcement
+		Route::prefix("/announcement")->name("announcement.")->group(function(){
+			Route::get("/", [AnnouncementController::class, "index"])->name("index");
+
+			Route::get("/create", [AnnouncementController::class, "create"])->name("create");
+			Route::post("/create", [AnnouncementController::class, "store"])->name("store");
+
+			Route::get("/{announcement_id}/edit", [AnnouncementController::class, "edit"])->name("edit");
+			Route::post("/{announcement_id}/edit", [AnnouncementController::class, "update"])->name("update");
+
+			Route::get("/{announcement_id}/delete", [AnnouncementController::class, "delete"])->name("delete");
+			Route::post("/{announcement_id}/destroy", [AnnouncementController::class, "destroy"])->name("destroy");
+		});
 	}
 );

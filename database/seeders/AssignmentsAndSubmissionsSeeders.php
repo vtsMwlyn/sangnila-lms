@@ -16,12 +16,12 @@ class AssignmentsAndSubmissionsSeeders extends Seeder
      */
     public function run()
     {
-        /* For Iswan Sudaryo (Teacher)'s Students */
-		newAssignment("3D Modelling", "Iswan Sudaryo (Teacher)", ["Louisha Annabelle", "Gayle Farrel Patria", "Angela Nathania", "Balya Malkan Mahyuzar", "Alvin Edward"], "Assignment 1 3D Modelling", "2024-06-20");
-		newAssignment("3D Modelling", "Iswan Sudaryo (Teacher)", ["Louisha Annabelle", "Gayle Farrel Patria", "Angela Nathania", "Balya Malkan Mahyuzar", "Alvin Edward"], "Assignment 2 3D Modelling", "2025-06-27");
+        /* For Iswan Sudaryo's Students */
+		newAssignment("3D Modelling", "Iswan Sudaryo", ["Louisha Annabelle", "Gayle Farrel Patria", "Angela Nathania", "Balya Malkan Mahyuzar", "Alvin Edward"], "Assignment 1 3D Modelling", "2024-06-20");
+		newAssignment("3D Modelling", "Iswan Sudaryo", ["Louisha Annabelle", "Gayle Farrel Patria", "Angela Nathania", "Balya Malkan Mahyuzar", "Alvin Edward"], "Assignment 2 3D Modelling", "2025-06-27");
 
-		newAssignment("Concept Art", "Iswan Sudaryo (Teacher)", ["Ethan Alexander Irawan", "Jezriel Connery", "Martha Theresia Ramlie", "Janicelyn Daviena Godarma", "Grace Devana Kusnandar"], "Assignment 1 Concept Art", "2024-06-21");
-		newAssignment("Concept Art", "Iswan Sudaryo (Teacher)", ["Ethan Alexander Irawan", "Jezriel Connery", "Martha Theresia Ramlie", "Janicelyn Daviena Godarma", "Grace Devana Kusnandar"], "Assignment 2 Concept Art", "2025-06-28");
+		newAssignment("Concept Art", "Iswan Sudaryo", ["Ethan Alexander Irawan", "Jezriel Connery", "Martha Theresia Ramlie", "Janicelyn Daviena Godarma", "Grace Devana Kusnandar"], "Assignment 1 Concept Art", "2024-06-21");
+		newAssignment("Concept Art", "Iswan Sudaryo", ["Ethan Alexander Irawan", "Jezriel Connery", "Martha Theresia Ramlie", "Janicelyn Daviena Godarma", "Grace Devana Kusnandar"], "Assignment 2 Concept Art", "2025-06-28");
 
 		/* For Vincent's Students */
 		newAssignment("3D Modelling", "Vincent", ["Philia Valeraine Alverna", "Kensi Sinclair", "Giselle Saputra"], "Assignment 1 3D Modelling", "2024-06-18");
@@ -43,11 +43,11 @@ class AssignmentsAndSubmissionsSeeders extends Seeder
 		newAssignment("Digital Drawing", "Gaby", ["Melly Tanto", "Zhafira Jasmine", "Vanya Farelia", "Freya Pramudia", "Kenzie Gautama Dirgantara"], "Assignment 2 Digital Drawing", "2025-06-08");
 		newAssignment("Digital Drawing", "Gaby", ["Melly Tanto", "Zhafira Jasmine", "Vanya Farelia", "Freya Pramudia", "Kenzie Gautama Dirgantara"], "Assignment 3 Digital Drawing", "2026-06-15");
 
-		/* For Immanuel Giovano (Teacher)'s Students */
-		newAssignment("Web Development", "Immanuel Giovano (Teacher)", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "Assignment 1 Web Development", "2024-06-09");
-		newAssignment("Web Development", "Immanuel Giovano (Teacher)", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "Assignment 2 Web Development", "2025-06-16");
-		newAssignment("Web Development", "Immanuel Giovano (Teacher)", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "Assignment 3 Web Development", "2026-06-23");
-		newAssignment("Web Development", "Immanuel Giovano (Teacher)", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "Assignment 4 Web Development", "2027-06-30");
+		/* For Immanuel Giovano's Students */
+		newAssignment("Web Development", "Immanuel Giovano", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "Assignment 1 Web Development", "2024-06-09");
+		newAssignment("Web Development", "Immanuel Giovano", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "Assignment 2 Web Development", "2025-06-16");
+		newAssignment("Web Development", "Immanuel Giovano", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "Assignment 3 Web Development", "2026-06-23");
+		newAssignment("Web Development", "Immanuel Giovano", ["Jack", "Jillian P. Tanuwijaya", "Jocheli Kensi Budianti"], "Assignment 4 Web Development", "2027-06-30");
 
 
 		/* Submissions for assignments in Hari's courses */
@@ -58,16 +58,16 @@ class AssignmentsAndSubmissionsSeeders extends Seeder
 		newSubmissions("Digital Drawing", "Hari", "Jack", "Assignment 2 Digital Drawing", ["Submission Assignment 2 Digital Drawing - Jack"]);
 		newSubmissions("Digital Drawing", "Hari", "Jillian P. Tanuwijaya", "Assignment 2 Digital Drawing", ["Submission Assignment 2 Digital Drawing - Jillian P. Tanuwijaya", "Revision Assignment 2 Digital Drawing - Jillian P. Tanuwijaya"]);
 
-		/* Submissions for assignments in Iswan Sudaryo (Teacher)'s courses */
-		newSubmissions("Concept Art", "Iswan Sudaryo (Teacher)", "Ethan Alexander Irawan", "Assignment 1 Concept Art", ["Submission Assignment 1 Concept Art - Ethan Alexander Irawan", "Revision Assignment 1 Concept Art - Ethan Alexander Irawan"]);
-		newSubmissions("Concept Art", "Iswan Sudaryo (Teacher)", "Jezriel Connery", "Assignment 1 Concept Art", ["Submission Assignment 1 Concept Art - Jezriel Connery", "Revision Assignment 1 Concept Art - Jezriel Connery"]);
-		newSubmissions("Concept Art", "Iswan Sudaryo (Teacher)", "Martha Theresia Ramlie", "Assignment 1 Concept Art", ["Submission Assignment 1 Concept Art - Martha Theresia Ramlie"]);
-		newSubmissions("Concept Art", "Iswan Sudaryo (Teacher)", "Janicelyn Daviena Godarma", "Assignment 1 Concept Art", ["Submission Assignment 1 Concept Art - Janicelyn Daviena Godarma", "Revision Assignment 1 Concept Art - Janicelyn Daviena Godarma"]);
-		newSubmissions("Concept Art", "Iswan Sudaryo (Teacher)", "Grace Devana Kusnandar", "Assignment 1 Concept Art", ["Submission Assignment 1 Concept Art - Grace Devana Kusnandar"]);
+		/* Submissions for assignments in Iswan Sudaryo's courses */
+		newSubmissions("Concept Art", "Iswan Sudaryo", "Ethan Alexander Irawan", "Assignment 1 Concept Art", ["Submission Assignment 1 Concept Art - Ethan Alexander Irawan", "Revision Assignment 1 Concept Art - Ethan Alexander Irawan"]);
+		newSubmissions("Concept Art", "Iswan Sudaryo", "Jezriel Connery", "Assignment 1 Concept Art", ["Submission Assignment 1 Concept Art - Jezriel Connery", "Revision Assignment 1 Concept Art - Jezriel Connery"]);
+		newSubmissions("Concept Art", "Iswan Sudaryo", "Martha Theresia Ramlie", "Assignment 1 Concept Art", ["Submission Assignment 1 Concept Art - Martha Theresia Ramlie"]);
+		newSubmissions("Concept Art", "Iswan Sudaryo", "Janicelyn Daviena Godarma", "Assignment 1 Concept Art", ["Submission Assignment 1 Concept Art - Janicelyn Daviena Godarma", "Revision Assignment 1 Concept Art - Janicelyn Daviena Godarma"]);
+		newSubmissions("Concept Art", "Iswan Sudaryo", "Grace Devana Kusnandar", "Assignment 1 Concept Art", ["Submission Assignment 1 Concept Art - Grace Devana Kusnandar"]);
 
-		newSubmissions("Concept Art", "Iswan Sudaryo (Teacher)", "Jezriel Connery", "Assignment 2 Concept Art", ["Submission Assignment 2 Concept Art - Jezriel Connery"]);
-		newSubmissions("Concept Art", "Iswan Sudaryo (Teacher)", "Janicelyn Daviena Godarma", "Assignment 2 Concept Art", ["Submission Assignment 2 Concept Art - Janicelyn Daviena Godarma", "Revision Assignment 2 Concept Art - Janicelyn Daviena Godarma"]);
-		newSubmissions("Concept Art", "Iswan Sudaryo (Teacher)", "Grace Devana Kusnandar", "Assignment 2 Concept Art", ["Submission Assignment 2 Concept Art - Grace Devana Kusnandar", "Revision Assignment 2 Concept Art - Grace Devana Kusnandar"]);
+		newSubmissions("Concept Art", "Iswan Sudaryo", "Jezriel Connery", "Assignment 2 Concept Art", ["Submission Assignment 2 Concept Art - Jezriel Connery"]);
+		newSubmissions("Concept Art", "Iswan Sudaryo", "Janicelyn Daviena Godarma", "Assignment 2 Concept Art", ["Submission Assignment 2 Concept Art - Janicelyn Daviena Godarma", "Revision Assignment 2 Concept Art - Janicelyn Daviena Godarma"]);
+		newSubmissions("Concept Art", "Iswan Sudaryo", "Grace Devana Kusnandar", "Assignment 2 Concept Art", ["Submission Assignment 2 Concept Art - Grace Devana Kusnandar", "Revision Assignment 2 Concept Art - Grace Devana Kusnandar"]);
 
 		/* Submissions for assignments in Vincent's courses */
 		newSubmissions("3D Modelling", "Vincent", "Philia Valeraine Alverna", "Assignment 1 3D Modelling", ["Submission Assignment 1 3D Modelling - Philia Valeraine Alverna", "Revision Assignment 1 3D Modelling - Philia Valeraine Alverna"]);

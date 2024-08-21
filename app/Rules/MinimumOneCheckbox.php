@@ -35,6 +35,6 @@ class MinimumOneCheckbox implements Rule
      */
     public function message()
     {
-        return 'Please select at least one student to assign.';
+        return 'Please select at least one of these items.';
     }
 }

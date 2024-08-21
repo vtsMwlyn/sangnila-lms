@@ -21,9 +21,9 @@ class CourseAssignmentsSeeder extends Seeder
 		assignStudent("Jillian P. Tanuwijaya", "Hari", "Digital Drawing", 8);
 		assignStudent("Jocheli Kensi Budianti", "Hari", "Digital Drawing", 8);
 
-		assignStudent("Jack", "Immanuel Giovano (Teacher)", "Web Development", 16);
-		assignStudent("Jillian P. Tanuwijaya", "Immanuel Giovano (Teacher)", "Web Development", 16);
-		assignStudent("Jocheli Kensi Budianti", "Immanuel Giovano (Teacher)", "Web Development", 16);
+		assignStudent("Jack", "Immanuel Giovano", "Web Development", 16);
+		assignStudent("Jillian P. Tanuwijaya", "Immanuel Giovano", "Web Development", 16);
+		assignStudent("Jocheli Kensi Budianti", "Immanuel Giovano", "Web Development", 16);
 
 		assignStudent("Batara Feodore Setiawan","Hari", "Roblox", 8);
 		assignStudent("Bellrich Kevin Tjahyadi","Hari", "Roblox", 8);
@@ -37,17 +37,17 @@ class CourseAssignmentsSeeder extends Seeder
 		assignStudent("Kenzie Gautama Dirgantara", "Gaby", "Digital Drawing", 16);
 
 		/*Iswan's students*/
-		assignStudent("Louisha Annabelle", "Iswan Sudaryo (Teacher)", "3D Modelling", 8);
-		assignStudent("Gayle Farrel Patria", "Iswan Sudaryo (Teacher)", "3D Modelling", 8);
-		assignStudent("Angela Nathania", "Iswan Sudaryo (Teacher)", "3D Modelling", 8);
-		assignStudent("Balya Malkan Mahyuzar", "Iswan Sudaryo (Teacher)", "3D Modelling", 8);
-		assignStudent("Alvin Edward", "Iswan Sudaryo (Teacher)", "3D Modelling", 8);
+		assignStudent("Louisha Annabelle", "Iswan Sudaryo", "3D Modelling", 8);
+		assignStudent("Gayle Farrel Patria", "Iswan Sudaryo", "3D Modelling", 8);
+		assignStudent("Angela Nathania", "Iswan Sudaryo", "3D Modelling", 8);
+		assignStudent("Balya Malkan Mahyuzar", "Iswan Sudaryo", "3D Modelling", 8);
+		assignStudent("Alvin Edward", "Iswan Sudaryo", "3D Modelling", 8);
 
-		assignStudent("Ethan Alexander Irawan", "Iswan Sudaryo (Teacher)", "Concept Art", 8);
-		assignStudent("Jezriel Connery", "Iswan Sudaryo (Teacher)", "Concept Art", 8);
-		assignStudent("Martha Theresia Ramlie", "Iswan Sudaryo (Teacher)", "Concept Art", 8);
-		assignStudent("Janicelyn Daviena Godarma", "Iswan Sudaryo (Teacher)", "Concept Art", 8);
-		assignStudent("Grace Devana Kusnandar", "Iswan Sudaryo (Teacher)", "Concept Art", 8);
+		assignStudent("Ethan Alexander Irawan", "Iswan Sudaryo", "Concept Art", 8);
+		assignStudent("Jezriel Connery", "Iswan Sudaryo", "Concept Art", 8);
+		assignStudent("Martha Theresia Ramlie", "Iswan Sudaryo", "Concept Art", 8);
+		assignStudent("Janicelyn Daviena Godarma", "Iswan Sudaryo", "Concept Art", 8);
+		assignStudent("Grace Devana Kusnandar", "Iswan Sudaryo", "Concept Art", 8);
 
 		/*Vincent's students*/
 		assignStudent("Philia Valeraine Alverna", "Vincent", "3D Modelling", 24);
@@ -60,8 +60,8 @@ class CourseAssignmentsSeeder extends Seeder
 		// Assign teachers to courses
 		assignTeacher("Hari", ["Digital Drawing", "Roblox"]);
 		assignTeacher("Gaby", ["Digital Drawing"]);
-		assignTeacher("Iswan Sudaryo (Teacher)", ["3D Modelling", "Concept Art"]);
+		assignTeacher("Iswan Sudaryo", ["3D Modelling", "Concept Art"]);
 		assignTeacher("Vincent", ["3D Modelling", "2D Animation"]);
-		assignTeacher("Immanuel Giovano (Teacher)", ["Web Development"]);
+		assignTeacher("Immanuel Giovano", ["Web Development"]);
     }
 }

@@ -25,18 +25,16 @@ class RolesAndUsersSeeder extends Seeder
 
         /* Admin and Teachers */
 		newUser("vannestheo.sangnila@gmail.com", "Vannes Theo Sudarsono", 1, 1);
-		newUser("immanuelgiovano.sangnila@gmail.com", "Immanuel Giovano", 1, 1);
 		newUser("victor.sangnila@gmail.com", "Victor", 1, 1);
 		newUser("feby.sangnila@gmail.com", "Feby", 1, 2);
 		newUser("tiwi.sangnila@gmail.com", "Pratiwi", 1, 2);
-		newUser("iswansudaryo.sangnila@gmail.com", "Iswan Sudaryo", 1, 1);
 		newUser("jovia.sangnila@gmail.com", "Jovia", 1, 2);
 
 		newUser("hari.sangnila@gmail.com", "Hari", 2, 1);
 		newUser("lgaby.sangnila@gmail.com", "Gaby", 2, 2);
-		newUser("iswansudaryo02.sangnila@gmail.com", "Iswan Sudaryo (Teacher)", 2, 1);
+		newUser("iswansudaryo.sangnila@gmail.com", "Iswan Sudaryo", 2, 1);
 		newUser("vincent.sangnila@gmail.com", "Vincent", 2, 1);
-		newUser("immanuelgiovano02.sangnila@gmail.com", "Immanuel Giovano (Teacher)", 2, 1);
+		newUser("immanuelgiovano.sangnila@gmail.com", "Immanuel Giovano", 2, 1);
 
 		/* Hari's students: Digital Drawing, Roblox */
 		newUser("jack.sangnila@gmail.com", "Jack", 3, 1);

@@ -16,11 +16,11 @@ class AttendancesSeeder extends Seeder
      */
     public function run()
     {
-        /* For Iswan Sudaryo (Teacher)'s Students */
-		newAttendance("3D Modelling", "Iswan Sudaryo (Teacher)", ["Louisha Annabelle", "Gayle Farrel Patria", "Angela Nathania", "Balya Malkan Mahyuzar", "Alvin Edward"], "2024-06-20");
-		newAttendance("3D Modelling", "Iswan Sudaryo (Teacher)", ["Gayle Farrel Patria", "Angela Nathania", "Balya Malkan Mahyuzar", "Alvin Edward"], "2024-06-27");
+        /* For Iswan Sudaryo's Students */
+		newAttendance("3D Modelling", "Iswan Sudaryo", ["Louisha Annabelle", "Gayle Farrel Patria", "Angela Nathania", "Balya Malkan Mahyuzar", "Alvin Edward"], "2024-06-20");
+		newAttendance("3D Modelling", "Iswan Sudaryo", ["Gayle Farrel Patria", "Angela Nathania", "Balya Malkan Mahyuzar", "Alvin Edward"], "2024-06-27");
 
-		newAttendance("Concept Art", "Iswan Sudaryo (Teacher)", ["Martha Theresia Ramlie", "Janicelyn Daviena Godarma", "Grace Devana Kusnandar"], "2024-06-21");
+		newAttendance("Concept Art", "Iswan Sudaryo", ["Martha Theresia Ramlie", "Janicelyn Daviena Godarma", "Grace Devana Kusnandar"], "2024-06-21");
 
 		/* For Vincent's Students */
 		newAttendance("3D Modelling", "Vincent", ["Philia Valeraine Alverna", "Kensi Sinclair", "Giselle Saputra"], "2024-06-18");
@@ -48,8 +48,8 @@ class AttendancesSeeder extends Seeder
 		/* For Gaby's Students */
 		newAttendance("Digital Drawing", "Gaby", ["Melly Tanto", "Zhafira Jasmine", "Vanya Farelia", "Freya Pramudia", "Kenzie Gautama Dirgantara"], "2024-06-01");
 
-		/* For Immanuel Giovano (Teacher)'s Students */
-		newAttendance("Web Development", "Immanuel Giovano (Teacher)", ["Jack", "Jillian P. Tanuwijaya"], "2024-06-09");
-		newAttendance("Web Development", "Immanuel Giovano (Teacher)", ["Jack", "Jocheli Kensi Budianti"], "2025-06-16");
+		/* For Immanuel Giovano's Students */
+		newAttendance("Web Development", "Immanuel Giovano", ["Jack", "Jillian P. Tanuwijaya"], "2024-06-09");
+		newAttendance("Web Development", "Immanuel Giovano", ["Jack", "Jocheli Kensi Budianti"], "2025-06-16");
     }
 }

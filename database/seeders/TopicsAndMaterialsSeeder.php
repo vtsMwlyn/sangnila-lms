@@ -27,7 +27,7 @@ class TopicsAndMaterialsSeeder extends Seeder
 			"Orthographic View / Turn Table",
 			"Blow Up and Detailing",
 			"Submission: Prop Design Portfolio"
-		], "Iswan Sudaryo (Teacher)");
+		], "Iswan Sudaryo");
 		addTopicAndMaterial("Concept Art", "Interior Environment", [
 			"Isometric Perspective: Simple Objects in 3D Space",
 			"Isometric Perspective: Complex Objects in 3D Space",
@@ -38,7 +38,7 @@ class TopicsAndMaterialsSeeder extends Seeder
 			"Rendering",
 			"Consultation",
 			"Submission: Interior Environment Portfolio"
-		], "Iswan Sudaryo (Teacher)");
+		], "Iswan Sudaryo");
 
 		/*Topics for 3D Modelling*/
 		addTopicAndMaterial("3D Modelling", "Intermediate Modelling", [
@@ -53,13 +53,13 @@ class TopicsAndMaterialsSeeder extends Seeder
 
 		addTopicAndMaterial("3D Modelling", "Intermediate Modelling", [
 			"Expand your 3D Modelling by Using Different Tools and Edits"
-		], "Iswan Sudaryo (Teacher)");
+		], "Iswan Sudaryo");
 		addTopicAndMaterial("3D Modelling", "Product Design Modelling", [
 			"Design a Simple Product for Advertising by Using Image Texturing"
-		], "Iswan Sudaryo (Teacher)");
+		], "Iswan Sudaryo");
 		addTopicAndMaterial("3D Modelling", "Interior Visualization", [
 			"Exercise Modelling an Interior Room with Different Types of Objects"
-		], "Iswan Sudaryo (Teacher)");
+		], "Iswan Sudaryo");
 
 		/*Topics for 2D Animation*/
 		addTopicAndMaterial("2D Animation", "Introduction + Software Practice #1", [
@@ -138,19 +138,19 @@ class TopicsAndMaterialsSeeder extends Seeder
 			"Introduction to HTML",
 			"Making simple article web page",
 			"Insert media to web page"
-		], "Immanuel Giovano (Teacher)");
+		], "Immanuel Giovano");
 		addTopicAndMaterial("Web Development", "Styling a web page using CSS", [
 			"Introduction to CSS",
 			"Decorating web page using CSS",
 			"Positioning elements using CSS"
-		], "Immanuel Giovano (Teacher)");
+		], "Immanuel Giovano");
 		addTopicAndMaterial("Web Development", "Using JavaScript to control the behavior and events in a web page", [
 			"Introduction to JS",
 			"Basics of JS",
 			"Manipulating HTML content and style",
 			"Handling events in a web page",
 			"Form validation using JS"
-		], "Immanuel Giovano (Teacher)");
+		], "Immanuel Giovano");
 		addTopicAndMaterial("Web Development", "Using PHP and MySQL to control and handle data from back end side", [
 			"Introduction to PHP",
 			"Basics of PHP",
@@ -158,7 +158,7 @@ class TopicsAndMaterialsSeeder extends Seeder
 			"Introduction to MySQL",
 			"Insert and show data from tables",
 			"Update and delete data from tables"
-		], "Immanuel Giovano (Teacher)");
+		], "Immanuel Giovano");
 
 		// Some example material links
 		changeMaterialLink("Digital Drawing", "Character Design", "Head Construction", "https://stanprokopenko.com/2012/08/video-draw-head-angle-1/");
