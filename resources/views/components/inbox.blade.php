@@ -3,6 +3,15 @@
 	foreach(Auth::user()->inboxes as $inbox){
 		if($inbox->status == "unread"){
 			$n++;
+		} else {
+			$current_time = Carbon\Carbon::now();
+			$inbox_age = Carbon\Carbon::parse($inbox->updated_at);
+
+			$time_diff = $inbox_age->diffInDays($current_time);
+
+			if($time_diff >= 30){
+				App\Models\Notification::destroy($inbox->id);
+			}
 		}
 	}
 
@@ -33,10 +42,10 @@
 							<button type="submit" class="font-semibold hover:underline text-orange-600">Mark as read</button>
 						</form>
 					@else
-						<form action="{{ route('notification.dismiss', $inbox->id) }}" class="flex justify-end w-full mt-2" method="post">
+						{{-- <form action="{{ route('notification.dismiss', $inbox->id) }}" class="flex justify-end w-full mt-2" method="post">
 							@csrf
 							<button type="submit" class="font-semibold hover:underline text-orange-600">Dismiss</button>
-						</form>
+						</form> --}}
 					@endif
 				</div>
 			@empty
@@ -48,7 +57,7 @@
 		</div>
 
 		@if($inboxes->count())
-			<div class="flex justify-between w-full px-5">
+			<div class="flex {{-- justify-between --}} justify-center w-full px-5">
 				@if($inboxes->where("status", "unread")->count())
 					<form action="{{ route('notification.mark-all-read') }}" class="flex justify-center" method="post">
 						@csrf
@@ -57,10 +66,10 @@
 				@else
 					<div type="button" class="font-bold text-slate-600 text-sm">Mark all as read</div>
 				@endif
-				<form action="{{ route('notification.dismiss-all') }}" class="flex justify-center" method="post">
+				{{-- <form action="{{ route('notification.dismiss-all') }}" class="flex justify-center" method="post">
 					@csrf
 					<button type="submit" class="font-semibold hover:underline text-orange-400 text-sm" onclick="return confirm('All of your read inbox will be cleared, are you sure want to proceed?');">Dismiss all</button>
-				</form>
+				</form> --}}
 			</div>
 		@endif
 	</div>
