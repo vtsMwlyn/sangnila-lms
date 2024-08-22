@@ -54,6 +54,10 @@ There are 5 roles (types of account) in Sangnila LMS:
 - Added undo button for undo check all students when teachers uploading new assignments
 - Bug fixes in edit attendance page
 
+### v0.7.7-beta
+- Added news and announcement, can be managed by admins
+- Now admin can set the password and its confirmation to be custom or default password when creating accounts
+
 ## Clone Project
 Clone the repository in any desired directory. Web resources such as images, videos, scripts, and styles are included in `public` folder. To generate the database system and fill it will sample data, run this command in the terminal:
 ```bash
