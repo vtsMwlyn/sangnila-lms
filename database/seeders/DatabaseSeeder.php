@@ -44,12 +44,5 @@ class DatabaseSeeder extends Seeder
 			"image_path" => $storageImagePath,
 			"sent_to" => json_encode(["on", "on", "on"])
 		]);
-
-		foreach(User::all() as $user){
-			AnnouncementUser::create([
-				"announcement_id" => $newAnnouncement->id,
-				"user_id" => $user->id
-			]);
-		}
 	}
 }

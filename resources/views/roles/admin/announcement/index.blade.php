@@ -12,6 +12,17 @@
 	<x-section-container>
 		<x-page-title class="mt-5">{{ __("All Announcements") }}</x-page-title>
 
+		@if(session()->has("successUploadAnnouncement"))
+			<x-badge-success badge_text="{{ session('successUploadAnnouncement') }}">
+			</x-badge-success>
+		@elseif(session()->has("successEditAnnouncement"))
+			<x-badge-success badge_text="{{ session('successEditAnnouncement') }}">
+			</x-badge-success>
+		@elseif(session()->has("successDeleteAnnouncement"))
+			<x-badge-warning badge_text="{{ session('successDeleteAnnouncement') }}">
+			</x-badge-warning>
+		@endif
+
 		<x-anchor-button class="bg-orange-500 mt-8" href="{{ route('admin.announcement.create') }}"><i class="bi bi-plus-lg"></i> Add New Announcement</x-anchor-button>
 
 		@foreach($announcements as $announcement)
@@ -38,11 +49,11 @@
 						</p>
 					</div>
 					<div class="flex gap-3">
-						<x-anchor-button class="bg-orange-500" href="#">
-							Edit Announcement
+						<x-anchor-button class="bg-orange-500" href="{{ route('admin.announcement.edit', $announcement->id) }}">
+							Edit
 						</x-anchor-button>
-						<x-anchor-button class="bg-orange-500" href="#">
-							Unannounce
+						<x-anchor-button class="bg-orange-500" href="{{ route('admin.announcement.delete', $announcement->id) }}">
+							Delete
 						</x-anchor-button>
 						<x-button type="button" class="bg-orange-500 toggleBtn">Show Content</x-button>
 					</div>

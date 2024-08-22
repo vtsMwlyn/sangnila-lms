@@ -26,14 +26,19 @@
 			<div class="mt-4 relative">
 				<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="togglePassword"></button>
 				<x-input id="password" class="w-full rounded-xl" type="password" name="password" style="height: 50px; padding-right: 60px;"
-					autocomplete="current-password" placeholder="Password" />
+					autocomplete="current-password" placeholder="Password" value="{{ trans('strings.default_password') }}"/>
 			</div>
 
 			<!-- Password Confirmation -->
 			<div class="mt-4 relative">
 				<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="toggleConfPassword"></button>
 				<x-input id="password_confirmation" class="w-full rounded-xl" type="password" name="password_confirmation" style="height: 50px; padding-right: 60px;"
-					autocomplete="current-password" placeholder="Password Confirmation" />
+					autocomplete="current-password" placeholder="Password Confirmation" value="{{ trans('strings.default_password') }}"/>
+			</div>
+
+			<div class="mt-4 flex items-center">
+				<input type="checkbox" id="use_default_password" name="use_default_password" class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" checked>
+				<x-label for="user_default_password" class="text-white">Use default password</x-label>
 			</div>
 
 			<div class="mt-4 flex flex-col md:flex-row gap-4 w-full">
@@ -106,6 +111,17 @@
 				$(this).html('<i class="bi bi-eye"></i>');
 				$("#password_confirmation").attr("type", "password");
 				toggleStatus = 0;
+			}
+		});
+
+		$("#use_default_password").change(function(){
+			if($(this).is(":checked")){
+				$("#password").val("s4ngnil4@7xB");
+				$("#password_confirmation").val("s4ngnil4@7xB");
+			}
+			else {
+				$("#password").val("");
+				$("#password_confirmation").val("");
 			}
 		});
 	</script>

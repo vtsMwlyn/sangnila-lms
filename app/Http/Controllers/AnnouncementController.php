@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Rules\MinimumOneCheckbox;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AnnouncementController extends Controller
 {
@@ -34,49 +35,25 @@ class AnnouncementController extends Controller
 			$validatedData["image"] = $request->file("image")->store("announcement-images");
 		}
 
-		try{
-			DB::beginTransaction();
+		$receiver_array = [];
 
-			$receiver_array = [];
-
-			foreach ($validatedData["receiver"] as $receiver_role) {
-				array_push($receiver_array, $receiver_role);
-			}
-
-			$data_to_create = [
-				"title" => $validatedData["title"],
-				"content" => $validatedData["content"],
-				"sent_to" => json_encode($receiver_array)
-			];
-
-			if($request->file("image")){
-				$data_to_create["image_path"] = $validatedData["image"];
-			}
-
-			$newAnnouncement = Announcement::create($data_to_create);
-
-			foreach($validatedData["receiver"] as $index => $receiver_role){
-				if($receiver_role == "on"){
-					foreach(Role::findOrFail($index + 1)->users as $user){
-						AnnouncementUser::create([
-							"announcement_id" => $newAnnouncement->id,
-							"user_id" => $user->id
-						]);
-					}
-				}
-			}
-
-			DB::commit();
-		}
-		catch (Exception $e){
-			DB::rollback();
-
-			return $e->getMessage();
-
-			return back()->with("failUploadAnnouncement", "System failed to upload announcement");
+		foreach ($validatedData["receiver"] as $receiver_role) {
+			array_push($receiver_array, $receiver_role);
 		}
 
-		return  redirect(route("admin.announcement.index"))->with("successUploadAnnouncement", "Announcement uploaded successfully!");
+		$data_to_create = [
+			"title" => $validatedData["title"],
+			"content" => $validatedData["content"],
+			"sent_to" => json_encode($receiver_array)
+		];
+
+		if($request->file("image")){
+			$data_to_create["image_path"] = $validatedData["image"];
+		}
+
+		Announcement::create($data_to_create);
+
+		return redirect(route("admin.announcement.index"))->with("successUploadAnnouncement", "Announcement uploaded successfully!");
 	}
 
 	public function edit($announcement_id){
@@ -86,7 +63,44 @@ class AnnouncementController extends Controller
 	}
 
 	public function update(Request $request, $announcement_id){
-		return $request;
+		$validatedData = $request->validate([
+			"title" => "required|min:3",
+			"content" => "required|min:3",
+			"image" => "image|file|max:4096",
+			"receiver" => ["required", new MinimumOneCheckbox]
+		]);
+
+		$announcement = Announcement::findOrFail($announcement_id);
+
+		if($request->file("image")){
+			if($announcement->image_path){
+				Storage::delete($announcement->image_path);
+			}
+			$validatedData["image"] = $request->file("image")->store("announcement-images");
+		}
+
+		$receiver_array = [];
+
+		foreach ($validatedData["receiver"] as $receiver_role) {
+			array_push($receiver_array, $receiver_role);
+		}
+
+		$data_to_update = [
+			"title" => $validatedData["title"],
+			"content" => $validatedData["content"],
+			"sent_to" => json_encode($receiver_array)
+		];
+
+		if($request->file("image")){
+			if($announcement->image_path){
+				Storage::delete($announcement->image_path);
+			}
+			$data_to_update["image_path"] = $validatedData["image"];
+		}
+
+		$announcement->update($data_to_update);
+
+		return redirect(route("admin.announcement.index"))->with("successEditAnnouncement", "Announcement edited successfully!");
 	}
 
 	public function delete($announcement_id){
@@ -96,6 +110,14 @@ class AnnouncementController extends Controller
 	}
 
 	public function destroy($announcement_id){
-		return "Otw di-delete";
+		$announcement = Announcement::findOrFail($announcement_id);
+
+		if($announcement->image_path){
+			Storage::delete($announcement->image_path);
+		}
+
+		Announcement::destroy($announcement_id);
+
+		return redirect(route("admin.announcement.index"))->with("successDeleteAnnouncement", "Announcement deleted successfully!");
 	}
 }

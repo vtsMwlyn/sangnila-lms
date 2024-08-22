@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use App\Providers\RouteServiceProvider;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\AnnouncementUser;
+use Carbon\Carbon;
 
 class AuthenticatedSessionController extends Controller {
 	/**
@@ -30,20 +32,22 @@ class AuthenticatedSessionController extends Controller {
 
 		$request->session()->regenerate();
 
-		// To make announcement re-appear after 1 hours since last opened
-		$announcementKey = 'announcement_displayed_at';
-		$redisplayInterval = now()->subHours(1); // 1 hours ago
+		session(['show_announcement' => true]);
 
-		// Check if the announcement should be redisplayed
-		if (!Cache::has($announcementKey) || Cache::get($announcementKey) < $redisplayInterval) {
-			// Set the cache timestamp to now
-			Cache::put($announcementKey, now());
+		// // To make announcement re-appear after 1 hours since last opened
+		// $announcementKey = 'announcement_displayed_at';
+		// $redisplayInterval = now()->subHours(1); // 1 hours ago
 
-			// Set session flag to show the announcement
-			session(['show_announcement' => true]);
-		} else {
-			session(['show_announcement' => false]);
-		}
+		// // Check if the announcement should be redisplayed
+		// if (!Cache::has($announcementKey) || Cache::get($announcementKey) < $redisplayInterval) {
+		// 	// Set the cache timestamp to now
+		// 	Cache::put($announcementKey, now());
+
+		// 	// Set session flag to show the announcement
+		// 	session(['show_announcement' => true]);
+		// } else {
+		// 	session(['show_announcement' => false]);
+		// }
 
 		return redirect()->intended(route('dashboard'));
 	}

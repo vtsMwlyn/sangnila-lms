@@ -35,6 +35,9 @@
 				</div>
 			</div>
 
+			<x-label :value="__('This is the image of your announcement:')" style="color: white; display: none;" class="mt-8" id="img-preview-label"></x-label>
+			<img id="img-preview" class="w-1/2 mt-5">
+
 			<x-label :value="__('Announce this announcement to:')" style="color: white;" class="mt-8"></x-label>
 
 			@error("receiver")
@@ -85,6 +88,17 @@
 	<script>
 		document.addEventListener("trix-file-accept", function(e){
 			e.preventDefault();
+		});
+
+		$("#image").on("change", function(){
+			const oFReader = new FileReader();
+			oFReader.readAsDataURL(image.files[0]);
+
+			oFReader.onload = function(oFEvent){
+				$("#img-preview").attr("src", oFEvent.target.result);
+			}
+
+			$("#img-preview-label").show();
 		});
 
 		$("#foomu").on("submit", function(e){

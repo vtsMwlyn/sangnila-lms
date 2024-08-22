@@ -133,23 +133,29 @@
 			</div>
 
 			@if(session()->pull('show_announcement'))
-				@forelse (Auth::user()->announcements as $announcement)
-					<div class="h-screen w-screen flex items-center justify-center fixed top-0 z-50 popup-container" style="background: rgba(0, 0, 0, 0.5)">
-						<div class="bg-white w-1/2 h-4/5 flex flex-col gap-5 justify-between items-center p-8 rounded-xl popup" >
-							<h1 class="text-xl font-bold text-blue-900">{{ $announcement->title }}</h1>
-							<div class="grow overflow-y-auto">
-								@if($announcement->image_path)
-									<div class="flex justify-center w-full mb-8">
-										<img src="{{ asset('storage/' . $announcement->image_path) }}" alt="announcement_img" class="w-3/4">
+				@forelse (App\Models\Announcement::all() as $announcement)
+					@php
+						$target = json_decode($announcement->sent_to);
+					@endphp
+					
+					@if($target[Auth::user()->role_id - 1] == "on")
+						<div class="h-screen w-screen flex items-center justify-center fixed top-0 z-50 popup-container" style="background: rgba(0, 0, 0, 0.5)">
+							<div class="bg-white w-1/2 h-4/5 flex flex-col gap-5 justify-between items-center p-8 rounded-xl popup" >
+								<h1 class="text-xl font-bold text-blue-900">{{ $announcement->title }}</h1>
+								<div class="grow overflow-y-auto">
+									@if($announcement->image_path)
+										<div class="flex justify-center w-full mb-8">
+											<img src="{{ asset('storage/' . $announcement->image_path) }}" alt="announcement_img" class="w-3/4">
+										</div>
+									@endif
+									<div class="announcementContent">
+										{!! $announcement->content !!}
 									</div>
-								@endif
-								<div class="announcementContent">
-									{!! $announcement->content !!}
 								</div>
+								<p class="text-sm text-slate-500">- Click anywhere to close -</p>
 							</div>
-							<p class="text-sm text-slate-500">- Click anywhere to close -</p>
 						</div>
-					</div>
+					@endif
 				@empty
 
 				@endforelse
