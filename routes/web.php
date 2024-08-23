@@ -74,12 +74,10 @@ Route::middleware([])->group(function(){
 		Route::post("/dismiss-all", [NotificationController::class, "dismiss_all"])->name("dismiss-all");
 	});
 
-
-	require __DIR__ . '/auth.php'; // to be deleted
-
+	require __DIR__ . '/auth.php';
+	
 	require __DIR__ . '/roles/admin.php';
 	require __DIR__ . '/roles/teacher.php';
 	require __DIR__ . '/roles/student.php';
 	require __DIR__ . '/roles/guest.php';
-
 });

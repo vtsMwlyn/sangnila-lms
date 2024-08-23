@@ -124,7 +124,7 @@
 			<div class="flex gap-10 flex-wrap mt-5">
 				@forelse ($student->enrolled_courses as $course)
 					<!-- Card -->
-					<div class="flex flex-col justify-center items-center gap-5 border-2 border-white rounded-xl text-white w-full md:w-1/3 px-8 " style="background: linear-gradient(to bottom, rgba(40, 55, 133, 0.53) 25%, rgba(235, 126, 37, 0.58)); min-height: 400px;">
+					<div class="flex flex-col justify-center items-center gap-5 border-2 border-white rounded-xl text-white w-full md:w-1/4 px-8 " style="background: linear-gradient(to bottom, rgba(40, 55, 133, 0.53) 25%, rgba(235, 126, 37, 0.58)); min-height: 400px;">
 						<h1 class="text-3xl font-bold"><a href="{{ route('admin.course.show', $course->id) }}" class="text-white hover:text-yellow-500">{{ $course->course_name }}</a></h1>
 						<span class="border border-white rounded-lg px-4 py-2 text-md">Teacher: {{ (App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->details->gender == 1)? "Mr." : "Ms." }} {{ App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->full_name }}</span>
 

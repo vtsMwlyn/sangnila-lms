@@ -68,7 +68,7 @@
 						{{ $course->course_name }}
 							<a
 								href="{{ route('admin.teacher.unassign.delete', ['teacher_id' => $user->id, 'course_id' => $course->id]) }}"
-								class="">
+								class="w-16 h-12 flex items-center justify-center pl-4 hover:text-red-600">
 								<i class="bi bi-x-circle-fill"></i>
 							</a>
 						</a>

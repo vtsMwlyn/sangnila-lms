@@ -11,6 +11,7 @@ use App\Models\Progress;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
 use App\Models\Topic;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,7 +38,12 @@ class CourseController extends Controller {
 			"visibility" => "required"
 		]);
 
-		Course::create($validatedData);
+		try {
+			Course::create($validatedData);
+		}
+		catch(Exception $e){
+			return "<p>System failed to add new course, please report the error to our IT team.</p><p><strong>Error detail:</strong></p><p>" . $e->getMessage() . "</p>";
+		}
 
 		return redirect(route('admin.course.index'))->with("successCreateNewCourse", "Successfully created new course!");
 	}
@@ -53,7 +59,7 @@ class CourseController extends Controller {
 
 	// Edit course page
 	public function admin_edit($course_id) {
-		$course = Course::/*where('visibility', 'public')->*/where('id', $course_id)->first();
+		$course = Course::findOrFail($course_id);
 		return view('roles.admin.course.edit', [
 			'course' => $course
 		]);
@@ -61,23 +67,27 @@ class CourseController extends Controller {
 
 	// Update the course in the database
 	public function admin_update(Request $request, $course_id) {
-		// $data = $request->except(['_token', '_method']);
-
 		$validatedData = $request->validate([
 			"course_name" => "required|min:3",
 			"course_description" => "required|min:3",
 			"visibility" => "required"
 		]);
 
-		// $course = Course::/*where('visibility', 'public')->*/where('id', $course_id)->update($data);
-		Course::where('id', $course_id)->update($validatedData);
+		$course = Course::findOrFail($course_id);
+
+		try {
+			$course->update($validatedData);
+		}
+		catch(Exception $e){
+			return "<p>System failed to edit course, please report the error to our IT team.</p><p><strong>Error detail:</strong></p><p>" . $e->getMessage() . "</p>";
+		}
 
 		return redirect(route('admin.course.show', $course_id))->with("successUpdateCourseData", "Successfully updated course data!");
 	}
 
 	// Course deletion confirmation
 	public function admin_delete($course_id){
-		$course = Course::where('id', $course_id)->first();
+		$course = Course::findOrFail($course_id);
 
 		return view('roles.admin.course.destroy', [
 			'course' => $course,

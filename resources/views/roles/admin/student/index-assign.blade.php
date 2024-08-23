@@ -20,11 +20,11 @@
 					@csrf
 					<!-- Select course -->
 					<div class="mt-3">
-						<x-label for="course_name" :value="__('Select a course to assign')" style="color: white;"/>
-						<x-select name="course_name" id="course_name" class="mt-1 w-full">
+						<x-label for="course" :value="__('Select a course to assign')" style="color: white;"/>
+						<x-select name="course" id="course" class="mt-1 w-full">
 							<option disabled selected>Pick a course</option>
 							@foreach ($courses as $course)
-								<option value="{{ $course->course_name }}">{{ $course->course_name }}</option>
+								<option value="{{ $course->toJson() }}">{{ $course->course_name }}</option>
 							@endforeach
 						</x-select>
 					</div>
@@ -32,8 +32,8 @@
 					<!-- Max Course Sessions -->
 					<div class="mt-3 flex gap-3">
 						<div class="w-1/2">
-							<x-label for="teacher_name" :value="__('Select a teacher that will teach the student')" style="color: white;"/>
-							<x-select name="teacher_name" id="teacher_name" class="mt-1 w-full">
+							<x-label for="teacher" :value="__('Select a teacher that will teach the student')" style="color: white;"/>
+							<x-select name="teacher" id="teacher" class="mt-1 w-full">
 								<option disabled selected>Pick a teacher</option>
 							</x-select>
 						</div>
@@ -61,38 +61,44 @@
 				</div>
 
 				<script>
-					const course_and_teachers = @json($course_and_teachers);
-					const selectedCourse = document.querySelector("#course_name");
+					$(document).ready(() => {
+						const course_and_teachers = @json($course_and_teachers);
+						const selectedCourse = document.querySelector("#course");
 
-					course_and_teachers.forEach(element => {
-						if(element.teachers.length == 0){
-							$("#course_name").find(`option[value="${element.course_name}"]`).remove();
+						course_and_teachers.forEach(element => {
+							if(element.teachers.length == 0){
+								$("#course").find(`option[value="${element.course_name}"]`).remove();
+							}
+						});
+
+						if($("#course").children().length == 1){
+							$("#student_assign_form").css({"display": "none"});
+							$("#when_empty").css({"display": "block"});
 						}
+
+						selectedCourse.addEventListener("change", function(){
+							let selectedCourse = JSON.parse(this.value);
+							let selectedCourseId = selectedCourse.id;
+
+							const teacherList = document.querySelector("#teacher");
+
+							teacherList.innerHTML = '';
+
+							console.log(course_and_teachers);
+
+							const course = course_and_teachers.find(c => c.course_id === selectedCourseId);
+
+							if(course) {
+								course.teachers.forEach(teacher => {
+									const newOption = document.createElement("option");
+									newOption.setAttribute("value", teacher.id);
+									newOption.innerText = teacher.full_name;
+									teacherList.appendChild(newOption);
+								});
+							}
+						});
 					});
 
-					if($("#course_name").children().length == 1){
-						$("#student_assign_form").css({"display": "none"});
-						$("#when_empty").css({"display": "block"});
-					}
-
-					selectedCourse.addEventListener("change", () => {
-						const selectedCourseName = selectedCourse.value;
-						console.log(selectedCourseName);
-						const teacherList = document.querySelector("#teacher_name");
-
-						teacherList.innerHTML = '';
-
-						const course = course_and_teachers.find(c => c.course_name === selectedCourseName);
-
-						if(course) {
-							course.teachers.forEach(teacher => {
-								const newOption = document.createElement("option");
-								newOption.setAttribute("value", teacher);
-								newOption.innerText = teacher;
-								teacherList.appendChild(newOption);
-							});
-						}
-					});
 
 				</script>
 			@else

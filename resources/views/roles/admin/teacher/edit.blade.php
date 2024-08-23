@@ -16,32 +16,40 @@
 			@csrf
 			@method('PATCH')
 			<!-- Teacher Name -->
-			<div class="flex items-stretch gap-3">
+			<div class="flex @error('full_name') items-start @else items-stretch @enderror gap-3">
 				<x-boxed-label for="full_name" :value="__('Teacher Name')" />
-				<x-input id="full_name" class="block w-full" type="text" name="full_name" :value="$teacher->full_name" placeholder="Teacher's name"
+				<div class="flex flex-col w-full items-stretch">
+					<x-input id="full_name" class="block w-full" type="text" name="full_name" :value="$teacher->full_name" placeholder="Teacher's name"
 					autofocus />
+				</div>
 			</div>
 
 			<!-- Phone Number -->
-			<div class="mt-3 flex items-stretch gap-3">
+			<div class="mt-3 flex @error('phone_number') items-start @else items-stretch @enderror gap-3">
 				<x-boxed-label for="phone_number" :value="__('Phone Number')"/>
-				<x-input id="phone_number" class="block w-full" type="text" name="phone_number" :value="$teacher->details->phone_number" placeholder="Add phone number"  />
+				<div class="flex flex-col w-full items-stretch">
+					<x-input id="phone_number" class="block w-full" type="text" name="phone_number" :value="$teacher->details->phone_number" placeholder="Add phone number"  />
+				</div>
 			</div>
 
 			<!-- Teacher City of Birth -->
-			<div class="mt-3 flex items-stretch gap-3">
+			<div class="mt-3 flex @error('city_of_birth') items-start @else items-stretch @enderror gap-3">
 				<x-boxed-label for="city_of_birth" :value="__('Teacher City of Birth')"/>
-				<x-input id="city_of_birth" class="block w-full" type="text" name="city_of_birth" :value="$teacher->details->city_of_birth" placeholder="Add city of birth"  />
+				<div class="flex flex-col w-full items-stretch">
+					<x-input id="city_of_birth" class="block w-full" type="text" name="city_of_birth" :value="$teacher->details->city_of_birth" placeholder="Add city of birth"  />
+				</div>
 			</div>
 
 			<!-- Teacher Date of Birth -->
-			<div class="mt-3 flex items-stretch gap-3">
+			<div class="mt-3 flex @error('date_of_birth') items-start @else items-stretch @enderror gap-3">
 				<x-boxed-label for="date_of_birth" :value="__('Teacher Date of Birth')"/>
-				@if($teacher->details->date_of_birth)
-					<x-input id="date_of_birth" class="block w-full" type="date" name="date_of_birth" :value="$teacher->details->date_of_birth" placeholder="Add date of birth"  />
-				@else
-					<x-input id="date_of_birth" class="block w-full" type="text" onfocus="(this.type='date')" name="date_of_birth" :value="$teacher->details->date_of_birth" placeholder="Add date of birth"  />
-				@endif
+				<div class="flex flex-col w-full items-stretch">
+					@if($teacher->details->date_of_birth)
+						<x-input id="date_of_birth" class="block w-full" type="date" name="date_of_birth" :value="$teacher->details->date_of_birth" placeholder="Add date of birth"  />
+					@else
+						<x-input id="date_of_birth" class="block w-full" type="text" onfocus="(this.type='date')" name="date_of_birth" :value="$teacher->details->date_of_birth" placeholder="Add date of birth"  />
+					@endif
+				</div>
 			</div>
 
 			<div class="flex items-stretch justify-center mt-20 mb-3 gap-3">

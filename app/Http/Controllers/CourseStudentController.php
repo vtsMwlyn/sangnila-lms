@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Topic;
@@ -14,6 +15,7 @@ use App\Models\CourseStudent;
 use App\Models\CourseTeacher;
 use App\Models\ImportedStudent;
 use App\Rules\MinimumOneCheckbox;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -28,10 +30,10 @@ class CourseStudentController extends Controller {
 		foreach(Course::all() as $c){
 			$teacher_list = [];
 			foreach($c->teachers as $teacher){
-				array_push($teacher_list, $teacher->full_name);
+				array_push($teacher_list, $teacher);
 			}
 
-			array_push($arr_ct, ["course_name" => $c->course_name, "teachers" => $teacher_list]);
+			array_push($arr_ct, ["course_id" => $c->id, "teachers" => $teacher_list]);
 		}
 
 		$courses = Course::where('visibility', 'public')->get();
@@ -40,7 +42,7 @@ class CourseStudentController extends Controller {
 		foreach($courses as $course){
 			$alreadyEnrolled = false;
 			foreach($student->enrolled_courses as $enrolled){
-				if($enrolled->course_name == $course->course_name){
+				if($enrolled->id == $course->id){
 					$alreadyEnrolled = true;
 					break;
 				}
@@ -61,58 +63,70 @@ class CourseStudentController extends Controller {
 	// Save the selected course into database
 	public function store(Request $request, $student_id) {
 		$validatedData = $request->validate([
-			"course_name" => "required",
+			"course" => "required",
 			"max_course_session" => "required",
-			"teacher_name" => "required"
+			"teacher" => "required"
 		]);
 
-		$course = Course::where("course_name", $validatedData["course_name"])->first();
-		$teacher = User::where("role_id", 2)->where("full_name", $validatedData["teacher_name"])->first();
-		$student = User::where("role_id", 3)->where("id", $student_id)->first();
+		try {
+			DB::beginTransaction();
 
-		CourseStudent::create([
-			'student_id' => $student_id,
-			'course_id' => $course->id,
-			'max_course_session' => $validatedData["max_course_session"],
-			"teacher_id" => $teacher->id,
-			"is_imported" => 0
-		]);
+			$course = Course::find(json_decode($validatedData["course"])->id);
+			$teacher = User::find($validatedData["teacher"]);
+			$student = User::find($student_id);
 
-		$existingProgress = Progress::where('student_id', $student->id)
-			->where('course_id', $course->id)
-			->pluck('material_id')
-			->toArray();
+			CourseStudent::create([
+				'student_id' => $student_id,
+				'course_id' => $course->id,
+				'max_course_session' => $validatedData["max_course_session"],
+				"teacher_id" => $teacher->id,
+				"is_imported" => 0
+			]);
 
-		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+			$existingProgress = Progress::where('student_id', $student->id)
+				->where('course_id', $course->id)
+				->pluck('material_id')
+				->toArray();
 
-		foreach ($topics as $index1 => $topic) {
-			foreach($topic->materials as $index2 => $material) {
-				$newData = [
-					'student_id' => $student->id,
-					'material_id' => $material->id,
-					'course_id' => $course->id,
-				];
+			$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
 
-				if($index1 == 0 && $index2 == 0){
-					$newData['status'] = 'unlocked';
-				} else {
-					$newData['status'] = 'locked';
-				}
+			foreach ($topics as $index1 => $topic) {
+				foreach($topic->materials as $index2 => $material) {
+					$newData = [
+						'student_id' => $student->id,
+						'material_id' => $material->id,
+						'course_id' => $course->id,
+					];
 
-				if (!in_array($material->id, $existingProgress)) {
-					Progress::create($newData);
+					if($index1 == 0 && $index2 == 0){
+						$newData['status'] = 'unlocked';
+					} else {
+						$newData['status'] = 'locked';
+					}
+
+					if (!in_array($material->id, $existingProgress)) {
+						Progress::create($newData);
+					}
 				}
 			}
+
+			DB::commit();
 		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return "<p>System failed to assign the course to the student, please report the error to our IT team.</p><p><strong>Error detail:</strong></p><p>" . $e->getMessage() . "</p>";
+		}
+
 
 		return redirect(route('admin.student.show', $student_id))->with("successAssignToCourse", "Successfully assigned the student to the course!");
 	}
 
 	// Unassign student from a course confirmation
 	public function delete($student_id, $course_id) {
-		$role = Role::where('role_name', 'student')->first();
-		$student = User::where('role_id', $role->id)->where('id', $student_id)->first();
-		$course = Course::where('visibility', 'public')->where('id', $course_id)->first();
+		$student = User::findOrFail($student_id);
+		$course = Course::findOrFail($course_id);
+
 		return view('roles.admin.student.destroy', [
 			'student' => $student,
 			'course' => $course
@@ -121,8 +135,14 @@ class CourseStudentController extends Controller {
 
 	// Remove the course from student's assigned course in the database
 	public function destroy($student_id, $course_id) {
-		$CourseStudent = CourseStudent::where('student_id', $student_id)->where('course_id', $course_id)->first();
-		CourseStudent::destroy($CourseStudent->id);
+		try {
+			$CourseStudent = CourseStudent::where('student_id', $student_id)->where('course_id', $course_id)->first();
+			CourseStudent::destroy($CourseStudent->id);
+		}
+		catch(Exception $e){
+			return "<p>System failed to unassign the course from the student, please report the error to our IT team.</p><p><strong>Error detail:</strong></p><p>" . $e->getMessage() . "</p>";
+		}
+
 		return redirect(route('admin.student.show', $student_id))->with("successUnassignFromCourse", "Successfully unassigned the student from the course!");;
 	}
 

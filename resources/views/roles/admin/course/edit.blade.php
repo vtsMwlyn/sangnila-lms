@@ -16,17 +16,21 @@
 			@csrf
 			@method('PATCH')
 			<!-- Course Name -->
-			<div class="flex items-stretch gap-3">
+			<div class="flex @error('course_name') items-start @else items-stretch @enderror gap-3">
 				<x-boxed-label for="course_name" :value="__('Course Name')" />
-				<x-input id="course_name" class="block w-full" type="text" placeholder="Course name" name="course_name" :value="$course->course_name"
+				<div class="flex flex-col w-full items-stretch">
+					<x-input id="course_name" class="block w-full" type="text" placeholder="Course name" name="course_name" :value="$course->course_name"
 					autofocus />
+				</div>
 			</div>
 
 			<!-- Course Description -->
-			<div class="mt-4 flex items-stretch gap-3">
+			<div class="mt-4 flex @error('course_description') items-start @else items-stretch @enderror gap-3">
 				<x-boxed-label for="course_description" :value="__('Course Description')" />
 				{{-- <x-input id="course_description" class="block w-full bg-blue-950" type="text" name="course_description" :value="$course->course_description" style="color: white"/> --}}
-				<x-input id="course_description" class="block w-full" type="text" name="course_description" placeholder="Course description" :value="$course->course_description"/>
+				<div class="flex flex-col w-full items-stretch">
+					<x-input id="course_description" class="block w-full" type="text" name="course_description" placeholder="Course description" :value="$course->course_description"/>
+				</div>
 			</div>
 
 			<!-- Course Visibility -->
