@@ -78,6 +78,8 @@ class AnnouncementController extends Controller
 
 		$announcement = Announcement::findOrFail($announcement_id);
 
+        $old_image_path = "";
+
 		if($request->file("image")){
 			if($announcement->image_path){
 				$old_image_path = $announcement->image_path;
@@ -104,16 +106,17 @@ class AnnouncementController extends Controller
 		try {
 			$announcement->update($data_to_update);
 
-			if($old_image_path){
+			if($old_image_path != ""){
 				Storage::delete($old_image_path);
 			}
 		}
 		catch(Exception $e){
-			Storage::delete($validatedData["image"]);
+			if($request->file("image")){
+				Storage::delete($validatedData["image"]);
+			}
 
 			return back()->with("systemFail", "System failed to edit announcement, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
-
 
 		return redirect(route("admin.announcement.index"))->with("successEditAnnouncement", "Announcement edited successfully!");
 	}
