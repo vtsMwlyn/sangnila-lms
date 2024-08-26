@@ -14,13 +14,19 @@
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">{{ __("Add New Curriculum Topic") }}</x-page-title>
 
+		@if(session()->has("systemFail"))
+			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
+		@endif
+
 		<form action="{{ route('admin.course.curriculum.topic.store', $course->id) }}" method="post">
 			@csrf
 			<!-- Curriculum Topic Title -->
-			<div class="mb-4 flex gap-3 items-stretch">
+			<div class="mb-4 flex gap-3 @error('topic_title') items-start @else items-stretch @enderror">
 				<x-boxed-label for="topic_title" :value="__('Topic Title')" />
-				<x-input id="topic_title" class="block w-full" type="text" name="topic_title" placeholder="New curriculum topic title"
+				<div class="flex flex-col w-full items-stretch">
+					<x-input id="topic_title" class="block w-full" type="text" name="topic_title" placeholder="New curriculum topic title"
 					:value="old('topic_title')" autofocus />
+				</div>
 			</div>
 
 			<div class="flex items-stretch gap-3 justify-center mt-20 mb-3">

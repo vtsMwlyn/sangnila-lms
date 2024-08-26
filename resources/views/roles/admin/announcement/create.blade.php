@@ -13,8 +13,8 @@
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">{{ __("Upload New Announcement") }}</x-page-title>
 
-		@if(session()->has("failUploadAnnouncement"))
-			<p class="text-red-500 font-extrabold">{{ session("failUploadAnnouncement") }}</p>
+		@if(session()->has("systemFail"))
+			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
 		@endif
 
 		<form action="{{ route("admin.announcement.store") }}" method="post" id="foomu" enctype="multipart/form-data">
@@ -41,10 +41,10 @@
 			<x-label :value="__('Announce this announcement to:')" style="color: white;" class="mt-8"></x-label>
 
 			@error("receiver")
-				<p class="text-red-500 mt-3">{{ $message }}</p>
+				<p class="text-red-800 font-bold mt-3"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
 			@enderror
 
-			<div class="flex flex-wrap gap-3 p-3 mt-5 border-2 border-blue-800 rounded-xl bg-white @error("receiver") border p-5 border-red-500 @enderror">
+			<div class="flex flex-wrap gap-3 p-3 mt-5 border-2 border-blue-800 rounded-xl bg-white @error("receiver") border p-5 border-red-700 @enderror">
 				<div class="flex items-center gap-3 p-5 checkbox-container" style="width: 23%;">
 					<input type="checkbox" id="checkbox1" name="checkbox1"
 					class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old("checkbox1") == "on") checked @endif>
@@ -65,10 +65,10 @@
 			<x-label :value="__('Announcement content')" style="color: white;" class="mt-8"></x-label>
 
 			@error("content")
-				<p class="text-red-500 mt-3">{{ $message }}</p>
+				<p class="text-red-800 font-bold mt-3"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
 			@enderror
 
-			<div class="bg-white p-8 border-2 @error("content") border-red-500 @else border-blue-800 @endif rounded-xl mt-5">
+			<div class="bg-white p-8 border-2 @error("content") border-red-700 @else border-blue-800 @endif rounded-xl mt-5">
 				<input type="hidden" id="content" name="content">
                 <trix-editor input="content">{!! old("content") !!}</trix-editor>
 			</div>

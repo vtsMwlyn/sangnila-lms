@@ -19,9 +19,8 @@ class CourseController extends Controller {
 	// ===== ADMIN ===== //
 	// Showing list of all available courses in Sangnila LMS
 	public function admin_index() {
-		$courses = Course::filter(request(["search"]))->get();
 		return view('roles.admin.course.index', [
-			'courses' => $courses,
+			'courses' => Course::filter(request(["search"]))->get()
 		]);
 	}
 
@@ -42,7 +41,7 @@ class CourseController extends Controller {
 			Course::create($validatedData);
 		}
 		catch(Exception $e){
-			return "<p>System failed to add new course, please report the error to our IT team.</p><p><strong>Error detail:</strong></p><p>" . $e->getMessage() . "</p>";
+			return back()->with("systemFail", "System failed to create course, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 		return redirect(route('admin.course.index'))->with("successCreateNewCourse", "Successfully created new course!");
@@ -50,18 +49,15 @@ class CourseController extends Controller {
 
 	// Shows a course details
 	public function admin_show($course_id) {
-		$course = Course::findOrFail($course_id);
-
 		return view('roles.admin.course.show', [
-			'course' => $course
+			'course' => Course::findOrFail($course_id)
 		]);
 	}
 
 	// Edit course page
 	public function admin_edit($course_id) {
-		$course = Course::findOrFail($course_id);
 		return view('roles.admin.course.edit', [
-			'course' => $course
+			'course' => Course::findOrFail($course_id)
 		]);
 	}
 
@@ -73,13 +69,11 @@ class CourseController extends Controller {
 			"visibility" => "required"
 		]);
 
-		$course = Course::findOrFail($course_id);
-
 		try {
-			$course->update($validatedData);
+			Course::findOrFail($course_id)->update($validatedData);
 		}
 		catch(Exception $e){
-			return "<p>System failed to edit course, please report the error to our IT team.</p><p><strong>Error detail:</strong></p><p>" . $e->getMessage() . "</p>";
+			return back()->with("systemFail", "System failed to edit course, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 		return redirect(route('admin.course.show', $course_id))->with("successUpdateCourseData", "Successfully updated course data!");
@@ -87,17 +81,14 @@ class CourseController extends Controller {
 
 	// Course deletion confirmation
 	public function admin_delete($course_id){
-		$course = Course::findOrFail($course_id);
-
 		return view('roles.admin.course.destroy', [
-			'course' => $course,
+			'course' => Course::findOrFail($course_id)
 		]);
 	}
 
 	// Delete course from database
 	public function admin_destroy($course_id){
-		$course = Course::findOrFail($course_id);
-		Course::destroy("id", $course->id);
+		Course::findOrFail($course_id)->delete();
 
 		return redirect(route('admin.course.index'))->with("successDeleteCourse", "Successfully deleted course!");
 	}
@@ -111,7 +102,7 @@ class CourseController extends Controller {
 
 	// Shows a course details also topics and materials
 	public function teacher_show($course_id) {
-		$course = Course::where("id", $course_id)->first();
+		$course = Course::findOrFail($course_id);
 		$course_students = CourseStudent::where("teacher_id", Auth::user()->id)->where("course_id", $course_id)->get();
 		$curriculum = CurriculumTopic::where("course_id", $course->id)->get();
 

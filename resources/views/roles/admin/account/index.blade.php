@@ -24,7 +24,7 @@
 
 		@foreach (['admin_accounts', 'teacher_accounts', 'student_accounts'] as $index => $account_type)
 			@php
-				$role = App\Models\Role::where("id", $index + 1)->first();
+				$role = App\Models\Role::findOrFail($index + 1);
 			@endphp
 			<div class="rounded-3xl px-5 py-4 @if($index != 0) mt-5 @endif @if(request("search") && request("role") == $role->id) bg-indigo-100 @endif">
 				<div class="flex flex-col md:flex-row gap-5 md:gap-0 w-full justify-between items-center mb-6">

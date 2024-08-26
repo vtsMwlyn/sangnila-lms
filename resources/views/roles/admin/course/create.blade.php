@@ -12,6 +12,10 @@
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">{{ __("Add New Course") }}</x-page-title>
 
+		@if(session()->has("systemFail"))
+			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+		@endif
+
 		<form action="{{ route('admin.course.store') }}" method="post">
 			@csrf
 			<!-- Course Name -->

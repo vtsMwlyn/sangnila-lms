@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use Error;
+use Exception;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Course;
+use App\Models\Assignment;
+use App\Models\Submission;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
 use Illuminate\Support\Carbon;
-use App\Models\Assignment;
-use App\Models\Notification;
-use App\Rules\MinimumOneCheckbox;
-use App\Models\Submission;
-use App\Models\Role;
-use App\Models\StudentAssignment;
-use Error;
-use Illuminate\Support\Facades\Auth;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Return_;
+use App\Models\StudentAssignment;
+use App\Rules\MinimumOneCheckbox;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AssignmentController extends Controller
 {
@@ -32,13 +34,13 @@ class AssignmentController extends Controller
 
 		return view("roles.teacher.assignment.show", [
 			"assignments" => $assignments,
-			"course" => Course::where("id", $course_id)->first()
+			"course" => Course::findOrFail($course_id)
 		]);
 	}
 
 	// New assignment input form page
 	public function teacher_upload($course_id){
-		$course = Course::where("id", $course_id)->first();
+		$course = Course::findOrFail($course_id);
 		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
 
 		return view("roles.teacher.assignment.upload", [
@@ -58,37 +60,46 @@ class AssignmentController extends Controller
 			"checkbox_value" => ["required", new MinimumOneCheckbox]
 		]);
 
-		$course = Course::where("id", $course_id)->first();
-		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+		$course = Course::findOrFail($course_id);
 
-		$newAsg = Assignment::create([
-			"title" => $validatedData["title"],
-			"desc" => $validatedData["desc"],
-			"link" => $validatedData["link"],
-			"deadline_date" => $validatedData["deadline_date"],
-			"deadline_time" => $validatedData["deadline_time"],
-			"teacher_id" => Auth::user()->id,
-			"course_id" => $course->id,
-		]);
+		try {
+			DB::beginTransaction();
 
-		$i = 0;
-		foreach($course_students as $cs){
-			$isAssigned = ($request->checkbox_value[$i] == "on")? 1 : 0;
+			$newAsg = Assignment::create([
+				"title" => $validatedData["title"],
+				"desc" => $validatedData["desc"],
+				"link" => $validatedData["link"],
+				"deadline_date" => $validatedData["deadline_date"],
+				"deadline_time" => $validatedData["deadline_time"],
+				"teacher_id" => Auth::user()->id,
+				"course_id" => $course->id,
+			]);
 
-			if($isAssigned){
-				StudentAssignment::create([
-					"student_id" => $cs->student->id,
-					"assignment_id" => $newAsg->id
-				]);
+			$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
 
-				Notification::create([
-					"user_id" => $cs->student->id,
-					"status" => "unread",
-					"message" => ((Auth::user()->details->gender == 1)? "Mr. " : "Ms. ") . Auth::user()->full_name . " has uploaded a new assignment \"" . $newAsg->title . "\" in course " . $course->course_name . ". Please do the assignment and submit before " . $newAsg->deadline_date . " at " . $newAsg->deadline_time . "."
-				]);
+			foreach($course_students as $i => $cs){
+				$isAssigned = ($request->checkbox_value[$i] == "on")? 1 : 0;
+
+				if($isAssigned){
+					StudentAssignment::create([
+						"student_id" => $cs->student->id,
+						"assignment_id" => $newAsg->id
+					]);
+
+					Notification::create([
+						"user_id" => $cs->student->id,
+						"status" => "unread",
+						"message" => ((Auth::user()->details->gender == 1)? "Mr. " : "Ms. ") . Auth::user()->full_name . " has uploaded a new assignment \"" . $newAsg->title . "\" in course " . $course->course_name . ". Please do the assignment and submit before " . $newAsg->deadline_date . " at " . $newAsg->deadline_time . "."
+					]);
+				}
 			}
 
-			$i++;
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return back()->with("systemFail", "System failed to create assignment, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 		return redirect(route("teacher.assignment.show", $course_id))->with("successUploadAssignment", "New assignment uploaded successfully!");
@@ -96,8 +107,8 @@ class AssignmentController extends Controller
 
 	// Edit assignment data input form page
 	public function teacher_edit($assignment_id){
-		$target_asg = Assignment::where("id", $assignment_id)->first();
-		$course = Course::where("id", $target_asg->course_id)->first();
+		$target_asg = Assignment::findOrFail($assignment_id);
+		$course = Course::findOrFail($target_asg->course_id);
 		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
 		$students_assigned = StudentAssignment::where("assignment_id", $target_asg->id)->get();
 
@@ -137,44 +148,56 @@ class AssignmentController extends Controller
 			"checkbox_value" => ["required", new MinimumOneCheckbox]
 		]);
 
-		$target_asg = Assignment::where("id", $assignment_id)->first();
-		$course = Course::where("id", $target_asg->course_id)->first();
-		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
-		$existingStudentAssignments = StudentAssignment::where("assignment_id", $target_asg->id)->get();
+		$target_asg = Assignment::findOrFail($assignment_id);
+		$course = Course::findOrFail($target_asg->course_id);
 
-		Assignment::where("id", $target_asg->id)->update([
-			"title" => $validatedData["title"],
-			"desc" => $validatedData["desc"],
-			"link" => $validatedData["link"],
-			"deadline_date" => $validatedData["deadline_date"],
-			"deadline_time" => $validatedData["deadline_time"],
-		]);
+		try {
+			DB::beginTransaction();
 
-		foreach($course_students as $index => $cs){
-			$isAssigned = ($request->checkbox_value[$index] == "on")? 1 : 0;
+			$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+			$existingStudentAssignments = StudentAssignment::where("assignment_id", $target_asg->id)->get();
 
-			$exists = false;
-			foreach($existingStudentAssignments as $esa){
-				if($esa->student_id == $cs->student->id){
-					$exists = true;
-					break;
+			$target_asg->update([
+				"title" => $validatedData["title"],
+				"desc" => $validatedData["desc"],
+				"link" => $validatedData["link"],
+				"deadline_date" => $validatedData["deadline_date"],
+				"deadline_time" => $validatedData["deadline_time"],
+			]);
+
+			foreach($course_students as $index => $cs){
+				$isAssigned = ($request->checkbox_value[$index] == "on")? 1 : 0;
+
+				$exists = false;
+				foreach($existingStudentAssignments as $esa){
+					if($esa->student_id == $cs->student->id){
+						$exists = true;
+						break;
+					}
+				}
+
+				if($isAssigned){
+					if(!$exists){
+						StudentAssignment::create([
+							"student_id" => $cs->student->id,
+							"assignment_id" => $target_asg->id
+						]);
+					}
+				}
+				else {
+					if($exists){
+						$target_del = StudentAssignment::where("student_id", $cs->student->id)->where("assignment_id", $assignment_id)->first();
+						StudentAssignment::destroy($target_del->id);
+					}
 				}
 			}
 
-			if($isAssigned){
-				if(!$exists){
-					StudentAssignment::create([
-						"student_id" => $cs->student->id,
-						"assignment_id" => $target_asg->id
-					]);
-				}
-			}
-			else {
-				if($exists){
-					$target_del = StudentAssignment::where("student_id", $cs->student->id)->where("assignment_id", $assignment_id)->first();
-					StudentAssignment::destroy($target_del->id);
-				}
-			}
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return back()->with("systemFail", "System failed to edit assignment, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 		return redirect(route("teacher.assignment.show", $course->id))->with("successEditAssignment", "Assignment edited successfully!");
@@ -183,28 +206,26 @@ class AssignmentController extends Controller
 
 	// Assignment deletion confirmation
 	public function teacher_delete($assignment_id){
-		$asg = Assignment::where("id", $assignment_id)->first();
+		$asg = Assignment::findOrFail($assignment_id);
 		return view("roles.teacher.assignment.delete-confirmation", [
 			"assignment" => $asg,
-			"course" => Course::where("id", $asg->course_id)->first()
+			"course" => Course::findOrFail($asg->course_id)
 		]);
 	}
 
 	// Delete assignment data from database
 	public function teacher_destroy($assignment_id){
-		$del = Assignment::where("id", $assignment_id)->first();
-		$course = Course::where("id", $del->course_id)->first();
+		$del = Assignment::findOrFail($assignment_id);
+		$course = Course::findOrFail($del->course_id);
 
-		Assignment::destroy($del->id);
+		$del->delete();
 
 		return redirect(route("teacher.assignment.show", $course->id))->with("successDeleteAssignment", "Assignment deleted successfully!");
 	}
 
 	// Check submissions from students in an assignment
 	public function teacher_check_submission($assignment_id){
-		$assignment = Assignment::where("id", $assignment_id)->first();
-		$course = $assignment->course;
-
+		$assignment = Assignment::findOrFail($assignment_id);
 		$submissions = Submission::where("assignment_id", $assignment->id)->get();
 
 		$student_list = [];
@@ -245,8 +266,8 @@ class AssignmentController extends Controller
 
 	// Check submission history from a student
 	public function teacher_check_history($assignment_id, $student_id){
-		$student = User::where("id", $student_id)->first();
-		$assignment = Assignment::where("id", $assignment_id)->first();
+		$student = User::findOrFail($student_id);
+		$assignment = Assignment::findOrFail($assignment_id);
 
 		return view("roles.teacher.assignment.submission-history", [
 			"history" => $student->submissions->where("assignment_id", $assignment_id)->values()->all(),
@@ -257,19 +278,31 @@ class AssignmentController extends Controller
 
 	// Save feedback added to a submission
 	public function teacher_feedback(Request $request, $submission_id, $student_id){
-		$asgsmt = Submission::where("id", $submission_id)->first();
-		$msg = "Feedback added successfully!";
-		if($asgsmt->feedback){
-			$msg = "Feedback edited successfully!";
+		$asgsmt = Submission::findOrFail($submission_id);
+
+		try {
+			DB::beginTransaction();
+
+			$msg = "Feedback added successfully!";
+			if($asgsmt->feedback){
+				$msg = "Feedback edited successfully!";
+			}
+
+			$asgsmt->update(["feedback" => $request->feedback]);
+
+			Notification::create([
+				"user_id" => $asgsmt->student->id,
+				"status" => "unread",
+				"message" => ((Auth::user()->details->gender == 1)? "Mr. " : "Ms. ") . Auth::user()->full_name . " has commented on your submission \"" . $asgsmt->title . "\" in assignment \"" . $asgsmt->assignment->title . "\" in course " . $asgsmt->assignment->course->course_name . "."
+			]);
+
+			DB::commit();
 		}
+		catch(Exception $e){
+			DB::rollback();
 
-		Submission::where("id", $submission_id)->update(["feedback" => $request->feedback]);
-
-		Notification::create([
-			"user_id" => $asgsmt->student->id,
-			"status" => "unread",
-			"message" => ((Auth::user()->details->gender == 1)? "Mr. " : "Ms. ") . Auth::user()->full_name . " has commented on your submission \"" . $asgsmt->title . "\" in assignment \"" . $asgsmt->assignment->title . "\" in course " . $asgsmt->assignment->course->course_name . "."
-		]);
+			return back()->with("systemFail", "System failed to add/edit feedback, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
 
 		return redirect(route("teacher.assignment.submission-history", [$asgsmt->assignment->id, $student_id]))->with("successModifFeedback", $msg);
 	}
@@ -285,7 +318,7 @@ class AssignmentController extends Controller
 
 	// List of assignments given to the student
 	public function student_show($course_id){
-		$course = Course::where("id", $course_id)->first();
+		$course = Course::findOrFail($course_id);
 		$student_assignments = StudentAssignment::where("student_id", Auth::user()->id)->latest()->get();
 
 		$assignments_assigned = [];
@@ -314,7 +347,7 @@ class AssignmentController extends Controller
 
 	// Submission input form page
 	public function student_submit($course_id, $assignment_id){
-		$asg = Assignment::where("id", $assignment_id)->first();
+		$asg = Assignment::findOrFail($assignment_id);
 
 		$n = 0;
 		foreach($asg->submissions as $sbm){
@@ -328,7 +361,7 @@ class AssignmentController extends Controller
 		}
 
 		return view("roles.student.assignment.submit", [
-			"course" => Course::where("id", $course_id)->first(),
+			"course" => Course::findOrFail($course_id),
 			"assignment" => $asg
 		]);
 	}
@@ -340,42 +373,53 @@ class AssignmentController extends Controller
 			"title" => "required|min:3"
 		]);
 
-		$assignment = Assignment::where("id", $assignment_id)->first();
+		$assignment = Assignment::findOrFail($assignment_id);
 
-		//The time is currently set to Asia/Jakarta
-		$submissionTime = now();
-		$deadlineTime = $assignment->deadline_date . " " . $assignment->deadline_time;
+		try {
+			DB::beginTransaction();
 
-		if($submissionTime > $deadlineTime){
-			$status = "Late";
-		} else {
-			$status = "On Time";
+			//The time is currently set to Asia/Jakarta
+			$submissionTime = now();
+			$deadlineTime = $assignment->deadline_date . " " . $assignment->deadline_time;
+
+			if($submissionTime > $deadlineTime){
+				$status = "Late";
+			} else {
+				$status = "On Time";
+			}
+
+			Submission::create([
+				"link" => $request->link,
+				"title" => $request->title,
+				"student_id" => Auth::user()->id,
+				"assignment_id" => $assignment->id,
+				"status" => $status,
+			]);
+
+			Notification::create([
+				"user_id" => $assignment->teacher_id,
+				"status" => "unread",
+				"message" => Auth::user()->full_name . " has made new submission on assignment \"" . $assignment->title . "\" in course " . $assignment->course->course_name
+			]);
+
+			DB::commit();
 		}
+		catch(Exception $e){
+			DB::rollback();
 
-		Submission::create([
-			"link" => $request->link,
-			"title" => $request->title,
-			"student_id" => Auth::user()->id,
-			"assignment_id" => $assignment->id,
-			"status" => $status,
-		]);
-
-		Notification::create([
-			"user_id" => $assignment->teacher_id,
-			"status" => "unread",
-			"message" => Auth::user()->full_name . " has made new submission on assignment \"" . $assignment->title . "\" in course " . $assignment->course->course_name
-		]);
+			return back()->with("systemFail", "System failed to upload your assignment submission, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
 
 		return redirect(route("student.assignment.show", $course_id))->with("successSubmitAssignment", "Assignment submitted successfully!");
 	}
 
 	// Shows submission history in an assignment
 	public function student_submission_detail($course_id, $student_id, $assignment_id){
-		$assignment = Assignment::where("id", $assignment_id)->first();
+		$assignment = Assignment::findOrFail($assignment_id);
 		$submissions = Submission::where("assignment_id", $assignment->id)->where("student_id", $student_id)->get();
 
 		return view("roles.student.assignment.submission-detail", [
-			"course" => Course::where("id", $course_id)->first(),
+			"course" => Course::findOrFail($course_id),
 			"submissions" => $submissions,
 			"assignment" => $assignment
 		]);
@@ -385,9 +429,9 @@ class AssignmentController extends Controller
 	// ===== ADMIN ===== //
 	// Showing selected student's assignment data in all course enrolled
 	public function admin_show($student_id, $course_id){
-		$student = User::where("id", $student_id)->first();
+		$student = User::findOrFail($student_id);
 		$student_assignments = StudentAssignment::where("student_id", $student_id)->get();
-		$course = Course::where("id", $course_id)->first();
+		$course = Course::findOrFail($course_id);
 
 		$assignments = [];
 		foreach($student_assignments as $sa){

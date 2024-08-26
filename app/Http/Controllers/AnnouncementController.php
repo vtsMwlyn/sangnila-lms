@@ -51,7 +51,13 @@ class AnnouncementController extends Controller
 			$data_to_create["image_path"] = $validatedData["image"];
 		}
 
-		Announcement::create($data_to_create);
+		try {
+			Announcement::create($data_to_create);
+		}
+		catch(Exception $e){
+			return back()->with("systemFail", "System failed to create announcement, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
+
 
 		return redirect(route("admin.announcement.index"))->with("successUploadAnnouncement", "Announcement uploaded successfully!");
 	}
@@ -74,7 +80,7 @@ class AnnouncementController extends Controller
 
 		if($request->file("image")){
 			if($announcement->image_path){
-				Storage::delete($announcement->image_path);
+				$old_image_path = $announcement->image_path;
 			}
 			$validatedData["image"] = $request->file("image")->store("announcement-images");
 		}
@@ -92,13 +98,22 @@ class AnnouncementController extends Controller
 		];
 
 		if($request->file("image")){
-			if($announcement->image_path){
-				Storage::delete($announcement->image_path);
-			}
 			$data_to_update["image_path"] = $validatedData["image"];
 		}
 
-		$announcement->update($data_to_update);
+		try {
+			$announcement->update($data_to_update);
+
+			if($old_image_path){
+				Storage::delete($old_image_path);
+			}
+		}
+		catch(Exception $e){
+			Storage::delete($validatedData["image"]);
+
+			return back()->with("systemFail", "System failed to edit announcement, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
+
 
 		return redirect(route("admin.announcement.index"))->with("successEditAnnouncement", "Announcement edited successfully!");
 	}

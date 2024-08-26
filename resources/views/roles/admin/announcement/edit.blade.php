@@ -14,8 +14,8 @@
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">{{ __("Edit Announcement") }}</x-page-title>
 
-		@if(session()->has("failUploadAnnouncement"))
-			<p class="text-red-500 font-extrabold">{{ session("failUploadAnnouncement") }}</p>
+		@if(session()->has("systemFail"))
+			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
 		@endif
 
 		<form action="{{ route("admin.announcement.update", $announcement->id) }}" method="post" id="foomu" enctype="multipart/form-data">
@@ -24,7 +24,7 @@
 			<div class="mb-4 flex gap-3 items-start">
 				<x-boxed-label for="title" :value="__('New title')" />
 				<div class="flex w-full flex-col items-stretch">
-					<x-input id="title" class="block w-full" type="text" name="title" placeholder="New announcement title" :value="old('title', $announcement->title)" autofocus />
+					<x-input id="title" class="block w-full" type="text" name="title" placeholder="New announcement title" :value="$announcement->title" autofocus />
 				</div>
 			</div>
 
@@ -42,14 +42,14 @@
 			<x-label :value="__('Announce this announcement to:')" style="color: white;" class="mt-8"></x-label>
 
 			@error("receiver")
-				<p class="text-red-500 mt-3">{{ $message }}</p>
+				<p class="text-red-800 font-bold mt-3"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
 			@enderror
 
 			@php
 				$cbvals = json_decode($announcement->sent_to);
 			@endphp
 
-			<div class="flex flex-wrap gap-3 p-3 mt-5 border-2 border-blue-800 rounded-xl bg-white @error("receiver") border p-5 border-red-500 @enderror">
+			<div class="flex flex-wrap gap-3 p-3 mt-5 border-2 border-blue-800 rounded-xl bg-white @error("receiver") border p-5 border-red-700 @enderror">
 				<div class="flex items-center gap-3 p-5 checkbox-container" style="width: 23%;">
 					<input type="checkbox" id="checkbox1" name="checkbox1"
 					class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old("checkbox1", $cbvals[0]) == "on") checked @endif>
@@ -70,10 +70,10 @@
 			<x-label :value="__('Announcement content')" style="color: white;" class="mt-8"></x-label>
 
 			@error("content")
-				<p class="text-red-500 mt-3">{{ $message }}</p>
+				<p class="text-red-800 font-bold mt-3"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
 			@enderror
 
-			<div class="bg-white p-8 border-2 @error("content") border-red-500 @else border-blue-800 @endif rounded-xl mt-5">
+			<div class="bg-white p-8 border-2 @error("content") border-red-700 @else border-blue-800 @endif rounded-xl mt-5">
 				<input type="hidden" id="content" name="content">
                 <trix-editor input="content">{!! old("content", $announcement->content) !!}</trix-editor>
 			</div>

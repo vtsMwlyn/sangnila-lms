@@ -61,7 +61,7 @@
 					</a>
 				@empty
 					<div class="flex w-full justify-center bg-white rounded-xl p-5 font-semibold">
-						<span>- No student enrolled in this course yet -</span>
+						<span>- No teacher assigned in this course yet -</span>
 					</div>
 				@endforelse
 			</div>

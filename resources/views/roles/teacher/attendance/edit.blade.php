@@ -14,17 +14,19 @@
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">Edit Attendance Data</x-page-title>
 
-		@if(session()->has("failedEditAttendance"))
-			<x-badge-danger badge_text="{{ session('failedEditAttendance') }}"></x-badge-danger>
+		@if(session()->has("systemFail"))
+			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
 		@endif
 
 		<form action="{{ route('teacher.attendance.update', $attendance->id) }}" method="post" class="mx-auto" id="attendance_form">
 			@csrf
-			<div class="my-4 flex w-full justify-between items-end">
+			<div class="my-4 flex w-full justify-between items-start">
 				<div class="w-1/3">
 					<x-label for="attendance_date">{{ __("Attendance Date") }}</x-label>
-					<div class="flex items-center gap-3 mt-1">
-						<x-input onfocus="this.type='date'" onblur="this.type='text'" name="attendance_date" id="attendance_date" :value="$attendance->attendance_date" class="w-full"/>
+					<div class="flex gap-3 mt-1 items-center" id="date-inp-cont">
+						<div class="flex flex-col items-start">
+							<x-input onfocus="this.type='date'" onblur="this.type='text'" name="attendance_date" id="attendance_date" :value="$attendance->attendance_date" class="w-full"/>
+						</div>
 						<x-button type="button" id="todaybtn" class="bg-orange-500">Today</x-button>
 					</div>
 				</div>
@@ -63,15 +65,17 @@
 											<label for="checkbox{{ $course_student->student->id }}">{{ $course_student->student->full_name }}</label>
 											<input type="hidden" name="students[]" value="{{ $course_student->student->id }}">
 										</div>
-										<div class="flex w-full gap-2 mt-2 material_progress_detail">
-											<x-select class="material_progress w-2/3">
-												<option selected disabled>Select Material Progress</option>
-												@foreach ($attendance->course->topics as $topic)
-													@foreach ($topic->materials as $material)
-														<option value="{{ $material->title }}" @if($atd->material_progress == $material->title) selected @endif>{{ $material->title }}</option>
+										<div class="flex w-full gap-2 mt-2 material_progress_detail items-start">
+											<div class="flex flex-col w-2/3">
+												<x-select class="material_progress">
+													<option selected disabled>Select Material Progress</option>
+													@foreach ($attendance->course->topics as $topic)
+														@foreach ($topic->materials as $material)
+															<option value="{{ $material->title }}" @if($atd->material_progress == $material->title) selected @endif>{{ $material->title }}</option>
+														@endforeach
 													@endforeach
-												@endforeach
-											</x-select>
+												</x-select>
+											</div>
 
 											<x-select class="learning_status w-1/3">
 												<option value="On Progress" @if($atd->learning_status == "On Progress") selected @endif>On Progress</option>
@@ -374,29 +378,34 @@
 					$invalid = false;
 
 					$("#attendance_date").css({"border": "rgb(30 58 138) solid 2px"});
+					$("#attendance_date").closest("div").find("p").remove();
+					$("#date-inp-cont").removeClass("items-start").addClass("items-center");
 					$("textarea").css({"border": "rgb(30 58 138) solid 2px"});
+					$("textarea").closest("div").find("p").remove();
 					$(".material_progress").each(function(){
 						$(this).css({"border": "rgb(30 58 138) solid 2px"});
-					})
+						$(this).closest("div").find("p").remove();
+					});
 
 					if(!$("#attendance_date").val()){
-						$("#attendance_date").css({"border": "red solid 2px"});
-						$("#attendance_date").after($("<p>").text("The attendance date field is required.").css("color", "red"));
+						$("#attendance_date").css("border", "solid 2px rgb(185 28 28)");
+						$("#date-inp-cont").removeClass("items-center").addClass("items-start");
+						$("#attendance_date").after($("<p>").html('<i class="bi bi-exclamation-circle"></i> The attendance date field is required.').addClass("text-red-800 font-bold mt-1"));
 						$invalid = true;
 					}
 
 					$("textarea").each(function(){
 						if($(this).val() == ""){
-							$(this).after($("<p>").text("The attendance detail field is required.").css("color", "red"));
-							$(this).css({"border": "red solid 2px"});
+							$(this).after($("<p>").html('<i class="bi bi-exclamation-circle"></i> The attendance detail field is required.').addClass("text-red-800 font-bold mt-1"));
+							$(this).css("border", "solid 2px rgb(185 28 28)");
 							$invalid = true;
 						}
 					});
 
 					checkboxValues.forEach((value, index) => {
 						if(value === "on" && !materialProgressValues[index]){
-							$($(".material_progress")[index]).css({"border": "red solid 2px"});
-							$($(".material_progress")[index]).after($("<p>").text("The material progress field is required.").css("color", "red"));
+							$($(".material_progress")[index]).css({"border": "solid 2px rgb(185 28 28)"});
+							$($(".material_progress")[index]).after($("<p>").html('<i class="bi bi-exclamation-circle"></i> The material progress field is required.').addClass("text-red-800 font-bold mt-1"));
 							$invalid = true;
 						}
 					});

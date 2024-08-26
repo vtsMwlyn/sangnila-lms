@@ -13,6 +13,10 @@
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">Batch Assign</x-page-title>
 
+		@if(session()->has("systemFail"))
+			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+		@endif
+
 		<x-badge-danger id="emptyDataNotif" badge_text="Please input minimum 1 data to proceed." style="display: none;"></x-badge-danger>
 
 		@if($allStudents->count() && $course->teachers->count())

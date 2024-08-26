@@ -14,19 +14,19 @@ class UserAccountController extends Controller{
 		switch(Auth::user()->role->id){
 			case 1:
 				return view("roles.admin.profile", [
-					"account_data" => User::where("id", Auth::user()->id)->first()
+					"account_data" => User::findOrFail(Auth::user()->id)
 				]);
 				break;
 
 			case 2:
 				return view("roles.teacher.profile", [
-					"account_data" => User::where("id", Auth::user()->id)->first()
+					"account_data" => User::findOrFail(Auth::user()->id)
 				]);
 				break;
 
 			case 3:
 				return view("roles.student.profile", [
-					"account_data" => User::where("id", Auth::user()->id)->first()
+					"account_data" => User::findOrFail(Auth::user()->id)
 				]);
 				break;
 
@@ -50,7 +50,7 @@ class UserAccountController extends Controller{
 			unset($validatedData["password_confirmation"]);
 		}
 
-		User::where("id", Auth::user()->id)->update($validatedData);
+		User::findOrFail(Auth::user()->id)->update($validatedData);
 
 		return back()->with("successUpdateProfile", "Account profile updated successfully!");
 	}

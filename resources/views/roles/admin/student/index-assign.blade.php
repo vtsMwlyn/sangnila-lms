@@ -13,6 +13,10 @@
 	<x-section-container>
 		<x-page-title class="mt-5">{{ __("Assign Student to Course") }}</x-page-title>
 
+		@if(session()->has("systemFail"))
+			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+		@endif
+
 		<div class="rounded-xl py-5 px-10 mt-10 text-white bg-blue-950">Select a Course to Assign</div>
 		<div class="mt-5">
 			@if(count($courses))

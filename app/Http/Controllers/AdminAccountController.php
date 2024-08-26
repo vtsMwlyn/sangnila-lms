@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\UserDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -71,10 +74,23 @@ class AdminAccountController extends Controller {
 		$dataToUpdate = $request->validate([
 			"full_name" => "required|min:3",
 			"email" => "required|email:dns",
-			"role_id" => "required"
+			"role_id" => "required",
+			"gender" => "required"
 		]);
 
-		User::where("id", $account->id)->update($dataToUpdate);
+		try {
+			DB::beginTransaction();
+
+			$account->update($dataToUpdate);
+			UserDetail::where("user_id", $account->id)->update(["gender" => $dataToUpdate["gender"]]);
+
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return back()->with("systemFail", "System failed to edit account, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
 
 		return redirect(route("admin.account.show", $account_id))->with("successUpdateAccountData", "Successfully updated account data!");
 	}
@@ -90,8 +106,7 @@ class AdminAccountController extends Controller {
 	public function disable_acc(Request $request, $user_id){
 		$request->validate(["disable_reason" => "required|min:3"]);
 
-		$user = User::findOrFail($user_id);
-		User::where("id", $user->id)->update(["status" => "disabled", "disable_reason" => $request->disable_reason]);
+		User::findOrFail($user_id)->update(["status" => "disabled", "disable_reason" => $request->disable_reason]);
 
 		return redirect(route("admin.account.index"))->with("successDisableAccount", "Successfully disabled account!");
 	}
@@ -105,25 +120,21 @@ class AdminAccountController extends Controller {
 
 	// Account enable confirmation page
 	public function enable_acc($user_id){
-		$user = User::findOrFail($user_id);
-		User::where("id", $user->id)->update(["status" => "enabled", "disable_reason" => null]);
+		User::findOrFail($user_id)->update(["status" => "enabled", "disable_reason" => null]);
 
 		return redirect(route("admin.account.index"))->with("successEnableAccount", "Successfully enabled account!");
 	}
 
 	// Account deletion confirmation page
 	public function delete($account_id){
-		$account = User::where('id', $account_id)->first();
-
 		return view('roles.admin.account.destroy', [
-			'account' => $account,
+			'account' => User::findOrFail($account_id)
 		]);
 	}
 
 	// Account deletion from database
 	public function destroy($user_id) {
-		$user = User::findOrFail($user_id);
-		User::destroy("id", $user->id);
+		User::findOrFail($user_id)->delete();
 
 		return redirect(route("admin.account.index"))->with("successDeleteAccount", "Successfully deleted account!");
 	}
@@ -131,13 +142,13 @@ class AdminAccountController extends Controller {
 	// Reset password confirmation
 	public function reset_password($user_id){
 		return view("roles.admin.account.reset-password-conf", [
-			"account" => User::where("id", $user_id)->first()
+			"account" => User::findOrFail($user_id)
 		]);
 	}
 
 	// Reset password in the database
 	public function reset_password_proceed($user_id){
-		User::where("id", $user_id)->update(["password" => Hash::make(trans("strings.default_password"))]);
+		User::findOrFail($user_id)->update(["password" => Hash::make(trans("strings.default_password"))]);
 
 		return redirect(route("admin.account.show", $user_id))->with("successResetPassword", "Successfully reset this account's password");
 	}

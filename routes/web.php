@@ -75,7 +75,7 @@ Route::middleware([])->group(function(){
 	});
 
 	require __DIR__ . '/auth.php';
-	
+
 	require __DIR__ . '/roles/admin.php';
 	require __DIR__ . '/roles/teacher.php';
 	require __DIR__ . '/roles/student.php';

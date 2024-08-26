@@ -25,16 +25,20 @@
 			<form action="{{ route("student.assignment.submit", [$course->id, $assignment->id]) }}" method="post" class="mt-8">
 				@csrf
 				<!-- Submission Title -->
-				<div class="flex gap-3 items-stretch w-full">
+				<div class="flex gap-3 @error('title') items-start @else items-stretch @enderror w-full">
 					<x-boxed-label for="title" :value="__('Submission Title')" />
-					<x-input id="title" class="block w-full" type="text" name="title" :value="old('title')"
+					<div class="flex flex-col w-full items-stretch">
+						<x-input id="title" class="block w-full" type="text" name="title" :value="old('title')"
 						autofocus />
+					</div>
 				</div>
 
 				<!-- Link -->
-				<div class="mt-3 flex gap-3 items-stretch w-full">
+				<div class="mt-3 flex gap-3 @error('link') items-start @else items-stretch @enderror w-full">
 					<x-boxed-label for="link" :value="__('Your Work Link')" />
-					<x-input id="link" class="block w-full" type="text" name="link" :value="old('link')"/>
+					<div class="flex flex-col w-full items-stretch">
+						<x-input id="link" class="block w-full" type="text" name="link" :value="old('link')"/>
+					</div>
 				</div>
 
 				<div class="flex items-center justify-center w-full mt-16 mb-3 gap-3">

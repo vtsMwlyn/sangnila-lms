@@ -10,12 +10,17 @@
 @endsection
 
 @section("content")
-	<x-section-container>
-		<x-page-title class="mt-5 mb-8">Import Old Student Data</x-page-title>
+	@if($course->teachers->count() && $course->topics->count() && $course->topics[0]->materials->count())
+		<x-section-container>
+			<x-page-title class="mt-5 mb-8">Import Old Student Data</x-page-title>
 
-		<x-badge-danger id="emptyDataNotif" badge_text="Please input minimum 1 data to proceed." style="display: none;"></x-badge-danger>
+			@if(session()->has("systemFail"))
+				<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+			@endif
 
-		@if($course->teachers->count() && $course->topics->count() && $course->topics[0]->materials->count())
+			<x-badge-danger id="emptyDataNotif" badge_text="Please input minimum 1 data to proceed." style="display: none;"></x-badge-danger>
+
+
 			<form action="#" id="le-form">
 				<div class="my-10">
 					<div class="flex w-full items-center justify-between mb-3">
@@ -450,13 +455,19 @@
 					this.submit();
 				});
 			</script>
-		@else
+
+		</x-section-container>
+
+	@else
+		<x-section-container>
+			<x-page-title class="mt-5 mb-8">Import Old Student Data</x-page-title>
 			<div class="rounded-lg py-5 px-10 bg-blue-800">
 				<p class="text-white italic">- This course still has no teachers assigned or topic and materials added to it -</p>
 				<x-button type="button" onclick="history.back()" class="bg-orange-500 mt-4">
 					Return
 				</x-button>
 			</div>
-		@endif
-	</x-section-container>
+		</x-section-container>
+	@endif
+
 @endsection

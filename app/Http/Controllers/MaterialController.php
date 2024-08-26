@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use App\Models\Topic;
 use App\Models\Course;
 use App\Models\Material;
-use App\Models\Topic;
 use Illuminate\Http\Request;
 
 class MaterialController extends Controller {
 	// ===== TEACHER ===== //
 	// New material input page
 	public function teacher_create($topic_id) {
-		$topic = Topic::where("id", $topic_id)->first();
+		$topic = Topic::findOrFail($topic_id);
 		return view('roles.teacher.topic-and-material.create-material', [
 			'topic' => $topic
 		]);
@@ -19,40 +20,53 @@ class MaterialController extends Controller {
 
 	// Insert the new material data into database
 	public function teacher_store(Request $request, $topic_id) {
-		$topic = Topic::where("id", $topic_id)->first();
 		$validatedData = $request->validate([
 			"title" => "required|min:3",
 			"link" => "required|url",
 			"desc" => "required|min:3"
 		]);
 
-		Material::create([
-			"topic_id" => $topic->id,
-			"title" => $validatedData["title"],
-			"link" => $validatedData["link"],
-			"desc" => $validatedData["desc"]
-		]);
+		$topic = Topic::findOrFail($topic_id);
+
+		try {
+			Material::create([
+				"topic_id" => $topic->id,
+				"title" => $validatedData["title"],
+				"link" => $validatedData["link"],
+				"desc" => $validatedData["desc"]
+			]);
+		}
+		catch(Exception $e){
+			return back()->with("systemFail", "System failed to create material, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
 
 		return redirect(route('teacher.topic.show', [$topic->course->id, $topic->id]))->with("successUploadMaterial", "Successfully uploaded new material to the topic!");
 	}
 
 	// Edit material input page
 	public function teacher_edit($material_id) {
-		$material = Material::findOrFail($material_id);
 		return view('roles.teacher.topic-and-material.edit-material', [
-			'material' => $material
+			'material' => Material::findOrFail($material_id)
 		]);
 	}
 
 	// Update the material data in the database
 	public function teacher_update(Request $request, $material_id) {
-		$material = Material::findOrFail($material_id);
 		$data = $request->validate([
 			"title" => "required|min:3",
 			"link" => "required|url",
 			"desc" => "required|min:3"
 		]);
-		Material::findOrFail($material_id)->update($data);
+
+		$material = Material::findOrFail($material_id);
+
+		try {
+			$material->update($data);
+		}
+		catch(Exception $e){
+			return back()->with("systemFail", "System failed to edit material, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
+
 
 		return redirect(route('teacher.topic.show', [$material->topic->course->id, $material->topic->id]))->with("successEditMaterial", "Successfully update material data!");
 	}
@@ -60,22 +74,24 @@ class MaterialController extends Controller {
 	// Material deletion confirmation
 	public function teacher_delete($material_id) {
 		return view("roles.teacher.topic-and-material.delete-material-confirmation", [
-			"material" => Material::where("id", $material_id)->first()
+			"material" => Material::findOrFail($material_id)
 		]);
 	}
 
 	// Remove material data from database
 	public function teacher_destroy($material_id) {
-		$material = Material::where("id", $material_id)->first();
+		$material = Material::findOrFail($material_id);
+		$cid = $material->topic->course->id;
+		$tid = $material->topic->id;
 
-		Material::destroy("id", $material->id);
+		$material->delete();
 
-		return redirect(route("teacher.topic.show", [$material->topic->course->id, $material->topic->id]))->with("successDeleteMaterial", "Successfully deleted material from the topic!");
+		return redirect(route("teacher.topic.show", [$cid, $tid]))->with("successDeleteMaterial", "Successfully deleted material from the topic!");
 	}
 
 	// ===== STUDENT ===== //
 	public function preview($material_id){
-		$material = Material::where("id", $material_id)->first();
+		$material = Material::findOrFail($material_id);
 
 		$original_link = $material->link;
 		$preview_link = $original_link;

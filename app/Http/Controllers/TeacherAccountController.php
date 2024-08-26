@@ -61,16 +61,16 @@ class TeacherAccountController extends Controller {
 		try {
 			DB::beginTransaction();
 
-			User::where("id", $teacher->id)->update(["full_name" => $dataToUpdate["full_name"]]);
+			$teacher->update(["full_name" => $dataToUpdate["full_name"]]);
 			unset($dataToUpdate["full_name"]);
-			UserDetail::where("user_id", $teacher_id)->update($dataToUpdate);
+			UserDetail::where("user_id", $teacher->id)->update($dataToUpdate);
 
 			DB::commit();
 
 		} catch(Exception $e){
 			DB::rollback();
 
-			return "<p>System failed to edit teacher, please report the error to our IT team.</p><p><strong>Error detail:</strong></p><p>" . $e->getMessage() . "</p>";
+			return back()->with("systemFail", "System failed to edit teacher, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 		return redirect(route("admin.teacher.show", $teacher_id))->with("successUpdateTeacherData", "Successfully updated teacher data!");

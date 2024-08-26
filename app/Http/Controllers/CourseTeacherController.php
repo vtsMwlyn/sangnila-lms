@@ -33,7 +33,7 @@ class CourseTeacherController extends Controller {
 			DB::beginTransaction();
 
 			foreach($request->courses_list as $course_to_assign){
-				$selectedNewCourse = Course::where("id", $course_to_assign)->first();
+				$selectedNewCourse = Course::findOrFail($course_to_assign);
 
 				CourseTeacher::create(["user_id" => $teacher_id, "course_id" => $selectedNewCourse->id]);
 			}
@@ -43,7 +43,7 @@ class CourseTeacherController extends Controller {
 		catch(Exception $e){
 			DB::rollback();
 
-			return "<p>System failed to assign courses to the teacher, please report the error to our IT team.</p><p><strong>Error detail:</strong></p><p>" . $e->getMessage() . "</p>";
+			return back()->with("systemFail", "System failed to assign the courses to the teacher, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 		return redirect(route("admin.teacher.show", $teacher_id))->with("successAssignToCourse", "Successfully assigned the teacher to the course!");
@@ -51,12 +51,9 @@ class CourseTeacherController extends Controller {
 
 	// Unassign teacher from a course confirmation
 	public function delete($teacher_id, $course_id){
-		$teacher = User::findOrFail($teacher_id);
-		$course = Course::findOrFail($course_id);
-
 		return view('roles.admin.teacher.destroy', [
-			'teacher' => $teacher,
-			'course' => $course
+			'teacher' => User::findOrFail($teacher_id),
+			'course' => Course::findOrFail($course_id)
 		]);
 	}
 
@@ -68,7 +65,7 @@ class CourseTeacherController extends Controller {
 			CourseTeacher::destroy($targettedData->id);
 		}
 		catch(Exception $e){
-			return "<p>System failed to unassign the course from the teacher, please report the error to our IT team.</p><p><strong>Error detail:</strong></p><p>" . $e->getMessage() . "</p>";
+			return back()->with("systemFail", "System failed to assign the course from the teacher, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 		return redirect(route("admin.teacher.show", $teacher_id))->with("successUnassignFromCourse", "Successfully unassigned the teacher from the course!");

@@ -17,6 +17,8 @@
 
 		@if(session()->has("successModifFeedback"))
 			<x-badge-success badge_text="{{ session('successModifFeedback') }}"></x-badge-success>
+		@elseif(session()->has("systemFail"))
+			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
 		@endif
 
 		<div class="overflow-x-auto">
