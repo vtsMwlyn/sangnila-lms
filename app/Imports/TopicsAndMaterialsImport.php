@@ -29,18 +29,11 @@ class TopicsAndMaterialsImport implements ToModel, WithHeadingRow
 
 			$course = Course::findOrFail($this->course_id);
 
-			$existing_topic = Topic::where("title", $row["topic"])->first();
-
-			if($existing_topic){
-				$topic = $existing_topic;
-			}
-			else {
-				$topic = Topic::create([
-					"user_id" => Auth::user()->id,
-					"course_id" => $course->id,
-					"title" => $row["topic"]
-				]);
-			}
+			$topic = Topic::updateOrCreate([
+				"user_id" => Auth::user()->id,
+				"course_id" => $course->id,
+				"title" => $row["topic"]
+			]);
 
 			Material::create([
 				"topic_id" => $topic->id,
