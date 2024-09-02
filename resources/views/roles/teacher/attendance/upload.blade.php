@@ -45,7 +45,7 @@
 											<input type="hidden" name="students[]" value="{{ $cs->student->id }}">
 										</div>
 										<div class="flex w-full gap-2 mt-2 material_progress_detail items-start" style="display: none;">
-											<div class="flex flex-col w-2/3">
+											<div class="flex flex-col w-2/3" id="container_material_progress">
 												<x-select class="material_progress" name="fake_material_progress[]">
 													<option selected disabled>Select Material Progress</option>
 													@foreach ($topics as $topic)
@@ -102,6 +102,44 @@
 
 		<script>
 			$(document).ready(() => {
+				// Select2 initialization + MAKING THIS SH*T FOLLOW THE RESIZING OF ITS CONTAINER SO YOU NO NEED TO REFRESH
+				$('.material_progress').select2({
+					allowClear: false
+				});
+
+				function stylingSelect2(){
+					$('.material_progress').next('.select2-container').find('.select2-selection').css({
+						"display": "flex",
+						"align-items": "center"
+					});
+
+					$('.material_progress').next('.select2-container').find('.select2-selection').css({
+						"height": "2.6rem",
+						"border": "solid 2px #283785",
+						"width": "100%",
+						"padding-top": "1rem",
+						"padding-bottom": "0.75rem",
+						"padding-left": "0.75rem",
+						"padding-right": "0.75rem",
+						"min-height" : "3.25rem",
+						"border-radius": "0.75rem"
+					});
+				}
+
+				const container = document.getElementById('container_material_progress');
+				const resizeObserver = new ResizeObserver(() => {
+					$('.material_progress').select2('destroy').select2({
+						allowClear: false
+					});
+
+					stylingSelect2();
+				});
+
+				if (container) {
+					resizeObserver.observe(container);
+				}
+
+
 				$("#attendance_date").on({
 					"focus": function(){
 						this.showPicker();

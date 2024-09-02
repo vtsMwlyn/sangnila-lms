@@ -18,7 +18,7 @@ return new class extends Migration
 			$table->string("title");
 			$table->longText("content");
 			$table->string("image_path")->nullable();
-			$table->string("announce_from")->nullable();
+			$table->timestamp("announce_from")->nullable();
 			$table->timestamp("announce_until")->nullable();
 			$table->string("sent_to");
             $table->timestamps();

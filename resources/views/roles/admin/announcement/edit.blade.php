@@ -36,8 +36,24 @@
 				</div>
 			</div>
 
+			<!-- Announcement Start Date -->
+			<div class="mb-4 flex gap-3 items-start">
+				<x-boxed-label for="announce_from" :value="__('New Start Date')" />
+				<div class="flex w-full flex-col items-stretch">
+					<x-input id="announce_from" class="block w-full" onfocus="this.type='date';" onblur="this.type='text';" name="announce_from" placeholder="New announcement start date" :value="old('announce_from', $announcement->announce_from)" autofocus />
+				</div>
+			</div>
+
+			<!-- Announcement End Date -->
+			<div class="mb-4 flex gap-3 items-start">
+				<x-boxed-label for="announce_until" :value="__('New End Date')" />
+				<div class="flex w-full flex-col items-stretch">
+					<x-input id="announce_until" class="block w-full" onfocus="this.type='date';" onblur="this.type='text';" name="announce_until" placeholder="New announcement end date" :value="old('announce_until', $announcement->announce_until)" autofocus />
+				</div>
+			</div>
+
 			<x-label :value="__('This is the current image of your announcement:')" style="color: white;" class="mt-8" id="img-preview-label"></x-label>
-			<img id="img-preview" src={{ asset("storage/" . $announcement->image_path) }} class="w-1/2 mt-5">
+			<img id="img-preview" src="{{ Storage::url("app/public/" . $announcement->image_path) }}" class="w-1/2 mt-5">
 
 			<x-label :value="__('Announce this announcement to:')" style="color: white;" class="mt-8"></x-label>
 
@@ -116,6 +132,24 @@
 			});
 
 			this.submit();
+		});
+
+		$("#announce_from").on({
+			"focus": function(){
+				this.showPicker();
+			},
+			"click": function(){
+				this.showPicker();
+			}
+		});
+
+		$("#announce_until").on({
+			"focus": function(){
+				this.showPicker();
+			},
+			"click": function(){
+				this.showPicker();
+			}
 		});
 	</script>
 @endsection

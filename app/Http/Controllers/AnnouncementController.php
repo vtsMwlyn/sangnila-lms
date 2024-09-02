@@ -28,6 +28,8 @@ class AnnouncementController extends Controller
 			"title" => "required|min:3",
 			"content" => "required|min:3",
 			"image" => "image|file|max:4096",
+			"announce_from" => "required|date",
+			"announce_until" => "required|date",
 			"receiver" => ["required", new MinimumOneCheckbox]
 		]);
 
@@ -44,6 +46,8 @@ class AnnouncementController extends Controller
 		$data_to_create = [
 			"title" => $validatedData["title"],
 			"content" => $validatedData["content"],
+			"announce_from" => $validatedData["announce_from"],
+			"announce_until" => $validatedData["announce_until"] . " 23:59:59",
 			"sent_to" => json_encode($receiver_array)
 		];
 
@@ -73,6 +77,8 @@ class AnnouncementController extends Controller
 			"title" => "required|min:3",
 			"content" => "required|min:3",
 			"image" => "image|file|max:4096",
+			"announce_from" => "required|date",
+			"announce_until" => "required|date",
 			"receiver" => ["required", new MinimumOneCheckbox]
 		]);
 
@@ -96,7 +102,9 @@ class AnnouncementController extends Controller
 		$data_to_update = [
 			"title" => $validatedData["title"],
 			"content" => $validatedData["content"],
-			"sent_to" => json_encode($receiver_array)
+			"sent_to" => json_encode($receiver_array),
+			"announce_from" => $validatedData["announce_from"],
+			"announce_until" => $validatedData["announce_until"] . " 23:59:59",
 		];
 
 		if($request->file("image")){

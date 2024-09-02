@@ -31,7 +31,7 @@
 							<x-select name="student_name" id="student_name" class="w-full" required>
 								<option disabled selected>Select Student</option>
 							</x-select>
-							<p class="text-red-500" id="errStudent">This field is required.</p>
+							<p class="text-red-700 font-bold mt-1" id="errStudent"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 						</div>
 						<div class="mt-3 w-full md:w-1/3" id="inpTeacherField">
 							<x-label class="mb-1">{{ __("Teacher Name") }}</x-label>
@@ -41,12 +41,12 @@
 									<option value="{{ $t->full_name }}">{{ ($t->details->gender == 1)? "Mr." : "Ms." }} {{ $t->full_name }}</option>
 								@endforeach
 							</x-select>
-							<p class="text-red-500" id="errTeacher">This field is required.</p>
+							<p class="text-red-700 font-bold mt-1" id="errTeacher"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 						</div>
 						<div class="mt-3 w-full md:w-1/3" id="inpMaxCourseSessionField">
 							<x-label class="mb-1">{{ __("Max Course Session") }}</x-label>
 							<x-input id="max_course_session" class="w-full" type="number" name="max_course_session" placeholder="Maximum sessions" value="8" />
-							<p class="text-red-500" id="errMaxCourseSession">Invalid input.</p>
+							<p class="text-red-700 font-bold mt-1" id="errMaxCourseSession"><i class="bi bi-exclamation-circle"></i> Invalid input.</p>
 						</div>
 					</div>
 					<div class="flex w-full justify-end mt-8">
@@ -199,19 +199,20 @@
 						let invalidInput = false;
 
 						if(!inpStudentName){
-							$("#inpStudentField").css({"border": "1px solid red", "padding": "10px"});
+							$("#inpStudentField").css({"border": "2px solid rgb(185 28 28)", "padding": "10px"});
 							$("#errStudent").css({"display": "block"});
 							invalidInput = true;
 						}
 
 						if(!inpTeacherName){
-							$("#inpTeacherField").css({"border": "1px solid red", "padding": "10px"});
+							$("#inpTeacherField").css({"border": "2px solid rgb(185 28 28)", "padding": "10px"});
 							$("#errTeacher").css({"display": "block"});
 							invalidInput = true;
 						}
 
 						if(inpMaxCourseSession < 1){
-							$("#inpMaxCourseSessionField").css({"border": "1px solid red", "padding": "10px"});
+							$("#inpMaxCourseSessionField").css({"border": "2px solid rgb(185 28 28)", "padding": "10px"});
+							$("#inpMaxCourseSession")
 							$("#errMaxCourseSession").css({"display": "block"});
 							invalidInput = true;
 						}
