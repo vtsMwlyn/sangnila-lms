@@ -19,9 +19,10 @@ There are 5 roles (types of account) in Sangnila LMS:
 - Improvement in error handling mechanism
 - Removed dismiss option on notifications
 - Auto remove read notifications since 30 days ago
+- Fixes in excel import download template
 
 ### v0.8.1-beta
-- Fix in announcements that can't display image from storage
+- Fixes in announcements that can't display image from storage
 - Now announcement will have its display period and will not shown if outside of the period
 - Now material selection dropdown has search feature enabled to help admin and teacher
 
