@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PushNotificationController;
 use App\Http\Controllers\SysAdminController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,8 @@ Auth::routes(['verify' => true]);
 Route::get("/sysadmin/login", [SysAdminController::class, "sysadmin_login"])->name("sysadmin.login");
 Route::post("/sysadmin/login", [SysAdminController::class, "sysadmin_authenticate"])->name("sysadmin.authenticate");
 Route::post("/sysadmin/logout", [SysAdminController::class, "sysadmin_logout"])->name("sysadmin.logout");
+
+Route::post('/save-subscription', [PushNotificationController::class, "saveSubscription"])->name("pushnotification.savesubscription");
 
 Route::middleware([])->group(function(){
 

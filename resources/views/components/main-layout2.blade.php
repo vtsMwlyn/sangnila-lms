@@ -5,6 +5,7 @@
 		<!-- Metas -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="csrf-token" content="{{ csrf_token() }}">
 
 		<!-- App icon -->
 		<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
@@ -25,6 +26,9 @@
 
 		<!-- Include Select2 CSS -->
 		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+		<!-- Push notification -->
+		<script src="{{ asset('js/push-notifications.js') }}" defer></script>
 
 		<!-- Poppins font -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
