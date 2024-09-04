@@ -14,7 +14,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5">{{ __("Account's Details") }}</x-page-title>
+		<x-page-title>{{ __("Account's Details") }}</x-page-title>
 
 		@if(session()->has("successUpdateAccountData"))
 			<x-badge-success badge_text="{{ session('successUpdateAccountData') }}"></x-badge-success>

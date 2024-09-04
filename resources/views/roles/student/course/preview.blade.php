@@ -11,7 +11,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">{{ $material->title }}</x-page-title>
+		<x-page-title>{{ $material->title }}</x-page-title>
 		<div class="flex gap-3 my-4">
 			<x-anchor-button type="button" target="blank" href="{{ $material->link }}" class="bg-orange-500">
 				Visit Link

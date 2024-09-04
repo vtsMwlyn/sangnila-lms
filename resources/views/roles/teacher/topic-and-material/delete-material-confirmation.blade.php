@@ -13,7 +13,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">Delete Material</x-page-title>
+		<x-page-title>Delete Material</x-page-title>
 
 		<form method="POST" action="{{ route("teacher.material.destroy", $material->id) }}" class="rounded-2xl p-5 bg-blue-800">
 			@csrf

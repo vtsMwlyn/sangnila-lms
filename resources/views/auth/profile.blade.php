@@ -1,5 +1,5 @@
 <x-section-container>
-	<x-page-title class="mt-5 mb-8">{{ __("Account Profile") }}</x-page-title>
+	<x-page-title>{{ __("Account Profile") }}</x-page-title>
 
 	@if(session()->has("successUpdateProfile"))
 		<x-badge-success badge_text="{{ session('successUpdateProfile') }}">

@@ -149,8 +149,8 @@ class CourseController extends Controller {
 			array_push($paymentReminders, ["course" => $c->course_name, "should_pay_soon" => $shouldPaySoon]);
 		}
 
-		$pushNotif = new PushNotificationController();
-		$pushNotif->sendPushNotification();
+		// $pushNotif = new PushNotificationController();
+		// $pushNotif->sendPushNotification();
 
 		return view('roles.student.course.index', [
 			"payment_reminders" => $paymentReminders

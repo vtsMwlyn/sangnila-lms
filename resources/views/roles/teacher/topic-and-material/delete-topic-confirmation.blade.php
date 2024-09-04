@@ -12,7 +12,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">Delete Topic</x-page-title>
+		<x-page-title>Delete Topic</x-page-title>
 		<form method="POST" action="{{ route("teacher.topic.destroy", [$topic->course->id, $topic->id]) }}" class="bg-blue-800 rounded-2xl p-5">
 			@csrf
 			@method('delete')

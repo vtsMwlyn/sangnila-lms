@@ -6,7 +6,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">My Courses</x-page-title>
+		<x-page-title>My Courses</x-page-title>
 		@foreach ($payment_reminders as $reminder)
 			@if($reminder["should_pay_soon"])
 				<div class="bg-yellow-400 text-orange-700 py-3 px-6 rounded-lg font-semibold mb-3">

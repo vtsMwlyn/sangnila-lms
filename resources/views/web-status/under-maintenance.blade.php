@@ -81,7 +81,7 @@
 					</form>
 				@endauth
 				<x-section-container>
-					<x-page-title class="mt-5 mb-8">Notice</x-page-title>
+					<x-page-title>Notice</x-page-title>
 					<div class="bg-blue-900 rounded-2xl p-5">
 						<!-- Confirmation Text -->
 						<div class="mb-4 p-5 text-white">

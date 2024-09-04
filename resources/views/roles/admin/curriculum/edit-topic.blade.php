@@ -13,7 +13,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">{{ __("Edit Curriculum Topic") }}</x-page-title>
+		<x-page-title>{{ __("Edit Curriculum Topic") }}</x-page-title>
 
 		@if(session()->has("systemFail"))
 			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>

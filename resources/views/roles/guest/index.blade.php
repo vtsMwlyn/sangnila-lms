@@ -6,7 +6,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">Our Courses</x-page-title>
+		<x-page-title>Our Courses</x-page-title>
 		@if ($courses->isNotEmpty())
 			{{-- <div class="overflow-x-auto rounded-md">
 				<table class="w-full table-auto">

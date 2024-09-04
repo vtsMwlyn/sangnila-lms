@@ -10,7 +10,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">{{ $course->course_name }}</x-page-title>
+		<x-page-title>{{ $course->course_name }}</x-page-title>
 
 		@if(session()->has("successAddTopic"))
 			<x-badge-success badge_text="{{ session('successAddTopic') }}"></x-badge-success>

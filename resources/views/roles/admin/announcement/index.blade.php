@@ -10,7 +10,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5">{{ __("All Announcements") }}</x-page-title>
+		<x-page-title>{{ __("All Announcements") }}</x-page-title>
 
 		@if(session()->has("successUploadAnnouncement"))
 			<x-badge-success badge_text="{{ session('successUploadAnnouncement') }}">

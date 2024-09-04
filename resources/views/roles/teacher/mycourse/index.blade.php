@@ -6,7 +6,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">My Courses</x-page-title>
+		<x-page-title>My Courses</x-page-title>
 		<div class="overflow-x-auto">
 			<x-table>
 				<x-slot name="head">

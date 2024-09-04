@@ -10,7 +10,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5">{{ __("Student's Details") }}</x-page-title>
+		<x-page-title>{{ __("Student's Details") }}</x-page-title>
 
 		@if(App\Models\ImportedStudent::where("student_id", $student->id)->first())
 			<div class="w-full bg-yellow-300 px-5 py-3 my-8 rounded-lg">

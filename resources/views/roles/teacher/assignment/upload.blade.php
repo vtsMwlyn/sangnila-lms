@@ -11,7 +11,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">Upload New Assignment to {{ $course->course_name }}</x-page-title>
+		<x-page-title>Upload New Assignment to {{ $course->course_name }}</x-page-title>
 
 		@if(session()->has("systemFail"))
 			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>

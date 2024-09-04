@@ -10,7 +10,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">Student Attendance for {{ $course->course_name }}</x-page-title>
+		<x-page-title>Student Attendance for {{ $course->course_name }}</x-page-title>
 
 		@if(session()->has("successUploadAttendance"))
 			<x-badge-success badge_text="{{ session('successUploadAttendance') }}"></x-badge-success>

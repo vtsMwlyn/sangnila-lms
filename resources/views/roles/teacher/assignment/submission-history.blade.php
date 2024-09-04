@@ -13,7 +13,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">{{ $student->full_name }}'s Submissions History in Assignment "{{ $assignment->title }}"</x-page-title>
+		<x-page-title>{{ $student->full_name }}'s Submissions History in Assignment "{{ $assignment->title }}"</x-page-title>
 
 		@if(session()->has("successModifFeedback"))
 			<x-badge-success badge_text="{{ session('successModifFeedback') }}"></x-badge-success>

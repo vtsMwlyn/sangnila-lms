@@ -24,7 +24,7 @@ if ('serviceWorker' in navigator) {
                     }
                     return registration.pushManager.subscribe({
                         userVisibleOnly: true,
-                        applicationServerKey: urlBase64ToUint8Array('BCdWMd593lp05hRwA5Rura6CkxyLtIk1aLl_f2q0VCR_nj8sz4UeOh4IW58SPG4U3SSwlz3TCDJE3ESIakW4OZk')
+                        applicationServerKey: urlBase64ToUint8Array('BG_rNhClZSODlHzKNrziZ3Bta2Ks5dqeii0_HFP013gQop4Yvp32YoDSRV6Oh53F7IR3SVv-SQ-mpgohRXxZ9Fs')
                     });
                 });
         })

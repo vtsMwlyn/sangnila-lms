@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PushNotificationController;
 use App\Http\Controllers\SysAdminController;
@@ -7,27 +8,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAccountController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
+// Verify email application (dont move this)
 Auth::routes(['verify' => true]);
 
+// For maintenance
 Route::get("/sysadmin/login", [SysAdminController::class, "sysadmin_login"])->name("sysadmin.login");
 Route::post("/sysadmin/login", [SysAdminController::class, "sysadmin_authenticate"])->name("sysadmin.authenticate");
 Route::post("/sysadmin/logout", [SysAdminController::class, "sysadmin_logout"])->name("sysadmin.logout");
 
-Route::post('/save-subscription', [PushNotificationController::class, "saveSubscription"])->name("pushnotification.savesubscription");
-
+// Main routes
 Route::middleware([])->group(function(){
-
+	// Home
 	Route::get('/', function () {
 		if (Auth::check()) {
 			// User is logged in, so redirect to a specific route
@@ -36,35 +27,9 @@ Route::middleware([])->group(function(){
 		return view('roles.guest.home');
 	})->name('home');
 
-	Route::get('/dashboard', function () {
-		$roleName = Auth::user()->role->role_name;
-		switch ($roleName) {
-			case 'SysAdmin':
-				// Logic for SysAdmin
-				return redirect(route('sysadmin.account.index'));
-				dd('SysAdmin');
-				break;
-			case 'Admin':
-				// Logic for Admin
-				return redirect(route('admin.course.index'));
-				dd('Admin');
-				break;
-			case 'Teacher':
-				// Logic for Teacher
-				return redirect(route('teacher.mycourse.index'));
-				dd('Teacher');
-				break;
-			case 'Student':
-				// Logic for Student
-				return redirect(route('student.mycourse.index'));
-				dd('Student');
-				break;
-			default:
-				// Default behavior (e.g., for unknown roles)
-				return view('dashboard');
-		}
-	})->middleware(['auth', 'verified'])->name('dashboard');
+	Route::get('/dashboard', [DashboardController::class, "index"])->middleware(['auth', 'verified'])->name('dashboard');
 
+	// Profile & notifications
 	Route::prefix("/profile")->name("profile.")->middleware(["auth", "verified"])->group(function(){
 		Route::get("/", [UserAccountController::class, "show"])->name("show");
 		Route::post("/", [UserAccountController::class, "update"])->name("update");
@@ -77,10 +42,20 @@ Route::middleware([])->group(function(){
 		Route::post("/dismiss-all", [NotificationController::class, "dismiss_all"])->name("dismiss-all");
 	});
 
+	// Authentication and registrations
 	require __DIR__ . '/auth.php';
 
+	// Role based routes
 	require __DIR__ . '/roles/admin.php';
 	require __DIR__ . '/roles/teacher.php';
 	require __DIR__ . '/roles/student.php';
 	require __DIR__ . '/roles/guest.php';
+
+	// Push notification
+	Route::post('/save-subscription', [PushNotificationController::class, "saveSubscription"])->name("pushnotification.savesubscription");
+
+	Route::get("/test-notif", function(){
+		$pnc = new PushNotificationController();
+		$pnc->sendPushNotification();
+	});
 });

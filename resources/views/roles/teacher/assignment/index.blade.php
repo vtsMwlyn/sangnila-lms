@@ -10,7 +10,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5">Manage Assignment</x-page-title>
+		<x-page-title>Manage Assignment</x-page-title>
 		<h1 class="text-2xl font-semibold text-blue-900 mb-8 text-center">Pick a Course</h1>
 
 		<div class="overflow-x-auto rounded-md">

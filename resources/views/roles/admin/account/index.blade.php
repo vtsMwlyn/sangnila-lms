@@ -6,7 +6,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5">{{ __("List of All Accounts") }}</x-page-title>
+		<x-page-title>{{ __("List of All Accounts") }}</x-page-title>
 
 		@if(session()->has("successCreateNewAccount"))
 			<x-badge-success badge_text="{{ session('successCreateNewAccount') }}"></x-badge-success>

@@ -10,7 +10,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5">Manage Students' Material Access</x-page-title>
+		<x-page-title>Manage Students' Material Access</x-page-title>
 		<h1 class="text-2xl font-semibold text-blue-900 text-center mb-8">Pick a Course</h1>
 		<div class="overflow-x-auto rounded-md">
 			<x-table>

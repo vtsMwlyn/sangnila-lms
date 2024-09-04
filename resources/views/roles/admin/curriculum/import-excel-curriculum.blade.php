@@ -12,7 +12,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">Import Curriculum Data from Excel</x-page-title>
+		<x-page-title>Import Curriculum Data from Excel</x-page-title>
 
 		@if(session()->has("failImportExcelCurriculum"))
 			<x-badge-danger badge_text="{{ session('failImportExcelCurriculum') }}" class="mb-8"></x-badge-danger>

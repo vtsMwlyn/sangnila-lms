@@ -12,7 +12,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5">{{ __("Delete Announcement") }}</x-page-title>
+		<x-page-title>{{ __("Delete Announcement") }}</x-page-title>
 
 		<div class="mt-10">
 			<form method="POST" action="{{ route('admin.announcement.destroy', $announcement->id) }}" class="bg-blue-800 rounded-2xl py-5 px-10">

@@ -6,7 +6,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5">{{ __("List of Active Teachers") }}</x-page-title>
+		<x-page-title>{{ __("List of Active Teachers") }}</x-page-title>
 
 		<form class="flex w-full justify-center" action="{{ route("admin.teacher.index") }}">
 			<x-input type="text" class="border-blue-900 border-2 rounded-l-lg rounded-r-none w-full lg:w-1/3" name="search" placeholder="Search..." :value="request('search')"/>

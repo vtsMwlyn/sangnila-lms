@@ -12,7 +12,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">Assignment Submission</x-page-title>
+		<x-page-title>Assignment Submission</x-page-title>
 
 		<div class="rounded-md w-full mt-5 my-5 p-5 border" style="background: rgba(256, 256, 256, 0.4)">
 			<h3 class="text-xl font-semibold text-blue-950">{{ $assignment->title }}</h3>

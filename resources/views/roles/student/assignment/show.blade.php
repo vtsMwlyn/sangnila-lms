@@ -10,7 +10,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5">My Assignments</x-page-title>
+		<x-page-title>My Assignments</x-page-title>
 		<h1 class="text-xl font-semibold text-center text-blue-900 mb-8">Course: {{ $course->course_name }}</h1>
 
 		@if(session()->has("successSubmitAssignment"))

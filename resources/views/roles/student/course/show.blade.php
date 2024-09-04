@@ -10,7 +10,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">{{ $course->course_name }}</x-page-title>
+		<x-page-title>{{ $course->course_name }}</x-page-title>
 		<p class="text-blue-950 font-semibold text-center mb-8">{{ $course->course_description }}</p>
 
 		<h2 class="text-xl text-white font-bold">Course Materials:</h2>
