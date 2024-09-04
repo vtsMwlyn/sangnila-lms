@@ -26,6 +26,9 @@ There are 5 roles (types of account) in Sangnila LMS:
 - Now announcement will have its display period and will not shown if outside of the period
 - Now material selection dropdown has search feature enabled to help admin and teacher
 
+### v0.8.2-beta
+- Added dashboard page for students
+
 ## Clone Project
 Clone the repository in any desired directory. Web resources such as images, videos, scripts, and styles are included in `public` folder. To generate the database system and fill it will sample data, run this command in the terminal:
 ```bash
