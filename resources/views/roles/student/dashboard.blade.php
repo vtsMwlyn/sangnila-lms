@@ -120,8 +120,10 @@
 
 			<!-- Progress -->
 			<div class="w-full md:w-1/2 bg-white rounded-xl p-5 shadow-lg">
-				<p class="font-semibold text-blue-800">Tau ah buat apa</p>
+				<p class="font-semibold text-blue-800">Calendar</p>
 				<hr class="mt-3">
+				{{-- <iframe src="https://calendar.google.com/calendar/embed?src=vannestheo.sangnila%40gmail.com&ctz=Asia%2FJakarta&no_cache=1&showNav=0&showTitle=0" style="border: 0" width="800" height="600" frameborder="0" scrolling="no" class="w-full"></iframe> --}}
+				<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FJakarta&bgcolor=%23ffffff&showTabs=0&showPrint=0&showTitle=0&showCalendars=0&src=YmQ3NzMyZWY2NjMwMjc5ZDRkYTM0YmZmZWRlOGUwMWFlOTAzNDVmZWVlM2MxNWNkMzk0NGU3NTk4OGJhYzBjY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZW4uaW5kb25lc2lhbiNob2xpZGF5QGdyb3VwLnYuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%23C0CA33&color=%230B8043" height="380" frameborder="0" scrolling="no" class="w-full mt-5"></iframe>
 			</div>
 		</div>
 	</x-section-container>

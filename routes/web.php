@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PushNotificationController;
@@ -15,6 +16,8 @@ Auth::routes(['verify' => true]);
 Route::get("/sysadmin/login", [SysAdminController::class, "sysadmin_login"])->name("sysadmin.login");
 Route::post("/sysadmin/login", [SysAdminController::class, "sysadmin_authenticate"])->name("sysadmin.authenticate");
 Route::post("/sysadmin/logout", [SysAdminController::class, "sysadmin_logout"])->name("sysadmin.logout");
+
+Route::get("/test-add-event", [CalendarController::class, "createEvent"]);
 
 // Main routes
 Route::middleware([])->group(function(){
