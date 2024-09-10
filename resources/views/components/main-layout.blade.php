@@ -29,7 +29,7 @@
 
 		<!-- Custom styles -->
 		<link rel="stylesheet" href="{{ asset("css/custom_styles.css") }}">
-		
+
 		<style>
 			/* Custom Cursor */
 			a {

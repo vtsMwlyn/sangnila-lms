@@ -9,6 +9,7 @@ use App\Models\CourseStudent;
 use App\Models\Attendance;
 use App\Models\ImportedStudent;
 use App\Models\StudentAttendance;
+use App\Models\Topic;
 use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends Controller {
@@ -34,6 +35,8 @@ class AttendanceController extends Controller {
 	public function create($course_id){
 		$course = Auth::user()->teached_courses->where('id', $course_id)->first();
 		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+
+		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
 
 		// Mechanism to remove student's who reached his/her maximum session and haven't paid yet (if agreed to be implemented)
 		// $studentsToRemove = [];
@@ -63,20 +66,13 @@ class AttendanceController extends Controller {
 
 		return view("roles.teacher.attendance.upload", [
 			"course" => $course,
+			"topics" => $topics,
 			"course_students" => $course_students/*$filteredUsers*/
 		]);
 	}
 
 	// Insert new attendance data into database
 	public function store(Request $request, $course_id) {
-		$validatedData = $request->validate([
-			"checkbox_value.*" => "required",
-			"attendance_detail.*" => "required|min:3",
-			"attendance_date" => "required"
-		], [
-			"attendance_detail.*.required" => "The attendance detail field is required."
-		]);
-
 		$course = Course::where("id", $course_id)->first();
 		$teacher = Auth::user();
 
@@ -85,22 +81,23 @@ class AttendanceController extends Controller {
 		$newAttendance = Attendance::create([
 			"teacher_id" => $teacher->id,
 			"course_id" => $course->id,
-			"attendance_date" => $validatedData["attendance_date"],
+			"attendance_date" => $request["attendance_date"],
 			"attendance_identifier" => $identifier
 		]);
 
-		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+		foreach($request->students as $i => $student_id){
+			$cs = CourseStudent::where("student_id", $student_id)->where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->first();
+			$attendanceDetail = $request["attendance_detail"][$i];
 
-		foreach($course_students as $i => $cs){
-			$attendanceDetail = $validatedData["attendance_detail"][$i];
-
-			$isAttend = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
+			$isAttend = ($request["checkbox_value"][$i] == "on")? 1 : 0;
 
 			StudentAttendance::create([
 				"user_id" => $cs->student->id,
 				"attendance_id" => $newAttendance->id,
 				"is_attend" => $isAttend,
 				"attendance_detail" => $attendanceDetail,
+				"material_progress" => $request["material_progress"][$i],
+				"learning_status" => $request["learning_status"][$i]
 			]);
 
 			$i++;
@@ -121,27 +118,44 @@ class AttendanceController extends Controller {
 
 	// Update attendance data in the database
 	public function update(Request $request, $attendance_data_id){
-		$validatedData = $request->validate([
-			"checkbox_value.*" => "required",
-			"attendance_detail.*" => "required|min:3",
-			"attendance_date" => "required"
-		], [
-			"attendance_detail.*.required" => "The attendance detail field is required."
-		]);
-
 		$attendance = Attendance::where("id", $attendance_data_id)->first();
 		$existingAttendanceData = $attendance->student_attendances;
 
-		$attendance->update(["attendance_date" => $validatedData["attendance_date"]]);
+		$attendance->update(["attendance_date" => $request["attendance_date"]]);
 
-		$i = 0;
-		foreach($existingAttendanceData as $a){
-			$isAttend = ($validatedData["checkbox_value"][$i] == "on")? 1 : 0;
-			$attendanceDetail = $validatedData["attendance_detail"][$i];
+		foreach($existingAttendanceData as $existingAtd){
+			if(!in_array($existingAtd->student->id, $request->students)){
+				StudentAttendance::where("user_id", $existingAtd->student->id)->where("attendance_id", $attendance->id)->delete();
+			}
+		}
 
-			StudentAttendance::where("id", $a->id)->update(["is_attend" => $isAttend, "attendance_detail" => $attendanceDetail]);
+		foreach($request->students as $i => $student_id){
+			$cs = CourseStudent::where("student_id", $student_id)->where("course_id", $attendance->course->id)->where("teacher_id", Auth::user()->id)->first();
 
-			$i++;
+			// Modify data in database mechanism if the data valid for each students data in the course
+			$isAttend = ($request["checkbox_value"][$i] == "on")? 1 : 0;
+			$attendanceDetail = $request["attendance_detail"][$i];
+
+			// If the student is not recorded in current attendance data, add them to the list
+			if(!$existingAttendanceData->where("user_id", $cs->student->id)->first()){
+				StudentAttendance::create([
+					"is_attend" => $isAttend,
+					"attendance_detail" => $attendanceDetail,
+					"material_progress" => $request["material_progress"][$i],
+					"learning_status" => $request["learning_status"][$i],
+					"user_id" => $student_id,
+					"attendance_id" => $attendance->id
+				]);
+			}
+			// If the student is already recorded in current attendance data, update the attendance data
+			else {
+				StudentAttendance::where("user_id", $cs->student->id)->where("attendance_id", $attendance->id)->update([
+					"is_attend" => $isAttend,
+					"attendance_detail" => $attendanceDetail,
+					"material_progress" => $request["material_progress"][$i],
+					"learning_status" => $request["learning_status"][$i]
+				]);
+			}
 		}
 
 		return redirect(route("teacher.attendance.show", $attendance->course_id))->with("successEditAttendance", "Attendance edited successfully!");
@@ -179,21 +193,33 @@ class AttendanceController extends Controller {
 	// ===== ADMIN ===== //
 	// Showing attendance data of a student in all enrolled course
 	public function admin_show($student_id, $course_id){
-		$attendances = StudentAttendance::where("user_id", $student_id)->whereNot("attendance_detail", "Account disabled")->get();
-		$course = Course::where("id", $course_id)->first();
-		$student = User::where("id", $student_id)->first();
+		// Eager load the 'attendance' relationship and order by 'attendance_date'
+		$attendances = StudentAttendance::where("user_id", $student_id)
+			->whereNot("attendance_detail", "Account disabled")
+			->with(['attendance' => function($query) {
+				$query->orderBy('attendance_date', 'asc'); // or 'desc' for descending order
+			}])
+			->get();
 
-		$student_attendances = [];
-		foreach($attendances as $atd){
-			if($atd->attendance->course_id == $course->id){
-				array_push($student_attendances, $atd);
-			}
-		}
+		$course = Course::findOrFail($course_id);
+		$student = User::findOrFail($student_id);
 
+		// Filter the attendances by the related course_id
+		$student_attendances = $attendances->filter(function ($atd) use ($course) {
+			return $atd->attendance->course_id == $course->id;
+		});
+
+		// Sort the filtered attendances by 'attendance_date'
+		$student_attendances = $student_attendances->sortBy(function ($atd) {
+			return $atd->attendance->attendance_date;
+		});
+
+		// Render the view with the sorted attendances
 		return view("roles.admin.student.atd-details", [
 			"attendances" => $student_attendances,
 			"course" => $course,
 			"student" => $student
 		]);
+
 	}
 }

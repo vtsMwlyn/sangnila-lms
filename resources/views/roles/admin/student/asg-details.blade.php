@@ -4,11 +4,17 @@
 	<h1>{{ $student->full_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <a href="{{ route('admin.student.show', $student->id) }}" class="font-bold text-yellow-500">{{ $student->full_name }}</a>
+	> <a href="{{ route('admin.student.show', $student->id) }}#student-summary" class="font-bold text-yellow-500">Assignments</a>
+	> <span>{{ $course->course_name }}</span>
+@endsection
+
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5">{{ __($student->full_name . "'s Assignments in Course: " . $course->course_name) }}</x-page-title>
+		<x-page-title class="mt-5 mb-8">{{ __($student->full_name . "'s Assignments in Course: " . $course->course_name) }}</x-page-title>
 
-		<div class="overflow-x-auto mt-10">
+		<div class="overflow-x-auto">
 			<x-table>
 				<x-slot name="head">
 					<th class="template-heads rounded-l-xl">Assignment Title</th>
@@ -21,7 +27,7 @@
 					<tr>
 						<td class="template-bodies rounded-l-xl">{{ $asg->title }}</td>
 						<td class="template-bodies">{{ $asg->desc }}</td>
-						<td class="template-bodies">{{ ($asg->posted_by->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $asg->posted_by->full_name }}</td>
+						<td class="template-bodies">{{ ($asg->posted_by->details->gender == 1)? "Mr." : "Ms." }} {{ $asg->posted_by->full_name }}</td>
 						@php
 							$submissions = $asg->submissions;
 							$found = false;
@@ -44,7 +50,7 @@
 					</tr>
 				@empty
 					<tr>
-						<td class="bg-white px-3 py-5 text-center rounded-xl" colspan="5">- No assignments assigned to the student yet -</td>
+						<td class="bg-white px-3 py-5 text-center rounded-xl font-semibold" colspan="5">- No assignments assigned to the student yet -</td>
 					</tr>
 				@endforelse
 			</x-table>

@@ -5,30 +5,29 @@
 @endsection
 
 @section("content")
-	<h1 class="text-3xl font-semibold text-blue-900 mb-4">{{ $course->course_name }}</h1>
-	<p class="text-gray-700 mb-8">{{ $course->course_description }}</p>
+	<x-section-container>
+		<x-page-title class="mt-5 mb-8">{{ $course->course_name }}</x-page-title>
+		<p class="text-blue-950 font-semibold text-center mb-8">{{ $course->course_description }}</p>
 
-	<h2 class="text-xl font-semibold mb-2">Course Materials:</h2>
-	<div class="overflow-x-auto mb-5">
-		<table class="min-w-full table-auto">
-			<thead>
-				<tr class="border-b border-blue-900 bg-blue-200">
-					<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Course Topic</th>
-					<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Material Name</th>
-				</tr>
-			</thead>
-			<tbody>
-				@if ($course->topics->count())
-					@if($course->topics[0]->materials->count())
-						@foreach ($course->topics[0]->materials as $index => $material)
+		<h2 class="text-xl font-bold text-white mb-5">Course Materials:</h2>
+		<div class="overflow-x-auto mb-5">
+			<x-table>
+				<x-slot name="head">
+					<th class="template-heads rounded-l-xl">Course Topic</th>
+					<th class="template-heads rounded-r-xl">Material Name</th>
+				</x-slot>
+
+				@if ($topics->count())
+					@if($topics[0]->curriculum_materials->count())
+						@foreach ($topics[0]->curriculum_materials as $index => $material)
 							@if($index < 3)
-								<tr class="hover:bg-gray-100 border-b border-blue-900 @if($index == 1) opacity-60 @elseif($index == 2) opacity-30 @endif">
-									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-										{{ $course->topics[0]->title }}
+								<tr class="@if($index == 1) opacity-60 @elseif($index == 2) opacity-30 @endif">
+									<td class="template-bodies rounded-l-xl">
+										{{ $topics[0]->title }}
 									</td>
-									<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
+									<td class="template-bodies rounded-r-xl">
 										@if($index < 1)
-											<a href="{{ $material->link }}" class="font-bold hover:underline text-blue-600">
+											<a href="{{ $material->link }}" class="font-bold hover:underline text-blue-200 hover:text-blue-400">
 												{{ $material->title }}
 											</a>
 										@else
@@ -43,21 +42,22 @@
 					@else
 						<tr class="hover:bg-gray-100 border-b border-blue-900">
 							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-								{{ $course->topics[0]->title }}
+								{{ $topics[0]->title }}
 							</td>
 							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 text-center">This topic doesn't have any materials yet.</td>
 						</tr>
 					@endif
 				@else
 					<tr>
-						<td colspan="2" class="px-4 py-2 text-center border-t border-blue-900">This course doesn't have any topics and materials yet.</td>
+						<td colspan="2" class="p-5 bg-white rounded-xl font-semibold text-center">This course doesn't have any topics and materials yet.</td>
 					</tr>
 				@endif
-			</tbody>
-		</table>
 
-		<div class="mt-10 flex justify-center">
-			<div class="border border-orange-500 p-5 text-orange-500 font-bold">~ Want to find out more? Come join us now! ~</div>
+			</x-table>
+
+			<div class="mt-10 flex justify-center">
+				<div class="border-4 border-orange-400 p-5 text-orange-400 font-extrabold">~ Want to find out more? Come join us now! ~</div>
+			</div>
 		</div>
-	</div>
+	</x-section-container>
 @endsection

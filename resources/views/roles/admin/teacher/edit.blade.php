@@ -4,6 +4,11 @@
 	<h1>{{ $teacher->full_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <a href="{{ route('admin.teacher.show', $teacher->id) }}" class="font-bold text-yellow-500">{{ (($teacher->details->gender == 1)? "Mr. " : "Ms. ") . $teacher->full_name }}</a>
+	> <span>Edit</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">{{ __("Edit Teacher's Data") }}</x-page-title>
@@ -17,9 +22,9 @@
 					autofocus />
 			</div>
 
-			<!-- Teacher Phone Number -->
+			<!-- Phone Number -->
 			<div class="mt-3 flex items-stretch gap-3">
-				<x-boxed-label for="phone_number" :value="__('Teacher Phone Number')"/>
+				<x-boxed-label for="phone_number" :value="__('Phone Number')"/>
 				<x-input id="phone_number" class="block w-full" type="text" name="phone_number" :value="$teacher->details->phone_number" placeholder="Add phone number"  />
 			</div>
 
@@ -43,9 +48,9 @@
 				<x-button class="bg-orange-500 w-full md:w-1/5">
 					{{ __('Save') }}
 				</x-button>
-				<x-button type="button" onclick="if(confirm('The changes will be discarded, are you sure want to cancel?')) history.back();" class="bg-orange-500 w-full md:w-1/5">
+				<x-cancel-button msg="The changes will be discarded, are you sure want to cancel?" class="w-full md:w-1/5">
 					Cancel
-				</x-button>
+				</x-cancel-button>
 			</div>
 		</form>
 	</x-section-container>

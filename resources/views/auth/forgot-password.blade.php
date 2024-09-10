@@ -1,36 +1,34 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+@extends("layouts.login-register")
 
-        <div class="mb-4 text-sm text-gray-600">
-            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-        </div>
+@section("content")
+	<div class="flex flex-col items-center justify-center rounded-2xl w-5/6 md:w-3/5 bg-orange-500 p-10">
+		<div class="my-10 w-32 md:w-40">
+			<img src={{ asset("img/AR.W.png") }} alt="logo" width="100%">
+		</div>
 
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
+		<div class="w-full md:w-4/5 bg-indigo-950 p-10 rounded-xl">
+			<div class="mb-4 text-md text-white">
+				{{ __('Forgot your password? No problem. Just let us know your account\'s email address and we will email you a password reset link that will allow you to choose a new one.') }}
+			</div>
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+			<!-- Session Status -->
+			<x-auth-session-status class="mb-4" :status="session('status')" />
 
-        <form method="POST" action="{{ route('password.email') }}">
-            @csrf
+			<form method="POST" action="{{ route('password.email') }}" class="w-full">
+				@csrf
 
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
+				<!-- Email Address -->
+				<div>
+					<x-label for="email" :value="__('Email')" style="color: white"/>
+					<x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" autofocus />
+				</div>
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Email Password Reset Link') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+				<div class="flex items-center justify-center mt-8">
+					<x-button class="bg-orange-500">
+						{{ __('Email Password Reset Link') }}
+					</x-button>
+				</div>
+			</form>
+		</div>
+	</div>
+@endsection

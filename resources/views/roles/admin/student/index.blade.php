@@ -13,7 +13,13 @@
 			<x-button class="bg-white rounded-l-none rounded-r-lg border-blue-900 border-t-2 border-r-2 border-b-2 text-blue-900 hover:text-white"><i class="bi bi-search"></i></x-button>
 		</form>
 
-		<div class="overflow-x-auto mt-8">
+		@if(session()->has("successImportExcelStudent"))
+			<x-badge-success badge_text="{{ session('successImportExcelStudent') }}" class="mb-4"></x-badge-success>
+		@endif
+
+		<x-anchor-button class="bg-orange-500 mt-8" href="{{ route('admin.student.import-excel') }}"><i class="bi bi-file-earmark-arrow-up"></i> Import From Excel</x-anchor-button>
+
+		<div class="overflow-x-auto mt-4">
 			<x-table>
 				<x-slot name="head">
 					<th class="template-heads sm:w-1/4 rounded-l-xl">Student Name</th>
@@ -41,13 +47,13 @@
 								@if($student->enrolled_courses->count())
 									<ul>
 										@foreach ($student->enrolled_courses as $index2 => $course)
-											<li class="flex justify-between items-center my-2">
+											<li class="flex justify-between gap-3 items-center my-2">
 												<div class="w-2/3">
 													<span>{{ $course->course_name }}</span>
 												</div>
 												<div class="w-1/3">
 													<div class="w-full bg-gray-200 rounded-lg h-4 overflow-hidden relative">
-														<div class="absolute w-full h-full @if((($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) && $current_attendances[$index1][$index2] != 0) text-red-950 @else text-green-950 @endif  flex justify-center items-center font-semibold">
+														<div class="absolute w-full h-full @if((($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) && $current_attendances[$index1][$index2] != 0) text-red-100 @else text-green-950 @endif  flex justify-center items-center font-semibold">
 															{{ __($current_attendances[$index1][$index2] . "/" . $max_attendances[$index1][$index2]) }}
 														</div>
 														<div class="@if(($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) bg-red-600 @else bg-green-700 @endif h-full" style="width: {{ $percentages[$index1][$index2] }}%;"></div>
@@ -76,8 +82,8 @@
 					@endforeach
 				@else
 					<tr class="bg-white">
-						<td colspan="4" class="rounded-xl text-center px-4 py-5 sm:w-1/4">
-							- No students yet -
+						<td colspan="4" class="font-semibold rounded-xl text-center p-5 sm:w-1/4">
+							{{ request("search")? "- No data found -" : "- No students yet -" }}
 						</td>
 					</tr>
 				@endif

@@ -4,13 +4,22 @@
 	<h1>{{ $course->course_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <a href="{{ route('admin.course.show', $course->id) }}" class="font-bold text-yellow-500">{{ $course->course_name }}</a>
+	> <span>Batch Assign</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5 mb-8">Batch Assign</x-page-title>
 
+		<x-badge-danger id="emptyDataNotif" badge_text="Please input minimum 1 data to proceed." style="display: none;"></x-badge-danger>
+
 		@if($allStudents->count() && $course->teachers->count())
-			<div class="border rounded-xl p-5 bg-white border-black">
-				<h1 class="font-semibold text-lg">Input New Data</h1>
+			<div class="my-10">
+				<div class="flex">
+					<h1 class="font-semibold text-lg text-blue-950 px-5 py-2 border-2 border-blue-950 rounded-xl">Input New Data</h1>
+				</div>
 				<div id="form-area">
 					<div class="flex flex-col md:flex-row gap-3">
 						<div class="mt-3 w-full md:w-1/3" id="inpStudentField">
@@ -25,7 +34,7 @@
 							<x-select name="teacher_name" id="teacher_name" class="w-full" required>
 								<option disabled selected>Pick a teacher</option>
 								@foreach ($allTeachers as $t)
-									<option value="{{ $t->full_name }}">{{ ($t->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $t->full_name }}</option>
+									<option value="{{ $t->full_name }}">{{ ($t->details->gender == 1)? "Mr." : "Ms." }} {{ $t->full_name }}</option>
 								@endforeach
 							</x-select>
 							<p class="text-red-500" id="errTeacher">This field is required.</p>
@@ -36,31 +45,38 @@
 							<p class="text-red-500" id="errMaxCourseSession">Invalid input.</p>
 						</div>
 					</div>
-					<x-button class="bg-green-600 mt-5" type="button" id="addBtn">Add Data</x-button>
+					<div class="flex w-full justify-end mt-8">
+						<x-button class="bg-orange-500 w-1/2 md:w-1/6" type="button" id="addBtn">Add Data</x-button>
+					</div>
 				</div>
 				<div id="no-more-add-data" class="my-5" style="display: none;">
 					<p class="italic text-slate-500">- No more students can be added -</p>
 				</div>
 			</div>
 
-			<div class="border rounded-xl p-5 mt-5 border-black bg-white">
-				<h1 class="font-semibold text-lg">Data to Add</h1>
+			<div class="">
+				<div class="flex">
+					<h1 class="font-semibold text-lg text-blue-950 px-5 py-2 border-2 border-blue-950 rounded-xl">Data to Add</h1>
+				</div>
 				<div class="overflow-x-auto mt-5">
-					<table class="w-full">
-						<thead>
-							<th class="border px-4 py-2">Student Name</th>
-							<th class="border px-4 py-2">Teacher Name</th>
-							<th class="border px-4 py-2" style="min-width: 100px; max-width: 100px;">Max Session</th>
-							<th class="border px-4 py-2">Action</th>
-						</thead>
-						<tbody id="tableBody">
-						</tbody>
-					</table>
+					<div class="w-full overflow-hidden rounded-xl border border-blue-950">
+						<table class="w-full bg-slate-200 text-blue-950">
+							<thead>
+								<th class="border-r border-blue-950 px-4 py-2">Student Name</th>
+								<th class="border-r border-blue-950 px-4 py-2">Teacher Name</th>
+								<th class="border-r border-blue-950 px-4 py-2" style="min-width: 100px; max-width: 100px;">Max Session</th>
+								<th class="px-4 py-2">Action</th>
+							</thead>
+							<tbody id="tableBody">
+							</tbody>
+						</table>
+					</div>
 				</div>
 
-				<form action="{{ route("admin.course.batch-assign.store", $course->id) }}" class="mt-5" method="post" id="leForm">
+				<form action="{{ route("admin.course.batch-assign.store", $course->id) }}" class="mt-10 w-full flex gap-3 justify-end items-center" method="post" id="leForm">
 					@csrf
-					<x-button class="bg-indigo-400">Assign All</x-button>
+					<x-button class="bg-orange-500 w-1/2 md:w-1/6">Assign All</x-button>
+					<x-cancel-button class="w-1/2 md:w-1/6" msg="The data will be discarded. Are you sure want to cancel?">Cancel</x-cancel-button>
 				</form>
 			</div>
 
@@ -190,7 +206,7 @@
 							invalidInput = true;
 						}
 
-						if(inpMaxCourseSession < 1 || inpMaxCourseSession % 8 != 0){
+						if(inpMaxCourseSession < 1){
 							$("#inpMaxCourseSessionField").css({"border": "1px solid red", "padding": "10px"});
 							$("#errMaxCourseSession").css({"display": "block"});
 							invalidInput = true;
@@ -202,10 +218,10 @@
 
 						// Generate new data element
 						const row = $("<tr>");
-						const col1 = $("<td>").addClass("border py-2 px-4");
-						const col2 = $("<td>").addClass("border py-2 px-4");
-						const col3 = $("<td>").addClass("border py-2 px-4");
-						const col4 = $("<td>").addClass("border py-2 px-4");
+						const col1 = $("<td>").addClass("border-r border-blue-950 border-t py-2 px-4 font-semibold");
+						const col2 = $("<td>").addClass("border-r border-blue-950 border-t py-2 px-4 font-semibold");
+						const col3 = $("<td>").addClass("border-r border-blue-950 border-t py-2 px-4 font-semibold");
+						const col4 = $("<td>").addClass("border-blue-950 border-t py-2 px-4 font-semibold");
 
 						const studentObj = JSON.parse(inpStudentName);
 
@@ -244,11 +260,23 @@
 
 						document.dispatchEvent(itemListModifiedEvent);
 					});
+
+					$("#leForm").on("submit", function(e){
+						e.preventDefault();
+
+						if(without.length == 0){
+							$("#emptyDataNotif").css("display", "flex");
+
+							return;
+						}
+
+						this.submit();
+					});
 				});
 			</script>
 		@else
 			<div class="rounded-lg py-5 px-10 bg-blue-800">
-				<p class="text-white italic">- This course still has no teachers and students assigned to it -</p>
+				<p class="text-white italic">- This course still has no teachers or students assigned to it, or there are no more students to assign to course -</p>
 				<x-button type="button" onclick="history.back()" class="bg-orange-500 mt-4">
 					Return
 				</x-button>

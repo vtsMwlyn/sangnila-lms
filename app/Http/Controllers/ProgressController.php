@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
-use App\Models\Progress;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Topic;
+use App\Models\Course;
+use App\Models\Notification;
+use App\Models\Progress;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProgressController extends Controller {
 	// ===== TEACHER ===== //
@@ -20,7 +23,9 @@ class ProgressController extends Controller {
 			->pluck('material_id')
 			->toArray();
 
-		foreach ($course->topics as $topic) {
+		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+
+		foreach ($topics as $topic) {
 			foreach($topic->materials as $material) {
 				if (!in_array($material->id, $existingProgress)) {
 					$progress = Progress::create([
@@ -38,6 +43,7 @@ class ProgressController extends Controller {
 		return view('roles.teacher.student.progress', [
 			'student' => $student,
 			'course' => $course,
+			"topics" => $topics,
 			'newestprogress' => $newestProgress
 		]);
 	}
@@ -47,8 +53,21 @@ class ProgressController extends Controller {
 		$student_progress = Progress::where("course_id", $course_id)->where("student_id", $student_id)->get();
 
 		foreach($student_progress as $index => $progress){
-			$newStatus = ($request->checkbox_value[$index] == 'on')? "unlocked" : "locked";
-			Progress::where("id", $progress->id)->update(["status" => $newStatus]);
+			$newStatus = ($request->checkbox_value[$index] == 'on') ? "unlocked" : "locked";
+
+			if ($progress->status == "locked" && $newStatus == "unlocked") {
+				$updateStatus = Progress::where("id", $progress->id)->update(["status" => $newStatus]);
+
+				if ($updateStatus > 0) {
+					Notification::create([
+						"user_id" => $student_id,
+						"status" => "unread",
+						"message" => "New material \"" . $progress->material->title . "\" in course " . $progress->course->course_name . " is now accessible!"
+					]);
+				}
+			} else {
+				Progress::where("id", $progress->id)->update(["status" => $newStatus]);
+			}
 		}
 
 		return redirect(route('teacher.student.show.progress', [

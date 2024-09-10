@@ -4,6 +4,12 @@
 	<h1>{{ $student->full_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <a href="{{ route('admin.student.show', $student->id) }}" class="font-bold text-yellow-500">{{ $student->full_name }}</a>
+	> <a href="{{ route('admin.student.show', $student->id) }}#student-summary" class="font-bold text-yellow-500">Attendance & Progress</a>
+	> <span>{{ $course->course_name }}</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5">{{ __($student->full_name . "'s Attendance in Course: " . $course->course_name) }}</x-page-title>
@@ -23,14 +29,19 @@
 							@continue
 						@endif
 						<tr class="@if($attendance->is_attend == 1) bg-green-700 @else bg-red-800 @endif text-white">
-							<td class="px-3 py-5 text-center rounded-l-xl">{{ $attendance->created_at }}</td>
+							<td class="px-3 py-5 text-center rounded-l-xl">{{ $attendance->attendance->attendance_date }}</td>
 							<td class="px-3 py-5 text-center font-bold">@if($attendance->is_attend == 1) Present @else Absent @endif</td>
-							<td class="px-3 py-5 text-center">{{ $attendance->attendance_detail }}</td>
-							<td class="px-3 py-5 text-center rounded-r-xl">{{ ($attendance->attendance->posted_by->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $attendance->attendance->posted_by->full_name }}</td>
+							<td class="px-3 py-5 text-center">
+								<div class="flex flex-col gap-3">
+									<p>{{ $attendance->attendance_detail }}</p>
+									<p class="font-semibold italic text-yellow-200">{{ $attendance->material_progress }} - {{ $attendance->learning_status }}</p>
+								</div>
+							</td>
+							<td class="px-3 py-5 text-center rounded-r-xl">{{ ($attendance->attendance->posted_by->details->gender == 1)? "Mr." : "Ms." }} {{ $attendance->attendance->posted_by->full_name }}</td>
 						</tr>
 					@endforeach
 				@else
-					<tr><td colspan="4" class="bg-white px-3 py-5 text-center rounded-xl">- The teacher haven't uploaded any attendance data yet -</td></tr>
+					<tr><td colspan="4" class="bg-white px-3 py-5 text-center rounded-xl font-semibold">- The teacher haven't uploaded any attendance data yet -</td></tr>
 				@endif
 			</x-table>
 		</div>

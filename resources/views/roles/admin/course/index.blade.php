@@ -14,18 +14,16 @@
 		</form>
 
 		@if(session()->has("successCreateNewCourse"))
-			<div class="w-full bg-green-500 px-5 py-3 rounded-lg">
-				<p class="text-green-900">{{ session("successCreateNewCourse") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successCreateNewCourse') }}">
+			</x-badge-success>
 		@elseif(session()->has("successDeleteCourse"))
-			<div class="w-full bg-yellow-300 px-5 py-3 rounded-lg">
-				<p class="text-yellow-600" >{{ session("successDeleteCourse") }}</p>
-			</div>
+			<x-badge-warning badge_text="{{ session('successDeleteCourse') }}">
+			</x-badge-warning>
 		@endif
 
 		<x-anchor-button class="bg-orange-500 mt-8" href="{{ route('admin.course.create') }}"><i class="bi bi-plus-lg"></i> Add New Course</x-anchor-button>
 
-		<div class="overflow-x-auto">
+		<div class="overflow-x-auto mt-5">
 			<x-table>
 				<x-slot name="head">
 					<th class="template-heads rounded-l-xl sm:w-1/4">Course Name</th>
@@ -72,8 +70,8 @@
 					@endforeach
 				@else
 					<tr>
-						<td colspan="4" class="bg-white rounded-xl px-4 py-5 sm:w-1/4 text-center">
-							- No courses yet -
+						<td colspan="4" class="bg-white rounded-xl p-5 sm:w-1/4 text-center font-semibold">
+							{{ request("search")? "- No data found -" : "- No courses yet -" }}
 						</td>
 					</tr>
 				@endif

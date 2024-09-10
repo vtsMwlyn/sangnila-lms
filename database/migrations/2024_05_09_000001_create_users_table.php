@@ -14,6 +14,8 @@ return new class extends Migration {
 			$table->string('password');
 			$table->unsignedBigInteger('role_id');
 			$table->string("status");
+			$table->timestamp("last_announcement")->nullable();
+			$table->timestamp("last_login")->nullable();
 			$table->string("disable_reason")->nullable();
 			$table->rememberToken();
 			$table->foreign('role_id')->references('id')->on('roles');

@@ -2,13 +2,10 @@
 	<x-page-title class="mt-5 mb-8">{{ __("Account Profile") }}</x-page-title>
 
 	@if(session()->has("successUpdateProfile"))
-		<div class="w-full bg-green-500 px-5 py-3 mt-5 rounded-lg">
-			<p class="text-green-900">{{ session("successUpdateProfile") }}</p>
-		</div>
+		<x-badge-success badge_text="{{ session('successUpdateProfile') }}">
+		</x-badge-success>
 	@elseif(session()->has("successPay"))
-		<div class="w-full bg-green-500 px-5 py-3 rounded-lg">
-			<p class="text-green-900">{{ session("successPay") }}</p>
-		</div>
+		<x-badge-success badge_text="{{ session('successPay') }}"></x-badge-success>
 	@endif
 
 	<div class="mt-5">
@@ -29,15 +26,21 @@
 			<!-- Password -->
 			<div class="mt-8 flex gap-3 items-stretch">
 				<x-boxed-label for="password">{{ __("Change Password") }}<span class="font-bold">*</span></x-boxed-label>
-				<x-input id="password" class="w-full" type="password" name="password"
-					autocomplete="current-password" placeholder="New Password" />
+				<div class="relative w-full h-full">
+					<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="togglePassword"></button>
+					<x-input id="password" class="w-full rounded-xl" type="password" name="password" style="padding-right: 60px;"
+						autocomplete="current-password" placeholder="New Password" />
+				</div>
 			</div>
 
 			<!-- Password Confirmation -->
 			<div class="mt-4 flex gap-3 items-stretch">
 				<x-boxed-label for="password_confirmation">{{ __("Confirm Password") }}<span class="font-bold">*</span></x-boxed-label>
-				<x-input id="password_confirmation" class="w-full" type="password" name="password_confirmation"
-					autocomplete="current-password" placeholder="New Password Confirmation" />
+				<div class="relative w-full h-full">
+					<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="toggleConfPassword"></button>
+					<x-input id="password_confirmation" class="w-full rounded-xl" type="password" name="password_confirmation" style="padding-right: 60px;"
+						autocomplete="current-password" placeholder="Confirm New Password" />
+				</div>
 			</div>
 
 			<p class="text-red-900 font-bold mt-5 text-sm">*Only fill these if you want to change your password</p>
@@ -46,10 +49,45 @@
 				<x-button class="bg-orange-500 w-full md:w-1/6">
 					{{ __('Save') }}
 				</x-button>
-				<x-button type="button" onclick="history.back()" class="bg-orange-500 w-full md:w-1/6">
+				<x-button type="button" onclick="history.back()" class="bg-slate-600 w-full md:w-1/6">
 					Return
 				</x-button>
 			</div>
 		</form>
 	</div>
+
+	<script>
+		let toggleStatus = 0;
+
+		$(document).ready(function(){
+			$("#togglePassword").html('<i class="bi bi-eye"></i>');
+			$("#toggleConfPassword").html('<i class="bi bi-eye"></i>');
+		});
+
+		$("#togglePassword").click(function(){
+			if(toggleStatus == 0){
+				$(this).html('<i class="bi bi-eye-slash"></i>');
+				$("#password").attr("type", "text");
+				toggleStatus = 1;
+			}
+			else {
+				$(this).html('<i class="bi bi-eye"></i>');
+				$("#password").attr("type", "password");
+				toggleStatus = 0;
+			}
+		});
+
+		$("#toggleConfPassword").click(function(){
+			if(toggleStatus == 0){
+				$(this).html('<i class="bi bi-eye-slash"></i>');
+				$("#password_confirmation").attr("type", "text");
+				toggleStatus = 1;
+			}
+			else {
+				$(this).html('<i class="bi bi-eye"></i>');
+				$("#password_confirmation").attr("type", "password");
+				toggleStatus = 0;
+			}
+		});
+	</script>
 </x-section-container>

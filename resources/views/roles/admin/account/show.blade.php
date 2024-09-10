@@ -4,18 +4,22 @@
 	<h1>{{ $user->full_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	@if($user->role_id == 2)
+		> <span>{{ (($user->details->gender == 1)? "Mr. " : "Ms. ") . $user->full_name }}</span>
+	@else
+		> <span>{{ $user->full_name }}</span>
+	@endif
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5">{{ __("Account's Details") }}</x-page-title>
 
 		@if(session()->has("successUpdateAccountData"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successUpdateAccountData") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successUpdateAccountData') }}"></x-badge-success>
 		@elseif(session()->has("successResetPassword"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successResetPassword") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successResetPassword') }}"></x-badge-success>
 		@endif
 
 		<div class="flex justify-between items-center mt-10 mb-5">
@@ -41,7 +45,7 @@
 				<tr>
 					<td class="template-hheads w-1/3">Full Name</td>
 					@if($user->role_id == 2)
-						<td class="template-hbodies">{{ ($user->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $user->full_name }}</td>
+						<td class="template-hbodies">{{ ($user->details->gender == 1)? "Mr." : "Ms." }} {{ $user->full_name }}</td>
 					@else
 						<td class="template-hbodies">{{ $user->full_name }}</td>
 					@endif

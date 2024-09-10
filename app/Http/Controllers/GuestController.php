@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\CurriculumTopic;
 use Illuminate\Http\Request;
 
 class GuestController extends Controller {
@@ -22,6 +23,7 @@ class GuestController extends Controller {
 
 		return view('roles.guest.show', [
 			'course' => $course,
+			'topics' => CurriculumTopic::where("course_id", $course->id)->get()
 		]);
 	}
 }

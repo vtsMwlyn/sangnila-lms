@@ -12,15 +12,51 @@ There are 5 roles (types of account) in Sangnila LMS:
 - **Parents**: Students' parents, those who are observing students' progress and learning results
 - **Guests**: Public user, those who are don't have any account to use, can only view few parts of Sangnila LMS
 
-## Change Logs (current version: v0.5.22-alpha)
-- Added batch import for old students data
-- Added batch assign students to a course
-- Added batch assign courses to students
-- Layout, view, responsiveness, and UX improvements
-- Confirmation on some page cancellation and deletion actions
-- Simple payment simulation
-- Student categorization (imported and normal)
-- UI implementations for admin pages
+## Change Logs
+### v0.7.0-beta
+- Logic fixes and UI/UX improvement in import student and batch assign student for admin pages
+- Applied glass morphism for content containers
+- Improvements in text displays (resizing and transforming)
+- Improvements in table data highlighting and column sizing/positioning
+- Optimizing default password for accounts
+- Improvements in notification badges for post-actions
+- UI/UX improvement in login pages
+
+### v0.7.1-beta
+- Fixes in some notification badge dan validation rules
+- Implementation of new account email verification feature
+- Implementation of forgot password and remember me feature
+- Implementation of breadcrumbs feature
+
+### v0.7.2-beta
+- Added password visibility toggle in all password input fields
+- Now course topics and materials setup will be separated for teachers that hold the same course
+- Added import from excel for importing students data
+
+### v0.7.3-beta
+- Added curriculum topics and materials for admins
+- Teacher now can synchronize topic and materials in his/her class to the curriculum
+
+### v0.7.4-beta
+- Added import from excel for importing curriculums for admins
+- Added import from excel for importing topics and materials for teachers
+- Provided template excel import file, available for download
+- UI/UX improvements in cards display and navbars
+
+### v0.7.5-beta
+- Now attendances are made flexible
+- Some improvements in edit attendance
+- Now admin can see student list in each teacher's teacher courses
+
+### v0.7.6-beta
+- Added notification inboxes for teachers after students submit their assignment
+- Added notification inboxes for students after the teacher posted assignments, unlocked materials, and commented on submissions
+- Added undo button for undo check all students when teachers uploading new assignments
+- Bug fixes in edit attendance page
+
+### v0.7.7-beta
+- Added news and announcement, can be managed by admins
+- Now admin can set the password and its confirmation to be custom or default password when creating accounts
 
 ## Clone Project
 Clone the repository in any desired directory. Web resources such as images, videos, scripts, and styles are included in `public` folder. To generate the database system and fill it will sample data, run this command in the terminal:

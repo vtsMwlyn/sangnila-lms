@@ -4,26 +4,29 @@
 	<h1>{{ $course->course_name }}</h1>
 @endsection
 
-@section("content")
-	@if(session()->has("successUpdateCourseData"))
-		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-green-900">{{ session("successUpdateCourseData") }}</p>
-		</div>
-	@elseif(session()->has("successBatchAssign"))
-		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-green-900">{{ session("successBatchAssign") }}</p>
-		</div>
-	@elseif(session()->has("successImportStudent"))
-		<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-			<p class="text-green-900">{{ session("successImportStudent") }}</p>
-		</div>
-	@endif
+@section("breadcrumbs-extension")
+	> <span>{{ $course->course_name }}</span>
+@endsection
 
+@section("content")
 	<x-section-container class="mb-10">
 		<x-page-title>{{ __("Course Details") }}</x-page-title>
 		{{-- <h6 class="text-sm italic text-gray-500 text-center mb-4">(Visibility: {{ $course->visibility }})</h6> --}}
-
-		{{-- <p class="text-gray-700 mb-3">{{ $course->course_description }}</p>--}}
+		@if(session()->has("successUpdateCourseData"))
+			<x-badge-success badge_text="{{ session('successUpdateCourseData') }}"></x-badge-success>
+		@elseif(session()->has("successBatchAssign"))
+			<x-badge-success badge_text="{{ session('successBatchAssign') }}"></x-badge-success>
+		@elseif(session()->has("successImportStudent"))
+			<x-badge-success badge_text="{{ session('successImportStudent') }}"></x-badge-success>
+		@elseif(session()->has("successImportExcelCurriculum"))
+			<x-badge-success badge_text="{{ session('successImportExcelCurriculum') }}"></x-badge-success>
+		@elseif(session()->has("successAddCurriculumTopic"))
+			<x-badge-success badge_text="{{ session('successAddCurriculumTopic') }}"></x-badge-success>
+		@elseif(session()->has("successEditCurriculumTopic"))
+			<x-badge-success badge_text="{{ session('successEditCurriculumTopic') }}"></x-badge-success>
+		@elseif(session()->has("successDeleteCurriculumTopic"))
+			<x-badge-warning badge_text="{{ session('successDeleteCurriculumTopic') }}"></x-badge-warning>
+		@endif
 
 		<div class="flex gap-5 mt-8">
 			<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.edit', $course->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
@@ -51,11 +54,13 @@
 	<x-section-container>
 		<div class="flex flex-col items-stretch mt-5">
 			<div class="rounded-2xl py-5 px-10 text-white bg-blue-950">List of Assigned Teachers</div>
-			<div class="flex flex-wrap gap-x-10 overflow-y-auto px-10 py-5 mt-3" style="max-height: 300px;">
+			<div class="flex flex-wrap gap-x-10 overflow-y-auto py-3 mt-3" style="max-height: 300px;">
 				@forelse ($course->teachers as $teacher)
-					<div class="text-white border-2 border-white bg-blue-900 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 100px; max-height: 100px;">{{ ($teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $teacher->full_name }}</div>
+					<a href="{{ route('admin.teacher.show', $teacher->id) }}">
+						<div class="text-white hover:text-yellow-500 border-4 border-white hover:border-yellow-500 bg-blue-900 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 100px; max-height: 100px;">{{ ($teacher->details->gender == 1)? "Mr." : "Ms." }} {{ $teacher->full_name }}</div>
+					</a>
 				@empty
-					<div class="flex w-full justify-center">
+					<div class="flex w-full justify-center bg-white rounded-xl p-5 font-semibold">
 						<span>- No student enrolled in this course yet -</span>
 					</div>
 				@endforelse
@@ -66,57 +71,71 @@
 			<div class="rounded-2xl py-5 px-10 text-white bg-blue-950 flex flex-col md:flex-row gap-5 md:gap-0 items-center justify-between">
 				<div class="">List of Assigned Students</div>
 				<div class="flex gap-5">
-					<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.batch-assign', $course->id) }}">Batch Assign</x-anchor-button>
-					<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.import-student-data', $course->id) }}">Import Student</x-anchor-button>
+					<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.batch-assign', $course->id) }}"><i class="bi bi-ui-checks-grid"></i> Batch Assign</x-anchor-button>
+					<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.import-student-data', $course->id) }}"><i class="bi bi-card-checklist"></i> Import Old Student</x-anchor-button>
 				</div>
 			</div>
-			<div class="flex flex-wrap gap-x-10 overflow-y-auto px-10 py-5 mt-3" style="max-height: 300px;">
+			<div class="flex flex-wrap gap-x-10 overflow-y-auto py-3 mt-3" style="max-height: 300px;">
 				@forelse ($course->students as $student)
-					<div class="text-white border-4 border-white bg-blue-900 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 100px; max-height: 100px;">
-						{{ $student->full_name }}
-						@if($student->status == "disabled")
-							<span class="text-red-500">(Disabled)</span>
-						@endif
-					</div>
+					<a href="{{ route('admin.student.show', $student->id) }}">
+						<div class="text-white hover:text-yellow-500 border-4 border-white hover:border-yellow-500 bg-blue-900 rounded-lg my-5 text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 220px; max-width: 220px; min-height: 100px; max-height: 100px;">
+							{{ $student->full_name }}
+							@if($student->status == "disabled")
+								<span class="text-red-500">(Disabled)</span>
+							@endif
+						</div>
+					</a>
 				@empty
-					<div class="flex w-full justify-center">
+					<div class="flex w-full justify-center font-semibold bg-white rounded-xl p-5">
 						<span>- No student enrolled in this course yet -</span>
 					</div>
 				@endforelse
 			</div>
 		</div>
 
-		<div class="flex flex-col w-full mt-10">
-			<div class="rounded-2xl py-5 px-10 text-white bg-blue-950">Course Topics and Materials</div>
-			<div class="mt-3">
-				<div class="overflow-x-auto">
-					<table class="w-full bg-white">
-						<thead class="bg-blue-800 text-white">
-							<th class="border border-blue-400 px-5 py-3">Topic name</th>
-							<th class="border border-blue-400 px-5 py-3">Materials</th>
-						</thead>
-						<tbody>
-							@forelse ($course->topics as $topic)
-								<tr>
-									<td class="border border-blue-400 px-5 py-3">{{ $topic->title }}</td>
-									<td class="border border-blue-400 px-5 py-3">
-										@if($topic->materials->count())
-											<ul>
-												@foreach ($topic->materials as $material)
-													<li>{{ $material->title }}</li>
-												@endforeach
-											</ul>
-										@else
-											<span class="text-gray-500">- No materials yet -</span>
-										@endif
-									</td>
-								</tr>
-							@empty
-								<tr class="text-gray-500 border border-blue-900"><td colspan="2" class="text-center py-3">- No topics yet -</td></tr>
-							@endforelse
-						</tbody>
-					</table>
+		<div class="flex flex-col w-full mt-10" id="curriculum-section">
+			<div class="rounded-2xl py-5 px-10 text-white bg-blue-950 flex items-center justify-between">
+				<span>Course Curriculum</span>
+				<div class="flex gap-5">
+					<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.curriculum.import-excel', $course->id) }}"><i class="bi bi-file-earmark-arrow-up"></i> Import from Excel</x-anchor-button>
+					<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.curriculum.topic.create', $course->id) }}"><i class="bi bi-plus-lg"></i> Add New Topic</x-anchor-button>
 				</div>
+			</div>
+
+			<div class="overflow-x-auto mt-3">
+				<x-table>
+					<x-slot name="head">
+						<th class="template-heads rounded-l-xl">Topic</th>
+						<th class="template-heads">Materials</th>
+						<th class="template-heads rounded-r-xl">Action</th>
+					</x-slot>
+					@forelse ($course->curriculum_topics as $topic)
+						<tr>
+							<td class="template-bodies rounded-l-xl"><a href="{{ route('admin.course.curriculum.topic.details', [$course->id, $topic->id]) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $topic->title }}</a></td>
+							<td class="template-bodies">
+								@if($topic->curriculum_materials->count())
+									<ul>
+										@foreach ($topic->curriculum_materials as $material)
+											<li>{{ $material->title }}</li>
+										@endforeach
+									</ul>
+								@else
+									<span class="text-gray-500 font-semibold">- No materials yet -</span>
+								@endif
+							</td>
+							<td class="template-bodies rounded-r-xl w-1/4">
+								<div class="w-full flex flex-col items-center justify-center gap-3">
+									<x-anchor-button href="{{ route('admin.course.curriculum.topic.edit', [$course->id, $topic->id]) }}" class="bg-orange-500 w-1/2"><i class="bi bi-pencil-square"></i> Edit Topic</x-anchor-button>
+									<x-anchor-button href="{{ route('admin.course.curriculum.topic.delete', [$course->id, $topic->id]) }}" class="bg-orange-500 w-1/2"><i class="bi bi-trash3"></i> Delete Topic</x-anchor-button>
+								</div>
+							</td>
+						</tr>
+					@empty
+						<tr><td colspan="3" class="text-center font-semibold rounded-xl p-5 bg-white">- No curriculum topics and materials yet -</td></tr>
+					@endforelse
+				</x-table>
+			</div>
+
 			</div>
 		</div>
 	</x-section-container>

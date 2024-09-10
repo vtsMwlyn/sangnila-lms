@@ -4,6 +4,11 @@
 	<h1>{{ $user->full_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <a href="{{ route('admin.teacher.show', $user->id) }}" class="font-bold text-yellow-500">{{ (($user->details->gender == 1)? "Mr. " : "Ms. ") . $user->full_name }}</a>
+	> <span>Assign</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5">{{ __("Assign Teacher to Course") }}</x-page-title>
@@ -23,26 +28,26 @@
 							<x-button class="bg-orange-500 w-1/6 mt-5" type="button" id="botan">
 								{{ __('Add to List') }}
 							</x-button>
-							<x-button class="bg-orange-500 w-1/6 mt-5" type="button" onclick="if(confirm('The inputted data will be discarded, are you sure want to cancel?')) history.back();">
+							<x-cancel-button class="w-1/6 mt-5" msg="The inputted data will be discarded, are you sure want to cancel?">
 								{{ __('Back') }}
-							</x-button>
+							</x-cancel-button>
 						</div>
 					</div>
 
 					<div class="flex w-full" id="notifikeshon" style="display: none;">
-						<div class="text-white italic font-semibold">- No more courses to assign -</div>
+						<div class="bg-white p-5 rounded-xl font-semibold text-center italic font-semibold">- No more courses to assign -</div>
 						<div class="flex w-full justify-end">
-							<x-button class="bg-orange-500 w-1/6 mt-5" type="button" onclick="if(confirm('The inputted data will be discarded, are you sure want to cancel?')) history.back();">
+							<x-cancel-button class="w-1/6 mt-5" msg="The inputted data will be discarded, are you sure want to cancel?'))">
 								{{ __('Back') }}
-							</x-button>
+							</x-cancel-button>
 						</div>
 					</div>
 
 				</form>
 			@else
-				<div class="rounded-lg py-5 px-10 bg-blue-800">
+				<div class="rounded-lg py-5 px-10 bg-blue-900">
 					<p class="text-white italic">- No more courses to assign -</p>
-					<x-button type="button" onclick="history.back()" class="bg-orange-500 mt-4">
+					<x-button type="button" onclick="history.back()" class="bg-slate-600 mt-4">
 						Return
 					</x-button>
 				</div>
@@ -60,8 +65,8 @@
 		</div>
 		<div class="mt-3">
 			<div class="flex w-full flex-wrap gap-x-10 overflow-x-auto" id="risuto">
-				<div class="w-full bg-white text-center p-4 rounded-xl flex items-center justify-center font-semibold" id="emputii">
-					- N/A -
+				<div class="w-full bg-white text-center p-5 rounded-xl flex items-center justify-center font-semibold" id="emputii">
+					- No courses added yet -
 				</div>
 			</div>
 		</div>
@@ -74,8 +79,8 @@
 						{{ $course->course_name }}
 					</div>
 				@empty
-					<div class="w-full text-center px-4 py-2 flex items-center justify-center font-semibold" style="min-width: 200px; min-height: 50px; max-height: 50px;">
-						- N/A -
+					<div class="w-full bg-white text-center p-5 rounded-xl flex items-center justify-center font-semibold">
+						- No courses assigned yet -
 					</div>
 				@endforelse
 			</div>

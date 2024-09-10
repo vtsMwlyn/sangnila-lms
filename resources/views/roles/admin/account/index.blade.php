@@ -9,21 +9,13 @@
 		<x-page-title class="mt-5">{{ __("List of All Accounts") }}</x-page-title>
 
 		@if(session()->has("successCreateNewAccount"))
-			<div class="w-full bg-green-500 px-5 py-3 rounded-lg">
-				<p class="text-green-900">{{ session("successCreateNewAccount") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successCreateNewAccount') }}"></x-badge-success>
 		@elseif(session()->has("successDeleteAccount"))
-			<div class="w-full bg-yellow-300 px-5 py-3 rounded-lg">
-				<p class="text-yellow-600" >{{ session("successDeleteAccount") }}</p>
-			</div>
+			<x-badge-warning badge_text="{{ session('successDeleteAccount') }}"></x-badge-warning>
 		@elseif(session()->has("successEnableAccount"))
-			<div class="w-full bg-green-500 px-5 py-3 rounded-lg">
-				<p class="text-green-900">{{ session("successEnableAccount") }}</p>
-			</div>
+			<x-badge-success badge_text="{{ session('successEnableAccount') }}"></x-badge-success>
 		@elseif(session()->has("successDisableAccount"))
-			<div class="w-full bg-yellow-300 px-5 py-3 rounded-lg">
-				<p class="text-yellow-600" >{{ session("successDisableAccount") }}</p>
-			</div>
+			<x-badge-warning badge_text="{{ session('successDisableAccount') }}"></x-badge-warning>
 		@endif
 
 		<div class="mb-5">
@@ -72,7 +64,7 @@
 								<tr>
 									<td class="template-bodies rounded-l-xl" style="min-width: 200px; max-width: 200px; text-wrap: wrap;">
 										@if($account->role_id == 2)
-											<a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ ($account->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ $account->full_name }}</a>
+											<a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ ($account->details->gender == 1)? "Mr." : "Ms." }} {{ $account->full_name }}</a>
 										@else
 											<a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $account->full_name }}</a>
 										@endif
@@ -103,7 +95,7 @@
 								</tr>
 							@empty
 								<tr>
-									<td colspan="5" class="bg-white px-4 py-5 rounded-xl text-center">- No accounts available to use yet -</td>
+									<td colspan="5" class="bg-white p-5 rounded-xl text-center font-semibold">{{ (request("search") && (request("role") == $role->id))? "- No data found -" : "- No accounts available found for this role -" }}</td>
 								</tr>
 							@endforelse
 						</tbody>
@@ -165,7 +157,7 @@
 							</tr>
 						@endforeach
 					@else
-						<tr><td colspan="5" class="bg-white px-4 py-5 rounded-xl text-center">- No accounts disabled yet -</td></tr>
+						<tr><td colspan="5" class="bg-white p-5 rounded-xl text-center font-semibold">- No disabled accounts yet -</td></tr>
 					@endif
 				</tbody>
 			</table>

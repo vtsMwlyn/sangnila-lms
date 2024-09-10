@@ -4,34 +4,54 @@
 	<h1>Student Progress</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <a href="{{ route('teacher.student.select-course') }}" class="text-yellow-500 font-bold">Select Course</a>
+	> <span>{{ $course->course_name }}</span>
+	> <span>Select Student</span>
+@endsection
+
 @section("content")
-	<h1 class="text-3xl font-semibold text-blue-900 mb-4">Manage Students</h1>
-	<h1 class="text-2xl font-semibold text-blue-900 mb-4">Pick a Student</h1>
-	@if ($course_students->isNotEmpty())
-		<div class="overflow-x-auto rounded-md">
-			<table class="min-w-full bg-white border-collapse ">
-				<thead>
-					<tr>
-						<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Student Name</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach ($course_students as $cs)
-						@if($cs->student->status != "disabled")
-							<tr>
-								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 ">
-									<a href="{{ route('teacher.student.show.progress', ['student_id' => $cs->student->id, 'course_id' => $course->id]) }}"
-										class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
-										{{ $cs->student->full_name }}
-									</a>
-								</td>
-							</tr>
+	<x-section-container>
+		<x-page-title class="mt-5">Manage Students' Material Access</x-page-title>
+		<h1 class="text-2xl font-semibold text-blue-900 text-center mb-8">Pick a Student</h1>
+
+		<div class="w-full">
+			<div class="w-full py-6 text-white rounded-xl font-bold text-center" style="background: #000C48;">
+				Student List
+			</div>
+
+			@if($course_students->count())
+				<div class="flex flex-col gap-5 mt-5">
+					@foreach ($course_students as $index => $cs)
+						@if ($index % 3 == 0)
+							@if ($index != 0)
+								</div> <!-- Close previous row -->
+							@endif
+							<div class="flex w-full rounded-xl overflow-hidden text-white h-16" style="background-color: #283785;">
 						@endif
+
+						<a href="{{ route('teacher.student.show.progress', ['student_id' => $cs->student->id, 'course_id' => $course->id]) }}" class="text-center w-1/3 h-full selections transition ease-in-out duration-500 flex justify-center items-center">
+							{{ $cs->student->full_name }}
+						</a>
+
 					@endforeach
-				</tbody>
-			</table>
+
+					</div> <!-- Close last row -->
+				</div>
+			@else
+				<div class="text-center bg-white rounded-xl w-full font-semibold p-5 mt-5">- No students assigned yet -</div>
+			@endif
 		</div>
-	@else
-		<div class="text-blue-900">N/A</div>
-	@endif
+
+		<script>
+			$(".selections").on({
+				"mouseover": function(){
+					$(this).css({"background-color": "rgb(250 204 21)"});
+				},
+				"mouseout": function(){
+					$(this).css({"background-color": "#283785"});
+				}
+			})
+		</script>
+	</x-section-container>
 @endsection

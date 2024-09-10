@@ -2,63 +2,32 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
+use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\AnnouncementUser;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use App\Providers\RouteServiceProvider;
+use App\Http\Requests\Auth\LoginRequest;
 
 class AuthenticatedSessionController extends Controller {
-	/**
-	 * Display the login view.
-	 *
-	 * @return \Illuminate\View\View
-	 */
 	public function create() {
 		return view('auth.login');
 	}
 
-	/**
-	 * Handle an incoming authentication request.
-	 *
-	 * @param  \App\Http\Requests\Auth\LoginRequest  $request
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
 	public function store(LoginRequest $request) {
-		$validatedData = $request->validate([
-			"email" => "required|email:dns",
-			"password" => "required|min:8"
-		]);
-
 		$request->authenticate();
 
 		$request->session()->regenerate();
 
 		$user = Auth::user();
+		User::findOrFail($user->id)->update(["last_login" => Carbon::now()]);
 
-		return redirect(route('dashboard'));
+		return redirect()->intended(route('dashboard'));
 	}
 
-	// public function store(Request $request) {
-	// 	$validatedData = $request->validate([
-	// 		"email" => "required|email:dns",
-	// 		"password" => "required|min:8"
-	// 	]);
-
-	// 	if(Auth::attempt($validatedData)){
-	// 		$request->session()->regenerate();
-	// 		return redirect()->intended(route('dashboard'));
-	// 	}
-
-	// 	return back()->with("failLogin", "Login failed!");
-	// }
-
-	/**
-	 * Destroy an authenticated session.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\RedirectResponse
-	 */
 	public function destroy(Request $request) {
 		Auth::guard('web')->logout();
 

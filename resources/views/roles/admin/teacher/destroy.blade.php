@@ -4,6 +4,11 @@
 	<h1>{{ $teacher->full_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <a href="{{ route('admin.teacher.show', $teacher->id) }}" class="font-bold text-yellow-500">{{ (($teacher->details->gender == 1)? "Mr. " : "Ms. ") . $teacher->full_name }}</a>
+	> <span>Unassign</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title>{{ __("Unassign Teacher from Course") }}</x-page-title>
@@ -23,7 +28,7 @@
 			<!-- Yes/No Buttons -->
 			<div class="flex gap-3 justify-center w-full">
 				<x-button type="submit" class="bg-orange-500 w-full md:w-1/12">Yes</x-button>
-				<x-button type="button" onclick="history.back()" class="bg-orange-500 w-full md:w-1/12">No</x-button>
+				<x-button type="button" onclick="history.back()" class="bg-slate-600 w-full md:w-1/12">No</x-button>
 			</div>
 		</form>
 	</x-section-container>

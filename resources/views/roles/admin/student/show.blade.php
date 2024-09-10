@@ -4,30 +4,34 @@
 	<h1>{{ $student->full_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <span>{{ $student->full_name }}</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5">{{ __("Student's Details") }}</x-page-title>
 
-		@if(session()->has("successAssignToCourse"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successAssignToCourse") }}</p>
-			</div>
-		@elseif(session()->has("successUnassignFromCourse"))
-			<div class="w-full bg-yellow-300 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-yellow-600" >{{ session("successUnassignFromCourse") }}</p>
-			</div>
-		@elseif(session()->has("successUpdateStudentData"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successUpdateStudentData") }}</p>
-			</div>
-		@elseif(session()->has("successUpdateMaxSession"))
-			<div class="w-full bg-green-500 px-5 py-3 mb-5 rounded-lg">
-				<p class="text-green-900">{{ session("successUpdateMaxSession") }}</p>
+		@if(App\Models\ImportedStudent::where("student_id", $student->id)->first())
+			<div class="w-full bg-yellow-300 px-5 py-3 my-8 rounded-lg">
+				<p class="text-yellow-700 font-semibold" ><i class="bi bi-info-circle"></i> <span class="font-bold">This student is imported.</span> You can unset the imported status when the attendance data of the students are fully inserted by <a href="{{ route("admin.student.normalize.confirmation", [$student->id]) }}" class="hover:underline font-bold hover:font-extrabold">clicking here</a>.</p>
 			</div>
 		@endif
 
-		<div class="h-fit mb-5">
-			<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.edit', $student->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
+		@if(session()->has("successAssignToCourse"))
+			<x-badge-success badge_text="{{ session('successAssignToCourse') }}"></x-badge-success>
+		@elseif(session()->has("successNormalize"))
+			<x-badge-success badge_text="{{ session('successNormalize') }}"></x-badge-success>
+		@elseif(session()->has("successUnassignFromCourse"))
+			<x-badge-warning badge_text="{{ session('successUnassignFromCourse') }}"></x-badge-warning>
+		@elseif(session()->has("successUpdateStudentData"))
+			<x-badge-success badge_text="{{ session('successUpdateStudentData') }}"></x-badge-success>
+		@elseif(session()->has("successUpdateMaxSession"))
+			<x-badge-success badge_text="{{ session('successUpdateMaxSession') }}"></x-badge-success>
+		@endif
+
+		<div class="h-fit my-8">
+			<x-anchor-button type="button" class="bg-orange-500" href="{{ route('admin.student.edit', $student->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		</div>
 
 		<div class="overflow-x-auto">
@@ -109,55 +113,57 @@
 			});
 		</script>
 
-		<x-page-title class="mt-8" style="text-align: left;">{{ __("Courses Enrolled") }}</x-page-title>
-		<div class="px-10 py-5 border rounded-xl bg-blue-900 mt-8">
-			<div class="py-5">
+		<h1 class="mt-8 text-blue-950 font-bold text-2xl" style="text-align: left;">{{ __("Courses Enrolled") }}</h1>
+		<div class="mt-8">
+			<div class="">
 				<x-anchor-button class="bg-orange-500"
 					href="{{ route('admin.student.assign.create', $student->id) }}">
 					<i class="bi bi-plus-lg"></i> Assign to course
 				</x-anchor-button>
 			</div>
-			<hr>
-			<div class="flex gap-x-10 flex-wrap bg-blue-900 rounded-b-xl mt-5">
+			<div class="flex gap-10 flex-wrap mt-5">
 				@forelse ($student->enrolled_courses as $course)
-					<div class="text-white border bg-orange-500 rounded-lg my-5 text-center px-4 py-5 flex flex-col justify-center items-start font-semibold" style="min-width: 300px; max-width: 300px; min-height: 150px;">
-						<h1 class="mb-1 font-bold">{{ $course->course_name }}</h1>
-						<span class="text-white text-xs mb-5">Teacher: {{ (App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->details->gender == 1)? "Mr." : "Ms./Mrs." }} {{ App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->full_name }}</span>
-						<span class="text-white text-xs">{{ __("Maximum Sessions") }}</span>
-						<div class="flex w-full items-center justify-between mt-3">
-							<form action="{{ route("admin.student.max-session.update", [$student->id, $course->id]) }}" method="post" class="flex justify-start gap-2">
+					<!-- Card -->
+					<div class="flex flex-col justify-center items-center gap-5 border-2 border-white rounded-xl text-white w-full md:w-1/3 px-8 " style="background: linear-gradient(to bottom, rgba(40, 55, 133, 0.53) 25%, rgba(235, 126, 37, 0.58)); min-height: 400px;">
+						<h1 class="text-3xl font-bold"><a href="{{ route('admin.course.show', $course->id) }}" class="text-white hover:text-yellow-500">{{ $course->course_name }}</a></h1>
+						<span class="border border-white rounded-lg px-4 py-2 text-md">Teacher: {{ (App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->details->gender == 1)? "Mr." : "Ms." }} {{ App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->full_name }}</span>
+
+						<span class="text-white">{{ __("Maximum Sessions") }}</span>
+						<div class="flex flex-col md:flex-row w-full items-center justify-center mt-3 gap-5">
+							<form action="{{ route("admin.student.max-session.update", [$student->id, $course->id]) }}" method="post" class="flex gap-2">
 								@csrf
-								<input type="number" name="{{ __('max_course_session' . $student->id . $course->id) }}" class="rounded-md shadow-sm border text-blue-800 @error('max_course_session' . $student->id . $course->id) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50  @else border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50 @enderror" style="width: 40%;" value="{{ App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", $student->id)->first()->max_course_session }}"  />
-								<x-button class="bg-orange-700 text-white"><i class="bi bi-pencil-square"></i></x-button>
+								<input type="number" name="{{ __('max_course_session' . $student->id . $course->id) }}" class="rounded-md shadow-sm border text-blue-800 @error('max_course_session' . $student->id . $course->id) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50  @else border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50 @enderror" value="{{ App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", $student->id)->first()->max_course_session }}"  style="max-width: 100px;"/>
+								<x-button class="bg-orange-700 text-white" onclick="return confirm('Are you sure want to change the maximum session of this student in this course?');"><i class="bi bi-pencil-square"></i></x-button>
 							</form>
 							<x-anchor-button
 								href="{{ route('admin.student.unassign.delete', ['student_id' => $student->id, 'course_id' => $course->id]) }}"
-								class="bg-white text-orange-500 text-xs">
+								class="bg-white text-orange-500 text-sm">
 								Unassign
 							</x-anchor-button>
 						</div>
+
 						@error('max_course_session' . $student->id . $course->id)
 							<p class="text-red-500 mt-2 text-left">{{ $message }}</p>
 						@enderror
 					</div>
 				@empty
-					<span class="text-white">No courses enrolled</span>
+					<div class="bg-white p-5 w-full rounded-xl font-semibold text-center">- No courses enrolled yet -</div>
 				@endforelse
 			</div>
 		</div>
 
-		<x-page-title class="mt-10" style="text-align: left;">{{ __("Student's Attendances and Assignments") }}</x-page-title>
+		<h1 class="mt-10 text-blue-950 font-bold text-2xl" style="text-align: left;" id="student-summary">{{ __("Student's Attendances and Assignments") }}</h1>
 		<div class="overflow-x-auto">
 			<x-table>
 				<x-slot name="head">
 					<th class="template-heads rounded-l-xl">Course</th>
-					<th class="template-heads">Progress</th>
+					<th class="template-heads">Attendance & Progress</th>
 					<th class="template-heads rounded-r-xl">Assignments</th>
 				</x-slot>
 				@if($student->enrolled_courses->count())
 					@for($i = 0; $i < $student->enrolled_courses->count(); $i++)
 						<tr>
-							<td class="template-bodies rounded-l-xl">{{ $student->enrolled_courses[$i]->course_name }}</td>
+							<td class="template-bodies rounded-l-xl"><a href="{{ route('admin.course.show', $student->enrolled_courses[$i]->id) }}" class="font-bold text-blue-200 hover:underline hover:text-blue-400">{{ $student->enrolled_courses[$i]->course_name }}</a></td>
 							<td class="template-bodies">
 								<div class="flex w-full items-center justify-center gap-3">
 									<span>{{ $current_progress[$i] }}/{{ $full_progress[$i] }} done</span>
@@ -177,7 +183,7 @@
 						</tr>
 					@endfor
 				@else
-					<tr><td colspan="3" class="text-center px-5 py-5">- Student isn't assigned to any courses yet -</td></tr>
+					<tr><td colspan="3" class="text-center font-semibold p-5 bg-white rounded-xl">- Student isn't assigned to any courses yet -</td></tr>
 				@endif
 			</x-table>
 		</div>

@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Topic;
 use App\Models\Course;
+use App\Models\Payment;
+use App\Models\Progress;
+use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
 use App\Models\CourseTeacher;
 use App\Models\ImportedStudent;
-use App\Models\Payment;
-use App\Models\Progress;
-use App\Models\UserDetail;
+use App\Rules\MinimumOneCheckbox;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class CourseStudentController extends Controller {
@@ -80,7 +83,9 @@ class CourseStudentController extends Controller {
 			->pluck('material_id')
 			->toArray();
 
-		foreach ($course->topics as $index1 => $topic) {
+		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+
+		foreach ($topics as $index1 => $topic) {
 			foreach($topic->materials as $index2 => $material) {
 				$newData = [
 					'student_id' => $student->id,
@@ -169,7 +174,9 @@ class CourseStudentController extends Controller {
 				->pluck('material_id')
 				->toArray();
 
-			foreach ($course->topics as $index1 => $topic) {
+			$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+
+			foreach ($topics as $index1 => $topic) {
 				foreach($topic->materials as $index2 => $material) {
 					$newData = [
 						'student_id' => $targetStudent->id,
@@ -198,8 +205,14 @@ class CourseStudentController extends Controller {
 	public function import_student_data($course_id){
 		$course = Course::where("id", $course_id)->first();
 
+		$materials = [];
+		foreach($course->topics as $topic){
+			array_push($materials, $topic->materials);
+		}
+
 		return view("roles.admin.student.import-student", [
 			"course" => $course,
+			"materials" => $materials,
 			"education_levels" => ["Elementary School", "Junior High School", "Senior High School", "College", "Professional"]
 		]);
 	}
@@ -222,54 +235,64 @@ class CourseStudentController extends Controller {
 				$generatedEmail = $localPart . ($n + 1) . $domainPart;
 			}
 
-			$newUser = User::create([
-				"full_name" => $student_name,
-				"email" => $generatedEmail,
-				"role_id" => 3,
-				"status" => "enabled",
-				"email_verified_at" => now(), //soon will be removed
-				"password" => Hash::make(trans("strings.default_password"))
-			]);
+			if($request->is_new_student[$index] == "Yes"){
+				$student = User::create([
+					"full_name" => $student_name,
+					"email" => $generatedEmail,
+					"role_id" => 3,
+					"status" => "enabled",
+					"email_verified_at" => now(), //soon will be removed
+					"password" => Hash::make(trans("strings.default_password"))
+				]);
 
-			UserDetail::create([
-				"user_id" => $newUser->id,
-				"gender" => $request->inp_gender[$index],
-				"phone_number" => $request->inp_phone_number[$index],
-				"city_of_birth" => $request->inp_cob[$index],
-				"date_of_birth" => $request->inp_dob[$index],
-				"name_parent" => $request->inp_name_parent[$index],
-				"phone_parent" => $request->inp_phone_parent[$index],
-				"school_name" => $request->inp_school_name[$index],
-				"student_level" => $request->inp_student_level[$index],
-			]);
+				UserDetail::create([
+					"user_id" => $student->id,
+					"gender" => $request->inp_gender[$index],
+					"phone_number" => $request->inp_phone_number[$index],
+					"city_of_birth" => $request->inp_cob[$index],
+					"date_of_birth" => $request->inp_dob[$index],
+					"name_parent" => $request->inp_name_parent[$index],
+					"phone_parent" => $request->inp_phone_parent[$index],
+					"school_name" => $request->inp_school_name[$index],
+					"student_level" => $request->inp_student_level[$index],
+				]);
+			}
+			else {
+				$student = User::where("role_id", 3)->where("full_name", $student_name)->first();
+				if(!$student){
+					continue;
+				}
+			}
 
 			CourseStudent::create([
 				"course_id" => $course->id,
-				"student_id" => $newUser->id,
+				"student_id" => $student->id,
 				"teacher_id" => $request->inp_teacher_name[$index],
 				"is_imported" => 1,
 				"max_course_session" => $request->inp_max_course_session[$index]
 			]);
 
 			ImportedStudent::create([
-				"student_id" => $newUser->id,
+				"student_id" => $student->id,
 				"course_id" => $course->id,
 				"last_attendance_count" => $request->inp_last_attendance_count[$index]
 			]);
 
+			$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+
 			$targetFound = false;
-			foreach($course->topics as $topic){
+			foreach($topics as $topic){
 				foreach($topic->materials as $material){
 					if($material->id != $request->inp_last_material_unlocked[$index]){
 						Progress::create([
-							"student_id" => $newUser->id,
+							"student_id" => $student->id,
 							"material_id" => $material->id,
 							"course_id" => $course->id,
 							"status" => "unlocked"
 						]);
 					} else {
 						Progress::create([
-							"student_id" => $newUser->id,
+							"student_id" => $student->id,
 							"material_id" => $material->id,
 							"course_id" => $course->id,
 							"status" => "unlocked"
@@ -287,6 +310,38 @@ class CourseStudentController extends Controller {
 		}
 
 		return redirect(route("admin.course.show", $course_id))->with("successImportStudent", "Students data imported successfully!");
+	}
+
+	public function normalize_confirmation($student_id){
+		return view("roles.admin.student.normalize", [
+			"student" => User::where("id", $student_id)->first(),
+			"imported" => ImportedStudent::where("student_id", $student_id)->get()
+		]);
+	}
+
+	public function normalize_proceed(Request $request, $student_id){
+		$request->validate([
+			"checkbox_values" => ["required", new MinimumOneCheckbox]
+		]);
+
+		$student = User::where("id", $student_id)->first();
+		$imported = ImportedStudent::where("student_id", $student->id)->get();
+
+		$to_be_deleted = [];
+
+		foreach($imported as $index => $imp){
+			if($request["checkbox_values"][$index] == "on"){
+				CourseStudent::where("student_id", $student->id)->where("course_id", $imp->course_id)->update(["is_imported" => 0]);
+
+				array_push($to_be_deleted, $imp->id);
+			}
+		}
+
+		foreach($to_be_deleted as $del){
+			ImportedStudent::destroy($del);
+		}
+
+		return redirect(route("admin.student.show", $student->id))->with("successNormalize", "Successfully normalized the student");
 	}
 
 }

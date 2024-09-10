@@ -4,6 +4,15 @@
 	<h1>{{ $account->full_name }}</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	@if($account->role_id == 2)
+		> <a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-yellow-500">{{ (($account->details->gender == 1)? "Mr. " : "Ms. ") . $account->full_name }}</a>
+	@else
+		> <a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-yellow-500">{{ $account->full_name }}</a>
+	@endif
+	> <span>Delete</span>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title class="mt-5">{{ __("Delete Account") }}</x-page-title>
@@ -24,7 +33,7 @@
 				<!-- Yes/No Buttons -->
 				<div class="flex gap-3 justify-center w-full">
 					<x-button type="submit" class="bg-orange-500 w-full md:w-1/12">Yes</x-button>
-					<x-button type="button" onclick="history.back()" class="bg-orange-500 w-full md:w-1/12">No</x-button>
+					<x-button type="button" onclick="history.back()" class="bg-slate-600 w-full md:w-1/12">No</x-button>
 				</div>
 			</form>
 		</div>

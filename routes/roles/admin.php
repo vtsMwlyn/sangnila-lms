@@ -7,10 +7,14 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\CurriculumController;
+use App\Http\Controllers\ExcelImportController;
 use App\Http\Controllers\AdminAccountController;
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\CourseStudentController;
 use App\Http\Controllers\CourseTeacherController;
 use App\Http\Controllers\TeacherAccountController;
+use App\Http\Controllers\DownloadResourceController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 
 Route::prefix('/admin')
@@ -39,21 +43,60 @@ Route::prefix('/admin')
 				Route::get('/{course_id}', [CourseController::class, 'admin_show'])->name('show')->whereNumber('course_id');
 
 				// Batch assign student
-				Route::get("/{course_id}/batch-assign", [CourseStudentController::class, "batch_assign"])->name("batch-assign");
-				Route::post("/{course_id}/batch-assign", [CourseStudentController::class, "batch_assign_store"])->name("batch-assign.store");
+				Route::get("/{course_id}/batch-assign", [CourseStudentController::class, "batch_assign"])->name("batch-assign")->whereNumber('course_id');
+				Route::post("/{course_id}/batch-assign", [CourseStudentController::class, "batch_assign_store"])->name("batch-assign.store")->whereNumber('course_id');
 
 				// Batch import old student data
-				Route::get("/{course_id}/import-data", [CourseStudentController::class, "import_student_data"])->name("import-student-data");
-				Route::post("/{course_id}/import-data", [CourseStudentController::class, "import_student_data_store"])->name("import-student-data.store");
+				Route::get("/{course_id}/import-data", [CourseStudentController::class, "import_student_data"])->name("import-student-data")->whereNumber('course_id');
+				Route::post("/{course_id}/import-data", [CourseStudentController::class, "import_student_data_store"])->name("import-student-data.store")->whereNumber('course_id');
 
 				// Edit course data
 				Route::get('/{course_id}/edit', [CourseController::class, 'admin_edit'])->name('edit')->whereNumber('course_id');
 				Route::patch('/{course_id}', [CourseController::class, 'admin_update'])->name('update')->whereNumber('course_id');
 
 				// Delete course
-				Route::get("/{course_id}/delete", [CourseController::class, "admin_delete"])->name("delete");
+				Route::get("/{course_id}/delete", [CourseController::class, "admin_delete"])->name("delete")->whereNumber('course_id');
 				Route::delete('/{course_id}/delete', [CourseController::class, 'admin_destroy'])->name('destroy')->whereNumber('course_id');
 
+				// Manage curriculum
+					Route::prefix('/{course_id}/curriculum')
+					->name('curriculum.')
+					->group(function () {
+						// Import from excel
+						Route::get("/import-excel", [ExcelImportController::class, "import_excel_curriculum_index"])->name("import-excel");
+						Route::post("/import-excel", [ExcelImportController::class, "import_excel_curriculum_store"])->name("import-excel.store");
+
+						// Download import excel template
+						Route::get("/import-excel/download-template", [DownloadResourceController::class, "topics_and_materials_import_excel_template"])->name("import-excel.download");
+
+						// Add new curriculum topic
+						Route::get("/create", [CurriculumController::class, "admin_create_topic"])->name("topic.create");
+						Route::post("/create", [CurriculumController::class, "admin_store_topic"])->name("topic.store");
+
+						// Modify curriculum topic
+						Route::get("/{curriculum_topic_id}/edit", [CurriculumController::class, "admin_edit_topic"])->name("topic.edit")->whereNumber('curriculum_topic_id');
+						Route::post("/{curriculum_topic_id}/edit", [CurriculumController::class, "admin_update_topic"])->name("topic.update")->whereNumber('curriculum_topic_id');
+
+						// Delete curriculum topic
+						Route::get("/{curriculum_topic_id}/delete", [CurriculumController::class, "admin_delete_topic"])->name("topic.delete")->whereNumber('curriculum_topic_id');
+						Route::post("/{curriculum_topic_id}/delete", [CurriculumController::class, "admin_destroy_topic"])->name("topic.destroy")->whereNumber('curriculum_topic_id');
+
+						// Show curriculum topic's detail
+						Route::get("/{curriculum_topic_id}", [CurriculumController::class, "admin_topic_details"])->name("topic.details")->whereNumber('curriculum_topic_id');
+
+						// Add new curriculum material
+						Route::get("/{curriculum_topic_id}/create", [CurriculumController::class, "admin_create_material"])->name("material.create")->whereNumber('curriculum_topic_id');
+						Route::post("/{curriculum_topic_id}/create", [CurriculumController::class, "admin_store_material"])->name("material.store")->whereNumber('curriculum_topic_id');
+
+						// Modify curriculum material
+						Route::get("/{curriculum_topic_id}/{curriculum_material_id}/edit", [CurriculumController::class, "admin_edit_material"])->name("material.edit")->whereNumber(['curriculum_topic_id', 'curriculum_material_id']);
+						Route::post("/{curriculum_topic_id}/{curriculum_material_id}/edit", [CurriculumController::class, "admin_update_material"])->name("material.update")->whereNumber(['curriculum_topic_id', 'curriculum_material_id']);
+
+						// Remove curriculum material from curriculum topic
+						Route::get("/{curriculum_topic_id}/{curriculum_material_id}/delete", [CurriculumController::class, "admin_delete_material"])->name("material.delete")->whereNumber(['curriculum_topic_id', 'curriculum_material_id']);
+						Route::post("/{curriculum_topic_id}/{curriculum_material_id}/delete", [CurriculumController::class, "admin_destroy_material"])->name("material.destroy")->whereNumber(['curriculum_topic_id', 'curriculum_material_id']);
+					}
+				)->whereNumber("course_id");
 			}
 		);
 
@@ -74,11 +117,11 @@ Route::prefix('/admin')
 				Route::patch('/{teacher_id}', [TeacherAccountController::class, 'admin_update'])->name('update')->whereNumber('teacher_id');
 
 				// Assign/unassign teacher to/from a course
-				Route::get("/{teacher_id}/assign", [CourseTeacherController::class, "show"])->name("assign");
-				Route::post("/{teacher_id}/assign", [CourseTeacherController::class, "assign"])->name("assign.store");
+				Route::get("/{teacher_id}/assign", [CourseTeacherController::class, "show"])->name("assign")->whereNumber('teacher_id');
+				Route::post("/{teacher_id}/assign", [CourseTeacherController::class, "assign"])->name("assign.store")->whereNumber('teacher_id');
 
-				Route::get('{teacher_id}/unassign/{course_id}', [CourseTeacherController::class, 'delete'])->name('unassign.delete');
-				Route::delete("/{teacher_id}/unassign/{course_id}", [CourseTeacherController::class, "unassign"])->name("unassign.destroy");
+				Route::get('{teacher_id}/unassign/{course_id}', [CourseTeacherController::class, 'delete'])->name('unassign.delete')->whereNumber(['teacher_id', 'course_id']);
+				Route::delete("/{teacher_id}/unassign/{course_id}", [CourseTeacherController::class, "unassign"])->name("unassign.destroy")->whereNumber(['teacher_id', 'course_id']);
 
 			}
 		);
@@ -91,23 +134,33 @@ Route::prefix('/admin')
 				// List of active students
 				Route::get('/', [StudentController::class, 'admin_index'])->name('index');
 				Route::get('/{student_id}', [StudentController::class, 'admin_show'])->name('show')->whereNumber('student_id');
-				Route::post('/{student_id}/{course_id}/max-session-update', [StudentController::class, 'admin_update_max_session'])->name('max-session.update');
+				Route::post('/{student_id}/{course_id}/max-session-update', [StudentController::class, 'admin_update_max_session'])->name('max-session.update')->whereNumber(['student_id', 'course_id']);
 
 				// Edit student data
 				Route::get('/{student_id}/edit', [StudentController::class, 'admin_edit'])->name('edit')->whereNumber('student_id');
 				Route::patch('/{student_id}', [StudentController::class, 'admin_update'])->name('update')->whereNumber('student_id');
 
 				// Assign/unassign students to/from a course
-				Route::get('/{student_id}/assign', [CourseStudentController::class, 'create'])->name('assign.create');
-				Route::post('/{student_id}/assign', [CourseStudentController::class, 'store'])->name('assign.store');
+				Route::get('/{student_id}/assign', [CourseStudentController::class, 'create'])->name('assign.create')->whereNumber('student_id');
+				Route::post('/{student_id}/assign', [CourseStudentController::class, 'store'])->name('assign.store')->whereNumber('student_id');
 
-				Route::get('{student_id}/unassign/{course_id}', [CourseStudentController::class, 'delete'])->name('unassign.delete');
-				Route::delete('{student_id}/unassign/{course_id}', [CourseStudentController::class, 'destroy'])->name('unassign.destroy');
+				Route::get('{student_id}/unassign/{course_id}', [CourseStudentController::class, 'delete'])->name('unassign.delete')->whereNumber(['student_id', 'course_id']);
+				Route::delete('{student_id}/unassign/{course_id}', [CourseStudentController::class, 'destroy'])->name('unassign.destroy')->whereNumber(['student_id', 'course_id']);
 
 				// Assignment and attendance details
-				Route::get("{student_id}/{course_id}/assignments", [AssignmentController::class, "admin_show"])->name("asg-details");
-				Route::get("{student_id}/{course_id}/attendance", [AttendanceController::class, "admin_show"])->name("atd-details");
+				Route::get("{student_id}/{course_id}/assignments", [AssignmentController::class, "admin_show"])->name("asg-details")->whereNumber(['student_id', 'course_id']);
+				Route::get("{student_id}/{course_id}/attendance", [AttendanceController::class, "admin_show"])->name("atd-details")->whereNumber(['student_id', 'course_id']);
 
+				// Make student status is not imported again
+				Route::get("{student_id}/normalize", [CourseStudentController::class, "normalize_confirmation"])->name("normalize.confirmation")->whereNumber('student_id');
+				Route::post("{student_id}/normalize", [CourseStudentController::class, "normalize_proceed"])->name("normalize.proceed")->whereNumber('student_id');
+
+				// Import from excel
+				Route::get("/import-excel", [ExcelImportController::class, "import_excel_student_index"])->name("import-excel");
+				Route::post("/import-excel", [ExcelImportController::class, "import_excel_student_store"])->name("import-excel.store");
+
+				// Download import excel template
+				Route::get("/import-excel/download-template", [DownloadResourceController::class, "student_import_excel_template"])->name("import-excel.download");
 			}
 		);
 
@@ -127,23 +180,37 @@ Route::prefix('/admin')
 				Route::post('/', [RegisteredUserController::class, 'admin_store'])->name('store');
 
 				// Edit account data
-				Route::get("/{user_id}/edit", [AdminAccountController::class, "edit_acc"])->name("acc_edit");
-				Route::patch("/{user_id}/edit", [AdminAccountController::class, "update_acc"])->name("acc_edit.store");
+				Route::get("/{user_id}/edit", [AdminAccountController::class, "edit_acc"])->name("acc_edit")->whereNumber('user_id');
+				Route::patch("/{user_id}/edit", [AdminAccountController::class, "update_acc"])->name("acc_edit.store")->whereNumber('user_id');
 
 				// Delete account data
-				Route::get("/{user_id}/delete", [AdminAccountController::class, "delete"])->name("acc_delete");
-				Route::delete("/{user_id}/delete", [AdminAccountController::class, "destroy"])->name("destroy");
+				Route::get("/{user_id}/delete", [AdminAccountController::class, "delete"])->name("acc_delete")->whereNumber('user_id');
+				Route::delete("/{user_id}/delete", [AdminAccountController::class, "destroy"])->name("destroy")->whereNumber('user_id');
 
 				// Enable/disable account
-				Route::get("/{user_id}/disable", [AdminAccountController::class, "disable_conf"])->name("acc_disable.conf");
-				Route::post("/{user_id}/disable", [AdminAccountController::class, "disable_acc"])->name("acc_disable");
-				Route::get("/{user_id}/enable", [AdminAccountController::class, "enable_conf"])->name("acc_enable.conf");
-				Route::post("/{user_id}/enable", [AdminAccountController::class, "enable_acc"])->name("acc_enable");
+				Route::get("/{user_id}/disable", [AdminAccountController::class, "disable_conf"])->name("acc_disable.conf")->whereNumber('user_id');
+				Route::post("/{user_id}/disable", [AdminAccountController::class, "disable_acc"])->name("acc_disable")->whereNumber('user_id');
+				Route::get("/{user_id}/enable", [AdminAccountController::class, "enable_conf"])->name("acc_enable.conf")->whereNumber('user_id');
+				Route::post("/{user_id}/enable", [AdminAccountController::class, "enable_acc"])->name("acc_enable")->whereNumber('user_id');
 
 				// Reset password
-				Route::get("/{user_id}/reset-password", [AdminAccountController::class, "reset_password"])->name("reset-password");
-				Route::post("/{user_id}/reset-password", [AdminAccountController::class, "reset_password_proceed"])->name("reset-password.proceed");
-
+				Route::get("/{user_id}/reset-password", [AdminAccountController::class, "reset_password"])->name("reset-password")->whereNumber('user_id');
+				Route::post("/{user_id}/reset-password", [AdminAccountController::class, "reset_password_proceed"])->name("reset-password.proceed")->whereNumber('user_id');
 			}
 		);
-	});
+
+		// Manage announcement
+		Route::prefix("/announcement")->name("announcement.")->group(function(){
+			Route::get("/", [AnnouncementController::class, "index"])->name("index");
+
+			Route::get("/create", [AnnouncementController::class, "create"])->name("create");
+			Route::post("/create", [AnnouncementController::class, "store"])->name("store");
+
+			Route::get("/{announcement_id}/edit", [AnnouncementController::class, "edit"])->name("edit");
+			Route::post("/{announcement_id}/edit", [AnnouncementController::class, "update"])->name("update");
+
+			Route::get("/{announcement_id}/delete", [AnnouncementController::class, "delete"])->name("delete");
+			Route::post("/{announcement_id}/destroy", [AnnouncementController::class, "destroy"])->name("destroy");
+		});
+	}
+);

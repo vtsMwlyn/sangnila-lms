@@ -4,30 +4,33 @@
 	<h1>My Attendances</h1>
 @endsection
 
+@section("breadcrumbs-extension")
+	> <span>{{ $course->course_name }}</span>
+@endsection
+
 @section("content")
-	<h1 class="text-3xl font-semibold text-blue-900 mb-4">My Attendance in Course {{ $course->course_name }}</h1>
-	<div class="overflow-x-auto">
-		<table class="min-w-full bg-white border border-black mt-3" style="border-radius: 0;">
-			<thead>
-				<tr>
-					<th class="border border-black px-3">Date and time</th>
-					<th class="border border-black px-3">Attendance status</th>
-					<th class="border border-black px-3">Attendance detail</th>
-				</tr>
-			</thead>
-			<tbody>
+	<x-section-container>
+		<x-page-title class="mt-5 mb-8">My Attendance in Course {{ $course->course_name }}</x-page-title>
+		<div class="overflow-x-auto">
+			<x-table>
+				<x-slot name="head">
+					<th class="template-heads rounded-l-xl">Date and time</th>
+					<th class="template-heads">Attendance status</th>
+					<th class="template-heads rounded-r-xl">Attendance detail</th>
+				</x-slot>
+
 				@if (count($attendances))
 					@foreach ($attendances as $attendance)
-						<tr class="@if($attendance->is_attend) bg-green-500 @else bg-red-400 @endif">
-							<td class="border border-black px-3">{{ $attendance->created_at }}</td>
-							<td class="border border-black px-3">@if($attendance->is_attend) Present @else Absent @endif</td>
-							<td class="border border-black px-3">{{ $attendance->attendance_detail }}</td>
+						<tr>
+							<td class="template-bodies font-semibold rounded-l-xl">{{ $attendance->created_at }}</td>
+							<td class="template-bodies font-semibold" style="color: @if($attendance->is_attend == 1) #219926 @else rgb(248 113 113) @endif;">@if($attendance->is_attend) Present @else Absent @endif</td>
+							<td class="template-bodies font-semibold rounded-r-xl">{{ $attendance->attendance_detail }}</td>
 						</tr>
 					@endforeach
 				@else
-					<tr><td colspan="3" class="border border-black px-3 text-center">- The teacher haven't uploaded any attendance data yet -</td></tr>
+					<tr><td colspan="3" class="p-5 rounded-xl bg-white font-semibold text-center">- The teacher haven't uploaded any attendance data yet -</td></tr>
 				@endif
-			</tbody>
-		</table>
-	</div>
+			</x-table>
+		</div>
+	</x-section-container>
 @endsection
