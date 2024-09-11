@@ -28,6 +28,9 @@ There are 5 roles (types of account) in Sangnila LMS:
 
 ### v0.8.2-beta
 - Added dashboard page for students
+- Added calendar and news and announcement slider in the dashboard
+- Added view page for announcements
+- Now students will not be able to access material preview page if they are reaching their max course session or accessing locked material via URL link
 
 ## Clone Project
 Clone the repository in any desired directory. Web resources such as images, videos, scripts, and styles are included in `public` folder. To generate the database system and fill it will sample data, run this command in the terminal:
