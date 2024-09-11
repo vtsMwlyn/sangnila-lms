@@ -8,20 +8,20 @@
 	<x-section-container>
 		<x-page-title>Dashboard</x-page-title>
 
-		<div class="w-full flex gap-5">
-			<div class="bg-white rounded-xl shadow-lg flex flex-col w-1/3 items-center gap-5 p-5">
+		<div class="w-full flex sm:flex-row flex-col gap-5">
+			<div class="bg-white rounded-xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-5 p-5">
 				<p class="font-bold text-blue-800 text-xl"><i class="bi bi-book"></i> Courses Enrolled</p>
 				<p class="text-2xl font-extrabold">{{ $courses_enrolled }}</p>
 			</div>
-			<div class="bg-white rounded-xl shadow-lg flex flex-col w-1/3 items-center gap-5 p-5">
+			<div class="bg-white rounded-xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-5 p-5">
 				<p class="font-bold text-blue-800 text-xl"><i class="bi bi-clipboard-check"></i> Materials Unlocked</p>
 				<p class="text-2xl font-extrabold">{{ $materials_unlocked }}</p>
 			</div>
-			<div class="bg-white rounded-xl shadow-lg flex flex-col w-1/3 items-center gap-5 p-5">
+			<div class="bg-white rounded-xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-5 p-5">
 				<p class="font-bold text-blue-800 text-xl"><i class="bi bi-calendar2-check"></i> Sessions Attended</p>
 				<p class="text-2xl font-extrabold">{{ $sessions_attended }}</p>
 			</div>
-			<div class="bg-white rounded-xl shadow-lg flex flex-col w-1/3 items-center gap-5 p-5">
+			<div class="bg-white rounded-xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-5 p-5">
 				<p class="font-bold text-blue-800 text-xl"><i class="bi bi-clipboard-check"></i> Assignments Done</p>
 				<p class="text-2xl font-extrabold">{{ $assignments_done }}</p>
 			</div>
@@ -76,29 +76,40 @@
 			</div>
 		</div>
 
+		{{-- @php
+			$n_announcement = 0;
+		@endphp --}}
+
 		<div class="w-full flex md:flex-row flex-col gap-5 mt-5">
 			<!-- Progress -->
 			<div class="w-full md:w-1/2 bg-white rounded-xl p-5 shadow-lg">
 				<p class="font-semibold text-blue-800">News and Announcement</p>
 				<hr class="mt-3">
 
-				<div class="relative">
-					<div class="flex mt-5 overflow-hidden">
+				<div class="relative flex sm:flex-row flex-col justify-center items-center">
+					<!-- Sliders -->
+					<div class="relative z-10 mt-5 overflow-hidden w-full sm:w-10/12">
 						<div id="cardSlider" class="flex transition-transform duration-300 ease-in-out">
 							@forelse (App\Models\Announcement::all() as $announcement)
-								@php
-									$target = json_decode($announcement->sent_to);
-								@endphp
+								@if($announcement->announce_from < now() && $announcement->announce_until > now())
+									<a class="card-img flex flex-col items-stretch" href="{{ route('student.view-announcement', $announcement->id) }}">
+										@php
+											$target = json_decode($announcement->sent_to);
+											// $n_announcement++;
+										@endphp
 
-								@if($target[Auth::user()->role_id - 1] == "on")
-									@if($announcement->announce_from < now() && $announcement->announce_until > now())
-										@if($announcement->image_path)
-											<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full">
+										@if($target[Auth::user()->role_id - 1] == "on")
+											@if($announcement->image_path)
+												<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full" style="object-fit: cover; object-position: center;">
+											@else
+												<div class="flex bg-slate-200 items-center justify-center text-white font-extrabold grow">
+													<i class="bi bi-megaphone-fill text-6xl"></i>
+												</div>
+											@endif
 										@endif
-										{{-- <div class="announcementContent">
-											{!! $announcement->content !!}
-										</div> --}}
-									@endif
+
+										<div class="text-blue-900 text-center py-5 font-extrabold">{{ $announcement->title }}</div>
+									</a>
 								@endif
 							@empty
 
@@ -107,7 +118,7 @@
 					</div>
 
 					<!-- Navigation buttons -->
-					<div class="slider-controls flex gap-2 justify-between absolute w-full" style="top: 45%;">
+					<div class="slider-controls flex gap-2 sm:justify-between justify-center sm:absolute w-full" style="top: 45%;">
 						<button id="prevBtn" class="transition-all duration-200 flex items-center justify-center font-semibold rounded-full px-3 py-2 bg-blue-950 text-white">
 							<i class="bi bi-arrow-left"></i>
 						</button>
@@ -115,6 +126,16 @@
 							<i class="bi bi-arrow-right"></i>
 						</button>
 					</div>
+					{{-- @if($n_announcement > 1)
+						<div class="slider-controls flex gap-2 justify-between absolute w-full" style="top: 45%;">
+							<button id="prevBtn" class="transition-all duration-200 flex items-center justify-center font-semibold rounded-full px-3 py-2 bg-blue-950 text-white">
+								<i class="bi bi-arrow-left"></i>
+							</button>
+							<button id="nextBtn" class="transition-all duration-200 flex items-center justify-center font-semibold rounded-full px-3 py-2 bg-blue-950 text-white">
+								<i class="bi bi-arrow-right"></i>
+							</button>
+						</div>
+					@endif --}}
 				</div>
 			</div>
 
@@ -129,80 +150,85 @@
 	</x-section-container>
 
 	<script>
-		// Card sliders
-		const cardSlider = $('#cardSlider');
-		const totalCards = cardSlider.children().length;
-		console.log(totalCards);
-		let currentCard = 0;
-
-		const cardWidthStr = cardSlider.find("img").css("width");
-		let cardWidth = 0;
-		// if($(window).width() > 768){
-		// 	cardWidth = parseFloat(cardWidthStr.replace("px", ''));
-		// }
-		// else {
-		// 	cardWidth = parseFloat(cardWidthStr.replace("px", ''));
-		// }
-		cardWidth = parseFloat(cardWidthStr.replace("px", ''));
-
-		const sliderWidth = totalCards * cardWidth;
-
-		cardSlider.css('width', sliderWidth);
-
-		function nextCard() {
-			const visibleCards = Math.floor(cardSlider.parent().width() / cardWidth);
-			if (currentCard < totalCards - visibleCards) {
-				currentCard++;
-				const translateValue = -currentCard * cardWidth;
-				cardSlider.css('transform', `translateX(${translateValue}px)`);
-				updateNavButtons();
-			}
-		}
-
-		function prevCard() {
-			if (currentCard > 0) {
-				currentCard--;
-				const translateValue = -currentCard * cardWidth;
-				cardSlider.css('transform', `translateX(${translateValue}px)`);
-				updateNavButtons();
-			}
-		}
-
-		function updateNavButtons() {
-			if (currentCard === 0) {
-				$('#prevBtn').prop('disabled', true).css({
-					"background-color": "lightgray",
-					"color": "rgb(23 37 84)"
-				});
-			} else {
-				$('#prevBtn').prop('disabled', false).css({
-					"background-color": "rgb(23 37 84)",
-					"color": "white"
-				});
+		$(document).ready(() => {
+			// Card sliders
+			let currentCard = 0;
+			let helper = 0;
+			if($(window).width() > 576){
+				helper = 10;
 			}
 
-			const visibleCards = Math.floor(cardSlider.parent().width() / cardWidth);
-			if (currentCard >= totalCards - visibleCards) {
-				$('#nextBtn').prop('disabled', true).css({
-					"background-color": "lightgray",
-					"color": "rgb(23 37 84)"
-				});
-			} else {
-				$('#nextBtn').prop('disabled', false).css({
-					"background-color": "rgb(23 37 84)",
-					"color": "white"
-				});
+			const cardSlider = $('#cardSlider');
+			const cardWidth = cardSlider.parent().width();
+			// const cardWidth = parseFloat(cardWidthStr.replace("px", ''));
+
+			console.log("Container width: " + cardWidth);
+
+			$(".card-img").each(function(){
+				$(this).css({"min-width": cardWidth + helper, "max-width": cardWidth + helper});
+				console.log("Cards width: " + $(this).width());
+			});
+
+			const totalCards = cardSlider.children().length;
+			const sliderWidth = totalCards * cardWidth;
+			cardSlider.css({"min-width": sliderWidth, "max-width": sliderWidth});
+			console.log(`Slider width: ${totalCards} x ${cardWidth} = ${cardSlider.width()}`);
+
+			function nextCard() {
+				const visibleCards = cardSlider.parent().width() / cardWidth;
+				if (currentCard < totalCards - visibleCards) {
+					currentCard++;
+					const translateValue = -currentCard * (cardWidth + helper);
+					cardSlider.css('transform', `translateX(${translateValue}px)`);
+					updateNavButtons();
+				}
 			}
-		}
 
-		$('#nextBtn').on('click', nextCard);
-		$('#prevBtn').on('click', prevCard);
+			function prevCard() {
+				if (currentCard > 0) {
+					currentCard--;
+					const translateValue = -currentCard * (cardWidth + helper);
+					cardSlider.css('transform', `translateX(${translateValue}px)`);
+					updateNavButtons();
+				}
+			}
 
-		updateNavButtons();
+			function updateNavButtons() {
+				if (currentCard === 0) {
+					$('#prevBtn').prop('disabled', true).css({
+						"background-color": "lightgray",
+						"color": "rgb(23 37 84)"
+					});
+				} else {
+					$('#prevBtn').prop('disabled', false).css({
+						"background-color": "rgb(23 37 84)",
+						"color": "white"
+					});
+				}
 
-		$(window).resize(function() {
-			cardSlider.css('width', sliderWidth);
+				const visibleCards = cardSlider.parent().width() / cardWidth;
+				if (currentCard >= totalCards - visibleCards) {
+					$('#nextBtn').prop('disabled', true).css({
+						"background-color": "lightgray",
+						"color": "rgb(23 37 84)"
+					});
+				} else {
+					$('#nextBtn').prop('disabled', false).css({
+						"background-color": "rgb(23 37 84)",
+						"color": "white"
+					});
+				}
+			}
+
+			$('#nextBtn').on('click', nextCard);
+			$('#prevBtn').on('click', prevCard);
+
 			updateNavButtons();
+
+			$(window).resize(function() {
+				cardSlider.css('width', sliderWidth);
+				updateNavButtons();
+			});
 		});
 	</script>
 @endsection

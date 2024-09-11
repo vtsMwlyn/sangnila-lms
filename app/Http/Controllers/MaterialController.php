@@ -7,6 +7,11 @@ use App\Models\Topic;
 use App\Models\Course;
 use App\Models\Material;
 use Illuminate\Http\Request;
+use App\Models\CourseStudent;
+use App\Models\ImportedStudent;
+use App\Models\Progress;
+use App\Models\StudentAttendance;
+use Illuminate\Support\Facades\Auth;
 
 class MaterialController extends Controller {
 	// ===== TEACHER ===== //
@@ -92,6 +97,40 @@ class MaterialController extends Controller {
 	// ===== STUDENT ===== //
 	public function preview($material_id){
 		$material = Material::findOrFail($material_id);
+
+		// Check if the user reaches maximum course session
+		$cs = CourseStudent::where("student_id", Auth::user()->id)->where("course_id", $material->topic->course_id)->first();
+
+		if($cs->is_imported){
+			$count = ImportedStudent::where("course_id", $material->topic->course_id)->where("student_id", Auth::user()->id)->first()->last_attendance_count;
+		} else {
+			$count = 0;
+		}
+
+		$stdatd = StudentAttendance::where("user_id", Auth::user()->id)->get();
+
+		foreach($stdatd as $atd){
+			if($atd->attendance->course_id == $material->topic->course_id && $atd->is_attend == 1){
+				$count++;
+			}
+		}
+
+		$max_session_reached = false;
+		if($count >= $cs->max_course_session) {
+			$max_session_reached = true;
+		}
+
+		// Check if the user is really has the material unlocked
+		$progress = Progress::where("student_id", Auth::user()->id)->where("material_id", $material->id)->first();
+		$actually_not_unlocked = false;
+
+		if($progress->status == "locked"){
+			$actually_not_unlocked = true;
+		}
+
+		if($max_session_reached || $actually_not_unlocked){
+			return abort(403);
+		}
 
 		$original_link = $material->link;
 		$preview_link = $original_link;

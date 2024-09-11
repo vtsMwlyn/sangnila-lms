@@ -116,10 +116,10 @@ class CourseController extends Controller {
 		]);
 	}
 
-
 	// ===== STUDENT ===== //
 	// List of enrolled courses
 	public function student_index() {
+		// Check for every course is the student's attendance reaching its max session
 		$enrolled_courses = Auth::user()->enrolled_courses;
 		$paymentReminders = [];
 
@@ -159,11 +159,41 @@ class CourseController extends Controller {
 
 	// Shows a course details with topics and materials
 	public function student_show($course_id) {
+		// Checking if total attendances near or reaching the course max session
+		$cs = CourseStudent::where("student_id", Auth::user()->id)->where("course_id", $course_id)->first();
+
+		if($cs->is_imported){
+			$count = ImportedStudent::where("course_id", $course_id)->where("student_id", Auth::user()->id)->first()->last_attendance_count;
+		} else {
+			$count = 0;
+		}
+
+		$stdatd = StudentAttendance::where("user_id", Auth::user()->id)->get();
+
+		foreach($stdatd as $atd){
+			if($atd->attendance->course_id == $course_id && $atd->is_attend == 1){
+				$count++;
+			}
+		}
+
+		$shouldPaySoon = false;
+		$max_session_reached = false;
+		if(($count + 1) % $cs->max_course_session == 0){
+			$shouldPaySoon = true;
+		} else if($count >= $cs->max_course_session) {
+			$shouldPaySoon = true;
+			$max_session_reached = true;
+		}
+
+		// Other data
 		$progresses = Progress::where('course_id', $course_id)->where('student_id', Auth::user()->id)->get();
 		$student = CourseStudent::where('student_id', Auth::user()->id)->where('course_id', $course_id)->first();
+
 		return view('roles.student.course.show', [
 			'course' => $student->course,
-			'materialProgresses' => $progresses
+			'materialProgresses' => $progresses,
+			"should_pay_soon" => $shouldPaySoon,
+			"max_session_reached" => $max_session_reached
 		]);
 	}
 

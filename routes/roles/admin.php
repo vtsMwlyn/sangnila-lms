@@ -211,6 +211,8 @@ Route::prefix('/admin')
 
 			Route::get("/{announcement_id}/delete", [AnnouncementController::class, "delete"])->name("delete");
 			Route::post("/{announcement_id}/destroy", [AnnouncementController::class, "destroy"])->name("destroy");
+
+			Route::get("/{announcement_id}", [AnnouncementController::class, "all_view_announcement"])->name("view-announcement")->whereNumber("announcement_id");
 		});
 	}
 );

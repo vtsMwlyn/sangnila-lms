@@ -11,6 +11,14 @@
 @section("content")
 	<x-section-container>
 		<x-page-title>{{ $course->course_name }}</x-page-title>
+
+		@if($should_pay_soon)
+			<div class="bg-yellow-400 text-orange-700 py-3 px-6 rounded-lg font-semibold mb-8">
+				<i class="bi bi-exclamation-square"></i>
+				<span>Your progress in <span class="font-bold">{{ $course->course_name }}</span> course is reaching its maximum session. Please do the payment to extend your study in the course.</span>
+			</div>
+		@endif
+
 		<p class="text-blue-950 font-semibold text-center mb-8">{{ $course->course_description }}</p>
 
 		<h2 class="text-xl text-white font-bold">Course Materials:</h2>
@@ -30,7 +38,7 @@
 							{{ $progress->material->topic->title }}
 						</td>
 						<td class="template-bodies">
-							@if ($progress->status === 'unlocked')
+							@if ($progress->status === 'unlocked' && !$max_session_reached)
 								<a {{-- href="{{ $progress->material->link }}" --}}
 									href="{{ route("student.mycourse.preview", $progress->material->id) }}" class="text-white hover:text-green-900 hover:underline font-bold">
 									{{ $progress->material->title }}
@@ -47,7 +55,7 @@
 							</span>
 						</td>
 						<td class="template-bodies rounded-r-xl">
-							@if ($progress->status === 'unlocked')
+							@if ($progress->status === 'unlocked' && !$max_session_reached)
 								<x-anchor-button class="bg-orange-500" href="{{ route('student.mycourse.preview', $progress->material->id) }}">View</x-anchor-button>
 							@else
 								<x-button class="bg-slate-800" type="button">View</x-button>

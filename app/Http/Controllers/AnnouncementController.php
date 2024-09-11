@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Role;
 use App\Models\Announcement;
-use App\Models\AnnouncementUser;
 use Illuminate\Http\Request;
+use App\Models\AnnouncementUser;
 use App\Rules\MinimumOneCheckbox;
-use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class AnnouncementController extends Controller
@@ -104,8 +105,13 @@ class AnnouncementController extends Controller
 			"content" => $validatedData["content"],
 			"sent_to" => json_encode($receiver_array),
 			"announce_from" => $validatedData["announce_from"],
-			"announce_until" => $validatedData["announce_until"] . " 23:59:59",
 		];
+
+		if($validatedData["announce_until"] != $announcement->announce_until){
+			$data_to_update["announce_until"] = $validatedData["announce_until"] . " 23:59:59";
+		} else {
+			$data_to_update["announce_until"] = $validatedData["announce_until"];
+		}
 
 		if($request->file("image")){
 			$data_to_update["image_path"] = $validatedData["image"];
@@ -145,5 +151,21 @@ class AnnouncementController extends Controller
 		Announcement::destroy($announcement_id);
 
 		return redirect(route("admin.announcement.index"))->with("successDeleteAnnouncement", "Announcement deleted successfully!");
+	}
+
+	public function all_view_announcement($announcement_id){
+		$view_name = "";
+
+		if(Auth::user()->role_id == 1){
+			$view_name = "roles.admin.view-announcement";
+		} else if(Auth::user()->role_id == 2){
+			$view_name = "roles.teacher.view-announcement";
+		} else if(Auth::user()->role_id == 3){
+			$view_name = "roles.student.view-announcement";
+		}
+
+		return view($view_name, [
+			"announcement" => Announcement::findOrFail($announcement_id)
+		]);
 	}
 }
