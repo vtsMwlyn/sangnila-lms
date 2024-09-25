@@ -149,9 +149,10 @@ class CurriculumController extends Controller
 	}
 
 	public function admin_destroy_material($course_id, $curriculum_topic_id, $curriculum_material_id){
-		$topic = CurriculumMaterial::findOrFail($curriculum_topic_id);
+		$topic = CurriculumTopic::findOrFail($curriculum_topic_id);
+		$material = CurriculumMaterial::findOrFail($curriculum_material_id);
 
-		CurriculumMaterial::destroy($curriculum_material_id);
+		$material->delete();
 
 		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $topic->id]))->with("successDeleteCurriculumMaterial", "Successfully removed the curriculum material from " . $topic->title . "!");
 	}
