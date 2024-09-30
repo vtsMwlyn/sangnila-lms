@@ -73,8 +73,5 @@ Route::prefix('/student')
 				Route::get('/{course_id}', [AttendanceController::class, "student_show"])->name('show');
 			}
 		);
-
-		// Announcements
-		Route::get("/announcement/{announcement_id}", [AnnouncementController::class, "all_view_announcement"])->name("view-announcement")->whereNumber("announcement_id");
 	}
 );

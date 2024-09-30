@@ -30,7 +30,7 @@
 		<div class="w-full flex md:flex-row flex-col gap-5 mt-5">
 			<!-- Progress -->
 			<div class="w-full md:w-2/3 bg-white rounded-xl p-5 shadow-lg">
-				<p class="font-semibold text-blue-800">Graph</p>
+				<p class="font-semibold text-blue-800">Popular Courses</p>
 				<hr class="mt-3">
 				<div class="flex flex-col justify-between" style="height: 400px;">
 					{{-- <div class="w-full flex flex-col overflow-y-auto py-3" style="height: 360px;">
@@ -65,7 +65,7 @@
 				<p class="font-semibold text-blue-800">To Do List</p>
 				<hr class="mt-3">
 				<div class="w-full flex flex-col overflow-y-auto" style="height: 400px;">
-					<p>- There's nothing to do for now -</p>
+					<div class="w-full h-full flex items-center justify-center">- There's nothing to do for now -</div>
 					{{-- @forelse($undone_assignment as $todoasg)
 						<div class="flex items-start gap-2 my-3">
 							<i class="bi bi-clipboard"></i>
@@ -94,7 +94,7 @@
 						<div id="cardSlider" class="flex transition-transform duration-300 ease-in-out">
 							@forelse (App\Models\Announcement::all() as $announcement)
 								@if($announcement->announce_from < now() && $announcement->announce_until > now())
-									<a class="card-img flex flex-col items-stretch" href="{{ route('student.view-announcement', $announcement->id) }}">
+									<a class="card-img flex flex-col items-stretch" href="{{ route('view-announcement', $announcement->id) }}">
 										@php
 											$target = json_decode($announcement->sent_to);
 											// $n_announcement++;
@@ -102,7 +102,7 @@
 
 										@if($target[Auth::user()->role_id - 1] == "on")
 											@if($announcement->image_path)
-												<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full" style="object-fit: cover; object-position: center;">
+												<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full" style="object-fit: cover; object-position: center; height: 340px;">
 											@else
 												<div class="flex bg-slate-200 items-center justify-center text-white font-extrabold grow">
 													<i class="bi bi-megaphone-fill text-6xl"></i>

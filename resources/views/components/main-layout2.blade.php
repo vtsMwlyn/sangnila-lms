@@ -142,14 +142,32 @@
 			</div>
 
 			@if(session()->pull('show_announcement'))
-				@forelse (App\Models\Announcement::all() as $announcement)
-					@php
-						$target = json_decode($announcement->sent_to);
-					@endphp
+			{{-- @if(true) --}}
+				@php
+					$n = 0;
+					$m = 0;
+					$all_announcements = App\Models\Announcement::all();
+
+					foreach($all_announcements as $anc){
+						$target = json_decode($anc->sent_to);
+
+						if($target[Auth::user()->role_id - 1] == "on" && $anc->announce_from < now() && $anc->announce_until > now()){
+							$m++;
+						}
+					}
+				@endphp
+
+				@if($m > 0)
+					<button class="fixed bottom-3 right-3 font-bold text-yellow-500 py-2 px-3 border-2 border-yellow-500 rounded-xl hover:text-slate-500 hover:border-slate-500" id="dismiss-announcements-btn" type="button" style="z-index: 60;">Dismiss all</button>
+				@endif
+
+				@forelse ($all_announcements as $announcement)
+					@php $target = json_decode($announcement->sent_to); @endphp
 
 					@if($target[Auth::user()->role_id - 1] == "on")
-						@if($announcement->announce_from < now() && $announcement->announce_until > now())
-							<div class="h-screen w-screen flex items-center justify-center fixed top-0 z-50 popup-container" style="background: rgba(0, 0, 0, 0.5)">
+						@php $n++; @endphp
+						<div class="h-screen w-screen flex items-center justify-center fixed top-0 z-50 popup-container" style="background: {{ ($n == 1)? 'rgba(0, 0, 0, 0.5)' : 'none' }};">
+							@if($announcement->announce_from < now() && $announcement->announce_until > now())
 								<div class="bg-white w-1/2 h-4/5 flex flex-col gap-5 justify-between items-center p-8 rounded-xl popup" >
 									<h1 class="text-xl font-bold text-blue-900">{{ $announcement->title }}</h1>
 									<div class="grow overflow-y-auto">
@@ -164,8 +182,8 @@
 									</div>
 									<p class="text-sm text-slate-500">- Click anywhere to close -</p>
 								</div>
-							</div>
-						@endif
+							@endif
+						</div>
 					@endif
 				@empty
 
@@ -230,6 +248,11 @@
 						$(this).fadeOut();
 					}
 
+				});
+
+				$("#dismiss-announcements-btn").click(function(){
+					$(".popup-container").fadeOut();
+					$(this).fadeOut();
 				});
 
 				$(".announcementContent a").each((index, anchor) => {

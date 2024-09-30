@@ -31,19 +31,24 @@ Route::middleware([])->group(function(){
 		return view('roles.guest.home');
 	})->name('home');
 
-	Route::get('/dashboard', [DashboardController::class, "index"])->middleware(['auth', 'verified'])->name('dashboard');
+	Route::middleware(["auth", "verified"])->group(function(){
+		Route::get('/dashboard', [DashboardController::class, "index"])->middleware(['auth', 'verified'])->name('dashboard');
 
-	// Profile & notifications
-	Route::prefix("/profile")->name("profile.")->middleware(["auth", "verified"])->group(function(){
-		Route::get("/", [UserAccountController::class, "show"])->name("show");
-		Route::post("/", [UserAccountController::class, "update"])->name("update");
-	});
+		// Profile & notifications
+		Route::prefix("/profile")->name("profile.")->middleware(["auth", "verified"])->group(function(){
+			Route::get("/", [UserAccountController::class, "show"])->name("show");
+			Route::post("/", [UserAccountController::class, "update"])->name("update");
+		});
 
-	Route::prefix("/notification")->name("notification.")->middleware(["auth", "verified"])->group(function(){
-		Route::post("/{notification_id}", [NotificationController::class, "mark_as_read"])->name("mark-read")->whereNumber("notification_id");
-		Route::post("/mark-read-all", [NotificationController::class, "mark_all_as_read"])->name("mark-all-read");
-		Route::post("/{notification_id}/dismiss}", [NotificationController::class, "dismiss"])->name("dismiss")->whereNumber("notification_id");
-		Route::post("/dismiss-all", [NotificationController::class, "dismiss_all"])->name("dismiss-all");
+		Route::prefix("/notification")->name("notification.")->middleware(["auth", "verified"])->group(function(){
+			Route::post("/{notification_id}", [NotificationController::class, "mark_as_read"])->name("mark-read")->whereNumber("notification_id");
+			Route::post("/mark-read-all", [NotificationController::class, "mark_all_as_read"])->name("mark-all-read");
+			Route::post("/{notification_id}/dismiss}", [NotificationController::class, "dismiss"])->name("dismiss")->whereNumber("notification_id");
+			Route::post("/dismiss-all", [NotificationController::class, "dismiss_all"])->name("dismiss-all");
+		});
+
+		// Announcements
+		Route::get("/announcement/{announcement_id}", [AnnouncementController::class, "all_view_announcement"])->name("view-announcement")->whereNumber("announcement_id");
 	});
 
 	// Authentication and registrations
@@ -55,7 +60,7 @@ Route::middleware([])->group(function(){
 	require __DIR__ . '/roles/student.php';
 	require __DIR__ . '/roles/guest.php';
 
-	// Push notification
+	// Push notification (postponed, VAPID keys-nya mabok)
 	Route::post('/save-subscription', [PushNotificationController::class, "saveSubscription"])->name("pushnotification.savesubscription");
 
 	Route::get("/test-notif", function(){

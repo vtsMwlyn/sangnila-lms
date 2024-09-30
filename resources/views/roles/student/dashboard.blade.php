@@ -70,7 +70,7 @@
 							<p class="">Do and submit your work for assignment <span class="font-semibold">"{{ $todoasg->assignment->title }}"</span> before <span class="italic font-bold">{{ $todoasg->assignment->deadline_date }} {{ $todoasg->assignment->deadline_time }}</span></p>
 						</div>
 					@empty
-						<p>- There's nothing to do for now -</p>
+						<div class="w-full h-full flex items-center justify-center">- There's nothing to do for now -</div>
 					@endforelse
 				</div>
 			</div>
@@ -92,7 +92,7 @@
 						<div id="cardSlider" class="flex transition-transform duration-300 ease-in-out">
 							@forelse (App\Models\Announcement::all() as $announcement)
 								@if($announcement->announce_from < now() && $announcement->announce_until > now())
-									<a class="card-img flex flex-col items-stretch" href="{{ route('student.view-announcement', $announcement->id) }}">
+									<a class="card-img flex flex-col items-stretch" href="{{ route('view-announcement', $announcement->id) }}">
 										@php
 											$target = json_decode($announcement->sent_to);
 											// $n_announcement++;
@@ -100,7 +100,7 @@
 
 										@if($target[Auth::user()->role_id - 1] == "on")
 											@if($announcement->image_path)
-												<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full" style="object-fit: cover; object-position: center;">
+												<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full" style="object-fit: cover; object-position: center; height: 340px;">
 											@else
 												<div class="flex bg-slate-200 items-center justify-center text-white font-extrabold grow">
 													<i class="bi bi-megaphone-fill text-6xl"></i>
@@ -139,7 +139,7 @@
 				</div>
 			</div>
 
-			<!-- Progress -->
+			<!-- Calendar -->
 			<div class="w-full md:w-1/2 bg-white rounded-xl p-5 shadow-lg">
 				<p class="font-semibold text-blue-800">Calendar</p>
 				<hr class="mt-3">
