@@ -38,8 +38,20 @@
 							<div class="w-full flex md:flex-row flex-col md:items-center gap-0">
 								<p class="w-full md:w-1/4 font-semibold"><a href="{{ route('student.mycourse.show', $cstudent->course->id) }}" class="hover:underline hover:text-indigo-600">{{ $cstudent->course->course_name }}</a></p>
 								<div class="grow flex flex-col border-l py-3">
-									<div class="h-6 bg-orange-500" style="width: {{ ($attendance_progress[$i][0] / $attendance_progress[$i][1]) * 100 }}%"></div>
-									<div class="h-6 bg-blue-600" style="width: {{ ($material_progress[$i][0] / $material_progress[$i][1]) * 100 }}%"></div>
+									@php
+										$mp_bar_percentage = 0;
+										$ap_bar_percentage = 0;
+
+										if($material_progress[$i][1] != 0){
+											$mp_bar_percentage = ($material_progress[$i][0] / $material_progress[$i][1]) * 100;
+										}
+
+										if($attendance_progress[$i][1] != 0){
+											$ap_bar_percentage = ($attendance_progress[$i][0] / $attendance_progress[$i][1]) * 100;
+										}
+									@endphp
+									<div class="h-6 bg-orange-500" style="width: {{ $mp_bar_percentage }}%"></div>
+									<div class="h-6 bg-blue-600" style="width: {{ $ap_bar_percentage }}%"></div>
 								</div>
 							</div>
 						@empty
