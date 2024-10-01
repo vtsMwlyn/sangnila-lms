@@ -141,8 +141,8 @@
 				</a>
 			</div>
 
-			@if(session()->pull('show_announcement'))
-			{{-- @if(true) --}}
+			{{-- @if(session()->pull('show_announcement')) --}}
+			@if(true)
 				@php
 					$n = 0;
 					$m = 0;
@@ -166,8 +166,8 @@
 
 					@if($target[Auth::user()->role_id - 1] == "on")
 						@php $n++; @endphp
-						<div class="h-screen w-screen flex items-center justify-center fixed top-0 z-50 popup-container" style="background: {{ ($n == 1)? 'rgba(0, 0, 0, 0.5)' : 'none' }};">
-							@if($announcement->announce_from < now() && $announcement->announce_until > now())
+						@if($announcement->announce_from < now() && $announcement->announce_until > now())
+							<div class="h-screen w-screen flex items-center justify-center fixed top-0 z-50 popup-container" style="background: {{ ($n == 1)? 'rgba(0, 0, 0, 0.5)' : 'none' }};">
 								<div class="bg-white w-1/2 h-4/5 flex flex-col gap-5 justify-between items-center p-8 rounded-xl popup" >
 									<h1 class="text-xl font-bold text-blue-900">{{ $announcement->title }}</h1>
 									<div class="grow overflow-y-auto">
@@ -182,8 +182,8 @@
 									</div>
 									<p class="text-sm text-slate-500">- Click anywhere to close -</p>
 								</div>
-							@endif
-						</div>
+							</div>
+						@endif
 					@endif
 				@empty
 
@@ -236,15 +236,28 @@
 						navbar.style.backgroundColor = "rgb(17, 41, 102)";
 
 					} else {
-						backToTopButton.classList.remove("opacity-100");backToTopButton.classList.add("opacity-0");
+						backToTopButton.classList.remove("opacity-100");
+						backToTopButton.classList.add("opacity-0");
 
 						navbar.style.backdropFilter = "blur(3px)";
 						navbar.style.backgroundColor = "rgba(17, 41, 102, 0.5)";
 					}
 				});
 
+				let popups = $(".popup-container").length;
+				console.log(popups);
+
+				function remove_dismiss_popup(){
+					popups--;
+					if(popups == 0){
+						$("#dismiss-announcements-btn").fadeOut();
+					}
+				}
+
+
 				$(".popup-container").click(function(e){
 					if (!$(e.target).closest(".popup").length) {
+						remove_dismiss_popup();
 						$(this).fadeOut();
 					}
 

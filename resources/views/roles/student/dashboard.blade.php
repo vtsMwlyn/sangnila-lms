@@ -162,17 +162,17 @@
 			const cardWidth = cardSlider.parent().width();
 			// const cardWidth = parseFloat(cardWidthStr.replace("px", ''));
 
-			console.log("Container width: " + cardWidth);
+			// console.log("Container width: " + cardWidth);
 
 			$(".card-img").each(function(){
 				$(this).css({"min-width": cardWidth + helper, "max-width": cardWidth + helper});
-				console.log("Cards width: " + $(this).width());
+				// console.log("Cards width: " + $(this).width());
 			});
 
 			const totalCards = cardSlider.children().length;
 			const sliderWidth = totalCards * cardWidth;
 			cardSlider.css({"min-width": sliderWidth, "max-width": sliderWidth});
-			console.log(`Slider width: ${totalCards} x ${cardWidth} = ${cardSlider.width()}`);
+			// console.log(`Slider width: ${totalCards} x ${cardWidth} = ${cardSlider.width()}`);
 
 			function nextCard() {
 				const visibleCards = cardSlider.parent().width() / cardWidth;
