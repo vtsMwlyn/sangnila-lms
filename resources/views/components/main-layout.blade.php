@@ -16,6 +16,7 @@
 
 		<!-- CSS -->
 		<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/color-pallete.css') }}">
 
 		<!-- Bootstrap icons -->
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -53,7 +54,7 @@
 		<title>Sangnila Academy | LMS</title>
 	</head>
 
-	<body class="bg-cover min-h-screen flex flex-col md:flex-row">
+	<body class="bg-cover min-h-screen flex flex-col">
 		<!-- Back to top button and version -->
 		<div class="fixed z-50 bottom-0 left-0 m-2 text-black md:text-white">
 			<div class="">{{ trans("strings.version") }}</div>
@@ -66,33 +67,40 @@
 			</a>
 		</div>
 
-		{{ $slot }}
+		<!-- Navbar -->
+		<x-navbar.student></x-navbar.student>
 
-		<!-- Content Section -->
-		<div class="container w-full md:w-4/5 min-h-screen flex flex-col justify-between">
+		<!-- Sidebar and content -->
+		<div class="w-full flex min-h-screen">
+			<!-- Sidebar -->
+			{{ $slot }}
 
-			<div class="my-10 text-4xl text-white font-bold flex items-center justify-center">
-				@yield("title")
-				<a href="{{ route("profile.show") }}" class="flex flex-col absolute items-center right-10 invisible md:visible text-white hover:text-yellow-400 transition ease-in-out hover:scale-105 duration-600" style="cursor: url({{ asset('img/cursor2.cur') }}), pointer;">
-					<i class="bi bi-person-circle"></i>
-					@auth
-						@if (Auth::user()->full_name == "Immanuel Giovano")
-							<span class="text-center text-sm mt-1">Pagi, Gi</span>
+			<!-- Content Section -->
+			<div class="container w-full md:w-4/5 min-h-screen flex flex-col justify-between">
+
+				<div class="my-10 text-4xl text-white font-bold flex items-center justify-center">
+					@yield("title")
+					<a href="{{ route("profile.show") }}" class="flex flex-col absolute items-center right-10 invisible md:visible text-white hover:text-yellow-400 transition ease-in-out hover:scale-105 duration-600" style="cursor: url({{ asset('img/cursor2.cur') }}), pointer;">
+						<i class="bi bi-person-circle"></i>
+						@auth
+							@if (Auth::user()->full_name == "Immanuel Giovano")
+								<span class="text-center text-sm mt-1">Pagi, Gi</span>
+							@else
+								<span class="text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
+							@endif
 						@else
-							<span class="text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
-						@endif
-					@else
-						<span class="text-center text-sm mt-1">Guest</span>
-					@endauth
-				</a>
-			</div>
-
-			<div class="bg-white flex flex-col justify-between h-full">
-				<div class="p-10">
-					@yield("content")
+							<span class="text-center text-sm mt-1">Guest</span>
+						@endauth
+					</a>
 				</div>
 
-				<x-footer></x-footer>
+				<div class="bg-white flex flex-col justify-between h-full">
+					<div class="p-10">
+						@yield("content")
+					</div>
+
+					<x-footer></x-footer>
+				</div>
 			</div>
 		</div>
 
