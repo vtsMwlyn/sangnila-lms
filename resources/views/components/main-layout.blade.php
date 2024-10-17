@@ -34,16 +34,16 @@
 		<style>
 			/* Custom Cursor */
 			a {
-				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
+				/* cursor: url("{{ asset('img/cursor2.cur') }}"), pointer; */
 			}
 
 			button[type="button"], button[type="submit"] {
-				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
+				/* cursor: url("{{ asset('img/cursor2.cur') }}"), pointer; */
 			}
 
 			body {
-				background: url("{{ asset('img/background.jpg') }}") no-repeat center center / cover;
-				cursor: url("{{ asset('img/kursor.cur') }}"), auto;
+				background: white;
+				/* cursor: url("{{ asset('img/kursor.cur') }}"), auto; */
 			}
 		</style>
 
@@ -78,9 +78,13 @@
 			<!-- Content Section -->
 			<div class="container w-full md:w-4/5 min-h-screen flex flex-col justify-between">
 
-				<div class="my-10 text-4xl text-white font-bold flex items-center justify-center">
+				<!-- Page title -->
+				<div class="py-4 px-6 text-3xl text-white font-bold flex items-center" style="background: linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%);
+">
 					@yield("title")
-					<a href="{{ route("profile.show") }}" class="flex flex-col absolute items-center right-10 invisible md:visible text-white hover:text-yellow-400 transition ease-in-out hover:scale-105 duration-600" style="cursor: url({{ asset('img/cursor2.cur') }}), pointer;">
+
+
+					{{-- <a href="{{ route("profile.show") }}" class="flex flex-col absolute items-center right-10 invisible md:visible text-white hover:text-yellow-400 transition ease-in-out hover:scale-105 duration-600" style="cursor: url({{ asset('img/cursor2.cur') }}), pointer;">
 						<i class="bi bi-person-circle"></i>
 						@auth
 							@if (Auth::user()->full_name == "Immanuel Giovano")
@@ -91,11 +95,12 @@
 						@else
 							<span class="text-center text-sm mt-1">Guest</span>
 						@endauth
-					</a>
+					</a> --}}
 				</div>
 
-				<div class="bg-white flex flex-col justify-between h-full">
-					<div class="p-10">
+				<!-- Content -->
+				<div class="flex flex-col justify-between" style="background: radial-gradient(circle at left top, rgb(175, 193, 221) 0%, #FFFFFF 100%)">
+					<div class="p-8 flex flex-col items-center">
 						@yield("content")
 					</div>
 

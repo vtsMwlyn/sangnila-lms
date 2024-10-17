@@ -5,9 +5,7 @@
 @endsection
 
 @section("content")
-	<x-section-container>
-		<x-page-title>Dashboard</x-page-title>
-
+	<div class="w-full">
 		<div class="w-full flex sm:flex-row flex-col gap-5">
 			<div class="bg-white rounded-xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-5 p-5">
 				<p class="font-bold text-blue-800 text-xl"><i class="bi bi-book"></i> Courses Enrolled</p>
@@ -159,7 +157,7 @@
 				<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FJakarta&bgcolor=%23ffffff&showTabs=0&showPrint=0&showTitle=0&showCalendars=0&src=YmQ3NzMyZWY2NjMwMjc5ZDRkYTM0YmZmZWRlOGUwMWFlOTAzNDVmZWVlM2MxNWNkMzk0NGU3NTk4OGJhYzBjY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZW4uaW5kb25lc2lhbiNob2xpZGF5QGdyb3VwLnYuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%23C0CA33&color=%230B8043" height="380" frameborder="0" scrolling="no" class="w-full mt-5"></iframe>
 			</div>
 		</div>
-	</x-section-container>
+	</div>
 
 	<script>
 		$(document).ready(() => {
