@@ -18,6 +18,11 @@
 		<link rel="stylesheet" href="{{ asset('css/app.css') }}">
 		<link rel="stylesheet" href="{{ asset('css/color-pallete.css') }}">
 
+		<!--Font-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
+
 		<!-- Bootstrap icons -->
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -43,6 +48,7 @@
 
 			body {
 				background: white;
+				font-family: "Geologica";
 				/* cursor: url("{{ asset('img/kursor.cur') }}"), auto; */
 			}
 		</style>
@@ -62,7 +68,7 @@
 			</div>
 			<div class="fixed bottom-0 right-0 m-2 opacity-0 transition-opacity duration-500 ease-in-out" id="back-to-top">
 				<a href="#">
-					<div class="bg-orange-500 rounded-full w-full text-xl p-2.5 flex justify-center align-center font-bold" style="width: 50px; height: 50px;">
+					<div class="bg-light-blue animate-bounce rounded-full w-full text-xl p-2.5 flex justify-center align-center font-bold" style="width: 50px; height: 50px;">
 						<i class="text-white text-center bi bi-arrow-up"></i>
 					</div>
 				</a>
