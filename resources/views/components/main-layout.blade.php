@@ -54,80 +54,125 @@
 		<title>Sangnila Academy | LMS</title>
 	</head>
 
-	<body class="bg-cover min-h-screen flex flex-col">
-		<!-- Back to top button and version -->
-		<div class="fixed z-50 bottom-0 left-0 m-2 text-black md:text-white">
-			<div class="">{{ trans("strings.version") }}</div>
-		</div>
-		<div class="fixed bottom-0 right-0 m-2 opacity-0 transition-opacity duration-500 ease-in-out" id="back-to-top">
-			<a href="#">
-				<div class="bg-orange-500 rounded-full w-full text-xl p-2.5 flex justify-center align-center font-bold" style="width: 50px; height: 50px;">
-					<i class="text-white text-center bi bi-arrow-up"></i>
-				</div>
-			</a>
-		</div>
+	<body class="min-h-screen flex flex-col items-center">
+		<div class="flex flex-col items-center w-full" style="max-width: 2500px;">
+			<!-- Back to top button and version -->
+			<div class="fixed z-50 bottom-0 left-0 m-2 text-black md:text-white">
+				<div class="">{{ trans("strings.version") }}</div>
+			</div>
+			<div class="fixed bottom-0 right-0 m-2 opacity-0 transition-opacity duration-500 ease-in-out" id="back-to-top">
+				<a href="#">
+					<div class="bg-orange-500 rounded-full w-full text-xl p-2.5 flex justify-center align-center font-bold" style="width: 50px; height: 50px;">
+						<i class="text-white text-center bi bi-arrow-up"></i>
+					</div>
+				</a>
+			</div>
 
-		<!-- Navbar -->
-		<x-navbar.student></x-navbar.student>
+			<!-- Navbar -->
+			<x-navbar.student></x-navbar.student>
 
-		<!-- Sidebar and content -->
-		<div class="w-full flex min-h-screen">
-			<!-- Sidebar -->
-			{{ $slot }}
+			<!-- Sidebar and content -->
+			<div class="w-full flex">
+				<!-- Sidebar -->
+				{{ $slot }}
 
-			<!-- Content Section -->
-			<div class="container w-full md:w-4/5 min-h-screen flex flex-col justify-between">
+				<!-- Content Section -->
+				<div class="flex flex-col" style="width: 80%;" id="content-container">
+					<div class="min-h-screen flex flex-col">
+						<!-- Page title -->
+						<div class="py-4 px-6 w-full text-white font-bold flex items-center justify-between" style="background: linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%);">
+							<div class="text-3xl">@yield("title")</div>
 
-				<!-- Page title -->
-				<div class="py-4 px-6 text-3xl text-white font-bold flex items-center" style="background: linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%);
-">
-					@yield("title")
+							<!-- "Sidebar" for mobile and tablet -->
+							<div class="relative lg:hidden flex flex-col items-end">
+								<button type="button" id="medsmallmenu-toggler">
+									<div class="w-40 bg-blue py-1.5 px-3 rounded-xl flex items-center justify-between">
+										Menu
+										<i class="bi bi-chevron-down"></i>
+									</div>
+								</button>
+								<div class="absolute z-10 text-white top-16 w-80 rounded-xl flex flex-col py-2" id="medsmallmenu-dropdown" style="display: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center; background-size: cover;">
+									<a href="{{ route('home') }}"><div class="w-full px-5 py-1 font-semibold flex items-center gap-1"><img src="{{ asset('img/sidebar-dashboard.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Dashboard</div></a>
+									<a href="{{ route('student.mycourse.index') }}"><div class="w-full px-5 py-1 font-semibold flex items-center gap-1"><img src="{{ asset('img/sidebar-courses.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Courses</div></a>
+									<a href="{{ route('student.assignment.index') }}"><div class="w-full px-5 py-1 font-semibold flex items-center gap-1"><img src="{{ asset('img/sidebar-assignment.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Assignment</div></a>
+									<a href="{{ route('student.attendance.index') }}"><div class="w-full px-5 py-1 font-semibold flex items-center gap-1"><img src="{{ asset('img/sidebar-attendance.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Attendance</div></a>
+									<a href="#"><div class="w-full px-5 py-1 font-semibold flex items-center gap-1"><img src="{{ asset('img/sidebar-schedule.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Schedule</div></a>
+									<a href="#"><div class="w-full px-5 py-1 font-semibold flex items-center gap-1"><img src="{{ asset('img/sidebar-announcement.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Announcement</div></a>
+								</div>
+							</div>
 
+							<script>
+								$(document).ready(function () {
+									// Toggle dropdown on button click
+									$("#medsmallmenu-toggler").click(function (e) {
+										e.stopPropagation(); // Prevent the click event from bubbling up to the document
 
-					{{-- <a href="{{ route("profile.show") }}" class="flex flex-col absolute items-center right-10 invisible md:visible text-white hover:text-yellow-400 transition ease-in-out hover:scale-105 duration-600" style="cursor: url({{ asset('img/cursor2.cur') }}), pointer;">
-						<i class="bi bi-person-circle"></i>
-						@auth
-							@if (Auth::user()->full_name == "Immanuel Giovano")
-								<span class="text-center text-sm mt-1">Pagi, Gi</span>
-							@else
-								<span class="text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
-							@endif
-						@else
-							<span class="text-center text-sm mt-1">Guest</span>
-						@endauth
-					</a> --}}
-				</div>
+										$("#medsmallmenu-dropdown").toggle();
+									});
 
-				<!-- Content -->
-				<div class="flex flex-col justify-between" style="background: radial-gradient(circle at left top, rgb(175, 193, 221) 0%, #FFFFFF 100%)">
-					<div class="p-8 flex flex-col items-center">
-						@yield("content")
+									// Close dropdown when clicking outside of it
+									$(document).click(function (e) {
+										if (!$(e.target).closest("#medsmallmenu-dropdown, #medsmallmenu-toggler").length) {
+											$("#medsmallmenu-dropdown").hide();
+										}
+									});
+								});
+							</script>
+						</div>
+
+						<div class="p-8 flex flex-col items-center grow" style="background: radial-gradient(circle at left top, rgb(175, 193, 221) 0%, #FFFFFF 100%)">
+							@yield("content")
+						</div>
 					</div>
 
 					<x-footer></x-footer>
 				</div>
 			</div>
+
+			<!-- Scripts -->
+			<script>
+				$(document).ready(() => {
+					// Display back to top button on page scroll more than 100vh
+					const backToTopButton = document.getElementById("back-to-top");
+
+					window.addEventListener("scroll", function() {
+						if (window.scrollY > window.innerHeight * 0.3) {
+							backToTopButton.classList.remove("opacity-0");
+							backToTopButton.classList.add("opacity-100");
+						} else {
+							backToTopButton.classList.remove("opacity-100");backToTopButton.classList.add("opacity-0");
+						}
+					});
+
+					function adjustLayouts(){
+						// Minimum height for sidebar
+						$("#sidebar").css("height", ($(this).height() - $("#navbar").outerHeight()));
+
+						// Set content and sidebar width
+						if($(this).width() < 1024){
+							$("#sidebar-container").css("display", "none");
+							$("#content-container").css("width", "100%");
+						}
+						else {
+							$("#sidebar-container").css("display", "block");
+							$("#content-container").css("width", "80%");
+						}
+					}
+
+					adjustLayouts();
+
+					$(window).on("resize", function(){
+						adjustLayouts();
+					});
+				});
+
+			</script>
+
+
+			<!-- Include Select2 JavaScript -->
+			<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 		</div>
-
-		<!-- Scripts -->
-		<!-- Back to top button -->
-		<script>
-			const backToTopButton = document.getElementById("back-to-top");
-
-			window.addEventListener("scroll", function() {
-				if (window.scrollY > window.innerHeight * 0.3) {
-					backToTopButton.classList.remove("opacity-0");
-					backToTopButton.classList.add("opacity-100");
-				} else {
-					backToTopButton.classList.remove("opacity-100");backToTopButton.classList.add("opacity-0");
-				}
-			});
-		</script>
-
-		<!-- Include Select2 JavaScript -->
-		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-
 	</body>
 
 </html>

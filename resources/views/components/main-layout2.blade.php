@@ -141,8 +141,8 @@
 				</a>
 			</div>
 
-			{{-- @if(session()->pull('show_announcement')) --}}
-			@if(true)
+			@if(session()->pull('show_announcement'))
+			{{-- @if(true) --}}
 				@php
 					$n = 0;
 					$m = 0;

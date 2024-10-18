@@ -1,5 +1,5 @@
 <!-- Main sidebar -->
-<div class="w-full md:w-1/5 relative text-white md:min-h-screen z-10">
+<div class="text-white z-10 min-h-screen" style="width: 20%;" id="sidebar-container">
 	@php
 		// $student = Auth::user();
 		// $n_asg_subm = 0;
@@ -35,14 +35,10 @@
 		<span class="inline-block">&#9776;</span>
 	</button>
 
-	<div class="md:flex flex-col items-stretch fixed hidden z-0 m-0 w-1/5" style="top: 65px; height: 100vh; background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center left; background-size: cover;" id="navigation">
-		{{-- <a href="{{ route("profile.show") }}" class="flex items-center  mt-5 gap-3 font-bold">
-			<i class="bi bi-person-circle text-xl"></i>
-			<span class="text-white text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
-		</a> --}}
+	<div class="md:flex flex-col items-stretch sticky hidden z-0 m-0" style="top: 65px; background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center left; background-size: cover;" id="sidebar">
 		<div class="relative flex flex-col px-10 my-4">
 			<button type="button" id="profile-toggler" class="flex flex-col items-center">
-				<img src="{{ asset("img/Blank profile picture round.png") }}" alt="">
+				<img src="{{ asset("img/templetus.webp") }}" class="rounded-full w-40 h-40 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;">
 				<h1 class="text-2xl font-bold">Hello {{ explode(" ", Auth::user()->full_name)[0] }}!</h1>
 			</button>
 
@@ -74,12 +70,12 @@
 
 		<!-- Sidebar navigations -->
 		<div class="flex flex-col items-stretch justify-center w-full mt-8">
-			<x-anchor-button class="grow flex items-center gap-4 h-16 px-8 text-xl"
+			<x-anchor-button class="grow flex items-center gap-4 h-14 px-8 text-lg"
 				href="{{ route('home') }}" style="border-radius: 0; background: {{ Request::is('dashboard*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : 'transparent' }};">
 				<img src="{{ asset('img/sidebar-dashboard.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Dashboard
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center gap-4 h-16 px-8 text-xl"
+			<x-anchor-button class="grow flex items-center gap-4 h-14 px-8 text-lg"
 				href="{{ route('student.mycourse.index') }}" style="border-radius: 0; background: {{ Request::is('student*my-course*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : 'transparent' }};">
 				<img src="{{ asset('img/sidebar-courses.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Courses
 			</x-anchor-button>
@@ -88,23 +84,23 @@
 				{{-- @if($n > 0)
 					<div class="absolute h-6 w-7 bg-red-600 rounded-full flex justify-center items-center" style="top: -0.5rem; right: -0.5rem;">{{ $n }}</div>
 				@endif --}}
-				<x-anchor-button class="flex items-center gap-4 h-16 px-8 text-xl w-full"
+				<x-anchor-button class="flex items-center gap-4 h-14 px-8 text-lg w-full"
 					href="{{ route('student.assignment.index') }}" style="border-radius: 0; background: {{ Request::is('student*assignment*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : 'transparent' }};">
 					<img src="{{ asset('img/sidebar-assignment.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Assignment
 				</x-anchor-button>
 			</div>
 
-			<x-anchor-button class="grow flex items-center gap-4 h-16 px-8 text-xl"
+			<x-anchor-button class="grow flex items-center gap-4 h-14 px-8 text-lg"
 				href="{{ route('student.attendance.index') }}" style="border-radius: 0; background: {{ Request::is('student*attendance*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : 'transparent' }};">
 				<img src="{{ asset('img/sidebar-attendance.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Attendance
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center gap-4 h-16 px-8 text-xl"
+			<x-anchor-button class="grow flex items-center gap-4 h-14 px-8 text-lg"
 				href="#" style="border-radius: 0; background: {{ Request::is('schedule*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : 'transparent' }};">
 				<img src="{{ asset('img/sidebar-schedule.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Schedule
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center gap-4 h-16 px-8 text-xl"
+			<x-anchor-button class="grow flex items-center gap-4 h-14 px-8 text-lg"
 				href="#" style="border-radius: 0; background: {{ Request::is('announcement*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : 'transparent' }};">
 				<img src="{{ asset('img/sidebar-announcement.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Announcement
 			</x-anchor-button>

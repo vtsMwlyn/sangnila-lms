@@ -1,4 +1,4 @@
-<footer class="px-5 py-10 mt-auto text-white bg-slate-800 bottom-0">
+<footer class="px-5 py-10 mt-auto text-white bg-slate-800 bottom-0" id="footer">
     <div class="flex flex-col md:flex-row items-center justify-center gap-3">
         <div class="w-full md:w-1/2">
             <p class="font-semibold text-center">Copyright &copy 2024 - Sangnila Interactive Media and Technology</p>
