@@ -5,170 +5,168 @@
 @endsection
 
 @section("content")
-	<div class="w-full flex flex-col">
-		<div class="w-full flex gap-5">
-			<div class="flex flex-col gap-5 w-2/3">
-				<!-- Main stats -->
-				<div class="w-full flex sm:flex-row flex-col gap-5">
-					<div class="bg-white rounded-3xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-2 p-5">
-						<img src="{{ asset('img/studentdashboard-courseenrolled.svg') }}" class="w-16 h-16" alt="icon">
-						<p class="font-bold text-black text-base text-center">Courses Enrolled</p>
-						<p class="text-4xl font-extrabold">{{ $courses_enrolled }}</p>
-					</div>
-					<div class="bg-white rounded-3xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-2 p-5">
-						<img src="{{ asset('img/studentdashboard-materialsunlocked.svg') }}" class="w-16 h-16" alt="icon">
-						<p class="font-bold text-black text-base text-center">Materials Unlocked</p>
-						<p class="text-4xl font-extrabold">{{ $materials_unlocked }}</p>
-					</div>
-					<div class="bg-white rounded-3xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-2 p-5">
-						<img src="{{ asset('img/studentdashboard-sessionsattended.svg') }}" class="w-16 h-16" alt="icon">
-						<p class="font-bold text-black text-base text-center">Sessions Attended</p>
-						<p class="text-4xl font-extrabold">{{ $sessions_attended }}</p>
-					</div>
-					<div class="bg-white rounded-3xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-2 p-5">
-						<img src="{{ asset('img/studentdashboard-assignmentsdone.svg') }}" class="w-16 h-16" alt="icon">
-						<p class="font-bold text-black text-base text-center">Assignments Done</p>
-						<p class="text-4xl font-extrabold">{{ $assignments_done }}</p>
-					</div>
+	<div class="w-full flex gap-5">
+		<div class="flex flex-col gap-5 w-2/3">
+			<!-- Main stats -->
+			<div class="w-full flex sm:flex-row flex-col gap-5">
+				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-2 p-5">
+					<img src="{{ asset('img/studentdashboard-courseenrolled.svg') }}" class="w-12 h-12" alt="icon">
+					<p class="font-bold text-black text-center">Courses Enrolled</p>
+					<p class="text-3xl font-extrabold">{{ $courses_enrolled }}</p>
 				</div>
-
-				<!-- Progress -->
-				<div class="bg-white rounded-3xl p-5 shadow-lg">
-					<p class="font-bold text-dark-blue text-lg">Courses Progress</p>
-					<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
-
-					<div class="flex flex-col justify-between" style="height: 400px;">
-						<div class="w-full flex flex-col overflow-y-auto py-3" style="height: 360px;">
-							@forelse ($course_students as $i => $cstudent)
-								<div class="w-full flex md:flex-row flex-col md:items-center gap-0">
-									<p class="w-full md:w-1/4 font-semibold"><a href="{{ route('student.mycourse.show', $cstudent->course->id) }}" class="hover:underline hover:text-indigo-600">{{ $cstudent->course->course_name }}</a></p>
-									<div class="grow flex flex-col border-l py-3">
-										@php
-											$mp_bar_percentage = 0;
-											$ap_bar_percentage = 0;
-
-											if($material_progress[$i][1] != 0){
-												$mp_bar_percentage = ($material_progress[$i][0] / $material_progress[$i][1]) * 100;
-											}
-
-											if($attendance_progress[$i][1] != 0){
-												$ap_bar_percentage = ($attendance_progress[$i][0] / $attendance_progress[$i][1]) * 100;
-											}
-										@endphp
-										<div class="h-5" style="width: {{ $mp_bar_percentage }}%; background: linear-gradient(90deg, #1EB8CD 0%, #BEE2DB 100%);"></div>
-										<div class="h-5" style="width: {{ $ap_bar_percentage }}%; background: linear-gradient(90deg, #212F63 0%, #354D9B 100%);"></div>
-									</div>
-								</div>
-							@empty
-
-							@endforelse
-						</div>
-						<div class="flex md:flex-row flex-col gap-2 md:gap-5 w-full justify-end font-semibold">
-							<div class="flex items-center gap-3">
-								<div class="h-4 w-4" style="background: linear-gradient(90deg, #1EB8CD 0%, #BEE2DB 100%);"></div>
-								<p>Attendance</p>
-							</div>
-							<div class="flex items-center gap-3">
-								<div class="h-4 w-4" style="background: linear-gradient(90deg, #212F63 0%, #354D9B 100%);"></div>
-								<p>Material</p>
-							</div>
-						</div>
-					</div>
+				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-2 p-5">
+					<img src="{{ asset('img/studentdashboard-materialsunlocked.svg') }}" class="w-12 h-12" alt="icon">
+					<p class="font-bold text-black text-center">Materials Unlocked</p>
+					<p class="text-3xl font-extrabold">{{ $materials_unlocked }}</p>
+				</div>
+				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-2 p-5">
+					<img src="{{ asset('img/studentdashboard-sessionsattended.svg') }}" class="w-12 h-12" alt="icon">
+					<p class="font-bold text-black text-center">Sessions Attended</p>
+					<p class="text-3xl font-extrabold">{{ $sessions_attended }}</p>
+				</div>
+				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-2 p-5">
+					<img src="{{ asset('img/studentdashboard-assignmentsdone.svg') }}" class="w-12 h-12" alt="icon">
+					<p class="font-bold text-black text-center">Assignments Done</p>
+					<p class="text-3xl font-extrabold">{{ $assignments_done }}</p>
 				</div>
 			</div>
 
-			<!-- Todo list -->
-			<div class="w-1/3 flex gap-5">
-				<div class="w-full bg-white rounded-3xl p-5 shadow-lg">
-					<p class="font-bold text-dark-blue text-lg">To Do List</p>
-					<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
+			<!-- Progress -->
+			<div class="bg-white rounded-3xl p-5 shadow-lg">
+				<p class="font-bold text-dark-blue">Courses Progress</p>
+				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-					<div class="w-full flex flex-col overflow-y-auto" style="height: 400px;">
-						<ul class="list-disc list-inside">
-							@forelse($undone_assignment as $todoasg)
-								<li class="mb-4" style="text-indent: -1.5rem; padding-left: 1.5rem;">
-									Do and submit your work for assignment <span class="font-bold">"{{ $todoasg->assignment->title }}"</span> before <span class="italic font-bold">{{ $todoasg->assignment->deadline_date }} {{ $todoasg->assignment->deadline_time }}</span>
-								</li>
-							@empty
-								<div class="w-full h-full flex items-center justify-center">- There's nothing to do for now -</div>
-							@endforelse
-						</ul>
+				<div class="flex flex-col justify-between" style="height: 400px;">
+					<div class="w-full flex flex-col overflow-y-auto py-3" style="height: 360px;">
+						@forelse ($course_students as $i => $cstudent)
+							<div class="w-full flex md:flex-row flex-col md:items-center gap-0">
+								<p class="w-full md:w-1/4"><a href="{{ route('student.mycourse.show', $cstudent->course->id) }}" class="hover:underline hover:text-indigo-600">{{ $cstudent->course->course_name }}</a></p>
+								<div class="grow flex flex-col border-l py-3">
+									@php
+										$mp_bar_percentage = 0;
+										$ap_bar_percentage = 0;
+
+										if($material_progress[$i][1] != 0){
+											$mp_bar_percentage = ($material_progress[$i][0] / $material_progress[$i][1]) * 100;
+										}
+
+										if($attendance_progress[$i][1] != 0){
+											$ap_bar_percentage = ($attendance_progress[$i][0] / $attendance_progress[$i][1]) * 100;
+										}
+									@endphp
+									<div class="h-5" style="width: {{ $mp_bar_percentage }}%; background: linear-gradient(90deg, #1EB8CD 0%, #BEE2DB 100%);"></div>
+									<div class="h-5" style="width: {{ $ap_bar_percentage }}%; background: linear-gradient(90deg, #212F63 0%, #354D9B 100%);"></div>
+								</div>
+							</div>
+						@empty
+
+						@endforelse
+					</div>
+					<div class="flex md:flex-row flex-col gap-2 md:gap-5 w-full justify-end font-semibold">
+						<div class="flex items-center gap-3">
+							<div class="h-4 w-4" style="background: linear-gradient(90deg, #1EB8CD 0%, #BEE2DB 100%);"></div>
+							<p>Attendance</p>
+						</div>
+						<div class="flex items-center gap-3">
+							<div class="h-4 w-4" style="background: linear-gradient(90deg, #212F63 0%, #354D9B 100%);"></div>
+							<p>Material</p>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		{{-- @php
-			$n_announcement = 0;
-		@endphp --}}
-
-		<div class="w-full flex md:flex-row flex-col gap-5 mt-5">
-			<!-- Progress -->
-			<div class="w-full md:w-1/2 bg-white rounded-3xl p-5 shadow-lg">
-				<p class="font-bold text-dark-blue text-lg">News and Announcement</p>
+		<!-- Todo list -->
+		<div class="w-1/3 flex gap-5">
+			<div class="w-full bg-white rounded-3xl p-5 shadow-lg">
+				<p class="font-bold text-dark-blue">To Do List</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-				<div class="relative flex sm:flex-row flex-col justify-center items-center">
-					<!-- Sliders -->
-					<div class="relative z-10 mt-5 overflow-hidden w-full sm:w-10/12">
-						<div id="cardSlider" class="flex transition-transform duration-300 ease-in-out">
-							@forelse (App\Models\Announcement::all() as $announcement)
-								@if($announcement->announce_from < now() && $announcement->announce_until > now())
-									<a class="card-img flex flex-col items-stretch" href="{{ route('view-announcement', $announcement->id) }}">
-										@php
-											$target = json_decode($announcement->sent_to);
-											// $n_announcement++;
-										@endphp
-
-										@if($target[Auth::user()->role_id - 1] == "on")
-											@if($announcement->image_path)
-												<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full rounded-3xl" style="object-fit: cover; object-position: center; height: 340px;">
-											@else
-												<div class="flex bg-slate-200 items-center justify-center text-white font-extrabold grow rounded-3xl">
-													<i class="bi bi-megaphone-fill text-6xl"></i>
-												</div>
-											@endif
-										@endif
-
-										<div class="text-blue-900 text-center py-5 font-extrabold">{{ $announcement->title }}</div>
-									</a>
-								@endif
-							@empty
-
-							@endforelse
-						</div>
-					</div>
-
-					<!-- Navigation buttons -->
-					<div class="slider-controls flex gap-2 sm:justify-between justify-center sm:absolute w-full" style="top: 40%;">
-						<button id="prevBtn" class="transition-all duration-200 flex items-center justify-center font-semibold rounded-full px-3 py-2 text-white">
-							<img src="{{ asset('img/arrow-left.svg') }}" class="w-8" alt="icon">
-						</button>
-						<button id="nextBtn" class="transition-all duration-200 flex items-center justify-center font-semibold rounded-full px-3 py-2 text-white">
-							<img src="{{ asset('img/arrow-right.svg') }}" class="w-8" alt="icon">
-						</button>
-					</div>
-					{{-- @if($n_announcement > 1)
-						<div class="slider-controls flex gap-2 justify-between absolute w-full" style="top: 45%;">
-							<button id="prevBtn" class="transition-all duration-200 flex items-center justify-center font-semibold rounded-full px-3 py-2 bg-blue-950 text-white">
-								<i class="bi bi-arrow-left"></i>
-							</button>
-							<button id="nextBtn" class="transition-all duration-200 flex items-center justify-center font-semibold rounded-full px-3 py-2 bg-blue-950 text-white">
-								<i class="bi bi-arrow-right"></i>
-							</button>
-						</div>
-					@endif --}}
+				<div class="w-full flex flex-col overflow-y-auto" style="height: 400px;">
+					<ul class="list-disc list-inside">
+						@forelse($undone_assignment as $todoasg)
+							<li class="mb-4" style="text-indent: -1.5rem; padding-left: 1.5rem;">
+								Do and submit your work for assignment <span class="font-bold">"{{ $todoasg->assignment->title }}"</span> before <span class="italic font-bold">{{ $todoasg->assignment->deadline_date }} {{ $todoasg->assignment->deadline_time }}</span>
+							</li>
+						@empty
+							<div class="w-full h-full flex items-center justify-center">- There's nothing to do for now -</div>
+						@endforelse
+					</ul>
 				</div>
 			</div>
+		</div>
+	</div>
 
-			<!-- Calendar -->
-			<div class="w-full md:w-1/2 bg-white rounded-3xl p-5 shadow-lg">
-				<p class="font-bold text-dark-blue text-lg">Calendar</p>
-				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
+	{{-- @php
+		$n_announcement = 0;
+	@endphp --}}
 
-				{{-- <iframe src="https://calendar.google.com/calendar/embed?src=vannestheo.sangnila%40gmail.com&ctz=Asia%2FJakarta&no_cache=1&showNav=0&showTitle=0" style="border: 0" width="800" height="600" frameborder="0" scrolling="no" class="w-full"></iframe> --}}
-				<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FJakarta&bgcolor=%23ffffff&showTabs=0&showPrint=0&showTitle=0&showCalendars=0&src=YmQ3NzMyZWY2NjMwMjc5ZDRkYTM0YmZmZWRlOGUwMWFlOTAzNDVmZWVlM2MxNWNkMzk0NGU3NTk4OGJhYzBjY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZW4uaW5kb25lc2lhbiNob2xpZGF5QGdyb3VwLnYuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%23C0CA33&color=%230B8043" height="380" frameborder="0" scrolling="no" class="w-full mt-5"></iframe>
+	<div class="w-full flex md:flex-row flex-col gap-5 mt-5">
+		<!-- Progress -->
+		<div class="w-full md:w-1/2 bg-white rounded-3xl p-5 shadow-lg">
+			<p class="font-bold text-dark-blue">News and Announcement</p>
+			<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
+
+			<div class="relative flex sm:flex-row flex-col justify-center items-center">
+				<!-- Sliders -->
+				<div class="relative z-10 mt-5 overflow-hidden w-full sm:w-10/12">
+					<div id="cardSlider" class="flex transition-transform duration-300 ease-in-out">
+						@forelse (App\Models\Announcement::all() as $announcement)
+							@if($announcement->announce_from < now() && $announcement->announce_until > now())
+								<a class="card-img flex flex-col items-stretch" href="{{ route('view-announcement', $announcement->id) }}">
+									@php
+										$target = json_decode($announcement->sent_to);
+										// $n_announcement++;
+									@endphp
+
+									@if($target[Auth::user()->role_id - 1] == "on")
+										@if($announcement->image_path)
+											<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full rounded-3xl" style="object-fit: cover; object-position: center; height: 340px;">
+										@else
+											<div class="flex bg-slate-200 items-center justify-center text-white font-extrabold grow rounded-3xl">
+												<i class="bi bi-megaphone-fill text-6xl"></i>
+											</div>
+										@endif
+									@endif
+
+									<div class="text-blue-900 text-center py-5 font-extrabold">{{ $announcement->title }}</div>
+								</a>
+							@endif
+						@empty
+
+						@endforelse
+					</div>
+				</div>
+
+				<!-- Navigation buttons -->
+				<div class="slider-controls flex gap-2 sm:justify-between justify-center sm:absolute w-full" style="top: 40%;">
+					<button id="prevBtn" class="transition-all duration-200 flex items-center justify-center font-semibold rounded-full px-3 py-2 text-white">
+						<img src="{{ asset('img/arrow-left.svg') }}" class="w-8" alt="icon">
+					</button>
+					<button id="nextBtn" class="transition-all duration-200 flex items-center justify-center font-semibold rounded-full px-3 py-2 text-white">
+						<img src="{{ asset('img/arrow-right.svg') }}" class="w-8" alt="icon">
+					</button>
+				</div>
+				{{-- @if($n_announcement > 1)
+					<div class="slider-controls flex gap-2 justify-between absolute w-full" style="top: 45%;">
+						<button id="prevBtn" class="transition-all duration-200 flex items-center justify-center font-semibold rounded-full px-3 py-2 bg-blue-950 text-white">
+							<i class="bi bi-arrow-left"></i>
+						</button>
+						<button id="nextBtn" class="transition-all duration-200 flex items-center justify-center font-semibold rounded-full px-3 py-2 bg-blue-950 text-white">
+							<i class="bi bi-arrow-right"></i>
+						</button>
+					</div>
+				@endif --}}
 			</div>
+		</div>
+
+		<!-- Calendar -->
+		<div class="w-full md:w-1/2 bg-white rounded-3xl p-5 shadow-lg">
+			<p class="font-bold text-dark-blue">Calendar</p>
+			<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
+
+			{{-- <iframe src="https://calendar.google.com/calendar/embed?src=vannestheo.sangnila%40gmail.com&ctz=Asia%2FJakarta&no_cache=1&showNav=0&showTitle=0" style="border: 0" width="800" height="600" frameborder="0" scrolling="no" class="w-full"></iframe> --}}
+			<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FJakarta&bgcolor=%23ffffff&showTabs=0&showPrint=0&showTitle=0&showCalendars=0&src=YmQ3NzMyZWY2NjMwMjc5ZDRkYTM0YmZmZWRlOGUwMWFlOTAzNDVmZWVlM2MxNWNkMzk0NGU3NTk4OGJhYzBjY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZW4uaW5kb25lc2lhbiNob2xpZGF5QGdyb3VwLnYuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%23C0CA33&color=%230B8043" height="380" frameborder="0" scrolling="no" class="w-full mt-5"></iframe>
 		</div>
 	</div>
 

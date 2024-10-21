@@ -187,11 +187,21 @@ class CourseController extends Controller {
 
 		// Other data
 		$progresses = Progress::where('course_id', $course_id)->where('student_id', Auth::user()->id)->get();
+
+		$progressAndMaterial = [];
+		foreach($progresses as $prgs){
+			$pam = [];
+			$pam["progress"] = $prgs;
+			$pam["material"] = $prgs->material;
+			$pam["topic"] = $prgs->material->topic;
+			array_push($progressAndMaterial, $pam);
+		}
+
 		$student = CourseStudent::where('student_id', Auth::user()->id)->where('course_id', $course_id)->first();
 
 		return view('roles.student.course.show', [
 			'course' => $student->course,
-			'materialProgresses' => $progresses,
+			'materialProgresses' => $progressAndMaterial,
 			"should_pay_soon" => $shouldPaySoon,
 			"max_session_reached" => $max_session_reached
 		]);

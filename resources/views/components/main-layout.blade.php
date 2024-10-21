@@ -60,11 +60,11 @@
 		<title>Sangnila Academy | LMS</title>
 	</head>
 
-	<body class="min-h-screen flex flex-col items-center">
+	<body class="min-h-screen flex flex-col items-center sm:text-sm text-xs">
 		<div class="flex flex-col items-center w-full" style="max-width: 2500px;">
 			<!-- Back to top button and version -->
-			<div class="fixed z-50 bottom-0 left-0 m-2 text-black md:text-white">
-				<div class="">{{ trans("strings.version") }}</div>
+			<div class="fixed z-50 bottom-0 left-0 m-2 lg:text-white text-slate-800">
+				<div class="flex gap-1">{{ trans("strings.version") }}<h1 id="screen"></h1></div>
 			</div>
 			<div class="fixed bottom-0 right-0 m-2 opacity-0 transition-opacity duration-500 ease-in-out" id="back-to-top">
 				<a href="#">
@@ -83,10 +83,10 @@
 				{{ $slot }}
 
 				<!-- Content Section -->
-				<div class="flex flex-col" style="width: 80%;" id="content-container">
+				<div class="flex flex-col" style="width: 83%;" id="content-container">
 					<div class="min-h-screen flex flex-col">
 						<!-- Page title -->
-						<div class="py-4 px-6 w-full text-white font-bold flex items-center justify-between" style="background: linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%);">
+						<div class="py-3 px-6 w-full text-white font-bold flex items-center justify-between" style="background: linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%);">
 							<div class="text-3xl">@yield("title")</div>
 
 							<!-- "Sidebar" for mobile and tablet -->
@@ -161,8 +161,10 @@
 						}
 						else {
 							$("#sidebar-container").css("display", "block");
-							$("#content-container").css("width", "80%");
+							$("#content-container").css("width", "83%");
 						}
+
+						$("#screen").text(`(Resolution: ${window.innerWidth}x${window.innerHeight})`);
 					}
 
 					adjustLayouts();
