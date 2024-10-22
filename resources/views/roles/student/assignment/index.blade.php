@@ -1,7 +1,7 @@
 @extends("layouts.main-student")
 
 @section("title")
-	<h1>My Assignments</h1>
+	<h1>Assignment</h1>
 @endsection
 
 @section("breadcrumbs-extension")
@@ -9,41 +9,36 @@
 @endsection
 
 @section("content")
-	<x-section-container>
-		<x-page-title>My Assignments</x-page-title>
-		<h1 class="text-2xl font-semibold text-blue-900 mb-4 text-center">Pick a Course</h1>
-		<div class="overflow-x-auto rounded-md">
-			<x-table>
-				<x-slot name="head">
-					<th class="template-heads rounded-xl">Course Name</th>
-				</x-slot>
-				@if ($courseStudents->count())
-					@foreach ($courseStudents as $cs)
-						<tr>
-							<td class="template-bodies rounded-xl selections transition ease-in-out duration-500" style="cursor: url('{{ asset('img/cursor2.cur') }}'), pointer; padding: 0;">
-								<div class="flex w-full h-full items-stretch p-5">
-									<a href="{{ route('student.assignment.show', $cs->course->id) }}" class="font-bold h-full w-full">
-										{{ $cs->course->course_name }}
-									</a>
-								</div>
-							</td>
-						</tr>
-					@endforeach
-				@else
-					<tr><td class="bg-white rounded-xl p-5 font-semibold text-center">- No courses assigned yet -</td></tr>
-				@endif
-			</x-table>
-		</div>
+	@forelse ($assignments_data as $ad)
+		<a href="{{ route('student.assignment.show', $ad["course_student"]->course->id) }}" class="w-full transition duration-300 selectable-cards">
+			<div class="rounded-3xl w-full py-5 px-8 mb-6 flex flex-col items-stretch sm:text-base text-sm" style="background: #FEFEFEB2;">
+				<p class="font-bold text-dark-blue">{{ $ad["course_student"]->course->course_name }}</p>
+				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
+				<div class="flex">
+					<div class="w-1/4">Total Assignments</div>
+					<div class="w-1/4">Completed Assignments</div>
+					<div class="w-1/4">Pending Assignments</div>
+					<div class="w-1/4 text-red">Due Soon Assignment</div>
+				</div>
+				<div class="flex">
+					<div class="w-1/4 font-semibold">{{ $ad["status"]["total"] }}</div>
+					<div class="w-1/4 font-semibold">{{ $ad["status"]["done"] }}</div>
+					<div class="w-1/4 font-semibold">{{ $ad["status"]["pending"] }}</div>
+					<div class="w-1/4 font-semibold text-red">{{ $ad["status"]["nearest_deadline"] }}</div>
+				</div>
+			</div>
+		</a>
+	@empty
+	@endforelse
 
-		<script>
-			$(".selections").on({
-				"mouseover": function(){
-					$(this).css({"background-color": "rgb(250 204 21)"});
-				},
-				"mouseout": function(){
-					$(this).css({"background-color": "#283785"});
-				}
-			})
-		</script>
-	</x-section-container>
+	<script>
+		$(".selectable-cards").on({
+			"mouseover": function(){
+				$(this).css("transform", "scale(1.02)");
+			},
+			"mouseout": function(){
+				$(this).css("transform", "scale(1)");
+			}
+		});
+	</script>
 @endsection

@@ -65,6 +65,60 @@
 	</head>
 
 	<body class="min-h-screen flex flex-col items-center sm:text-sm text-xs">
+		<!-- Other popups -->
+		@yield("popup")
+
+		<!-- Announcements -->
+		@if(session()->pull('show_announcement'))
+		{{-- @if(true) --}}
+			@php
+				$n = 0;
+				$m = 0;
+				$all_announcements = App\Models\Announcement::all();
+
+				foreach($all_announcements as $anc){
+					$target = json_decode($anc->sent_to);
+
+					if($target[Auth::user()->role_id - 1] == "on" && $anc->announce_from < now() && $anc->announce_until > now()){
+						$m++;
+					}
+				}
+			@endphp
+
+			@if($m > 0)
+				<button class="fixed bottom-3 right-3 font-bold text-blue py-2 px-3 border-2 border-blue rounded-xl hover:text-slate-500 hover:border-slate-500" id="dismiss-announcements-btn" type="button" style="z-index: 70;">Dismiss all</button>
+			@endif
+
+			@forelse ($all_announcements as $announcement)
+				@php $target = json_decode($announcement->sent_to); @endphp
+
+				@if($target[Auth::user()->role_id - 1] == "on")
+					@php $n++; @endphp
+					@if($announcement->announce_from < now() && $announcement->announce_until > now())
+						<div class="h-screen w-screen flex items-center justify-center fixed top-0 announcement-popup-container" style="backdrop-filter: blur(5px); background: {{ ($n == 1)? 'rgba(0, 0, 0, 0.3)' : 'none' }}; z-index: 60;">
+							<div class="bg-white w-1/2 h-4/5 flex flex-col gap-5 justify-between items-center p-8 rounded-3xl announcement-popup" >
+								<h1 class="text-xl font-bold text-blue-900">{{ $announcement->title }}</h1>
+								<div class="grow overflow-y-auto">
+									@if($announcement->image_path)
+										<div class="flex justify-center w-full mb-8">
+											<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-3/4">
+										</div>
+									@endif
+									<div class="announcementContent">
+										{!! $announcement->content !!}
+									</div>
+								</div>
+								<p class="text-sm text-slate-500">- Click anywhere to close -</p>
+							</div>
+						</div>
+					@endif
+				@endif
+			@empty
+
+			@endforelse
+
+		@endif
+
 		<div class="flex flex-col items-center w-full" style="max-width: 2500px;">
 			<!-- Back to top button and version -->
 			<div class="fixed z-50 bottom-0 left-0 m-2 lg:text-white text-slate-800">
@@ -175,6 +229,42 @@
 
 					$(window).on("resize", function(){
 						adjustLayouts();
+					});
+
+					let popups = $(".announcement-popup-container").length;
+					// console.log(popups);
+
+					function remove_dismiss_announcement_popup(){
+						popups--;
+						if(popups == 0){
+							$("#dismiss-announcements-btn").fadeOut();
+						}
+					}
+
+
+					$(".announcement-popup-container").click(function(e){
+						if (!$(e.target).closest(".announcement-popup").length) {
+							remove_dismiss_announcement_popup();
+							$(this).fadeOut();
+						}
+
+					});
+
+					$(".popup-container").click(function(e){
+						if (!$(e.target).closest(".popup").length) {
+							remove_dismiss_announcement_popup();
+							$(this).fadeOut();
+						}
+
+					});
+
+					$("#dismiss-announcements-btn").click(function(){
+						$(".announcement-popup-container").fadeOut();
+						$(this).fadeOut();
+					});
+
+					$(".announcementContent a").each((index, anchor) => {
+						$(anchor).attr("target", "blank");
 					});
 				});
 

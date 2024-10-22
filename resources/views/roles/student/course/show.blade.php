@@ -93,12 +93,13 @@
 
 						// Initialize Swiper
 						const swiper = new Swiper('.swiper', {
-							slidesPerView: 9.5,
+							slidesPerView: $(window).width() / 165,
 							spaceBetween: 0,
 							freeMode: true,
 							mousewheel: true, // Allow scrolling with mouse wheel
 							grabCursor: true, // Allow grabbing on desktop for dragging
 						});
+
 
 						// Handle session button click
 						$(".session-buttons").click(function () {
@@ -155,7 +156,7 @@
 					</div>
 					<div class="flex w-1/2 items-start ">
 						<div class="flex gap-1">
-							<a href="{{ route('student.mycourse.preview', $materialProgresses[0]["material"]->id) }}" id="preview-link"><img src="{{ asset('img/view.svg') }}" alt="icon" class="w-8 h-8"></a>
+							<a href="{{ route('student.mycourse.preview', $materialProgresses[0]["material"]->id) }}" id="preview-link"><img src="{{ asset('img/view.svg') }}" alt="icon" class="w-8 h-8 hover:scale-110"></a>
 							{{-- <a href="#"></a><img src="{{ asset('img/download.svg') }}" alt="icon" class="w-8 h-8"> --}}
 						</div>
 					</div>

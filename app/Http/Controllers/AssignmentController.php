@@ -311,8 +311,49 @@ class AssignmentController extends Controller
 	// ===== STUDENT ===== //
 	// Shows list of enrolled course to select before continue
 	public function student_index(){
+		$course_students = CourseStudent::where("student_id", Auth::user()->id)->get();
+		$assignments_data = [];
+
+		foreach($course_students as $cs){
+			$ad = [];
+			$ad["course_student"] = $cs;
+
+			$total_assignments = 0;
+			$assignments_done = 0;
+			$nd = [];
+
+			$student_assignments = StudentAssignment::where("student_id", Auth::user()->id)->get();
+			foreach($student_assignments as $sa){
+				if($sa->assignment->course_id == $cs->course_id){
+					$total_assignments++;
+
+					if($sa->assignment->deadline_date > now()){
+						array_push($nd, $sa->assignment->deadline_date . " " . $sa->assignment->deadline_time);
+					}
+
+					foreach($sa->assignment->submissions as $submission){
+						if($submission->student_id == Auth::user()->id && $submission->assignment_id == $sa->assignment->id){
+							$assignments_done++;
+							break;
+						}
+					}
+				}
+			}
+
+			$assignments_pending = $total_assignments - $assignments_done;
+
+			$ad["status"] = [
+				"total" => $total_assignments,
+				"done" => $assignments_done,
+				"pending" => $assignments_pending,
+				"nearest_deadline" => min($nd)
+			];
+
+			array_push($assignments_data, $ad);
+		}
+
 		return view("roles.student.assignment.index", [
-			"courseStudents" => CourseStudent::where("student_id", Auth::user()->id)->get()
+			"assignments_data" => $assignments_data
 		]);
 	}
 
@@ -324,19 +365,21 @@ class AssignmentController extends Controller
 		$assignments_assigned = [];
 		$submissions_per_assignment = [];
 		foreach($student_assignments as $sa){
+			$spa = [];
 			if($sa->assignment->course_id == $course_id){
 				array_push($assignments_assigned, $sa->assignment);
 				$submissions = $sa->assignment->submissions;
-				$n = 0;
+
 				foreach($submissions as $sbm){
 					if($sbm->student_id == Auth::user()->id && $sbm->assignment_id == $sa->assignment->id){
-						$n++;
+						array_push($spa, $sbm);
 					}
 				}
-				array_push($submissions_per_assignment, $n);
+
+				array_push($submissions_per_assignment, $spa);
+
 			}
 		}
-
 
 		return view("roles.student.assignment.show", [
 			"assignments" => $assignments_assigned,
