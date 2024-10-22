@@ -5,16 +5,16 @@
 @endsection
 
 @section("content")
-	@foreach ($payment_reminders as $reminder)
-		@if($reminder["should_pay_soon"])
-			<div class="bg-yellow-400 text-orange-700 py-3 px-6 rounded-lg font-semibold mb-3">
-				<i class="bi bi-exclamation-square"></i>
-				<span>Your progress in <span class="font-bold">{{ $reminder["course"] }}</span> course is reaching its maximum session. Please do the payment to extend your study in the course.</span>
-			</div>
-		@endif
-	@endforeach
-
 	<div class="w-full flex flex-wrap gap-5">
+		@foreach ($payment_reminders as $reminder)
+			@if($reminder["should_pay_soon"])
+				<div class="bg-yellow-400 text-orange-700 py-3 px-6 rounded-lg font-semibold mb-3 w-full">
+					<i class="bi bi-exclamation-square"></i>
+					<span>Your progress in <span class="font-bold">{{ $reminder["course"] }}</span> course is reaching its maximum session. Please do the payment to extend your study in the course.</span>
+				</div>
+			@endif
+		@endforeach
+
 		@forelse (Auth::user()->enrolled_courses->where('visibility', 'public') as $course)
 			<a href="{{ route('student.mycourse.show', $course->id) }}"  style="width: 32%;" class="transition duration-300 hover:scale-105">
 				<div class="bg-white rounded-3xl p-5 shadow-lg">

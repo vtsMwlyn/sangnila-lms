@@ -142,6 +142,11 @@ class MaterialController extends Controller {
 			$preview_link .= "/embed";
 		}
 
+		$progress = Progress::where("student_id", Auth::user()->id)->where("material_id", $material->id)->first();
+		if($progress->already_opened == "no"){
+			Progress::findOrFail($progress->id)->update(["already_opened" => "yes"]);
+		}
+
 		return view("roles.student.course.preview", [
 			"material" => $material,
 			"preview_link" => $preview_link

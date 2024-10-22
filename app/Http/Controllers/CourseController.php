@@ -199,12 +199,21 @@ class CourseController extends Controller {
 
 		$student = CourseStudent::where('student_id', Auth::user()->id)->where('course_id', $course_id)->first();
 
-		return view('roles.student.course.show', [
-			'course' => $student->course,
-			'materialProgresses' => $progressAndMaterial,
-			"should_pay_soon" => $shouldPaySoon,
-			"max_session_reached" => $max_session_reached
-		]);
+		if($max_session_reached){
+			return view('roles.student.course.show', [
+				'course' => $student->course,
+				"should_pay_soon" => $shouldPaySoon,
+				"max_session_reached" => $max_session_reached
+			]);
+		}
+		else {
+			return view('roles.student.course.show', [
+				'course' => $student->course,
+				'materialProgresses' => $progressAndMaterial,
+				"should_pay_soon" => $shouldPaySoon,
+				"max_session_reached" => $max_session_reached
+			]);
+		}
 	}
 
 
