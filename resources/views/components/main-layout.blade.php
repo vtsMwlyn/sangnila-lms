@@ -250,12 +250,15 @@
 
 					});
 
-					$(".popup-container").click(function(e){
-						if (!$(e.target).closest(".popup").length) {
-							remove_dismiss_announcement_popup();
-							$(this).fadeOut();
-						}
+					// $(".popup-container").click(function(e){
+					// 	if (!$(e.target).closest(".popup").length) {
+					// 		remove_dismiss_announcement_popup();
+					// 		$(this).fadeOut();
+					// 	}
 
+					// });
+					$(".popup-dismiss").click(function(){
+						$(this).closest(".popup-container").fadeOut();
 					});
 
 					$("#dismiss-announcements-btn").click(function(){

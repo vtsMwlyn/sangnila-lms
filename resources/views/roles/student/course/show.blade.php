@@ -73,7 +73,7 @@
 								$is_unlocked = $mp["progress"]->status === 'unlocked';
 							@endphp
 							<div class="swiper-slide relative">
-								<button type="button" id="{{ $loop->iteration }}"
+								<button type="button" id="{{ $loop->iteration }}" data-route="{{ route('student.mycourse.preview', $mp['material']->id) }}"
 									class="flex items-center justify-center session-buttons px-2 py-2.5 mb-8 mt-4 rounded-xl text-base font-extrabold
 									@if($is_unlocked) unlocked-session @else locked-session @endif @if($loop->iteration == 1) selected-session @endif"
 									style="border-width: 3px; min-width: 110px;">
@@ -117,7 +117,7 @@
 								// Update the content with topic and material info
 								$("#topic").text(matprog[index].topic.title);
 								$("#material").text(matprog[index].material.title);
-								$("#preview-link").attr("href", `../../student/my-course/${matprog[index].material.id}/preview`);
+								$("#preview-link").attr("href", $(this).data('route'));
 								$("#num").text(index + 1);
 
 								// Scroll to the selected slide
@@ -183,69 +183,6 @@
 			</div>
 		@endif
 	</div>
-
-	{{-- <script>
-		$(document).ready(() => {
-			const scrollContainer = document.querySelector('#session-scroller');
-
-			let isDown = false; // Indicates if the mouse button is pressed
-			let startX; // Starting X position of the mouse
-			let scrollLeft; // Starting scroll position of the container
-
-			// Mouse down event to initiate dragging
-			scrollContainer.addEventListener('mousedown', (e) => {
-				isDown = true; // Mouse button is pressed
-				scrollContainer.style.userSelect = 'none'; // Prevent text selection
-				startX = e.pageX; // Get the initial mouse position
-				scrollLeft = scrollContainer.scrollLeft; // Get the current scroll position
-			});
-
-			// Mouse up event to stop dragging
-			scrollContainer.addEventListener('mouseup', () => {
-				isDown = false; // Mouse button is released
-				scrollContainer.style.userSelect = ''; // Restore text selection
-			});
-
-			// Mouse leave event to stop dragging if the mouse leaves the container
-			scrollContainer.addEventListener('mouseleave', () => {
-				isDown = false; // Mouse has left the container
-				scrollContainer.style.userSelect = ''; // Restore text selection
-			});
-
-			// Mouse move event to scroll the container
-			scrollContainer.addEventListener('mousemove', (e) => {
-				if (!isDown) return; // Only proceed if the mouse button is down
-
-				e.preventDefault(); // Prevent default action to avoid text selection
-
-				const x = e.pageX; // Current mouse position
-				const walk = (x - startX); // Calculate the distance moved
-
-				// Scroll the container based on the mouse movement
-				scrollContainer.scrollLeft = scrollLeft - walk; // Update the scroll position
-			});
-
-			const matprog = @json($materialProgresses);
-
-			$(".session-buttons").click(function(){
-				const index = parseInt($(this).attr("id")) - 1;
-				if(matprog[index].progress.status == "unlocked"){
-					$(".unlocked-session").each(function(){
-						$(this).removeClass("selected-session");
-					});
-
-					$(this).addClass("selected-session");
-
-					$("#topic").text(matprog[index].topic.title);
-					$("#material").text(matprog[index].material.title);
-					$("#preview-link").attr("href", `../../student/my-course/${matprog[index].material.id}/preview`);
-					$("#num").text(index + 1);
-				}
-
-			});
-		});
-
-	</script> --}}
 @endsection
 
 {{-- <p class="text-blue-950 font-semibold text-center mb-8">{{ $course->course_description }}</p> --}}
