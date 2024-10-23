@@ -84,9 +84,11 @@
 			<x-badge-success badge_text="{{ session('successSubmitAssignment') }}" class="mb-4"></x-badge-success>
 		@elseif(session()->has("successEditSubmission"))
 			<x-badge-success badge_text="{{ session('successEditSubmission') }}" class="mb-4"></x-badge-success>
-		@elseif(session()->has("maximumSubmission"))
-			<x-badge-danger badge_text="{{ session('maximumSubmission') }}" class="mb-4"></x-badge-danger>
+		{{-- @elseif(session()->has("maximumSubmission"))
+			<x-badge-danger badge_text="{{ session('maximumSubmission') }}" class="mb-4" id="max-submission-badge"></x-badge-danger> --}}
 		@endif
+
+		<x-badge-danger badge_text="This assignment's maximum submission is reached." class="mb-4" id="max-submission-badge" style="display: none;"></x-badge-danger>
 
 		<div class="w-full overflow-x-auto">
 			<table class="w-full">
@@ -122,7 +124,7 @@
 										<img src="{{ asset('img/download.svg') }}" alt="download-icon" class="w-8 h-8 hover:scale-110">
 									</a>
 									<button type="button" class="submitassignment-popuptrigger" data-route="{{ route('student.assignment.submit', [$course->id, $asg->id]) }}"
-										data-assignment="{{ $asg->toJSON() }}">
+										data-assignment="{{ $asg->toJSON() }}" data-submissions="{{ count($submissions_per_assignment[$index]) }}">
 										<img src="{{ asset('img/attach.svg') }}" alt="history-icon" class="w-8 h-8 hover:scale-110">
 									</button>
 								</div>
@@ -144,7 +146,15 @@
 
 	<script>
 		$(document).ready(() => {
+			const all_submission_data = @json($submissions_per_assignment);
+
 			$('.submitassignment-popuptrigger').on('click', function() {
+				if(parseInt($(this).data('submissions')) == 10){
+					$("#max-submission-badge").show();
+
+					return;
+				}
+
 				const route = $(this).data('route');
 				const assignment = $(this).data('assignment');
 
@@ -162,8 +172,6 @@
 
 				$("#submit-assignment").parent().show();
 			});
-
-			const all_submission_data = @json($submissions_per_assignment);
 
 			$(".submissionhistory-popuptrigger").click(function(){
 				$("#submission-history-tbody").empty();
