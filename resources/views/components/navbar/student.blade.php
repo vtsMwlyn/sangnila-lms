@@ -37,13 +37,13 @@
 				$inboxes = Auth::user()->inboxes()->orderByRaw('CASE WHEN status = "unread" THEN 0 ELSE 1 END')->orderBy('created_at', 'desc')->get();
 			@endphp
 
-			<div class="relative flex flex-col items-end">
+			<div class="relative flex flex-col items-end dropdown-container">
 				@if($n > 0)
 					<div class="absolute h-3 w-3 bg-red rounded-full flex justify-center items-center text-white" style="top: -0.25rem; right: -0.25rem;"></div>
 				@endif
-				<button type="button" id="inbox-toggler"><img src="{{ asset('img/mail-icon.svg') }}" alt="mail-icon" class="h-6"></button>
+				<button type="button" class="dropdown-toggler"><img src="{{ asset('img/mail-icon.svg') }}" alt="mail-icon" class="h-6"></button>
 
-				<div class="absolute z-10 bg-white top-16 w-96 rounded-3xl px-5 py-3 flex flex-col" id="inbox-dropdown" style="@if(!session()->has('successNotifAction')) display: none; @endif box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); height: 600px;">
+				<div class="absolute z-10 bg-white top-16 w-96 rounded-3xl px-5 py-3 flex flex-col dropdown-menu" style="@if(!session()->has('successNotifAction')) display: none; @endif box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); height: 600px;">
 					<div class="w-full flex items-center justify-between">
 						<h1 class="font-extrabold text-dark-blue">Notifications</h1>
 						@if($inboxes->count())
@@ -91,9 +91,9 @@
 				</div>
 			</div>
 
-			<div class="relative flex flex-col items-end">
-				<button type="button" id="burger-toggler"><img src="{{ asset('img/burger-icon-navbar-pc.svg') }}" alt="burger-icon" class="h-6"></button>
-				<div class="absolute z-10 bg-white top-16 w-80 rounded-3xl flex flex-col py-2" id="burger-dropdown" style="display: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
+			<div class="relative flex flex-col items-end dropdown-container">
+				<button type="button" class="dropdown-toggler"><img src="{{ asset('img/burger-icon-navbar-pc.svg') }}" alt="burger-icon" class="h-6"></button>
+				<div class="absolute z-10 bg-white top-16 w-80 rounded-3xl flex flex-col py-2 dropdown-menu" style="display: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
 					<a href="#"><div class="w-full px-5 py-1 text-black font-semibold flex items-center gap-1"><img src="{{ asset('img/navbar-help-and-support.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Help and Support</div></a>
 					<a href="#"><div class="w-full px-5 py-1 text-black font-semibold flex items-center gap-1"><img src="{{ asset('img/navbar-send-feedback.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Send Feedback</div></a>
 					<form method="POST" action="{{ route('logout') }}" class="grow flex items-center gap-2">
@@ -106,7 +106,7 @@
 				</div>
 			</div>
 
-			<script>
+			{{-- <script>
 				$(document).ready(function () {
 					// Toggle dropdown on button click
 					$("#inbox-toggler").click(function (e) {
@@ -129,7 +129,7 @@
 						}
 					});
 				});
-			</script>
+			</script> --}}
 		</div>
 	</div>
 

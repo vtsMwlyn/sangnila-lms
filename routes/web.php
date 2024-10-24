@@ -48,6 +48,7 @@ Route::middleware([])->group(function(){
 		});
 
 		// Announcements
+		Route::get("/announcement", [AnnouncementController::class, "all_list_announcement"])->name("list-announcement");
 		Route::get("/announcement/{announcement_id}", [AnnouncementController::class, "all_view_announcement"])->name("view-announcement")->whereNumber("announcement_id");
 	});
 

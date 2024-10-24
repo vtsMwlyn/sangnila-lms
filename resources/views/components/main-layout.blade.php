@@ -41,19 +41,9 @@
 		<link rel="stylesheet" href="{{ asset("css/custom_styles.css") }}">
 
 		<style>
-			/* Custom Cursor */
-			a {
-				/* cursor: url("{{ asset('img/cursor2.cur') }}"), pointer; */
-			}
-
-			button[type="button"], button[type="submit"] {
-				/* cursor: url("{{ asset('img/cursor2.cur') }}"), pointer; */
-			}
-
 			body {
 				background: white;
 				font-family: "Geologica";
-				/* cursor: url("{{ asset('img/kursor.cur') }}"), auto; */
 			}
 		</style>
 
@@ -231,8 +221,9 @@
 						adjustLayouts();
 					});
 
+
+					// Announcement popups
 					let popups = $(".announcement-popup-container").length;
-					// console.log(popups);
 
 					function remove_dismiss_announcement_popup(){
 						popups--;
@@ -241,24 +232,12 @@
 						}
 					}
 
-
 					$(".announcement-popup-container").click(function(e){
 						if (!$(e.target).closest(".announcement-popup").length) {
 							remove_dismiss_announcement_popup();
 							$(this).fadeOut();
 						}
 
-					});
-
-					// $(".popup-container").click(function(e){
-					// 	if (!$(e.target).closest(".popup").length) {
-					// 		remove_dismiss_announcement_popup();
-					// 		$(this).fadeOut();
-					// 	}
-
-					// });
-					$(".popup-dismiss").click(function(){
-						$(this).closest(".popup-container").fadeOut();
 					});
 
 					$("#dismiss-announcements-btn").click(function(){
@@ -269,6 +248,25 @@
 					$(".announcementContent a").each((index, anchor) => {
 						$(anchor).attr("target", "blank");
 					});
+
+					// Other popups
+					$(".popup-dismiss").click(function(){
+						$(this).closest(".popup-container").fadeOut();
+					});
+
+					// Dropdowns
+					$(".dropdown-toggler").click(function (e) {
+						e.stopPropagation();
+
+						$(this).closest(".dropdown-container").find(".dropdown-menu").toggle();
+					});
+
+					$(document).click(function (e) {
+						if (!$(e.target).closest(".dropdown-menu, .dropdown-toggler").length) {
+							$(".dropdown-menu").hide();
+						}
+					});
+
 				});
 
 			</script>

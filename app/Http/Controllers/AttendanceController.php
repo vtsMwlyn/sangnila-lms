@@ -185,27 +185,36 @@ class AttendanceController extends Controller {
 	// ===== STUDENT ====== //
 	// Showing all enrolled course to pick before continue
 	public function student_index(){
-		return view("roles.student.attendance.index", [
-			"courseStudents" => CourseStudent::where("student_id", Auth::user()->id)->get()
-		]);
+		$cs = CourseStudent::where("student_id", Auth::user()->id)->first();
+
+		return redirect(route("student.attendance.show", $cs->course_id));
+
+		// return view("roles.student.attendance.index", [
+		// 	"courseStudents" => CourseStudent::where("student_id", Auth::user()->id)->get()
+		// ]);
 	}
 
 	// List of all attendance data in the selected course
 	public function student_show($course_id){
 		$student_id = Auth::user()->id;
 		$attendances = StudentAttendance::where("user_id", $student_id)->whereNot("attendance_detail", "Account disabled")->get();
-		$course = Course::findOrFail($course_id);
+		$cs = CourseStudent::where("student_id", Auth::user()->id)->where("course_id", $course_id)->first();
 
 		$student_attendances = [];
+		$n_attend = 0;
 		foreach($attendances as $atd){
-			if($atd->attendance->course_id == $course->id){
+			if($atd->attendance->course_id == $cs->course_id){
 				array_push($student_attendances, $atd);
+				if($atd->is_attend == 1){
+					$n_attend++;
+				}
 			}
 		}
 
 		return view("roles.student.attendance.show", [
 			"attendances" => $student_attendances,
-			"course" => $course
+			"course_student" => $cs,
+			"n_attend" => $n_attend
 		]);
 	}
 

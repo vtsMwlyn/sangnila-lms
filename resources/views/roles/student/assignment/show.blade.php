@@ -76,8 +76,34 @@
 
 @section("content")
 	<div class="rounded-3xl w-full py-5 px-8 mb-6 flex flex-col items-stretch sm:text-base text-sm" style="background: #FEFEFEB2;">
-		<button type="button" onclick="history.back();"><img src="{{ asset('img/back-button.svg') }}" class="h-8 w-8" alt="back"></button>
-		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
+		<div class="flex w-full justify-between items-end">
+			<div class="">
+				<button type="button" onclick="history.back();"><img src="{{ asset('img/back-button.svg') }}" class="h-8 w-8" alt="back"></button>
+				<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
+			</div>
+			<div class="flex gap-8">
+				<div class="flex flex-col gap-1 text-xs text-gray-500">
+					<div class="flex items-center gap-1">
+						<img src="{{ asset('img/view.svg') }}" class="h-6 w-6" alt="icon">
+						<p>: View Assignment</p>
+					</div>
+					<div class="flex items-center gap-1">
+						<img src="{{ asset('img/download.svg') }}" class="h-6 w-6" alt="icon">
+						<p>: Download Assignment</p>
+					</div>
+				</div>
+				<div class="flex flex-col gap-1 text-xs text-gray-500">
+					<div class="flex items-center gap-1">
+						<img src="{{ asset('img/attach.svg') }}" class="h-6 w-6" alt="icon">
+						<p>: Submit Answer</p>
+					</div>
+					<div class="flex items-center gap-1">
+						<img src="{{ asset('img/history.svg') }}" class="h-6 w-6" alt="icon">
+						<p>: History</p>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
 		@if(session()->has("successSubmitAssignment"))
@@ -120,6 +146,9 @@
 							</td>
 							<td class="py-2 px-4">
 								<div class="flex justify-center gap-2 w-full">
+									<a href="{{ $asg->link }}" target="blank">
+										<img src="{{ asset('img/view.svg') }}" alt="view-icon" class="w-8 h-8 hover:scale-110">
+									</a>
 									<a href="{{ $asg->link }}" target="blank">
 										<img src="{{ asset('img/download.svg') }}" alt="download-icon" class="w-8 h-8 hover:scale-110">
 									</a>

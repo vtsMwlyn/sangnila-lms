@@ -168,4 +168,29 @@ class AnnouncementController extends Controller
 			"announcement" => Announcement::findOrFail($announcement_id)
 		]);
 	}
+
+	public function all_list_announcement(){
+		$view_name = "";
+
+		if(Auth::user()->role_id == 1){
+			$view_name = "roles.admin.list-announcement";
+		} else if(Auth::user()->role_id == 2){
+			$view_name = "roles.teacher.list-announcement";
+		} else if(Auth::user()->role_id == 3){
+			$view_name = "roles.student.list-announcement";
+		}
+
+		$my_announcements = [];
+		$all_announcements = Announcement::all();
+
+		foreach($all_announcements as $ann){
+			if(json_decode($ann->sent_to)[Auth::user()->role_id - 1] == "on"){
+				array_push($my_announcements, $ann);
+			}
+		}
+
+		return view($view_name, [
+			"announcements" => $my_announcements
+		]);
+	}
 }
