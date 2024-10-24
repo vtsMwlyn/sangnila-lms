@@ -70,10 +70,17 @@ class UserAccountController extends Controller{
 		try {
 			DB::beginTransaction();
 
-			UserDetail::where("user_id", Auth::user()->id)->update([
-				"phone_number" => $validatedData["phone_number"],
-				"profpic" => $validatedData["image"] ?? null
-			]);
+			if($request->file("image")){
+				UserDetail::where("user_id", Auth::user()->id)->update([
+					"phone_number" => $validatedData["phone_number"],
+					"profpic" => $validatedData["image"]
+				]);
+			}
+			else {
+				UserDetail::where("user_id", Auth::user()->id)->update([
+					"phone_number" => $validatedData["phone_number"],
+				]);
+			}
 
 			if($request->password){
 				User::findOrFail(Auth::user()->id)->update([
