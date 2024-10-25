@@ -32,17 +32,7 @@
 		<link rel="stylesheet" href="{{ asset("css/custom_styles.css") }}">
 
 		<style>
-			/* Custom Cursor */
-			a {
-				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
-			}
-
-			button[type="button"], button[type="submit"] {
-				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
-			}
-
 			body {
-				cursor: url("{{ asset('img/kursor.cur') }}"), auto;
 				font-family: "Poppins";
 			}
 		</style>

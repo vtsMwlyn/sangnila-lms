@@ -10,7 +10,7 @@
 
 		<form class="flex w-full justify-center" action="{{ route("admin.teacher.index") }}">
 			<x-input type="text" class="border-blue-900 border-2 rounded-l-lg rounded-r-none w-full lg:w-1/3" name="search" placeholder="Search..." :value="request('search')"/>
-			<x-button class="bg-white rounded-l-none rounded-r-lg border-blue-900 border-t-2 border-r-2 border-b-2 text-blue-900 hover:text-white"><i class="bi bi-search"></i></x-button>
+			<button class="rounded-l-none rounded-r-lg border-slate-400 border-t-2 border-r-2 border-b-2 py-2 px-4 bg-white text-slate-400 hover:bg-slate-400 hover:text-white" style="border-width: 3px 3px 3px 0;"><i class="bi bi-search"></i></button>
 		</form>
 
 		<div class="overflow-x-auto mt-8">

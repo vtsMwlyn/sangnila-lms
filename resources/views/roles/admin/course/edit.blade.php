@@ -17,7 +17,7 @@
 			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('admin.course.update', $course->id) }}" method="post">
+		<form action="{{ route('admin.course.update', $course->id) }}" method="post" class="w-full">
 			@csrf
 			@method('PATCH')
 			<!-- Course Name -->

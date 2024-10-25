@@ -16,7 +16,7 @@
 			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('admin.course.store') }}" method="post">
+		<form action="{{ route('admin.course.store') }}" method="post" class="w-full">
 			@csrf
 			<!-- Course Name -->
 			<div class="mb-4 flex gap-3 @error('course_name') items-start @else items-stretch @enderror">

@@ -8,6 +8,7 @@
 
 		<!-- CSS -->
 		<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/color-pallete.css') }}">
 
 		<!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
@@ -29,25 +30,15 @@
 		<!-- Include jQuery  -->
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-		<!-- Poppins font -->
+		<!-- Font -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
 
 		<!-- Custom styles -->
 		<style>
-			/* Custom Cursor */
-			a {
-				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
-			}
-
-			button[type="button"], button[type="submit"] {
-				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
-			}
-
 			body {
-				cursor: url("{{ asset('img/kursor.cur') }}"), auto;
-				font-family: "Poppins";
+				font-family: "Geologica";
 			}
 		</style>
 
@@ -57,12 +48,20 @@
 	</head>
 
 	<body class="bg-cover min-h-screen flex items-center justify-center"
-		style="background-image: url({{ asset('img/background.jpg') }});">
-		<div class="fixed text-black md:text-white bottom-0 left-0 m-2">
-			{{ trans("strings.version") }}
+		style="background: url({{ asset('img/loginbg.png') }}) no-repeat right center; background-size: cover;">
+		<div class="fixed text-white bottom-0 left-0 m-2">
+			{{ trans("strings.version") }} <span id="screen"></span>
 		</div>
 
-		@yield("content");
+		@yield("content")
 	</body>
+
+	<script>
+		$("#screen").text(`(Resolution: ${window.innerWidth}x${window.innerHeight})`);
+
+		$(window).on("resize", function(){
+			$("#screen").text(`(Resolution: ${window.innerWidth}x${window.innerHeight})`);
+		});
+	</script>
 
 </html>

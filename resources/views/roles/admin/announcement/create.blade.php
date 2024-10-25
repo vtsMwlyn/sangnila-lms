@@ -51,10 +51,10 @@
 				</div>
 			</div>
 
-			<x-label :value="__('This is the image of your announcement:')" style="color: white; display: none;" class="mt-8" id="img-preview-label"></x-label>
+			<x-label :value="__('This is the image of your announcement:')" style="display: none;" class="mt-8" id="img-preview-label"></x-label>
 			<img id="img-preview" class="w-1/2 mt-5">
 
-			<x-label :value="__('Announce this announcement to:')" style="color: white;" class="mt-8"></x-label>
+			<x-label :value="__('Announce this announcement to:')" class="mt-8"></x-label>
 
 			@error("receiver")
 				<p class="text-red-800 font-bold mt-3"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
@@ -78,7 +78,7 @@
 				</div>
 			</div>
 
-			<x-label :value="__('Announcement content')" style="color: white;" class="mt-8"></x-label>
+			<x-label :value="__('Announcement content')" class="mt-8"></x-label>
 
 			@error("content")
 				<p class="text-red-800 font-bold mt-3"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>

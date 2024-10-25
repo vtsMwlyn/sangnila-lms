@@ -17,6 +17,7 @@
 
 		<!-- CSS -->
 		<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/color-pallete.css') }}">
 
 		<!-- Bootstrap icons -->
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -31,9 +32,9 @@
 		{{-- <script src="{{ asset('js/push-notifications.js') }}" defer></script> --}}
 
 		<!-- Poppins font -->
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
 
 		<!-- Trix editor -->
 		<link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
@@ -43,18 +44,8 @@
 		<link rel="stylesheet" href="{{ asset("css/custom_styles.css") }}">
 
 		<style>
-			/* Custom Cursor */
-			a {
-				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
-			}
-
-			button[type="button"], button[type="submit"] {
-				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
-			}
-
 			body {
-				cursor: url("{{ asset('img/kursor.cur') }}"), auto;
-				font-family: "Poppins";
+				font-family: "Geologica";
 			}
 
 			trix-toolbar [data-trix-button-group="file-tools"] {
@@ -109,10 +100,27 @@
 			div.announcementContent a:hover {
 				text-decoration: underline;
 			}
+
+			.select2-container .select2-selection {
+				display: flex !important;
+				align-items: center !important;
+				height: 2.45rem !important;
+				border: solid 2px rgb(148 163 184) !important;
+				width: 100% !important;
+				padding-top: 0.25rem !important;
+				padding-bottom: 0.25rem !important;
+				padding-left: 0.75rem !important;
+				padding-right: 0.75rem !important;
+				min-height: 2.45rem !important;
+				border-radius: 0.85rem !important;
+			}
+
 		</style>
 
-		<!-- Include jQuery  -->
+		<!-- Include jQuery & jQuery UI -->
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+		<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
 
 		<!-- Include Select2 JavaScript -->
 		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -121,7 +129,7 @@
 		<title>Sangnila Academy | LMS</title>
 	</head>
 
-	<body class="bg-cover min-h-screen flex flex-col">
+	<body class="bg-cover min-h-screen flex flex-col sm:text-sm text-xs">
 		{{-- @dd(Storage::url("app/public/" . App\Models\Announcement::all()[1]->image_path)) --}}
 
 		<!-- Fixed background image -->
@@ -197,7 +205,7 @@
 			<!-- Content Section -->
 			<div class="px-10 @auth pb-10 @else py-10 @endauth grow">
 				<div class="flex flex-col items-center w-full">
-					<div class="w-full lg:w-5/6 flex justify-between gap-3 items-center">
+					<div class="w-full flex justify-between gap-3 items-center">
 						<!-- Breadcrumbs -->
 						@auth
 							<x-breadcrumbs>
@@ -243,6 +251,52 @@
 						navbar.style.backgroundColor = "rgba(17, 41, 102, 0.5)";
 					}
 				});
+
+				// Select2 initialization
+				$('.select2').select2({
+					allowClear: false
+				});
+
+				// Apply resize observer to each container with class 'container_select2'
+				$('.container_select2').each(function () {
+					const container = this;
+					const resizeObserver = new ResizeObserver(() => {
+						$(container).find('.select2').each(function () {
+							$(this).select2('destroy').select2({
+								allowClear: false
+							});
+						});
+
+						// stylingSelect2();
+					});
+
+					resizeObserver.observe(container);
+				});
+
+
+				// Datepicker mechanique
+				const testinput = document.createElement('input');
+				testinput.setAttribute('type', 'date');
+
+				// If native date input is not supported, use jQuery UI Datepicker
+				if (testinput.type !== 'date') {
+					$('.date-input').datepicker({
+						dateFormat: "yy-mm-dd", // Set the desired date format
+						changeMonth: true, // Enable month dropdown
+						changeYear: true,  // Enable year dropdown
+						yearRange: "1900:+10", // Set the range of years
+					});
+				}
+				else {
+					$('.date-input').on({
+						"focus": function(){
+							this.showPicker();
+						},
+						"click": function(){
+							this.showPicker();
+						}
+					});
+				}
 
 				let popups = $(".popup-container").length;
 				console.log(popups);

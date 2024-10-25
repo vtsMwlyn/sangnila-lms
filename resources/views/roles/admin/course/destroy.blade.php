@@ -13,7 +13,7 @@
 	<x-section-container>
 		<x-page-title>{{ __("Delete Course") }}</x-page-title>
 
-		<form method="POST" action="{{ route('admin.course.destroy', $course->id) }}" class="bg-blue-800 rounded-2xl py-5 px-10 mt-8">
+		<form method="POST" action="{{ route('admin.course.destroy', $course->id) }}" class="bg-blue-800 rounded-2xl py-5 px-10 mt-8 w-full">
 			@csrf
 			@method('delete')
 			<!-- Confirmation Text -->

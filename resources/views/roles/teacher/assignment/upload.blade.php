@@ -48,7 +48,7 @@
 				<div class="mb-4 flex @error('deadline_date') items-start @else items-stretch @enderror w-full gap-3">
 					<x-boxed-label for="deadline_date" :value="__('Deadline Date')" />
 					<div class="flex flex-col w-full items-stretch">
-						<x-input id="deadline_date" class="block w-full" onblur="this.type = 'text';" onfocus="this.type = 'date';" name="deadline_date" placeholder="Enter deadline date" :value="old('deadline_date')"/>
+						<x-input id="deadline_date" class="block w-full date-input" type="date" name="deadline_date" placeholder="Enter deadline date" :value="old('deadline_date')"/>
 					</div>
 				</div>
 
@@ -104,15 +104,6 @@
 		<script>
 			$(document).ready(() => {
 				let prevCheckBoxValues = [];
-
-				$("#deadline_date").on({
-					"focus": function(){
-						this.showPicker();
-					},
-					"click": function(){
-						this.showPicker();
-					}
-				});
 
 				const collectCheckboxValues = () => {
 					const checkboxes = document.querySelectorAll('input[type="checkbox"]');

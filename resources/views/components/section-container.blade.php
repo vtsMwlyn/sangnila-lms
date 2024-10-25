@@ -1,3 +1,3 @@
-<div {{ $attributes->merge(['class' => 'w-full lg:w-5/6 rounded-3xl border border-white py-8 px-10', "style" => "background-color: rgba(255, 255, 255, 0.4); backdrop-filter: blur(3px);"]) }}>
+<div {{ $attributes->merge(['class' => 'rounded-3xl w-full py-5 px-8 mb-6 flex flex-col items-stretch sm:text-base text-sm', "style" => "background: #FEFEFEB2;"]) }}>
 	{{ $slot }}
 </div>

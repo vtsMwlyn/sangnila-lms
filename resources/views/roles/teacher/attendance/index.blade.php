@@ -20,7 +20,7 @@
 				@if (Auth::user()->teached_courses->isNotEmpty())
 					@foreach (Auth::user()->teached_courses as $course)
 						<tr>
-							<td class="template-bodies rounded-xl selections transition ease-in-out duration-500" style="cursor: url('{{ asset('img/cursor2.cur') }}'), pointer; padding: 0;">
+							<td class="template-bodies rounded-xl selections transition ease-in-out duration-500" style="padding: 0;">
 								<div class="flex w-full h-full items-stretch p-5">
 									<a href="{{ route('teacher.attendance.show', $course->id) }}" class="font-bold h-full w-full">
 										{{ $course->course_name }}

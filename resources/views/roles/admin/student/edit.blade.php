@@ -49,11 +49,7 @@
 			<div class="mt-3 flex gap-3 @error('date_of_birth') items-start @else items-stretch @enderror">
 				<x-boxed-label for="date_of_birth" :value="__('Date of Birth')"/>
 				<div class="flex flex-col w-full items-stretch">
-					@if($student->details->date_of_birth)
-						<x-input id="date_of_birth" class="block w-full" type="date" name="date_of_birth" :value="$student->details->date_of_birth" placeholder="Add date of birth"  />
-					@else
-						<x-input id="date_of_birth" class="block w-full" type="text" onfocus="(this.type='date')" name="date_of_birth" :value="$student->details->date_of_birth" placeholder="Add date of birth"  />
-					@endif
+					<x-input id="date_of_birth" class="block w-full date-input" type="date" name="date_of_birth" :value="$student->details->date_of_birth" placeholder="Add date of birth"  />
 				</div>
 			</div>
 

@@ -52,7 +52,7 @@
 	</x-section-container>
 
 	<x-section-container>
-		<div class="flex flex-col items-stretch mt-5">
+		<div class="flex flex-col items-stretch mt-5 w-full">
 			<div class="rounded-2xl py-5 px-10 text-white bg-blue-950">List of Assigned Teachers</div>
 			<div class="flex flex-wrap gap-x-10 overflow-y-auto py-3 mt-3" style="max-height: 300px;">
 				@forelse ($course->teachers as $teacher)
@@ -67,7 +67,7 @@
 			</div>
 		</div>
 
-		<div class="flex flex-col items-stretch mt-10">
+		<div class="flex flex-col items-stretch mt-10 w-full">
 			<div class="rounded-2xl py-5 px-10 text-white bg-blue-950 flex flex-col md:flex-row gap-5 md:gap-0 items-center justify-between">
 				<div class="">List of Assigned Students</div>
 				<div class="flex gap-5">
@@ -136,7 +136,6 @@
 				</x-table>
 			</div>
 
-			</div>
 		</div>
 	</x-section-container>
 
