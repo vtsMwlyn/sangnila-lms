@@ -167,6 +167,9 @@
 							</td>
 						</tr>
 					@empty
+						<tr class="bg-white">
+							<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+						</tr>
 					@endforelse
 				</tbody>
 			</table>

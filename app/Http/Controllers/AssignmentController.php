@@ -346,7 +346,7 @@ class AssignmentController extends Controller
 				"total" => $total_assignments,
 				"done" => $assignments_done,
 				"pending" => $assignments_pending,
-				"nearest_deadline" => min($nd)
+				"nearest_deadline" => (count($nd) > 0)? min($nd) : "N/A"
 			];
 
 			array_push($assignments_data, $ad);

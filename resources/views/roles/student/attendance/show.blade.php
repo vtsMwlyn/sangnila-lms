@@ -69,32 +69,12 @@
 							</td>
 						</tr>
 					@empty
+						<tr class="bg-white">
+							<td class="py-2 px-4 text-center" colspan="6">- No data found -</td>
+						</tr>
 					@endforelse
 				</tbody>
 			</table>
 		</div>
-
-
-		{{-- <div class="overflow-x-auto">
-			<x-table>
-				<x-slot name="head">
-					<th class="template-heads rounded-l-xl">Date and time</th>
-					<th class="template-heads">Attendance status</th>
-					<th class="template-heads rounded-r-xl">Attendance detail</th>
-				</x-slot>
-
-				@if (count($attendances))
-					@foreach ($attendances as $attendance)
-						<tr>
-							<td class="template-bodies font-semibold rounded-l-xl">{{ $attendance->created_at }}</td>
-							<td class="template-bodies font-semibold" style="color: @if($attendance->is_attend == 1) #219926 @else rgb(248 113 113) @endif;">@if($attendance->is_attend) Present @else Absent @endif</td>
-							<td class="template-bodies font-semibold rounded-r-xl">{{ $attendance->attendance_detail }}</td>
-						</tr>
-					@endforeach
-				@else
-					<tr><td colspan="3" class="p-5 rounded-xl bg-white font-semibold text-center">- The teacher haven't uploaded any attendance data yet -</td></tr>
-				@endif
-			</x-table>
-		</div> --}}
 	</div>
 @endsection
