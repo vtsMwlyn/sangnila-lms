@@ -6,10 +6,12 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title>{{ $course->course_name }}</x-page-title>
-		<p class="text-blue-950 font-semibold text-center mb-8">{{ $course->course_description }}</p>
+		<button type="button" onclick="history.back();"><img src="{{ asset('img/back-button.svg') }}" class="h-8 w-8 hover:scale-110" alt="back"></button>
+		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
+		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
+		<p class="text-blue-950 font-semibold mb-8">{{ $course->course_description }}</p>
 
-		<h2 class="text-xl font-bold text-white mb-5">Course Materials:</h2>
+		<h2 class="text-xl text-black font-bold mb-5">Course Materials:</h2>
 		<div class="overflow-x-auto mb-5">
 			<x-table>
 				<x-slot name="head">

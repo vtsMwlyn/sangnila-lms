@@ -65,6 +65,11 @@
 					<x-button class="w-full md:w-1/6">Submit</x-button>
 					{{-- <x-button class="w-full md:w-1/6">Cancel</x-button> --}}
 				</div>
+
+				<!-- Helper -->
+				<input type="hidden" name="h-asg" id="h-asg">
+				<input type="hidden" name="h-route" id="h-route">
+				<input type="hidden" name="h-n" id="h-n">
 			</form>
 		</div>
 	</x-popup>
@@ -177,33 +182,56 @@
 	</div>
 
 	<script>
+		function initializeAssignmentSubmissionPopup(assignment, route, n){
+			if(n == 10){
+				$("#max-submission-badge").show();
+
+				return;
+			}
+
+			// Retrieve and save selected data
+			$("#h-asg").val(JSON.stringify(assignment));
+			$("#h-route").val(route);
+			$("#h-n").val(n);
+
+			// Fill the popup with data
+			$("#assignment-title").text(assignment.title);
+			$("#assignment-desc").text(assignment.desc);
+			$("#assignment-deadline").text(new Date(`${assignment.deadline_date} ${assignment.deadline_time}`).toLocaleString('en-GB', {
+					day: '2-digit',
+					month: 'short',
+					year: 'numeric',
+					hour: '2-digit',
+					minute: '2-digit',
+					hour12: false
+				}));
+			$("#submit-form").attr("action", route);
+
+			// Display the popup
+			$("#submit-assignment").parent().show();
+		}
+
 		$(document).ready(() => {
 			const all_submission_data = @json($submissions_per_assignment);
 
 			$('.submitassignment-popuptrigger').on('click', function() {
-				if(parseInt($(this).data('submissions')) == 10){
-					$("#max-submission-badge").show();
-
-					return;
-				}
-
+				// Retrieve and save selected data
+				const n = $(this).data('submission');
 				const route = $(this).data('route');
 				const assignment = $(this).data('assignment');
 
-				$("#assignment-title").text(assignment.title);
-				$("#assignment-desc").text(assignment.desc);
-				$("#assignment-deadline").text(new Date(`${assignment.deadline_date} ${assignment.deadline_time}`).toLocaleString('en-GB', {
-						day: '2-digit',
-						month: 'short',
-						year: 'numeric',
-						hour: '2-digit',
-						minute: '2-digit',
-						hour12: false
-					}));
-				$("#submit-form").attr("action", route);
-
-				$("#submit-assignment").parent().show();
+				initializeAssignmentSubmissionPopup(assignment, route, n);
 			});
+
+			// Redisplay popup and fill with prev data
+			@if ($errors->any())
+				// Retrieve and re-save saved data
+				const old_asg = JSON.parse(@json(old('h-asg')));
+				const old_route = @json(old('h-route'));
+				const old_n = @json(old('h-n'));
+
+				initializeAssignmentSubmissionPopup(old_asg, old_route, old_n);
+			@endif
 
 			$(".submissionhistory-popuptrigger").click(function(){
 				$("#submission-history-tbody").empty();

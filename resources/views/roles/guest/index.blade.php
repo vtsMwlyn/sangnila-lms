@@ -5,49 +5,57 @@
 @endsection
 
 @section("content")
-	<x-section-container>
-		<x-page-title>Our Courses</x-page-title>
-		@if ($courses->isNotEmpty())
-			{{-- <div class="overflow-x-auto rounded-md">
-				<table class="w-full table-auto">
-					<thead>
-						<tr>
-							<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Course Name</th>
-							<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2">Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						@foreach ($courses as $course)
-							<tr>
-								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-									<a href="{{ route('guest.show', ['course_id' => $course->id]) }}"
-										class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
-										{{ $course->course_name }}
-									</a>
-								</td>
-								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
-									{{ $course->course_description }}
-								</td>
-							</tr>
-						@endforeach
-					</tbody>
-				</table>
-			</div> --}}
-			<div class="w-full flex flex-wrap justify-center my-10 gap-16">
-				@foreach ($courses as $course)
-					<!-- Course card  -->
-					<a href="{{ route('guest.show', ['course_id' => $course->id]) }}" class="w-full md:w-1/3">
-						<div class="flex flex-col justify-center items-center gap-5 border-2 border-white rounded-xl text-white px-8  hover:scale-105 transition duration-300 ease-in-out" style="background: linear-gradient(to bottom, rgba(40, 55, 133, 0.53) 25%, rgba(235, 126, 37, 0.58)); min-height: 400px; cursor: url('{{ asset('img/cursor2.cur') }}'), pointer;">
-							<h1 class="text-3xl font-bold">{{ $course->course_name }}</h1>
-							<div class="overflow-y-auto" style="max-height: 200px;">
-								<p class="text-xl mt-5 font-semibolf">{{ $course->course_description }}</p>
+	<div class="flex flex-wrap gap-5 w-full">
+		@forelse ($courses as $course)
+			<a href="{{ route('guest.show', ['course_id' => $course->id]) }}" style="width: 32%;" class="course-card transition duration-300 hover:scale-105" data-course-name="{{ $course->course_name }}">
+				<div class="rounded-3xl shadow-lg overflow-hidden relative">
+					<div class="absolute h-full w-full course-bg" style="background-size: cover; background-position: center; filter: brightness(0.5) blur(2px);"></div>
+					<div class="relative p-5 w-full h-full">
+						<!-- Course information -->
+						<p class="font-bold text-white">{{ $course->course_name }}</p>
+						<div class="w-full bg-white mt-2 mb-3" style="height: 2px;"></div>
+						<div class="overflow-y-auto text-white" style="height: 100px;">{{ $course->course_description }}</div>
+						<div class="w-full flex flex-col text-white mt-4">
+							<div class="flex gap-2">
+								<i class="bi bi-person-fill"></i>
+								<span>{{ App\Models\CourseStudent::where("course_id", $course->id)->count() }} Students Enrolled</span>
+							</div>
+							<div class="flex gap-2">
+								<i class="bi bi-person-fill"></i>
+								<span>{{ App\Models\CourseTeacher::where("course_id", $course->id)->count() }} Teachers Teaching</span>
 							</div>
 						</div>
-					</a>
-				@endforeach
-			</div>
-		@else
+					</div>
+				</div>
+			</a>
+		@empty
 			<div class="text-blue-900">N/A</div>
-		@endif
-	</x-section-container>
+		@endforelse
+	</div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			const accessKey = 'W_A5i7O9MjRE54Q4l9KA4onU-zZjNbNYowSd8UccBLY';
+
+			// Loop through each card and fetch background image based on course name
+			document.querySelectorAll('.course-card').forEach((card) => {
+				const courseName = card.getAttribute('data-course-name');
+
+				// Fetch image from Unsplash API for each course
+				fetch(`https://api.unsplash.com/search/photos?query=${courseName}&client_id=${accessKey}`)
+					.then(response => response.json())
+					.then(data => {
+						if (data.results && data.results.length > 0) {
+							const imageUrl = data.results[0].urls.regular;
+							// Set background image
+							card.querySelector('.course-bg').style.backgroundImage = `url('${imageUrl}')`;
+						} else {
+							console.log('No images found for:', courseName);
+						}
+					})
+					.catch(error => console.error('Error fetching image:', error));
+			});
+		});
+	</script>
+
 @endsection

@@ -367,7 +367,11 @@
 
 					// Other popups
 					$(".popup-dismiss").click(function(){
-						$(this).closest(".popup-container").fadeOut();
+						$(this).closest(".popup-container").fadeOut(function(){
+							// Clear error messages and reset input classes
+							$('input').removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0').val();
+							$('.error-messages').remove(); // This removes any error messages displayed
+						});
 					});
 
 					// Dropdowns

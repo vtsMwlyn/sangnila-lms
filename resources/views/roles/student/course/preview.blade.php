@@ -11,7 +11,7 @@
 
 @section("content")
 	<div class="rounded-3xl w-full py-5 px-8 flex flex-col items-stretch sm:text-base text-sm" style="background: #FEFEFEB2;">
-		<a href="{{ route('student.mycourse.show', $material->topic->course->id) }}"><img src="{{ asset('img/back-button.svg') }}" class="h-8 w-8" alt="back"></a>
+		<x-back-button href="{{ route('student.mycourse.show', $material->topic->course->id) }}"></x-back-button>
 
 		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ __($material->topic->title . ": " . $material->title) }}</h1>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>

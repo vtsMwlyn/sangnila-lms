@@ -16,7 +16,7 @@
 <input {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => $classList, 'style' => 'border-width: 3px;']) !!}>
 
 @error($attributes->get('name'))
-    <p class="text-red font-bold mt-2"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
+    <p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
 @enderror
 
 {{-- focus:ring focus:ring-red-500 focus:ring-opacity-50 focus:ring focus:ring-slate-500 focus:ring-opacity-50 --}}

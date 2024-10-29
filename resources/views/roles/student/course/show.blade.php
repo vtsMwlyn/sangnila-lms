@@ -11,7 +11,7 @@
 @section("content")
 	<div class="rounded-3xl w-full py-5 flex flex-col items-stretch sm:text-base text-sm" style="background: #FEFEFEB2;">
 		<div class="flex flex-col w-full px-8">
-			<button type="button" onclick="history.back();"><img src="{{ asset('img/back-button.svg') }}" class="h-8 w-8" alt="back"></button>
+			<x-back-button href="{{ route('student.mycourse.index') }}"></x-back-button>
 			<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
 			<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 			@php
