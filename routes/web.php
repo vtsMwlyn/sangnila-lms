@@ -21,7 +21,7 @@ Route::post("/sysadmin/logout", [SysAdminController::class, "sysadmin_logout"])-
 Route::get("/test-add-event", [CalendarController::class, "createEvent"]);
 
 // Main routes
-Route::middleware([])->group(function(){
+Route::middleware(["maintenance"])->group(function(){
 	// Home
 	Route::get('/', function () {
 		if (Auth::check()) {
