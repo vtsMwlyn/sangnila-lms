@@ -107,13 +107,8 @@
 				display: flex !important;
 				align-items: center !important;
 				height: 2.45rem !important;
-				border: solid 2px rgb(148 163 184) !important;
-				width: 100% !important;
-				padding-top: 0.25rem !important;
-				padding-bottom: 0.25rem !important;
-				padding-left: 0.75rem !important;
-				padding-right: 0.75rem !important;
-				min-height: 2.45rem !important;
+				border: solid 3px rgb(148 163 184) !important;
+				height: 2.9rem !important;
 				border-radius: 0.85rem !important;
 			}
 
@@ -135,6 +130,14 @@
 	<body class="min-h-screen flex flex-col items-center sm:text-sm text-xs">
 		<!-- Other popups -->
 		@yield("popup")
+
+		<!-- Loading popup -->
+		<div class="popup-container w-full h-full fixed top-0 flex items-center justify-center" style="backdrop-filter: blur(5px); z-index: 100; background: rgba(0, 0, 0, 0.3);">
+			<div class="rounded-3xl bg-white py-5 px-6 popup w-1/3 h-1/4 flex gap-3 items-center justify-center" id="loading-popup">
+				<div class="loader w-12 h-12 border-8 border-t-transparent border-light-blue rounded-full animate-spin"></div>
+				<p class="font-extrabold text-xl animate-pulse">Please Wait...</p>
+			</div>
+		</div>
 
 		<!-- Announcements -->
 		@if(session()->pull('show_announcement'))
@@ -254,7 +257,50 @@
 
 			<!-- Scripts -->
 			<script>
+				let loadingTimeout;
+
+				// Function to show the loading popup with a delay
+				function showLoadingPopupWithDelay() {
+					loadingTimeout = setTimeout(function() {
+						$('#loading-popup').parent().removeClass('hidden');
+					}, 500); // Show loader only if loading takes longer than 500ms
+				}
+
+				// Function to hide the loading popup
+				function hideLoadingPopup() {
+					clearTimeout(loadingTimeout);
+					$('#loading-popup').parent().addClass('hidden');
+				}
+
 				$(document).ready(() => {
+					// Show loading popup on form submission
+					$('form').on('submit', function () {
+						showLoadingPopupWithDelay();
+					});
+
+					// Show loading popup on anchor link clicks that reload the page
+					$('a[href]').on('click', function (e) {
+						const href = $(this).attr('href');
+
+						// If the href is "#" or opens in a different tab, skip showing the loading popup
+						if (href === "#" || $(this).attr('target') && $(this).attr('target') !== '_self') {
+							return;
+						}
+
+						showLoadingPopupWithDelay();
+					});
+
+					// Hide loading popup when a button with onclick="history.back();" is clicked
+					$('button[onclick*="history.back"]').on('click', function () {
+						// This will not hide the popup here
+						// Instead, we'll handle it in the beforeunload event
+					});
+
+					// Hide loading popup when navigating away from the page
+					$(window).on('beforeunload', function () {
+						hideLoadingPopup();
+					});
+
 					// Display back to top button on page scroll more than 100vh
 					const backToTopButton = document.getElementById("back-to-top");
 
@@ -390,6 +436,9 @@
 					const testus = $("#large-sidebar").clone();
 					$("#medsmallmenu-dropdown").empty().append(testus);
 				});
+
+				// Hide the loading popup once the page is fully loaded
+				$(window).on('load', hideLoadingPopup);
 
 			</script>
 

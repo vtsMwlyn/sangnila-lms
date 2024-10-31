@@ -18,7 +18,7 @@
 		@endif
 
 		@if($course_students->count() && $topics->count())
-			<form action="{{ route('teacher.attendance.store', $course->id) }}" method="post" class="mx-auto" id="attendance_form">
+			<form action="{{ route('teacher.attendance.store', $course->id) }}" method="post" id="attendance_form">
 				@csrf
 
 				<div class="my-4">

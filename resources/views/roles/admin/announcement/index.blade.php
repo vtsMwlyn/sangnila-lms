@@ -23,12 +23,12 @@
 			</x-badge-warning>
 		@endif
 
-		<div class="">
+		<div class="mb-4">
 			<x-anchor-button class="bg-orange-500 mt-8" href="{{ route('admin.announcement.create') }}"><i class="bi bi-plus-lg"></i> Add New Announcement</x-anchor-button>
 		</div>
 
 		@foreach($announcements as $announcement)
-			<div class="p-5 my-8 rounded-xl bg-white">
+			<div class="p-5 my-4 rounded-xl bg-white">
 				<div class="flex w-full items-center justify-between">
 					<div class="">
 						<p class="text-blue-900 font-bold text-lg">

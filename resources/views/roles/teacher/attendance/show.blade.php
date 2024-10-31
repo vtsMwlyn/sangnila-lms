@@ -18,13 +18,15 @@
 			<x-badge-success badge_text="{{ session('successEditAttendance') }}"></x-badge-success>
 		@endif
 
-		<x-anchor-button class="bg-orange-500 mt-5 mb-3" href="{{ route('teacher.attendance.upload', $course->id) }}">
-			<i class="bi bi-plus-lg"></i> Upload New Attendance
-		</x-anchor-button>
+		<div class="">
+			<x-anchor-button class="bg-orange-500 mt-5 mb-3" href="{{ route('teacher.attendance.upload', $course->id) }}">
+				<i class="bi bi-plus-lg"></i> Upload New Attendance
+			</x-anchor-button>
+		</div>
 
 		@if($attendanceData->count())
 			@foreach($attendanceData as $atd)
-				<div class="p-5 my-8 rounded-xl" style="background-color: rgba(255, 255, 255, 0.3)">
+				<div class="p-5 my-4 rounded-xl" style="background-color: rgba(255, 255, 255, 0.3)">
 					<div class="flex w-full items-center justify-between">
 						<p class="text-blue-950 font-semibold">Attendance Date:<br><span class="font-bold text-blue-950">{{ $atd->attendance_date }}</span></p>
 						<div class="flex gap-3">

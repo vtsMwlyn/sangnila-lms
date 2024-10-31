@@ -155,9 +155,9 @@
 					</div>
 
 					<!-- Student's last material unlocked -->
-					<div class="w-full mt-3" id="container_last_material_unlocked">
+					<div class="w-full mt-3 select2_container" id="container_last_material_unlocked">
 						<x-label for="last_material_unlocked" class="mb-1" :value="__('Last Material Unlock')"/>
-						<x-select name="last_material_unlocked" id="last_material_unlocked" class="mt-1 w-full">
+						<x-select name="last_material_unlocked" id="last_material_unlocked" class="mt-1 w-full select2">
 							{{-- <option value="" disabled selected>Pick a material</option>
 							@foreach ($course->topics as $topic)
 								@foreach ($topic->materials as $material)
@@ -221,44 +221,6 @@
 
 			<script>
 				$(document).ready(() => {
-					// Select2 initialization + MAKING THIS SH*T FOLLOW THE RESIZING OF ITS CONTAINER SO YOU NO NEED TO REFRESH
-					$('#last_material_unlocked').select2({
-						allowClear: false
-					});
-
-					function stylingSelect2(){
-						$('#last_material_unlocked').next('.select2-container').find('.select2-selection').css({
-							"display": "flex",
-							"align-items": "center"
-						});
-
-						$('#last_material_unlocked').next('.select2-container').find('.select2-selection').css({
-							"height": "2.6rem",
-							"border": "solid 2px #283785",
-							"width": "100%",
-							"padding-top": "1rem",
-							"padding-bottom": "0.75rem",
-							"padding-left": "0.75rem",
-							"padding-right": "0.75rem",
-							"min-height" : "3.25rem",
-							"border-radius": "0.75rem"
-						});
-					}
-
-					const container = document.getElementById('container_last_material_unlocked');
-					const resizeObserver = new ResizeObserver(() => {
-						$('#last_material_unlocked').select2('destroy').select2({
-							allowClear: false
-						});
-
-						stylingSelect2();
-					});
-
-					if (container) {
-						resizeObserver.observe(container);
-					}
-
-
 					function resetMaterialSelection(){
 						$("#last_material_unlocked").empty();
 

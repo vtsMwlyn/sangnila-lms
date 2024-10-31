@@ -18,7 +18,7 @@
 			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('teacher.attendance.update', $attendance->id) }}" method="post" class="mx-auto" id="attendance_form">
+		<form action="{{ route('teacher.attendance.update', $attendance->id) }}" method="post" id="attendance_form">
 			@csrf
 			<div class="my-4 flex w-full justify-between items-start">
 				<div class="w-1/3">
@@ -65,7 +65,7 @@
 											<label for="checkbox{{ $course_student->student->id }}">{{ $course_student->student->full_name }}</label>
 											<input type="hidden" name="students[]" value="{{ $course_student->student->id }}">
 										</div>
-										<div class="flex w-full gap-2 mt-2 material_progress_detail items-start">
+										<div class="flex w-full gap-3 mt-2 material_progress_detail items-start justify-between">
 											<div class="flex flex-col w-2/3 container_select2">
 												<x-select class="material_progress select2">
 													<option selected disabled>Select Material Progress</option>

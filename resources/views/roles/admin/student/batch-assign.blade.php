@@ -26,9 +26,9 @@
 				</div>
 				<div id="form-area">
 					<div class="flex flex-col md:flex-row gap-3">
-						<div class="mt-3 w-full md:w-1/3" id="inpStudentField">
+						<div class="mt-3 w-full md:w-1/3 select2_container" id="inpStudentField">
 							<x-label class="mb-1">{{ __("Student Name") }}</x-label>
-							<x-select name="student_name" id="student_name" class="w-full" required>
+							<x-select name="student_name" id="student_name" class="w-full select2" required>
 								<option disabled selected>Select Student</option>
 							</x-select>
 							<p class="text-red-700 font-bold mt-1" id="errStudent"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
@@ -136,51 +136,6 @@
 							$("#no-more-add-data").css({"display": "block"});
 						}
 					}
-
-					// Select2 initialization + MAKING THIS SH*T FOLLOW THE RESIZING OF ITS CONTAINER SO YOU NO NEED TO REFRESH
-					$('#student_name').select2({
-						allowClear: false
-					});
-
-					function stylingSelect2(){
-						$('#student_name').next('.select2-container').find('.select2-selection').css({
-							"display": "flex",
-							"align-items": "center"
-						});
-
-						$('#student_name').next('.select2-container').find('.select2-selection').css({
-							"height": "2.6rem",
-							"border": "solid 2px #283785",
-							"width": "100%",
-							"padding-top": "0.75rem",
-							"padding-bottom": "0.75rem",
-							"padding-left": "0.75rem",
-							"padding-right": "0.75rem",
-							"min-height" : "3.25rem",
-							"border-radius": "0.75rem"
-						});
-					}
-
-					const container = document.getElementById('inpStudentField');
-					const resizeObserver = new ResizeObserver(() => {
-						$('#student_name').select2('destroy').select2({
-							allowClear: false
-						});
-
-						stylingSelect2();
-					});
-
-					if (container) {
-						resizeObserver.observe(container);
-					}
-
-					// Adding placeholder to search field inside select2
-					$('#student_name').on('select2:open', function (e) {
-						if ($('#student_name').data('select2').isOpen()) {
-							const searchField = $('.select2-search__field');
-							searchField.attr('placeholder', 'Search for a student...');
-						}
-					});
 
 					// Add items when add button clicked (main logic)
 					$("#addBtn").click(() => {

@@ -53,15 +53,58 @@
 			{{ trans("strings.version") }} <span id="screen"></span>
 		</div>
 
+		<!-- Loading popup -->
+		<div class="popup-container hidden w-full h-full fixed top-0 flex items-center justify-center" style="backdrop-filter: blur(5px); z-index: 100; background: rgba(0, 0, 0, 0.3);">
+			<div class="rounded-3xl bg-white py-5 px-6 popup w-1/3 h-1/4 flex gap-3 items-center justify-center" id="loading-popup">
+				<div class="loader w-12 h-12 border-8 border-t-transparent border-light-blue rounded-full animate-spin"></div>
+				<p class="font-extrabold text-xl animate-pulse">Please Wait...</p>
+			</div>
+		</div>
+
 		@yield("content")
 	</body>
 
 	<script>
+		// Function to show the loading popup with a delay
+		function showLoadingPopupWithDelay() {
+			loadingTimeout = setTimeout(function() {
+				$('#loading-popup').parent().removeClass('hidden');
+			}, 500); // Show loader only if loading takes longer than 500ms
+		}
+
+		// Function to hide the loading popup
+		function hideLoadingPopup() {
+			clearTimeout(loadingTimeout);
+			$('#loading-popup').parent().addClass('hidden');
+		}
+
+		$(document).ready(() => {
+			// Show loading popup on form submission
+			$('form').on('submit', function () {
+				showLoadingPopupWithDelay();
+			});
+
+			// Show loading popup on anchor link clicks that reload the page
+			$('a[href]').on('click', function (e) {
+				const href = $(this).attr('href');
+
+				// If the href is "#" or opens in a different tab, skip showing the loading popup
+				if (href === "#" || $(this).attr('target') && $(this).attr('target') !== '_self') {
+					return;
+				}
+
+				showLoadingPopupWithDelay();
+			});
+		});
+
 		$("#screen").text(`(Resolution: ${window.innerWidth}x${window.innerHeight})`);
 
 		$(window).on("resize", function(){
 			$("#screen").text(`(Resolution: ${window.innerWidth}x${window.innerHeight})`);
 		});
+
+		// Hide the loading popup once the page is fully loaded
+		$(window).on('load', hideLoadingPopup);
 	</script>
 
 </html>

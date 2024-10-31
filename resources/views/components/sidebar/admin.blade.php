@@ -59,37 +59,37 @@
 		<!-- Sidebar navigations -->
 		<div class="flex flex-col items-stretch justify-center w-full text-base" id="large-sidebar">
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
-				href="{{ route('home') }}" style="border-radius: 0; background: {{ Request::is('dashboard*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
+				href="{{ route('home') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('dashboard*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-dashboard.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Dashboard
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
-				href="{{ route('admin.course.index') }}" style="border-radius: 0; background: {{ Request::is('admin*course*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
+				href="{{ route('admin.course.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('admin*course*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-managecourses.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Courses
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
-				href="{{ route('admin.teacher.index') }}" style="border-radius: 0; background: {{ Request::is('admin*teacher*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
+				href="{{ route('admin.teacher.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('admin*teacher*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-manageteacher.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Teachers
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
-				href="{{ route('admin.student.index') }}" style="border-radius: 0; background: {{ Request::is('admin*student*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
+				href="{{ route('admin.student.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('admin*student*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-managestudents.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Students
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
-				href="{{ route('admin.account.index') }}" style="border-radius: 0; background: {{ Request::is('admin*account*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
+				href="{{ route('admin.account.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('admin*account*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-manageaccounts.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Accounts
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
-				href="#" style="border-radius: 0; background: {{ Request::is('schedule*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
+				href="#" style="transform: scale(1); border-radius: 0; background: {{ Request::is('schedule*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-schedule.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Schedule
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
-				href="{{ route('admin.announcement.index') }}" style="border-radius: 0; background: {{ Request::is('admin*announcement*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
+				href="{{ route('admin.announcement.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('admin*announcement*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-manageannouncement.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Announcements
 			</x-anchor-button>
 
@@ -112,62 +112,3 @@
 	</script>
 </div>
 
-{{-- <div class="w-full md:w-1/5 bg-blue-950 text-white md:min-h-screen sticky top-0 md:static z-30" >
-	<!-- Sidebar toggler for mobile -->
-	<button id="mobileMenuButton" class="md:hidden bg-blue-950 text-white font-semibold text-xl transition duration-300 absolute m-2 px-4 py-3 z-10">
-		<span class="inline-block">&#9776;</span>
-	</button>
-
-	<div class="md:flex flex-col items-stretch sticky top-0 py-10 hidden px-5 z-0" id="navigation">
-		<!-- Brand -->
-		<div class="w-full flex justify-center hover:scale-110 transition duration-600">
-			<a href="{{ route('home') }}" style="cursor: url({{ asset('img/cursor2.cur') }}), pointer;">
-				<img src={{ asset("img/AR.W.png") }} alt="logo" width="100px">
-			</a>
-		</div>
-
-		<a href="{{ route("profile.show") }}" class="flex items-center visible md:invisible mt-5 gap-3 font-bold">
-			<i class="bi bi-person-circle text-xl"></i>
-			<span class="text-white text-center text-sm mt-1">{{ Auth::user()->full_name }}</span>
-		</a>
-
-		<!-- Sidebar navigations -->
-		<div class="mt-5 flex flex-col text-sm">
-			<x-anchor-button class="{{ Request::is('admin*course*')? 'bg-orange-500' : 'bg-blue-600' }} my-2 hover:scale-105 transition duration-600"
-				href="{{ route('admin.course.index') }}">
-				<i class="bi bi-grid"></i> Courses
-			</x-anchor-button>
-
-			<x-anchor-button class="{{ Request::is('admin*teacher*')? 'bg-orange-500' : 'bg-blue-600' }} my-2 hover:scale-105 transition duration-600"
-				href="{{ route('admin.teacher.index') }}">
-				<i class="bi bi-person-lines-fill"></i> Teachers
-			</x-anchor-button>
-
-			<x-anchor-button class="{{ Request::is('admin*student*')? 'bg-orange-500' : 'bg-blue-600' }} my-2 hover:scale-105 transition duration-600"
-				href="{{ route('admin.student.index') }}">
-				<i class="bi bi-person-workspace"></i> Students
-			</x-anchor-button>
-
-			<x-anchor-button class="{{ Request::is('admin*account*')? 'bg-orange-500' : 'bg-blue-600' }} my-2 hover:scale-105 transition duration-600"
-				href="{{ route('admin.account.index') }}">
-				<i class="bi bi-person-gear"></i> Accounts
-			</x-anchor-button>
-		</div>
-
-		<!-- Logout Button -->
-		<form method="POST" action="{{ route('logout') }}" class="mt-5">
-			@csrf
-			<x-button
-				class="font-semibold w-full bg-red-600 hover:scale-105 transition duration-600" onclick="return confirm('Are you sure want to logout from your account?');">
-					<i class="bi bi-box-arrow-left"></i> {{ __('Log Out') }}
-			</x-button>
-		</form>
-	</div>
-
-	<script>
-		// Toggle mobile menu visibility
-		$("#mobileMenuButton").click(() => {
-			$("#navigation").slideToggle();
-		});
-	</script>
-</div> --}}

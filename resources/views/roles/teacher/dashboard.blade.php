@@ -83,28 +83,38 @@
 		@endphp --}}
 
 		<div class="w-full flex md:flex-row flex-col gap-5 mt-5">
-			<!-- Progress -->
-			<div class="w-full md:w-1/2 bg-white rounded-xl p-5 shadow-lg">
-				<p class="font-semibold text-blue-800">News and Announcement</p>
-				<hr class="mt-3">
+			<!-- News and Announcement -->
+			<div class="w-full md:w-1/2 bg-white rounded-3xl py-5 shadow-lg">
+				<div class="px-5">
+					<p class="font-bold text-dark-blue">News and Announcement</p>
+					<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
+				</div>
 
 				<div class="relative flex sm:flex-row flex-col justify-center items-center">
-					<!-- Sliders -->
-					<div class="relative z-10 mt-5 overflow-hidden w-full sm:w-10/12">
-						<div id="cardSlider" class="flex transition-transform duration-300 ease-in-out">
+					<!-- Navigation and Sliders -->
+					<div class="slider-controls flex gap-2 sm:justify-between justify-center sm:absolute w-full px-2" style="top: 36%;">
+						<button id="prevBtn">
+							<img src="{{ asset('img/arrow-left.svg') }}" class="w-8" alt="icon">
+						</button>
+						<button id="nextBtn">
+							<img src="{{ asset('img/arrow-right.svg') }}" class="w-8" alt="icon">
+						</button>
+					</div>
+
+					<div class="swiper w-10/12">
+						<div class="swiper-wrapper">
 							@forelse (App\Models\Announcement::all() as $announcement)
 								@if($announcement->announce_from < now() && $announcement->announce_until > now())
-									<a class="card-img flex flex-col items-stretch" href="{{ route('view-announcement', $announcement->id) }}">
+									<a class="card-img flex flex-col items-stretch swiper-slide" href="{{ route('view-announcement', $announcement->id) }}">
 										@php
 											$target = json_decode($announcement->sent_to);
-											// $n_announcement++;
 										@endphp
 
 										@if($target[Auth::user()->role_id - 1] == "on")
 											@if($announcement->image_path)
-												<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full" style="object-fit: cover; object-position: center; height: 340px;">
+												<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full rounded-3xl" style="object-fit: cover; object-position: center; height: 340px;">
 											@else
-												<div class="flex bg-slate-200 items-center justify-center text-white font-extrabold grow">
+												<div class="flex bg-slate-200 items-center justify-center text-white font-extrabold grow rounded-3xl" style="height: 340px;">
 													<i class="bi bi-megaphone-fill text-6xl"></i>
 												</div>
 											@endif
@@ -118,26 +128,6 @@
 							@endforelse
 						</div>
 					</div>
-
-					<!-- Navigation buttons -->
-					<div class="slider-controls flex gap-2 sm:justify-between justify-center sm:absolute w-full" style="top: 45%;">
-						<button id="prevBtn" class="transition-all duration-200 flex items-center justify-center font-semibold rounded-full px-3 py-2 bg-blue-950 text-white">
-							<i class="bi bi-arrow-left"></i>
-						</button>
-						<button id="nextBtn" class="transition-all duration-200 flex items-center justify-center font-semibold rounded-full px-3 py-2 bg-blue-950 text-white">
-							<i class="bi bi-arrow-right"></i>
-						</button>
-					</div>
-					{{-- @if($n_announcement > 1)
-						<div class="slider-controls flex gap-2 justify-between absolute w-full" style="top: 45%;">
-							<button id="prevBtn" class="transition-all duration-200 flex items-center justify-center font-semibold rounded-full px-3 py-2 bg-blue-950 text-white">
-								<i class="bi bi-arrow-left"></i>
-							</button>
-							<button id="nextBtn" class="transition-all duration-200 flex items-center justify-center font-semibold rounded-full px-3 py-2 bg-blue-950 text-white">
-								<i class="bi bi-arrow-right"></i>
-							</button>
-						</div>
-					@endif --}}
 				</div>
 			</div>
 
@@ -153,84 +143,23 @@
 
 	<script>
 		$(document).ready(() => {
-			// Card sliders
-			let currentCard = 0;
-			let helper = 0;
-			if($(window).width() > 576){
-				helper = 10;
-			}
-
-			const cardSlider = $('#cardSlider');
-			const cardWidth = cardSlider.parent().width();
-			// const cardWidth = parseFloat(cardWidthStr.replace("px", ''));
-
-			// console.log("Container width: " + cardWidth);
-
-			$(".card-img").each(function(){
-				$(this).css({"min-width": cardWidth + helper, "max-width": cardWidth + helper});
-				// console.log("Cards width: " + $(this).width());
+			// Initialize Swiper
+			const swiper = new Swiper('.swiper', {
+				slidesPerView: 1,
+				spaceBetween: 0,
+				freeMode: true,
+				mousewheel: true, // Allow scrolling with mouse wheel
+				grabCursor: true, // Allow grabbing on desktop for dragging
+				loop: true,
+				autoplay: {
+					delay: 3000, // 3000ms = 3 seconds between slides
+					disableOnInteraction: false // Continue autoplay after user interactions
+				}
 			});
 
-			const totalCards = cardSlider.children().length;
-			const sliderWidth = totalCards * cardWidth;
-			cardSlider.css({"min-width": sliderWidth, "max-width": sliderWidth});
-			// console.log(`Slider width: ${totalCards} x ${cardWidth} = ${cardSlider.width()}`);
-
-			function nextCard() {
-				const visibleCards = cardSlider.parent().width() / cardWidth;
-				if (currentCard < totalCards - visibleCards) {
-					currentCard++;
-					const translateValue = -currentCard * (cardWidth + helper);
-					cardSlider.css('transform', `translateX(${translateValue}px)`);
-					updateNavButtons();
-				}
-			}
-
-			function prevCard() {
-				if (currentCard > 0) {
-					currentCard--;
-					const translateValue = -currentCard * (cardWidth + helper);
-					cardSlider.css('transform', `translateX(${translateValue}px)`);
-					updateNavButtons();
-				}
-			}
-
-			function updateNavButtons() {
-				if (currentCard === 0) {
-					$('#prevBtn').prop('disabled', true).css({
-						"background-color": "lightgray",
-						"color": "rgb(23 37 84)"
-					});
-				} else {
-					$('#prevBtn').prop('disabled', false).css({
-						"background-color": "rgb(23 37 84)",
-						"color": "white"
-					});
-				}
-
-				const visibleCards = cardSlider.parent().width() / cardWidth;
-				if (currentCard >= totalCards - visibleCards) {
-					$('#nextBtn').prop('disabled', true).css({
-						"background-color": "lightgray",
-						"color": "rgb(23 37 84)"
-					});
-				} else {
-					$('#nextBtn').prop('disabled', false).css({
-						"background-color": "rgb(23 37 84)",
-						"color": "white"
-					});
-				}
-			}
-
-			$('#nextBtn').on('click', nextCard);
-			$('#prevBtn').on('click', prevCard);
-
-			updateNavButtons();
-
-			$(window).resize(function() {
-				cardSlider.css('width', sliderWidth);
-				updateNavButtons();
-			});
+			// Custom navigation buttons
+			$('#prevBtn').click(() => swiper.slidePrev());
+			$('#nextBtn').click(() => swiper.slideNext());
 		});
 	</script>
 @endsection

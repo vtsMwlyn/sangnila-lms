@@ -47,7 +47,7 @@
 			@endif
 		</div>
 
-		<h2 class="text-xl font-semibold mb-2 text-white mt-10">Course Topic and Materials:</h2>
+		<h2 class="text-xl font-semibold mb-2 mt-10">Course Topic and Materials:</h2>
 		<div class="flex justify-between items-stretch w-full mt-5">
 			<x-anchor-button class="bg-orange-500"
 				href="{{ route('teacher.topic.create', $course->id) }}">

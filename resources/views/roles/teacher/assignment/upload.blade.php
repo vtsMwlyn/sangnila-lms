@@ -18,7 +18,7 @@
 		@endif
 
 		@if($course_students->count())
-			<form action="{{ route('teacher.assignment.store', $course->id) }}" method="post" class="mx-auto" id="assignment_form">
+			<form action="{{ route('teacher.assignment.store', $course->id) }}" method="post" id="assignment_form">
 				@csrf
 				<!-- Assignment Title -->
 				<div class="mb-4 flex @error('title') items-start @else items-stretch @enderror w-full gap-3">
@@ -62,7 +62,7 @@
 
 				<!-- Select Students to Assign -->
 				<div class="flex items-center gap-3 mt-8">
-					<x-label :value="__('Pick students to assign or')" style="color: white;"></x-label>
+					<x-label :value="__('Pick students to assign or')"></x-label>
 					<div class="flex gap-3">
 						<x-button class="bg-orange-500" type="button" id="checkall">Assign to all</x-button>
 						<x-button class="bg-slate-600" type="button" id="undo" style="display: none;">Undo</x-button>

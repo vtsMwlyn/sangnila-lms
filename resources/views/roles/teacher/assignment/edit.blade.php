@@ -18,7 +18,7 @@
 			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('teacher.assignment.update', $assignment->id) }}" method="post" class="mx-auto" id="assignment_form">
+		<form action="{{ route('teacher.assignment.update', $assignment->id) }}" method="post" id="assignment_form">
 			@csrf
 			@method("patch")
 			<!-- Assignment Title -->
