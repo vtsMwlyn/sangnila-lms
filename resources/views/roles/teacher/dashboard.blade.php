@@ -78,9 +78,9 @@
 			</div>
 		</div>
 
-		{{-- @php
+		@php
 			$n_announcement = 0;
-		@endphp --}}
+		@endphp
 
 		<div class="w-full flex md:flex-row flex-col gap-5 mt-5">
 			<!-- News and Announcement -->
@@ -92,15 +92,6 @@
 
 				<div class="relative flex sm:flex-row flex-col justify-center items-center">
 					<!-- Navigation and Sliders -->
-					<div class="slider-controls flex gap-2 sm:justify-between justify-center sm:absolute w-full px-2" style="top: 36%;">
-						<button id="prevBtn">
-							<img src="{{ asset('img/arrow-left.svg') }}" class="w-8" alt="icon">
-						</button>
-						<button id="nextBtn">
-							<img src="{{ asset('img/arrow-right.svg') }}" class="w-8" alt="icon">
-						</button>
-					</div>
-
 					<div class="swiper w-10/12">
 						<div class="swiper-wrapper">
 							@forelse (App\Models\Announcement::all() as $announcement)
@@ -111,6 +102,9 @@
 										@endphp
 
 										@if($target[Auth::user()->role_id - 1] == "on")
+											@php
+												$n_announcement++;
+											@endphp
 											@if($announcement->image_path)
 												<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full rounded-3xl" style="object-fit: cover; object-position: center; height: 340px;">
 											@else
@@ -128,6 +122,26 @@
 							@endforelse
 						</div>
 					</div>
+
+					@if($n_announcement > 1)
+						<div class="slider-controls flex gap-2 sm:justify-between justify-center sm:absolute w-full px-2" style="top: 36%;">
+							<button id="prevBtn">
+								<img src="{{ asset('img/arrow-left.svg') }}" class="w-8" alt="icon">
+							</button>
+							<button id="nextBtn">
+								<img src="{{ asset('img/arrow-right.svg') }}" class="w-8" alt="icon">
+							</button>
+						</div>
+					@else
+						<div class="flex gap-2 sm:justify-between justify-center sm:absolute w-full px-2" style="top: 36%;">
+							<button disabled>
+								<img src="{{ asset('img/arrowleft-gray.svg') }}" class="w-8" alt="icon">
+							</button>
+							<button disabled>
+								<img src="{{ asset('img/arrowright-gray.svg') }}" class="w-8" alt="icon">
+							</button>
+						</div>
+					@endif
 				</div>
 			</div>
 

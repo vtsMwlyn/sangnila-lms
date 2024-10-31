@@ -53,7 +53,11 @@
 			</div>
 
 			<x-label :value="__('This is the current image of your announcement:')" class="mt-8" id="img-preview-label"></x-label>
-			<img id="img-preview" src="{{ Storage::url("app/public/" . $announcement->image_path) }}" class="w-1/2 mt-5">
+			@if($announcement->image_path)
+				<img id="img-preview" src="{{ Storage::url("app/public/" . $announcement->image_path) }}" class="w-1/2 mt-5">
+			@else
+				N/A
+			@endif
 
 			<x-label :value="__('Announce this announcement to:')" class="mt-8"></x-label>
 
