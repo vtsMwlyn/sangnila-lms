@@ -11,6 +11,7 @@ use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\ExcelImportController;
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\DownloadResourceController;
 
 Route::prefix('/teacher')
@@ -165,6 +166,9 @@ Route::prefix('/teacher')
 
 			}
 		);
+
+		// Announcements
+		Route::get("/announcement/{announcement_id}", [AnnouncementController::class, "all_view_announcement"])->name("view-announcement")->whereNumber("announcement_id");
 
 	}
 );

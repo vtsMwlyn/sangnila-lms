@@ -11,22 +11,31 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">{{ __("Edit Course") }}</x-page-title>
-		<form action="{{ route('admin.course.update', $course->id) }}" method="post">
+		<x-page-title>{{ __("Edit Course") }}</x-page-title>
+
+		@if(session()->has("systemFail"))
+			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+		@endif
+
+		<form action="{{ route('admin.course.update', $course->id) }}" method="post" class="w-full">
 			@csrf
 			@method('PATCH')
 			<!-- Course Name -->
-			<div class="flex items-stretch gap-3">
+			<div class="flex @error('course_name') items-start @else items-stretch @enderror gap-3">
 				<x-boxed-label for="course_name" :value="__('Course Name')" />
-				<x-input id="course_name" class="block w-full" type="text" placeholder="Course name" name="course_name" :value="$course->course_name"
+				<div class="flex flex-col w-full items-stretch">
+					<x-input id="course_name" class="block w-full" type="text" placeholder="Course name" name="course_name" :value="$course->course_name"
 					autofocus />
+				</div>
 			</div>
 
 			<!-- Course Description -->
-			<div class="mt-4 flex items-stretch gap-3">
+			<div class="mt-4 flex @error('course_description') items-start @else items-stretch @enderror gap-3">
 				<x-boxed-label for="course_description" :value="__('Course Description')" />
 				{{-- <x-input id="course_description" class="block w-full bg-blue-950" type="text" name="course_description" :value="$course->course_description" style="color: white"/> --}}
-				<x-input id="course_description" class="block w-full" type="text" name="course_description" placeholder="Course description" :value="$course->course_description"/>
+				<div class="flex flex-col w-full items-stretch">
+					<x-input id="course_description" class="block w-full" type="text" name="course_description" placeholder="Course description" :value="$course->course_description"/>
+				</div>
 			</div>
 
 			<!-- Course Visibility -->

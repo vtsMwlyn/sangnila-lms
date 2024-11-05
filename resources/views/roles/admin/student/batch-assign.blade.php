@@ -11,7 +11,11 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">Batch Assign</x-page-title>
+		<x-page-title>Batch Assign</x-page-title>
+
+		@if(session()->has("systemFail"))
+			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+		@endif
 
 		<x-badge-danger id="emptyDataNotif" badge_text="Please input minimum 1 data to proceed." style="display: none;"></x-badge-danger>
 
@@ -22,12 +26,12 @@
 				</div>
 				<div id="form-area">
 					<div class="flex flex-col md:flex-row gap-3">
-						<div class="mt-3 w-full md:w-1/3" id="inpStudentField">
+						<div class="mt-3 w-full md:w-1/3 select2_container" id="inpStudentField">
 							<x-label class="mb-1">{{ __("Student Name") }}</x-label>
-							<x-select name="student_name" id="student_name" class="w-full" required>
+							<x-select name="student_name" id="student_name" class="w-full select2" required>
 								<option disabled selected>Select Student</option>
 							</x-select>
-							<p class="text-red-500" id="errStudent">This field is required.</p>
+							<p class="text-red-700 font-bold mt-1" id="errStudent"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 						</div>
 						<div class="mt-3 w-full md:w-1/3" id="inpTeacherField">
 							<x-label class="mb-1">{{ __("Teacher Name") }}</x-label>
@@ -37,12 +41,12 @@
 									<option value="{{ $t->full_name }}">{{ ($t->details->gender == 1)? "Mr." : "Ms." }} {{ $t->full_name }}</option>
 								@endforeach
 							</x-select>
-							<p class="text-red-500" id="errTeacher">This field is required.</p>
+							<p class="text-red-700 font-bold mt-1" id="errTeacher"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 						</div>
 						<div class="mt-3 w-full md:w-1/3" id="inpMaxCourseSessionField">
 							<x-label class="mb-1">{{ __("Max Course Session") }}</x-label>
 							<x-input id="max_course_session" class="w-full" type="number" name="max_course_session" placeholder="Maximum sessions" value="8" />
-							<p class="text-red-500" id="errMaxCourseSession">Invalid input.</p>
+							<p class="text-red-700 font-bold mt-1" id="errMaxCourseSession"><i class="bi bi-exclamation-circle"></i> Invalid input.</p>
 						</div>
 					</div>
 					<div class="flex w-full justify-end mt-8">
@@ -133,51 +137,6 @@
 						}
 					}
 
-					// Select2 initialization + MAKING THIS SH*T FOLLOW THE RESIZING OF ITS CONTAINER SO YOU NO NEED TO REFRESH
-					$('#student_name').select2({
-						allowClear: false
-					});
-
-					function stylingSelect2(){
-						$('#student_name').next('.select2-container').find('.select2-selection').css({
-							"display": "flex",
-							"align-items": "center"
-						});
-
-						$('#student_name').next('.select2-container').find('.select2-selection').css({
-							"height": "2.6rem",
-							"border": "solid 2px #283785",
-							"width": "100%",
-							"padding-top": "0.75rem",
-							"padding-bottom": "0.75rem",
-							"padding-left": "0.75rem",
-							"padding-right": "0.75rem",
-							"min-height" : "3.25rem",
-							"border-radius": "0.75rem"
-						});
-					}
-
-					const container = document.getElementById('inpStudentField');
-					const resizeObserver = new ResizeObserver(() => {
-						$('#student_name').select2('destroy').select2({
-							allowClear: false
-						});
-
-						stylingSelect2();
-					});
-
-					if (container) {
-						resizeObserver.observe(container);
-					}
-
-					// Adding placeholder to search field inside select2
-					$('#student_name').on('select2:open', function (e) {
-						if ($('#student_name').data('select2').isOpen()) {
-							const searchField = $('.select2-search__field');
-							searchField.attr('placeholder', 'Search for a student...');
-						}
-					});
-
 					// Add items when add button clicked (main logic)
 					$("#addBtn").click(() => {
 						const inpStudentName = $("#student_name").val();
@@ -195,19 +154,20 @@
 						let invalidInput = false;
 
 						if(!inpStudentName){
-							$("#inpStudentField").css({"border": "1px solid red", "padding": "10px"});
+							$("#inpStudentField").css({"border": "2px solid rgb(185 28 28)", "padding": "10px"});
 							$("#errStudent").css({"display": "block"});
 							invalidInput = true;
 						}
 
 						if(!inpTeacherName){
-							$("#inpTeacherField").css({"border": "1px solid red", "padding": "10px"});
+							$("#inpTeacherField").css({"border": "2px solid rgb(185 28 28)", "padding": "10px"});
 							$("#errTeacher").css({"display": "block"});
 							invalidInput = true;
 						}
 
 						if(inpMaxCourseSession < 1){
-							$("#inpMaxCourseSessionField").css({"border": "1px solid red", "padding": "10px"});
+							$("#inpMaxCourseSessionField").css({"border": "2px solid rgb(185 28 28)", "padding": "10px"});
+							$("#inpMaxCourseSession")
 							$("#errMaxCourseSession").css({"display": "block"});
 							invalidInput = true;
 						}

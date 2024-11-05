@@ -5,6 +5,7 @@
 		<!-- Metas -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="csrf-token" content="{{ csrf_token() }}">
 
 		<!-- App icon -->
 		<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
@@ -16,6 +17,7 @@
 
 		<!-- CSS -->
 		<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/color-pallete.css') }}">
 
 		<!-- Bootstrap icons -->
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -26,10 +28,13 @@
 		<!-- Include Select2 CSS -->
 		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
+		<!-- Push notification (temporary disabled because of tholol vapid key) -->
+		{{-- <script src="{{ asset('js/push-notifications.js') }}" defer></script> --}}
+
 		<!-- Poppins font -->
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
 
 		<!-- Trix editor -->
 		<link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
@@ -39,18 +44,8 @@
 		<link rel="stylesheet" href="{{ asset("css/custom_styles.css") }}">
 
 		<style>
-			/* Custom Cursor */
-			a {
-				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
-			}
-
-			button[type="button"], button[type="submit"] {
-				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
-			}
-
 			body {
-				cursor: url("{{ asset('img/kursor.cur') }}"), auto;
-				font-family: "Poppins";
+				font-family: "Geologica";
 			}
 
 			trix-toolbar [data-trix-button-group="file-tools"] {
@@ -105,26 +100,48 @@
 			div.announcementContent a:hover {
 				text-decoration: underline;
 			}
+
+			.select2-container .select2-selection {
+				display: flex !important;
+				align-items: center !important;
+				height: 2.45rem !important;
+				border: solid 2px rgb(148 163 184) !important;
+				width: 100% !important;
+				padding-top: 0.25rem !important;
+				padding-bottom: 0.25rem !important;
+				padding-left: 0.75rem !important;
+				padding-right: 0.75rem !important;
+				min-height: 2.45rem !important;
+				border-radius: 0.85rem !important;
+			}
+
 		</style>
 
-		<!-- Include jQuery  -->
+		<!-- Include jQuery & jQuery UI -->
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+		<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
+
+		<!-- Include Select2 JavaScript -->
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 		<!-- App title -->
 		<title>Sangnila Academy | LMS</title>
 	</head>
 
-	<body class="bg-cover min-h-screen flex flex-col">
+	<body class="bg-cover min-h-screen flex flex-col sm:text-sm text-xs">
+		{{-- @dd(Storage::url("app/public/" . App\Models\Announcement::all()[1]->image_path)) --}}
+
 		<!-- Fixed background image -->
 		<img src="{{ asset("img/background.jpg") }}" alt="" height="100vh" class="w-screen h-screen fixed top-0 z-0" style="object-fit: cover; object-position: center;">
 
 		<!-- Page -->
 		<div class="absolute z-10 w-full min-h-full flex flex-col justify-between" style="background-color: rgba(0, 0, 0, 0.4);">
 			<!-- Back to top button and version -->
-			<div class="fixed z-60 bottom-1 left-1 m-2 text-white">
+			<div class="fixed z-50 bottom-1 left-1 m-2 text-white">
 				<div class="">{{ trans("strings.version") }}</div>
 			</div>
-			<div class="fixed bottom-1 right-1 m-2 opacity-0 transition-opacity duration-500 ease-in-out animate-bounce" id="back-to-top">
+			<div class="fixed bottom-1 right-1 m-2 opacity-0 transition-opacity duration-500 ease-in-out animate-bounce z-50" id="back-to-top">
 				<a href="#">
 					<div class="bg-orange-500 rounded-full w-full text-xl p-2.5 flex justify-center align-center font-bold" style="width: 50px; height: 50px;">
 						<i class="text-white text-center bi bi-arrow-up"></i>
@@ -133,28 +150,48 @@
 			</div>
 
 			@if(session()->pull('show_announcement'))
-				@forelse (App\Models\Announcement::all() as $announcement)
-					@php
-						$target = json_decode($announcement->sent_to);
-					@endphp
-					
+			{{-- @if(true) --}}
+				@php
+					$n = 0;
+					$m = 0;
+					$all_announcements = App\Models\Announcement::all();
+
+					foreach($all_announcements as $anc){
+						$target = json_decode($anc->sent_to);
+
+						if($target[Auth::user()->role_id - 1] == "on" && $anc->announce_from < now() && $anc->announce_until > now()){
+							$m++;
+						}
+					}
+				@endphp
+
+				@if($m > 0)
+					<button class="fixed bottom-3 right-3 font-bold text-yellow-500 py-2 px-3 border-2 border-yellow-500 rounded-xl hover:text-slate-500 hover:border-slate-500" id="dismiss-announcements-btn" type="button" style="z-index: 60;">Dismiss all</button>
+				@endif
+
+				@forelse ($all_announcements as $announcement)
+					@php $target = json_decode($announcement->sent_to); @endphp
+
 					@if($target[Auth::user()->role_id - 1] == "on")
-						<div class="h-screen w-screen flex items-center justify-center fixed top-0 z-50 popup-container" style="background: rgba(0, 0, 0, 0.5)">
-							<div class="bg-white w-1/2 h-4/5 flex flex-col gap-5 justify-between items-center p-8 rounded-xl popup" >
-								<h1 class="text-xl font-bold text-blue-900">{{ $announcement->title }}</h1>
-								<div class="grow overflow-y-auto">
-									@if($announcement->image_path)
-										<div class="flex justify-center w-full mb-8">
-											<img src="{{ asset('storage/' . $announcement->image_path) }}" alt="announcement_img" class="w-3/4">
+						@php $n++; @endphp
+						@if($announcement->announce_from < now() && $announcement->announce_until > now())
+							<div class="h-screen w-screen flex items-center justify-center fixed top-0 z-50 popup-container" style="background: {{ ($n == 1)? 'rgba(0, 0, 0, 0.5)' : 'none' }};">
+								<div class="bg-white w-1/2 h-4/5 flex flex-col gap-5 justify-between items-center p-8 rounded-xl popup" >
+									<h1 class="text-xl font-bold text-blue-900">{{ $announcement->title }}</h1>
+									<div class="grow overflow-y-auto">
+										@if($announcement->image_path)
+											<div class="flex justify-center w-full mb-8">
+												<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-3/4">
+											</div>
+										@endif
+										<div class="announcementContent">
+											{!! $announcement->content !!}
 										</div>
-									@endif
-									<div class="announcementContent">
-										{!! $announcement->content !!}
 									</div>
+									<p class="text-sm text-slate-500">- Click anywhere to close -</p>
 								</div>
-								<p class="text-sm text-slate-500">- Click anywhere to close -</p>
 							</div>
-						</div>
+						@endif
 					@endif
 				@empty
 
@@ -168,7 +205,7 @@
 			<!-- Content Section -->
 			<div class="px-10 @auth pb-10 @else py-10 @endauth grow">
 				<div class="flex flex-col items-center w-full">
-					<div class="w-full lg:w-5/6 flex justify-between gap-3 items-center">
+					<div class="w-full flex justify-between gap-3 items-center">
 						<!-- Breadcrumbs -->
 						@auth
 							<x-breadcrumbs>
@@ -207,18 +244,82 @@
 						navbar.style.backgroundColor = "rgb(17, 41, 102)";
 
 					} else {
-						backToTopButton.classList.remove("opacity-100");backToTopButton.classList.add("opacity-0");
+						backToTopButton.classList.remove("opacity-100");
+						backToTopButton.classList.add("opacity-0");
 
 						navbar.style.backdropFilter = "blur(3px)";
 						navbar.style.backgroundColor = "rgba(17, 41, 102, 0.5)";
 					}
 				});
 
+				// Select2 initialization
+				$('.select2').select2({
+					allowClear: false
+				});
+
+				// Apply resize observer to each container with class 'container_select2'
+				$('.container_select2').each(function () {
+					const container = this;
+					const resizeObserver = new ResizeObserver(() => {
+						$(container).find('.select2').each(function () {
+							$(this).select2('destroy').select2({
+								allowClear: false
+							});
+						});
+
+						// stylingSelect2();
+					});
+
+					resizeObserver.observe(container);
+				});
+
+
+				// Datepicker mechanique
+				const testinput = document.createElement('input');
+				testinput.setAttribute('type', 'date');
+
+				// If native date input is not supported, use jQuery UI Datepicker
+				if (testinput.type !== 'date') {
+					$('.date-input').datepicker({
+						dateFormat: "yy-mm-dd", // Set the desired date format
+						changeMonth: true, // Enable month dropdown
+						changeYear: true,  // Enable year dropdown
+						yearRange: "1900:+10", // Set the range of years
+					});
+				}
+				else {
+					$('.date-input').on({
+						"focus": function(){
+							this.showPicker();
+						},
+						"click": function(){
+							this.showPicker();
+						}
+					});
+				}
+
+				let popups = $(".popup-container").length;
+				console.log(popups);
+
+				function remove_dismiss_popup(){
+					popups--;
+					if(popups == 0){
+						$("#dismiss-announcements-btn").fadeOut();
+					}
+				}
+
+
 				$(".popup-container").click(function(e){
 					if (!$(e.target).closest(".popup").length) {
+						remove_dismiss_popup();
 						$(this).fadeOut();
 					}
 
+				});
+
+				$("#dismiss-announcements-btn").click(function(){
+					$(".popup-container").fadeOut();
+					$(this).fadeOut();
 				});
 
 				$(".announcementContent a").each((index, anchor) => {
@@ -226,8 +327,5 @@
 				});
 			});
 		</script>
-
-		<!-- Include Select2 JavaScript -->
-		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 	</body>
 </html>

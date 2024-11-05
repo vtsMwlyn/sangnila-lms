@@ -1,18 +1,18 @@
 @props(['disabled' => false])
 
 @php
-    $classList = 'rounded-xl shadow-sm border-2 font-semibold text-blue-800 py-3 px-5';
+    $classList = 'rounded-2xl shadow-sm focus:outline-none py-2 px-4';
     if($errors->has($attributes->get('name'))) {
-        $classList .= ' border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50';
+        $classList .= ' border-red focus:border-red-700 focus:ring-0';
     } else {
-		$classList .= " border-blue-900 focus:border-blue-700 focus:ring focus:ring-blue-700 focus:ring-opacity-50";
+		$classList .= " border-slate-400 focus:border-slate-600 focus:ring-0";
 	}
 @endphp
 
-<select {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => $classList]) !!}>
+<select {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => $classList, 'style' => 'border-width: 3px;']) !!}>
 	{{ $slot }}
 </select>
 
 @if($errors->has($attributes->get('name')))
-    <p class="text-red-500 mt-2">{{ $errors->first($attributes->get('name')) }}</p>
+    <p class="text-red-800 font-bold mt-2"><i class="bi bi-exclamation-circle"></i> {{ $errors->first($attributes->get('name')) }}</p>
 @endif

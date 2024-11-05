@@ -12,15 +12,20 @@
 @section("content")
 	<x-section-container>
         <x-page-title class="text-3xl font-semibold text-blue-900 mt-5 mb-8">Upload New Attendance Data</x-page-title>
+
+		@if(session()->has("systemFail"))
+			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
+		@endif
+
 		@if($course_students->count() && $topics->count())
-			<form action="{{ route('teacher.attendance.store', $course->id) }}" method="post" class="mx-auto" id="attendance_form">
+			<form action="{{ route('teacher.attendance.store', $course->id) }}" method="post" id="attendance_form">
 				@csrf
 
 				<div class="my-4">
 					<x-label for="attendance_date">{{ __("Attendance Date") }}</x-label>
 					<div class="flex items-center gap-3 mt-1">
 						<div class="flex flex-col w-1/3">
-							<x-input onfocus="this.type='date'" onblur="this.type='text'" name="attendance_date" id="attendance_date" placeholder="Enter attendance date"/>
+							<x-input type="date" class="date-input" name="attendance_date" id="attendance_date" placeholder="Enter attendance date"/>
 						</div>
 						<x-button type="button" id="todaybtn" class="bg-orange-500">Today</x-button>
 					</div>
@@ -39,15 +44,17 @@
 											<label for="checkbox{{ $loop->iteration }}">{{ $cs->student->full_name }}</label>
 											<input type="hidden" name="students[]" value="{{ $cs->student->id }}">
 										</div>
-										<div class="flex w-full gap-2 mt-2 material_progress_detail" style="display: none;">
-											<x-select class="material_progress w-2/3" name="fake_material_progress[]">
-												<option selected disabled>Select Material Progress</option>
-												@foreach ($topics as $topic)
-													@foreach ($topic->materials as $material)
-														<option value="{{ $material->title }}" @if(old("material_progress[]") == $material->title) selected @endif>{{ $material->title }}</option>
+										<div class="flex w-full gap-2 mt-2 material_progress_detail items-start" style="display: none;">
+											<div class="flex flex-col w-2/3 container_select2">
+												<x-select class="material_progress select2" name="fake_material_progress[]">
+													<option selected disabled>Select Material Progress</option>
+													@foreach ($topics as $topic)
+														@foreach ($topic->materials as $material)
+															<option value="{{ $material->title }}" @if(old("material_progress[]") == $material->title) selected @endif>{{ $material->title }}</option>
+														@endforeach
 													@endforeach
-												@endforeach
-											</x-select>
+												</x-select>
+											</div>
 
 											<x-select class="learning_status w-1/3" name="fake_learning_status[]">
 												<option value="On Progress" @if(old("learning_status[]") == "On Progress") selected @endif>On Progress</option>
@@ -95,15 +102,6 @@
 
 		<script>
 			$(document).ready(() => {
-				$("#attendance_date").on({
-					"focus": function(){
-						this.showPicker();
-					},
-					"click": function(){
-						this.showPicker();
-					}
-				});
-
 				// Mechanism to hide and unhide selects for material progress detail depending if the student name checkbox is checked or not
 				const allCheckBoxes = $('input[type="checkbox"]');
 
@@ -197,29 +195,32 @@
 				$invalid = false;
 
 				$("#attendance_date").css({"border": "rgb(30 58 138) solid 2px"});
+				$("#attendance_date").closest("div").find("p").remove();
 				$("textarea").css({"border": "rgb(30 58 138) solid 2px"});
+				$("textarea").closest("div").find("p").remove();
 				$(".material_progress").each(function(){
 					$(this).css({"border": "rgb(30 58 138) solid 2px"});
-				})
+					$(this).closest("div").find("p").remove();
+				});
 
 				if(!$("#attendance_date").val()){
-					$("#attendance_date").css({"border": "red solid 2px"});
-					$("#attendance_date").after($("<p>").text("The attendance date field is required.").css("color", "red"));
+					$("#attendance_date").css("border", "solid 2px rgb(185 28 28)");
+					$("#attendance_date").after($("<p>").html('<i class="bi bi-exclamation-circle"></i> The attendance date field is required.').addClass("text-red-800 font-bold mt-1"));
 					$invalid = true;
 				}
 
 				$("textarea").each(function(){
 					if($(this).val() == ""){
-						$(this).after($("<p>").text("The attendance detail field is required.").css("color", "red"));
-						$(this).css({"border": "red solid 2px"});
+						$(this).after($("<p>").html('<i class="bi bi-exclamation-circle"></i> The attendance detail field is required.').addClass("text-red-800 font-bold mt-1"));
+						$(this).css("border", "solid 2px rgb(185 28 28)");
 						$invalid = true;
 					}
 				});
 
 				checkboxValues.forEach((value, index) => {
 					if(value === "on" && !materialProgressValues[index]){
-						$($(".material_progress")[index]).css({"border": "red solid 2px"});
-						$($(".material_progress")[index]).after($("<p>").text("The material progress field is required.").css("color", "red"));
+						$($(".material_progress")[index]).css({"border": "solid 2px rgb(185 28 28)"});
+						$($(".material_progress")[index]).after($("<p>").html('<i class="bi bi-exclamation-circle"></i> The material progress field is required.').addClass("text-red-800 font-bold mt-1"));
 						$invalid = true;
 					}
 				});

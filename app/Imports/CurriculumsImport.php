@@ -28,17 +28,10 @@ class CurriculumsImport implements ToModel, WithHeadingRow
 
 			$course = Course::findOrFail($this->course_id);
 
-			$existing_ctopic = CurriculumTopic::where("title", $row["topic"])->first();
-
-			if($existing_ctopic){
-				$ctopic = $existing_ctopic;
-			}
-			else {
-				$ctopic = CurriculumTopic::create([
-					"course_id" => $course->id,
-					"title" => $row["topic"]
-				]);
-			}
+			$ctopic = CurriculumTopic::updateOrCreate([
+				"course_id" => $course->id,
+				"title" => $row["topic"]
+			]);
 
 			CurriculumMaterial::create([
 				"curriculum_topic_id" => $ctopic->id,

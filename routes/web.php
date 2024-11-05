@@ -1,30 +1,28 @@
 <?php
 
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PushNotificationController;
 use App\Http\Controllers\SysAdminController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserAccountController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
+// Verify email application (dont move this)
 Auth::routes(['verify' => true]);
 
+// For maintenance
 Route::get("/sysadmin/login", [SysAdminController::class, "sysadmin_login"])->name("sysadmin.login");
 Route::post("/sysadmin/login", [SysAdminController::class, "sysadmin_authenticate"])->name("sysadmin.authenticate");
 Route::post("/sysadmin/logout", [SysAdminController::class, "sysadmin_logout"])->name("sysadmin.logout");
 
-Route::middleware([])->group(function(){
+Route::get("/test-add-event", [CalendarController::class, "createEvent"]);
 
+// Main routes
+Route::middleware([])->group(function(){
+	// Home
 	Route::get('/', function () {
 		if (Auth::check()) {
 			// User is logged in, so redirect to a specific route
@@ -33,53 +31,41 @@ Route::middleware([])->group(function(){
 		return view('roles.guest.home');
 	})->name('home');
 
-	Route::get('/dashboard', function () {
-		$roleName = Auth::user()->role->role_name;
-		switch ($roleName) {
-			case 'SysAdmin':
-				// Logic for SysAdmin
-				return redirect(route('sysadmin.account.index'));
-				dd('SysAdmin');
-				break;
-			case 'Admin':
-				// Logic for Admin
-				return redirect(route('admin.course.index'));
-				dd('Admin');
-				break;
-			case 'Teacher':
-				// Logic for Teacher
-				return redirect(route('teacher.mycourse.index'));
-				dd('Teacher');
-				break;
-			case 'Student':
-				// Logic for Student
-				return redirect(route('student.mycourse.index'));
-				dd('Student');
-				break;
-			default:
-				// Default behavior (e.g., for unknown roles)
-				return view('dashboard');
-		}
-	})->middleware(['auth', 'verified'])->name('dashboard');
+	Route::middleware(["auth", "verified"])->group(function(){
+		Route::get('/dashboard', [DashboardController::class, "index"])->middleware(['auth', 'verified'])->name('dashboard');
 
-	Route::prefix("/profile")->name("profile.")->middleware(["auth", "verified"])->group(function(){
-		Route::get("/", [UserAccountController::class, "show"])->name("show");
-		Route::post("/", [UserAccountController::class, "update"])->name("update");
+		// Profile & notifications
+		Route::prefix("/profile")->name("profile.")->middleware(["auth", "verified"])->group(function(){
+			Route::get("/", [UserAccountController::class, "show"])->name("show");
+			Route::post("/", [UserAccountController::class, "update"])->name("update");
+		});
+
+		Route::prefix("/notification")->name("notification.")->middleware(["auth", "verified"])->group(function(){
+			Route::post("/{notification_id}", [NotificationController::class, "mark_as_read"])->name("mark-read")->whereNumber("notification_id");
+			Route::post("/mark-read-all", [NotificationController::class, "mark_all_as_read"])->name("mark-all-read");
+			Route::post("/{notification_id}/dismiss}", [NotificationController::class, "dismiss"])->name("dismiss")->whereNumber("notification_id");
+			Route::post("/dismiss-all", [NotificationController::class, "dismiss_all"])->name("dismiss-all");
+		});
+
+		// Announcements
+		Route::get("/announcement", [AnnouncementController::class, "all_list_announcement"])->name("list-announcement");
+		Route::get("/announcement/{announcement_id}", [AnnouncementController::class, "all_view_announcement"])->name("view-announcement")->whereNumber("announcement_id");
 	});
 
-	Route::prefix("/notification")->name("notification.")->middleware(["auth", "verified"])->group(function(){
-		Route::post("/{notification_id}", [NotificationController::class, "mark_as_read"])->name("mark-read")->whereNumber("notification_id");
-		Route::post("/mark-read-all", [NotificationController::class, "mark_all_as_read"])->name("mark-all-read");
-		Route::post("/{notification_id}/dismiss}", [NotificationController::class, "dismiss"])->name("dismiss")->whereNumber("notification_id");
-		Route::post("/dismiss-all", [NotificationController::class, "dismiss_all"])->name("dismiss-all");
-	});
+	// Authentication and registrations
+	require __DIR__ . '/auth.php';
 
-
-	require __DIR__ . '/auth.php'; // to be deleted
-
+	// Role based routes
 	require __DIR__ . '/roles/admin.php';
 	require __DIR__ . '/roles/teacher.php';
 	require __DIR__ . '/roles/student.php';
 	require __DIR__ . '/roles/guest.php';
 
+	// Push notification (postponed, VAPID keys-nya mabok)
+	Route::post('/save-subscription', [PushNotificationController::class, "saveSubscription"])->name("pushnotification.savesubscription");
+
+	Route::get("/test-notif", function(){
+		$pnc = new PushNotificationController();
+		$pnc->sendPushNotification();
+	});
 });

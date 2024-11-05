@@ -1,57 +1,82 @@
-<x-section-container>
-	<x-page-title class="mt-5 mb-8">{{ __("Account Profile") }}</x-page-title>
+<div class="rounded-3xl w-full md:w-5/6 py-5 px-8 mb-6 flex flex-col sm:text-base text-sm self-start" style="background: #FEFEFEB2;">
+	<h1 class="text-dark-blue font-bold text-lg">{{ __("Account Profile") }}</h1>
+	<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 	@if(session()->has("successUpdateProfile"))
 		<x-badge-success badge_text="{{ session('successUpdateProfile') }}">
 		</x-badge-success>
 	@elseif(session()->has("successPay"))
 		<x-badge-success badge_text="{{ session('successPay') }}"></x-badge-success>
+	@elseif(session()->has("systemFail"))
+		<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
 	@endif
 
 	<div class="mt-5">
-		<form action="{{ route("profile.update") }}" method="post">
+		<form action="{{ route("profile.update") }}" method="post" class="flex gap-10" enctype="multipart/form-data">
 			@csrf
-			<!-- Name -->
-			<div class="flex gap-3 items-stretch">
-				<x-boxed-label for="full_name">{{ __("Full Name") }}</x-boxed-label>
-				<x-input id="full_name" class="w-full" type="text" name="full_name" :value="old('full_name', $account_data->full_name)" placeholder="Full Name" />
-			</div>
-
-			<!-- Email Address -->
-			<div class="mt-4 flex gap-3 items-stretch">
-				<x-boxed-label for="email">{{ __("Email Address") }}</x-boxed-label>
-				<x-input id="email" class="w-full text-slate-500" type="email" name="email" :value="$account_data->email" disabled  />
-			</div>
-
-			<!-- Password -->
-			<div class="mt-8 flex gap-3 items-stretch">
-				<x-boxed-label for="password">{{ __("Change Password") }}<span class="font-bold">*</span></x-boxed-label>
-				<div class="relative w-full h-full">
-					<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="togglePassword"></button>
-					<x-input id="password" class="w-full rounded-xl" type="password" name="password" style="padding-right: 60px;"
-						autocomplete="current-password" placeholder="New Password" />
+			<div class="flex flex-col items-center relative">
+				<div class="relative w-40 h-40 rounded-full overflow-hidden shadow-lg">
+					@if(Auth::user()->details->profpic)
+						<img id="img-preview" src="{{ Storage::url("app/public/" . Auth::user()->details->profpic) }}" alt="Image Preview" class="w-full h-full object-cover rounded-full">
+					@else
+						<img id="img-preview" src="{{ asset('img/tempblankprofpic.png') }}" alt="Image Preview" class="w-full h-full object-cover rounded-full">
+					@endif
+					<label for="image" class="text-3xl absolute bottom-0 w-full h-10 bg-black bg-opacity-50 text-white flex justify-center items-center cursor-pointer">
+						<i class="bi bi-camera-fill"></i>
+					</label>
 				</div>
+				<input type="file" id="image" name="image" accept="image/*" class="hidden">
 			</div>
 
-			<!-- Password Confirmation -->
-			<div class="mt-4 flex gap-3 items-stretch">
-				<x-boxed-label for="password_confirmation">{{ __("Confirm Password") }}<span class="font-bold">*</span></x-boxed-label>
-				<div class="relative w-full h-full">
-					<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="toggleConfPassword"></button>
-					<x-input id="password_confirmation" class="w-full rounded-xl" type="password" name="password_confirmation" style="padding-right: 60px;"
-						autocomplete="current-password" placeholder="Confirm New Password" />
+			<div class="flex flex-col grow">
+				<!-- Name -->
+				<div>
+					<x-label for="full_name">{{ __("Full Name") }}</x-label>
+					<x-input id="full_name" class="w-full mt-1" type="text" name="full_name" :value="old('full_name', $account_data->full_name)" placeholder="Full Name" />
 				</div>
-			</div>
 
-			<p class="text-red-900 font-bold mt-5 text-sm">*Only fill these if you want to change your password</p>
+				<!-- Email Address -->
+				<div class="mt-6">
+					<x-label for="email">{{ __("Email Address") }}</x-label>
+					<x-input id="email" class="w-full mt-1" type="email" name="email" :value="$account_data->email" disabled  />
+				</div>
 
-			<div class="flex items-stretch gap-2 justify-center mt-20 mb-3 w-full">
-				<x-button class="bg-orange-500 w-full md:w-1/6">
-					{{ __('Save') }}
-				</x-button>
-				<x-button type="button" onclick="history.back()" class="bg-slate-600 w-full md:w-1/6">
-					Return
-				</x-button>
+				<!-- Phone Number -->
+				<div class="mt-6">
+					<x-label for="phone_number">{{ __("Phone Number") }}</x-label>
+					<x-input id="phone_number" class="w-full mt-1" type="text" name="phone_number" placeholder="Phone Number" :value="old('phone_number', $account_data->details->phone_number)" />
+				</div>
+
+				<!-- Password -->
+				<div class="mt-6">
+					<x-label for="password">{{ __("Change Password") }}<span class="font-semibold">*</span></x-label>
+					<div class="relative w-full flex items-center mt-1">
+						<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="togglePassword"></button>
+						<x-input id="password" class="w-full" type="password" name="password" style="padding-right: 60px;"
+							autocomplete="current-password" placeholder="New Password" />
+					</div>
+				</div>
+
+				<!-- Password Confirmation -->
+				<div class="mt-6">
+					<x-label for="password_confirmation">{{ __("Confirm Password") }}<span class="font-semibold">*</span></x-label>
+					<div class="relative w-full flex items-center mt-1">
+						<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="toggleConfPassword"></button>
+						<x-input id="password_confirmation" class="w-full" type="password" name="password_confirmation" style="padding-right: 60px;"
+							autocomplete="current-password" placeholder="Confirm New Password" />
+					</div>
+				</div>
+
+				<p class="mt-5 text-xs">*Only fill these if you want to change your password</p>
+
+				<div class="flex items-stretch gap-2 justify-end mt-4 mb-3 w-full">
+					<x-cancel-button type="button" onclick="history.back();" class="w-full md:w-1/6">
+						Return
+					</x-cancel-button>
+					<x-button class="bg-orange-500 w-full md:w-1/6">
+						{{ __('Save') }}
+					</x-button>
+				</div>
 			</div>
 		</form>
 	</div>
@@ -89,5 +114,16 @@
 				toggleStatus = 0;
 			}
 		});
+
+		$("#image").on("change", function(){
+			const oFReader = new FileReader();
+			oFReader.readAsDataURL(image.files[0]);
+
+			oFReader.onload = function(oFEvent){
+				$("#img-preview").attr("src", oFEvent.target.result);
+			}
+
+			$("#img-preview-label").show();
+		});
 	</script>
-</x-section-container>
+</div>

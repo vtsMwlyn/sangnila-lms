@@ -8,6 +8,7 @@ use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AnnouncementController;
 
 Route::prefix('/student')
 	->name('student.')
@@ -34,7 +35,7 @@ Route::prefix('/student')
 				// Course details and available topics and materials
 				Route::get('/{course_id}', [CourseController::class, 'student_show'])->name('show')->whereNumber('course_id');
 
-				Route::get("/{material_id}/preview", [MaterialController::class, "preview"])->name("preview");
+				Route::get("/{material_id}/preview", [MaterialController::class, "preview"])->name("preview")->whereNumber("material_id");
 
 			}
 		);
@@ -70,9 +71,7 @@ Route::prefix('/student')
 
 				// List of attendance data in the selected course
 				Route::get('/{course_id}', [AttendanceController::class, "student_show"])->name('show');
-
 			}
 		);
-
 	}
 );

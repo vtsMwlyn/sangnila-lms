@@ -11,6 +11,7 @@ use App\Models\Progress;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
 use App\Models\Topic;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,9 +19,8 @@ class CourseController extends Controller {
 	// ===== ADMIN ===== //
 	// Showing list of all available courses in Sangnila LMS
 	public function admin_index() {
-		$courses = Course::filter(request(["search"]))->get();
 		return view('roles.admin.course.index', [
-			'courses' => $courses,
+			'courses' => Course::filter(request(["search"]))->get()
 		]);
 	}
 
@@ -37,57 +37,58 @@ class CourseController extends Controller {
 			"visibility" => "required"
 		]);
 
-		Course::create($validatedData);
+		try {
+			Course::create($validatedData);
+		}
+		catch(Exception $e){
+			return back()->with("systemFail", "System failed to create course, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
 
 		return redirect(route('admin.course.index'))->with("successCreateNewCourse", "Successfully created new course!");
 	}
 
 	// Shows a course details
 	public function admin_show($course_id) {
-		$course = Course::findOrFail($course_id);
-
 		return view('roles.admin.course.show', [
-			'course' => $course
+			'course' => Course::findOrFail($course_id)
 		]);
 	}
 
 	// Edit course page
 	public function admin_edit($course_id) {
-		$course = Course::/*where('visibility', 'public')->*/where('id', $course_id)->first();
 		return view('roles.admin.course.edit', [
-			'course' => $course
+			'course' => Course::findOrFail($course_id)
 		]);
 	}
 
 	// Update the course in the database
 	public function admin_update(Request $request, $course_id) {
-		// $data = $request->except(['_token', '_method']);
-
 		$validatedData = $request->validate([
 			"course_name" => "required|min:3",
 			"course_description" => "required|min:3",
 			"visibility" => "required"
 		]);
 
-		// $course = Course::/*where('visibility', 'public')->*/where('id', $course_id)->update($data);
-		Course::where('id', $course_id)->update($validatedData);
+		try {
+			Course::findOrFail($course_id)->update($validatedData);
+		}
+		catch(Exception $e){
+			return back()->with("systemFail", "System failed to edit course, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
 
 		return redirect(route('admin.course.show', $course_id))->with("successUpdateCourseData", "Successfully updated course data!");
 	}
 
 	// Course deletion confirmation
 	public function admin_delete($course_id){
-		$course = Course::where('id', $course_id)->first();
-
 		return view('roles.admin.course.destroy', [
-			'course' => $course,
+			'course' => Course::findOrFail($course_id)
 		]);
 	}
 
 	// Delete course from database
 	public function admin_destroy($course_id){
-		$course = Course::findOrFail($course_id);
-		Course::destroy("id", $course->id);
+		Course::findOrFail($course_id)->delete();
 
 		return redirect(route('admin.course.index'))->with("successDeleteCourse", "Successfully deleted course!");
 	}
@@ -101,7 +102,7 @@ class CourseController extends Controller {
 
 	// Shows a course details also topics and materials
 	public function teacher_show($course_id) {
-		$course = Course::where("id", $course_id)->first();
+		$course = Course::findOrFail($course_id);
 		$course_students = CourseStudent::where("teacher_id", Auth::user()->id)->where("course_id", $course_id)->get();
 		$curriculum = CurriculumTopic::where("course_id", $course->id)->get();
 
@@ -115,10 +116,10 @@ class CourseController extends Controller {
 		]);
 	}
 
-
 	// ===== STUDENT ===== //
 	// List of enrolled courses
 	public function student_index() {
+		// Check for every course is the student's attendance reaching its max session
 		$enrolled_courses = Auth::user()->enrolled_courses;
 		$paymentReminders = [];
 
@@ -148,6 +149,9 @@ class CourseController extends Controller {
 			array_push($paymentReminders, ["course" => $c->course_name, "should_pay_soon" => $shouldPaySoon]);
 		}
 
+		// $pushNotif = new PushNotificationController();
+		// $pushNotif->sendPushNotification();
+
 		return view('roles.student.course.index', [
 			"payment_reminders" => $paymentReminders
 		]);
@@ -155,12 +159,61 @@ class CourseController extends Controller {
 
 	// Shows a course details with topics and materials
 	public function student_show($course_id) {
+		// Checking if total attendances near or reaching the course max session
+		$cs = CourseStudent::where("student_id", Auth::user()->id)->where("course_id", $course_id)->first();
+
+		if($cs->is_imported){
+			$count = ImportedStudent::where("course_id", $course_id)->where("student_id", Auth::user()->id)->first()->last_attendance_count;
+		} else {
+			$count = 0;
+		}
+
+		$stdatd = StudentAttendance::where("user_id", Auth::user()->id)->get();
+
+		foreach($stdatd as $atd){
+			if($atd->attendance->course_id == $course_id && $atd->is_attend == 1){
+				$count++;
+			}
+		}
+
+		$shouldPaySoon = false;
+		$max_session_reached = false;
+		if(($count + 1) % $cs->max_course_session == 0){
+			$shouldPaySoon = true;
+		} else if($count >= $cs->max_course_session) {
+			$shouldPaySoon = true;
+			$max_session_reached = true;
+		}
+
+		// Other data
 		$progresses = Progress::where('course_id', $course_id)->where('student_id', Auth::user()->id)->get();
+
+		$progressAndMaterial = [];
+		foreach($progresses as $prgs){
+			$pam = [];
+			$pam["progress"] = $prgs;
+			$pam["material"] = $prgs->material;
+			$pam["topic"] = $prgs->material->topic;
+			array_push($progressAndMaterial, $pam);
+		}
+
 		$student = CourseStudent::where('student_id', Auth::user()->id)->where('course_id', $course_id)->first();
-		return view('roles.student.course.show', [
-			'course' => $student->course,
-			'materialProgresses' => $progresses
-		]);
+
+		if($max_session_reached){
+			return view('roles.student.course.show', [
+				'course' => $student->course,
+				"should_pay_soon" => $shouldPaySoon,
+				"max_session_reached" => $max_session_reached
+			]);
+		}
+		else {
+			return view('roles.student.course.show', [
+				'course' => $student->course,
+				'materialProgresses' => $progressAndMaterial,
+				"should_pay_soon" => $shouldPaySoon,
+				"max_session_reached" => $max_session_reached
+			]);
+		}
 	}
 
 

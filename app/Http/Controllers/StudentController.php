@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Course;
@@ -14,6 +15,7 @@ use App\Models\CourseStudent;
 use App\Models\ImportedStudent;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\AssignmentSubmission;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +33,7 @@ class StudentController extends Controller {
 
 	// Showing all students in the selected course to select before continue
 	public function teacher_select_student($course_id) {
-		$course = Course::where("id", $course_id)->first();
+		$course = Course::findOrFail($course_id);
 		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
 
 		return view('roles.teacher.student.select-student', [
@@ -194,7 +196,7 @@ class StudentController extends Controller {
 
 		CourseStudent::where("course_id", $course_id)->where("student_id", $student_id)->update(["max_course_session" => $request["max_course_session" . $student_id . $course_id]]);
 
-		$course = Course::where("id", $course_id)->first();
+		$course = Course::findOrFail($course_id);
 
 		return back()->with("successUpdateMaxSession", "Student's max course session in course " . $course->course_name . " has been updated successfully!");
 	}
@@ -216,7 +218,7 @@ class StudentController extends Controller {
 		$validationRule = [
 			"full_name" => "required|min:3",
 			"phone_number" => "nullable",
-			"city_of_birth" => "nullable",
+			"city_of_birth" => "nullable|min:3",
 			"date_of_birth" => "nullable",
 
 			"school_name" => "nullable|min:3",
@@ -237,9 +239,20 @@ class StudentController extends Controller {
 
 		$dataToUpdate = $validator->validate();
 
-		User::where("id", $student->id)->update(["full_name" => $dataToUpdate["full_name"]]);
-		unset($dataToUpdate["full_name"]);
-		UserDetail::where("user_id", $student->id)->update($dataToUpdate);
+		try {
+			DB::beginTransaction();
+
+			$student->update(["full_name" => $dataToUpdate["full_name"]]);
+			unset($dataToUpdate["full_name"]);
+			UserDetail::where("user_id", $student->id)->update($dataToUpdate);
+
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return back()->with("systemFail", "System failed to edit student, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
 
 		return redirect(route("admin.student.show", $student_id))->with("successUpdateStudentData", "Successfully updated student data!");
 	}

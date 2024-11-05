@@ -10,7 +10,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5">{{ __("All Announcements") }}</x-page-title>
+		<x-page-title>{{ __("All Announcements") }}</x-page-title>
 
 		@if(session()->has("successUploadAnnouncement"))
 			<x-badge-success badge_text="{{ session('successUploadAnnouncement') }}">
@@ -23,14 +23,29 @@
 			</x-badge-warning>
 		@endif
 
-		<x-anchor-button class="bg-orange-500 mt-8" href="{{ route('admin.announcement.create') }}"><i class="bi bi-plus-lg"></i> Add New Announcement</x-anchor-button>
+		<div class="mb-4">
+			<x-anchor-button class="bg-orange-500 mt-8" href="{{ route('admin.announcement.create') }}"><i class="bi bi-plus-lg"></i> Add New Announcement</x-anchor-button>
+		</div>
 
 		@foreach($announcements as $announcement)
-			<div class="p-5 my-8 rounded-xl" style="background-color: rgba(255, 255, 255, 0.3)">
+			<div class="p-5 my-4 rounded-xl bg-white">
 				<div class="flex w-full items-center justify-between">
 					<div class="">
-						<p class="text-blue-900 font-bold">{{ $announcement->title }}</p>
+						<p class="text-blue-900 font-bold text-lg">
+							<span>{{ $announcement->title }} </span>
+
+							@php
+								if(now() >= $announcement->announce_from && now() <= $announcement->announce_until){
+									echo '<span class="text-green-700 font-bold italic">(Live)</span>';
+								} else if(now() < $announcement->announce_from){
+									echo '<span class="text-yellow-700 font-bold italic">(To be announced)</span>';
+								} else if(now() > $announcement->announce_until){
+									echo '<span class="text-red-600 font-bold italic">(Expired)</span>';
+								}
+							@endphp
+						</p>
 						<p>
+							Announced to
 							@php
 								$sent_to = json_decode($announcement->sent_to, true);
 								$roles = App\Models\Role::all();
@@ -47,6 +62,7 @@
 								echo $formattedString . (empty($formattedString) ? '' : ', and ') . $lastItem;
 							@endphp
 						</p>
+						<p>Period: <span class="font-bold">{{ $announcement->announce_from }}</span> until <span class="font-bold">{{ $announcement->announce_until }}</span></p>
 					</div>
 					<div class="flex gap-3">
 						<x-anchor-button class="bg-orange-500" href="{{ route('admin.announcement.edit', $announcement->id) }}">
@@ -62,7 +78,7 @@
 				<div class="overflow-x-auto contentTable pt-8" style="display: none;">
 					@if($announcement->image_path)
 						<div class="flex justify-center w-full mb-8">
-							<img src="{{ asset('storage/' . $announcement->image_path) }}" alt="announcement_img" class="w-3/4">
+							<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-3/4">
 						</div>
 					@endif
 					<div class="announcementContent">

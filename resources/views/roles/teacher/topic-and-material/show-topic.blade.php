@@ -11,7 +11,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5">
+		<x-page-title>
 			<a href="{{ route("teacher.mycourse.show", $topic->course->id) }}">{{ $topic->course->course_name }}</a>
 		</x-page-title>
 		<h1 class="text-2xl font-semibold text-blue-900 mb-8 text-center">{{ $topic->title }}</h1>

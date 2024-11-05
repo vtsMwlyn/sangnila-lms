@@ -8,6 +8,7 @@
 
 		<!-- CSS -->
 		<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+		<link rel="stylesheet" href="{{ asset('css/color-pallete.css') }}">
 
 		<!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
@@ -29,25 +30,15 @@
 		<!-- Include jQuery  -->
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-		<!-- Poppins font -->
+		<!-- Font -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
 
 		<!-- Custom styles -->
 		<style>
-			/* Custom Cursor */
-			a {
-				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
-			}
-
-			button[type="button"], button[type="submit"] {
-				cursor: url("{{ asset('img/cursor2.cur') }}"), pointer;
-			}
-
 			body {
-				cursor: url("{{ asset('img/kursor.cur') }}"), auto;
-				font-family: "Poppins";
+				font-family: "Geologica";
 			}
 		</style>
 
@@ -57,12 +48,63 @@
 	</head>
 
 	<body class="bg-cover min-h-screen flex items-center justify-center"
-		style="background-image: url({{ asset('img/background.jpg') }});">
-		<div class="fixed text-black md:text-white bottom-0 left-0 m-2">
-			{{ trans("strings.version") }}
+		style="background: url({{ asset('img/loginbg.png') }}) no-repeat right center; background-size: cover;">
+		<div class="fixed text-white bottom-0 left-0 m-2">
+			{{ trans("strings.version") }} <span id="screen"></span>
 		</div>
 
-		@yield("content");
+		<!-- Loading popup -->
+		<div class="popup-container hidden w-full h-full fixed top-0 flex items-center justify-center" style="backdrop-filter: blur(5px); z-index: 100; background: rgba(0, 0, 0, 0.3);">
+			<div class="rounded-3xl bg-white py-5 px-6 popup w-1/3 h-1/4 flex gap-3 items-center justify-center" id="loading-popup">
+				<div class="loader w-12 h-12 border-8 border-t-transparent border-light-blue rounded-full animate-spin"></div>
+				<p class="font-extrabold text-xl animate-pulse">Please Wait...</p>
+			</div>
+		</div>
+
+		@yield("content")
 	</body>
+
+	<script>
+		// Function to show the loading popup with a delay
+		function showLoadingPopupWithDelay() {
+			loadingTimeout = setTimeout(function() {
+				$('#loading-popup').parent().removeClass('hidden');
+			}, 500); // Show loader only if loading takes longer than 500ms
+		}
+
+		// Function to hide the loading popup
+		function hideLoadingPopup() {
+			clearTimeout(loadingTimeout);
+			$('#loading-popup').parent().addClass('hidden');
+		}
+
+		$(document).ready(() => {
+			// Show loading popup on form submission
+			$('form').on('submit', function () {
+				showLoadingPopupWithDelay();
+			});
+
+			// Show loading popup on anchor link clicks that reload the page
+			$('a[href]').on('click', function (e) {
+				const href = $(this).attr('href');
+
+				// If the href is "#" or opens in a different tab, skip showing the loading popup
+				if (href === "#" || $(this).attr('target') && $(this).attr('target') !== '_self') {
+					return;
+				}
+
+				showLoadingPopupWithDelay();
+			});
+		});
+
+		$("#screen").text(`(Resolution: ${window.innerWidth}x${window.innerHeight})`);
+
+		$(window).on("resize", function(){
+			$("#screen").text(`(Resolution: ${window.innerWidth}x${window.innerHeight})`);
+		});
+
+		// Hide the loading popup once the page is fully loaded
+		$(window).on('load', hideLoadingPopup);
+	</script>
 
 </html>

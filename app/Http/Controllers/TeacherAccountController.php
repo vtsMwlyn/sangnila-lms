@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class TeacherAccountController extends Controller {
@@ -44,7 +46,7 @@ class TeacherAccountController extends Controller {
 		$validationRule = [
 			"full_name" => "required|min:3",
 			"phone_number" => "nullable",
-			"city_of_birth" => "nullable",
+			"city_of_birth" => "nullable|min:3",
 			"date_of_birth" => "nullable",
 		];
 
@@ -56,11 +58,20 @@ class TeacherAccountController extends Controller {
 
 		$dataToUpdate = $validator->validate();
 
-		User::where("id", $teacher->id)->update(["full_name" => $dataToUpdate["full_name"]]);
+		try {
+			DB::beginTransaction();
 
-		unset($dataToUpdate["full_name"]);
+			$teacher->update(["full_name" => $dataToUpdate["full_name"]]);
+			unset($dataToUpdate["full_name"]);
+			UserDetail::where("user_id", $teacher->id)->update($dataToUpdate);
 
-		UserDetail::where("user_id", $teacher_id)->update($dataToUpdate);
+			DB::commit();
+
+		} catch(Exception $e){
+			DB::rollback();
+
+			return back()->with("systemFail", "System failed to edit teacher, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
 
 		return redirect(route("admin.teacher.show", $teacher_id))->with("successUpdateTeacherData", "Successfully updated teacher data!");
 	}

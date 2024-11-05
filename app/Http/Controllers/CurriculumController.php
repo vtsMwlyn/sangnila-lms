@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Topic;
 use App\Models\Course;
+use App\Models\Material;
 use Illuminate\Http\Request;
 use App\Models\CurriculumTopic;
 use App\Models\CurriculumMaterial;
-use App\Models\Material;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class CurriculumController extends Controller
@@ -22,10 +24,15 @@ class CurriculumController extends Controller
 	public function admin_store_topic(Request $request, $course_id){
 		$request->validate(["topic_title" => "required|min:3"]);
 
-		CurriculumTopic::create([
-			"course_id" => $course_id,
-			"title" => $request->topic_title
-		]);
+		try {
+			CurriculumTopic::create([
+				"course_id" => $course_id,
+				"title" => $request->topic_title
+			]);
+		}
+		catch(Exception $e){
+			return back()->with("systemFail", "System failed to create curriculum topic, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
 
 		return redirect(route('admin.course.show', $course_id))->with("successAddCurriculumTopic", "Successfully added new curriculum topic to the course!");
 	}
@@ -40,9 +47,12 @@ class CurriculumController extends Controller
 	public function admin_update_topic(Request $request, $course_id, $curriculum_topic_id){
 		$request->validate(["topic_title" => "required|min:3"]);
 
-		CurriculumTopic::where("id", $curriculum_topic_id)->update([
-			"title" => $request->topic_title
-		]);
+		try {
+			CurriculumTopic::findOrFail($curriculum_topic_id)->update(["title" => $request->topic_title]);
+		}
+		catch(Exception $e){
+			return back()->with("systemFail", "System failed to edit curriculum topic, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
 
 		return redirect(route('admin.course.curriculum.topic.details', [$course_id, CurriculumTopic::find($curriculum_topic_id)->id]))->with("successEditCurriculumTopic", "Successfully updated the curriculum topic data!");
 	}
@@ -85,12 +95,18 @@ class CurriculumController extends Controller
 
 		$ctopic = CurriculumTopic::findOrFail($curriculum_topic_id);
 
-		CurriculumMaterial::create([
-			"title" => $request->title,
-			"desc" => $request->desc,
-			"link" => $request->link,
-			"curriculum_topic_id" => $ctopic->id
-		]);
+		try {
+			CurriculumMaterial::create([
+				"title" => $request->title,
+				"desc" => $request->desc,
+				"link" => $request->link,
+				"curriculum_topic_id" => $ctopic->id
+			]);
+		}
+		catch(Exception $e){
+			return back()->with("systemFail", "System failed to create curriculum material, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
+
 
 		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $ctopic->id]))->with("successAddCurriculumMaterial", "Successfully added the curriculum material data!");
 	}
@@ -111,11 +127,16 @@ class CurriculumController extends Controller
 
 		$cmaterial = CurriculumMaterial::findOrFail($curriculum_material_id);
 
-		$cmaterial->update([
-			"title" => $request->title,
-			"desc" => $request->desc,
-			"link" => $request->link
-		]);
+		try {
+			$cmaterial->update([
+				"title" => $request->title,
+				"desc" => $request->desc,
+				"link" => $request->link
+			]);
+		}
+		catch(Exception $e){
+			return back()->with("systemFail", "System failed to edit curriculum material, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
 
 		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $cmaterial->curriculum_topic->id]))->with("successEditCurriculumMaterial", "Successfully updated the curriculum topic data!");
 	}
@@ -128,9 +149,10 @@ class CurriculumController extends Controller
 	}
 
 	public function admin_destroy_material($course_id, $curriculum_topic_id, $curriculum_material_id){
-		$topic = CurriculumMaterial::findOrFail($curriculum_topic_id);
+		$topic = CurriculumTopic::findOrFail($curriculum_topic_id);
+		$material = CurriculumMaterial::findOrFail($curriculum_material_id);
 
-		CurriculumMaterial::destroy($curriculum_material_id);
+		$material->delete();
 
 		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $topic->id]))->with("successDeleteCurriculumMaterial", "Successfully removed the curriculum material from " . $topic->title . "!");
 	}
@@ -138,30 +160,42 @@ class CurriculumController extends Controller
 
 	/* ===== TEACHER ====== */
 	public function teacher_synchronize($course_id){
-		$current_topics = Topic::where("course_id", $course_id)->where("user_id", Auth::user()->id)->get();
+		try {
+			DB::beginTransaction();
 
-		foreach($current_topics as $utopic){
-			Topic::destroy($utopic->id);
-		}
+			$current_topics = Topic::where("course_id", $course_id)->where("user_id", Auth::user()->id)->get();
 
-		$curriculum_topics = CurriculumTopic::where("course_id", $course_id)->get();
-
-		foreach($curriculum_topics as $ctopic){
-			$ntopic = Topic::create([
-				"title" => $ctopic->title,
-				"user_id" => Auth::user()->id,
-				"course_id" => $course_id
-			]);
-
-			foreach($ctopic->curriculum_materials as $material){
-				Material::create([
-					"topic_id" => $ntopic->id,
-					"title" => $material->title,
-					"desc" => $material->desc,
-					"link" => $material->link
-				]);
+			foreach($current_topics as $utopic){
+				Topic::destroy($utopic->id);
 			}
+
+			$curriculum_topics = CurriculumTopic::where("course_id", $course_id)->get();
+
+			foreach($curriculum_topics as $ctopic){
+				$ntopic = Topic::create([
+					"title" => $ctopic->title,
+					"user_id" => Auth::user()->id,
+					"course_id" => $course_id
+				]);
+
+				foreach($ctopic->curriculum_materials as $material){
+					Material::create([
+						"topic_id" => $ntopic->id,
+						"title" => $material->title,
+						"desc" => $material->desc,
+						"link" => $material->link
+					]);
+				}
+			}
+
+			DB::commit();
 		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return back()->with("systemFail", "System failed to synchronize your course topics and materials with the curriculum, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
+
 
 		return redirect(route("teacher.mycourse.show", $course_id))->with("successSynchronizeCurriculum", "Your class' topic and materials have been successfully synchronized with the curriculum!");
 	}

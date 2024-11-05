@@ -1,7 +1,7 @@
 @extends("layouts.main-student")
 
 @section("title")
-	<h1>My Assignments</h1>
+	<h1>Assignment</h1>
 @endsection
 
 @section("breadcrumbs-extension")
@@ -11,42 +11,35 @@
 @endsection
 
 @section("content")
-	<x-section-container>
-		<x-page-title class="mt-5 mb-8">Assignment Submission</x-page-title>
+	<div class="rounded-3xl w-full py-5 px-8 mb-6 flex flex-col items-stretch sm:text-base text-sm" style="background: #FEFEFEB2;">
+		<button type="button" onclick="history.back();"><img src="{{ asset('img/back-button.svg') }}" class="h-8 w-8" alt="back"></button>
+		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $assignment->title }}</h1>
+		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
-		<div class="rounded-md w-full mt-5 my-5 p-5 border" style="background: rgba(256, 256, 256, 0.4)">
-			<h3 class="text-xl font-semibold text-blue-950">{{ $assignment->title }}</h3>
+		<p class="mt-3 font-semibold">Assignment Description:</p>
+		<p class="mt-1">{{ $assignment->desc }}</p>
 
-			<p class="mt-3 italic">Assignment Description:</p>
-			<p class="mt-1">{{ $assignment->desc }}</p>
+		<p class="mt-3 text-blue">Please submit before <span class="font-bold">{{ $assignment->deadline_date }} {{ $assignment->deadline_time }}</span></p>
 
-			<p class="mt-3 text-blue-950">Please submit before <span class="font-bold">{{ $assignment->deadline_date }} {{ $assignment->deadline_time }}</span></p>
+		<form action="{{ route("student.assignment.submit", [$course->id, $assignment->id]) }}" method="post" class="mt-8">
+			@csrf
+			<div class="flex flex-col">
+				<label for="title">Submission Title</label>
+				<x-input id="title" class="w-full mt-1" type="text" name="title" style="border-width: 3px;" value="{{ old('title') }}" placeholder="Submission Title" autofocus />
+			</div>
 
-			<form action="{{ route("student.assignment.submit", [$course->id, $assignment->id]) }}" method="post" class="mt-8">
-				@csrf
-				<!-- Submission Title -->
-				<div class="flex gap-3 items-stretch w-full">
-					<x-boxed-label for="title" :value="__('Submission Title')" />
-					<x-input id="title" class="block w-full" type="text" name="title" :value="old('title')"
-						autofocus />
-				</div>
+			<div class="flex flex-col mt-4">
+				<label for="link">You Work Link</label>
+				<x-input id="link" class="w-full mt-1" type="text" name="link" style="border-width: 3px;" value="{{ old('link') }}" placeholder="Your Work Link" autofocus />
+			</div>
 
-				<!-- Link -->
-				<div class="mt-3 flex gap-3 items-stretch w-full">
-					<x-boxed-label for="link" :value="__('Your Work Link')" />
-					<x-input id="link" class="block w-full" type="text" name="link" :value="old('link')"/>
-				</div>
+			<div class="flex items-center justify-center w-full mt-16 mb-3 gap-3">
+				<x-button class="w-full md:w-1/6">Submit</x-button>
+				<x-cancel-button msg="The filled data will be discarded, are you sure want to cancel?" class="w-full md:w-1/6">
+					Cancel
+				</x-cancel-button>
+			</div>
+		</form>
 
-				<div class="flex items-center justify-center w-full mt-16 mb-3 gap-3">
-					<x-button type="submit" class="bg-orange-500 w-full md:w-1/6">
-						Submit
-					</x-button>
-					<x-cancel-button msg="The filled data will be discarded, are you sure want to cancel?" class="w-full md:w-1/6">
-						Cancel
-					</x-cancel-button>
-				</div>
-			</form>
-
-		</div>
-	</x-section-container>
+	</div>
 @endsection

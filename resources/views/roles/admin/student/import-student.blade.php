@@ -10,12 +10,17 @@
 @endsection
 
 @section("content")
-	<x-section-container>
-		<x-page-title class="mt-5 mb-8">Import Old Student Data</x-page-title>
+	@if($course->teachers->count() && $course->topics->count() && $course->topics[0]->materials->count())
+		<x-section-container>
+			<x-page-title>Import Old Student Data</x-page-title>
 
-		<x-badge-danger id="emptyDataNotif" badge_text="Please input minimum 1 data to proceed." style="display: none;"></x-badge-danger>
+			@if(session()->has("systemFail"))
+				<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+			@endif
 
-		@if($course->teachers->count() && $course->topics->count() && $course->topics[0]->materials->count())
+			<x-badge-danger id="emptyDataNotif" badge_text="Please input minimum 1 data to proceed." style="display: none;"></x-badge-danger>
+
+
 			<form action="#" id="le-form">
 				<div class="my-10">
 					<div class="flex w-full items-center justify-between mb-3">
@@ -27,7 +32,7 @@
 						<div class="w-full md:w-1/2" id="container_full_name">
 							<x-label for="full_name" :value="__('Student Name')" />
 							<x-input id="full_name" class="block mt-1 w-full" type="text" name="full_name" placeholder="Full Name" :value="old('full_name')" autofocus />
-							<p class="text-red-500" style="display: none" id="err_full_name">This field is required.</p>
+							<p class="text-red-700 font-bold mt-1" style="display: none" id="err_full_name"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 						</div>
 
 						<div class="w-full md:w-1/2 flex flex-col md:flex-row gap-3">
@@ -36,7 +41,7 @@
 								<x-label for="email" :value="__('Student Email')" />
 								<x-input id="email" class="block mt-1 w-full" type="text" name="email" placeholder="Student's Email" :value="old('email')"
 									autofocus />
-								<p class="text-red-500" style="display: none" id="err_email">This field is required.</p>
+								<p class="text-red-700 font-bold mt-1" style="display: none" id="err_email"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 							</div>
 							<!-- Gender -->
 							<div class="w-full md:w-1/3" id="container_gender">
@@ -47,7 +52,7 @@
 									<option value="1">Male</option>
 									<option value="2">Female</option>
 								</x-select>
-								<p class="text-red-500" style="display: none" id="err_gender">This field is required.</p>
+								<p class="text-red-700 font-bold mt-1" style="display: none" id="err_gender"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 							</div>
 						</div>
 					</div>
@@ -129,7 +134,7 @@
 									<option value="{{ $teacher->toJson() }}">{{ $teacher->full_name }}</option>
 								@endforeach
 							</x-select>
-							<p class="text-red-500" style="display: none" id="err_teacher_name">This field is required.</p>
+							<p class="text-red-700 font-bold mt-1" style="display: none" id="err_teacher_name"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 						</div>
 
 						<div class="w-full md:w-1/2 flex gap-3">
@@ -137,22 +142,22 @@
 							<div class="w-1/2" id="container_last_attendance_count">
 								<x-label for="last_attendance_count" :value="__('Last Attendance Count')" />
 								<x-input id="last_attendance_count" class="block mt-1 w-full" type="number" name="last_attendance_count" placeholder="Maximum sessions" value="0" />
-								<p class="text-red-500" style="display: none" id="err_last_attendance_count">Invalid input.</p>
+								<p class="text-red-700 font-bold mt-1" style="display: none" id="err_last_attendance_count">Invalid input.</p>
 							</div>
 
 							<!-- Student's max course session -->
 							<div class="w-1/2" id="container_max_course_session">
 								<x-label for="max_course_session" :value="__('Maximum Sessions')"/>
 								<x-input id="max_course_session" class="block mt-1 w-full" type="number" name="max_course_session" placeholder="Maximum sessions" value="8" />
-								<p class="text-red-500" style="display: none" id="err_max_course_session">Invalid input.</p>
+								<p class="text-red-700 font-bold mt-1" style="display: none" id="err_max_course_session">Invalid input.</p>
 							</div>
 						</div>
 					</div>
 
-					<!-- Student's last mnaterial unlocked -->
-					<div class="w-full mt-3" id="container_last_material_unlocked">
-						<x-label for="last_material_unlocked" :value="__('Last Material Unlock')"/>
-						<x-select name="last_material_unlocked" id="last_material_unlocked" class="mt-1 w-full">
+					<!-- Student's last material unlocked -->
+					<div class="w-full mt-3 select2_container" id="container_last_material_unlocked">
+						<x-label for="last_material_unlocked" class="mb-1" :value="__('Last Material Unlock')"/>
+						<x-select name="last_material_unlocked" id="last_material_unlocked" class="mt-1 w-full select2">
 							{{-- <option value="" disabled selected>Pick a material</option>
 							@foreach ($course->topics as $topic)
 								@foreach ($topic->materials as $material)
@@ -160,7 +165,7 @@
 								@endforeach
 							@endforeach --}}
 						</x-select>
-						<p class="text-red-500" style="display: none" id="err_last_material_unlocked">This field is required.</p>
+						<p class="text-red-700 font-bold mt-1" style="display: none" id="err_last_material_unlocked"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 					</div>
 					<div class="flex w-full justify-end">
 						<x-button class="bg-orange-500 mt-8 w-1/2 md:w-1/6" type="submit" id="addBtn">Add Data</x-button>
@@ -215,248 +220,254 @@
 			</div>
 
 			<script>
-				function resetMaterialSelection(){
-					$("#last_material_unlocked").empty();
-
-					$("#last_material_unlocked").append($("<option>").text("Select a material").attr({
-						"value": "",
-						"disabled": true,
-						"selected": true
-					}));
-				}
-
 				$(document).ready(() => {
+					function resetMaterialSelection(){
+						$("#last_material_unlocked").empty();
+
+						$("#last_material_unlocked").append($("<option>").text("Select a material").attr({
+							"value": "",
+							"disabled": true,
+							"selected": true
+						}));
+					}
+
 					resetMaterialSelection();
-				});
 
-				$("#teacher_name").on("change", function() {
-					resetMaterialSelection();
+					$("#teacher_name").on("change", function() {
+						resetMaterialSelection();
 
-					const course = @json($course);
-					const teacher = JSON.parse($("#teacher_name").val());
+						const course = @json($course);
+						const teacher = JSON.parse($("#teacher_name").val());
 
-					course.topics.forEach(topic => {
-						if(topic.user_id == teacher.id){
-							topic.materials.forEach(material => {
-								$("#last_material_unlocked").append($("<option>").text(`${topic.title} - ${material.title}`)).attr({"value": material});
-							});
-						}
-					});
-				});
-
-				let import_data_count = 0;
-
-				$("#date_of_birth").on({
-					"focus": function(){
-						this.showPicker();
-					},
-					"click": function(){
-						this.showPicker();
-					}
-				});
-
-				$("#show-details-button").click((e) => {
-					e.preventDefault();
-
-					$("#form-details").slideToggle(() => {
-						if ($("#form-details").is(":visible")) {
-							$("#show-details-button").text("Hide Details");
-						} else {
-							$("#show-details-button").text("Show Details");
-						}
-					});
-				});
-
-				$("#addBtn").click((e) => {
-					e.preventDefault();
-
-					// Collect data from form and collect them in an object
-					const formDataArray = $("#le-form").serializeArray();
-					const formData = {};
-					$.each(formDataArray, function() {
-						formData[this.name] = this.value;
+						course.topics.forEach(topic => {
+							if(topic.user_id == teacher.id){
+								topic.materials.forEach(material => {
+									$("#last_material_unlocked").append($("<option>").text(`${topic.title} - ${material.title}`)).attr({"value": material});
+								});
+							}
+						});
 					});
 
-					// Checkbox value
-					const cbv = $('input[type="checkbox"]').is(":checked")? "Yes" : "No";
+					let import_data_count = 0;
 
-					// Validations
-					const contFullName = $("#container_full_name");
-					const errFullName = $("#err_full_name");
-					const contEmail = $("#container_email");
-					const errEmail = $("#err_email");
-					const contGender = $("#container_gender");
-					const errGender = $("#err_gender");
-					const contTeacherName = $("#container_teacher_name");
-					const errTeacherName = $("#err_teacher_name");
-					const contLastAttendanceCount = $("#container_last_attendance_count");
-					const errLastAttendanceCount = $("#err_last_attendance_count");
-					const contCourseMaxSession = $("#container_max_course_session");
-					const errCourseMaxSession = $("#err_max_course_session");
-					const contLastMaterialUnlocked = $("#container_last_material_unlocked");
-					const errLastMaterialUnlocked = $("#err_last_material_unlocked");
-
-					contFullName.css({"padding": 0, "border": "none"});
-					errFullName.css({"display": "none"});
-					contEmail.css({"padding": 0, "border": "none"});
-					errEmail.css({"display": "none"});
-					contGender.css({"padding": 0, "border": "none"});
-					errGender.css({"display": "none"});
-					contTeacherName.css({"padding": 0, "border": "none"});
-					errTeacherName.css({"display": "none"});
-					contLastAttendanceCount.css({"padding": 0, "border": "none"});
-					errLastAttendanceCount.css({"display": "none"});
-					contCourseMaxSession.css({"padding": 0, "border": "none"});
-					errCourseMaxSession.css({"display": "none"});
-					contLastMaterialUnlocked.css({"padding": 0, "border": "none"});
-					errLastMaterialUnlocked.css({"display": "none"});
-
-					let thereAreUnfilledFields = false;
-					if(!$("#full_name").val()){
-						contFullName.css({"border": "solid 1px red", "padding": "15px"});
-						errFullName.css({"display": "block"});
-						thereAreUnfilledFields = true;
-					}
-
-					if(!$("#email").val()){
-						contEmail.css({"border": "solid 1px red", "padding": "15px"});
-						errEmail.css({"display": "block"});
-						thereAreUnfilledFields = true;
-					}
-
-					if(!$("#gender").val()){
-						contGender.css({"border": "solid 1px red", "padding": "15px"});
-						errGender.css({"display": "block"});
-						thereAreUnfilledFields = true;
-					}
-
-					if(!$("#teacher_name").val()){
-						contTeacherName.css({"border": "solid 1px red", "padding": "15px"});
-						errTeacherName.css({"display": "block"});
-						thereAreUnfilledFields = true;
-					}
-
-					if($("#last_attendance_count").val() < 0){
-						contLastAttendanceCount.css({"border": "solid 1px red", "padding": "15px"});
-						errLastAttendanceCount.css({"display": "block"});
-						thereAreUnfilledFields = true;
-					}
-
-					if($("#max_course_session").val() < 1){
-						contCourseMaxSession.css({"border": "solid 1px red", "padding": "15px"});
-						errCourseMaxSession.css({"display": "block"});
-						thereAreUnfilledFields = true;
-					}
-
-					if(!$("#last_material_unlocked").val()){
-						contLastMaterialUnlocked.css({"border": "solid 1px red", "padding": "15px"});
-						errLastMaterialUnlocked.css({"display": "block"});
-						thereAreUnfilledFields = true;
-					}
-
-					if(thereAreUnfilledFields){
-						return;
-					}
-
-					// Generate new row of data to show in the table
-					const newRow = $("<tr>");
-
-					const colFullName = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(formData.full_name);
-					const colEmail = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(formData.email);
-
-					const colTeacherName = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(JSON.parse(formData.teacher_name).full_name);
-					const colLastAttendanceCount = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.last_attendance_count);
-					const colMaxCourseSession = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.max_course_session);
-					const colLastMaterialUnlocked = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(formData.last_material_unlocked.title);
-					const colNewStudent = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(cbv);
-
-					const delBtn = $("<button>").attr({"type": "button"}).addClass("text-center px-5 py-2 border border-transparent rounded-lg text-white bg-red-700 hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 transition ease-in-out duration-150").html("<i class='bi bi-trash3'></i>");
-					const colAction = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").append(delBtn);
-
-					const colGender = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.gender);
-					const colPhoneNumber = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.phone_number);
-					const colCityOfBirth = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.city_of_birth);
-					const colDateOfBirth = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.date_of_birth);
-					const colSchoolName = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.school_name);
-					const colStudentLevel = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.student_level);
-					const colNameParent = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.name_parent);
-					const colPhoneParent = $("<td>").addClass("border-t border-blue-950 px-4 py-2 fixed2").text(formData.phone_parent);
-
-					newRow.append(colFullName, colNewStudent, colEmail, colTeacherName, colLastAttendanceCount, colMaxCourseSession, colLastMaterialUnlocked, colAction, colGender, colPhoneNumber, colCityOfBirth, colDateOfBirth, colSchoolName, colStudentLevel, colNameParent, colPhoneParent);
-
-					$("#table-body").append(newRow);
-
-					// Generate hidden inputs to help send data to Laravel
-					const hiddenInputsContainer = $("<div>");
-
-					const hidFullName = $("<input>").attr({"type": "hidden", "name": "inp_full_name[]", "value": formData.full_name});
-					const hidEmail = $("<input>").attr({"type": "hidden", "name": "inp_email[]", "value": formData.email});
-					const hidGender = $("<input>").attr({"type": "hidden", "name": "inp_gender[]", "value": formData.gender});
-					const hidTeacherName = $("<input>").attr({"type": "hidden", "name": "inp_teacher_name[]", "value": JSON.parse(formData.teacher_name).id});
-					const hidLastAttendanceCount = $("<input>").attr({"type": "hidden", "name": "inp_last_attendance_count[]", "value": formData.last_attendance_count});
-					const hidMaxCourseSession = $("<input>").attr({"type": "hidden", "name": "inp_max_course_session[]", "value": formData.max_course_session});
-					const hidLastMaterialUnlocked = $("<input>").attr({"type": "hidden", "name": "inp_last_material_unlocked[]", "value": formData.last_material_unlocked.id});
-					const hidNewStudent = $("<input>").attr({"type": "hidden", "name": "is_new_student[]", "value": cbv});
-
-					const hidPhoneNumber = $("<input>").attr({"type": "hidden", "name": "inp_phone_number[]", "value": formData.phone_number});
-					const hidCityOfBirth = $("<input>").attr({"type": "hidden", "name": "inp_cob[]", "value": formData.city_of_birth});
-					const hidDateOfBirth = $("<input>").attr({"type": "hidden", "name": "inp_dob[]", "value": formData.date_of_birth});
-					const hidSchoolName = $("<input>").attr({"type": "hidden", "name": "inp_school_name[]", "value": formData.school_name});
-					const hidStudentLevel = $("<input>").attr({"type": "hidden", "name": "inp_student_level[]", "value": formData.student_level});
-					const hidNameParent = $("<input>").attr({"type": "hidden", "name": "inp_name_parent[]", "value": formData.name_parent});
-					const hidPhoneParent = $("<input>").attr({"type": "hidden", "name": "inp_phone_parent[]", "value": formData.phone_parent});
-
-					$(hiddenInputsContainer).append(hidFullName, hidEmail, hidGender, hidTeacherName, hidLastAttendanceCount, hidMaxCourseSession, hidLastMaterialUnlocked, hidNewStudent, hidPhoneNumber, hidCityOfBirth, hidDateOfBirth, hidSchoolName, hidStudentLevel, hidNameParent, hidPhoneParent);
-					$("#real-form").append(hiddenInputsContainer);
-
-					console.log($(hiddenInputsContainer).children());
-
-					$(delBtn).click(() => {
-						if(confirm("Are you sure want to remove this student from the list?")){
-							$(newRow).remove();
-							$(hiddenInputsContainer).remove();
-							import_data_count--;
+					$("#date_of_birth").on({
+						"focus": function(){
+							this.showPicker();
+						},
+						"click": function(){
+							this.showPicker();
 						}
 					});
 
-					// Empty the input field
-					$("#full_name").val("");
-					$("#email").val("");
-					$("#gender").val("");
-					$("#phone_number").val("");
-					$("#city_of_birth").val("");
-					$("#date_of_birth").val("");
-					$("#school_name").val("");
-					$("#student_level").val("");
-					$("#name_parent").val("");
-					$("#phone_parent").val("");
-					$("#last_attendance_count").val("0");
-					$("#max_course_session").val("8");
-					$("#last_material_unlocked").val("");
+					$("#show-details-button").click((e) => {
+						e.preventDefault();
 
-					import_data_count++;
-				});
+						$("#form-details").slideToggle(() => {
+							if ($("#form-details").is(":visible")) {
+								$("#show-details-button").text("Hide Details");
+							} else {
+								$("#show-details-button").text("Show Details");
+							}
+						});
+					});
 
-				$("#real-form").on("submit", function(e){
-					e.preventDefault();
+					$("#addBtn").click((e) => {
+						e.preventDefault();
 
-					if(import_data_count == 0){
-						$("#emptyDataNotif").css("display", "flex");
-						$("html, body").scrollTop(0);
+						// Collect data from form and collect them in an object
+						const formDataArray = $("#le-form").serializeArray();
+						const formData = {};
+						$.each(formDataArray, function() {
+							formData[this.name] = this.value;
+						});
 
-						return;
-					}
+						// Checkbox value
+						const cbv = $('input[type="checkbox"]').is(":checked")? "Yes" : "No";
 
-					this.submit();
+						// Validations
+						const contFullName = $("#container_full_name");
+						const errFullName = $("#err_full_name");
+						const contEmail = $("#container_email");
+						const errEmail = $("#err_email");
+						const contGender = $("#container_gender");
+						const errGender = $("#err_gender");
+						const contTeacherName = $("#container_teacher_name");
+						const errTeacherName = $("#err_teacher_name");
+						const contLastAttendanceCount = $("#container_last_attendance_count");
+						const errLastAttendanceCount = $("#err_last_attendance_count");
+						const contCourseMaxSession = $("#container_max_course_session");
+						const errCourseMaxSession = $("#err_max_course_session");
+						const contLastMaterialUnlocked = $("#container_last_material_unlocked");
+						const errLastMaterialUnlocked = $("#err_last_material_unlocked");
+
+						contFullName.css({"padding": 0, "border": "none"});
+						errFullName.css({"display": "none"});
+						contEmail.css({"padding": 0, "border": "none"});
+						errEmail.css({"display": "none"});
+						contGender.css({"padding": 0, "border": "none"});
+						errGender.css({"display": "none"});
+						contTeacherName.css({"padding": 0, "border": "none"});
+						errTeacherName.css({"display": "none"});
+						contLastAttendanceCount.css({"padding": 0, "border": "none"});
+						errLastAttendanceCount.css({"display": "none"});
+						contCourseMaxSession.css({"padding": 0, "border": "none"});
+						errCourseMaxSession.css({"display": "none"});
+						contLastMaterialUnlocked.css({"padding": 0, "border": "none"});
+						errLastMaterialUnlocked.css({"display": "none"});
+
+						let thereAreUnfilledFields = false;
+						if(!$("#full_name").val()){
+							contFullName.css({"border": "solid 2px rgb(185 28 28)", "padding": "15px"});
+							errFullName.css({"display": "block"});
+							thereAreUnfilledFields = true;
+						}
+
+						if(!$("#email").val()){
+							contEmail.css({"border": "solid 2px rgb(185 28 28)", "padding": "15px"});
+							errEmail.css({"display": "block"});
+							thereAreUnfilledFields = true;
+						}
+
+						if(!$("#gender").val()){
+							contGender.css({"border": "solid 2px rgb(185 28 28)", "padding": "15px"});
+							errGender.css({"display": "block"});
+							thereAreUnfilledFields = true;
+						}
+
+						if(!$("#teacher_name").val()){
+							contTeacherName.css({"border": "solid 2px rgb(185 28 28)", "padding": "15px"});
+							errTeacherName.css({"display": "block"});
+							thereAreUnfilledFields = true;
+						}
+
+						if($("#last_attendance_count").val() < 0){
+							contLastAttendanceCount.css({"border": "solid 2px rgb(185 28 28)", "padding": "15px"});
+							errLastAttendanceCount.css({"display": "block"});
+							thereAreUnfilledFields = true;
+						}
+
+						if($("#max_course_session").val() < 1){
+							contCourseMaxSession.css({"border": "solid 2px rgb(185 28 28)", "padding": "15px"});
+							errCourseMaxSession.css({"display": "block"});
+							thereAreUnfilledFields = true;
+						}
+
+						if(!$("#last_material_unlocked").val()){
+							contLastMaterialUnlocked.css({"border": "solid 2px rgb(185 28 28)", "padding": "15px"});
+							errLastMaterialUnlocked.css({"display": "block"});
+							thereAreUnfilledFields = true;
+						}
+
+						if(thereAreUnfilledFields){
+							return;
+						}
+
+						// Generate new row of data to show in the table
+						const newRow = $("<tr>");
+
+						const colFullName = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(formData.full_name);
+						const colEmail = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(formData.email);
+
+						const colTeacherName = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(JSON.parse(formData.teacher_name).full_name);
+						const colLastAttendanceCount = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.last_attendance_count);
+						const colMaxCourseSession = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.max_course_session);
+						const colLastMaterialUnlocked = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(formData.last_material_unlocked.title);
+						const colNewStudent = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(cbv);
+
+						const delBtn = $("<button>").attr({"type": "button"}).addClass("text-center px-5 py-2 border border-transparent rounded-lg text-white bg-red-700 hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 transition ease-in-out duration-150").html("<i class='bi bi-trash3'></i>");
+						const colAction = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").append(delBtn);
+
+						const colGender = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.gender);
+						const colPhoneNumber = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.phone_number);
+						const colCityOfBirth = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.city_of_birth);
+						const colDateOfBirth = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.date_of_birth);
+						const colSchoolName = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.school_name);
+						const colStudentLevel = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.student_level);
+						const colNameParent = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.name_parent);
+						const colPhoneParent = $("<td>").addClass("border-t border-blue-950 px-4 py-2 fixed2").text(formData.phone_parent);
+
+						newRow.append(colFullName, colNewStudent, colEmail, colTeacherName, colLastAttendanceCount, colMaxCourseSession, colLastMaterialUnlocked, colAction, colGender, colPhoneNumber, colCityOfBirth, colDateOfBirth, colSchoolName, colStudentLevel, colNameParent, colPhoneParent);
+
+						$("#table-body").append(newRow);
+
+						// Generate hidden inputs to help send data to Laravel
+						const hiddenInputsContainer = $("<div>");
+
+						const hidFullName = $("<input>").attr({"type": "hidden", "name": "inp_full_name[]", "value": formData.full_name});
+						const hidEmail = $("<input>").attr({"type": "hidden", "name": "inp_email[]", "value": formData.email});
+						const hidGender = $("<input>").attr({"type": "hidden", "name": "inp_gender[]", "value": formData.gender});
+						const hidTeacherName = $("<input>").attr({"type": "hidden", "name": "inp_teacher_name[]", "value": JSON.parse(formData.teacher_name).id});
+						const hidLastAttendanceCount = $("<input>").attr({"type": "hidden", "name": "inp_last_attendance_count[]", "value": formData.last_attendance_count});
+						const hidMaxCourseSession = $("<input>").attr({"type": "hidden", "name": "inp_max_course_session[]", "value": formData.max_course_session});
+						const hidLastMaterialUnlocked = $("<input>").attr({"type": "hidden", "name": "inp_last_material_unlocked[]", "value": formData.last_material_unlocked.id});
+						const hidNewStudent = $("<input>").attr({"type": "hidden", "name": "is_new_student[]", "value": cbv});
+
+						const hidPhoneNumber = $("<input>").attr({"type": "hidden", "name": "inp_phone_number[]", "value": formData.phone_number});
+						const hidCityOfBirth = $("<input>").attr({"type": "hidden", "name": "inp_cob[]", "value": formData.city_of_birth});
+						const hidDateOfBirth = $("<input>").attr({"type": "hidden", "name": "inp_dob[]", "value": formData.date_of_birth});
+						const hidSchoolName = $("<input>").attr({"type": "hidden", "name": "inp_school_name[]", "value": formData.school_name});
+						const hidStudentLevel = $("<input>").attr({"type": "hidden", "name": "inp_student_level[]", "value": formData.student_level});
+						const hidNameParent = $("<input>").attr({"type": "hidden", "name": "inp_name_parent[]", "value": formData.name_parent});
+						const hidPhoneParent = $("<input>").attr({"type": "hidden", "name": "inp_phone_parent[]", "value": formData.phone_parent});
+
+						$(hiddenInputsContainer).append(hidFullName, hidEmail, hidGender, hidTeacherName, hidLastAttendanceCount, hidMaxCourseSession, hidLastMaterialUnlocked, hidNewStudent, hidPhoneNumber, hidCityOfBirth, hidDateOfBirth, hidSchoolName, hidStudentLevel, hidNameParent, hidPhoneParent);
+						$("#real-form").append(hiddenInputsContainer);
+
+						console.log($(hiddenInputsContainer).children());
+
+						$(delBtn).click(() => {
+							if(confirm("Are you sure want to remove this student from the list?")){
+								$(newRow).remove();
+								$(hiddenInputsContainer).remove();
+								import_data_count--;
+							}
+						});
+
+						// Empty the input field
+						$("#full_name").val("");
+						$("#email").val("");
+						$("#gender").val("");
+						$("#phone_number").val("");
+						$("#city_of_birth").val("");
+						$("#date_of_birth").val("");
+						$("#school_name").val("");
+						$("#student_level").val("");
+						$("#name_parent").val("");
+						$("#phone_parent").val("");
+						$("#last_attendance_count").val("0");
+						$("#max_course_session").val("8");
+						$("#last_material_unlocked").val("");
+
+						import_data_count++;
+					});
+
+					$("#real-form").on("submit", function(e){
+						e.preventDefault();
+
+						if(import_data_count == 0){
+							$("#emptyDataNotif").css("display", "flex");
+							$("html, body").scrollTop(0);
+
+							return;
+						}
+
+						this.submit();
+					});
 				});
 			</script>
-		@else
+
+		</x-section-container>
+
+	@else
+		<x-section-container>
+			<x-page-title>Import Old Student Data</x-page-title>
 			<div class="rounded-lg py-5 px-10 bg-blue-800">
 				<p class="text-white italic">- This course still has no teachers assigned or topic and materials added to it -</p>
 				<x-button type="button" onclick="history.back()" class="bg-orange-500 mt-4">
 					Return
 				</x-button>
 			</div>
-		@endif
-	</x-section-container>
+		</x-section-container>
+	@endif
+
 @endsection

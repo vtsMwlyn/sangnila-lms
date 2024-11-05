@@ -6,7 +6,12 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">Normalize Student Status</x-page-title>
+		<x-page-title>Normalize Student Status</x-page-title>
+
+		@if(session()->has("systemFail"))
+			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+		@endif
+
 		<form method="POST" action="{{ route('admin.student.normalize.proceed', $student->id) }}" class="bg-blue-800 rounded-2xl py-5 px-10 mt-8" id="foomu">
 			@csrf
 			<!-- Confirmation Text -->

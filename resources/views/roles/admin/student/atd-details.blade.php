@@ -12,7 +12,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5">{{ __($student->full_name . "'s Attendance in Course: " . $course->course_name) }}</x-page-title>
+		<x-page-title>{{ __($student->full_name . "'s Attendance in Course: " . $course->course_name) }}</x-page-title>
 
 		<div class="overflow-x-auto mt-8">
 			<x-table>

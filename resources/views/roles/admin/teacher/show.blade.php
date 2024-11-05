@@ -10,7 +10,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">{{ __("Teacher's Details") }}</x-page-title>
+		<x-page-title>{{ __("Teacher's Details") }}</x-page-title>
 
 		@if(session()->has("successAssignToCourse"))
 			<x-badge-success badge_text="{{ session('successAssignToCourse') }}"></x-badge-success>
@@ -68,7 +68,7 @@
 						{{ $course->course_name }}
 							<a
 								href="{{ route('admin.teacher.unassign.delete', ['teacher_id' => $user->id, 'course_id' => $course->id]) }}"
-								class="">
+								class="w-16 h-12 flex items-center justify-center pl-4 hover:text-red-600">
 								<i class="bi bi-x-circle-fill"></i>
 							</a>
 						</a>

@@ -1,7 +1,78 @@
 @extends("layouts.main-student")
 
 @section("title")
-	<h1>My Assignments</h1>
+	<h1>Assignment</h1>
+@endsection
+
+@section("popup")
+	<x-popup class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submission-history">
+		<!-- Popup header -->
+		<div class="flex items-center w-full">
+			<div class="font-bold text-2xl grow text-center">History</div>
+			<button type="button" class="popup-dismiss">
+				<img src="{{ asset('img/close.svg') }}" alt="history-icon" class="w-6 h-6 hover:scale-110">
+			</button>
+		</div>
+		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
+
+		<!-- Popup content -->
+		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
+			<div class="w-full overflow-x-auto">
+				<table class="w-full">
+					<thead>
+						<th class="py-3 px-4 border-b-2 border-slate-400">No</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Time</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Title</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Note</th>
+					</thead>
+					<tbody id="submission-history-tbody">
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</x-popup>
+
+	<x-popup class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submit-assignment">
+		<!-- Popup header -->
+		<div class="flex items-center w-full">
+			<div class="font-bold text-2xl grow text-center" id="assignment-title"></div>
+			<button type="button" class="popup-dismiss">
+				<img src="{{ asset('img/close.svg') }}" alt="history-icon" class="w-6 h-6 hover:scale-110">
+			</button>
+		</div>
+		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
+
+		<!-- Popup content -->
+		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
+			<p class="mt-3 font-semibold">Assignment Description:</p>
+			<p class="mt-1" id="assignment-desc"></p>
+
+			<p class="mt-3 text-blue">Please submit before <span class="font-bold" id="assignment-deadline"></span></p>
+
+			<form action="#" method="post" class="mt-4" id="submit-form">
+				@csrf
+				<div class="flex flex-col">
+					<label for="title">Submission Title</label>
+					<x-input id="title" class="w-full mt-1" type="text" name="title" style="border-width: 3px;" value="{{ old('title') }}" placeholder="Submission Title" autofocus />
+				</div>
+
+				<div class="flex flex-col mt-4">
+					<label for="link">You Work Link</label>
+					<x-input id="link" class="w-full mt-1" type="text" name="link" style="border-width: 3px;" value="{{ old('link') }}" placeholder="Your Work Link" autofocus />
+				</div>
+
+				<div class="flex items-center justify-center w-full mt-8 mb-3 gap-3">
+					<x-button class="w-full md:w-1/6">Submit</x-button>
+					{{-- <x-button class="w-full md:w-1/6">Cancel</x-button> --}}
+				</div>
+
+				<!-- Helper -->
+				<input type="hidden" name="h-asg" id="h-asg">
+				<input type="hidden" name="h-route" id="h-route">
+				<input type="hidden" name="h-n" id="h-n">
+			</form>
+		</div>
+	</x-popup>
 @endsection
 
 @section("breadcrumbs-extension")
@@ -9,61 +80,192 @@
 @endsection
 
 @section("content")
-	<x-section-container>
-		<x-page-title class="mt-5">My Assignments</x-page-title>
-		<h1 class="text-xl font-semibold text-center text-blue-900 mb-8">Course: {{ $course->course_name }}</h1>
-
-		@if(session()->has("successSubmitAssignment"))
-			<x-badge-success badge_text="{{ session('successSubmitAssignment') }}"></x-badge-success>
-		@elseif(session()->has("successEditSubmission"))
-			<x-badge-success badge_text="{{ session('successEditSubmission') }}"></x-badge-success>
-		@elseif(session()->has("maximumSubmission"))
-			<x-badge-danger badge_text="{{ session('maximumSubmission') }}"></x-badge-danger>
-		@endif
-
-		@forelse ($assignments as $index => $asg)
-			<div class="rounded-md w-full mt-5 my-5 p-5 border" style="background: rgba(256, 256, 256, 0.4)">
-				<h3 class="text-xl font-semibold text-blue-950">{{ $asg->title }}</h3>
-
-				@if($submissions_per_assignment[$index] > 0)
-					<div class="flex items-center gap-2">
-						<p class="mt-2 mb-2">Submitted</p>
-						<i class="bi bi-patch-check-fill text-2xl text-green-800"></i>
+	<div class="rounded-3xl w-full py-5 px-8 mb-6 flex flex-col items-stretch sm:text-base text-sm" style="background: #FEFEFEB2;">
+		<div class="flex w-full justify-between items-end">
+			<div class="">
+				<button type="button" onclick="history.back();"><img src="{{ asset('img/back-button.svg') }}" class="h-8 w-8" alt="back"></button>
+				<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
+			</div>
+			<div class="flex gap-8">
+				<div class="flex flex-col gap-1 text-xs text-gray-500">
+					<div class="flex items-center gap-1">
+						<img src="{{ asset('img/view.svg') }}" class="h-6 w-6" alt="icon">
+						<p>: View Assignment</p>
 					</div>
-					<a class="text-blue-800 hover:underline font-bold" href="{{ route("student.assignment.detail", [$course->id, Auth::user()->id ,$asg->id]) }}">Submission history and feedback</a>
-				@endif
-
-				<p class="mt-3 italic ">Assignment Description:</p>
-				<p class="mt-1 ">{{ $asg->desc }}</p>
-
-				<p class="mt-3 text-blue-950 ">Please submit before <span class="font-bold">{{ $asg->deadline_date }} {{ $asg->deadline_time }}</span></p>
-
-				@if($submissions_per_assignment[$index] < 10)
-					<p class="font-bold  text-blue-950">New submissions allowed: {{ 10 - $submissions_per_assignment[$index] }} time(s)</p>
-				@else
-					<p class="font-bold  text-red-500">Number of new submissions reached its limit!</p>
-				@endif
-
-				<div class="flex items-center gap-3 mt-5 mb-3">
-					<x-anchor-button class="bg-orange-500"
-						href="{{ $asg->link }}">
-						Download
-					</x-anchor-button>
-					@if($asg->submissions && $asg->submissions->where("student_id", Auth::user()->id)->count())
-						<x-anchor-button class="bg-orange-500"
-							href="{{ route('student.assignment.submit', [$course->id, $asg->id]) }}">
-							New submission
-						</x-anchor-button>
-					@else
-						<x-anchor-button class="bg-orange-500"
-							href="{{ route('student.assignment.submit', [$course->id, $asg->id]) }}">
-							Upload
-						</x-anchor-button>
-					@endif
+					<div class="flex items-center gap-1">
+						<img src="{{ asset('img/download.svg') }}" class="h-6 w-6" alt="icon">
+						<p>: Download Assignment</p>
+					</div>
+				</div>
+				<div class="flex flex-col gap-1 text-xs text-gray-500">
+					<div class="flex items-center gap-1">
+						<img src="{{ asset('img/attach.svg') }}" class="h-6 w-6" alt="icon">
+						<p>: Submit Answer</p>
+					</div>
+					<div class="flex items-center gap-1">
+						<img src="{{ asset('img/history.svg') }}" class="h-6 w-6" alt="icon">
+						<p>: History</p>
+					</div>
 				</div>
 			</div>
-		@empty
-			<div class="bg-white rounded-xl text-center font-semibold w-full mt-5 p-5">- No assignments given yet -</div>
-		@endforelse
-	</x-section-container>
+		</div>
+		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
+
+		@if(session()->has("successSubmitAssignment"))
+			<x-badge-success badge_text="{{ session('successSubmitAssignment') }}" class="mb-4"></x-badge-success>
+		@elseif(session()->has("successEditSubmission"))
+			<x-badge-success badge_text="{{ session('successEditSubmission') }}" class="mb-4"></x-badge-success>
+		{{-- @elseif(session()->has("maximumSubmission"))
+			<x-badge-danger badge_text="{{ session('maximumSubmission') }}" class="mb-4" id="max-submission-badge"></x-badge-danger> --}}
+		@endif
+
+		<x-badge-danger badge_text="This assignment's maximum submission is reached." class="mb-4" id="max-submission-badge" style="display: none;"></x-badge-danger>
+
+		<div class="w-full overflow-x-auto">
+			<table class="w-full">
+				<thead>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Title</th>
+					<th class="py-3 px-4 border-b-2 border-slate-400">Due Date</th>
+					<th class="py-3 px-4 border-b-2 border-slate-400">Status</th>
+					<th class="py-3 px-4 border-b-2 border-slate-400">Action</th>
+					<th class="py-3 px-4 border-b-2 border-slate-400">History</th>
+				</thead>
+				<tbody>
+					@forelse ($assignments as $index => $asg)
+						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
+							<td class="py-2 px-4">{{ $asg->title }}</td>
+							<td class="py-2 px-4">
+								<div class="flex justify-center">
+									{{ date("d M Y", strtotime($asg->deadline_date)) }},<br>{{ substr($asg->deadline_time, 0, 5) }} GMT+7
+								</div>
+							</td>
+							<td class="py-2 px-4">
+								<div class="flex flex-col w-full items-center">
+									@if(count($submissions_per_assignment[$index]) > 0)
+										<span class="font-bold text-light-blue">Submitted</span>
+									@else
+										<span class="font-bold text-red">Not Yet</span>
+										<span class="font-bold text-red">Submitted</span>
+									@endif
+								</div>
+							</td>
+							<td class="py-2 px-4">
+								<div class="flex justify-center gap-2 w-full">
+									<a href="{{ $asg->link }}" target="blank">
+										<img src="{{ asset('img/view.svg') }}" alt="view-icon" class="w-8 h-8 hover:scale-110">
+									</a>
+									<a href="{{ $asg->link }}" target="blank">
+										<img src="{{ asset('img/download.svg') }}" alt="download-icon" class="w-8 h-8 hover:scale-110">
+									</a>
+									<button type="button" class="submitassignment-popuptrigger" data-route="{{ route('student.assignment.submit', [$course->id, $asg->id]) }}"
+										data-assignment="{{ $asg->toJSON() }}" data-submissions="{{ count($submissions_per_assignment[$index]) }}">
+										<img src="{{ asset('img/attach.svg') }}" alt="history-icon" class="w-8 h-8 hover:scale-110">
+									</button>
+								</div>
+							</td>
+							<td class="py-2 px-4">
+								<div class="flex justify-center gap-2 w-full">
+									<button type="button" class="submissionhistory-popuptrigger" id="{{ $loop->iteration }}">
+										<img src="{{ asset('img/history.svg') }}" alt="history-icon" class="w-8 h-8 hover:scale-110">
+									</button>
+								</div>
+							</td>
+						</tr>
+					@empty
+						<tr class="bg-white">
+							<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+						</tr>
+					@endforelse
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<script>
+		function initializeAssignmentSubmissionPopup(assignment, route, n){
+			if(n == 10){
+				$("#max-submission-badge").show();
+
+				return;
+			}
+
+			// Retrieve and save selected data
+			$("#h-asg").val(JSON.stringify(assignment));
+			$("#h-route").val(route);
+			$("#h-n").val(n);
+
+			// Fill the popup with data
+			$("#assignment-title").text(assignment.title);
+			$("#assignment-desc").text(assignment.desc);
+			$("#assignment-deadline").text(new Date(`${assignment.deadline_date} ${assignment.deadline_time}`).toLocaleString('en-GB', {
+					day: '2-digit',
+					month: 'short',
+					year: 'numeric',
+					hour: '2-digit',
+					minute: '2-digit',
+					hour12: false
+				}));
+			$("#submit-form").attr("action", route);
+
+			// Display the popup
+			$("#submit-assignment").parent().show();
+		}
+
+		$(document).ready(() => {
+			const all_submission_data = @json($submissions_per_assignment);
+
+			$('.submitassignment-popuptrigger').on('click', function() {
+				// Retrieve and save selected data
+				const n = $(this).data('submission');
+				const route = $(this).data('route');
+				const assignment = $(this).data('assignment');
+
+				initializeAssignmentSubmissionPopup(assignment, route, n);
+			});
+
+			// Redisplay popup and fill with prev data
+			@if ($errors->any())
+				// Retrieve and re-save saved data
+				const old_asg = JSON.parse(@json(old('h-asg')));
+				const old_route = @json(old('h-route'));
+				const old_n = @json(old('h-n'));
+
+				initializeAssignmentSubmissionPopup(old_asg, old_route, old_n);
+			@endif
+
+			$(".submissionhistory-popuptrigger").click(function(){
+				$("#submission-history-tbody").empty();
+
+				let i = 0;
+				for(let submission of all_submission_data[parseInt($(this).attr("id")) - 1]){
+					const col1 = $("<td>").addClass("py-2 px-4 text-center").text(i + 1);
+					const col2 = $("<td>").addClass("py-2 px-4").text(new Date(submission.created_at).toLocaleString('en-GB', {
+						day: '2-digit',
+						month: 'short',
+						year: 'numeric',
+						hour: '2-digit',
+						minute: '2-digit',
+						hour12: false
+					}));
+					const col3 = $("<td>").addClass("py-2 px-4").html(`<a href="${submission.link}" class="font-semibold hover:underline">${submission.title}</a>`);
+					const col4 = $("<td>").addClass("py-2 px-4").text(submission.feedback);
+
+					let rowBg;
+					if(i % 2 == 0){
+						rowBG = "rgb(237, 241, 247)";
+					}
+					else {
+						rowBG = "white";
+					}
+
+					$("#submission-history-tbody").append(
+						$("<tr>").css("background-color", rowBG).append(col1).append(col2).append(col3).append(col4)
+					);
+					i++;
+				}
+
+				$("#submission-history").parent().show();
+			});
+		});
+	</script>
 @endsection

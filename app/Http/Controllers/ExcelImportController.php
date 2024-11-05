@@ -83,7 +83,7 @@ class ExcelImportController extends Controller
 		$request->validate([
 			'file' => 'required|mimes:xlsx,xls,csv',
 		]);
-		
+
 		try {
 			$course = Course::findOrFail($course_id);
 

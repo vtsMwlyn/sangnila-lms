@@ -15,7 +15,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5">{{ __("Enable Account") }}</x-page-title>
+		<x-page-title>{{ __("Enable Account") }}</x-page-title>
 
 		<div class="mt-8">
 			<form method="POST" action="{{ route("admin.account.acc_enable", $account->id) }}" class="bg-blue-800 rounded-2xl py-5 px-10 mt-10">

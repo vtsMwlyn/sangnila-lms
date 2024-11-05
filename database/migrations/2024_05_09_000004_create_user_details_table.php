@@ -23,6 +23,8 @@ return new class extends Migration {
 			$table->string("student_level")->nullable();
 			$table->string('school_name')->nullable();
 
+			$table->string("profpic")->nullable();
+
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
 			$table->timestamps();

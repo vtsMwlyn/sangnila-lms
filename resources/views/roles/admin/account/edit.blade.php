@@ -15,34 +15,56 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-5 mb-8">{{ __("Edit Account's Data") }}</x-page-title>
+		<x-page-title>{{ __("Edit Account's Data") }}</x-page-title>
+
+		@if(session()->has("systemFail"))
+			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+		@endif
 
 		<form action="{{ route('admin.account.acc_edit.store', $account->id) }}" method="post">
 			@csrf
 			@method('PATCH')
 			<!-- Account Name -->
-			<div class="flex gap-3 items-stretch">
+			<div class="flex gap-3 @error('full_name') items-start @else items-stretch @enderror">
 				<x-boxed-label for="full_name" :value="__('New Account Name')" />
-				<x-input id="full_name" class="block w-full" type="text" name="full_name" :value="$account->full_name"
+				<div class="flex flex-col w-full items-stretch">
+					<x-input id="full_name" class="block w-full" type="text" name="full_name" :value="$account->full_name"
 					autofocus />
+				</div>
 			</div>
 
 			<!-- Account Email -->
-			<div class="mt-3 flex gap-3 items-stretch">
+			<div class="mt-3 flex gap-3 @error('email') items-start @else items-stretch @enderror">
 				<x-boxed-label for="email" :value="__('New Account Email')"/>
-				<x-input id="email" class="block w-full" type="text" name="email" :value="$account->email"  />
+				<div class="flex flex-col w-full items-stretch">
+					<x-input id="email" class="block w-full" type="text" name="email" :value="$account->email"  />
+				</div>
 			</div>
 
 			<!-- Role Selection -->
-			<div class="mt-4 flex gap-3 items-stretch">
-				<x-boxed-label for="role_id" class="text-white" :value="__('Select New Role')" />
-				<x-select name="role_id" id="role_id"
-				class="w-full">
-					@forelse ($roles as $role)
-						<option value="{{ $role->id }}" @if($account->role->role_name == $role->role_name) selected @endif>{{ $role->role_name }}</option>
-					@empty
-					@endforelse
-				</x-select>
+			<div class="mt-4 flex gap-3 @error('role_id') items-start @else items-stretch @enderror">
+				<x-boxed-label for="role_id" class="text-white" :value="__('Change Role')" />
+				<div class="flex flex-col w-full items-stretch">
+					<x-select name="role_id" id="role_id"
+					class="w-full">
+						@forelse ($roles as $role)
+							<option value="{{ $role->id }}" @if($account->role->role_name == $role->role_name) selected @endif>{{ $role->role_name }}</option>
+						@empty
+						@endforelse
+					</x-select>
+				</div>
+			</div>
+
+			<!-- Gender Selection -->
+			<div class="mt-4 flex gap-3 @error('gender') items-start @else items-stretch @enderror">
+				<x-boxed-label for="gender" class="text-white" :value="__('Change Gender')" />
+				<div class="flex flex-col w-full items-stretch">
+					<x-select name="gender" id="gender"
+					class="w-full">
+						<option value="1" @if($account->details->gender == 1) selected @endif>Male</option>
+						<option value="2" @if($account->details->gender == 2) selected @endif>Female</option>
+					</x-select>
+				</div>
 			</div>
 
 			<div class="flex items-stretch justify-center mt-20 mb-3 gap-3">

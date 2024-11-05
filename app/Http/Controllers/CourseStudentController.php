@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Topic;
@@ -14,6 +15,7 @@ use App\Models\CourseStudent;
 use App\Models\CourseTeacher;
 use App\Models\ImportedStudent;
 use App\Rules\MinimumOneCheckbox;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -21,17 +23,16 @@ class CourseStudentController extends Controller {
 	// ===== ADMIN ===== //
 	// Shows a page to select a course to assign to a student
 	public function create($student_id) {
-		$role = Role::where('role_name', 'Student')->first();
-		$student = User::where('role_id', $role->id)->where('id', $student_id)->first();
+		$student = User::findOrFail($student_id);
 
 		$arr_ct = [];
 		foreach(Course::all() as $c){
 			$teacher_list = [];
 			foreach($c->teachers as $teacher){
-				array_push($teacher_list, $teacher->full_name);
+				array_push($teacher_list, $teacher);
 			}
 
-			array_push($arr_ct, ["course_name" => $c->course_name, "teachers" => $teacher_list]);
+			array_push($arr_ct, ["course_id" => $c->id, "teachers" => $teacher_list]);
 		}
 
 		$courses = Course::where('visibility', 'public')->get();
@@ -40,7 +41,7 @@ class CourseStudentController extends Controller {
 		foreach($courses as $course){
 			$alreadyEnrolled = false;
 			foreach($student->enrolled_courses as $enrolled){
-				if($enrolled->course_name == $course->course_name){
+				if($enrolled->id == $course->id){
 					$alreadyEnrolled = true;
 					break;
 				}
@@ -61,74 +62,89 @@ class CourseStudentController extends Controller {
 	// Save the selected course into database
 	public function store(Request $request, $student_id) {
 		$validatedData = $request->validate([
-			"course_name" => "required",
+			"course" => "required",
 			"max_course_session" => "required",
-			"teacher_name" => "required"
+			"teacher" => "required"
 		]);
 
-		$course = Course::where("course_name", $validatedData["course_name"])->first();
-		$teacher = User::where("role_id", 2)->where("full_name", $validatedData["teacher_name"])->first();
-		$student = User::where("role_id", 3)->where("id", $student_id)->first();
+		try {
+			DB::beginTransaction();
 
-		CourseStudent::create([
-			'student_id' => $student_id,
-			'course_id' => $course->id,
-			'max_course_session' => $validatedData["max_course_session"],
-			"teacher_id" => $teacher->id,
-			"is_imported" => 0
-		]);
+			$course = Course::find(json_decode($validatedData["course"])->id);
+			$teacher = User::find($validatedData["teacher"]);
+			$student = User::find($student_id);
 
-		$existingProgress = Progress::where('student_id', $student->id)
-			->where('course_id', $course->id)
-			->pluck('material_id')
-			->toArray();
+			CourseStudent::create([
+				'student_id' => $student_id,
+				'course_id' => $course->id,
+				'max_course_session' => $validatedData["max_course_session"],
+				"teacher_id" => $teacher->id,
+				"is_imported" => 0
+			]);
 
-		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+			$existingProgress = Progress::where('student_id', $student->id)
+				->where('course_id', $course->id)
+				->pluck('material_id')
+				->toArray();
 
-		foreach ($topics as $index1 => $topic) {
-			foreach($topic->materials as $index2 => $material) {
-				$newData = [
-					'student_id' => $student->id,
-					'material_id' => $material->id,
-					'course_id' => $course->id,
-				];
+			$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
 
-				if($index1 == 0 && $index2 == 0){
-					$newData['status'] = 'unlocked';
-				} else {
-					$newData['status'] = 'locked';
-				}
+			foreach ($topics as $index1 => $topic) {
+				foreach($topic->materials as $index2 => $material) {
+					$newData = [
+						'student_id' => $student->id,
+						'material_id' => $material->id,
+						'course_id' => $course->id,
+					];
 
-				if (!in_array($material->id, $existingProgress)) {
-					Progress::create($newData);
+					if($index1 == 0 && $index2 == 0){
+						$newData['status'] = 'unlocked';
+					} else {
+						$newData['status'] = 'locked';
+					}
+
+					if (!in_array($material->id, $existingProgress)) {
+						Progress::create($newData);
+					}
 				}
 			}
+
+			DB::commit();
 		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return back()->with("systemFail", "System failed to assign courses to the student, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
+
 
 		return redirect(route('admin.student.show', $student_id))->with("successAssignToCourse", "Successfully assigned the student to the course!");
 	}
 
 	// Unassign student from a course confirmation
 	public function delete($student_id, $course_id) {
-		$role = Role::where('role_name', 'student')->first();
-		$student = User::where('role_id', $role->id)->where('id', $student_id)->first();
-		$course = Course::where('visibility', 'public')->where('id', $course_id)->first();
 		return view('roles.admin.student.destroy', [
-			'student' => $student,
-			'course' => $course
+			'student' => User::findOrFail($student_id),
+			'course' => Course::findOrFail($course_id)
 		]);
 	}
 
 	// Remove the course from student's assigned course in the database
 	public function destroy($student_id, $course_id) {
-		$CourseStudent = CourseStudent::where('student_id', $student_id)->where('course_id', $course_id)->first();
-		CourseStudent::destroy($CourseStudent->id);
+		try {
+			$CourseStudent = CourseStudent::where('student_id', $student_id)->where('course_id', $course_id)->first();
+			CourseStudent::destroy($CourseStudent->id);
+		}
+		catch(Exception $e){
+			return back()->with("systemFail", "System failed to unassign the course from the student, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
+
 		return redirect(route('admin.student.show', $student_id))->with("successUnassignFromCourse", "Successfully unassigned the student from the course!");;
 	}
 
 	// Batch assign student to course
 	public function batch_assign($course_id){
-		$course = Course::where("id", $course_id)->first();
+		$course = Course::findOrFail($course_id);
 		$students = User::where("role_id", 3)->get();
 
 		$filtered = $students->filter(function($student) use($course){
@@ -155,46 +171,57 @@ class CourseStudentController extends Controller {
 		$teachers = $request->teacherName;
 		$maxcoursesessions = $request->maxCourseSession;
 
-		$course = Course::where("id", $course_id)->first();
+		$course = Course::findOrFail($course_id);
 
-		foreach($students as $index => $student){
-			$targetStudent = User::where("id", $student)->first();
-			$targetTeacher = User::where("role_id", 2)->where("full_name", $teachers[$index])->first();
+		try {
+			DB::beginTransaction();
 
-			CourseStudent::create([
-				"student_id" => $targetStudent->id,
-				"teacher_id" => $targetTeacher->id,
-				"course_id" => $course->id,
-				"max_course_session" => $maxcoursesessions[$index],
-				"is_imported" => 0
-			]);
+			foreach($students as $index => $student){
+				$targetStudent = User::find($student);
+				$targetTeacher = User::where("role_id", 2)->where("full_name", $teachers[$index])->first();
 
-			$existingProgress = Progress::where('student_id', $targetStudent->id)
-				->where('course_id', $course->id)
-				->pluck('material_id')
-				->toArray();
+				CourseStudent::create([
+					"student_id" => $targetStudent->id,
+					"teacher_id" => $targetTeacher->id,
+					"course_id" => $course->id,
+					"max_course_session" => $maxcoursesessions[$index],
+					"is_imported" => 0
+				]);
 
-			$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+				$existingProgress = Progress::where('student_id', $targetStudent->id)
+					->where('course_id', $course->id)
+					->pluck('material_id')
+					->toArray();
 
-			foreach ($topics as $index1 => $topic) {
-				foreach($topic->materials as $index2 => $material) {
-					$newData = [
-						'student_id' => $targetStudent->id,
-						'material_id' => $material->id,
-						'course_id' => $course->id,
-					];
+				$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
 
-					if($index1 == 0 && $index2 == 0){
-						$newData['status'] = 'unlocked';
-					} else {
-						$newData['status'] = 'locked';
-					}
+				foreach ($topics as $index1 => $topic) {
+					foreach($topic->materials as $index2 => $material) {
+						$newData = [
+							'student_id' => $targetStudent->id,
+							'material_id' => $material->id,
+							'course_id' => $course->id,
+						];
 
-					if (!in_array($material->id, $existingProgress)) {
-						Progress::create($newData);
+						if($index1 == 0 && $index2 == 0){
+							$newData['status'] = 'unlocked';
+						} else {
+							$newData['status'] = 'locked';
+						}
+
+						if (!in_array($material->id, $existingProgress)) {
+							Progress::create($newData);
+						}
 					}
 				}
 			}
+
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return back()->with("systemFail", "System failed to batch assign these students to the course, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 		return redirect(route("admin.course.show", $course->id))->with("successBatchAssign", "Successfully batch-assigned students!");
@@ -203,7 +230,7 @@ class CourseStudentController extends Controller {
 
 	// Import old existing student data
 	public function import_student_data($course_id){
-		$course = Course::where("id", $course_id)->first();
+		$course = Course::findOrFail($course_id);
 
 		$materials = [];
 		foreach($course->topics as $topic){
@@ -218,95 +245,106 @@ class CourseStudentController extends Controller {
 	}
 
 	public function import_student_data_store(Request $request, $course_id){
-		$course = Course::where("id", $course_id)->first();
+		$course = Course::findOrFail($course_id);
 
-		foreach($request->inp_full_name as $index => $student_name){
-			// Prevent duplicate email
-			$existingUserWithSameEmail = User::where("email", $request->inp_email[$index])->get();
-			$n = $existingUserWithSameEmail->count();
+		try {
+			DB::beginTransaction();
 
-			if($n == 0){
-				$generatedEmail = $request->inp_email[$index];
-			} else {
-				$dotPosition = strpos($request->inp_email[$index], '.');
-				$localPart = substr($request->inp_email[$index], 0, $dotPosition);
-				$domainPart = substr($request->inp_email[$index], $dotPosition);
+			foreach($request->inp_full_name as $index => $student_name){
+				// Prevent duplicate email
+				$existingUserWithSameEmail = User::where("email", $request->inp_email[$index])->get();
+				$n = $existingUserWithSameEmail->count();
 
-				$generatedEmail = $localPart . ($n + 1) . $domainPart;
-			}
+				if($n == 0){
+					$generatedEmail = $request->inp_email[$index];
+				} else {
+					$dotPosition = strpos($request->inp_email[$index], '.');
+					$localPart = substr($request->inp_email[$index], 0, $dotPosition);
+					$domainPart = substr($request->inp_email[$index], $dotPosition);
 
-			if($request->is_new_student[$index] == "Yes"){
-				$student = User::create([
-					"full_name" => $student_name,
-					"email" => $generatedEmail,
-					"role_id" => 3,
-					"status" => "enabled",
-					"email_verified_at" => now(), //soon will be removed
-					"password" => Hash::make(trans("strings.default_password"))
-				]);
-
-				UserDetail::create([
-					"user_id" => $student->id,
-					"gender" => $request->inp_gender[$index],
-					"phone_number" => $request->inp_phone_number[$index],
-					"city_of_birth" => $request->inp_cob[$index],
-					"date_of_birth" => $request->inp_dob[$index],
-					"name_parent" => $request->inp_name_parent[$index],
-					"phone_parent" => $request->inp_phone_parent[$index],
-					"school_name" => $request->inp_school_name[$index],
-					"student_level" => $request->inp_student_level[$index],
-				]);
-			}
-			else {
-				$student = User::where("role_id", 3)->where("full_name", $student_name)->first();
-				if(!$student){
-					continue;
+					$generatedEmail = $localPart . ($n + 1) . $domainPart;
 				}
-			}
 
-			CourseStudent::create([
-				"course_id" => $course->id,
-				"student_id" => $student->id,
-				"teacher_id" => $request->inp_teacher_name[$index],
-				"is_imported" => 1,
-				"max_course_session" => $request->inp_max_course_session[$index]
-			]);
+				if($request->is_new_student[$index] == "Yes"){
+					$student = User::create([
+						"full_name" => $student_name,
+						"email" => $generatedEmail,
+						"role_id" => 3,
+						"status" => "enabled",
+						"email_verified_at" => now(), //soon will be removed
+						"password" => Hash::make(trans("strings.default_password"))
+					]);
 
-			ImportedStudent::create([
-				"student_id" => $student->id,
-				"course_id" => $course->id,
-				"last_attendance_count" => $request->inp_last_attendance_count[$index]
-			]);
-
-			$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
-
-			$targetFound = false;
-			foreach($topics as $topic){
-				foreach($topic->materials as $material){
-					if($material->id != $request->inp_last_material_unlocked[$index]){
-						Progress::create([
-							"student_id" => $student->id,
-							"material_id" => $material->id,
-							"course_id" => $course->id,
-							"status" => "unlocked"
-						]);
-					} else {
-						Progress::create([
-							"student_id" => $student->id,
-							"material_id" => $material->id,
-							"course_id" => $course->id,
-							"status" => "unlocked"
-						]);
-
-						$targetFound = true;
-						break;
+					UserDetail::create([
+						"user_id" => $student->id,
+						"gender" => $request->inp_gender[$index],
+						"phone_number" => $request->inp_phone_number[$index],
+						"city_of_birth" => $request->inp_cob[$index],
+						"date_of_birth" => $request->inp_dob[$index],
+						"name_parent" => $request->inp_name_parent[$index],
+						"phone_parent" => $request->inp_phone_parent[$index],
+						"school_name" => $request->inp_school_name[$index],
+						"student_level" => $request->inp_student_level[$index],
+					]);
+				}
+				else {
+					$student = User::where("role_id", 3)->where("full_name", $student_name)->first();
+					if(!$student){
+						continue;
 					}
 				}
 
-				if($targetFound){
-					break;
+				CourseStudent::create([
+					"course_id" => $course->id,
+					"student_id" => $student->id,
+					"teacher_id" => $request->inp_teacher_name[$index],
+					"is_imported" => 1,
+					"max_course_session" => $request->inp_max_course_session[$index]
+				]);
+
+				ImportedStudent::create([
+					"student_id" => $student->id,
+					"course_id" => $course->id,
+					"last_attendance_count" => $request->inp_last_attendance_count[$index]
+				]);
+
+				$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+
+				$targetFound = false;
+				foreach($topics as $topic){
+					foreach($topic->materials as $material){
+						if($material->id != $request->inp_last_material_unlocked[$index]){
+							Progress::create([
+								"student_id" => $student->id,
+								"material_id" => $material->id,
+								"course_id" => $course->id,
+								"status" => "unlocked"
+							]);
+						} else {
+							Progress::create([
+								"student_id" => $student->id,
+								"material_id" => $material->id,
+								"course_id" => $course->id,
+								"status" => "unlocked"
+							]);
+
+							$targetFound = true;
+							break;
+						}
+					}
+
+					if($targetFound){
+						break;
+					}
 				}
 			}
+
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return back()->with("systemFail", "System failed to import old student data, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 		return redirect(route("admin.course.show", $course_id))->with("successImportStudent", "Students data imported successfully!");
@@ -314,7 +352,7 @@ class CourseStudentController extends Controller {
 
 	public function normalize_confirmation($student_id){
 		return view("roles.admin.student.normalize", [
-			"student" => User::where("id", $student_id)->first(),
+			"student" => User::findOrFail($student_id),
 			"imported" => ImportedStudent::where("student_id", $student_id)->get()
 		]);
 	}
@@ -324,21 +362,33 @@ class CourseStudentController extends Controller {
 			"checkbox_values" => ["required", new MinimumOneCheckbox]
 		]);
 
-		$student = User::where("id", $student_id)->first();
-		$imported = ImportedStudent::where("student_id", $student->id)->get();
+		$student = User::findOrFail($student_id);
 
-		$to_be_deleted = [];
+		try {
+			DB::beginTransaction();
 
-		foreach($imported as $index => $imp){
-			if($request["checkbox_values"][$index] == "on"){
-				CourseStudent::where("student_id", $student->id)->where("course_id", $imp->course_id)->update(["is_imported" => 0]);
+			$imported = ImportedStudent::where("student_id", $student->id)->get();
 
-				array_push($to_be_deleted, $imp->id);
+			$to_be_deleted = [];
+
+			foreach($imported as $index => $imp){
+				if($request["checkbox_values"][$index] == "on"){
+					CourseStudent::where("student_id", $student->id)->where("course_id", $imp->course_id)->update(["is_imported" => 0]);
+
+					array_push($to_be_deleted, $imp->id);
+				}
 			}
-		}
 
-		foreach($to_be_deleted as $del){
-			ImportedStudent::destroy($del);
+			foreach($to_be_deleted as $del){
+				ImportedStudent::destroy($del);
+			}
+
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return back()->with("systemFail", "System failed to normalize_student, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 		return redirect(route("admin.student.show", $student->id))->with("successNormalize", "Successfully normalized the student");
