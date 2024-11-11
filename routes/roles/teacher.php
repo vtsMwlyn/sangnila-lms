@@ -124,7 +124,9 @@ Route::prefix('/teacher')
 				Route::get('/{course_id}', [AttendanceController::class, 'show'])->name('show')->whereNumber('course_id');
 
 				// Upload new attendance data
-				Route::get('/{course_id}/upload', [AttendanceController::class, 'create'])->name('upload')->whereNumber('course_id');
+				Route::get("/{course_id}/preupload", [AttendanceController::class, "select_students"])->name("select-students")->whereNumber("course_id");
+				Route::post("/{course_id}/preupload", [AttendanceController::class, "submit_and_proceed"])->name("submit-and-proceed")->whereNumber("course_id");
+				// Route::get('/{course_id}/upload', [AttendanceController::class, 'create'])->name('upload')->whereNumber('course_id');
 				Route::post('/{course_id}/upload', [AttendanceController::class, 'store'])->name('store')->whereNumber('course_id');
 
 				// Edit attendance data

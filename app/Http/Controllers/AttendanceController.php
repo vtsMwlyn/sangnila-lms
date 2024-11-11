@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\CourseStudent;
 use App\Models\ImportedStudent;
 use App\Models\StudentAttendance;
+use Google\Service\Classroom\Student;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,44 +34,100 @@ class AttendanceController extends Controller {
 		]);
 	}
 
-	// New attendance data input form page
-	public function create($course_id){
+	// Pick students to include in new attendance report
+	public function select_students($course_id){
 		$course = Course::findOrFail($course_id);
+		$students = User::where("role_id", 3)->get();
 		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
-		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
 
-		// Mechanism to remove student's who reached his/her maximum session and haven't paid yet (if agreed to be implemented)
-		// $studentsToRemove = [];
+		$sorted_students = [];
+		$remaining_students = [];
 
 		// foreach($course_students as $cs){
-		// 	$sa = StudentAttendance::where("user_id", $cs->student_id)->get();
-		// 	if($cs->is_imported){
-		// 		$count = ImportedStudent::where("student_id", $cs->student_id)->where("course_id", $course_id)->first()->last_attendance_count;
-		// 	} else {
-		// 		$count = 0;
-		// 	}
-
-		// 	foreach($sa as $atd){
-		// 		if($atd->attendance->course_id == $course_id && $atd->is_attend == 1){
-		// 			$count++;
-		// 		}
-		// 	}
-
-		// 	if($cs->max_course_session == $count){
-		// 		array_push($studentsToRemove, $cs->student->id);
-		// 	}
+		// 	array_push($sorted_students, $cs->student);
 		// }
 
-		// $filteredUsers = $course_students->reject(function ($courseStudent) use ($studentsToRemove) {
-		// 	return in_array($courseStudent->student_id, $studentsToRemove);
-		// });
+		foreach($students as $s){
+			$student_is_not_teached = true;
+			foreach($course_students as $cs){
+				if($cs->student->id == $s->id){
+					$student_is_not_teached = false;
+					break;
+				}
+			}
+
+			if($student_is_not_teached){
+				// array_push($sorted_students, $s);
+				array_push($remaining_students, $s);
+			}
+		}
+
+		return view("roles.teacher.attendance.student-select", [
+			"course_students" => $course_students,
+			"remaining_students" => $remaining_students,
+			"course" => $course,
+			// "students" => $students
+		]);
+	}
+
+	public function submit_and_proceed(Request $request, $course_id){
+		if(count($request->selected_students) == 0){
+			return back()->with("failProceed", "Please select minimum one student!");
+		}
+
+		$course = Course::findOrFail($course_id);
+		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+		$students = [];
+
+		foreach($request->selected_students as $req_student){
+			array_push($students, User::find($req_student));
+		}
 
 		return view("roles.teacher.attendance.upload", [
 			"course" => $course,
 			"topics" => $topics,
-			"course_students" => $course_students/*$filteredUsers*/
+			"students" => collect($students)
 		]);
 	}
+
+	// New attendance data input form page
+	// public function create($course_id){
+	// 	$course = Course::findOrFail($course_id);
+	// 	$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+	// 	$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+
+	// 	// Mechanism to remove student's who reached his/her maximum session and haven't paid yet (if agreed to be implemented)
+	// 	// $studentsToRemove = [];
+
+	// 	// foreach($course_students as $cs){
+	// 	// 	$sa = StudentAttendance::where("user_id", $cs->student_id)->get();
+	// 	// 	if($cs->is_imported){
+	// 	// 		$count = ImportedStudent::where("student_id", $cs->student_id)->where("course_id", $course_id)->first()->last_attendance_count;
+	// 	// 	} else {
+	// 	// 		$count = 0;
+	// 	// 	}
+
+	// 	// 	foreach($sa as $atd){
+	// 	// 		if($atd->attendance->course_id == $course_id && $atd->is_attend == 1){
+	// 	// 			$count++;
+	// 	// 		}
+	// 	// 	}
+
+	// 	// 	if($cs->max_course_session == $count){
+	// 	// 		array_push($studentsToRemove, $cs->student->id);
+	// 	// 	}
+	// 	// }
+
+	// 	// $filteredUsers = $course_students->reject(function ($courseStudent) use ($studentsToRemove) {
+	// 	// 	return in_array($courseStudent->student_id, $studentsToRemove);
+	// 	// });
+
+	// 	return view("roles.teacher.attendance.upload", [
+	// 		"course" => $course,
+	// 		"topics" => $topics,
+	// 		"course_students" => $course_students/*$filteredUsers*/
+	// 	]);
+	// }
 
 	// Insert new attendance data into database
 	public function store(Request $request, $course_id) {

@@ -17,7 +17,7 @@
 			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
 		@endif
 
-		@if($course_students->count() && $topics->count())
+		@if($students->count() && $topics->count())
 			<form action="{{ route('teacher.attendance.store', $course->id) }}" method="post" id="attendance_form">
 				@csrf
 
@@ -35,14 +35,14 @@
 					<x-label>{{ __("Attendance Details") }}</x-label>
 					<table class="w-full mt-1" style="border-collapse: separate; border-spacing: 0 20px;">
 						<tbody id="table-body">
-							@foreach ($course_students as $index => $cs)
-								<tr class="table-row" style="@if($cs->student->status == "disabled") display: none; @endif background: rgba(256, 256, 256, 0.4);">
+							@foreach ($students as $index => $s)
+								<tr class="table-row" style="@if($s->status == "disabled") display: none; @endif background: rgba(256, 256, 256, 0.4);">
 									<td class="p-5 grow rounded-l-xl">
 										<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
 											<input type="checkbox" id="checkbox{{ $loop->iteration }}"
 											class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif >
-											<label for="checkbox{{ $loop->iteration }}">{{ $cs->student->full_name }}</label>
-											<input type="hidden" name="students[]" value="{{ $cs->student->id }}">
+											<label for="checkbox{{ $loop->iteration }}">{{ $s->full_name }}</label>
+											<input type="hidden" name="students[]" value="{{ $s->id }}">
 										</div>
 										<div class="flex w-full gap-2 mt-2 material_progress_detail items-start" style="display: none;">
 											<div class="flex flex-col w-2/3 container_select2">
@@ -64,7 +64,7 @@
 									</td>
 									<td class="p-5 w-1/2">
 										<div class="flex flex-col items-stretch">
-											<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px;">@if($cs->student->status == "disabled"){{ __("Account disabled") }}@else{{ old("attendance_detail." . $loop->index) }}@endif</textarea>
+											<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px;">@if($s->status == "disabled"){{ __("Account disabled") }}@else{{ old("attendance_detail." . $loop->index) }}@endif</textarea>
 
 											@error("attendance_detail." . $loop->index)
 												<span class="text-red-500 mt-2">{{ $message }}</span>

@@ -19,7 +19,7 @@
 		@endif
 
 		<div class="">
-			<x-anchor-button class="bg-orange-500 mt-5 mb-3" href="{{ route('teacher.attendance.upload', $course->id) }}">
+			<x-anchor-button class="bg-orange-500 mt-5 mb-3" href="{{ route('teacher.attendance.select-students', $course->id) }}">
 				<i class="bi bi-plus-lg"></i> Upload New Attendance
 			</x-anchor-button>
 		</div>
