@@ -14,6 +14,8 @@ use App\Models\StudentAttendance;
 use Google\Service\Classroom\Student;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use PDO;
 
 class AttendanceController extends Controller {
 	// ===== TEACHER ===== //
@@ -40,12 +42,7 @@ class AttendanceController extends Controller {
 		$students = User::where("role_id", 3)->get();
 		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
 
-		$sorted_students = [];
 		$remaining_students = [];
-
-		// foreach($course_students as $cs){
-		// 	array_push($sorted_students, $cs->student);
-		// }
 
 		foreach($students as $s){
 			$student_is_not_teached = true;
@@ -57,7 +54,6 @@ class AttendanceController extends Controller {
 			}
 
 			if($student_is_not_teached){
-				// array_push($sorted_students, $s);
 				array_push($remaining_students, $s);
 			}
 		}
@@ -66,7 +62,6 @@ class AttendanceController extends Controller {
 			"course_students" => $course_students,
 			"remaining_students" => $remaining_students,
 			"course" => $course,
-			// "students" => $students
 		]);
 	}
 
@@ -76,64 +71,102 @@ class AttendanceController extends Controller {
 		}
 
 		$course = Course::findOrFail($course_id);
-		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
-		$students = [];
+		session(["selected_students" => $request->selected_students]);
 
-		foreach($request->selected_students as $req_student){
-			array_push($students, User::find($req_student));
-		}
+		return redirect(route("teacher.attendance.upload", $course->id));
+	}
+
+	// New attendance data input form page
+	public function create($course_id){
+		$course = Course::findOrFail($course_id);
+		$selected_student_ids = session('selected_students', []);
+		$students = User::whereIn('id', $selected_student_ids)->get();
+		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+
+		// Mechanism to remove student's who reached his/her maximum session and haven't paid yet (if agreed to be implemented)
+		// $studentsToRemove = [];
+
+		// foreach($course_students as $cs){
+		// 	$sa = StudentAttendance::where("user_id", $cs->student_id)->get();
+		// 	if($cs->is_imported){
+		// 		$count = ImportedStudent::where("student_id", $cs->student_id)->where("course_id", $course_id)->first()->last_attendance_count;
+		// 	} else {
+		// 		$count = 0;
+		// 	}
+
+		// 	foreach($sa as $atd){
+		// 		if($atd->attendance->course_id == $course_id && $atd->is_attend == 1){
+		// 			$count++;
+		// 		}
+		// 	}
+
+		// 	if($cs->max_course_session == $count){
+		// 		array_push($studentsToRemove, $cs->student->id);
+		// 	}
+		// }
+
+		// $filteredUsers = $course_students->reject(function ($courseStudent) use ($studentsToRemove) {
+		// 	return in_array($courseStudent->student_id, $studentsToRemove);
+		// });
 
 		return view("roles.teacher.attendance.upload", [
 			"course" => $course,
 			"topics" => $topics,
-			"students" => collect($students)
+			"students" => $students/*$filteredUsers*/
 		]);
 	}
 
-	// New attendance data input form page
-	// public function create($course_id){
-	// 	$course = Course::findOrFail($course_id);
-	// 	$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
-	// 	$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
-
-	// 	// Mechanism to remove student's who reached his/her maximum session and haven't paid yet (if agreed to be implemented)
-	// 	// $studentsToRemove = [];
-
-	// 	// foreach($course_students as $cs){
-	// 	// 	$sa = StudentAttendance::where("user_id", $cs->student_id)->get();
-	// 	// 	if($cs->is_imported){
-	// 	// 		$count = ImportedStudent::where("student_id", $cs->student_id)->where("course_id", $course_id)->first()->last_attendance_count;
-	// 	// 	} else {
-	// 	// 		$count = 0;
-	// 	// 	}
-
-	// 	// 	foreach($sa as $atd){
-	// 	// 		if($atd->attendance->course_id == $course_id && $atd->is_attend == 1){
-	// 	// 			$count++;
-	// 	// 		}
-	// 	// 	}
-
-	// 	// 	if($cs->max_course_session == $count){
-	// 	// 		array_push($studentsToRemove, $cs->student->id);
-	// 	// 	}
-	// 	// }
-
-	// 	// $filteredUsers = $course_students->reject(function ($courseStudent) use ($studentsToRemove) {
-	// 	// 	return in_array($courseStudent->student_id, $studentsToRemove);
-	// 	// });
-
-	// 	return view("roles.teacher.attendance.upload", [
-	// 		"course" => $course,
-	// 		"topics" => $topics,
-	// 		"course_students" => $course_students/*$filteredUsers*/
-	// 	]);
-	// }
-
 	// Insert new attendance data into database
 	public function store(Request $request, $course_id) {
+		$validator = Validator::make($request->all(), [
+			"attendance_date" => "required",
+			"attendance_detail.*" => "required",
+		]);
+
+		// Collect initial validation errors into the $errors array
+		$errors = [];
+		$validatedData = [];
+
+		if ($validator->fails()) {
+			$errors = $validator->errors()->toArray(); // Collect errors from the initial validation
+		}
+
 		$course = Course::findOrFail($course_id);
 		$teacher = Auth::user();
 		$identifier = $course->id . "_" . $teacher->id . "/" . round(microtime(true) * 1000);
+
+		foreach($request->students as $i => $student_id){
+			$isAttend = ($request["checkbox_value"][$i] == "on")? 1 : 0;
+
+			// Validate conditional fields based on attendance status
+			$attendanceData = [
+				'attendance_detail' => $request->input("attendance_detail.$i"),
+				'material_progress' => $isAttend ? $request->input("material_progress.$i") : null,
+				'learning_status' => $isAttend ? $request->input("learning_status.$i") : null,
+				'attended' => $isAttend,
+			];
+
+			// If material_progress is filled, ensure learning_status is provided
+			if ($isAttend == 1 && $attendanceData['material_progress'] && !$attendanceData['learning_status']) {
+				$errors["learning_status.$i"] = "Learning status is required if material progress is provided.";
+			}
+			else if ($isAttend == 1 && !$attendanceData['material_progress'] && $attendanceData['learning_status']) {
+				$errors["material_progress.$i"] = "Material progress is required if learning status is provided.";
+			}
+
+			// Collect valid data for the second loop if no errors
+			if (empty($errors)) {
+				$validatedData[] = [
+					"student_id" => $student_id,
+					"attendance_data" => $attendanceData
+				];
+			}
+		}
+
+		// If errors exist (from either the initial validation or the loop), return them
+		if (!empty($errors)) {
+			return back()->withErrors($errors)->withInput();
+		}
 
 		try {
 			DB::beginTransaction();
@@ -145,19 +178,16 @@ class AttendanceController extends Controller {
 				"attendance_identifier" => $identifier
 			]);
 
-			foreach($request->students as $i => $student_id){
-				$cs = CourseStudent::where("student_id", $student_id)->where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->first();
-				$attendanceDetail = $request["attendance_detail"][$i];
-
-				$isAttend = ($request["checkbox_value"][$i] == "on")? 1 : 0;
-
+			 // Create StudentAttendance records
+			foreach($validatedData as $data) {
+				$student = User::findOrFail($data['student_id']);
 				StudentAttendance::create([
-					"user_id" => $cs->student->id,
+					"user_id" => $student->id,
 					"attendance_id" => $newAttendance->id,
-					"is_attend" => $isAttend,
-					"attendance_detail" => $attendanceDetail,
-					"material_progress" => $request["material_progress"][$i],
-					"learning_status" => $request["learning_status"][$i]
+					"is_attend" => $data['attendance_data']['attended'],
+					"attendance_detail" => $data['attendance_data']['attendance_detail'],
+					"material_progress" => $data['attendance_data']['material_progress'],
+					"learning_status" => $data['attendance_data']['learning_status']
 				]);
 			}
 
@@ -179,12 +209,61 @@ class AttendanceController extends Controller {
 		return view("roles.teacher.attendance.edit", [
 			"attendance" => $attendance,
 			"attendanceData" => $attendance->student_attendances,
+			"all_students" => User::where("role_id", 3)->get()
 		]);
 	}
 
 	// Update attendance data in the database
 	public function update(Request $request, $attendance_data_id){
 		$attendance = Attendance::findOrFail($attendance_data_id);
+
+		$validator = Validator::make($request->all(), [
+			"attendance_date" => "required",
+			"attendance_detail.*" => "required",
+		]);
+
+		// Collect initial validation errors into the $errors array
+		$errors = [];
+		$validatedData = [];
+
+		if ($validator->fails()) {
+			$errors = $validator->errors()->toArray(); // Collect errors from the initial validation
+		}
+
+		foreach($request->students as $i => $student_id){
+			$isAttend = ($request["checkbox_value"][$i] == "on")? 1 : 0;
+
+			// Validate conditional fields based on attendance status
+			$attendanceData = [
+				'attendance_detail' => $request->input("attendance_detail.$i"),
+				'material_progress' => $isAttend ? $request->input("material_progress.$i") : null,
+				'learning_status' => $isAttend ? $request->input("learning_status.$i") : null,
+				'attended' => $isAttend,
+			];
+
+			// If material_progress is filled, ensure learning_status is provided
+			if ($isAttend == 1 && $attendanceData['material_progress'] && !$attendanceData['learning_status']) {
+				$errors["learning_status.$i"] = "Learning status is required if material progress is provided.";
+			}
+			else if ($isAttend == 1 && !$attendanceData['material_progress'] && $attendanceData['learning_status']) {
+				$errors["material_progress.$i"] = "Material progress is required if learning status is provided.";
+			}
+
+			// Collect valid data for the second loop if no errors
+			if (empty($errors)) {
+				$validatedData[] = [
+					"student_id" => $student_id,
+					"attendance_data" => $attendanceData
+				];
+			}
+		}
+
+		// If errors exist (from either the initial validation or the loop), return them
+		if (!empty($errors)) {
+			return back()->withErrors($errors)->withInput();
+		}
+
+		return "oghey";
 
 		try {
 			DB::beginTransaction();

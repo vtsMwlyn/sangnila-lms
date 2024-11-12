@@ -60,98 +60,13 @@
 											@endif
 										</td>
 										<td class="template-bodies">{{ $sa->attendance_detail }}</td>
-										<td class="template-bodies rounded-r-xl">{{ $sa->material_progress }} [{{ $sa->learning_status }}]</td>
+										<td class="template-bodies rounded-r-xl">{{ $sa->material_progress ?? "N/A" }} [{{ $sa->learning_status ?? "N/A" }}]</td>
 									</tr>
 								@endif
 							@endforeach
 
 						</x-table>
 					</div>
-
-					{{-- <div class="flex flex-col overflow-hidden rounded-xl mt-5 border border-blue-950 contentTable my-5" style="display: none;">
-						<!-- Header -->
-						<div class="flex w-full">
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-b border-blue-950 px-4 py-2 font-bold text-blue-950 text-center">Student Name</div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-l border-r border-b border-blue-950 px-4 py-2 font-bold text-blue-950 text-center">Attendance Status</div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-r border-b border-blue-950 px-4 py-2 font-bold text-blue-950 text-center">Attendance Details</div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-b border-blue-950 px-4 py-2 font-bold text-blue-950 text-center">Progress</div>
-							</div>
-						</div>
-
-						<!-- Filler -->
-						<div class="flex w-full">
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-l border-r border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-r border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
-							</div>
-						</div>
-
-						<!-- Main attendance content -->
-						@foreach($atd->student_attendances as $sa)
-							@if($sa->attendance_detail != "Account disabled")
-								<div class="flex w-full items-stretch bg-slate-300">
-									<div class="w-1/4">
-										<div class="px-4 text-blue-950">
-											<li>{{ $sa->student->full_name }}</li>
-										</div>
-									</div>
-									<div class="w-1/4 border-l border-r border-blue-950">
-										<div class="px-4 text-blue-950">
-											<li>
-												@if($sa->is_attend == 1)
-												Attended
-												@elseif($sa->is_attend == 0)
-													Absent
-												@endif
-											</li>
-										</div>
-									</div>
-									<div class="w-1/4 border-r border-blue-950">
-										<div class="px-4 text-blue-950">
-											<li>{{ $sa->attendance_detail }}</li>
-										</div>
-									</div>
-									<div class="w-1/4">
-										<div class="px-4 text-blue-950">
-											<li>{{ $sa->material_progress }} [{{ $sa->learning_status }}]</li>
-										</div>
-									</div>
-								</div>
-							@endif
-						@endforeach
-
-						<!-- Filler -->
-						<div class="flex w-full">
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-l border-r border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-r border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
-							</div>
-						</div>
-
-					</div> --}}
 				</div>
 			@endforeach
 

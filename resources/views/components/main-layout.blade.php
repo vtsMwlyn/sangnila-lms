@@ -107,9 +107,9 @@
 				display: flex !important;
 				align-items: center !important;
 				height: 2.45rem !important;
-				border: solid 3px rgb(148 163 184) !important;
+				border: solid 3px rgb(148 163 184);
 				height: 2.9rem !important;
-				border-radius: 0.85rem !important;
+				border-radius: 1rem !important;
 			}
 
 			@media screen and (max-width: 1024px){

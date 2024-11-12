@@ -14,5 +14,5 @@
 </select>
 
 @if($errors->has($attributes->get('name')))
-    <p class="text-red-800 font-bold mt-2"><i class="bi bi-exclamation-circle"></i> {{ $errors->first($attributes->get('name')) }}</p>
+	<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $errors->first($attributes->get('name')) }}</p>
 @endif

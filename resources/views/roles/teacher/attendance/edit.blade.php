@@ -24,7 +24,7 @@
 				<div class="w-1/3">
 					<x-label for="attendance_date">{{ __("Attendance Date") }}</x-label>
 					<div class="flex gap-3 mt-1 items-center" id="date-inp-cont">
-						<div class="flex flex-col items-start">
+						<div class="flex flex-col items-start grow">
 							<x-input type="date" class="date-input w-full" name="attendance_date" id="attendance_date" :value="$attendance->attendance_date"/>
 						</div>
 						<x-button type="button" id="todaybtn" class="bg-orange-500">Today</x-button>
@@ -33,8 +33,8 @@
 				<div class="w-1/3">
 					<x-label for="student_add">{{ __("Add Student to Attendance") }}</x-label>
 					<div class="flex items-center gap-3 mt-1">
-						<x-select class="w-full" id="student_add">
-						</x-select>
+						<select class="w-full rounded-2xl shadow-sm focus:outline-none py-2 px-4 focus:ring-0" id="student_add" style="border-width: 3px;">
+						</select>
 						<x-button type="button" id="add_student" class="bg-orange-500">Add</x-button>
 					</div>
 				</div>
@@ -47,61 +47,63 @@
 						@php
 							$exclude_from_dropdown = [];
 						@endphp
-						@foreach (App\Models\CourseStudent::where("course_id", $attendance->course_id)->where("teacher_id", Auth::user()->id)->get() as $course_student)
+
+						@foreach ($attendanceData as $ad)
 							@php
-								$atd = $attendanceData->where("user_id", $course_student->student->id)->first();
+								array_push($exclude_from_dropdown, $ad->student->id);
 							@endphp
 
-							@if($atd)
-								@php
-									array_push($exclude_from_dropdown, $course_student->student->id);
-								@endphp
-
-								<tr class="table-row" style="@if($atd->attendance_detail == "Account disabled") display: none; @endif background: rgba(256, 256, 256, 0.4);">
-									<td class="p-5 grow rounded-l-xl">
-										<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
-											<input type="checkbox" id="checkbox{{ $course_student->student->id }}"
-											class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @elseif($atd->is_attend == 1) checked @endif @if($atd->attendance_detail == "Account disabled") disabled @endif>
-											<label for="checkbox{{ $course_student->student->id }}">{{ $course_student->student->full_name }}</label>
-											<input type="hidden" name="students[]" value="{{ $course_student->student->id }}">
-										</div>
-										<div class="flex w-full gap-3 mt-2 material_progress_detail items-start justify-between">
-											<div class="flex flex-col w-2/3 container_select2">
-												<x-select class="material_progress select2">
-													<option selected disabled>Select Material Progress</option>
-													@foreach ($attendance->course->topics as $topic)
-														@foreach ($topic->materials as $material)
-															<option value="{{ $material->title }}" @if($atd->material_progress == $material->title) selected @endif>{{ $material->title }}</option>
-														@endforeach
+							<tr @if($loop->index == 0) id="tes" @endif class="table-row" style="@if($ad->attendance_detail == "Account disabled") display: none; @endif background: rgba(256, 256, 256, 0.4);">
+								<td class="grow rounded-l-xl p-5">
+									<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
+										<input type="checkbox" id="checkbox{{ $ad->student->id }}"
+										class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @elseif($ad->is_attend == 1) checked @endif @if($ad->attendance_detail == "Account disabled") disabled @endif>
+										<label for="checkbox{{ $ad->student->id }}">{{ $ad->student->full_name }}</label>
+										<input type="hidden" name="students[]" value="{{ $ad->student->id }}">
+									</div>
+									<div class="flex w-full gap-3 mt-2 material_progress_detail items-start justify-between @error('material_progress.' . $loop->index) border-red rounded-2xl p-1 @enderror @error('learning_status.' . $loop->index) border-red p-1 rounded-2xl @enderror">
+										<div class="flex flex-col w-2/3 container_select2">
+											<x-select class="material_progress select2" name="fake_material_progress[]">
+												<option selected disabled>Select Material Progress</option>
+												@foreach ($attendance->course->topics as $topic)
+													@foreach ($topic->materials as $material)
+														<option value="{{ $material->title }}" @if($ad->material_progress == $material->title) selected @endif>{{ $material->title }}</option>
 													@endforeach
-												</x-select>
-											</div>
-
-											<x-select class="learning_status w-1/3">
-												<option value="On Progress" @if($atd->learning_status == "On Progress") selected @endif>On Progress</option>
-												<option value="Done" @if($atd->learning_status == "Done") selected @endif>Done</option>
+												@endforeach
 											</x-select>
 										</div>
-									</td>
-									<td class="p-5 w-1/2">
-										<div class="flex flex-col items-stretch">
-											@if($atd)
-												<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px;">{{ old("attendance_detail." . $loop->index, $atd->attendance_detail) }}</textarea>
-											@else
-												<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px;"></textarea>
-											@endif
-											@error("attendance_detail." . $loop->index)
-												<span class="text-red-500 mt-2">{{ $message }}</span>
-											@enderror
-										</div>
-									</td>
-									<td class="p-5 rounded-r-xl shrink">
-										<div class="flex justify-center items-center w-full h-full">
-											<x-button class="bg-red-600 remove-row" type="button"><i class="bi bi-trash3"></i></x-button>
-										</div>
-									</td>
-								</tr>
-							@endif
+
+										<x-select class="learning_status w-1/3" name="fake_learning_status[]">
+											<option value="On Progress" @if($ad->learning_status == "On Progress") selected @endif>On Progress</option>
+											<option value="Done" @if($ad->learning_status == "Done") selected @endif>Done</option>
+										</x-select>
+									</div>
+
+									@error("learning_status." . $loop->index)
+										<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
+									@enderror
+									@error("material_progress." . $loop->index)
+										<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
+									@enderror
+								</td>
+								<td class="w-1/2">
+									<div class="flex flex-col items-stretch">
+										@if($ad)
+											<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px; border-width: 3px;">{{ old("attendance_detail." . $loop->index, $ad->attendance_detail) }}</textarea>
+										@else
+											<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px;"></textarea>
+										@endif
+										@error("attendance_detail." . $loop->index)
+											<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> The attendance detail field is required.</p>
+										@enderror
+									</div>
+								</td>
+								<td class="rounded-r-xl shrink p-5">
+									<div class="flex justify-center items-center w-full h-full">
+										<x-button class="bg-red-600 remove-row" type="button"><i class="bi bi-trash3"></i></x-button>
+									</div>
+								</td>
+							</tr>
 						@endforeach
 					</tbody>
 				</table>
@@ -118,11 +120,6 @@
 		</form>
 
 		@php
-			$all_students = [];
-			foreach(App\Models\CourseStudent::where("course_id", $attendance->course_id)->where("teacher_id", Auth::user()->id)->get() as $crsstd){
-				array_push($all_students, $crsstd->student);
-			}
-
 			$all_topics_and_materials = [];
 			foreach($attendance->course->topics as $topic){
 				$tm = [];
@@ -141,6 +138,10 @@
 		@endphp
 
 		<script>
+			@php
+				$counter = $attendanceData->count();
+			@endphp
+
 			const allStudents = @json($all_students);
 			console.log(allStudents);
 			let exclude_dropdown = {!! json_encode($exclude_from_dropdown) !!};
@@ -151,12 +152,36 @@
 				$(document).on("item_list_modified", () => {
 					refreshAddStudent();
 					reapplyEventListeners();
+					reinitializeSelect2();
 				});
 
 				// Initialization
 				applyHideAndUnhideProgress();
 				applyRemoveRowButton();
 				refreshAddStudent();
+
+				function reinitializeSelect2(){
+					// Select2 initialization
+					$('.select2').select2({
+						allowClear: false
+					});
+
+					// Apply resize observer to each container with class 'container_select2'
+					$('.container_select2').each(function () {
+						const container = this;
+						const resizeObserver = new ResizeObserver(() => {
+							$(container).find('.select2').each(function () {
+								$(this).select2('destroy').select2({
+									allowClear: false
+								});
+							});
+
+							// stylingSelect2();
+						});
+
+						resizeObserver.observe(container);
+					});
+				}
 
 				function refreshAddStudent(){
 					$("#student_add").html("");
@@ -227,6 +252,10 @@
 
 						$(element).closest('.table-row').remove();
 
+						@php
+							$counter--;
+						@endphp
+
 						document.dispatchEvent(itemListModifiedEvent);
 					}
 				}
@@ -243,12 +272,12 @@
 
 					const trow = $("<tr>").addClass("table-row").css({"background": "rgba(256, 256, 256, 0.4)"});
 					const firstCol = $("<td>").addClass("p-5 grow rounded-l-xl");
-					const secondCol = $("<td>").addClass("p-5 w-1/2");
+					const secondCol = $("<td>").addClass("w-1/2");
 					const thirdCol = $("<td>").addClass("p-5 rounded-r-xl shrink");
 
 					// First column
 					const checkNameContainer = $("<div>").addClass("flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl");
-					const progressContainer = $("<div>").addClass("flex w-full gap-2 mt-2 material_progress_detail");
+					const progressContainer = $("<div>").addClass("flex w-full gap-2 mt-2 material_progress_detail @error('material_progress.' . $counter) border-red rounded-2xl p-1 @enderror @error('learning_status.' . $counter) border-red p-1 rounded-2xl @enderror");
 
 					const studentToAdd = JSON.parse($("#student_add").val());
 					const newCheckBox = $("<input>").attr({"type": "checkbox", "id": `checkbox${studentToAdd.id}`}).addClass("mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300");
@@ -256,7 +285,8 @@
 					const newHiddenInput = $("<input>").attr({"type": "hidden", "name": "students[]", "value": studentToAdd.id});
 					checkNameContainer.append(newCheckBox).append(newLabelCheckBox).append(newHiddenInput);
 
-					const newMaterialProgressDropdown = $("<select>").addClass("material_progress w-2/3 border-blue-900 focus:border-blue-700 focus:ring focus:ring-blue-700 focus:ring-opacity-50 rounded-xl shadow-sm border-2 font-semibold text-blue-800 py-3 px-5");
+					const selectContainer = $("<div>").addClass("flex flex-col w-2/3 container_select2");
+					const newMaterialProgressDropdown = $("<select>").addClass("select2 material_progress w-full rounded-2xl shadow-sm focus:outline-none py-2 px-4 border-slate-400 focus:border-slate-600 focus:ring-0").css("border-width", "3px");
 					const materialProgressDropdownPlaceholder = $("<option>").attr({"disabled": true, "selected": true}).text("Select Material Progress");
 					newMaterialProgressDropdown.append(materialProgressDropdownPlaceholder);
 					const allTopicsAndMaterials = @json($all_topics_and_materials);
@@ -267,25 +297,25 @@
 						}
 					}
 
-					const newLearningStatusDropdown = $("<select>").addClass("learning_status w-1/3 border-blue-900 focus:border-blue-700 focus:ring focus:ring-blue-700 focus:ring-opacity-50 rounded-xl shadow-sm border-2 font-semibold text-blue-800 py-3 px-5");
+					const newLearningStatusDropdown = $("<select>").addClass("learning_status w-1/3 rounded-2xl shadow-sm focus:outline-none py-2 px-4 border-slate-400 focus:border-slate-600 focus:ring-0").css("border-width", "3px");
 					const materialProgressDropdownOption1 = $("<option>").attr({"selected": true, "value": "On Progress"}).text("On Progress");
 					const materialProgressDropdownOption2 = $("<option>").attr({"value": "Done"}).text("Done");
 					newLearningStatusDropdown.append(materialProgressDropdownOption1).append(materialProgressDropdownOption2);
 
-					progressContainer.append(newMaterialProgressDropdown).append(newLearningStatusDropdown);
+					progressContainer.append(selectContainer.append(newMaterialProgressDropdown)).append(newLearningStatusDropdown);
 
 					firstCol.append(checkNameContainer).append(progressContainer);
 
 					// Second column
 					const attendanceDetailContainer = $("<div>").addClass("flex flex-col items-stretch");
-					const newTextArea = $("<textarea>").attr({"rows": 4, "name": "attendance_detail[]", "placeholder": "Enter student in class progress"}).addClass("rounded-xl border-2 font-semibold text-blue-900 border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50").css({"resize": "none", "box-sizing": "border-box", "padding": "10px"});
+					const newTextArea = $("<textarea>").attr({"rows": 4, "name": "attendance_detail[]", "placeholder": "Enter student in class progress"}).addClass("rounded-xl border-2 font-semibold text-blue-900 @error('attendance_detail.' . $counter) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror").css({"resize": "none", "box-sizing": "border-box", "padding": "10px", "border-width": "3px"});
 					attendanceDetailContainer.append(newTextArea);
 
 					secondCol.append(attendanceDetailContainer);
 
 					// Third column
 					const removeBtnContainer = $("<div>").addClass("flex justify-center items-center w-full h-full");
-					const newRemoveBtn = $("<button>").attr({"type": "button"}).addClass("bg-red-600 remove-row text-center px-5 py-2 border border-transparent rounded-xl text-white font-semibold hover:bg-slate-800 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 transition ease-in-out duration-150").css({"box-shadow": "0 1px 2px rgba(0, 0, 0, 0.3)"}).html("<i class='bi bi-trash3'></i>");
+					const newRemoveBtn = $("<button>").attr({"type": "button"}).addClass("remove-row text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25").css({"box-shadow": "0 1px 2px rgba(0, 0, 0, 0.3)", "background": "linear-gradient(90deg, #1EB8CD 0%, #354D9B 100%)"}).html("<i class='bi bi-trash3'></i>");
 					removeBtnContainer.append(newRemoveBtn);
 					thirdCol.append(removeBtnContainer);
 
@@ -296,6 +326,10 @@
 
 					applyHideAndUnhideProgress();
 					applyRemoveRowButton();
+
+					@php
+						$counter++;
+					@endphp
 
 					document.dispatchEvent(itemListModifiedEvent);
 				}
@@ -309,7 +343,7 @@
 				});
 
 				// Helper mechanism to send data to Laravel when form is submitted
-				const collectCheckboxValues = () => {
+				const collectValues = () => {
 					const checkboxes = $('input[type="checkbox"]');
 					const checkboxValues = [];
 					const materialProgressValues = [];
@@ -360,50 +394,7 @@
 				form.addEventListener('submit', (event) => {
 					event.preventDefault();
 
-					const [checkboxValues, materialProgressValues, learningStatusValues] = collectCheckboxValues();
-
-					console.log(checkboxValues);
-					console.log(materialProgressValues);
-					console.log(learningStatusValues);
-
-					$invalid = false;
-
-					$("#attendance_date").css({"border": "rgb(30 58 138) solid 2px"});
-					$("#attendance_date").closest("div").find("p").remove();
-					$("#date-inp-cont").removeClass("items-start").addClass("items-center");
-					$("textarea").css({"border": "rgb(30 58 138) solid 2px"});
-					$("textarea").closest("div").find("p").remove();
-					$(".material_progress").each(function(){
-						$(this).css({"border": "rgb(30 58 138) solid 2px"});
-						$(this).closest("div").find("p").remove();
-					});
-
-					if(!$("#attendance_date").val()){
-						$("#attendance_date").css("border", "solid 2px rgb(185 28 28)");
-						$("#date-inp-cont").removeClass("items-center").addClass("items-start");
-						$("#attendance_date").after($("<p>").html('<i class="bi bi-exclamation-circle"></i> The attendance date field is required.').addClass("text-red-800 font-bold mt-1"));
-						$invalid = true;
-					}
-
-					$("textarea").each(function(){
-						if($(this).val() == ""){
-							$(this).after($("<p>").html('<i class="bi bi-exclamation-circle"></i> The attendance detail field is required.').addClass("text-red-800 font-bold mt-1"));
-							$(this).css("border", "solid 2px rgb(185 28 28)");
-							$invalid = true;
-						}
-					});
-
-					checkboxValues.forEach((value, index) => {
-						if(value === "on" && !materialProgressValues[index]){
-							$($(".material_progress")[index]).css({"border": "solid 2px rgb(185 28 28)"});
-							$($(".material_progress")[index]).after($("<p>").html('<i class="bi bi-exclamation-circle"></i> The material progress field is required.').addClass("text-red-800 font-bold mt-1"));
-							$invalid = true;
-						}
-					});
-
-					if($invalid){
-						return;
-					}
+					const [checkboxValues, materialProgressValues, learningStatusValues] = collectValues();
 
 					checkboxValues.forEach((value, index) => {
 						const hiddenInput1 = $("<input>").attr({"type": "hidden", "name": "checkbox_value[]", "value": value});
