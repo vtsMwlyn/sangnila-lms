@@ -219,7 +219,8 @@ class AttendanceController extends Controller {
 
 		$validator = Validator::make($request->all(), [
 			"attendance_date" => "required",
-			"attendance_detail.*" => "required",
+			"attendance_detail.*" => "required|min:3",
+			"students.*" => "required"
 		]);
 
 		// Collect initial validation errors into the $errors array

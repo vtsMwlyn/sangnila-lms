@@ -81,7 +81,11 @@
 
 			<div class="flex flex-wrap gap-3 p-3 mt-5 border-2 border-blue-800 rounded-xl bg-white @error("checkbox_value") border p-5 border-red-700 @enderror">
 				@foreach ($course_students as $i => $cs)
-					<div class="flex items-center gap-3 p-5 checkbox-container" style="width: 23%; @if($cs->student->status == "disabled") display: none; @endif">
+					@if($cs->student->status == "disabled")
+						@continue
+					@endif
+
+					<div class="flex items-center gap-3 p-5 checkbox-container" style="width: 23%;">
 						<input type="checkbox" id="checkbox{{ $i }}"
 						class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $i) == "on" ) checked @elseif($checkboxes_values[$i] == "on") checked @endif>
 						<label for="checkbox{{ $i }}">{{ $cs->student->full_name }}</label>

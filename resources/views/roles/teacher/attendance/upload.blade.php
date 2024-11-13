@@ -36,7 +36,11 @@
 					<table class="w-full mt-1" style="border-collapse: separate; border-spacing: 0 20px;">
 						<tbody id="table-body">
 							@foreach ($students as $index => $s)
-								<tr class="table-row" style="@if($s->status == "disabled") display: none; @endif background: rgba(256, 256, 256, 0.4);">
+								@if($s->status == "disabled")
+									@continue
+								@endif
+
+								<tr class="table-row" style="background: rgba(256, 256, 256, 0.4);">
 									<td class="p-5 grow rounded-l-xl">
 										<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
 											<input type="checkbox" id="checkbox{{ $loop->iteration }}"
@@ -62,7 +66,7 @@
 												<option value="Done" @if(old("learning_status." . $index) == "Done" ) selected @endif>Done</option>
 											</x-select>
 										</div>
-										
+
 										@error("learning_status." . $loop->index)
 											<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
 										@enderror
@@ -72,7 +76,7 @@
 									</td>
 									<td class="p-5 w-1/2">
 										<div class="flex flex-col items-stretch">
-											<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px; border-width: 3px;">@if($s->status == "disabled"){{ __("Account disabled") }}@else{{ old("attendance_detail." . $loop->index) }}@endif</textarea>
+											<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px; border-width: 3px;">{{ old("attendance_detail." . $loop->index) }}</textarea>
 
 											@error("attendance_detail." . $loop->index)
 												<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> The attendance detail field is required.</p>
