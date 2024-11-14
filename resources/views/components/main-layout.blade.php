@@ -290,14 +290,26 @@
 						showLoadingPopupWithDelay();
 					});
 
-					// Hide loading popup when a button with onclick="history.back();" is clicked
-					$('button[onclick*="history.back"]').on('click', function () {
-						// This will not hide the popup here
-						// Instead, we'll handle it in the beforeunload event
+					// // Hide loading popup when a button with onclick="history.back();" is clicked
+					// $('button[onclick*="history.back"]').on('click', function () {
+					// 	// This will not hide the popup here
+					// 	// Instead, we'll handle it in the beforeunload event
+					// });
+
+					// // Hide loading popup when navigating away from the page
+					// $(window).on('beforeunload', function () {
+					// 	hideLoadingPopup();
+					// });
+					
+					// Track back button click using popstate event
+					$(window).on('popstate', function () {
+						isPopState = true;  // Set flag to true on back navigation
+						hideLoadingPopup();  // Ensure the popup is hidden
 					});
 
-					// Hide loading popup when navigating away from the page
-					$(window).on('beforeunload', function () {
+					// Hide loading popup once the page is fully loaded
+					$(window).on('pageshow', function () {
+						isPopState = false;  // Reset flag on full page load
 						hideLoadingPopup();
 					});
 

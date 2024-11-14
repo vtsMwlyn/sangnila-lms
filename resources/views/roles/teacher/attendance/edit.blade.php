@@ -48,72 +48,6 @@
 							$exclude_from_dropdown = [];
 						@endphp
 
-						{{-- @foreach ($attendanceData as $ad)
-							@php
-								array_push($exclude_from_dropdown, $ad->student->id);
-							@endphp
-
-							<tr @if($loop->index == 0) id="tes" @endif class="table-row" style="@if($ad->attendance_detail == "Account disabled") display: none; @endif background: rgba(256, 256, 256, 0.4);">
-								<td class="grow rounded-l-xl p-5">
-									<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
-										<input type="checkbox" id="checkbox{{ $ad->student->id }}"
-										class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @elseif($ad->is_attend == 1) checked @endif>
-										<label for="checkbox{{ $ad->student->id }}">{{ $ad->student->full_name }}</label>
-										<input type="hidden" name="students[]" value="{{ $ad->student->id }}">
-									</div>
-									<div class="flex w-full gap-3 mt-2 material_progress_detail items-start justify-between @error('material_progress.' . $loop->index) border-red rounded-2xl p-1 @enderror @error('learning_status.' . $loop->index) border-red p-1 rounded-2xl @enderror">
-										<div class="flex flex-col w-2/3 container_select2">
-											<x-select class="material_progress select2" name="fake_material_progress[]">
-												<option selected disabled>Select Material Progress</option>
-												@foreach ($attendance->course->topics as $topic)
-													@foreach ($topic->materials as $material)
-														<option value="{{ $material->title }}" @if($ad->material_progress == $material->title) selected @endif>{{ $material->title }}</option>
-													@endforeach
-												@endforeach
-											</x-select>
-										</div>
-
-										<x-select class="learning_status w-1/3" name="fake_learning_status[]">
-											<option value="On Progress" @if($ad->learning_status == "On Progress") selected @endif>On Progress</option>
-											<option value="Done" @if($ad->learning_status == "Done") selected @endif>Done</option>
-										</x-select>
-									</div>
-
-									@error("learning_status." . $loop->index)
-										<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
-									@enderror
-									@error("material_progress." . $loop->index)
-										<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
-									@enderror
-								</td>
-								<td class="w-1/2">
-									<div class="flex flex-col items-stretch">
-										@if($ad)
-											<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px; border-width: 3px;">{{ old("attendance_detail." . $loop->index, $ad->attendance_detail) }}</textarea>
-										@else
-											<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px;"></textarea>
-										@endif
-										@error("attendance_detail." . $loop->index)
-											<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> The attendance detail field is required.</p>
-										@enderror
-									</div>
-								</td>
-								<td class="rounded-r-xl shrink p-5">
-									<div class="flex justify-center items-center w-full h-full">
-										<x-button class="bg-red-600 remove-row" type="button"><i class="bi bi-trash3"></i></x-button>
-									</div>
-								</td>
-							</tr>
-						@endforeach --}}
-
-						{{-- <tr class="bg-slate-800">
-							<td colspan="3"></td>
-						</tr> --}}
-
-						{{-- @if(old('students'))
-							@dd(old('students.6', 'tolol'))
-						@endif --}}
-
 						@forelse (old('checkbox_value', $attendanceData) as $i => $ad)
 							@php
 								$studentId = is_object($ad)? $ad->student->id : $ad;
@@ -176,6 +110,9 @@
 						@empty
 						@endforelse
 
+						@php
+							$exclude_from_dropdown = array_map('intval', $exclude_from_dropdown);
+						@endphp
 					</tbody>
 				</table>
 			</div>
@@ -214,7 +151,7 @@
 			@endphp
 
 			const allStudents = @json($all_students);
-			let exclude_dropdown = {!! json_encode($exclude_from_dropdown) !!};
+			let exclude_dropdown = @json($exclude_from_dropdown);
 
 			$(document).ready(() => {
 				const itemListModifiedEvent = new Event("item_list_modified");
@@ -244,8 +181,6 @@
 									allowClear: false
 								});
 							});
-
-							// stylingSelect2();
 						});
 
 						resizeObserver.observe(container);
@@ -253,12 +188,16 @@
 				}
 
 				function refreshAddStudent(){
+					console.log(exclude_dropdown);
 					$("#student_add").html("");
-					console.log(`To exclude length: ${exclude_dropdown.length}, all students count: ${allStudents.length}`);
 					if(exclude_dropdown.length < allStudents.length){
 						for(let std of allStudents){
+							console.log(std.id);
 							if(!exclude_dropdown.includes(std.id) && std.status != "disabled"){
 								$("#student_add").append($("<option>").attr({"value": JSON.stringify(std)}).text(std.full_name));
+								console.log(`${std.full_name} will be included.`);
+							} else {
+								console.log(`${std.full_name} should be excluded.`);
 							}
 						}
 					}
