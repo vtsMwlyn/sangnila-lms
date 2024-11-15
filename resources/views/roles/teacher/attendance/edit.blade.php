@@ -55,6 +55,7 @@
 								$learStat = is_object($ad)? $ad->learning_status : $ad;
 								$attenDet = is_object($ad)? $ad->attendance_detail: $ad;
 								$isAtten = is_object($ad)? $ad->is_attend : $ad;
+								$isCustom = is_object($ad)? $ad->is_custom : $ad;
 
 								array_push($exclude_from_dropdown, old('students.' . $i, $studentId));
 							@endphp
@@ -76,6 +77,7 @@
 														<option value="{{ $material->title }}" @if(old('material_progress.' . $i, $matProg) == $material->title) selected @endif>{{ $material->title }}</option>
 													@endforeach
 												@endforeach
+												<option value="other" @if(old("material_progress." . $i) == "other" || $isCustom == 1) selected @endif>Other</option>
 											</x-select>
 										</div>
 
@@ -90,6 +92,13 @@
 										<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
 									@enderror
 									@error("material_progress." . $i)
+										<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
+									@enderror
+
+									<div class="mt-2 @error('other_material.' . $i) border-red rounded-2xl p-1 @enderror">
+										<x-input name="other_material[]" type="text" class="w-full hidden other-material" placeholder="Input activity/material" value="{{ old('other_material.' . $i, ($isCustom == 1 ? $matProg : '')) }}"/>
+									</div>
+									@error("other_material." . $i)
 										<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
 									@enderror
 								</td>
@@ -188,7 +197,7 @@
 				}
 
 				function refreshAddStudent(){
-					console.log(exclude_dropdown);
+
 					$("#student_add").html("");
 					if(exclude_dropdown.length < allStudents.length){
 						for(let std of allStudents){
@@ -222,11 +231,17 @@
 				// Mechanism to hide and unhide selects for material progress detail depending if the student name checkbox is checked or not
 				function toggleProgress(element) {
 					const correspondingDetail = $(element).closest('td').find('.material_progress_detail');
+					const otherMaterial = $(element).closest('td').find('.other-material');
 
 					if ($(element).is(":checked")) {
 						correspondingDetail.css("display", "flex");
-					} else {
+						if(correspondingDetail.find('.material_progress').val() == "other"){
+							otherMaterial.css("display", "flex");
+						}
+					}
+					else {
 						correspondingDetail.css("display", "none");
+						otherMaterial.css("display", "none");
 					}
 				}
 
@@ -243,6 +258,15 @@
 					// Set up the event listener for checkbox changes
 					allCheckBoxes.change(evlisToggleProgress);
 				}
+
+				$(".material_progress").change(function(){
+					if($(this).val() == "other"){
+						$(this).closest(".material_progress_detail").next().find(".other-material").show();
+					}
+					else {
+						$(this).closest(".material_progress_detail").next().find(".other-material").hide();
+					}
+				});
 
 				// Remove row of data if a student doesnt want to be included in attendance data
 				function evlisRemoveRow(){
@@ -304,6 +328,7 @@
 							newMaterialProgressDropdown.append(newMaterialProgressDropdownOption);
 						}
 					}
+					newMaterialProgressDropdown.append($("<option>").attr("value", "other").text("Other"));
 
 					const newLearningStatusDropdown = $("<select>").addClass("learning_status w-1/3 rounded-2xl shadow-sm focus:outline-none py-2 px-4 border-slate-400 focus:border-slate-600 focus:ring-0").css("border-width", "3px");
 					const learningStatusPlaceholder = $("<option>").attr({"selected": true, "disabled": true}).text("Select Status");
@@ -313,7 +338,11 @@
 
 					progressContainer.append(selectContainer.append(newMaterialProgressDropdown)).append(newLearningStatusDropdown);
 
-					firstCol.append(checkNameContainer).append(progressContainer);
+					const otherMaterialContainer = $("<div>").addClass("mt-2");
+					const otherMaterialInput = $("<input>").attr({"type": "text", "placeholder": "Input activity/material", "name": "other-material[]"}).addClass("w-full hidden other-material rounded-2xl shadow-sm focus:outline-none py-2 px-4 border-slate-400 focus:border-slate-600 focus:ring-0 ");
+					otherMaterialContainer.append(otherMaterialInput);
+
+					firstCol.append(checkNameContainer).append(progressContainer).append(otherMaterialContainer);
 
 					// Second column
 					const attendanceDetailContainer = $("<div>").addClass("flex flex-col items-stretch");

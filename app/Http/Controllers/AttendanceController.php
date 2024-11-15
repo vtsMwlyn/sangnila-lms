@@ -143,6 +143,7 @@ class AttendanceController extends Controller {
 				'attendance_detail' => $request->input("attendance_detail.$i"),
 				'material_progress' => $isAttend ? $request->input("material_progress.$i") : null,
 				'learning_status' => $isAttend ? $request->input("learning_status.$i") : null,
+				'other_material' => $isAttend ? $request->input("other_material.$i") : null,
 				'attended' => $isAttend,
 			];
 
@@ -152,6 +153,10 @@ class AttendanceController extends Controller {
 			}
 			else if ($isAttend == 1 && !$attendanceData['material_progress'] && $attendanceData['learning_status']) {
 				$errors["material_progress.$i"] = "Material progress is required if learning status is provided.";
+			}
+
+			if($isAttend == 1 && $attendanceData['material_progress'] == "other" && !$attendanceData['other_material']){
+				$errors["other_material.$i"] = "Please specified the material.";
 			}
 
 			// Collect valid data for the second loop if no errors
@@ -186,7 +191,8 @@ class AttendanceController extends Controller {
 					"attendance_id" => $newAttendance->id,
 					"is_attend" => $data['attendance_data']['attended'],
 					"attendance_detail" => $data['attendance_data']['attendance_detail'],
-					"material_progress" => $data['attendance_data']['material_progress'],
+					"material_progress" => ($data['attendance_data']['material_progress'] == 'other') ? $data['attendance_data']['other_material'] : $data['attendance_data']['material_progress'],
+					"is_custom" => ($data['attendance_data']['material_progress'] == 'other') ? 1 : 0,
 					"learning_status" => $data['attendance_data']['learning_status']
 				]);
 			}
@@ -239,6 +245,7 @@ class AttendanceController extends Controller {
 				'attendance_detail' => $request->input("attendance_detail.$i"),
 				'material_progress' => $isAttend ? $request->input("material_progress.$i") : null,
 				'learning_status' => $isAttend ? $request->input("learning_status.$i") : null,
+				'other_material' => $isAttend ? $request->input("other_material.$i") : null,
 				'attended' => $isAttend,
 			];
 
@@ -248,6 +255,10 @@ class AttendanceController extends Controller {
 			}
 			else if ($isAttend == 1 && !$attendanceData['material_progress'] && $attendanceData['learning_status']) {
 				$errors["material_progress.$i"] = "Material progress is required if learning status is provided.";
+			}
+
+			if($isAttend == 1 && $attendanceData['material_progress'] == "other" && !$attendanceData['other_material']){
+				$errors["other_material.$i"] = "Please specified the material.";
 			}
 
 			// Collect valid data for the second loop if no errors
@@ -264,8 +275,6 @@ class AttendanceController extends Controller {
 			return back()->withErrors($errors)->withInput();
 		}
 
-		return "oghey";
-
 		try {
 			DB::beginTransaction();
 
@@ -273,39 +282,20 @@ class AttendanceController extends Controller {
 
 			$attendance->update(["attendance_date" => $request["attendance_date"]]);
 
-			foreach($existingAttendanceData as $existingAtd){
-				if(!in_array($existingAtd->student->id, $request->students)){
-					StudentAttendance::where("user_id", $existingAtd->student->id)->where("attendance_id", $attendance->id)->delete();
-				}
+			foreach($existingAttendanceData as $ead){
+				StudentAttendance::find($ead->id)->delete();
 			}
 
-			foreach($request->students as $i => $student_id){
-				$cs = CourseStudent::where("student_id", $student_id)->where("course_id", $attendance->course->id)->where("teacher_id", Auth::user()->id)->first();
-
-				// Modify data in database mechanism if the data valid for each students data in the course
-				$isAttend = ($request["checkbox_value"][$i] == "on")? 1 : 0;
-				$attendanceDetail = $request["attendance_detail"][$i];
-
-				// If the student is not recorded in current attendance data, add them to the list
-				if(!$existingAttendanceData->where("user_id", $cs->student->id)->first()){
-					StudentAttendance::create([
-						"is_attend" => $isAttend,
-						"attendance_detail" => $attendanceDetail,
-						"material_progress" => $request["material_progress"][$i],
-						"learning_status" => $request["learning_status"][$i],
-						"user_id" => $student_id,
-						"attendance_id" => $attendance->id
-					]);
-				}
-				// If the student is already recorded in current attendance data, update the attendance data
-				else {
-					StudentAttendance::where("user_id", $cs->student->id)->where("attendance_id", $attendance->id)->update([
-						"is_attend" => $isAttend,
-						"attendance_detail" => $attendanceDetail,
-						"material_progress" => $request["material_progress"][$i],
-						"learning_status" => $request["learning_status"][$i]
-					]);
-				}
+			foreach($validatedData as $vd){
+				StudentAttendance::create([
+					"is_attend" => $vd["attendance_data"]["attended"],
+					"attendance_detail" => $vd["attendance_data"]["attendance_detail"],
+					"material_progress" => ($vd["attendance_data"]["material_progress"] == "other")? $vd["attendance_data"]["other_material"] : $vd['attendance_data']['material_progress'],
+					"learning_status" => $vd["attendance_data"]["learning_status"],
+					"is_custom" => ($vd["attendance_data"]["material_progress"] == "other")? 1 : 0,
+					"user_id" => intval($vd["student_id"]),
+					"attendance_id" => $attendance->id
+				]);
 			}
 
 			DB::commit();
@@ -313,7 +303,7 @@ class AttendanceController extends Controller {
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to create announcement, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("systemFail", "System failed to update attendance, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 		return redirect(route("teacher.attendance.show", $attendance->course_id))->with("successEditAttendance", "Attendance edited successfully!");

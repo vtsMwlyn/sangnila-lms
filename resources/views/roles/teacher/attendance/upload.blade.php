@@ -48,6 +48,7 @@
 											<label for="checkbox{{ $loop->iteration }}">{{ $s->full_name }}</label>
 											<input type="hidden" name="students[]" value="{{ $s->id }}">
 										</div>
+
 										<div class="flex w-full gap-2 mt-2 material_progress_detail items-start @error('material_progress.' . $loop->index) border-red rounded-2xl p-1 @enderror @error('learning_status.' . $loop->index) border-red p-1 rounded-2xl @enderror" style="display: none;">
 											<div class="flex flex-col w-2/3 container_select2">
 												<select class="material_progress select2 rounded-2xl shadow-sm focus:outline-none py-2 px-4 focus:ring-0" name="fake_material_progress[]">
@@ -57,6 +58,7 @@
 															<option value="{{ $material->title }}" @if(old("material_progress." . $index) == $material->title) selected @endif>{{ $material->title }}</option>
 														@endforeach
 													@endforeach
+													<option value="other" @if(old("material_progress." . $index) == "other") selected @endif>Other</option>
 												</select>
 											</div>
 
@@ -66,17 +68,23 @@
 												<option value="Done" @if(old("learning_status." . $index) == "Done" ) selected @endif>Done</option>
 											</x-select>
 										</div>
-
 										@error("learning_status." . $loop->index)
 											<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
 										@enderror
 										@error("material_progress." . $loop->index)
 											<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
 										@enderror
+
+										<div class="mt-2 @error('other_material.' . $loop->index) border-red rounded-2xl p-1 @enderror">
+											<x-input name="other_material[]" type="text" class="w-full hidden other-material" placeholder="Input activity/material" value="{{ old('other_material.' . $loop->index) }}"/>
+										</div>
+										@error("other_material." . $loop->index)
+											<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
+										@enderror
 									</td>
 									<td class="p-5 w-1/2">
 										<div class="flex flex-col items-stretch">
-											<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px; border-width: 3px;">{{ old("attendance_detail." . $loop->index) }}</textarea>
+											<textarea name="attendance_detail[]" rows="6" class="h-full rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px; border-width: 3px;">{{ old("attendance_detail." . $loop->index) }}</textarea>
 
 											@error("attendance_detail." . $loop->index)
 												<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> The attendance detail field is required.</p>
@@ -114,23 +122,33 @@
 
 				allCheckBoxes.each(function() {
 					const correspondingDetail = $(this).closest('td').find('.material_progress_detail');
+					const otherMaterial = $(this).closest('td').find('.other-material');
 
 					if ($(this).is(":checked")) {
 						correspondingDetail.css("display", "flex");
+						if(correspondingDetail.find('.material_progress').val() == "other"){
+							otherMaterial.css("display", "flex");
+						}
 					}
 					else {
 						correspondingDetail.css("display", "none");
+						otherMaterial.css("display", "none");
 					}
 				});
 
 				allCheckBoxes.change(function(){
 					const correspondingDetail = $(this).closest('td').find('.material_progress_detail');
+					const otherMaterial = $(this).closest('td').find('.other-material');
 
 					if ($(this).is(":checked")) {
 						correspondingDetail.css("display", "flex");
+						if(correspondingDetail.find('.material_progress').val() == "other"){
+							otherMaterial.css("display", "flex");
+						}
 					}
 					else {
 						correspondingDetail.css("display", "none");
+						otherMaterial.css("display", "none");
 					}
 				});
 			});
@@ -182,6 +200,15 @@
 					}
 				});
 			}
+
+			$(".material_progress").change(function(){
+				if($(this).val() == "other"){
+					$(this).closest(".material_progress_detail").next().find(".other-material").show();
+				}
+				else {
+					$(this).closest(".material_progress_detail").next().find(".other-material").hide();
+				}
+			});
 
 			const form = document.querySelector('#attendance_form');
 			form.addEventListener('submit', (event) => {

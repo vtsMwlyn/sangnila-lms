@@ -300,7 +300,7 @@
 					// $(window).on('beforeunload', function () {
 					// 	hideLoadingPopup();
 					// });
-					
+
 					// Track back button click using popstate event
 					$(window).on('popstate', function () {
 						isPopState = true;  // Set flag to true on back navigation
