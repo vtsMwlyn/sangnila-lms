@@ -70,7 +70,7 @@
 				<p class="mt-5 text-xs">*Only fill these if you want to change your password</p>
 
 				<div class="flex items-stretch gap-2 justify-end mt-4 mb-3 w-full">
-					<x-cancel-button type="button" onclick="history.back();" class="w-full md:w-1/6">
+					<x-cancel-button class="w-full md:w-1/6">
 						Return
 					</x-cancel-button>
 					<x-button class="bg-orange-500 w-full md:w-1/6">

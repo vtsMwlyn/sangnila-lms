@@ -32,7 +32,7 @@
 							<x-button class="bg-orange-500 w-1/6 mt-5" type="button" id="botan">
 								{{ __('Add to List') }}
 							</x-button>
-							<x-cancel-button class="w-1/6 mt-5" msg="The inputted data will be discarded, are you sure want to cancel?">
+							<x-cancel-button class="w-1/6 mt-5">
 								{{ __('Back') }}
 							</x-cancel-button>
 						</div>
@@ -41,7 +41,7 @@
 					<div class="flex w-full" id="notifikeshon" style="display: none;">
 						<div class="bg-white p-5 rounded-xl font-semibold text-center italic font-semibold">- No more courses to assign -</div>
 						<div class="flex w-full justify-end">
-							<x-cancel-button class="w-1/6 mt-5" msg="The inputted data will be discarded, are you sure want to cancel?'))">
+							<x-cancel-button class="w-1/6 mt-5">
 								{{ __('Back') }}
 							</x-cancel-button>
 						</div>

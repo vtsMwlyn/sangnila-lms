@@ -27,7 +27,7 @@ class MaterialController extends Controller {
 	public function teacher_store(Request $request, $topic_id) {
 		$validatedData = $request->validate([
 			"title" => "required|min:3",
-			"link" => "required|url",
+			"link" => "nullable|url",
 			"desc" => "required|min:3"
 		]);
 
@@ -45,7 +45,7 @@ class MaterialController extends Controller {
 			return back()->with("systemFail", "System failed to create material, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route('teacher.topic.show', [$topic->course->id, $topic->id]))->with("successUploadMaterial", "Successfully uploaded new material to the topic!");
+		return redirect(route('teacher.mycourse.topic.show', [$topic->course->id, $topic->id]))->with("successUploadMaterial", "Successfully uploaded new material to the topic!");
 	}
 
 	// Edit material input page
@@ -59,7 +59,7 @@ class MaterialController extends Controller {
 	public function teacher_update(Request $request, $material_id) {
 		$data = $request->validate([
 			"title" => "required|min:3",
-			"link" => "required|url",
+			"link" => "nullable|url",
 			"desc" => "required|min:3"
 		]);
 
@@ -73,7 +73,7 @@ class MaterialController extends Controller {
 		}
 
 
-		return redirect(route('teacher.topic.show', [$material->topic->course->id, $material->topic->id]))->with("successEditMaterial", "Successfully update material data!");
+		return redirect(route('teacher.mycourse.topic.show', [$material->topic->course->id, $material->topic->id]))->with("successEditMaterial", "Successfully update material data!");
 	}
 
 	// Material deletion confirmation
@@ -91,7 +91,7 @@ class MaterialController extends Controller {
 
 		$material->delete();
 
-		return redirect(route("teacher.topic.show", [$cid, $tid]))->with("successDeleteMaterial", "Successfully deleted material from the topic!");
+		return redirect(route("teacher.mycourse.topic.show", [$cid, $tid]))->with("successDeleteMaterial", "Successfully deleted material from the topic!");
 	}
 
 	// ===== STUDENT ===== //

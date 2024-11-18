@@ -1,7 +1,7 @@
 @extends("layouts.main-teacher")
 
 @section("title")
-	<h1>{{ $course->course_name }}</h1>
+	<h1>Courses</h1>
 @endsection
 
 @section("breadcrumbs-extension")
@@ -10,7 +10,9 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title>{{ $course->course_name }}</x-page-title>
+		<x-back-button href="{{ route('teacher.mycourse.index') }}"></x-back-button>
+		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
+		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("successAddTopic"))
 			<x-badge-success badge_text="{{ session('successAddTopic') }}"></x-badge-success>
@@ -24,33 +26,31 @@
 
 		<p class="text-blue-950 font-semibold my-8 text-center">{{ $course->course_description }}</p>
 
-		<div class="w-full">
-			<div class="w-full py-6 rounded-xl text-white font-bold text-center" style="background: #000C48;">
-				Student List
-			</div>
+		<div class="w-full bg-slate-400 mt-4" style="height: 2px;"></div>
+		<h2 class="my-4 font-extrabold text-xl text-dark-blue">Student List</h2>
+		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
-			@if($course_students->count())
-				<div class="flex flex-col gap-5 mt-5">
-					@foreach ($course_students as $index => $cs)
-						@if ($index % 3 == 0)
-							@if ($index != 0)
-								</div> <!-- Close previous row -->
-							@endif
-							<div class="flex w-full rounded-xl text-white py-6 items-center" style="background-color: #283785;">
-						@endif
-							<div class="w-1/3 text-center">{{ $cs->student->full_name }}</div>
-					@endforeach
-					</div> <!-- Close last row -->
+		<div class="mt-8 flex flex-wrap">
+			@forelse ($course_students as $index => $cs)
+				<div class="flex flex-col items-center w-1/6 mb-6">
+					@if($cs->student->details->profpic)
+						<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;">
+					@else
+						<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+					@endif
+					<h1 class="text-lg font-bold text-center">{{-- explode(" ", $cs->student->full_name)[0] --}}{{ $cs->student->full_name }}</h1>
 				</div>
-			@else
-				<div class="text-center p-5 bg-white rounded-xl mt-5 w-full font-semibold">- No students assigned yet -</div>
-			@endif
+			@empty
+			@endforelse
 		</div>
 
-		<h2 class="text-xl font-semibold mb-2 mt-10">Course Topic and Materials:</h2>
+		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
+		<h2 class="my-4 font-extrabold text-xl text-dark-blue">Course Topics and Materials/Activities</h2>
+		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
+
 		<div class="flex justify-between items-stretch w-full mt-5">
 			<x-anchor-button class="bg-orange-500"
-				href="{{ route('teacher.topic.create', $course->id) }}">
+				href="{{ route('teacher.mycourse.topic.create', $course->id) }}">
 				<i class="bi bi-plus-lg"></i> Add new topic
 			</x-anchor-button>
 
@@ -69,70 +69,79 @@
 			</div>
 		</div>
 
-		<div class="mt-5 mb-5 overflow-x-auto">
-			<x-table>
-				<x-slot name="head">
-					<th class="template-heads rounded-l-xl w-1/3">Topic Title</th>
-					<th class="template-heads w-1/3">List of Materials</th>
-					{{-- <th class="template-heads">Material Link</th> --}}
-					<th class="template-heads rounded-r-xl w-1/3">Action</th>
-				</x-slot>
+		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
 
-				@if ($topics->count())
-					@foreach ($topics as $topic)
+		<div class="w-full overflow-x-auto">
+			<table class="w-full">
+				<thead>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Topic Title</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Materials/Activities</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
+				</thead>
+				<tbody >
+					@php
+						$iterasus = 1;
+					@endphp
+
+					@forelse ($topics as $topic)
 						@if($topic->materials->count())
-							<tr>
-								<td class="template-bodies rounded-l-xl w-1/3">
-									<a href="{{ route("teacher.topic.show", [$course->id, $topic->id]) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $topic->title }}</a>
+							<tr class="@if($iterasus % 2 == 1) bg-white @endif">
+								<td class="py-2 px-4">
+									<a href="{{ route("teacher.mycourse.topic.show", [$course->id, $topic->id]) }}" class="font-bold text-blue-600 hover:underline">{{ $topic->title }}</a>
 								</td>
 
-								<td class="template-bodies w-1/3">
-									<ul class="h-full w-full overflow-y-auto flex flex-col" style="max-height: 100px;">
+								<td class="py-2 px-4">
+									<ul class="h-full w-full flex flex-col">
 										@foreach ($topic->materials as $material)
 											<li>{{ $material->title }}</li>
 										@endforeach
 									</ul>
 								</td>
-								{{-- <td class="template-bodies"><a href="{{ $material->link }}" class="text-blue-600">{{ $material->link }}</a></td> --}}
 
-								<td class="template-bodies rounded-r-xl w-1/3">
-									<div class="flex flex-col w-full justify-center items-center gap-2">
-										<x-anchor-button class="bg-orange-500 w-1/2"
-											href="{{ route('teacher.topic.edit', [$topic->course->id, $topic->id]) }}">
+								<td class="py-2 px-4">
+									<div class="flex w-full items-center gap-2">
+										<x-anchor-button class="bg-orange-500"
+											href="{{ route('teacher.mycourse.topic.edit', [$topic->course->id, $topic->id]) }}">
 											<i class="bi bi-pencil-square"></i> Edit Topic
 										</x-anchor-button>
-										<x-anchor-button class="bg-orange-500 w-1/2"
-											href="{{ route('teacher.topic.delete', [$topic->course->id, $topic->id]) }}">
+										<x-anchor-button class="bg-orange-500"
+											href="{{ route('teacher.mycourse.topic.delete', [$topic->course->id, $topic->id]) }}">
 											<i class="bi bi-trash3"></i> Delete Topic
 										</x-anchor-button>
 									</div>
 								</td>
-
 							</tr>
+
+							@php
+								$iterasus++;
+							@endphp
 						@else
-							<tr>
-								<td class="template-bodies rounded-l-xl"><a href="{{ route("teacher.topic.show", [$course->id, $topic->id]) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $topic->title }}</a></td>
-								<td class="template-bodies">- No materials added yet to this topic -</td>
-								<td class="template-bodies rounded-r-xl">
-									<div class="flex w-full justify-center gap-1">
+							<tr class="@if($iterasus % 2 == 1) bg-white @endif">
+								<td class="py-2 px-4"><a href="{{ route("teacher.mycourse.topic.show", [$course->id, $topic->id]) }}" class="font-bold text-light-blue hover:text-blue-400 hover:underline">{{ $topic->title }}</a></td>
+								<td class="py-2 px-4">- No materials added yet to this topic -</td>
+								<td class="py-2 px-4">
+									<div class="flex w-full items-center gap-2">
 										<x-anchor-button class="bg-orange-500"
-											href="{{ route('teacher.topic.edit', [$topic->course->id, $topic->id]) }}">
-											Edit Topic
+											href="{{ route('teacher.mycourse.topic.edit', [$topic->course->id, $topic->id]) }}">
+											<i class="bi bi-pencil-square"></i> Edit Topic
 										</x-anchor-button>
 										<x-anchor-button class="bg-orange-500"
-											href="{{ route('teacher.topic.delete', [$topic->course->id, $topic->id]) }}">
-											Delete Topic
+											href="{{ route('teacher.mycourse.topic.delete', [$topic->course->id, $topic->id]) }}">
+											<i class="bi bi-trash3"></i> Delete Topic
 										</x-anchor-button>
 									</div>
 								</td>
 							</tr>
-						@endif
-					@endforeach
-				@else
-					<tr><td colspan="4" class="text-center p-5 bg-white rounded-xl w-full font-semibold">- No topics and materials added yet to this course -</td></tr>
-				@endif
 
-			</x-table>
+							@php
+								$iterasus++;
+							@endphp
+						@endif
+					@empty
+						<tr><td colspan="4" class="text-center p-5 bg-white rounded-xl w-full font-semibold">- No topics and materials added yet to this course -</td></tr>
+					@endforelse
+				</tbody>
+			</table>
 		</div>
 	</x-section-container>
 @endsection

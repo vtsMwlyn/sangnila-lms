@@ -127,7 +127,7 @@
 		<title>Sangnila Academy | LMS</title>
 	</head>
 
-	<body class="min-h-screen flex flex-col items-center sm:text-sm text-xs">
+	<body class="min-h-screen flex flex-col items-center text-xs sm:text-sm">
 		<!-- Other popups -->
 		@yield("popup")
 

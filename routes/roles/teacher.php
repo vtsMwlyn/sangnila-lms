@@ -19,81 +19,74 @@ Route::prefix('/teacher')
 	->middleware(['auth', 'role:Teacher', 'verified', "acc_not_disabled"])
 	->group(function () {
 
-		// Landing page
+		// ===== DASHBOARD ===== //
 		Route::get('/', function () {
 			return redirect(route('dashboard'));
 		});
 
-		// Manage courses, topics, and materials
-		Route::prefix('/my-course')
-			->name('mycourse.')
-			->group(function () {
 
-				// List of assigned courses
-				Route::get('/', [CourseController::class, 'teacher_index'])->name('index');
+		Route::prefix('/my-course')->name('mycourse.')->group(function () {
+			// ===== MANAGE COURSES ===== //
+			// List of assigned courses
+			Route::get('/', [CourseController::class, 'teacher_index'])->name('index');
 
-				// Course details
-				Route::get('/{course_id}', [CourseController::class, 'teacher_show'])->name('show')->whereNumber('course_id');
+			// Course details
+			Route::get('/{course_id}', [CourseController::class, 'teacher_show'])->name('show')->whereNumber('course_id');
 
-				// Synchronize with curriculum
-				Route::post("/{course_id}/synchronize", [CurriculumController::class, "teacher_synchronize"])->name("synchronize")->whereNumber('course_id');
+			// Synchronize with curriculum
+			Route::post("/{course_id}/synchronize", [CurriculumController::class, "teacher_synchronize"])->name("synchronize")->whereNumber('course_id');
 
-				// Import from excel
-				Route::get("/{course_id}/import-excel", [ExcelImportController::class, "import_excel_topics_and_materials_index"])->name("import-excel-topicsandmaterials");
-				Route::post("/{course_id}/import-excel", [ExcelImportController::class, "import_excel_topics_and_materials_store"])->name("import-excel-topicsandmaterials.store");
+			// Import from excel
+			Route::get("/{course_id}/import-excel", [ExcelImportController::class, "import_excel_topics_and_materials_index"])->name("import-excel-topicsandmaterials");
+			Route::post("/{course_id}/import-excel", [ExcelImportController::class, "import_excel_topics_and_materials_store"])->name("import-excel-topicsandmaterials.store");
 
-				// Download import excel template
-				Route::get("/import-excel/download-template", [DownloadResourceController::class, "topics_and_materials_import_excel_template"])->name("import-excel.download");
-			}
-		);
+			// Download import excel template
+			Route::get("/import-excel/download-template", [DownloadResourceController::class, "topics_and_materials_import_excel_template"])->name("import-excel.download");
 
-		Route::prefix("/topic")
-			->name("topic.")
-			->group(function(){
-				// Route::get('/', function(){
-				// 	return redirect(route("teacher.mycourse.index"));
-				// })->name("index");
 
-				// Add new topic
-				Route::get("/{course_id}", [TopicController::class, "teacher_create"])->name("create")->whereNumber('course_id');
-				Route::post("/{course_id}", [TopicController::class, "teacher_store"])->name("store")->whereNumber('course_id');
+			// ===== TOPICS ===== //
+			Route::prefix("/topic")
+				->name("topic.")
+				->group(function(){
+					// Add new topic
+					Route::get("/{course_id}", [TopicController::class, "teacher_create"])->name("create")->whereNumber('course_id');
+					Route::post("/{course_id}", [TopicController::class, "teacher_store"])->name("store")->whereNumber('course_id');
 
-				// Topic details
-				Route::get("/{course_id}/{topic_id}/detail", [TopicController::class, "teacher_show"])->name("show")->whereNumber(['course_id', 'topic_id']);
+					// Topic details
+					Route::get("/{course_id}/{topic_id}/detail", [TopicController::class, "teacher_show"])->name("show")->whereNumber(['course_id', 'topic_id']);
 
-				// Edit topic
-				Route::get("/{course_id}/{topic_id}/edit", [TopicController::class, "teacher_edit"])->name("edit")->whereNumber(['course_id', 'topic_id']);
-				Route::patch("/{course_id}/{topic_id}/edit", [TopicController::class, "teacher_update"])->name("update")->whereNumber(['course_id', 'topic_id']);
+					// Edit topic
+					Route::get("/{course_id}/{topic_id}/edit", [TopicController::class, "teacher_edit"])->name("edit")->whereNumber(['course_id', 'topic_id']);
+					Route::patch("/{course_id}/{topic_id}/edit", [TopicController::class, "teacher_update"])->name("update")->whereNumber(['course_id', 'topic_id']);
 
-				// Delete topic
-				Route::get("/{course_id}/{topic_id}/delete", [TopicController::class, "teacher_delete"])->name("delete")->whereNumber(['course_id', 'topic_id']);
-				Route::delete("/{course_id}/{topic_id}/delete", [TopicController::class, "teacher_destroy"])->name("destroy")->whereNumber(['course_id', 'topic_id']);
-			}
-		);
+					// Delete topic
+					Route::get("/{course_id}/{topic_id}/delete", [TopicController::class, "teacher_delete"])->name("delete")->whereNumber(['course_id', 'topic_id']);
+					Route::delete("/{course_id}/{topic_id}/delete", [TopicController::class, "teacher_destroy"])->name("destroy")->whereNumber(['course_id', 'topic_id']);
+				}
+			);
 
-		Route::prefix('/material')
-			->name('material.')
-			->group(function () {
-				// Route::get('/', function(){
-				// 	return redirect(route("teacher.mycourse.index"));
-				// })->name("index");
+			// ===== MATERIALS ===== //
+			Route::prefix('/material')
+				->name('material.')
+				->group(function () {
+					// Add new material
+					Route::get('/upload/{topic_id}', [MaterialController::class, 'teacher_create'])->name('upload')->whereNumber('topic_id');
+					Route::post('/upload/{topic_id}', [MaterialController::class, 'teacher_store'])->name('store')->whereNumber('topic_id');
 
-				// Add new material
-				Route::get('/upload/{topic_id}', [MaterialController::class, 'teacher_create'])->name('upload')->whereNumber('topic_id');
-				Route::post('/upload/{topic_id}', [MaterialController::class, 'teacher_store'])->name('store')->whereNumber('topic_id');
+					// Edit material
+					Route::get('/{material_id}/edit', [MaterialController::class, 'teacher_edit'])->name('edit')->whereNumber('material_id');
+					Route::patch('/{material_id}', [MaterialController::class, 'teacher_update'])->name('update')->whereNumber('material_id');
 
-				// Edit material
-				Route::get('/{material_id}/edit', [MaterialController::class, 'teacher_edit'])->name('edit')->whereNumber('material_id');
-				Route::patch('/{material_id}', [MaterialController::class, 'teacher_update'])->name('update')->whereNumber('material_id');
+					// Delete material
+					Route::get('/{material_id}/delete', [MaterialController::class, 'teacher_delete'])->name('remove')->whereNumber('material_id');
+					Route::delete('/{material_id}', [MaterialController::class, 'teacher_destroy'])->name('destroy')->whereNumber('material_id');
 
-				// Delete material
-				Route::get('/{material_id}/delete', [MaterialController::class, 'teacher_delete'])->name('remove')->whereNumber('material_id');
-				Route::delete('/{material_id}', [MaterialController::class, 'teacher_destroy'])->name('destroy')->whereNumber('material_id');
+				}
+			);
+		});
 
-			}
-		);
 
-		// Manage students
+		// ===== STUDENTS MATERIAL ACCESS ===== //
 		Route::prefix('/student')
 			->name('student.')
 			->group(function () {
@@ -112,7 +105,8 @@ Route::prefix('/teacher')
 			}
 		);
 
-		// Attendance
+
+		// ===== ATTENDANCE ===== //
 		Route::prefix('/attendance')
 			->name('attendance.')
 			->group(function () {
@@ -135,7 +129,8 @@ Route::prefix('/teacher')
 			}
 		);
 
-		// Assignment
+
+		// ===== ASSIGNMENT ===== //
 		Route::prefix("/assignment")
 			->name("assignment.")
 			->group(function(){
@@ -168,7 +163,7 @@ Route::prefix('/teacher')
 			}
 		);
 
-		// Announcements
+		// ===== VIEW ANNOUNCEMENT ===== //
 		Route::get("/announcement/{announcement_id}", [AnnouncementController::class, "all_view_announcement"])->name("view-announcement")->whereNumber("announcement_id");
 
 	}

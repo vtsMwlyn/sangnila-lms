@@ -39,33 +39,45 @@
 
 					{{-- <p>Uploaded by: {{ ($atd->posted_by->details->gender == 1)? "Mr." : "Ms." }} {{ $atd->posted_by->full_name }}</p> --}}
 
-					<div class="overflow-x-auto contentTable" style="display: none;">
-						<x-table>
-							<x-slot name="head">
-								<th class="template-heads rounded-l-xl">Students</th>
-								<th class="template-heads">Attendance status</th>
-								<th class="template-heads">In Class Progress</th>
-								<th class="template-heads rounded-r-xl">Material Progress</th>
-							</x-slot>
+					<div class=" contentTable w-full" style="display: none;" >
+						<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
 
-							@foreach($atd->student_attendances as $sa)
-								@if($sa->attendance_detail != "Account disabled")
-									<tr>
-										<td class="template-bodies rounded-l-xl">{{ $sa->student->full_name }}</td>
-										<td class="template-bodies">
-											@if($sa->is_attend == 1)
-												Attended
-											@elseif($sa->is_attend == 0)
-												Absent
-											@endif
-										</td>
-										<td class="template-bodies">{{ $sa->attendance_detail }}</td>
-										<td class="template-bodies rounded-r-xl">{{ $sa->material_progress ?? "N/A" }} [{{ $sa->learning_status ?? "N/A" }}]</td>
-									</tr>
-								@endif
-							@endforeach
-
-						</x-table>
+						<div class="w-full overflow-x-auto">
+							<table class="w-full">
+								<thead>
+									<th class="text-start py-3 px-4 border-b-2 border-slate-400">Students</th>
+									<th class="text-center py-3 px-4 border-b-2 border-slate-400">Attended</th>
+									<th class="text-start py-3 px-4 border-b-2 border-slate-400">In Class Progress</th>
+									<th class="text-start py-3 px-4 border-b-2 border-slate-400">Notes</th>
+								</thead>
+								<tbody>
+									@forelse ($atd->student_attendances as $sa)
+										@if($sa->attendance_detail != "Account disabled")
+											<tr class="@if($loop->index % 2 == 0) bg-white @endif">
+												<td class="py-2 px-4">{{ $sa->student->full_name }}</td>
+												<td class="py-2 px-4">
+													<div class="w-full flex justify-center">
+														@if($sa->is_attend == 1)
+															<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">
+														@else
+															<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">
+														@endif
+													</div>
+												</td>
+												<td class="py-2 px-4">
+													{{ $sa->material_progress ?? "N/A" }} [{{ $sa->learning_status ?? "N/A" }}]
+												</td>
+												<td class="py-2 px-4 w-1/3">
+													{{ $sa->attendance_detail }}
+												</td>
+											</tr>
+										@endif
+									@empty
+										<tr><td colspan="4" class="text-center p-5 bg-white rounded-xl w-full font-semibold">- No materials added yet to this course topic -</td></tr>
+									@endforelse
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			@endforeach

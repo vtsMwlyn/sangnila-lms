@@ -17,7 +17,7 @@
 			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('teacher.topic.store', $course->id) }}" method="post">
+		<form action="{{ route('teacher.mycourse.topic.store', $course->id) }}" method="post">
 			@csrf
 			<!-- Topic Title -->
 			<div class="mb-4 flex gap-3 @error('title') items-start @else items-stretch @enderror">
@@ -32,7 +32,7 @@
 				<x-button class="bg-orange-500 w-full md:w-1/5">
 					{{ __('Submit') }}
 				</x-button>
-				<x-cancel-button msg="The filled data will be discarded, are you sure want to cancel?" class="w-full md:w-1/5">
+				<x-cancel-button class="w-full md:w-1/5">
 					Cancel
 				</x-cancel-button>
 			</div>

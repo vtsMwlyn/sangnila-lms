@@ -52,11 +52,11 @@ Route::prefix('/student')
 				Route::get("/{course_id}", [AssignmentController::class, "student_show"])->name("show");
 
 				// Upload assignment
-				Route::get("/{course_id}/{assignment_id}/submit", [AssignmentController::class, "student_submit"])->name("submit");
+				// Route::get("/{course_id}/{assignment_id}/submit", [AssignmentController::class, "student_submit"])->name("submit");
 				Route::post("/{course_id}/{assignment_id}/submit", [AssignmentController::class, "student_store"])->name("store");
 
 				// Check submission history
-				Route::get("/{course_id}/{student__id}/{assignment_id}/detail", [AssignmentController::class, "student_submission_detail"])->name("detail");
+				// Route::get("/{course_id}/{student__id}/{assignment_id}/detail", [AssignmentController::class, "student_submission_detail"])->name("detail");
 
 			}
 		);

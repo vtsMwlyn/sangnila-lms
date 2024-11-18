@@ -83,7 +83,7 @@
 	<div class="rounded-3xl w-full py-5 px-8 mb-6 flex flex-col items-stretch sm:text-base text-sm" style="background: #FEFEFEB2;">
 		<div class="flex w-full justify-between items-end">
 			<div class="">
-				<button type="button" onclick="history.back();"><img src="{{ asset('img/back-button.svg') }}" class="h-8 w-8" alt="back"></button>
+				<x-back-button href="{{ route('student.assignment.index') }}"><img src="{{ asset('img/back-button.svg') }}" class="h-8 w-8" alt="back"></x-back-button>
 				<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
 			</div>
 			<div class="flex gap-8">
@@ -157,7 +157,7 @@
 									<a href="{{ $asg->link }}" target="blank">
 										<img src="{{ asset('img/download.svg') }}" alt="download-icon" class="w-8 h-8 hover:scale-110">
 									</a>
-									<button type="button" class="submitassignment-popuptrigger" data-route="{{ route('student.assignment.submit', [$course->id, $asg->id]) }}"
+									<button type="button" class="submitassignment-popuptrigger" data-route="{{ route('student.assignment.store', [$course->id, $asg->id]) }}"
 										data-assignment="{{ $asg->toJSON() }}" data-submissions="{{ count($submissions_per_assignment[$index]) }}">
 										<img src="{{ asset('img/attach.svg') }}" alt="history-icon" class="w-8 h-8 hover:scale-110">
 									</button>

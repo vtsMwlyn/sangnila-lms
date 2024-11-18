@@ -51,7 +51,7 @@
 						<x-button class="bg-orange-500 w-full md:w-1/6">
 							{{ __('Assign') }}
 						</x-button>
-						<x-cancel-button msg="The filled in data will be discarded, are you sure want to cancel?" class="w-full md:w-1/6">
+						<x-cancel-button class="w-full md:w-1/6">
 							Cancel
 						</x-cancel-button>
 					</div>

@@ -80,7 +80,7 @@
 				<form action="{{ route("admin.course.batch-assign.store", $course->id) }}" class="mt-10 w-full flex gap-3 justify-end items-center" method="post" id="leForm">
 					@csrf
 					<x-button class="bg-orange-500 w-1/2 md:w-1/6">Assign All</x-button>
-					<x-cancel-button class="w-1/2 md:w-1/6" msg="The data will be discarded. Are you sure want to cancel?">Cancel</x-cancel-button>
+					<x-cancel-button class="w-1/2 md:w-1/6">Cancel</x-cancel-button>
 				</form>
 			</div>
 

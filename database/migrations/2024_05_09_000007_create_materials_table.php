@@ -11,7 +11,7 @@ return new class extends Migration {
 			$table->unsignedBigInteger('topic_id');
 			$table->string('title');
 			$table->longText("desc");
-			$table->longText('link');
+			$table->longText('link')->nullable();
 			$table->foreign('topic_id')->references('id')->on('topics')->onDelete("cascade");
 			$table->timestamps();
 		});

@@ -78,7 +78,7 @@
 					<x-button class="bg-orange-500 w-full md:w-1/3">
 						{{ __('Create') }}
 					</x-button>
-					<x-cancel-button msg="The filled data will be discarded, are you sure want to cancel?" class="w-full md:w-1/3">
+					<x-cancel-button class="w-full md:w-1/3">
 						Cancel
 					</x-cancel-button>
 				</div>

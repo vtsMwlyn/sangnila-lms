@@ -1,7 +1,7 @@
 @extends("layouts.main-teacher")
 
 @section("title")
-	<h1>{{ $topic->course->course_name }}</h1>
+	<h1>Courses</h1>
 @endsection
 
 @section("breadcrumbs-extension")
@@ -11,10 +11,11 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title>
-			<a href="{{ route("teacher.mycourse.show", $topic->course->id) }}">{{ $topic->course->course_name }}</a>
-		</x-page-title>
-		<h1 class="text-2xl font-semibold text-blue-900 mb-8 text-center">{{ $topic->title }}</h1>
+		<x-back-button href="{{ route('teacher.mycourse.show', $topic->course->id) }}"></x-back-button>
+		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $topic->course->course_name }}</h1>
+		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
+
+		<h1 class="text-xl font-semibold text-blue-900">Course Topic: {{ $topic->title }}</h1>
 
 		@if(session()->has("successUpdateTopic"))
 			<x-badge-success badge_text="{{ session('successUpdateTopic') }}"></x-badge-success>
@@ -29,50 +30,75 @@
 		@endif
 
 		<div class="flex gap-2 my-8">
-			<x-anchor-button class="bg-orange-500" href="{{ route('teacher.topic.edit', [$topic->course->id, $topic->id]) }}"><i class="bi bi-pencil-square"></i> Edit Topic</x-anchor-button>
-			<x-anchor-button class="bg-orange-500" href="{{ route('teacher.topic.delete', [$topic->course->id, $topic->id]) }}"><i class="bi bi-trash3"></i> Delete Topic</x-anchor-button>
+			<x-anchor-button class="bg-orange-500" href="{{ route('teacher.mycourse.topic.edit', [$topic->course->id, $topic->id]) }}"><i class="bi bi-pencil-square"></i> Edit Topic</x-anchor-button>
+			<x-anchor-button class="bg-orange-500" href="{{ route('teacher.mycourse.topic.delete', [$topic->course->id, $topic->id]) }}"><i class="bi bi-trash3"></i> Delete Topic</x-anchor-button>
 		</div>
 
-		<h2 class="text-xl font-semibold mb-2 text-white">Material List:</h2>
+		<h2 class="text-lg font-semibold mb-2">Material/Activity List:</h2>
 		<div class="flex mt-4">
-			<x-anchor-button class="bg-orange-500" href="{{ route('teacher.material.upload', $topic->id) }}"><i class="bi bi-plus-lg"></i> Add New Material</x-anchor-button>
+			<x-anchor-button class="bg-orange-500" href="{{ route('teacher.mycourse.material.upload', $topic->id) }}"><i class="bi bi-plus-lg"></i> Add New Material</x-anchor-button>
 		</div>
 
-		<div class="overflow-x-auto">
-			<x-table>
-				<x-slot name="head">
-					<th class="template-heads rounded-l-xl">Material Title</th>
-					<th class="template-heads" style="min-width: 30vw;">Material Description</th>
-					<th class="template-heads" style="max-width: 20vw;">Link</th>
-					<th class="template-heads rounded-r-xl">Actions</th>
-				</x-slot>
+		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
 
-				@forelse ($topic->materials as $material)
-					<tr>
-						<td class="template-bodies rounded-l-xl w-1/4">{{ $material->title }}</td>
-						<td class="template-bodies w-1/3">
-							<div class="h-full w-full overflow-y-auto" style="max-height: 5.5rem;">{{ $material->desc }}</div>
-						</td>
-						<td class="template-bodies" style="max-width: 20vw; word-wrap: break-word;"><a href="{{ $material->link }}" target="blank" class="text-blue-200 font-bold hover:text-blue-400 hover:underline">{{ $material->link }}</a></td>
-						<td class="template-bodies rounded-r-xl">
-							<div class="flex gap-1">
-								<x-anchor-button class="bg-orange-500"
-									href="{{ route('teacher.material.edit', $material->id) }}">
-									<i class="bi bi-pencil-square"></i>
-								</x-anchor-button>
-								<x-anchor-button class="bg-orange-500"
-									href="{{ route('teacher.material.remove', $material->id) }}">
-									<i class="bi bi-trash3"></i>
-								</x-anchor-button>
-							</div>
-						</td>
-					</tr>
-				@empty
-					<tr>
-						<td colspan="4" class="bg-white rounded-xl p-5 text-center font-semibold">- No materials added yet to this topic -</td>
-					</tr>
-				@endforelse
-			</x-table>
+		<div class="w-full overflow-x-auto">
+			<table class="w-full">
+				<thead>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Material/Activity Title</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Material/Activity Description</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Link</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
+				</thead>
+				<tbody>
+					@forelse ($topic->materials as $material)
+						<tr class="@if($loop->index % 2 == 0) bg-white @endif">
+							<td class="py-2 px-4 w-1/4">{{ $material->title }}</td>
+							<td class="py-2 px-4 w-1/2">
+								@if(strlen($material->desc) > 120)
+									<div class="">{{ substr($material->desc, 0, 120) }}... <button type="button" class="show-more-button text-blue font-semibold text-xs">[Show More]</button></div>
+									<div class="hidden">{{ $material->desc }} <button type="button" class="show-less-button text-blue font-semibold text-xs">[Show Less]</button></div>
+								@else
+									{{ $material->desc }}
+								@endif
+							</td>
+							<td class="py-2 px-4" style="max-width: 18vw; word-wrap: break-word;">
+								@if($material->link)
+									<a href="{{ $material->link }}" target="blank" class="font-bold text-blue-600 hover:underline">{{ $material->link }}</a>
+								@else
+									N/A
+								@endif
+							</td>
+
+							<td class="py-2 px-4">
+								<div class="flex gap-1">
+									<x-anchor-button class="bg-orange-500"
+										href="{{ route('teacher.mycourse.material.edit', $material->id) }}">
+										<i class="bi bi-pencil-square"></i>
+									</x-anchor-button>
+									<x-anchor-button class="bg-orange-500"
+										href="{{ route('teacher.mycourse.material.remove', $material->id) }}">
+										<i class="bi bi-trash3"></i>
+									</x-anchor-button>
+								</div>
+							</td>
+						</tr>
+					@empty
+						<tr><td colspan="4" class="text-center p-5 bg-white rounded-xl w-full font-semibold">- No materials added yet to this course topic -</td></tr>
+					@endforelse
+				</tbody>
+			</table>
 		</div>
 	</x-section-container>
+
+	<script>
+		$(".show-more-button").click(function(){
+			$(this).closest("div").next().removeClass("hidden");
+			$(this).closest("div").addClass("hidden");
+		});
+
+		$(".show-less-button").click(function(){
+			$(this).closest("div").prev().removeClass("hidden");
+			$(this).closest("div").addClass("hidden");
+		});
+	</script>
 @endsection

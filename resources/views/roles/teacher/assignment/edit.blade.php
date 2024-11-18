@@ -68,7 +68,7 @@
 
 			<!-- Select Students to Assign -->
 			<div class="flex items-center gap-3 mt-8">
-				<x-label :value="__('Pick students to assign or')" style="color: white;"></x-label>
+				<x-label :value="__('Pick students to assign or')"></x-label>
 				<div class="flex gap-3">
 					<x-button class="bg-orange-500" type="button" id="checkall">Assign to all</x-button>
 					<x-button class="bg-slate-600" type="button" id="undo" style="display: none;">Undo</x-button>
@@ -97,7 +97,7 @@
 				<x-button class="bg-orange-500 w-full md:w-1/6">
 					{{ __('Submit') }}
 				</x-button>
-				<x-cancel-button msg="The changes will be discarded, are you sure want to cancel?" class="w-full md:w-1/6">
+				<x-cancel-button class="w-full md:w-1/6">
 					Cancel
 				</x-cancel-button>
 			</div>

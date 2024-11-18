@@ -213,7 +213,7 @@
 						</div>
 					</div>
 					<div class="flex w-full items-center gap-3 justify-end mt-8">
-						<x-cancel-button class="w-1/2 md:w-1/6" msg="The data will be discarded. Are you sure want to cancel?">Cancel</x-cancel-button>
+						<x-cancel-button class="w-1/2 md:w-1/6">Cancel</x-cancel-button>
 						<x-button class="bg-orange-500 w-1/2 md:w-1/6" type="submit">Import Data</x-button>
 					</div>
 				</form>

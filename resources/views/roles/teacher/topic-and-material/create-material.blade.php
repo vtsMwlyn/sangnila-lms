@@ -6,7 +6,7 @@
 
 @section("breadcrumbs-extension")
 	> <a href="{{ route('teacher.mycourse.show', $topic->course->id) }}" class="font-bold text-yellow-500">{{ $topic->course->course_name }}</a>
-	> <a href="{{ route('teacher.topic.show', [$topic->course->id, $topic->id]) }}" class="font-bold text-yellow-500">{{ $topic->title }}</a>
+	> <a href="{{ route('teacher.mycourse.topic.show', [$topic->course->id, $topic->id]) }}" class="font-bold text-yellow-500">{{ $topic->title }}</a>
 	> <span>Add Material</span>
 @endsection
 
@@ -21,7 +21,7 @@
 			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('teacher.material.store', $topic->id) }}" method="post">
+		<form action="{{ route('teacher.mycourse.material.store', $topic->id) }}" method="post">
 			@csrf
 			<!-- Material Title -->
 			<div class="flex gap-2 @error('title') items-start @else items-stretch @enderror">
@@ -51,7 +51,7 @@
 				<x-button class="bg-orange-500 w-full md:w-1/6">
 					{{ __('Save') }}
 				</x-button>
-				<x-cancel-button msg="The filled data will be discarded, are you sure want to cancel?" class="w-full md:w-1/6">
+				<x-cancel-button class="w-full md:w-1/6">
 					Cancel
 				</x-cancel-button>
 			</div>

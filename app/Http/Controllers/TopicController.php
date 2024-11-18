@@ -68,7 +68,7 @@ class TopicController extends Controller
 			return back()->with("systemFail", "System failed to edit topic, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("teacher.topic.show", [$course_id, $topic_id]))->with("successEditTopic", "Successfully updated topic data!");
+		return redirect(route("teacher.mycourse.topic.show", [$course_id, $topic_id]))->with("successEditTopic", "Successfully updated topic data!");
 	}
 
 	// Topic deletion confirmation

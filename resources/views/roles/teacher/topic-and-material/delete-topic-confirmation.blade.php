@@ -6,14 +6,14 @@
 
 @section("breadcrumbs-extension")
 	> <a href="{{ route('teacher.mycourse.show', $topic->course->id) }}" class="font-bold text-yellow-500">{{ $topic->course->course_name }}</a>
-	> <a href="{{ route('teacher.topic.show', [$topic->course->id, $topic->id]) }}" class="font-bold text-yellow-500">{{ $topic->title }}</a>
+	> <a href="{{ route('teacher.mycourse.topic.show', [$topic->course->id, $topic->id]) }}" class="font-bold text-yellow-500">{{ $topic->title }}</a>
 	> <span>Delete</span>
 @endsection
 
 @section("content")
 	<x-section-container>
 		<x-page-title>Delete Topic</x-page-title>
-		<form method="POST" action="{{ route("teacher.topic.destroy", [$topic->course->id, $topic->id]) }}" class="bg-blue-800 rounded-2xl p-5">
+		<form method="POST" action="{{ route("teacher.mycourse.topic.destroy", [$topic->course->id, $topic->id]) }}" class="bg-blue-800 rounded-2xl p-5">
 			@csrf
 			@method('delete')
 			<!-- Confirmation Text -->

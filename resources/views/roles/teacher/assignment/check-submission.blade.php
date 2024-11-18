@@ -12,31 +12,44 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title>Students Submissions in assignment "{{ $assignment->title }}"</x-page-title>
-		<div class="overflow-x-auto">
-			<x-table>
-				<x-slot name="head">
-					<th class="template-heads rounded-l-xl">Submission time</th>
-					<th class="template-heads">Student</th>
-					<th class="template-heads">Submission title</th>
-					<th class="template-heads">Submission status</th>
-					<th class="template-heads rounded-r-xl">Submission link</th>
-				</x-slot>
+		<x-back-button href="{{ route('teacher.assignment.show', $assignment->course->id) }}"></x-back-button>
+		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $assignment->title }}</h1>
+		<h1 class="text-xl font-semibold text-blue-900 mt-2">Students Submissions</h1>
 
-				@if(count($latest_submissions))
-					@foreach($latest_submissions as $submission)
-						<tr @if($submission->status == "Late") class="bg-red-400" @endif>
-							<td class="template-bodies rounded-l-xl">{{ $submission->created_at }}</td>
-							<td class="template-bodies"><a href="{{ route("teacher.assignment.submission-history", [$assignment->id, $submission->student->id]) }}" class="text-blue-200 hover:text-blue-400 hover:underline font-bold">{{ $submission->student->full_name }}</a></td>
-							<td class="template-bodies">{{ $submission->title }}</td>
-							<td class="template-bodies">{{ $submission->status }}</td>
-							<td class="template-bodies rounded-r-xl"><a class="text-blue-200 hover:text-blue-400 hover:underline font-bold" href="{{ $submission->link }}" target="blank">{{ $submission->link }}</a></td>
+		<div class="w-full bg-slate-400 mt-6" style="height: 2px;"></div>
+
+		<div class="w-full overflow-x-auto">
+			<table class="w-full">
+				<thead>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Submission Time</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Student</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Submission title</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Status</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Submission link</th>
+				</thead>
+				<tbody>
+					@forelse ($latest_submissions as $submission)
+						<tr class="@if($loop->index % 2 == 0) bg-white @endif">
+							<td class="py-2 px-4">
+								<div class="whitespace-nowrap">{{ $submission->created_at->format('d M Y') }}</div>
+								<div class="whitespace-nowrap">{{ $submission->created_at->format('H:i') }} GMT+7</div>
+							</td>
+							<td class="py-2 px-4">
+								<a href="{{ route("teacher.assignment.submission-history", [$assignment->id, $submission->student->id]) }}" class="text-blue-600 hover:underline font-bold">{{ $submission->student->full_name }}</a>
+							</td>
+							<td class="py-2 px-4">{{ $submission->title }}</td>
+							<td class="py-2 px-4">
+								<div class="font-bold whitespace-nowrap @if($submission->status == 'Late') text-red @else text-light-blue @endif">{{ $submission->status }}</div>
+							</td>
+							<td class="py-2 px-4">
+								<a class="text-blue-600 hover:underline font-bold" href="{{ $submission->link }}" target="blank">{{ $submission->link }}</a>
+							</td>
 						</tr>
-					@endforeach
-				@else
-					<tr><td class="rounded-xl bg-white text-center font-semibold p-5" colspan="5">- No submissions yet -</td></tr>
-				@endif
-			</x-table>
+					@empty
+						<tr><td class="rounded-xl bg-white text-center font-semibold p-5" colspan="5">- No submissions yet -</td></tr>
+					@endforelse
+				</tbody>
+			</table>
 		</div>
 	</x-section-container>
 @endsection

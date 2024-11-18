@@ -10,7 +10,9 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title>List of Assignments in {{ $course->course_name }}</x-page-title>
+		<x-back-button href="{{ route('teacher.assignment.index') }}"></x-back-button>
+		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
+		<h1 class="text-xl font-semibold text-blue-900 mt-2">Assignments List</h1>
 
 		@if(session()->has("successUploadAssignment"))
 			<x-badge-success badge_text="{{ session('successUploadAssignment') }}"></x-badge-success>
@@ -20,44 +22,43 @@
 			<x-badge-warning badge_text="{{ session('successDeleteAssignment') }}"></x-badge-warning>
 		@endif
 
-		<div class="mt-5 mb-5">
+		<div class="mt-6">
 			<x-anchor-button class="bg-orange-500"
 				href="{{ route('teacher.assignment.upload', $course->id) }}">
 				<i class="bi bi-plus-lg"></i> Upload New Assignment
 			</x-anchor-button>
 		</div>
 
-		<div class="overflow-x-auto rounded-md">
-			<x-table>
-				<x-slot name="head">
-					<th class="template-heads rounded-l-xl">Title</th>
-					<th class="template-heads">Description</th>
-					<th class="template-heads">Deadline</th>
-					<th class="template-heads">Download link</th>
-					{{-- <th class="template-heads">Assigned to</th> --}}
-					<th class="template-heads rounded-r-xl">Actions</th>
-				</x-slot>
+		<div class="w-full bg-slate-400 mt-6" style="height: 2px;"></div>
 
-				@if ($assignments->count())
-					@foreach($assignments as $asg)
-						<tr>
-							<td class="template-bodies rounded-l-xl">
-								<a class="text-blue-200 hover:text-blue-400 hover:underline font-bold" href="{{ route("teacher.assignment.check", $asg->id) }}">{{ $asg->title }}</a>
+		<div class="w-full overflow-x-auto">
+			<table class="w-full">
+				<thead>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Title</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Assigned to</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Deadline</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Description & Link</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
+				</thead>
+				<tbody>
+					@forelse ($assignments as $asg)
+						<tr class="@if($loop->index % 2 == 0) bg-white @endif">
+							<td class="py-2 px-4">
+								<a class="text-blue-600 hover:underline font-bold" href="{{ route('teacher.assignment.check', $asg->id) }}">{{ $asg->title }}</a>
 							</td>
-							<td class="template-bodies">{{ $asg->desc }}</td>
-							<td class="template-bodies">{{ $asg->deadline_date }}<br>{{ $asg->deadline_time }}</td>
-							<td class="template-bodies text-blue-600">
-								<a href="{{ $asg->link }}" class="text-blue-200 hover:text-blue-400 hover:underline font-bold">{{ $asg->link }}</a>
-							</td>
-							{{-- <td class="template-bodies">{{ $asg->assigned_to->full_name }}</td> --}}
-							{{-- <td class="template-bodies">
-								<ul>
-									@for ($j = $i; $assignments[$j]->title == $assignments[$j + 1]->title; $j++)
-										<li>{{ $assignments[$j]->assigned_to->full_name }}</li>
-									@endfor
+							<td class="py-2 px-4">
+								<ul class="list-disc list-inside">
+									@foreach ($asg->student_assignments as $sasg)
+										<li>{{ $sasg->student->full_name }}</li>
+									@endforeach
 								</ul>
-							</td> --}}
-							<td class="template-bodies rounded-r-xl">
+							</td>
+							<td class="py-2 px-4">{{ Carbon\Carbon::parse($asg->deadline_date)->format('d M Y') }}<br>{{ Carbon\Carbon::parse($asg->deadline_time)->format("H:i") }} GMT+7</td>
+							<td class="py-2 px-4">
+								{{ $asg->desc }}<br>
+								<a href="{{ $asg->link }}" class="text-blue-600 hover:underline font-bold">{{ $asg->link }}</a>
+							</td>
+							<td class="py-2 px-4">
 								<div class="flex gap-1">
 									<x-anchor-button class="bg-orange-500" href="{{ route('teacher.assignment.edit', $asg->id) }}">
 										<i class="bi bi-pencil-square"></i>
@@ -68,12 +69,11 @@
 								</div>
 							</td>
 						</tr>
-					@endforeach
-				@else
-					<tr ><td colspan="5" class="bg-white rounded-xl p-5 font-semibold text-center">- No assignments yet -</td></tr>
-				@endif
-
-			</x-table>
+					@empty
+						<tr><td colspan="5" class="bg-white rounded-xl p-5 font-semibold text-center">- No assignments yet -</td></tr>
+					@endforelse
+				</tbody>
+			</table>
 		</div>
 	</x-section-container>
 @endsection

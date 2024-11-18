@@ -1,7 +1,7 @@
 @extends("layouts.main-teacher")
 
 @section("title")
-	<h1>{{ $student->full_name }}</h1>
+	<h1>Material Access</h1>
 @endsection
 
 @section("breadcrumbs-extension")
@@ -13,17 +13,59 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title>{{ $student->full_name }}'s Material Access</x-page-title>
-		<h1 class="text-xl font-semibold text-blue-900 mb-8 text-center">In Course: {{ $course->course_name }}</h1>
+		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $student->full_name }}</h1>
+		<h1 class="text-xl font-semibold text-blue-900 mt-2">In Course: {{ $course->course_name }}</h1>
 
 		@if(session()->has("successUpdateProgress"))
-			<x-badge-success badge_text="{{ session('successUpdateProgress') }}"></x-badge-success>
+			<x-badge-success badge_text="{{ session('successUpdateProgress') }}" class="mb-4"></x-badge-success>
 		@endif
 
-		<div class="overflow-x-auto rounded-md mt-8">
+		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
+
+		<div class="w-full overflow-x-auto">
 			<form method="post" action="{{ route("teacher.student.update.progress", [$course->id, $student->id]) }}" id="student_progress">
 				@csrf
 				@method('patch')
+
+				<table class="w-full">
+					<thead>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Topic</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Material Name</th>
+						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Material Access</th>
+					</thead>
+					<tbody>
+						@forelse ($newestprogress as $progress)
+							<tr class="@if($loop->index % 2 == 0) bg-white @endif">
+								<td class="py-2 px-4">{{ $progress->material->topic->title }}</td>
+								<td class="py-2 px-4">{{ $progress->material->title }}</td>
+								<td class="py-2 px-4">
+									<div class="w-full flex justify-center">
+										<input type="checkbox" name="access" id="material_progress_{{ $progress->id }}"
+										class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300"
+										@if ($progress->status === 'unlocked') checked @endif>
+									</div>
+								</td>
+							</tr>
+						@empty
+							<tr><td colspan="4" class="text-center font-semibold bg-white rounded-xl p-5">- No materials yet added to this course -</td></tr>
+						@endforelse
+					</tbody>
+				</table>
+
+				@if($newestprogress->isNotEmpty())
+					<div class="flex gap-2 mt-10 mb-3 w-full justify-center">
+						<x-button class="bg-orange-500 w-full md:w-1/6">Save</x-button>
+						<x-cancel-button class="w-full md:w-1/6" href="{{ route('teacher.student.select-student', $course->id) }}">Cancel</x-cancel-button>
+					</div>
+				@endif
+			</form>
+		</div>
+
+		{{-- <div class="overflow-x-auto rounded-md mt-8">
+			<form method="post" action="{{ route("teacher.student.update.progress", [$course->id, $student->id]) }}" id="student_progress">
+				@csrf
+				@method('patch')
+
 				<x-table>
 					<x-slot name="head">
 						<th class="template-heads rounded-l-xl">Topic</th>
@@ -70,7 +112,7 @@
 				@endif
 
 			</form>
-		</div>
+		</div> --}}
 
 		<script>
 			const collectCheckboxValues = () => {
