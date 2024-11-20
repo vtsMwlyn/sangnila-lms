@@ -9,7 +9,33 @@
 @endsection
 
 @section("content")
-	<x-section-container>
+	<div class="w-full flex flex-wrap gap-5">
+		@forelse (Auth::user()->teached_courses as $course)
+			<a href="{{ route('teacher.attendance.show', $course->id) }}"  style="width: 32%;" class="transition duration-300 hover:scale-105">
+				<div class="bg-white rounded-3xl p-5 shadow-lg">
+					<!-- Counting assignments posted and nearest deadline -->
+					@php
+						$attendances = App\Models\Attendance::where("teacher_id", Auth::user()->id)->where("course_id", $course->id)->latest()->get();
+					@endphp
+
+					<!-- Course information -->
+					<p class="font-bold text-dark-blue">{{ $course->course_name }}</p>
+					<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
+
+					<div class="flex gap-2 items-center">
+						<i class="bi bi-book-half text-slate-400"></i>{{ $attendances->count() }} Attendance Reports Uploaded
+					</div>
+
+					<div class="flex gap-2 items-center">
+						<img src="{{ asset('img/clock.svg') }}" class="w-4 h-4" alt="icon">Latest Report: {{ Carbon\Carbon::parse($attendances->first()->attendance_date)->format("D, d M Y") }}
+					</div>
+				</div>
+			</a>
+		@empty
+			<div class="bg-white rounded-xl text-center font-semibold w-full mt-5 p-5">- No courses assigned yet -</div>
+		@endforelse
+	</div>
+	{{-- <x-section-container>
 		<x-page-title>Manage Attendance</x-page-title>
 		<h1 class="text-2xl font-semibold text-blue-900 mb-8 text-center">Pick a Course</h1>
 		<div class="overflow-x-auto rounded-md">
@@ -44,5 +70,5 @@
 				}
 			})
 		</script>
-	</x-section-container>
+	</x-section-container> --}}
 @endsection

@@ -11,7 +11,59 @@
 @endsection
 
 @section("content")
-	<x-section-container>
+<div class="w-full flex flex-wrap gap-5">
+	@forelse ($course_students as $index => $cs)
+		<a href="{{ route('teacher.student.show.progress', ['student_id' => $cs->student->id, 'course_id' => $course->id]) }}"  style="width: 32%;" class="transition duration-300 hover:scale-105">
+			<!-- Counting how many students has no access at all to any materials -->
+			@php
+				$course_students = App\Models\CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+
+				$n_unlocked = 0;
+				$n_opened = 0;
+
+				$progress_per_student = App\Models\Progress::where("course_id", $course->id)->where("student_id", $cs->student->id)->get();
+
+				if($progress_per_student->count() > 0){
+					foreach($progress_per_student as $p){
+						if($p->status == "unlocked"){
+							$n_unlocked++;
+						}
+
+						if($p->already_opened == "yes"){
+							$n_opened++;
+						}
+					}
+				}
+			@endphp
+
+			<div class="bg-white rounded-3xl p-5 shadow-lg flex gap-4 items-start">
+				<div class="">
+					@if($cs->student->details->profpic)
+						<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-20 h-20 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;">
+					@else
+						<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-20 h-20 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+					@endif
+				</div>
+				<div class="grow">
+					<!-- Course information -->
+					<p class="font-bold text-dark-blue">{{ $cs->student->full_name }}</p>
+					<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
+
+					<div class="flex gap-2 items-center @if($n_unlocked == 0) text-red @endif">
+						<i class="bi bi-book-half text-slate-400"></i>{{ __($n_unlocked . "/" . $progress_per_student->count()) }} Materials Unlocked
+					</div>
+
+					<div class="flex gap-2 items-center">
+						<i class="bi bi-book-half text-slate-400"></i>{{ __($n_opened . "/" . $progress_per_student->count()) }} Materials Read
+					</div>
+				</div>
+			</div>
+		</a>
+	@empty
+		<div class="bg-white rounded-xl text-center font-semibold w-full mt-5 p-5">- No courses assigned yet -</div>
+	@endforelse
+</div>
+	{{-- <x-section-container>
 		<x-page-title>Manage Students' Material Access</x-page-title>
 		<h1 class="text-2xl font-semibold text-blue-900 text-center mb-8">Pick a Student</h1>
 
@@ -53,5 +105,5 @@
 				}
 			})
 		</script>
-	</x-section-container>
+	</x-section-container> --}}
 @endsection
