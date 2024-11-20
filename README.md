@@ -13,24 +13,19 @@ There are 5 roles (types of account) in Sangnila LMS:
 - **Guests**: Public user, those who are don't have any account to use, can only view few parts of Sangnila LMS
 
 ## Change Logs
-### v0.8.0-beta
-- Fixes in misplaced error messages
-- Error marking color and thickness improvement
-- Improvement in error handling mechanism
-- Removed dismiss option on notifications
-- Auto remove read notifications since 30 days ago
-- Fixes in excel import download template
+### v0.9.0-beta
+- Changed main layout to be navbar-sidebar-content from previously only navbar and content
+- Redesign all pages for students
 
-### v0.8.1-beta
-- Fixes in announcements that can't display image from storage
-- Now announcement will have its display period and will not shown if outside of the period
-- Now material selection dropdown has search feature enabled to help admin and teacher
+### v0.9.1-beta
+- Implemented popup submission forms
+- Improvement and bug fixes in displaying popups and announcements
+- Font and element sizing adjustments
 
-### v0.8.2-beta
-- Added dashboard page for students
-- Added calendar and news and announcement slider in the dashboard
-- Added view page for announcements
-- Now students will not be able to access material preview page if they are reaching their max course session or accessing locked material via URL link
+### v0.9.2-beta
+- Redesign all pages for teachers
+- Now teacher can select students to include in a new attendance report
+- Fix major bugs and mechanism of adding and editting attendance report when data is invalid
 
 ## Clone Project
 Clone the repository in any desired directory. Web resources such as images, videos, scripts, and styles are included in `public` folder. To generate the database system and fill it will sample data, run this command in the terminal:
