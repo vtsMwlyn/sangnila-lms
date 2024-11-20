@@ -82,24 +82,15 @@
 				<img src="{{ asset('img/sidebar-attendance.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Attendance
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
+			{{-- <x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
 				href="#" style="transform: scale(1); border-radius: 0; background: {{ Request::is('schedule*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-schedule.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Schedule
-			</x-anchor-button>
+			</x-anchor-button> --}}
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
 				href="{{ route('list-announcement') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('announcement*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-announcement.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Announcement
 			</x-anchor-button>
-
-			{{-- <!-- Logout Button -->
-			<form method="POST" action="{{ route('logout') }}" class="grow flex items-center gap-2">
-				@csrf
-				<x-button
-					class="font-semibold bg-red-600 w-full" onclick="return confirm('Are you sure want to logout from your account?');">
-						<i class="bi bi-box-arrow-left"></i> {{ __('Log Out') }}
-				</x-button>
-			</form> --}}
 		</div>
 	</div>
 
