@@ -9,8 +9,10 @@ use App\Models\Material;
 use Illuminate\Http\Request;
 use App\Models\CurriculumTopic;
 use App\Models\CurriculumMaterial;
+use App\Rules\MinimumOneCheckbox;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CurriculumController extends Controller
 {
@@ -198,5 +200,66 @@ class CurriculumController extends Controller
 
 
 		return redirect(route("teacher.mycourse.show", $course_id))->with("successSynchronizeCurriculum", "Your class' topic and materials have been successfully synchronized with the curriculum!");
+	}
+
+	public function teacher_pick_course($course_id){
+		$course = Course::findOrFail($course_id);
+		$curriculum_topics = CurriculumTopic::where("course_id", $course_id)->get();
+
+		return view("roles.teacher.topic-and-material.pick-from-curriculum", [
+			"curriculum_topics" => $curriculum_topics,
+			"course" => $course
+		]);
+	}
+
+	public function teacher_save_picked_course(Request $request, $course_id){
+		$request->validate(["selected" => new MinimumOneCheckbox]);
+
+		try {
+			DB::beginTransaction();
+
+			$course = Course::findOrFail($course_id);
+
+			$current_topics = Topic::where("course_id", $course_id)->where("user_id", Auth::user()->id)->get();
+
+			foreach($current_topics as $utopic){
+				Topic::destroy($utopic->id);
+			}
+
+			$curriculum_topics = CurriculumTopic::where("course_id", $course_id)->get();
+
+			$bikingaya = [];
+
+			$i = 0;
+			foreach($curriculum_topics as $ctopic){
+				$ntopic = Topic::create([
+					"title" => $ctopic->title,
+					"user_id" => Auth::user()->id,
+					"course_id" => $course->id
+				]);
+
+				foreach($ctopic->curriculum_materials as $cmaterial){
+					if($request->selected[$i] == "on"){
+						Material::create([
+							"topic_id" => $ntopic->id,
+							"title" => $cmaterial->title,
+							"desc" => $cmaterial->desc,
+							"link" => $cmaterial->link
+						]);
+					}
+
+					$i++;
+				}
+			}
+
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return back()->with("systemFail", "System failed to save selected syllabus topic and materials to your course's topics and materials. Please report this error to our IT team. Error detail: " . $e->getMessage());
+		}
+
+		return redirect(route('teacher.mycourse.show', $course->id))->with("successPickFromCurriculum", "Successfully picked topics and materials from the curriculum");
 	}
 }

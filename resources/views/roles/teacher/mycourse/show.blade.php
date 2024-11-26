@@ -18,6 +18,8 @@
 			<x-badge-success badge_text="{{ session('successAddTopic') }}"></x-badge-success>
 		@elseif(session()->has("successSynchronizeCurriculum"))
 			<x-badge-success badge_text="{{ session('successSynchronizeCurriculum') }}"></x-badge-success>
+		@elseif(session()->has("successPickFromCurriculum"))
+			<x-badge-success badge_text="{{ session('successPickFromCurriculum') }}"></x-badge-success>
 		@elseif(session()->has("successImportExcelTopicsAndMaterials"))
 			<x-badge-success badge_text="{{ session('successImportExcelTopicsAndMaterials') }}"></x-badge-success>
 		@elseif(session()->has("successDeleteTopic"))
@@ -61,10 +63,22 @@
 				</x-anchor-button>
 
 				@if($has_curriculum > 0)
-					<form action="{{ route('teacher.mycourse.synchronize', $course->id) }}" method="post">
-						@csrf
-						<x-button class="bg-orange-500" onclick="return confirm('Synchronizing with topics and material in curriculum will erase all of your posted topics and materials. Are your sure want to proceed?')"><i class="bi bi-arrow-repeat"></i> Sync with curriculum</x-button>
-					</form>
+					<div class="relative flex flex-col items-end dropdown-container">
+						<x-button class="bg-orange-500" type="button" class="dropdown-toggler">
+							<i class="bi bi-arrow-repeat"></i> Generate from Syllabus
+						</x-button>
+						<div class="absolute z-10 overflow-hidden bg-white top-12 w-80 rounded-3xl text-sm font-semibold flex flex-col py-2 dropdown-menu" style="display: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
+							<a href="{{ route('teacher.mycourse.pick-course', $course->id) }}" class="hover:bg-slate-300">
+								<div class="w-full px-5 py-1 text-black flex items-center gap-1"><i class="bi bi-check2-square text-slate-400"></i> Pick from Syllabus</div>
+							</a>
+							<form method="POST" action="{{ route('teacher.mycourse.synchronize', $course->id) }}" class="hover:bg-slate-300 grow flex items-center gap-2">
+								@csrf
+								<button class="w-full px-5 py-1 text-black flex items-center gap-1" onclick="return confirm('Synchronizing with topics and material in syllabus will erase all of your posted topics and materials. Are your sure want to proceed?');">
+									<i class="bi bi-arrow-repeat text-slate-400"></i> Sync with Syllabus
+								</button>
+							</form>
+						</div>
+					</div>
 				@endif
 			</div>
 		</div>

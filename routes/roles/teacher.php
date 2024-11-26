@@ -37,11 +37,15 @@ Route::prefix('/teacher')
 			Route::post("/{course_id}/synchronize", [CurriculumController::class, "teacher_synchronize"])->name("synchronize")->whereNumber('course_id');
 
 			// Import from excel
-			Route::get("/{course_id}/import-excel", [ExcelImportController::class, "import_excel_topics_and_materials_index"])->name("import-excel-topicsandmaterials");
-			Route::post("/{course_id}/import-excel", [ExcelImportController::class, "import_excel_topics_and_materials_store"])->name("import-excel-topicsandmaterials.store");
+			Route::get("/{course_id}/import-excel", [ExcelImportController::class, "import_excel_topics_and_materials_index"])->name("import-excel-topicsandmaterials")->whereNumber("course_id");
+			Route::post("/{course_id}/import-excel", [ExcelImportController::class, "import_excel_topics_and_materials_store"])->name("import-excel-topicsandmaterials.store")->whereNumber("course_id");
 
 			// Download import excel template
 			Route::get("/import-excel/download-template", [DownloadResourceController::class, "topics_and_materials_import_excel_template"])->name("import-excel.download");
+
+			// Pick materials from syllabus/curriculum
+			Route::get("/{course_id}/pick-course", [CurriculumController::class, "teacher_pick_course"])->name("pick-course")->whereNumber("course_id");
+			Route::post("/{course_id}/pick-course", [CurriculumController::class, "teacher_save_picked_course"])->name("save-picked-course")->whereNumber("course_id");
 
 
 			// ===== TOPICS ===== //
