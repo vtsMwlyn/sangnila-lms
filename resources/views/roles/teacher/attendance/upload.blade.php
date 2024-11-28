@@ -11,7 +11,7 @@
 
 @section("content")
 	<x-section-container>
-        <x-page-title class="text-3xl font-semibold text-blue-900 mt-5 mb-8">Upload New Attendance Data</x-page-title>
+        <x-page-title class="text-3xl font-semibold text-blue-900 mt-5 mb-6">Upload New Attendance Data</x-page-title>
 
 		@if(session()->has("systemFail"))
 			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
@@ -21,8 +21,8 @@
 			<form action="{{ route('teacher.attendance.store', $course->id) }}" method="post" id="attendance_form">
 				@csrf
 
-				<div class="my-4">
-					<x-label for="attendance_date">{{ __("Attendance Date") }}</x-label>
+				<div class="">
+					<h2 class="my-4 font-extrabold text-xl text-dark-blue">Attendance Date</h2>
 					<div class="flex items-center gap-3 mt-1">
 						<div class="flex flex-col w-1/3">
 							<x-input type="date" class="date-input" name="attendance_date" id="attendance_date" placeholder="Enter attendance date" value="{{ old('attendance_date') }}"/>
@@ -31,9 +31,15 @@
 					</div>
 				</div>
 
-				<div class="mt-6 overflow-x-auto">
-					<x-label>{{ __("Attendance Details") }}</x-label>
-					<table class="w-full mt-1" style="border-collapse: separate; border-spacing: 0 20px;">
+				<h2 class="mt-12 font-extrabold text-xl text-dark-blue">Attendance Report</h2>
+
+				<div class="w-full bg-slate-400 mt-6" style="height: 2px;"></div>
+				<div class="overflow-x-auto">
+					<table class="w-full">
+						<thead>
+							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Student's Attendance Data</th>
+							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Attendance Detail</th>
+						</thead>
 						<tbody id="table-body">
 							@foreach ($students as $index => $s)
 								@if($s->status == "disabled")
@@ -49,8 +55,8 @@
 											<input type="hidden" name="students[]" value="{{ $s->id }}">
 										</div>
 
-										<div class="flex w-full gap-2 mt-2 material_progress_detail items-start @error('material_progress.' . $loop->index) border-red rounded-2xl p-1 @enderror @error('learning_status.' . $loop->index) border-red p-1 rounded-2xl @enderror" style="display: none;">
-											<div class="flex flex-col w-2/3 container_select2">
+										<div class="flex flex-col w-full gap-2 mt-2 material_progress_detail items-start @error('material_progress.' . $loop->index) border-red rounded-2xl p-1 @enderror @error('learning_status.' . $loop->index) border-red p-1 rounded-2xl @enderror" style="display: none;">
+											<div class="flex flex-col w-full container_select2">
 												<select class="material_progress select2 rounded-2xl shadow-sm focus:outline-none py-2 px-4 focus:ring-0" name="fake_material_progress[]">
 													<option selected disabled>Select Material Progress</option>
 													@foreach ($topics as $topic)
@@ -62,7 +68,7 @@
 												</select>
 											</div>
 
-											<x-select class="learning_status w-1/3" name="fake_learning_status[]" style="border-width: 3px;">
+											<x-select class="learning_status w-full" name="fake_learning_status[]" style="border-width: 3px;">
 												<option disabled selected>Select Status</option>
 												<option value="On Progress" @if(old("learning_status." . $index) == "On Progress") selected @endif>On Progress</option>
 												<option value="Done" @if(old("learning_status." . $index) == "Done" ) selected @endif>Done</option>
@@ -84,7 +90,7 @@
 									</td>
 									<td class="p-5 w-1/2">
 										<div class="flex flex-col items-stretch">
-											<textarea name="attendance_detail[]" rows="6" class="h-full rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px; border-width: 3px;">{{ old("attendance_detail." . $loop->index) }}</textarea>
+											<textarea name="attendance_detail[]" rows="8" class="h-full rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror" placeholder="Enter student in class progress details" style="resize: none; box-sizing: border-box; padding: 10px; border-width: 3px;">{{ old("attendance_detail." . $loop->index) }}</textarea>
 
 											@error("attendance_detail." . $loop->index)
 												<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> The attendance detail field is required.</p>

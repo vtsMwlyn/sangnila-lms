@@ -12,10 +12,10 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-4">
+		<x-page-title class="mt-4" style="margin-bottom: 0">
 			<a href="{{ route("teacher.mycourse.show", $topic->course->id) }}">{{ $topic->course->course_name }}</a>
 		</x-page-title>
-		<h1 class="text-2xl font-semibold text-blue-900 mb-8 text-center">Upload Material to Topic "{{ $topic->title }}"</h1>
+		<h1 class="text-2xl font-semibold text-blue-900 mb-8 text-center mt-4">Upload Material to Topic "{{ $topic->title }}"</h1>
 
 		@if(session()->has("systemFail"))
 			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>

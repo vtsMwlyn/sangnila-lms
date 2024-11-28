@@ -14,9 +14,7 @@
 		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(session()->has("successAddTopic"))
-			<x-badge-success badge_text="{{ session('successAddTopic') }}"></x-badge-success>
-		@elseif(session()->has("successSynchronizeCurriculum"))
+		@if(session()->has("successSynchronizeCurriculum"))
 			<x-badge-success badge_text="{{ session('successSynchronizeCurriculum') }}"></x-badge-success>
 		@elseif(session()->has("successPickFromCurriculum"))
 			<x-badge-success badge_text="{{ session('successPickFromCurriculum') }}"></x-badge-success>
@@ -100,9 +98,7 @@
 					@forelse ($topics as $topic)
 						@if($topic->materials->count())
 							<tr class="@if($iterasus % 2 == 1) bg-white @endif">
-								<td class="py-2 px-4">
-									<a href="{{ route("teacher.mycourse.topic.show", [$course->id, $topic->id]) }}" class="font-bold text-blue-600 hover:underline">{{ $topic->title }}</a>
-								</td>
+								<td class="py-2 px-4">{{ $topic->title }}</td>
 
 								<td class="py-2 px-4">
 									<ul class="h-full w-full flex flex-col">
@@ -115,12 +111,12 @@
 								<td class="py-2 px-4">
 									<div class="flex w-full items-center gap-2">
 										<x-anchor-button class="bg-orange-500"
-											href="{{ route('teacher.mycourse.topic.edit', [$topic->course->id, $topic->id]) }}">
-											<i class="bi bi-pencil-square"></i> Edit Topic
+											href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}">
+											<i class="bi bi-eye"></i> Details
 										</x-anchor-button>
 										<x-anchor-button class="bg-orange-500"
 											href="{{ route('teacher.mycourse.topic.delete', [$topic->course->id, $topic->id]) }}">
-											<i class="bi bi-trash3"></i> Delete Topic
+											<i class="bi bi-trash3"></i> Delete
 										</x-anchor-button>
 									</div>
 								</td>
@@ -131,17 +127,17 @@
 							@endphp
 						@else
 							<tr class="@if($iterasus % 2 == 1) bg-white @endif">
-								<td class="py-2 px-4"><a href="{{ route("teacher.mycourse.topic.show", [$course->id, $topic->id]) }}" class="font-bold text-light-blue hover:text-blue-400 hover:underline">{{ $topic->title }}</a></td>
+								<td class="py-2 px-4">{{ $topic->title }}</td>
 								<td class="py-2 px-4">- No materials added yet to this topic -</td>
 								<td class="py-2 px-4">
 									<div class="flex w-full items-center gap-2">
 										<x-anchor-button class="bg-orange-500"
-											href="{{ route('teacher.mycourse.topic.edit', [$topic->course->id, $topic->id]) }}">
-											<i class="bi bi-pencil-square"></i> Edit Topic
+											href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}">
+											<i class="bi bi-eye"></i> Details
 										</x-anchor-button>
 										<x-anchor-button class="bg-orange-500"
 											href="{{ route('teacher.mycourse.topic.delete', [$topic->course->id, $topic->id]) }}">
-											<i class="bi bi-trash3"></i> Delete Topic
+											<i class="bi bi-trash3"></i> Delete
 										</x-anchor-button>
 									</div>
 								</td>

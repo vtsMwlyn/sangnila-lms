@@ -40,9 +40,16 @@
 				</div>
 			</div>
 
-			<div class="overflow-x-auto mt-6">
-				<x-label>{{ __("Attendance Details") }}</x-label>
-				<table class="w-full" style="border-collapse: separate; border-spacing: 0 20px;">
+			<h2 class="mt-12 font-extrabold text-xl text-dark-blue">Attendance Report</h2>
+
+			<div class="w-full bg-slate-400 mt-6" style="height: 2px;"></div>
+				<div class="overflow-x-auto">
+					<table class="w-full">
+						<thead>
+							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Student's Attendance Data</th>
+							<th class="text-start py-3 border-b-2 border-slate-400">Attendance Detail</th>
+							<th class="text-start py-3 px-4 border-b-2 border-slate-400"></th>
+						</thead>
 					<tbody id="table-body">
 						@php
 							$exclude_from_dropdown = [];
@@ -68,8 +75,8 @@
 										<label for="checkbox{{ old('students.' . $i, $studentId) }}">{{ App\Models\User::find(old('students.' . $i, $studentId))->full_name }}</label>
 										<input type="hidden" name="students[]" value="{{ old('students.' . $i, $studentId) }}">
 									</div>
-									<div class="flex w-full gap-3 mt-2 material_progress_detail items-start justify-between @error('material_progress.' . $i) border-red rounded-2xl p-1 @enderror @error('learning_status.' . $i) border-red p-1 rounded-2xl @enderror">
-										<div class="flex flex-col w-2/3 container_select2">
+									<div class="flex flex-col w-full gap-3 mt-2 material_progress_detail items-start justify-between @error('material_progress.' . $i) border-red rounded-2xl p-1 @enderror @error('learning_status.' . $i) border-red p-1 rounded-2xl @enderror">
+										<div class="flex flex-col w-full container_select2">
 											<x-select class="material_progress select2" name="fake_material_progress[]">
 												<option selected disabled>Select Material Progress</option>
 												@foreach ($attendance->course->topics as $topic)
@@ -81,7 +88,7 @@
 											</x-select>
 										</div>
 
-										<x-select class="learning_status w-1/3" name="fake_learning_status[]">
+										<x-select class="learning_status w-full" name="fake_learning_status[]">
 											<option selected disabled>Select Status</option>
 											<option value="On Progress" @if(old('learning_status.' . $i, $learStat) == "On Progress") selected @endif>On Progress</option>
 											<option value="Done" @if(old('learning_status.' . $i, $learStat) == "Done") selected @endif>Done</option>
@@ -102,9 +109,9 @@
 										<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
 									@enderror
 								</td>
-								<td class="w-1/2">
+								<td class="w-1/2 py-5">
 									<div class="flex flex-col items-stretch">
-										<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $i) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px; border-width: 3px;">{{ old("attendance_detail." . $i, $attenDet) }}</textarea>
+										<textarea name="attendance_detail[]" rows="8" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $i) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px; border-width: 3px;">{{ old("attendance_detail." . $i, $attenDet) }}</textarea>
 										@error("attendance_detail." . $i)
 											<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> The attendance detail field is required.</p>
 										@enderror
@@ -309,7 +316,7 @@
 
 					// First column
 					const checkNameContainer = $("<div>").addClass("flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl");
-					const progressContainer = $("<div>").addClass("flex w-full gap-2 mt-2 material_progress_detail @error('material_progress.' . $counter) border-red rounded-2xl p-1 @enderror @error('learning_status.' . $counter) border-red p-1 rounded-2xl @enderror");
+					const progressContainer = $("<div>").addClass("flex flex-col w-full gap-2 mt-2 material_progress_detail @error('material_progress.' . $counter) border-red rounded-2xl p-1 @enderror @error('learning_status.' . $counter) border-red p-1 rounded-2xl @enderror");
 
 					const studentToAdd = JSON.parse($("#student_add").val());
 					const newCheckBox = $("<input>").attr({"type": "checkbox", "id": `checkbox${studentToAdd.id}`}).addClass("mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300");
@@ -317,7 +324,7 @@
 					const newHiddenInput = $("<input>").attr({"type": "hidden", "name": "students[]", "value": studentToAdd.id});
 					checkNameContainer.append(newCheckBox).append(newLabelCheckBox).append(newHiddenInput);
 
-					const selectContainer = $("<div>").addClass("flex flex-col w-2/3 container_select2");
+					const selectContainer = $("<div>").addClass("flex flex-col w-full container_select2");
 					const newMaterialProgressDropdown = $("<select>").addClass("select2 material_progress w-full rounded-2xl shadow-sm focus:outline-none py-2 px-4 border-slate-400 focus:border-slate-600 focus:ring-0").css("border-width", "3px");
 					const materialProgressDropdownPlaceholder = $("<option>").attr({"disabled": true, "selected": true}).text("Select Material Progress");
 					newMaterialProgressDropdown.append(materialProgressDropdownPlaceholder);
@@ -330,7 +337,7 @@
 					}
 					newMaterialProgressDropdown.append($("<option>").attr("value", "other").text("Other"));
 
-					const newLearningStatusDropdown = $("<select>").addClass("learning_status w-1/3 rounded-2xl shadow-sm focus:outline-none py-2 px-4 border-slate-400 focus:border-slate-600 focus:ring-0").css("border-width", "3px");
+					const newLearningStatusDropdown = $("<select>").addClass("learning_status w-full rounded-2xl shadow-sm focus:outline-none py-2 px-4 border-slate-400 focus:border-slate-600 focus:ring-0").css("border-width", "3px");
 					const learningStatusPlaceholder = $("<option>").attr({"selected": true, "disabled": true}).text("Select Status");
 					const learningStatusDropdownOption1 = $("<option>").attr({"value": "On Progress"}).text("On Progress");
 					const learningStatusDropdownOption2 = $("<option>").attr({"value": "Done"}).text("Done");
@@ -346,7 +353,7 @@
 
 					// Second column
 					const attendanceDetailContainer = $("<div>").addClass("flex flex-col items-stretch");
-					const newTextArea = $("<textarea>").attr({"rows": 4, "name": "attendance_detail[]", "placeholder": "Enter student in class progress"}).addClass("rounded-xl border-2 font-semibold text-blue-900 @error('attendance_detail.' . $counter) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror").css({"resize": "none", "box-sizing": "border-box", "padding": "10px", "border-width": "3px"});
+					const newTextArea = $("<textarea>").attr({"rows": 8, "name": "attendance_detail[]", "placeholder": "Enter student in class progress"}).addClass("rounded-xl border-2 font-semibold text-blue-900 @error('attendance_detail.' . $counter) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror").css({"resize": "none", "box-sizing": "border-box", "padding": "10px", "border-width": "3px"});
 					attendanceDetailContainer.append(newTextArea);
 
 					secondCol.append(attendanceDetailContainer);

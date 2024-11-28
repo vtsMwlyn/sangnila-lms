@@ -37,14 +37,14 @@ class TopicController extends Controller
 		]);
 
 		try {
-			Topic::create(["course_id" => $course_id, "title" => $validatedData["title"], "user_id" => Auth::user()->id]);
+			$newTopic = Topic::create(["course_id" => $course_id, "title" => $validatedData["title"], "user_id" => Auth::user()->id]);
 		}
 		catch(Exception $e){
 			return back()->with("systemFail", "System failed to create topic, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 
-		return redirect(route("teacher.mycourse.show", $course_id))->with("successAddTopic", "Successfully added new topic to the course!");
+		return redirect(route("teacher.mycourse.topic.show", [$course_id, $newTopic->id]))->with("successAddTopic", "Successfully added new topic to the course!");
 	}
 
 	// Edit topic input page

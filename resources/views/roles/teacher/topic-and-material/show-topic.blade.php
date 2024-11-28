@@ -13,12 +13,13 @@
 	<x-section-container>
 		<x-back-button href="{{ route('teacher.mycourse.show', $topic->course->id) }}"></x-back-button>
 		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $topic->course->course_name }}</h1>
-		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
-
-		<h1 class="text-xl font-semibold text-blue-900">Course Topic: {{ $topic->title }}</h1>
+		<h1 class="text-xl font-semibold text-blue-900 mt-2">Topic and Materials Details</h1>
+		<div class="w-full bg-slate-400 mt-4" style="height: 2px;"></div>
 
 		@if(session()->has("successUpdateTopic"))
 			<x-badge-success badge_text="{{ session('successUpdateTopic') }}"></x-badge-success>
+		@elseif(session()->has("successAddTopic"))
+			<x-badge-success badge_text="{{ session('successAddTopic') }}"></x-badge-success>
 		@elseif(session()->has("successEditTopic"))
 			<x-badge-success badge_text="{{ session('successEditTopic') }}"></x-badge-success>
 		@elseif(session()->has('successUploadMaterial'))
@@ -29,17 +30,30 @@
 			<x-badge-warning badge_text="{{ session('successDeleteMaterial') }}"></x-badge-warning>
 		@endif
 
-		<div class="flex gap-2 my-8">
-			<x-anchor-button class="bg-orange-500" href="{{ route('teacher.mycourse.topic.edit', [$topic->course->id, $topic->id]) }}"><i class="bi bi-pencil-square"></i> Edit Topic</x-anchor-button>
-			<x-anchor-button class="bg-orange-500" href="{{ route('teacher.mycourse.topic.delete', [$topic->course->id, $topic->id]) }}"><i class="bi bi-trash3"></i> Delete Topic</x-anchor-button>
-		</div>
+		<h2 class="mt-4 mb-2 font-extrabold text-xl text-dark-blue">Topic</h2>
 
-		<h2 class="text-lg font-semibold mb-2">Material/Activity List:</h2>
-		<div class="flex mt-4">
+		<form action="{{ route('teacher.mycourse.topic.update', [$topic->course->id, $topic->id]) }}" method="post" class="w-full flex flex-col gap-4">
+			@method('patch')
+			@csrf
+
+			<div class="flex flex-col grow">
+				<x-input id="title" class="w-full mt-1" type="text" name="title" placeholder="Topic title" :value="old('title', $topic->title)" />
+			</div>
+
+			<div class="flex gap-2 w-full justify-end">
+				<x-button class="bg-orange-500" type="submit"><i class="bi bi-pencil-square"></i> Edit Topic Name</x-button>
+				<x-anchor-button class="bg-orange-500" href="{{ route('teacher.mycourse.topic.delete', [$topic->course->id, $topic->id]) }}"><i class="bi bi-trash3"></i> Delete</x-anchor-button>
+			</div>
+		</form>
+
+
+		<h2 class="my-4 font-extrabold text-xl text-dark-blue">List of Materials/Activities</h2>
+
+		<div class="flex">
 			<x-anchor-button class="bg-orange-500" href="{{ route('teacher.mycourse.material.upload', $topic->id) }}"><i class="bi bi-plus-lg"></i> Add New Material</x-anchor-button>
 		</div>
 
-		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
+		<div class="w-full bg-slate-400 mt-4" style="height: 2px;"></div>
 
 		<div class="w-full overflow-x-auto">
 			<table class="w-full">
