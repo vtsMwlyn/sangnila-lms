@@ -67,8 +67,8 @@
 								array_push($exclude_from_dropdown, old('students.' . $i, $studentId));
 							@endphp
 
-							<tr class="table-row" style=" background: rgba(256, 256, 256, 0.4);">
-								<td class="grow rounded-l-xl p-5">
+							<tr class="table-row @if($loop->index % 2 == 0) bg-white @endif">
+								<td class="grow p-5">
 									<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
 										<input type="checkbox" id="checkbox{{ old('students.' . $i, $studentId) }}"
 										class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $i, $studentId) == "on") checked @elseif($isAtten == 1) checked @endif>

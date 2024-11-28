@@ -46,8 +46,8 @@
 									@continue
 								@endif
 
-								<tr class="table-row" style="background: rgba(256, 256, 256, 0.4);">
-									<td class="p-5 grow rounded-l-xl">
+								<tr class="table-row @if($loop->index % 2 == 0) bg-white @endif">
+									<td class="p-5 grow">
 										<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
 											<input type="checkbox" id="checkbox{{ $loop->iteration }}"
 											class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif >

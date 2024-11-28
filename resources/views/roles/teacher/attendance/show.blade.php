@@ -73,11 +73,11 @@
 							<td class="py-2 px-4 text-center">{{ $atd->student_attendances->where("is_attend", 1)->count() }}</td>
 							<td class="py-2 px-4 text-center">{{ $atd->student_attendances->where("is_attend", 0)->count() }}</td>
 							<td class="py-2 px-4">
-								<div class="flex gap-1">
+								<div class="flex gap-2">
 									<x-anchor-button class="bg-orange-500" href="{{ route('teacher.attendance.edit', $atd->id) }}">
-										Edit Data
+										<i class="bi bi-pencil-square"></i> Edit Data
 									</x-anchor-button>
-									<x-button type="button" class="bg-orange-500 show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}">Show Details</x-button>
+									<x-button type="button" class="bg-orange-500 show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}"><i class="bi bi-eye"></i> Show Details</x-button>
 								</div>
 							</td>
 						</tr>
@@ -89,20 +89,6 @@
 		</div>
 
 		<script>
-			// const allToggleBtn = $(".toggleBtn");
-			// const allContentTable = $(".contentTable");
-
-			// allToggleBtn.each(function(index, element) {
-			// 	$(element).click(() => {
-			// 		allContentTable.eq(index).slideToggle(() => {
-			// 		if (allContentTable.eq(index).is(":visible")) {
-			// 			$(element).text("Hide Details");
-			// 		} else {
-			// 			$(element).text("Show Details");
-			// 		}
-			// 	});
-			// 	});
-			// });
 
 			$(document).ready(() => {
 				$(".show-attendance-details-button").click(function(){
