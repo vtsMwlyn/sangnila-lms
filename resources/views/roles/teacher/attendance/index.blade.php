@@ -27,7 +27,7 @@
 					</div>
 
 					<div class="flex gap-2 items-center">
-						<img src="{{ asset('img/clock.svg') }}" class="w-4 h-4" alt="icon">Latest Report: {{ Carbon\Carbon::parse($attendances->first()->attendance_date)->format("D, d M Y") }}
+						<img src="{{ asset('img/clock.svg') }}" class="w-4 h-4" alt="icon">Latest Report: {{ ($attendances->count() > 0) ? Carbon\Carbon::parse($attendances->first()->attendance_date)->format("D, d M Y") : 'N/A' }}
 					</div>
 				</div>
 			</a>

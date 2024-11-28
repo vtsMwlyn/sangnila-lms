@@ -37,7 +37,7 @@
 					</div>
 
 					<div class="flex gap-2 items-center">
-						<img src="{{ asset('img/clock.svg') }}" class="w-4 h-4" alt="icon">Nearest Deadline: {{ Carbon\Carbon::parse($nearest)->format("d M Y, H:i") }} GMT+7
+						<img src="{{ asset('img/clock.svg') }}" class="w-4 h-4" alt="icon">Nearest Deadline: {{ $nearest == 'N/A' ? $nearest : Carbon\Carbon::parse($nearest)->format("d M Y, H:i") }} GMT+7
 					</div>
 				</div>
 			</a>
