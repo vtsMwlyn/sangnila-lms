@@ -28,7 +28,7 @@ class AttendanceController extends Controller {
 	public function show($course_id) {
 		$course = Course::findOrFail($course_id);
 
-		$attendanceData = Attendance::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->latest()->get();
+		$attendanceData = Attendance::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->with(['student_attendances.student'])->latest()->get();
 
 		return view('roles.teacher.attendance.show', [
 			'attendanceData' => $attendanceData,
