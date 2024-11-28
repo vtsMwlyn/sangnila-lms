@@ -51,9 +51,11 @@
 				<div class="mt-6">
 					<x-label for="password">{{ __("Change Password") }}<span class="font-semibold">*</span></x-label>
 					<div class="relative w-full flex items-center mt-1">
-						<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="togglePassword"></button>
-						<x-input id="password" class="w-full" type="password" name="password" style="padding-right: 60px;"
+						<button type="button" class="absolute top-0 h-11 right-2 text-slate-500 font-bold w-12" id="togglePassword"></button>
+						<div class="flex flex-col w-full">
+							<x-input id="password" class="w-full" type="password" name="password" style="padding-right: 60px;"
 							autocomplete="current-password" placeholder="New Password" />
+						</div>
 					</div>
 				</div>
 
@@ -61,9 +63,11 @@
 				<div class="mt-6">
 					<x-label for="password_confirmation">{{ __("Confirm Password") }}<span class="font-semibold">*</span></x-label>
 					<div class="relative w-full flex items-center mt-1">
-						<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="toggleConfPassword"></button>
-						<x-input id="password_confirmation" class="w-full" type="password" name="password_confirmation" style="padding-right: 60px;"
+						<button type="button" class="absolute top-0 h-11 right-2 text-slate-500 font-bold w-12" id="toggleConfPassword"></button>
+						<div class="flex flex-col w-full">
+							<x-input id="password_confirmation" class="w-full" type="password" name="password_confirmation" style="padding-right: 60px;"
 							autocomplete="current-password" placeholder="Confirm New Password" />
+						</div>
 					</div>
 				</div>
 
