@@ -17,4 +17,8 @@ class Activity extends Model {
 	public function progress() {
 		return $this->hasMany(Progress::class);
 	}
+
+	public function learning_outcomes(){
+		return $this->belongsToMany(LearningOutcome::class);
+	}
 }

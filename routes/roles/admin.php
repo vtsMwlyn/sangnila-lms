@@ -16,6 +16,8 @@ use App\Http\Controllers\CourseTeacherController;
 use App\Http\Controllers\TeacherAccountController;
 use App\Http\Controllers\DownloadResourceController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\LearningOutcomeController;
+use App\Models\LearningOutcome;
 
 Route::prefix('/admin')
 	->name('admin.')
@@ -57,6 +59,11 @@ Route::prefix('/admin')
 				// Delete course
 				Route::get("/{course_id}/delete", [CourseController::class, "admin_delete"])->name("delete")->whereNumber('course_id');
 				Route::delete('/{course_id}/delete', [CourseController::class, 'admin_destroy'])->name('destroy')->whereNumber('course_id');
+
+				// Manage LO
+				Route::post("/{course_id}/learning-outcome/create", [LearningOutcomeController::class, "admin_store"])->name("learning-outcome.store")->whereNumber("course_id");
+				Route::post("/{course_id}/{learning_outcome_id}/learning-outcome/edit", [LearningOutcomeController::class, "admin_update"])->name("learning-outcome.update")->whereNumber("course_id");
+				Route::post("/{course_id}/{learning_outcome_id}/learning-outcome/delete", [LearningOutcomeController::class, "admin_destroy"])->name("learning-outcome.destroy")->whereNumber("course_id");
 
 				// Manage curriculum
 					Route::prefix('/{course_id}/curriculum')

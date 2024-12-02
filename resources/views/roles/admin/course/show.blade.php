@@ -8,6 +8,88 @@
 	> <span>{{ $course->course_name }}</span>
 @endsection
 
+@section("popup")
+	<x-popup class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="new-learning-outcome">
+		<!-- Popup header -->
+		<div class="flex items-center w-full">
+			<div class="font-bold text-2xl grow text-center">New Learning Outcome</div>
+			<button type="button" class="popup-dismiss">
+				<img src="{{ asset('img/close.svg') }}" alt="history-icon" class="w-6 h-6 hover:scale-110">
+			</button>
+		</div>
+		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
+
+		<!-- Popup content -->
+		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
+			<form method="post" class="mt-4" id="new-learning-outcome-form">
+				@csrf
+				<div class="flex flex-col">
+					<label for="title">Learning Outcome Title</label>
+					<x-input id="title" class="w-full mt-1" type="text" name="title" style="border-width: 3px;" value="{{ old('title') }}" placeholder="Learning Outcome Title" autofocus />
+				</div>
+
+				<div class="flex flex-col mt-4">
+					<label for="number">Order/Number of Learning Outcome</label>
+					<x-input id="number" class="w-full mt-1" type="text" name="number" style="border-width: 3px;" value="{{ old('number') }}" placeholder="Learning Outcome Order/Number" autofocus />
+				</div>
+
+				<div class="flex items-center justify-center w-full mt-8 mb-3 gap-3">
+					<x-button class="w-full md:w-1/6">Submit</x-button>
+					{{-- <x-button class="w-full md:w-1/6">Cancel</x-button> --}}
+				</div>
+
+				<!-- Helper -->
+				<input type="hidden" name="h-last-popup" class="h-last-popup">
+
+				<input type="hidden" name="h-route" class="h-route">
+				<input type="hidden" name="h-title" class="h-title">
+				<input type="hidden" name="h-number" class="h-number">
+			</form>
+		</div>
+	</x-popup>
+
+	<x-popup class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-learning-outcome">
+		<!-- Popup header -->
+		<div class="flex items-center w-full">
+			<div class="font-bold text-2xl grow text-center">Edit Learning Outcome</div>
+			<button type="button" class="popup-dismiss">
+				<img src="{{ asset('img/close.svg') }}" alt="history-icon" class="w-6 h-6 hover:scale-110">
+			</button>
+		</div>
+		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
+
+		<!-- Popup content -->
+		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
+			<form method="post" class="mt-4" id="edit-learning-outcome-form">
+				@csrf
+				<div class="flex flex-col">
+					<label for="title">Learning Outcome Title</label>
+					<x-input id="title" class="w-full mt-1" type="text" name="title" style="border-width: 3px;" value="{{ old('title') }}" placeholder="Learning Outcome Title" autofocus />
+				</div>
+
+				<div class="flex flex-col mt-4">
+					<label for="number">Order/Number of Learning Outcome</label>
+					<x-input id="number" class="w-full mt-1" type="text" name="number" style="border-width: 3px;" value="{{ old('number') }}" placeholder="Learning Outcome Order/Number" autofocus />
+				</div>
+
+				<div class="flex items-center justify-center w-full mt-8 mb-3 gap-3">
+					<x-button class="w-full md:w-1/6">Submit</x-button>
+					{{-- <x-button class="w-full md:w-1/6">Cancel</x-button> --}}
+				</div>
+
+				<!-- Helper -->
+				<input type="hidden" name="h-last-popup" class="h-last-popup">
+
+				<input type="hidden" name="h-route" class="h-route">
+				<input type="hidden" name="h-lo" class="h-lo">
+
+				<input type="hidden" name="h-title" class="h-title">
+				<input type="hidden" name="h-number" class="h-number">
+			</form>
+		</div>
+	</x-popup>
+@endsection
+
 @section("content")
 	<x-section-container class="mb-10">
 		<x-page-title>{{ __("Course Details") }}</x-page-title>
@@ -16,6 +98,10 @@
 			<x-badge-success badge_text="{{ session('successUpdateCourseData') }}"></x-badge-success>
 		@elseif(session()->has("successBatchAssign"))
 			<x-badge-success badge_text="{{ session('successBatchAssign') }}"></x-badge-success>
+		@elseif(session()->has("successAddLearningOutcome"))
+			<x-badge-success badge_text="{{ session('successAddLearningOutcome') }}"></x-badge-success>
+		@elseif(session()->has("successEditLearningOutcome"))
+			<x-badge-success badge_text="{{ session('successEditLearningOutcome') }}"></x-badge-success>
 		@elseif(session()->has("successImportStudent"))
 			<x-badge-success badge_text="{{ session('successImportStudent') }}"></x-badge-success>
 		@elseif(session()->has("successImportExcelCurriculum"))
@@ -49,6 +135,47 @@
 				</tr>
 			</x-horizontal-table>
 		</div>
+
+		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
+		<h2 class="my-4 font-extrabold text-xl text-dark-blue">Learning Outcomes</h2>
+		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
+
+		<div class="mt-4">
+			<x-button type="button" class="newlearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.store', $course->id) }}"><i class="bi bi-plus-lg"></i> New Learning Outcome</x-button>
+		</div>
+
+		<div class="w-full overflow-x-auto my-6">
+			<table class="w-full">
+				<thead>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">#</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Outcome Title</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
+				</thead>
+				<tbody>
+					@forelse ($learning_outcomes as $index => $lo)
+						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
+							<td class="py-2 px-4">{{ $lo->number }}</td>
+							<td class="py-2 px-4">{{ $lo->title }}</td>
+							<td class="py-2 px-4">
+								<div class="flex justify-center gap-2 w-full">
+									<x-button type="button" class="editlearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.update', [$course->id, $lo->id]) }}" data-learning_outcome="{{ $lo->toJSON() }}">
+										<i class="bi bi-pencil-square"></i>
+									</x-button>
+									<x-button type="button" class="deletelearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.destroy', [$course->id, $lo->id]) }}">
+										<i class="bi bi-trash3"></i>
+									</x-button>
+								</div>
+							</td>
+						</tr>
+					@empty
+						<tr class="bg-white">
+							<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+						</tr>
+					@endforelse
+				</tbody>
+			</table>
+		</div>
+
 	</x-section-container>
 
 	<x-section-container>
@@ -139,49 +266,81 @@
 		</div>
 	</x-section-container>
 
-		{{-- Schedule --}}
-		{{-- <h2 class="text-xl font-semibold mb-2">Schedule List:</h2>
-		<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white" href="{{ route('admin.schedule.create', $course->id) }}">Add
-			New Schedule</a>
-		@if ($course->schedules->isNotEmpty())
-			<div class="overflow-x-auto mt-5">
-				<table class="min-w-full bg-white border-collapse border border-blue-400">
-					<thead>
-						<tr>
-							<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Day of Week</th>
-							<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Start Time</th>
-							<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">End Time</th>
-							<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-2 sm:w-1/4">Action</th>
-						</tr>
-					</thead>
-					<tbody>
-						@foreach ($course->schedules as $schedule)
-							<tr>
+	<script>
+		function initializeNewLearningOutcomePopup(route, whichpopup){
+			// // Retrieve and save selected data
+			$(".h-route").val(route);
+			$(".h-last-popup").val(whichpopup);
 
-								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
-									<div>{{ $schedule->day_of_week }}</div>
-								</td>
+			$("#new-learning-outcome-form").attr("action", route);
 
-								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
-									<div>{{ $schedule->start_time }}</div>
-								</td>
+			// Display the popup
+			$("#new-learning-outcome").parent().show();
+		}
 
-								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
-									<div>{{ $schedule->end_time }}</div>
-								</td>
+		function initializeEditLearningOutcomePopup(route, learning_outcome, whichpopup){
+			// Retrieve and save selected data
+			$(".h-route").val(route);
+			$(".h-last-popup").val(whichpopup);
+			$(".h-lo").val(JSON.stringify(learning_outcome));
 
-								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 sm:w-1/4">
-									<a class="px-5 py-2 bg-indigo-400 rounded-lg text-white"
-										href="{{ route('admin.schedule.edit', $schedule->id) }}">Edit Schedule</a>
-								</td>
-							</tr>
-						@endforeach
-					</tbody>
-				</table>
-			</div>
-		@else
-			<div class="text-blue-900">N/A</div>
-		@endif --}}
+			const oldTitle = '{{ old('title') }}';
+			const oldNumber = '{{ old('number') }}';
 
+			// If old values exist, fill them in
+			$('input[name="title"]').val(oldTitle ?  oldTitle : learning_outcome.title);
+			$('input[name="number"]').val(oldNumber ? oldNumber : learning_outcome.number);
+
+			$(".h-title").val(learning_outcome.title);
+			$(".h-number").val(learning_outcome.number);
+
+			$("#edit-learning-outcome-form").attr("action", route);
+
+			// Display the popup
+			$("#edit-learning-outcome").parent().show();
+		}
+
+		$(document).ready(() => {
+			$('.newlearningoutcome-popuptrigger').on('click', function() {
+				// Retrieve and save selected data
+				const route = $(this).data('route');
+				const whichpopup = "add-learning-outcome";
+
+				initializeNewLearningOutcomePopup(route, whichpopup);
+			});
+
+			$('.editlearningoutcome-popuptrigger').on('click', function() {
+				// Retrieve and save selected data
+				const route = $(this).data('route');
+				const whichpopup = "edit-learning-outcome";
+				const learning_outcome = $(this).data("learning_outcome");
+
+				initializeEditLearningOutcomePopup(route, learning_outcome, whichpopup);
+			});
+
+			$(".popup-dismiss").click(function(){
+				$('input[name]:not([name="_token"])').val("");
+			});
+
+			// Redisplay popup and fill with prev data
+			@if ($errors->any())
+				// Retrieve and re-save saved data
+				const old_popup = @json(old('h-last-popup'));
+
+				if(old_popup == "add-learning-outcome"){
+					const old_route = @json(old('h-route'));
+
+					initializeNewLearningOutcomePopup(old_route, old_popup);
+				}
+				else if(old_popup == "edit-learning-outcome") {
+					const old_route = @json(old('h-route'));
+					const old_lo = @json(old('h-lo'));
+
+					initializeEditLearningOutcomePopup(old_route, JSON.parse(old_lo), old_popup);
+				}
+
+			@endif
+		});
+	</script>
 
 @endsection

@@ -18,6 +18,9 @@ return new class extends Migration
 
 			$table->unsignedInteger("number");
 			$table->longText("title");
+			
+			$table->unsignedBigInteger("course_id");
+			$table->foreign("course_id")->references("id")->on("courses");
 
             $table->timestamps();
         });

@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\CourseStudent;
 use App\Models\CurriculumTopic;
 use App\Models\ImportedStudent;
+use App\Models\LearningOutcome;
 use App\Models\Progress;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
@@ -49,8 +50,10 @@ class CourseController extends Controller {
 
 	// Shows a course details
 	public function admin_show($course_id) {
+		$course = Course::findOrFail($course_id);
 		return view('roles.admin.course.show', [
-			'course' => Course::findOrFail($course_id)
+			'course' => $course,
+			'learning_outcomes' => LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get()
 		]);
 	}
 

@@ -56,6 +56,10 @@ class Course extends Model {
 		return $this->hasMany(CurriculumTopic::class);
 	}
 
+	public function learning_outcomes(){
+		return $this->hasMany(LearningOutcome::class);
+	}
+
 }
 
 
