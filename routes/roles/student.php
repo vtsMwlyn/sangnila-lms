@@ -4,7 +4,7 @@ use App\Models\StudentAttendance;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
@@ -32,10 +32,10 @@ Route::prefix('/student')
 				// List of enrolled courses
 				Route::get('/', [CourseController::class, 'student_index'])->name('index');
 
-				// Course details and available topics and materials
+				// Course details and available topics and activities
 				Route::get('/{course_id}', [CourseController::class, 'student_show'])->name('show')->whereNumber('course_id');
 
-				Route::get("/{material_id}/preview", [MaterialController::class, "preview"])->name("preview")->whereNumber("material_id");
+				Route::get("/{activity_id}/preview", [ActivityController::class, "preview"])->name("preview")->whereNumber("activity_id");
 
 			}
 		);

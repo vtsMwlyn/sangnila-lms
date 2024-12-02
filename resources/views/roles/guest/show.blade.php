@@ -11,17 +11,17 @@
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 		<p class="text-blue-950 font-semibold mb-8">{{ $course->course_description }}</p>
 
-		<h2 class="text-xl text-black font-bold mb-5">Course Materials:</h2>
+		<h2 class="text-xl text-black font-bold mb-5">Course Activities:</h2>
 		<div class="overflow-x-auto mb-5">
 			<x-table>
 				<x-slot name="head">
 					<th class="template-heads rounded-l-xl">Course Topic</th>
-					<th class="template-heads rounded-r-xl">Material Name</th>
+					<th class="template-heads rounded-r-xl">Activity Name</th>
 				</x-slot>
 
 				@if ($topics->count())
-					@if($topics[0]->curriculum_materials->count())
-						@foreach ($topics[0]->curriculum_materials as $index => $material)
+					@if($topics[0]->curriculum_activities->count())
+						@foreach ($topics[0]->curriculum_activities as $index => $activity)
 							@if($index < 3)
 								<tr class="@if($index == 1) opacity-60 @elseif($index == 2) opacity-30 @endif">
 									<td class="template-bodies rounded-l-xl">
@@ -29,11 +29,11 @@
 									</td>
 									<td class="template-bodies rounded-r-xl">
 										@if($index < 1)
-											<a href="{{ $material->link }}" class="font-bold hover:underline text-blue-200 hover:text-blue-400">
-												{{ $material->title }}
+											<a href="{{ $activity->link }}" class="font-bold hover:underline text-blue-200 hover:text-blue-400">
+												{{ $activity->title }}
 											</a>
 										@else
-										{{ $material->title }}
+										{{ $activity->title }}
 										@endif
 									</td>
 								</tr>
@@ -46,12 +46,12 @@
 							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
 								{{ $topics[0]->title }}
 							</td>
-							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 text-center">This topic doesn't have any materials yet.</td>
+							<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 text-center">This topic doesn't have any activities yet.</td>
 						</tr>
 					@endif
 				@else
 					<tr>
-						<td colspan="2" class="p-5 bg-white rounded-xl font-semibold text-center">This course doesn't have any topics and materials yet.</td>
+						<td colspan="2" class="p-5 bg-white rounded-xl font-semibold text-center">This course doesn't have any topics and activities yet.</td>
 					</tr>
 				@endif
 

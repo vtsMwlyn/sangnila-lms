@@ -100,7 +100,7 @@ class CourseController extends Controller {
 		return view('roles.teacher.mycourse.index', []);
 	}
 
-	// Shows a course details also topics and materials
+	// Shows a course details also topics and activities
 	public function teacher_show($course_id) {
 		$course = Course::findOrFail($course_id);
 		$course_students = CourseStudent::where("teacher_id", Auth::user()->id)->where("course_id", $course_id)->get();
@@ -157,7 +157,7 @@ class CourseController extends Controller {
 		]);
 	}
 
-	// Shows a course details with topics and materials
+	// Shows a course details with topics and activities
 	public function student_show($course_id) {
 		// Checking if total attendances near or reaching the course max session
 		$cs = CourseStudent::where("student_id", Auth::user()->id)->where("course_id", $course_id)->first();
@@ -188,13 +188,13 @@ class CourseController extends Controller {
 		// Other data
 		$progresses = Progress::where('course_id', $course_id)->where('student_id', Auth::user()->id)->get();
 
-		$progressAndMaterial = [];
+		$progressAndActivity = [];
 		foreach($progresses as $prgs){
 			$pam = [];
 			$pam["progress"] = $prgs;
-			$pam["material"] = $prgs->material;
-			$pam["topic"] = $prgs->material->topic;
-			array_push($progressAndMaterial, $pam);
+			$pam["activity"] = $prgs->activity;
+			$pam["topic"] = $prgs->activity->topic;
+			array_push($progressAndActivity, $pam);
 		}
 
 		$student = CourseStudent::where('student_id', Auth::user()->id)->where('course_id', $course_id)->first();
@@ -209,7 +209,7 @@ class CourseController extends Controller {
 		else {
 			return view('roles.student.course.show', [
 				'course' => $student->course,
-				'materialProgresses' => $progressAndMaterial,
+				'activityProgresses' => $progressAndActivity,
 				"should_pay_soon" => $shouldPaySoon,
 				"max_session_reached" => $max_session_reached
 			]);

@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Auth;
 class TopicController extends Controller
 {
 	// ===== TEACHER ===== //
-	// Shows a topic's details and all materials in the topic
+	// Shows a topic's details and all activities in the topic
 	public function teacher_show($course_id, $topic_id){
-		return view("roles.teacher.topic-and-material.show-topic", [
+		return view("roles.teacher.topic-and-activity.show-topic", [
 			"topic" => Topic::where("course_id", $course_id)->where("id", $topic_id)->first()
 		]);
 	}
@@ -24,7 +24,7 @@ class TopicController extends Controller
 		$course = Course::findOrFail($course_id);
 		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
 
-		return view("roles.teacher.topic-and-material.create-topic", [
+		return view("roles.teacher.topic-and-activity.create-topic", [
 			"course" => $course,
 			"topics" => $topics,
 		]);
@@ -49,7 +49,7 @@ class TopicController extends Controller
 
 	// Edit topic input page
 	public function teacher_edit($course_id, $topic_id){
-		return view("roles.teacher.topic-and-material.edit-topic", [
+		return view("roles.teacher.topic-and-activity.edit-topic", [
 			"topic" => Topic::findOrFail($topic_id),
 			"course" => Course::findOrFail($course_id),
 		]);
@@ -73,7 +73,7 @@ class TopicController extends Controller
 
 	// Topic deletion confirmation
 	public function teacher_delete($course_id, $topic_id){
-		return view("roles.teacher.topic-and-material.delete-topic-confirmation", [
+		return view("roles.teacher.topic-and-activity.delete-topic-confirmation", [
 			"topic" => Topic::where("course_id", $course_id)->where("id", $topic_id)->first()
 		]);
 	}

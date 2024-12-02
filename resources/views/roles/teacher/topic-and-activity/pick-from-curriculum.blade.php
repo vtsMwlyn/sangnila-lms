@@ -17,14 +17,14 @@
 			<x-badge-danger badge_text="{{ session('systemFail') }}" style="margin-top: 0;" class="mb-8"></x-badge-danger>
 		@endif
 
-		<h2 class="mb-4 font-extrabold text-xl text-dark-blue">Select topic and materials from syllabus:</h2>
+		<h2 class="mb-4 font-extrabold text-xl text-dark-blue">Select topic and activities from syllabus:</h2>
 		<div class="w-full bg-slate-400" style="height: 2px;"></div>
 
 		<div class="w-full overflow-x-auto @error('selected') border-red @enderror">
 			<table class="w-full">
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Topic</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Materials/Activities</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activities</th>
 				</thead>
 				<tbody >
 					@php
@@ -37,10 +37,10 @@
 
 							<td class="py-2 px-4">
 								<div class="h-full w-2/3 flex flex-col gap-2">
-									@foreach ($topic->curriculum_materials as $material)
+									@foreach ($topic->curriculum_activities as $activity)
 										<div class="flex w-full justify-between">
-											<div>{{ $material->title }}</div>
-											<input type="checkbox" id="material_{{ $material->id }}"
+											<div>{{ $activity->title }}</div>
+											<input type="checkbox" id="activity_{{ $activity->id }}"
 											class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300">
 										</div>
 									@endforeach
@@ -53,7 +53,7 @@
 							$iterasus++;
 						@endphp
 					@empty
-						<tr><td colspan="4" class="text-center p-5 bg-white rounded-xl w-full font-semibold">- No topics and materials added yet to this course -</td></tr>
+						<tr><td colspan="4" class="text-center p-5 bg-white rounded-xl w-full font-semibold">- No topics and activities added yet to this course -</td></tr>
 					@endforelse
 				</tbody>
 			</table>

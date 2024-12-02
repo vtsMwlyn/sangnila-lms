@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\Topic;
 use App\Models\Course;
-use App\Models\Material;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use App\Models\CurriculumTopic;
-use App\Models\CurriculumMaterial;
+use App\Models\CurriculumActivity;
 use App\Rules\MinimumOneCheckbox;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -81,14 +81,14 @@ class CurriculumController extends Controller
 	}
 
 
-	public function admin_create_material($course_id, $curriculum_topic_id){
-		return view("roles.admin.curriculum.create-material", [
+	public function admin_create_activity($course_id, $curriculum_topic_id){
+		return view("roles.admin.curriculum.create-activity", [
 			"course" => Course::findOrFail($course_id),
 			"curriculum_topic" => CurriculumTopic::findOrFail($curriculum_topic_id)
 		]);
 	}
 
-	public function admin_store_material(Request $request, $course_id, $curriculum_topic_id){
+	public function admin_store_activity(Request $request, $course_id, $curriculum_topic_id){
 		$request->validate([
 			"title" => "required|min:3",
 			"desc" => "required|min:3",
@@ -98,7 +98,7 @@ class CurriculumController extends Controller
 		$ctopic = CurriculumTopic::findOrFail($curriculum_topic_id);
 
 		try {
-			CurriculumMaterial::create([
+			CurriculumActivity::create([
 				"title" => $request->title,
 				"desc" => $request->desc,
 				"link" => $request->link,
@@ -106,57 +106,57 @@ class CurriculumController extends Controller
 			]);
 		}
 		catch(Exception $e){
-			return back()->with("systemFail", "System failed to create curriculum material, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("systemFail", "System failed to create curriculum activity, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 
-		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $ctopic->id]))->with("successAddCurriculumMaterial", "Successfully added the curriculum material data!");
+		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $ctopic->id]))->with("successAddCurriculumActivity", "Successfully added the curriculum activity data!");
 	}
 
-	public function admin_edit_material($course_id, $curriculum_topic_id, $curriculum_material_id){
-		return view("roles.admin.curriculum.edit-material", [
+	public function admin_edit_activity($course_id, $curriculum_topic_id, $curriculum_activity_id){
+		return view("roles.admin.curriculum.edit-activity", [
 			"course" => Course::findOrFail($course_id),
-			"curriculum_material" => CurriculumMaterial::findOrFail($curriculum_material_id)
+			"curriculum_activity" => CurriculumActivity::findOrFail($curriculum_activity_id)
 		]);
 	}
 
-	public function admin_update_material(Request $request, $course_id, $curriculum_topic_id, $curriculum_material_id){
+	public function admin_update_activity(Request $request, $course_id, $curriculum_topic_id, $curriculum_activity_id){
 		$request->validate([
 			"title" => "required|min:3",
 			"desc" => "required|min:3",
 			"link" => "required|url"
 		]);
 
-		$cmaterial = CurriculumMaterial::findOrFail($curriculum_material_id);
+		$cactivity = CurriculumActivity::findOrFail($curriculum_activity_id);
 
 		try {
-			$cmaterial->update([
+			$cactivity->update([
 				"title" => $request->title,
 				"desc" => $request->desc,
 				"link" => $request->link
 			]);
 		}
 		catch(Exception $e){
-			return back()->with("systemFail", "System failed to edit curriculum material, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("systemFail", "System failed to edit curriculum activity, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $cmaterial->curriculum_topic->id]))->with("successEditCurriculumMaterial", "Successfully updated the curriculum topic data!");
+		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $cactivity->curriculum_topic->id]))->with("successEditCurriculumActivity", "Successfully updated the curriculum topic data!");
 	}
 
-	public function admin_delete_material($course_id, $curriculum_topic_id, $curriculum_material_id){
-		return view("roles.admin.curriculum.delete-material", [
+	public function admin_delete_activity($course_id, $curriculum_topic_id, $curriculum_activity_id){
+		return view("roles.admin.curriculum.delete-activity", [
 			"course" => Course::findOrFail($course_id),
-			"curriculum_material" => CurriculumMaterial::findOrFail($curriculum_material_id)
+			"curriculum_activity" => CurriculumActivity::findOrFail($curriculum_activity_id)
 		]);
 	}
 
-	public function admin_destroy_material($course_id, $curriculum_topic_id, $curriculum_material_id){
+	public function admin_destroy_activity($course_id, $curriculum_topic_id, $curriculum_activity_id){
 		$topic = CurriculumTopic::findOrFail($curriculum_topic_id);
-		$material = CurriculumMaterial::findOrFail($curriculum_material_id);
+		$activity = CurriculumActivity::findOrFail($curriculum_activity_id);
 
-		$material->delete();
+		$activity->delete();
 
-		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $topic->id]))->with("successDeleteCurriculumMaterial", "Successfully removed the curriculum material from " . $topic->title . "!");
+		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $topic->id]))->with("successDeleteCurriculumActivity", "Successfully removed the curriculum activity from " . $topic->title . "!");
 	}
 
 
@@ -180,12 +180,12 @@ class CurriculumController extends Controller
 					"course_id" => $course_id
 				]);
 
-				foreach($ctopic->curriculum_materials as $material){
-					Material::create([
+				foreach($ctopic->curriculum_activities as $activity){
+					Activity::create([
 						"topic_id" => $ntopic->id,
-						"title" => $material->title,
-						"desc" => $material->desc,
-						"link" => $material->link
+						"title" => $activity->title,
+						"desc" => $activity->desc,
+						"link" => $activity->link
 					]);
 				}
 			}
@@ -195,18 +195,18 @@ class CurriculumController extends Controller
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to synchronize your course topics and materials with the curriculum, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("systemFail", "System failed to synchronize your course topics and activities with the curriculum, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 
-		return redirect(route("teacher.mycourse.show", $course_id))->with("successSynchronizeCurriculum", "Your class' topic and materials have been successfully synchronized with the curriculum!");
+		return redirect(route("teacher.mycourse.show", $course_id))->with("successSynchronizeCurriculum", "Your class' topic and activities have been successfully synchronized with the curriculum!");
 	}
 
 	public function teacher_pick_course($course_id){
 		$course = Course::findOrFail($course_id);
 		$curriculum_topics = CurriculumTopic::where("course_id", $course_id)->get();
 
-		return view("roles.teacher.topic-and-material.pick-from-curriculum", [
+		return view("roles.teacher.topic-and-activity.pick-from-curriculum", [
 			"curriculum_topics" => $curriculum_topics,
 			"course" => $course
 		]);
@@ -238,13 +238,13 @@ class CurriculumController extends Controller
 					"course_id" => $course->id
 				]);
 
-				foreach($ctopic->curriculum_materials as $cmaterial){
+				foreach($ctopic->curriculum_activities as $cactivity){
 					if($request->selected[$i] == "on"){
-						Material::create([
+						Activity::create([
 							"topic_id" => $ntopic->id,
-							"title" => $cmaterial->title,
-							"desc" => $cmaterial->desc,
-							"link" => $cmaterial->link
+							"title" => $cactivity->title,
+							"desc" => $cactivity->desc,
+							"link" => $cactivity->link
 						]);
 					}
 
@@ -257,9 +257,9 @@ class CurriculumController extends Controller
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to save selected syllabus topic and materials to your course's topics and materials. Please report this error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("systemFail", "System failed to save selected syllabus topic and activities to your course's topics and activities. Please report this error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route('teacher.mycourse.show', $course->id))->with("successPickFromCurriculum", "Successfully picked topics and materials from the curriculum");
+		return redirect(route('teacher.mycourse.show', $course->id))->with("successPickFromCurriculum", "Successfully picked topics and activities from the curriculum");
 	}
 }

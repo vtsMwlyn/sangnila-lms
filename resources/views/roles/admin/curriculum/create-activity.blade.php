@@ -7,9 +7,8 @@
 @section("breadcrumbs-extension")
 	> <a href="{{ route('admin.course.show', $course->id) }}" class="font-bold text-yellow-500">{{ $course->course_name }}</a>
 	> <a href="{{ route('admin.course.show', $course->id) }}#curriculum-section" class="font-bold text-yellow-500">Curriculum</a>
-	> <a href="{{ route('admin.course.curriculum.topic.details', [$course->id, $curriculum_material->curriculum_topic->id]) }}" class="font-bold text-yellow-500">{{ $curriculum_material->curriculum_topic->title }}</a>
-	> <span>{{ $curriculum_material->title }}</span>
-	> <span>Edit</span>
+	> <a href="{{ route('admin.course.curriculum.topic.details', [$course->id, $curriculum_topic->id]) }}" class="font-bold text-yellow-500">{{ $curriculum_topic->title }}</a>
+	> <span>Add Activity</span>
 @endsection
 
 @section("content")
@@ -17,35 +16,35 @@
 		<x-page-title class="mt-4">
 			<a href="{{ route("admin.course.show", $course->id) }}">{{ $course->course_name }}</a>
 		</x-page-title>
-		<h1 class="text-2xl font-semibold text-blue-900 mb-8 text-center">Edit Material "{{ $curriculum_material->title }}"</h1>
+		<h1 class="text-2xl font-semibold text-blue-900 mb-8 text-center">Upload Activity to Topic "{{ $curriculum_topic->title }}"</h1>
 
 		@if(session()->has("systemFail"))
 			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route("admin.course.curriculum.material.update", [$course->id, $curriculum_material->curriculum_topic->id, $curriculum_material->id]) }}" method="post">
+		<form action="{{ route("admin.course.curriculum.activity.store", [$course->id, $curriculum_topic->id]) }}" method="post">
 			@csrf
-			<!-- Material Title -->
+			<!-- Activity Title -->
 			<div class="flex gap-2 @error('title') items-start @else items-stretch @enderror">
-				<x-boxed-label for="title" :value="__('Material Title')" />
+				<x-boxed-label for="title" :value="__('Activity Title')" />
 				<div class="flex flex-col w-full items-stretch">
-					<x-input id="title" class="w-full" type="text" name="title" placeholder="Enter new material title" :value="old('title', $curriculum_material->title)" autofocus />
+					<x-input id="title" class="w-full" type="text" name="title" placeholder="Enter activity title" :value="old('title')" autofocus />
 				</div>
 			</div>
 
-			<!-- Material Description -->
+			<!-- Activity Description -->
 			<div class="mt-4 flex gap-2 @error('desc') items-start @else items-stretch @enderror">
-				<x-boxed-label for="desc" :value="__('Material Description')" />
+				<x-boxed-label for="desc" :value="__('Activity Description')" />
 				<div class="flex flex-col w-full items-stretch">
-					<x-input id="desc" class="w-full" type="text" name="desc" placeholder="Enter new material description" :value="old('desc', $curriculum_material->desc)"/>
+					<x-input id="desc" class="w-full" type="text" name="desc" placeholder="Enter activity description" :value="old('desc')" />
 				</div>
 			</div>
 
-			<!-- Material Link -->
+			<!-- Activity Link -->
 			<div class="mt-4 flex gap-2 @error('link') items-start @else items-stretch @enderror">
-				<x-boxed-label for="link" :value="__('Material Link')" />
+				<x-boxed-label for="link" :value="__('Activity Link')" />
 				<div class="flex flex-col w-full items-stretch">
-					<x-input id="link" class="w-full" type="text" name="link" placeholder="Enter material link" :value="old('link', $curriculum_material->link)"/>
+					<x-input id="link" class="w-full" type="text" name="link" placeholder="Enter activity link" :value="old('link')" />
 				</div>
 			</div>
 

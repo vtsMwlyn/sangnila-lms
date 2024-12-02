@@ -102,7 +102,7 @@
 						const col1 = $("<td>").addClass("py-2 px-4 text-center").text(i + 1);
 						const col2 = $("<td>").addClass("py-2 px-4").text(sa.student.full_name);
 						const col3 = $("<td>").addClass("py-2 px-4").html(sa.is_attend == 1 ? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`);
-						const col4 = $("<td>").addClass("py-2 px-4").text(`${sa.material_progress ? sa.material_progress : 'N/A'} [${sa.learning_status ? sa.learning_status : 'N/A'}]`);
+						const col4 = $("<td>").addClass("py-2 px-4").text(`${sa.activity_progress ? sa.activity_progress : 'N/A'} [${sa.learning_status ? sa.learning_status : 'N/A'}]`);
 						const col5 = $("<td>").addClass("py-2 px-4").text(sa.attendance_detail);
 
 						let rowBG;

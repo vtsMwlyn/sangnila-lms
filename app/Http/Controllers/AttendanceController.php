@@ -141,22 +141,22 @@ class AttendanceController extends Controller {
 			// Validate conditional fields based on attendance status
 			$attendanceData = [
 				'attendance_detail' => $request->input("attendance_detail.$i"),
-				'material_progress' => $isAttend ? $request->input("material_progress.$i") : null,
+				'activity_progress' => $isAttend ? $request->input("activity_progress.$i") : null,
 				'learning_status' => $isAttend ? $request->input("learning_status.$i") : null,
-				'other_material' => $isAttend ? $request->input("other_material.$i") : null,
+				'other_activity' => $isAttend ? $request->input("other_activity.$i") : null,
 				'attended' => $isAttend,
 			];
 
-			// If material_progress is filled, ensure learning_status is provided
-			if ($isAttend == 1 && $attendanceData['material_progress'] && !$attendanceData['learning_status']) {
-				$errors["learning_status.$i"] = "Learning status is required if material progress is provided.";
+			// If activity_progress is filled, ensure learning_status is provided
+			if ($isAttend == 1 && $attendanceData['activity_progress'] && !$attendanceData['learning_status']) {
+				$errors["learning_status.$i"] = "Learning status is required if activity progress is provided.";
 			}
-			else if ($isAttend == 1 && !$attendanceData['material_progress'] && $attendanceData['learning_status']) {
-				$errors["material_progress.$i"] = "Material progress is required if learning status is provided.";
+			else if ($isAttend == 1 && !$attendanceData['activity_progress'] && $attendanceData['learning_status']) {
+				$errors["activity_progress.$i"] = "Activity progress is required if learning status is provided.";
 			}
 
-			if($isAttend == 1 && $attendanceData['material_progress'] == "other" && !$attendanceData['other_material']){
-				$errors["other_material.$i"] = "Please specified the material.";
+			if($isAttend == 1 && $attendanceData['activity_progress'] == "other" && !$attendanceData['other_activity']){
+				$errors["other_activity.$i"] = "Please specified the activity.";
 			}
 
 			// Collect valid data for the second loop if no errors
@@ -191,8 +191,8 @@ class AttendanceController extends Controller {
 					"attendance_id" => $newAttendance->id,
 					"is_attend" => $data['attendance_data']['attended'],
 					"attendance_detail" => $data['attendance_data']['attendance_detail'],
-					"material_progress" => ($data['attendance_data']['material_progress'] == 'other') ? $data['attendance_data']['other_material'] : $data['attendance_data']['material_progress'],
-					"is_custom" => ($data['attendance_data']['material_progress'] == 'other') ? 1 : 0,
+					"activity_progress" => ($data['attendance_data']['activity_progress'] == 'other') ? $data['attendance_data']['other_activity'] : $data['attendance_data']['activity_progress'],
+					"is_custom" => ($data['attendance_data']['activity_progress'] == 'other') ? 1 : 0,
 					"learning_status" => $data['attendance_data']['learning_status']
 				]);
 			}
@@ -243,22 +243,22 @@ class AttendanceController extends Controller {
 			// Validate conditional fields based on attendance status
 			$attendanceData = [
 				'attendance_detail' => $request->input("attendance_detail.$i"),
-				'material_progress' => $isAttend ? $request->input("material_progress.$i") : null,
+				'activity_progress' => $isAttend ? $request->input("activity_progress.$i") : null,
 				'learning_status' => $isAttend ? $request->input("learning_status.$i") : null,
-				'other_material' => $isAttend ? $request->input("other_material.$i") : null,
+				'other_activity' => $isAttend ? $request->input("other_activity.$i") : null,
 				'attended' => $isAttend,
 			];
 
-			// If material_progress is filled, ensure learning_status is provided
-			if ($isAttend == 1 && $attendanceData['material_progress'] && !$attendanceData['learning_status']) {
-				$errors["learning_status.$i"] = "Learning status is required if material progress is provided.";
+			// If activity_progress is filled, ensure learning_status is provided
+			if ($isAttend == 1 && $attendanceData['activity_progress'] && !$attendanceData['learning_status']) {
+				$errors["learning_status.$i"] = "Learning status is required if activity progress is provided.";
 			}
-			else if ($isAttend == 1 && !$attendanceData['material_progress'] && $attendanceData['learning_status']) {
-				$errors["material_progress.$i"] = "Material progress is required if learning status is provided.";
+			else if ($isAttend == 1 && !$attendanceData['activity_progress'] && $attendanceData['learning_status']) {
+				$errors["activity_progress.$i"] = "Activity progress is required if learning status is provided.";
 			}
 
-			if($isAttend == 1 && $attendanceData['material_progress'] == "other" && !$attendanceData['other_material']){
-				$errors["other_material.$i"] = "Please specified the material.";
+			if($isAttend == 1 && $attendanceData['activity_progress'] == "other" && !$attendanceData['other_activity']){
+				$errors["other_activity.$i"] = "Please specified the activity.";
 			}
 
 			// Collect valid data for the second loop if no errors
@@ -290,9 +290,9 @@ class AttendanceController extends Controller {
 				StudentAttendance::create([
 					"is_attend" => $vd["attendance_data"]["attended"],
 					"attendance_detail" => $vd["attendance_data"]["attendance_detail"],
-					"material_progress" => ($vd["attendance_data"]["material_progress"] == "other")? $vd["attendance_data"]["other_material"] : $vd['attendance_data']['material_progress'],
+					"activity_progress" => ($vd["attendance_data"]["activity_progress"] == "other")? $vd["attendance_data"]["other_activity"] : $vd['attendance_data']['activity_progress'],
 					"learning_status" => $vd["attendance_data"]["learning_status"],
-					"is_custom" => ($vd["attendance_data"]["material_progress"] == "other")? 1 : 0,
+					"is_custom" => ($vd["attendance_data"]["activity_progress"] == "other")? 1 : 0,
 					"user_id" => intval($vd["student_id"]),
 					"attendance_id" => $attendance->id
 				]);

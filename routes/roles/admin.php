@@ -67,7 +67,7 @@ Route::prefix('/admin')
 						Route::post("/import-excel", [ExcelImportController::class, "import_excel_curriculum_store"])->name("import-excel.store");
 
 						// Download import excel template
-						Route::get("/import-excel/download-template", [DownloadResourceController::class, "topics_and_materials_import_excel_template"])->name("import-excel.download");
+						Route::get("/import-excel/download-template", [DownloadResourceController::class, "topics_and_activities_import_excel_template"])->name("import-excel.download");
 
 						// Add new curriculum topic
 						Route::get("/create", [CurriculumController::class, "admin_create_topic"])->name("topic.create");
@@ -84,17 +84,17 @@ Route::prefix('/admin')
 						// Show curriculum topic's detail
 						Route::get("/{curriculum_topic_id}", [CurriculumController::class, "admin_topic_details"])->name("topic.details")->whereNumber('curriculum_topic_id');
 
-						// Add new curriculum material
-						Route::get("/{curriculum_topic_id}/create", [CurriculumController::class, "admin_create_material"])->name("material.create")->whereNumber('curriculum_topic_id');
-						Route::post("/{curriculum_topic_id}/create", [CurriculumController::class, "admin_store_material"])->name("material.store")->whereNumber('curriculum_topic_id');
+						// Add new curriculum activity
+						Route::get("/{curriculum_topic_id}/create", [CurriculumController::class, "admin_create_activity"])->name("activity.create")->whereNumber('curriculum_topic_id');
+						Route::post("/{curriculum_topic_id}/create", [CurriculumController::class, "admin_store_activity"])->name("activity.store")->whereNumber('curriculum_topic_id');
 
-						// Modify curriculum material
-						Route::get("/{curriculum_topic_id}/{curriculum_material_id}/edit", [CurriculumController::class, "admin_edit_material"])->name("material.edit")->whereNumber(['curriculum_topic_id', 'curriculum_material_id']);
-						Route::post("/{curriculum_topic_id}/{curriculum_material_id}/edit", [CurriculumController::class, "admin_update_material"])->name("material.update")->whereNumber(['curriculum_topic_id', 'curriculum_material_id']);
+						// Modify curriculum activity
+						Route::get("/{curriculum_topic_id}/{curriculum_activity_id}/edit", [CurriculumController::class, "admin_edit_activity"])->name("activity.edit")->whereNumber(['curriculum_topic_id', 'curriculum_activity_id']);
+						Route::post("/{curriculum_topic_id}/{curriculum_activity_id}/edit", [CurriculumController::class, "admin_update_activity"])->name("activity.update")->whereNumber(['curriculum_topic_id', 'curriculum_activity_id']);
 
-						// Remove curriculum material from curriculum topic
-						Route::get("/{curriculum_topic_id}/{curriculum_material_id}/delete", [CurriculumController::class, "admin_delete_material"])->name("material.delete")->whereNumber(['curriculum_topic_id', 'curriculum_material_id']);
-						Route::post("/{curriculum_topic_id}/{curriculum_material_id}/delete", [CurriculumController::class, "admin_destroy_material"])->name("material.destroy")->whereNumber(['curriculum_topic_id', 'curriculum_material_id']);
+						// Remove curriculum activity from curriculum topic
+						Route::get("/{curriculum_topic_id}/{curriculum_activity_id}/delete", [CurriculumController::class, "admin_delete_activity"])->name("activity.delete")->whereNumber(['curriculum_topic_id', 'curriculum_activity_id']);
+						Route::post("/{curriculum_topic_id}/{curriculum_activity_id}/delete", [CurriculumController::class, "admin_destroy_activity"])->name("activity.destroy")->whereNumber(['curriculum_topic_id', 'curriculum_activity_id']);
 					}
 				)->whereNumber("course_id");
 			}

@@ -14,7 +14,7 @@
 <div class="w-full flex flex-wrap gap-5">
 	@forelse ($course_students as $index => $cs)
 		<a href="{{ route('teacher.student.show.progress', ['student_id' => $cs->student->id, 'course_id' => $course->id]) }}"  style="width: 32%;" class="transition duration-300 hover:scale-105">
-			<!-- Counting how many students has no access at all to any materials -->
+			<!-- Counting how many students has no access at all to any activities -->
 			@php
 				$course_students = App\Models\CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
 
@@ -54,7 +54,7 @@
 					</div>
 
 					<div class="flex gap-2 items-center">
-						<i class="bi bi-book-half text-slate-400"></i>{{ __($n_opened . "/" . $progress_per_student->count()) }} Materials Read
+						<i class="bi bi-book-half text-slate-400"></i>{{ __($n_opened . "/" . $progress_per_student->count()) }} Activities Read
 					</div>
 				</div>
 			</div>

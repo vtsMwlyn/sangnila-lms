@@ -4,7 +4,7 @@ namespace App\Imports;
 
 use Exception;
 use App\Models\Course;
-use App\Models\CurriculumMaterial;
+use App\Models\CurriculumActivity;
 use App\Models\CurriculumTopic;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -33,9 +33,9 @@ class CurriculumsImport implements ToModel, WithHeadingRow
 				"title" => $row["topic"]
 			]);
 
-			CurriculumMaterial::create([
+			CurriculumActivity::create([
 				"curriculum_topic_id" => $ctopic->id,
-				"title" => $row["material"],
+				"title" => $row["activity"],
 				"desc" => $row["description"],
 				"link" => $row["link"]
 			]);

@@ -95,29 +95,29 @@ class DashboardController extends Controller
 			array_push($current_and_full, $cs->max_course_session);
 			array_push($atd_progress, $current_and_full);
 
-			// Material progress
+			// Activity progress
 			$unlocked_and_full = [];
 
-			$n_all_materials = 0;
+			$n_all_activities = 0;
 			$topics = Topic::where("user_id", $cs->teacher_id)->where("course_id", $cs->course_id)->get();
 			if($topics->count()){
 				foreach($topics as $topic){
-					if($topic->materials->count()){
-						$n_all_materials += $topic->materials->count();
+					if($topic->activities->count()){
+						$n_all_activities += $topic->activities->count();
 					}
 				}
 			}
 
 			$n_unlocked = 0;
-			$unlocked_materials = Progress::where("student_id", Auth::user()->id)->where("course_id", $cs->course_id)->get();
-			foreach($unlocked_materials as $unl){
+			$unlocked_activities = Progress::where("student_id", Auth::user()->id)->where("course_id", $cs->course_id)->get();
+			foreach($unlocked_activities as $unl){
 				if($unl->status == "unlocked"){
 					$n_unlocked++;
 				}
 			}
 
 			array_push($unlocked_and_full, $n_unlocked);
-			array_push($unlocked_and_full, $n_all_materials);
+			array_push($unlocked_and_full, $n_all_activities);
 			array_push($mtr_progress, $unlocked_and_full);
 
 			$assignments = Assignment::where("course_id", $cs->course_id)->where("teacher_id", $cs->teacher_id)->get();
@@ -139,19 +139,19 @@ class DashboardController extends Controller
 		foreach($atd_progress as $i => $ap){
 			$sessions_attended += $ap[0];
 		}
-		$materials_unlocked = 0;
+		$activities_unlocked = 0;
 		foreach($mtr_progress as $i => $mp){
-			$materials_unlocked += $mp[0];
+			$activities_unlocked += $mp[0];
 		}
 
 		return view("roles.student.dashboard", [
 			"courses_enrolled" => $courses_enrolled,
 			"sessions_attended" => $sessions_attended,
 			"assignments_done" => $assignments_done,
-			"materials_unlocked" => $materials_unlocked,
+			"activities_unlocked" => $activities_unlocked,
 
 			"undone_assignment" => $undone_asg,
-			"material_progress" => $mtr_progress,
+			"activity_progress" => $mtr_progress,
 			"attendance_progress" => $atd_progress,
 			"course_students" =>  $course_students
 		]);

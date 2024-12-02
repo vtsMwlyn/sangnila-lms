@@ -16,7 +16,7 @@ return new class extends Migration
 
 			$table->unsignedInteger("is_attend");
 			$table->longText('attendance_detail');
-			$table->longText("material_progress")->nullable();
+			$table->longText("activity_progress")->nullable();
 			$table->string("learning_status")->nullable();
 
 			$table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");

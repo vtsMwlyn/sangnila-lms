@@ -55,16 +55,16 @@
 											<input type="hidden" name="students[]" value="{{ $s->id }}">
 										</div>
 
-										<div class="flex flex-col w-full gap-2 mt-2 material_progress_detail items-start @error('material_progress.' . $loop->index) border-red rounded-2xl p-1 @enderror @error('learning_status.' . $loop->index) border-red p-1 rounded-2xl @enderror" style="display: none;">
+										<div class="flex flex-col w-full gap-2 mt-2 activity_progress_detail items-start @error('activity_progress.' . $loop->index) border-red rounded-2xl p-1 @enderror @error('learning_status.' . $loop->index) border-red p-1 rounded-2xl @enderror" style="display: none;">
 											<div class="flex flex-col w-full container_select2">
-												<select class="material_progress select2 rounded-2xl shadow-sm focus:outline-none py-2 px-4 focus:ring-0" name="fake_material_progress[]">
-													<option selected disabled>Select Material Progress</option>
+												<select class="activity_progress select2 rounded-2xl shadow-sm focus:outline-none py-2 px-4 focus:ring-0" name="fake_activity_progress[]">
+													<option selected disabled>Select Activity Progress</option>
 													@foreach ($topics as $topic)
-														@foreach ($topic->materials as $material)
-															<option value="{{ $material->title }}" @if(old("material_progress." . $index) == $material->title) selected @endif>{{ $material->title }}</option>
+														@foreach ($topic->activities as $activity)
+															<option value="{{ $activity->title }}" @if(old("activity_progress." . $index) == $activity->title) selected @endif>{{ $activity->title }}</option>
 														@endforeach
 													@endforeach
-													<option value="other" @if(old("material_progress." . $index) == "other") selected @endif>Other</option>
+													<option value="other" @if(old("activity_progress." . $index) == "other") selected @endif>Other</option>
 												</select>
 											</div>
 
@@ -77,14 +77,14 @@
 										@error("learning_status." . $loop->index)
 											<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
 										@enderror
-										@error("material_progress." . $loop->index)
+										@error("activity_progress." . $loop->index)
 											<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
 										@enderror
 
-										<div class="mt-2 @error('other_material.' . $loop->index) border-red rounded-2xl p-1 @enderror">
-											<x-input name="other_material[]" type="text" class="w-full hidden other-material" placeholder="Input activity/material" value="{{ old('other_material.' . $loop->index) }}"/>
+										<div class="mt-2 @error('other_activity.' . $loop->index) border-red rounded-2xl p-1 @enderror">
+											<x-input name="other_activity[]" type="text" class="w-full hidden other-activity" placeholder="Input activity/activity" value="{{ old('other_activity.' . $loop->index) }}"/>
 										</div>
-										@error("other_material." . $loop->index)
+										@error("other_activity." . $loop->index)
 											<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
 										@enderror
 									</td>
@@ -114,7 +114,7 @@
 			</form>
 		@else
 			<div class="bg-blue-900 rounded-xl p-8">
-				<h1 class="font-semibold italic text-white">- No students assigned or topics and materials added to this course yet, cannot upload assignment -</h1>
+				<h1 class="font-semibold italic text-white">- No students assigned or topics and activities added to this course yet, cannot upload assignment -</h1>
 				<x-button type="button" onclick="history.back()" class="bg-slate-600 mt-5">
 					Return
 				</x-button>
@@ -123,38 +123,38 @@
 
 		<script>
 			$(document).ready(() => {
-				// Mechanism to hide and unhide selects for material progress detail depending if the student name checkbox is checked or not
+				// Mechanism to hide and unhide selects for activity progress detail depending if the student name checkbox is checked or not
 				const allCheckBoxes = $('input[type="checkbox"]');
 
 				allCheckBoxes.each(function() {
-					const correspondingDetail = $(this).closest('td').find('.material_progress_detail');
-					const otherMaterial = $(this).closest('td').find('.other-material');
+					const correspondingDetail = $(this).closest('td').find('.activity_progress_detail');
+					const otherActivity = $(this).closest('td').find('.other-activity');
 
 					if ($(this).is(":checked")) {
 						correspondingDetail.css("display", "flex");
-						if(correspondingDetail.find('.material_progress').val() == "other"){
-							otherMaterial.css("display", "flex");
+						if(correspondingDetail.find('.activity_progress').val() == "other"){
+							otherActivity.css("display", "flex");
 						}
 					}
 					else {
 						correspondingDetail.css("display", "none");
-						otherMaterial.css("display", "none");
+						otherActivity.css("display", "none");
 					}
 				});
 
 				allCheckBoxes.change(function(){
-					const correspondingDetail = $(this).closest('td').find('.material_progress_detail');
-					const otherMaterial = $(this).closest('td').find('.other-material');
+					const correspondingDetail = $(this).closest('td').find('.activity_progress_detail');
+					const otherActivity = $(this).closest('td').find('.other-activity');
 
 					if ($(this).is(":checked")) {
 						correspondingDetail.css("display", "flex");
-						if(correspondingDetail.find('.material_progress').val() == "other"){
-							otherMaterial.css("display", "flex");
+						if(correspondingDetail.find('.activity_progress').val() == "other"){
+							otherActivity.css("display", "flex");
 						}
 					}
 					else {
 						correspondingDetail.css("display", "none");
-						otherMaterial.css("display", "none");
+						otherActivity.css("display", "none");
 					}
 				});
 			});
@@ -163,33 +163,33 @@
 			const collectValues = () => {
 				const checkboxes = $('input[type="checkbox"]');
 				const checkboxValues = [];
-				const materialProgressValues = [];
+				const activityProgressValues = [];
 				const learningStatusValues = [];
 
 				checkboxes.each(function(){
-					const correspondingDetail = $(this).closest('td').find('.material_progress_detail');
+					const correspondingDetail = $(this).closest('td').find('.activity_progress_detail');
 
 					if($(this).is(":disabled")){
 						checkboxValues.push('off');
-						materialProgressValues.push("Absent");
+						activityProgressValues.push("Absent");
 						learningStatusValues.push("Absent");
 					} else {
 						const cb = $(this).is(":checked") ? 'on' : 'off';
 						checkboxValues.push(cb);
 
 						if(cb == "on"){
-							materialProgressValues.push(correspondingDetail.find('.material_progress').val());
+							activityProgressValues.push(correspondingDetail.find('.activity_progress').val());
 							learningStatusValues.push(correspondingDetail.find('.learning_status').val());
 						}
 						else {
-							materialProgressValues.push("Absent");
+							activityProgressValues.push("Absent");
 							learningStatusValues.push("Absent");
 						}
 
 					}
 				});
 
-				return [checkboxValues, materialProgressValues, learningStatusValues];
+				return [checkboxValues, activityProgressValues, learningStatusValues];
 			}
 
 			const processDisabledTextAreas = () => {
@@ -207,12 +207,12 @@
 				});
 			}
 
-			$(".material_progress").change(function(){
+			$(".activity_progress").change(function(){
 				if($(this).val() == "other"){
-					$(this).closest(".material_progress_detail").next().find(".other-material").show();
+					$(this).closest(".activity_progress_detail").next().find(".other-activity").show();
 				}
 				else {
-					$(this).closest(".material_progress_detail").next().find(".other-material").hide();
+					$(this).closest(".activity_progress_detail").next().find(".other-activity").hide();
 				}
 			});
 
@@ -220,11 +220,11 @@
 			form.addEventListener('submit', (event) => {
 				event.preventDefault();
 
-				const [checkboxValues, materialProgressValues, learningStatusValues] = collectValues();
+				const [checkboxValues, activityProgressValues, learningStatusValues] = collectValues();
 
 				checkboxValues.forEach((value, index) => {
 					const hiddenInput1 = $("<input>").attr({"type": "hidden", "name": "checkbox_value[]", "value": value});
-					const hiddenInput2 = $("<input>").attr({"type": "hidden", "name": "material_progress[]", "value": materialProgressValues[index]});
+					const hiddenInput2 = $("<input>").attr({"type": "hidden", "name": "activity_progress[]", "value": activityProgressValues[index]});
 					const hiddenInput3 = $("<input>").attr({"type": "hidden", "name": "learning_status[]", "value": learningStatusValues[index]});
 
 					$(form).append(hiddenInput1, hiddenInput2, hiddenInput3);

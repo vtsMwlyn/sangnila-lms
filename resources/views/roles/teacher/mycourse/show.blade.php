@@ -18,8 +18,8 @@
 			<x-badge-success badge_text="{{ session('successSynchronizeCurriculum') }}"></x-badge-success>
 		@elseif(session()->has("successPickFromCurriculum"))
 			<x-badge-success badge_text="{{ session('successPickFromCurriculum') }}"></x-badge-success>
-		@elseif(session()->has("successImportExcelTopicsAndMaterials"))
-			<x-badge-success badge_text="{{ session('successImportExcelTopicsAndMaterials') }}"></x-badge-success>
+		@elseif(session()->has("successImportExcelTopicsAndActivities"))
+			<x-badge-success badge_text="{{ session('successImportExcelTopicsAndActivities') }}"></x-badge-success>
 		@elseif(session()->has("successDeleteTopic"))
 			<x-badge-warning badge_text="{{ session('successDeleteTopic') }}"></x-badge-warning>
 		@endif
@@ -45,7 +45,7 @@
 		</div>
 
 		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
-		<h2 class="my-4 font-extrabold text-xl text-dark-blue">Course Topics and Materials/Activities</h2>
+		<h2 class="my-4 font-extrabold text-xl text-dark-blue">Course Topics and Activities</h2>
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
 		<div class="flex justify-between items-stretch w-full mt-5">
@@ -56,7 +56,7 @@
 
 			<div class="flex gap-5">
 				<x-anchor-button class="bg-orange-500"
-					href="{{ route('teacher.mycourse.import-excel-topicsandmaterials', $course->id) }}">
+					href="{{ route('teacher.mycourse.import-excel-topicsandactivities', $course->id) }}">
 					<i class="bi bi-file-earmark-arrow-up"></i> Import from Excel
 				</x-anchor-button>
 
@@ -71,7 +71,7 @@
 							</a>
 							<form method="POST" action="{{ route('teacher.mycourse.synchronize', $course->id) }}" class="hover:bg-slate-300 grow flex items-center gap-2">
 								@csrf
-								<button class="w-full px-5 py-1 text-black flex items-center gap-1" onclick="return confirm('Synchronizing with topics and material in syllabus will erase all of your posted topics and materials. Are your sure want to proceed?');">
+								<button class="w-full px-5 py-1 text-black flex items-center gap-1" onclick="return confirm('Synchronizing with topics and activity in syllabus will erase all of your posted topics and activities. Are your sure want to proceed?');">
 									<i class="bi bi-arrow-repeat text-slate-400"></i> Sync with Syllabus
 								</button>
 							</form>
@@ -87,7 +87,7 @@
 			<table class="w-full">
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Topic Title</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Materials/Activities</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activities</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 				</thead>
 				<tbody >
@@ -96,14 +96,14 @@
 					@endphp
 
 					@forelse ($topics as $topic)
-						@if($topic->materials->count())
+						@if($topic->activities->count())
 							<tr class="@if($iterasus % 2 == 1) bg-white @endif">
 								<td class="py-2 px-4">{{ $topic->title }}</td>
 
 								<td class="py-2 px-4">
 									<ul class="h-full w-full flex flex-col">
-										@foreach ($topic->materials as $material)
-											<li>{{ $material->title }}</li>
+										@foreach ($topic->activities as $activity)
+											<li>{{ $activity->title }}</li>
 										@endforeach
 									</ul>
 								</td>
@@ -128,7 +128,7 @@
 						@else
 							<tr class="@if($iterasus % 2 == 1) bg-white @endif">
 								<td class="py-2 px-4">{{ $topic->title }}</td>
-								<td class="py-2 px-4">- No materials added yet to this topic -</td>
+								<td class="py-2 px-4">- No activities added yet to this topic -</td>
 								<td class="py-2 px-4">
 									<div class="flex w-full items-center gap-2">
 										<x-anchor-button class="bg-orange-500"
@@ -148,7 +148,7 @@
 							@endphp
 						@endif
 					@empty
-						<tr><td colspan="4" class="text-center p-5 bg-white rounded-xl w-full font-semibold">- No topics and materials added yet to this course -</td></tr>
+						<tr><td colspan="4" class="text-center p-5 bg-white rounded-xl w-full font-semibold">- No topics and activities added yet to this course -</td></tr>
 					@endforelse
 				</tbody>
 			</table>

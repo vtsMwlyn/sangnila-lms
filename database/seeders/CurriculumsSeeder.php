@@ -64,7 +64,7 @@ class CurriculumsSeeder extends Seeder
 			"Line Art",
 			"Value and Ligthing",
 			"Color Theory and Exploration",
-			"Material Studies",
+			"Activity Studies",
 			"Orthographic View / Turn Table",
 			"Blow Up and Detailing",
 			"Submission: Prop Design Portfolio"

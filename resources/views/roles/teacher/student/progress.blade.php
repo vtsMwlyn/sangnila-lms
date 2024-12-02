@@ -30,24 +30,24 @@
 				<table class="w-full">
 					<thead>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Topic</th>
-						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Material Name</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activity Name</th>
 						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Material Access</th>
 					</thead>
 					<tbody>
 						@forelse ($newestprogress as $progress)
 							<tr class="@if($loop->index % 2 == 0) bg-white @endif">
-								<td class="py-2 px-4">{{ $progress->material->topic->title }}</td>
-								<td class="py-2 px-4">{{ $progress->material->title }}</td>
+								<td class="py-2 px-4">{{ $progress->activity->topic->title }}</td>
+								<td class="py-2 px-4">{{ $progress->activity->title }}</td>
 								<td class="py-2 px-4">
 									<div class="w-full flex justify-center">
-										<input type="checkbox" name="access" id="material_progress_{{ $progress->id }}"
+										<input type="checkbox" name="access" id="activity_progress_{{ $progress->id }}"
 										class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300"
 										@if ($progress->status === 'unlocked') checked @endif>
 									</div>
 								</td>
 							</tr>
 						@empty
-							<tr><td colspan="4" class="text-center font-semibold bg-white rounded-xl p-5">- No materials yet added to this course -</td></tr>
+							<tr><td colspan="4" class="text-center font-semibold bg-white rounded-xl p-5">- No activities yet added to this course -</td></tr>
 						@endforelse
 					</tbody>
 				</table>
@@ -69,7 +69,7 @@
 				<x-table>
 					<x-slot name="head">
 						<th class="template-heads rounded-l-xl">Topic</th>
-						<th class="template-heads">Material Name</th>
+						<th class="template-heads">Activity Name</th>
 						<th class="template-heads">Access</th>
 						<th class="template-heads rounded-r-xl">Action</th>
 					</x-slot>
@@ -79,13 +79,13 @@
 							<tr>
 								<td class="template-bodies rounded-l-xl">
 									<a href="">
-										{{ $progress->material->topic->title }}
+										{{ $progress->activity->topic->title }}
 									</a>
 								</td>
 
 								<td class="template-bodies">
 									<a href="">
-										{{ $progress->material->title }}
+										{{ $progress->activity->title }}
 									</a>
 								</td>
 
@@ -93,14 +93,14 @@
 									{{ $progress->status }}
 								</td>
 								<td class="template-bodies rounded-r-xl">
-									<input type="checkbox" name="access" id="material_progress_{{ $progress->id }}"
+									<input type="checkbox" name="access" id="activity_progress_{{ $progress->id }}"
 									class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300"
 									@if ($progress->status === 'unlocked') checked @endif>
 								</td>
 							</tr>
 						@endforeach
 					@else
-						<tr><td colspan="4" class="text-center font-semibold bg-white rounded-xl p-5">- No materials yet added to this course -</td></tr>
+						<tr><td colspan="4" class="text-center font-semibold bg-white rounded-xl p-5">- No activities yet added to this course -</td></tr>
 					@endif
 				</x-table>
 

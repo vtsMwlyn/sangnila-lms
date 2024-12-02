@@ -24,10 +24,10 @@
 						@php
 							$n_mat = 0;
 							foreach($course->topics as $t){
-								$n_mat += $t->materials->count();
+								$n_mat += $t->activities->count();
 							}
 						@endphp
-						<i class="bi bi-book-half text-slate-400"></i>{{ $n_mat }} Activities/Materials
+						<i class="bi bi-book-half text-slate-400"></i>{{ $n_mat }} Activities
 					</div>
 				</div>
 			</a>

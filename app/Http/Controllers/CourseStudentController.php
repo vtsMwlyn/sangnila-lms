@@ -84,16 +84,16 @@ class CourseStudentController extends Controller {
 
 			$existingProgress = Progress::where('student_id', $student->id)
 				->where('course_id', $course->id)
-				->pluck('material_id')
+				->pluck('activity_id')
 				->toArray();
 
 			$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
 
 			foreach ($topics as $index1 => $topic) {
-				foreach($topic->materials as $index2 => $material) {
+				foreach($topic->activities as $index2 => $activity) {
 					$newData = [
 						'student_id' => $student->id,
-						'material_id' => $material->id,
+						'activity_id' => $activity->id,
 						'course_id' => $course->id,
 					];
 
@@ -103,7 +103,7 @@ class CourseStudentController extends Controller {
 						$newData['status'] = 'locked';
 					}
 
-					if (!in_array($material->id, $existingProgress)) {
+					if (!in_array($activity->id, $existingProgress)) {
 						Progress::create($newData);
 					}
 				}
@@ -190,16 +190,16 @@ class CourseStudentController extends Controller {
 
 				$existingProgress = Progress::where('student_id', $targetStudent->id)
 					->where('course_id', $course->id)
-					->pluck('material_id')
+					->pluck('activity_id')
 					->toArray();
 
 				$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
 
 				foreach ($topics as $index1 => $topic) {
-					foreach($topic->materials as $index2 => $material) {
+					foreach($topic->activities as $index2 => $activity) {
 						$newData = [
 							'student_id' => $targetStudent->id,
-							'material_id' => $material->id,
+							'activity_id' => $activity->id,
 							'course_id' => $course->id,
 						];
 
@@ -209,7 +209,7 @@ class CourseStudentController extends Controller {
 							$newData['status'] = 'locked';
 						}
 
-						if (!in_array($material->id, $existingProgress)) {
+						if (!in_array($activity->id, $existingProgress)) {
 							Progress::create($newData);
 						}
 					}
@@ -232,14 +232,14 @@ class CourseStudentController extends Controller {
 	public function import_student_data($course_id){
 		$course = Course::findOrFail($course_id);
 
-		$materials = [];
+		$activities = [];
 		foreach($course->topics as $topic){
-			array_push($materials, $topic->materials);
+			array_push($activities, $topic->activities);
 		}
 
 		return view("roles.admin.student.import-student", [
 			"course" => $course,
-			"materials" => $materials,
+			"activities" => $activities,
 			"education_levels" => ["Elementary School", "Junior High School", "Senior High School", "College", "Professional"]
 		]);
 	}
@@ -312,18 +312,18 @@ class CourseStudentController extends Controller {
 
 				$targetFound = false;
 				foreach($topics as $topic){
-					foreach($topic->materials as $material){
-						if($material->id != $request->inp_last_material_unlocked[$index]){
+					foreach($topic->activities as $activity){
+						if($activity->id != $request->inp_last_activity_unlocked[$index]){
 							Progress::create([
 								"student_id" => $student->id,
-								"material_id" => $material->id,
+								"activity_id" => $activity->id,
 								"course_id" => $course->id,
 								"status" => "unlocked"
 							]);
 						} else {
 							Progress::create([
 								"student_id" => $student->id,
-								"material_id" => $material->id,
+								"activity_id" => $activity->id,
 								"course_id" => $course->id,
 								"status" => "unlocked"
 							]);

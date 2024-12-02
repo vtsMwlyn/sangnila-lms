@@ -1,7 +1,7 @@
 @extends("layouts.main-teacher")
 
 @section("title")
-	<h1>Import Course Topics And Materials Data from Excel</h1>
+	<h1>Import Course Topics And Activities Data from Excel</h1>
 @endsection
 
 @section("breadcrumbs-extension")
@@ -11,10 +11,10 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title>Import Course Topics And Materials Data from Excel</x-page-title>
+		<x-page-title>Import Course Topics And Activities Data from Excel</x-page-title>
 
-		@if(session()->has("failImportExcelTopicsAndMaterials"))
-			<x-badge-danger badge_text="{{ session('failImportExcelTopicsAndMaterials') }}" class="mb-8"></x-badge-danger>
+		@if(session()->has("failImportExcelTopicsAndActivities"))
+			<x-badge-danger badge_text="{{ session('failImportExcelTopicsAndActivities') }}" class="mb-8"></x-badge-danger>
 		@endif
 
 		<p class="text-blue-950 font-semibold">Please make sure your excel file has <span class="font-extrabold">column position</span> like shown in this image below:</p>
@@ -22,7 +22,7 @@
 
 		<p class="text-blue-950 font-semibold mt-8">Make sure <span class="font-extrabold">all columns</span> should be filled with values.</p>
 
-		<form action="{{ route('teacher.mycourse.import-excel-topicsandmaterials.store', $course->id) }}" method="POST" enctype="multipart/form-data" class="mt-8">
+		<form action="{{ route('teacher.mycourse.import-excel-topicandactivities.store', $course->id) }}" method="POST" enctype="multipart/form-data" class="mt-8">
 			@csrf
 
 			<div>

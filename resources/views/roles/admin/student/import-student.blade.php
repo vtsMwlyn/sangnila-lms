@@ -10,7 +10,7 @@
 @endsection
 
 @section("content")
-	@if($course->teachers->count() && $course->topics->count() && $course->topics[0]->materials->count())
+	@if($course->teachers->count() && $course->topics->count() && $course->topics[0]->activities->count())
 		<x-section-container>
 			<x-page-title>Import Old Student Data</x-page-title>
 
@@ -154,18 +154,12 @@
 						</div>
 					</div>
 
-					<!-- Student's last material unlocked -->
-					<div class="w-full mt-3 select2_container" id="container_last_material_unlocked">
-						<x-label for="last_material_unlocked" class="mb-1" :value="__('Last Material Unlock')"/>
-						<x-select name="last_material_unlocked" id="last_material_unlocked" class="mt-1 w-full select2">
-							{{-- <option value="" disabled selected>Pick a material</option>
-							@foreach ($course->topics as $topic)
-								@foreach ($topic->materials as $material)
-									<option value="{{ $material->toJson() }}">{{ $topic->title }} - {{ $material->title }}</option>
-								@endforeach
-							@endforeach --}}
+					<!-- Student's last activity unlocked -->
+					<div class="w-full mt-3 select2_container" id="container_last_activity_unlocked">
+						<x-label for="last_activity_unlocked" class="mb-1" :value="__('Last Activity Unlock')"/>
+						<x-select name="last_activity_unlocked" id="last_activity_unlocked" class="mt-1 w-full select2">
 						</x-select>
-						<p class="text-red-700 font-bold mt-1" style="display: none" id="err_last_material_unlocked"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
+						<p class="text-red-700 font-bold mt-1" style="display: none" id="err_last_activity_unlocked"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 					</div>
 					<div class="flex w-full justify-end">
 						<x-button class="bg-orange-500 mt-8 w-1/2 md:w-1/6" type="submit" id="addBtn">Add Data</x-button>
@@ -191,7 +185,7 @@
 										<th class="border-r border-blue-950 px-4 fixed1" rowspan="2">Email</th>
 										<th class="border-r border-blue-950 px-4 fixed1" rowspan="2">Teacher</th>
 										<th class="border-r border-blue-950 px-4" colspan="2">Session</th>
-										<th class="border-r border-blue-950 px-4 fixed1" rowspan="2">Last Material</th>
+										<th class="border-r border-blue-950 px-4 fixed1" rowspan="2">Last Activity</th>
 										<th class="border-r border-blue-950 px-4" rowspan="2">Action</th>
 										<th class="border-r border-blue-950 px-4" rowspan="2">Gender</th>
 										<th class="border-r border-blue-950 px-4 fixed2" rowspan="2">Phone</th>
@@ -221,28 +215,28 @@
 
 			<script>
 				$(document).ready(() => {
-					function resetMaterialSelection(){
-						$("#last_material_unlocked").empty();
+					function resetActivitySelection(){
+						$("#last_activity_unlocked").empty();
 
-						$("#last_material_unlocked").append($("<option>").text("Select a material").attr({
+						$("#last_activity_unlocked").append($("<option>").text("Select a activity").attr({
 							"value": "",
 							"disabled": true,
 							"selected": true
 						}));
 					}
 
-					resetMaterialSelection();
+					resetActivitySelection();
 
 					$("#teacher_name").on("change", function() {
-						resetMaterialSelection();
+						resetActivitySelection();
 
 						const course = @json($course);
 						const teacher = JSON.parse($("#teacher_name").val());
 
 						course.topics.forEach(topic => {
 							if(topic.user_id == teacher.id){
-								topic.materials.forEach(material => {
-									$("#last_material_unlocked").append($("<option>").text(`${topic.title} - ${material.title}`)).attr({"value": material});
+								topic.activities.forEach(activity => {
+									$("#last_activity_unlocked").append($("<option>").text(`${topic.title} - ${activity.title}`)).attr({"value": activity});
 								});
 							}
 						});
@@ -297,8 +291,8 @@
 						const errLastAttendanceCount = $("#err_last_attendance_count");
 						const contCourseMaxSession = $("#container_max_course_session");
 						const errCourseMaxSession = $("#err_max_course_session");
-						const contLastMaterialUnlocked = $("#container_last_material_unlocked");
-						const errLastMaterialUnlocked = $("#err_last_material_unlocked");
+						const contLastActivityUnlocked = $("#container_last_activity_unlocked");
+						const errLastActivityUnlocked = $("#err_last_activity_unlocked");
 
 						contFullName.css({"padding": 0, "border": "none"});
 						errFullName.css({"display": "none"});
@@ -312,8 +306,8 @@
 						errLastAttendanceCount.css({"display": "none"});
 						contCourseMaxSession.css({"padding": 0, "border": "none"});
 						errCourseMaxSession.css({"display": "none"});
-						contLastMaterialUnlocked.css({"padding": 0, "border": "none"});
-						errLastMaterialUnlocked.css({"display": "none"});
+						contLastActivityUnlocked.css({"padding": 0, "border": "none"});
+						errLastActivityUnlocked.css({"display": "none"});
 
 						let thereAreUnfilledFields = false;
 						if(!$("#full_name").val()){
@@ -352,9 +346,9 @@
 							thereAreUnfilledFields = true;
 						}
 
-						if(!$("#last_material_unlocked").val()){
-							contLastMaterialUnlocked.css({"border": "solid 2px rgb(185 28 28)", "padding": "15px"});
-							errLastMaterialUnlocked.css({"display": "block"});
+						if(!$("#last_activity_unlocked").val()){
+							contLastActivityUnlocked.css({"border": "solid 2px rgb(185 28 28)", "padding": "15px"});
+							errLastActivityUnlocked.css({"display": "block"});
 							thereAreUnfilledFields = true;
 						}
 
@@ -371,7 +365,7 @@
 						const colTeacherName = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(JSON.parse(formData.teacher_name).full_name);
 						const colLastAttendanceCount = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.last_attendance_count);
 						const colMaxCourseSession = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.max_course_session);
-						const colLastMaterialUnlocked = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(formData.last_material_unlocked.title);
+						const colLastActivityUnlocked = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(formData.last_activity_unlocked.title);
 						const colNewStudent = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(cbv);
 
 						const delBtn = $("<button>").attr({"type": "button"}).addClass("text-center px-5 py-2 border border-transparent rounded-lg text-white bg-red-700 hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 transition ease-in-out duration-150").html("<i class='bi bi-trash3'></i>");
@@ -386,7 +380,7 @@
 						const colNameParent = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed2").text(formData.name_parent);
 						const colPhoneParent = $("<td>").addClass("border-t border-blue-950 px-4 py-2 fixed2").text(formData.phone_parent);
 
-						newRow.append(colFullName, colNewStudent, colEmail, colTeacherName, colLastAttendanceCount, colMaxCourseSession, colLastMaterialUnlocked, colAction, colGender, colPhoneNumber, colCityOfBirth, colDateOfBirth, colSchoolName, colStudentLevel, colNameParent, colPhoneParent);
+						newRow.append(colFullName, colNewStudent, colEmail, colTeacherName, colLastAttendanceCount, colMaxCourseSession, colLastActivityUnlocked, colAction, colGender, colPhoneNumber, colCityOfBirth, colDateOfBirth, colSchoolName, colStudentLevel, colNameParent, colPhoneParent);
 
 						$("#table-body").append(newRow);
 
@@ -399,7 +393,7 @@
 						const hidTeacherName = $("<input>").attr({"type": "hidden", "name": "inp_teacher_name[]", "value": JSON.parse(formData.teacher_name).id});
 						const hidLastAttendanceCount = $("<input>").attr({"type": "hidden", "name": "inp_last_attendance_count[]", "value": formData.last_attendance_count});
 						const hidMaxCourseSession = $("<input>").attr({"type": "hidden", "name": "inp_max_course_session[]", "value": formData.max_course_session});
-						const hidLastMaterialUnlocked = $("<input>").attr({"type": "hidden", "name": "inp_last_material_unlocked[]", "value": formData.last_material_unlocked.id});
+						const hidLastActivityUnlocked = $("<input>").attr({"type": "hidden", "name": "inp_last_activity_unlocked[]", "value": formData.last_activity_unlocked.id});
 						const hidNewStudent = $("<input>").attr({"type": "hidden", "name": "is_new_student[]", "value": cbv});
 
 						const hidPhoneNumber = $("<input>").attr({"type": "hidden", "name": "inp_phone_number[]", "value": formData.phone_number});
@@ -410,7 +404,7 @@
 						const hidNameParent = $("<input>").attr({"type": "hidden", "name": "inp_name_parent[]", "value": formData.name_parent});
 						const hidPhoneParent = $("<input>").attr({"type": "hidden", "name": "inp_phone_parent[]", "value": formData.phone_parent});
 
-						$(hiddenInputsContainer).append(hidFullName, hidEmail, hidGender, hidTeacherName, hidLastAttendanceCount, hidMaxCourseSession, hidLastMaterialUnlocked, hidNewStudent, hidPhoneNumber, hidCityOfBirth, hidDateOfBirth, hidSchoolName, hidStudentLevel, hidNameParent, hidPhoneParent);
+						$(hiddenInputsContainer).append(hidFullName, hidEmail, hidGender, hidTeacherName, hidLastAttendanceCount, hidMaxCourseSession, hidLastActivityUnlocked, hidNewStudent, hidPhoneNumber, hidCityOfBirth, hidDateOfBirth, hidSchoolName, hidStudentLevel, hidNameParent, hidPhoneParent);
 						$("#real-form").append(hiddenInputsContainer);
 
 						console.log($(hiddenInputsContainer).children());
@@ -436,7 +430,7 @@
 						$("#phone_parent").val("");
 						$("#last_attendance_count").val("0");
 						$("#max_course_session").val("8");
-						$("#last_material_unlocked").val("");
+						$("#last_activity_unlocked").val("");
 
 						import_data_count++;
 					});
@@ -462,7 +456,7 @@
 		<x-section-container>
 			<x-page-title>Import Old Student Data</x-page-title>
 			<div class="rounded-lg py-5 px-10 bg-blue-800">
-				<p class="text-white italic">- This course still has no teachers assigned or topic and materials added to it -</p>
+				<p class="text-white italic">- This course still has no teachers assigned or topic and activities added to it -</p>
 				<x-button type="button" onclick="history.back()" class="bg-orange-500 mt-4">
 					Return
 				</x-button>

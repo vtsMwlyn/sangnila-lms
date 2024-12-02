@@ -17,7 +17,7 @@ class GuestController extends Controller {
 		//
 	}
 
-	// Showing course details with accessible topics and materials
+	// Showing course details with accessible topics and activities
 	public function show($course_id) {
 		$course = Course::findOrFail($course_id);
 

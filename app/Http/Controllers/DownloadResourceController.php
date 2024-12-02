@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Response;
 class DownloadResourceController extends Controller
 {
     public function curriculum_import_excel_template(){
-		return Response::download(public_path("resources/template_import_excel_topics_and_materials.xlsx"));
+		return Response::download(public_path("resources/template_import_excel_topics_and_activities.xlsx"));
 	}
 
-	public function topics_and_materials_import_excel_template(){
-		return Response::download(public_path("resources/template_import_excel_topics_and_materials.xlsx"));
+	public function topics_and_activities_import_excel_template(){
+		return Response::download(public_path("resources/template_import_excel_topics_and_activities.xlsx"));
 	}
 
 	public function student_import_excel_template(){

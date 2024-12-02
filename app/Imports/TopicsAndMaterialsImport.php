@@ -5,7 +5,7 @@ namespace App\Imports;
 use Exception;
 use App\Models\Topic;
 use App\Models\Course;
-use App\Models\Material;
+use App\Models\Activity;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class TopicsAndMaterialsImport implements ToModel, WithHeadingRow
+class TopicsAndActivitiesImport implements ToModel, WithHeadingRow
 {
 	private $course_id;
 
@@ -35,9 +35,9 @@ class TopicsAndMaterialsImport implements ToModel, WithHeadingRow
 				"title" => $row["topic"]
 			]);
 
-			Material::create([
+			Activity::create([
 				"topic_id" => $topic->id,
-				"title" => $row["material"],
+				"title" => $row["activity"],
 				"desc" => $row["description"],
 				"link" => $row["link"]
 			]);

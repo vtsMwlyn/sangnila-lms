@@ -106,21 +106,21 @@
 				<x-table>
 					<x-slot name="head">
 						<th class="template-heads rounded-l-xl">Topic</th>
-						<th class="template-heads">Materials</th>
+						<th class="template-heads">Activities</th>
 						<th class="template-heads rounded-r-xl">Action</th>
 					</x-slot>
 					@forelse ($course->curriculum_topics as $topic)
 						<tr>
 							<td class="template-bodies rounded-l-xl"><a href="{{ route('admin.course.curriculum.topic.details', [$course->id, $topic->id]) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $topic->title }}</a></td>
 							<td class="template-bodies">
-								@if($topic->curriculum_materials->count())
+								@if($topic->curriculum_activities->count())
 									<ul>
-										@foreach ($topic->curriculum_materials as $material)
-											<li>{{ $material->title }}</li>
+										@foreach ($topic->curriculum_activities as $activity)
+											<li>{{ $activity->title }}</li>
 										@endforeach
 									</ul>
 								@else
-									<span class="text-gray-500 font-semibold">- No materials yet -</span>
+									<span class="text-gray-500 font-semibold">- No activities yet -</span>
 								@endif
 							</td>
 							<td class="template-bodies rounded-r-xl w-1/4">
@@ -131,7 +131,7 @@
 							</td>
 						</tr>
 					@empty
-						<tr><td colspan="3" class="text-center font-semibold rounded-xl p-5 bg-white">- No curriculum topics and materials yet -</td></tr>
+						<tr><td colspan="3" class="text-center font-semibold rounded-xl p-5 bg-white">- No curriculum topics and activities yet -</td></tr>
 					@endforelse
 				</x-table>
 			</div>

@@ -13,7 +13,7 @@
 		@forelse (Auth::user()->teached_courses as $course)
 			<a href="{{ route('teacher.student.select-student', $course->id) }}"  style="width: 32%;" class="transition duration-300 hover:scale-105">
 				<div class="bg-white rounded-3xl p-5 shadow-lg">
-					<!-- Counting how many students has no access at all to any materials -->
+					<!-- Counting how many students has no access at all to any activities -->
 					@php
 						$course_students = App\Models\CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
 
@@ -23,16 +23,16 @@
 							$progress_per_student = App\Models\Progress::where("course_id", $course->id)->where("student_id", $cs->student->id)->get();
 
 							if($progress_per_student->count() > 0){
-								$no_materials_unlocked_yet = true;
+								$no_activities_unlocked_yet = true;
 
 								foreach($progress_per_student as $p){
 									if($p->status == "unlocked"){
-										$no_materials_unlocked_yet = false;
+										$no_activities_unlocked_yet = false;
 										break;
 									}
 								}
 
-								if($no_materials_unlocked_yet){
+								if($no_activities_unlocked_yet){
 									$n++;
 								}
 							}
@@ -48,7 +48,7 @@
 						{{ App\Models\CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get()->count() }} Students Teached
 					</div>
 					<div class="flex gap-2 items-center @if($n > 0) text-red @endif">
-						<i class="bi bi-book-half text-slate-400"></i>{{ $n }} Students Has No Access To Any Materials
+						<i class="bi bi-book-half text-slate-400"></i>{{ $n }} Students Has No Access To Any Activities
 					</div>
 				</div>
 			</a>

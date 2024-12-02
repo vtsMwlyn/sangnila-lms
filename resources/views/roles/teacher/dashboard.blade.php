@@ -43,7 +43,7 @@
 								<p class="w-full md:w-1/4 font-semibold"><a href="{{ route('student.mycourse.show', $cstudent->course->id) }}" class="hover:underline hover:text-indigo-600">{{ $cstudent->course->course_name }}</a></p>
 								<div class="grow flex flex-col border-l py-3">
 									<div class="h-6 bg-orange-500" style="width: {{ ($attendance_progress[$i][0] / $attendance_progress[$i][1]) * 100 }}%"></div>
-									<div class="h-6 bg-blue-600" style="width: {{ ($material_progress[$i][0] / $material_progress[$i][1]) * 100 }}%"></div>
+									<div class="h-6 bg-blue-600" style="width: {{ ($activity_progress[$i][0] / $activity_progress[$i][1]) * 100 }}%"></div>
 								</div>
 							</div>
 						@empty

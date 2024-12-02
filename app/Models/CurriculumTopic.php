@@ -15,7 +15,7 @@ class CurriculumTopic extends Model
 		return $this->belongsTo(Course::class);
 	}
 
-	public function curriculum_materials(){
-		return $this->hasMany(CurriculumMaterial::class);
+	public function curriculum_activities(){
+		return $this->hasMany(CurriculumActivity::class);
 	}
 }

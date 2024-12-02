@@ -68,18 +68,18 @@
 
 				<div class="swiper" style="padding: 0;">
 					<div class="swiper-wrapper">
-						@forelse ($materialProgresses as $mp)
+						@forelse ($activityProgresses as $ap)
 							@php
-								$is_unlocked = $mp["progress"]->status === 'unlocked';
+								$is_unlocked = $ap["progress"]->status === 'unlocked';
 							@endphp
 							<div class="swiper-slide relative">
-								<button type="button" id="{{ $loop->iteration }}" data-route="{{ route('student.mycourse.preview', $mp['material']->id) }}"
+								<button type="button" id="{{ $loop->iteration }}" data-route="{{ route('student.mycourse.preview', $ap['activity']->id) }}"
 									class="flex items-center justify-center session-buttons px-2 py-2.5 mb-8 mt-4 rounded-xl text-base font-extrabold
 									@if($is_unlocked) unlocked-session @else locked-session @endif @if($loop->iteration == 1) selected-session @endif"
 									style="border-width: 3px; min-width: 110px;">
 									Session {{ $loop->iteration }}
 								</button>
-								<div class="absolute top-6 right-3 rounded-full h-2.5 w-2.5 @if(!$is_unlocked || $mp['progress']->already_opened == 'yes' || $loop->iteration == 1) hidden @endif" style="background: linear-gradient(180deg, #1EB8CD 0%, #BEE2DB 100%);"></div>
+								<div class="absolute top-6 right-3 rounded-full h-2.5 w-2.5 @if(!$is_unlocked || $ap['progress']->already_opened == 'yes' || $loop->iteration == 1) hidden @endif" style="background: linear-gradient(180deg, #1EB8CD 0%, #BEE2DB 100%);"></div>
 							</div>
 						@empty
 
@@ -89,7 +89,7 @@
 
 				<script>
 					document.addEventListener('DOMContentLoaded', function () {
-						const matprog = @json($materialProgresses);
+						const matprog = @json($activityProgresses);
 
 						// Initialize Swiper
 						const swiper = new Swiper('.swiper', {
@@ -114,9 +114,9 @@
 								// Add selected-session class to the clicked button
 								$(this).addClass("selected-session");
 
-								// Update the content with topic and material info
+								// Update the content with topic and activity info
 								$("#topic").text(matprog[index].topic.title);
-								$("#material").text(matprog[index].material.title);
+								$("#activity").text(matprog[index].activity.title);
 								$("#preview-link").attr("href", $(this).data('route'));
 								$("#num").text(index + 1);
 
@@ -129,7 +129,7 @@
 
 
 				<div class="mb-6">
-					<h1 class="text-dark-blue font-bold text-xl"><span id="num">1</span>. <span id="topic">{{ $materialProgresses[0]["topic"]->title }}</span></h1>
+					<h1 class="text-dark-blue font-bold text-xl"><span id="num">1</span>. <span id="topic">{{ $activityProgresses[0]["topic"]->title }}</span></h1>
 					<div class="flex flex-col gap-1 mt-2">
 						<div class="flex gap-2 items-center">
 							<img src="{{ asset('img/bullet.svg') }}" alt="icon" class="w-3 h-3">
@@ -144,7 +144,7 @@
 			<div class="w-full bg-white px-8 py-3">
 				<div class="w-full flex items-center">
 					<div class="flex w-1/2 items-start">
-						<h1 class="text-dark-blue font-bold text-xl">Course Material</h1>
+						<h1 class="text-dark-blue font-bold text-xl">Course Activity</h1>
 					</div>
 					<div class="flex w-1/2 items-start">
 						<h1 class="text-dark-blue font-bold text-xl">Action</h1>
@@ -152,11 +152,11 @@
 				</div>
 				<div class="w-full flex items-center mt-1">
 					<div class="flex w-1/2 items-start">
-						<h2 id="material">{{ $materialProgresses[0]["material"]->title }}</h2>
+						<h2 id="activity">{{ $activityProgresses[0]["activity"]->title }}</h2>
 					</div>
 					<div class="flex w-1/2 items-start ">
 						<div class="flex gap-1">
-							<a href="{{ route('student.mycourse.preview', $materialProgresses[0]["material"]->id) }}" id="preview-link"><img src="{{ asset('img/view.svg') }}" alt="icon" class="w-8 h-8 hover:scale-110"></a>
+							<a href="{{ route('student.mycourse.preview', $activityProgresses[0]["activity"]->id) }}" id="preview-link"><img src="{{ asset('img/view.svg') }}" alt="icon" class="w-8 h-8 hover:scale-110"></a>
 							{{-- <a href="#"></a><img src="{{ asset('img/download.svg') }}" alt="icon" class="w-8 h-8"> --}}
 						</div>
 					</div>
@@ -184,54 +184,3 @@
 		@endif
 	</div>
 @endsection
-
-{{-- <p class="text-blue-950 font-semibold text-center mb-8">{{ $course->course_description }}</p> --}}
-
-		{{-- <h2 class="text-xl text-white font-bold">Course Materials:</h2>
-
-		<div class="mb-6 overflow-x-auto">
-			<x-table>
-				<x-slot name="head">
-					<th class="template-heads rounded-l-xl">Course Topic</th>
-					<th class="template-heads">Material Name</th>
-					<th class="template-heads">Status</th>
-					<th class="template-heads rounded-r-xl">Actions</th>
-				</x-slot>
-
-				@forelse ($materialProgresses as $progress)
-					<tr>
-						<td class="template-bodies rounded-l-xl" style="@if ($progress->status === 'locked') color: rgb(156 163 175); @endif">
-							{{ $progress->material->topic->title }}
-						</td>
-						<td class="template-bodies">
-							@if ($progress->status === 'unlocked' && !$max_session_reached)
-								<a
-									href="{{ route("student.mycourse.preview", $progress->material->id) }}" class="text-white hover:text-green-900 hover:underline font-bold">
-									{{ $progress->material->title }}
-								</a>
-							@else
-								<span class="text-gray-400 font-bold">
-									{{ $progress->material->title }}
-								</span>
-							@endif
-						</td>
-						<td class="template-bodies">
-							<span class="@if ($progress->status === 'unlocked') font-bold text-green-700 @else text-gray-400 @endif">
-								{{ $progress->status }}
-							</span>
-						</td>
-						<td class="template-bodies rounded-r-xl">
-							@if ($progress->status === 'unlocked' && !$max_session_reached)
-								<x-anchor-button class="bg-orange-500" href="{{ route('student.mycourse.preview', $progress->material->id) }}">View</x-anchor-button>
-							@else
-								<x-button class="bg-slate-800" type="button">View</x-button>
-							@endif
-						</td>
-					</tr>
-				@empty
-					<tr>
-						<td colspan="4" class="p-5 text-center rounded-xl bg-white font-semibold">- The teacher haven't uploaded any topics and materials yet -</td>
-					</tr>
-				@endforelse
-			</x-table>
-		</div> --}}

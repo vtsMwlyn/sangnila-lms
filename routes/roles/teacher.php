@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\StudentController;
-use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
@@ -37,13 +37,13 @@ Route::prefix('/teacher')
 			Route::post("/{course_id}/synchronize", [CurriculumController::class, "teacher_synchronize"])->name("synchronize")->whereNumber('course_id');
 
 			// Import from excel
-			Route::get("/{course_id}/import-excel", [ExcelImportController::class, "import_excel_topics_and_materials_index"])->name("import-excel-topicsandmaterials")->whereNumber("course_id");
-			Route::post("/{course_id}/import-excel", [ExcelImportController::class, "import_excel_topics_and_materials_store"])->name("import-excel-topicsandmaterials.store")->whereNumber("course_id");
+			Route::get("/{course_id}/import-excel", [ExcelImportController::class, "import_excel_topics_and_activities_index"])->name("import-excel-topicsandactivities")->whereNumber("course_id");
+			Route::post("/{course_id}/import-excel", [ExcelImportController::class, "import_excel_topics_and_activities_store"])->name("import-excel-topicsandactivities.store")->whereNumber("course_id");
 
 			// Download import excel template
-			Route::get("/import-excel/download-template", [DownloadResourceController::class, "topics_and_materials_import_excel_template"])->name("import-excel.download");
+			Route::get("/import-excel/download-template", [DownloadResourceController::class, "topics_and_activities_import_excel_template"])->name("import-excel.download");
 
-			// Pick materials from syllabus/curriculum
+			// Pick activities from syllabus/curriculum
 			Route::get("/{course_id}/pick-course", [CurriculumController::class, "teacher_pick_course"])->name("pick-course")->whereNumber("course_id");
 			Route::post("/{course_id}/pick-course", [CurriculumController::class, "teacher_save_picked_course"])->name("save-picked-course")->whereNumber("course_id");
 
@@ -69,21 +69,21 @@ Route::prefix('/teacher')
 				}
 			);
 
-			// ===== MATERIALS ===== //
-			Route::prefix('/material')
-				->name('material.')
+			// ===== ACTIVITIES ===== //
+			Route::prefix('/activity')
+				->name('activity.')
 				->group(function () {
-					// Add new material
-					Route::get('/upload/{topic_id}', [MaterialController::class, 'teacher_create'])->name('upload')->whereNumber('topic_id');
-					Route::post('/upload/{topic_id}', [MaterialController::class, 'teacher_store'])->name('store')->whereNumber('topic_id');
+					// Add new activity
+					Route::get('/upload/{topic_id}', [ActivityController::class, 'teacher_create'])->name('upload')->whereNumber('topic_id');
+					Route::post('/upload/{topic_id}', [ActivityController::class, 'teacher_store'])->name('store')->whereNumber('topic_id');
 
-					// Edit material
-					Route::get('/{material_id}/edit', [MaterialController::class, 'teacher_edit'])->name('edit')->whereNumber('material_id');
-					Route::patch('/{material_id}', [MaterialController::class, 'teacher_update'])->name('update')->whereNumber('material_id');
+					// Edit activity
+					Route::get('/{activity_id}/edit', [ActivityController::class, 'teacher_edit'])->name('edit')->whereNumber('activity_id');
+					Route::patch('/{activity_id}', [ActivityController::class, 'teacher_update'])->name('update')->whereNumber('activity_id');
 
-					// Delete material
-					Route::get('/{material_id}/delete', [MaterialController::class, 'teacher_delete'])->name('remove')->whereNumber('material_id');
-					Route::delete('/{material_id}', [MaterialController::class, 'teacher_destroy'])->name('destroy')->whereNumber('material_id');
+					// Delete activity
+					Route::get('/{activity_id}/delete', [ActivityController::class, 'teacher_delete'])->name('remove')->whereNumber('activity_id');
+					Route::delete('/{activity_id}', [ActivityController::class, 'teacher_destroy'])->name('destroy')->whereNumber('activity_id');
 
 				}
 			);
@@ -101,10 +101,10 @@ Route::prefix('/teacher')
 				// Pick an intended student to manage
 				Route::get('/{course_id}', [StudentController::class, 'teacher_select_student'])->name('select-student')->whereNumber('course_id');
 
-				// List of student's material progress
+				// List of student's activity progress
 				Route::get('/{student_id}/progress/{course_id}', [ProgressController::class, 'index'])->name('show.progress')->whereNumber(['student_id', 'course_id']);
 
-				// Update student's material progress
+				// Update student's activity progress
 				Route::patch('/progress/{course_id}/{student_id}', [ProgressController::class, 'update'])->name('update.progress')->whereNumber(['course_id', 'student_id']);
 			}
 		);

@@ -15,9 +15,9 @@
 					<p class="text-3xl font-extrabold">{{ $courses_enrolled }}</p>
 				</div>
 				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-2 p-5">
-					<img src="{{ asset('img/studentdashboard-materialsunlocked.svg') }}" class="w-12 h-12" alt="icon">
+					<img src="{{ asset('img/studentdashboard-activitiesunlocked.svg') }}" class="w-12 h-12" alt="icon">
 					<p class="font-bold text-black text-center">Materials Unlocked</p>
-					<p class="text-3xl font-extrabold">{{ $materials_unlocked }}</p>
+					<p class="text-3xl font-extrabold">{{ $activities_unlocked }}</p>
 				</div>
 				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-2 p-5">
 					<img src="{{ asset('img/studentdashboard-sessionsattended.svg') }}" class="w-12 h-12" alt="icon">
@@ -46,8 +46,8 @@
 										$mp_bar_percentage = 0;
 										$ap_bar_percentage = 0;
 
-										if($material_progress[$i][1] != 0){
-											$mp_bar_percentage = ($material_progress[$i][0] / $material_progress[$i][1]) * 100;
+										if($activity_progress[$i][1] != 0){
+											$mp_bar_percentage = ($activity_progress[$i][0] / $activity_progress[$i][1]) * 100;
 										}
 
 										if($attendance_progress[$i][1] != 0){
@@ -69,7 +69,7 @@
 						</div>
 						<div class="flex items-center gap-3">
 							<div class="h-4 w-4" style="background: linear-gradient(90deg, #212F63 0%, #354D9B 100%);"></div>
-							<p>Material</p>
+							<p>Activity</p>
 						</div>
 					</div>
 				</div>

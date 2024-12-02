@@ -16,7 +16,7 @@
 		@endif
 
 	@elseif(Auth::user()->role_id == 2)
-		@if(Request::is("*my-course*") || Request::is("*topic*") || Request::is("*material*"))
+		@if(Request::is("*my-course*") || Request::is("*topic*") || Request::is("*activity*"))
 			> <a href="{{ route('teacher.mycourse.index') }}" class="font-bold text-yellow-500">My Courses</a>
 		@elseif(Request::is("*student*"))
 			> <a href="{{ route('teacher.student.select-course') }}" class="font-bold text-yellow-500">Material Access</a>

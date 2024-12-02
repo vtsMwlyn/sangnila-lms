@@ -10,7 +10,7 @@ Route::prefix('/guest')
 		// Landing page (by default also showing list of available courses in Sangnila LMS)
 		Route::get('/', [GuestController::class, 'index'])->name('index');
 
-		// Course details and list of trial (guest-accessible/available or first) topic/material
+		// Course details and list of trial (guest-accessible/available or first) topic/activity
 		Route::get('/{course_id}', [GuestController::class, 'show'])->name('show')->whereNumber('course_id');
 
 	}

@@ -15,24 +15,24 @@ use Illuminate\Support\Facades\Auth;
 
 class ProgressController extends Controller {
 	// ===== TEACHER ===== //
-	// Showing list of student's course materials accessibility status (locked/unlocked) and create progress data for the student
+	// Showing list of student's course activities accessibility status (locked/unlocked) and create progress data for the student
 	public function index($student_id, $course_id) {
 		$course = Course::where('visibility', 'public')->where('id', $course_id)->first();
 		$role = Role::where('role_name', 'Student')->first();
 		$student = User::where('role_id', $role->id)->where('id', $student_id)->first();
 		$existingProgress = Progress::where('student_id', $student->id)
 			->where('course_id', $course->id)
-			->pluck('material_id')
+			->pluck('activity_id')
 			->toArray();
 
 		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
 
 		foreach ($topics as $topic) {
-			foreach($topic->materials as $material) {
-				if (!in_array($material->id, $existingProgress)) {
+			foreach($topic->activities as $activity) {
+				if (!in_array($activity->id, $existingProgress)) {
 					$progress = Progress::create([
 						'student_id' => $student->id,
-						'material_id' => $material->id,
+						'activity_id' => $activity->id,
 						'course_id' => $course->id,
 						'status' => 'locked'
 					]);
@@ -50,7 +50,7 @@ class ProgressController extends Controller {
 		]);
 	}
 
-	// Update the material accessibility in the database
+	// Update the activity accessibility in the database
 	public function update(Request $request, $course_id, $student_id) {
 		$student_progress = Progress::where("course_id", $course_id)->where("student_id", $student_id)->get();
 
@@ -67,7 +67,7 @@ class ProgressController extends Controller {
 						Notification::create([
 							"user_id" => $student_id,
 							"status" => "unread",
-							"message" => "New material \"" . $progress->material->title . "\" in course " . $progress->course->course_name . " is now accessible!"
+							"message" => "New activity \"" . $progress->activity->title . "\" in course " . $progress->course->course_name . " is now accessible!"
 						]);
 					}
 				} else {
@@ -80,7 +80,7 @@ class ProgressController extends Controller {
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to update material access, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("systemFail", "System failed to update activity access, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 		return redirect(route('teacher.student.show.progress', ['student_id' => $student_id, 'course_id' => $course_id]))->with("successUpdateProgress", "Student's progress updated successfully!");

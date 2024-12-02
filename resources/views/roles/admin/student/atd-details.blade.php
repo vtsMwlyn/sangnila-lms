@@ -34,7 +34,7 @@
 							<td class="px-3 py-5 text-center">
 								<div class="flex flex-col gap-3">
 									<p>{{ $attendance->attendance_detail }}</p>
-									<p class="font-semibold italic text-yellow-200">{{ $attendance->material_progress }} - {{ $attendance->learning_status }}</p>
+									<p class="font-semibold italic text-yellow-200">{{ $attendance->activity_progress }} - {{ $attendance->learning_status }}</p>
 								</div>
 							</td>
 							<td class="px-3 py-5 text-center rounded-r-xl">{{ ($attendance->attendance->posted_by->details->gender == 1)? "Mr." : "Ms." }} {{ $attendance->attendance->posted_by->full_name }}</td>

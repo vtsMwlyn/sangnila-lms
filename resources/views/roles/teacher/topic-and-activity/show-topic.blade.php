@@ -13,7 +13,7 @@
 	<x-section-container>
 		<x-back-button href="{{ route('teacher.mycourse.show', $topic->course->id) }}"></x-back-button>
 		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $topic->course->course_name }}</h1>
-		<h1 class="text-xl font-semibold text-blue-900 mt-2">Topic and Materials Details</h1>
+		<h1 class="text-xl font-semibold text-blue-900 mt-2">Topic and Activities Details</h1>
 		<div class="w-full bg-slate-400 mt-4" style="height: 2px;"></div>
 
 		@if(session()->has("successUpdateTopic"))
@@ -22,12 +22,12 @@
 			<x-badge-success badge_text="{{ session('successAddTopic') }}"></x-badge-success>
 		@elseif(session()->has("successEditTopic"))
 			<x-badge-success badge_text="{{ session('successEditTopic') }}"></x-badge-success>
-		@elseif(session()->has('successUploadMaterial'))
-			<x-badge-success badge_text="{{ session('successUploadMaterial') }}"></x-badge-success>
-		@elseif(session()->has('successEditMaterial'))
-			<x-badge-success badge_text="{{ session('successEditMaterial') }}"></x-badge-success>
-		@elseif(session()->has("successDeleteMaterial"))
-			<x-badge-warning badge_text="{{ session('successDeleteMaterial') }}"></x-badge-warning>
+		@elseif(session()->has('successUploadActivity'))
+			<x-badge-success badge_text="{{ session('successUploadActivity') }}"></x-badge-success>
+		@elseif(session()->has('successEditActivity'))
+			<x-badge-success badge_text="{{ session('successEditActivity') }}"></x-badge-success>
+		@elseif(session()->has("successDeleteActivity"))
+			<x-badge-warning badge_text="{{ session('successDeleteActivity') }}"></x-badge-warning>
 		@endif
 
 		<h2 class="mt-4 mb-2 font-extrabold text-xl text-dark-blue">Topic</h2>
@@ -47,10 +47,10 @@
 		</form>
 
 
-		<h2 class="my-4 font-extrabold text-xl text-dark-blue">List of Materials/Activities</h2>
+		<h2 class="my-4 font-extrabold text-xl text-dark-blue">List of Activities</h2>
 
 		<div class="flex">
-			<x-anchor-button class="bg-orange-500" href="{{ route('teacher.mycourse.material.upload', $topic->id) }}"><i class="bi bi-plus-lg"></i> Add New Material</x-anchor-button>
+			<x-anchor-button class="bg-orange-500" href="{{ route('teacher.mycourse.activity.upload', $topic->id) }}"><i class="bi bi-plus-lg"></i> Add New Activity</x-anchor-button>
 		</div>
 
 		<div class="w-full bg-slate-400 mt-4" style="height: 2px;"></div>
@@ -58,26 +58,26 @@
 		<div class="w-full overflow-x-auto">
 			<table class="w-full">
 				<thead>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Material/Activity Title</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Material/Activity Description</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activity Title</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activity Description</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Link</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 				</thead>
 				<tbody>
-					@forelse ($topic->materials as $material)
+					@forelse ($topic->activities as $activity)
 						<tr class="@if($loop->index % 2 == 0) bg-white @endif">
-							<td class="py-2 px-4 w-1/4">{{ $material->title }}</td>
+							<td class="py-2 px-4 w-1/4">{{ $activity->title }}</td>
 							<td class="py-2 px-4 w-1/2">
-								@if(strlen($material->desc) > 120)
-									<div class="">{{ substr($material->desc, 0, 120) }}... <button type="button" class="show-more-button text-blue font-semibold text-xs">[Show More]</button></div>
-									<div class="hidden">{{ $material->desc }} <button type="button" class="show-less-button text-blue font-semibold text-xs">[Show Less]</button></div>
+								@if(strlen($activity->desc) > 120)
+									<div class="">{{ substr($activity->desc, 0, 120) }}... <button type="button" class="show-more-button text-blue font-semibold text-xs">[Show More]</button></div>
+									<div class="hidden">{{ $activity->desc }} <button type="button" class="show-less-button text-blue font-semibold text-xs">[Show Less]</button></div>
 								@else
-									{{ $material->desc }}
+									{{ $activity->desc }}
 								@endif
 							</td>
 							<td class="py-2 px-4" style="max-width: 18vw; word-wrap: break-word;">
-								@if($material->link)
-									<a href="{{ $material->link }}" target="blank" class="font-bold text-blue-600 hover:underline">{{ $material->link }}</a>
+								@if($activity->link)
+									<a href="{{ $activity->link }}" target="blank" class="font-bold text-blue-600 hover:underline">{{ $activity->link }}</a>
 								@else
 									N/A
 								@endif
@@ -86,18 +86,18 @@
 							<td class="py-2 px-4">
 								<div class="flex gap-1">
 									<x-anchor-button class="bg-orange-500"
-										href="{{ route('teacher.mycourse.material.edit', $material->id) }}">
+										href="{{ route('teacher.mycourse.activity.edit', $activity->id) }}">
 										<i class="bi bi-pencil-square"></i>
 									</x-anchor-button>
 									<x-anchor-button class="bg-orange-500"
-										href="{{ route('teacher.mycourse.material.remove', $material->id) }}">
+										href="{{ route('teacher.mycourse.activity.remove', $activity->id) }}">
 										<i class="bi bi-trash3"></i>
 									</x-anchor-button>
 								</div>
 							</td>
 						</tr>
 					@empty
-						<tr><td colspan="4" class="text-center p-5 bg-white rounded-xl w-full font-semibold">- No materials added yet to this course topic -</td></tr>
+						<tr><td colspan="4" class="text-center p-5 bg-white rounded-xl w-full font-semibold">- No activities added yet to this course topic -</td></tr>
 					@endforelse
 				</tbody>
 			</table>

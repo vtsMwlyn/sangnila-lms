@@ -11,7 +11,7 @@ use App\Imports\CurriculumsImport;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\UserAndDetailsImport;
-use App\Imports\TopicsAndMaterialsImport;
+use App\Imports\TopicsAndActivitiesImport;
 
 class ExcelImportController extends Controller
 {
@@ -73,13 +73,13 @@ class ExcelImportController extends Controller
 		}
 	}
 
-	public function import_excel_topics_and_materials_index($course_id){
-		return view("roles.teacher.mycourse.import-excel-topics-and-materials", [
+	public function import_excel_topics_and_activities_index($course_id){
+		return view("roles.teacher.mycourse.import-excel-topics-and-activities", [
 			"course" => Course::findOrFail($course_id)
 		]);
 	}
 
-	public function import_excel_topics_and_materials_store(Request $request, $course_id){
+	public function import_excel_topics_and_activities_store(Request $request, $course_id){
 		$request->validate([
 			'file' => 'required|mimes:xlsx,xls,csv',
 		]);
@@ -96,17 +96,17 @@ class ExcelImportController extends Controller
 			}
 
 			// Add with the new data
-			Excel::import(new TopicsAndMaterialsImport($course_id), $request->file('file')->store('temp'));
+			Excel::import(new TopicsAndActivitiesImport($course_id), $request->file('file')->store('temp'));
 
 			DB::commit();
 
-			return redirect(route("teacher.mycourse.show", $course_id))->with('successImportExcelTopicsAndMaterials', 'Topics and Materials data imported successfully!');
+			return redirect(route("teacher.mycourse.show", $course_id))->with('successImportExcelTopicsAndActivities', 'Topics and Activities data imported successfully!');
 		}
 
 		catch (Exception $e){
 			DB::rollback();
 
-			return back()->with('failImportExcelTopicsAndMaterials', "Data in your file is in invalid format or not fully filled. Please recheck your data, revise, make sure it fullfil the requirement, and then try to upload again.");
+			return back()->with('failImportExcelTopicsAndActivities', "Data in your file is in invalid format or not fully filled. Please recheck your data, revise, make sure it fullfil the requirement, and then try to upload again.");
 		}
 	}
 }
