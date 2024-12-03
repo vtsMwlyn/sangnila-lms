@@ -6,12 +6,15 @@ use Exception;
 use App\Models\Topic;
 use App\Models\Course;
 use App\Models\Activity;
+use App\Models\Progress;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
 use App\Models\ImportedStudent;
-use App\Models\Progress;
+use App\Models\LearningOutcome;
 use App\Models\StudentAttendance;
+use App\Rules\MinimumOneCheckbox;
 use Illuminate\Support\Facades\Auth;
+use App\Models\LearningOutcomeActivity;
 
 class ActivityController extends Controller {
 	// ===== TEACHER ===== //
@@ -19,7 +22,8 @@ class ActivityController extends Controller {
 	public function teacher_create($topic_id) {
 		$topic = Topic::findOrFail($topic_id);
 		return view('roles.teacher.topic-and-activity.create-activity', [
-			'topic' => $topic
+			'topic' => $topic,
+			"learning_outcomes" => LearningOutcome::where("course_id", $topic->course->id)->orderBy("number", "asc")->get()
 		]);
 	}
 
@@ -28,18 +32,27 @@ class ActivityController extends Controller {
 		$validatedData = $request->validate([
 			"title" => "required|min:3",
 			"link" => "nullable|url",
-			"desc" => "required|min:3"
+			"desc" => "required|min:3",
 		]);
 
 		$topic = Topic::findOrFail($topic_id);
 
 		try {
-			Activity::create([
+			$new_ac = Activity::create([
 				"topic_id" => $topic->id,
 				"title" => $validatedData["title"],
 				"link" => $validatedData["link"],
 				"desc" => $validatedData["desc"]
 			]);
+
+			foreach(LearningOutcome::where("course_id", $topic->course->id)->orderBy("number", "asc")->get() as $i => $lo){
+				if($request->learning_outcome[$i] == "on"){
+					LearningOutcomeActivity::create([
+						"activity_id" => $new_ac->id,
+						"learning_outcome_id" => $lo->id
+					]);
+				}
+			}
 		}
 		catch(Exception $e){
 			return back()->with("systemFail", "System failed to create activity, please report the error to our IT team. Error detail: " . $e->getMessage());
@@ -50,8 +63,32 @@ class ActivityController extends Controller {
 
 	// Edit activity input page
 	public function teacher_edit($activity_id) {
+		$activity = Activity::findOrFail($activity_id);
+		$learning_outcomes = LearningOutcome::where("course_id", $activity->topic->course->id)->orderBy("number", "asc")->get();
+
+		$checkbox_values = [];
+
+		foreach($learning_outcomes as $lo){
+			$found = false;
+			foreach($activity->learning_outcomes as $calo){
+				if($calo->id == $lo->id){
+					$found = true;
+					break;
+				}
+			}
+
+			if($found){
+				array_push($checkbox_values, "on");
+			}
+			else {
+				array_push($checkbox_values, "off");
+			}
+		}
+
 		return view('roles.teacher.topic-and-activity.edit-activity', [
-			'activity' => Activity::findOrFail($activity_id)
+			'activity' => $activity,
+			"learning_outcomes" => $learning_outcomes,
+			"checkbox_values" => $checkbox_values
 		]);
 	}
 
@@ -60,13 +97,37 @@ class ActivityController extends Controller {
 		$data = $request->validate([
 			"title" => "required|min:3",
 			"link" => "nullable|url",
-			"desc" => "required|min:3"
+			"desc" => "required|min:3",
 		]);
 
 		$activity = Activity::findOrFail($activity_id);
+		$course = $activity->topic->course;
 
 		try {
-			$activity->update($data);
+			$activity->update([
+				"title" => $request->title,
+				"desc" => $request->desc,
+				"link" => $request->link
+			]);
+
+			$learning_outcomes = LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get();
+			foreach($request->learning_outcome as $i => $rlo){
+				if($rlo == "on"){
+					$existing_calo = LearningOutcomeActivity::where("learning_outcome_id", $learning_outcomes[$i]->id)->where("activity_id", $activity->id)->first();
+					if(!$existing_calo){
+						LearningOutcomeActivity::create([
+							"activity_id" => $activity->id,
+							"learning_outcome_id" => $learning_outcomes[$i]->id
+						]);
+					}
+				}
+				else {
+					$existing_calo = LearningOutcomeActivity::where("learning_outcome_id", $learning_outcomes[$i]->id)->where("activity_id", $activity->id)->first();
+					if($existing_calo){
+						LearningOutcomeActivity::destroy($existing_calo->id);
+					}
+				}
+			}
 		}
 		catch(Exception $e){
 			return back()->with("systemFail", "System failed to edit activity, please report the error to our IT team. Error detail: " . $e->getMessage());

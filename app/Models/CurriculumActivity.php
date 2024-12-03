@@ -14,4 +14,8 @@ class CurriculumActivity extends Model
 	public function curriculum_topic(){
 		return $this->belongsTo(CurriculumTopic::class);
 	}
+
+	public function learning_outcomes(){
+		return $this->belongsToMany(LearningOutcome::class, "learning_outcome_curriculum_activities")->orderBy('number');
+	}
 }

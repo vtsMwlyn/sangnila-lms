@@ -110,12 +110,14 @@ class CourseController extends Controller {
 		$curriculum = CurriculumTopic::where("course_id", $course->id)->get();
 
 		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+		$learning_outcomes = LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get();
 
 		return view('roles.teacher.mycourse.show', [
 			'course_students' => $course_students,
 			"course" => $course,
 			"topics" => $topics,
-			"has_curriculum" => $curriculum->count()
+			"has_curriculum" => $curriculum->count(),
+			"learning_outcomes" => $learning_outcomes
 		]);
 	}
 
@@ -197,6 +199,7 @@ class CourseController extends Controller {
 			$pam["progress"] = $prgs;
 			$pam["activity"] = $prgs->activity;
 			$pam["topic"] = $prgs->activity->topic;
+			$pam["learning_outcomes"] = $prgs->activity->learning_outcomes->toJson();
 			array_push($progressAndActivity, $pam);
 		}
 

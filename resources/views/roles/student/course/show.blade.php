@@ -120,6 +120,17 @@
 								$("#preview-link").attr("href", $(this).data('route'));
 								$("#num").text(index + 1);
 
+								// Update learning outcome
+								$("#learning-outcomes").html('');
+
+								for(let lo of JSON.parse(matprog[index].learning_outcomes)){
+									const loContainer = $("<div>").addClass("flex gap-2 items-center");
+									const loBullet = $("<img>").attr({"alt": "icon", "src": "{{ asset('img/bullet.svg') }}"}).addClass("w-3 h-3");
+									const loText = $("<div>").text(`LO${lo.number}: ${lo.title}`);
+									loContainer.append(loBullet).append(loText);
+									$("#learning-outcomes").append(loContainer);
+								}
+
 								// Scroll to the selected slide
 								swiper.slideTo(index);
 							}
@@ -129,12 +140,18 @@
 
 
 				<div class="mb-6">
-					<h1 class="text-dark-blue font-bold text-xl"><span id="num">1</span>. <span id="topic">{{ $activityProgresses[0]["topic"]->title }}</span></h1>
-					<div class="flex flex-col gap-1 mt-2">
-						<div class="flex gap-2 items-center">
-							<img src="{{ asset('img/bullet.svg') }}" alt="icon" class="w-3 h-3">
-							<div>N/A</div>
-						</div>
+					<h1 class="text-dark-blue font-bold text-xl"><span id="num">1</span>. <span id="topic">{{ count($activityProgresses) > 0 ? $activityProgresses[0]["topic"]->title : 'N/A' }}</span></h1>
+					<div class="flex flex-col gap-1 mt-2" id="learning-outcomes">
+						@if(count($activityProgresses) > 0)
+							@foreach(json_decode($activityProgresses[0]["learning_outcomes"]) as $lo)
+								<div class="flex gap-2 items-center">
+									<img src="{{ asset('img/bullet.svg') }}" alt="icon" class="w-3 h-3">
+									<div>LO{{ $lo->number }}: {{ $lo->title }}</div>
+								</div>
+							@endforeach
+						@else
+							N/A
+						@endif
 					</div>
 				</div>
 			@endif
@@ -152,12 +169,15 @@
 				</div>
 				<div class="w-full flex items-center mt-1">
 					<div class="flex w-1/2 items-start">
-						<h2 id="activity">{{ $activityProgresses[0]["activity"]->title }}</h2>
+						<h2 id="activity">{{ count($activityProgresses) > 0 ? $activityProgresses[0]["activity"]->title : 'N/A' }}</h2>
 					</div>
 					<div class="flex w-1/2 items-start ">
 						<div class="flex gap-1">
-							<a href="{{ route('student.mycourse.preview', $activityProgresses[0]["activity"]->id) }}" id="preview-link"><img src="{{ asset('img/view.svg') }}" alt="icon" class="w-8 h-8 hover:scale-110"></a>
-							{{-- <a href="#"></a><img src="{{ asset('img/download.svg') }}" alt="icon" class="w-8 h-8"> --}}
+							@if(count($activityProgresses) > 0)
+								<a href="{{ route('student.mycourse.preview', $activityProgresses[0]["activity"]->id) }}" id="preview-link"><img src="{{ asset('img/view.svg') }}" alt="icon" class="w-8 h-8 hover:scale-110"></a>
+							@else
+								<a href="#"></a><img src="{{ asset('img/download.svg') }}" alt="icon" class="w-8 h-8">
+							@endif
 						</div>
 					</div>
 				</div>

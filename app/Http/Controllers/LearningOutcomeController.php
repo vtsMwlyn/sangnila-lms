@@ -8,7 +8,7 @@ use App\Models\LearningOutcome;
 
 class LearningOutcomeController extends Controller
 {
-    public function admin_store(Request $request, $course_id){
+    public function admin_store_lo(Request $request, $course_id){
 		$request->validate([
 			"title" => "required|min:3",
 			"number" => "required|numeric|min:1"
@@ -25,15 +25,15 @@ class LearningOutcomeController extends Controller
 		return back()->with("successAddLearningOutcome", "Learning Outcome has been successfully added to this course!");
 	}
 
-	public function admin_update(Request $request, $course_id, $learning_outcome_id){
+	public function admin_update_lo(Request $request, $course_id, $learning_outcome_id){
 		$request->validate([
 			"title" => "required|min:3",
 			"number" => "required|numeric|min:1"
 		]);
 
-		$learning_outcome = LearningOutcome::findOrFail($learning_outcome_id);
+		$clearning_outcome = LearningOutcome::findOrFail($learning_outcome_id);
 
-		$learning_outcome->update([
+		$clearning_outcome->update([
 			"title" => $request->title,
 			"number" => $request->number
 		]);
@@ -41,7 +41,11 @@ class LearningOutcomeController extends Controller
 		return back()->with("successEditLearningOutcome", "Learning Outcome has been successfully edited to this course!");
 	}
 
-	public function admin_destroy($course_id, $learning_outcome_id){
-		return "otw delete";
+	public function admin_destroy_lo($course_id, $learning_outcome_id){
+		$del = LearningOutcome::findOrFail($learning_outcome_id);
+
+		$del->delete();
+
+		return back()->with("successDeleteLearningOutcome", "Learning Outcome has been successfully deleted from this course!");
 	}
 }

@@ -50,6 +50,31 @@
 				</div>
 			</div>
 
+			<!-- Learning Outcome -->
+			<p class="font-bold mt-6">Learning Outcomes:</p>
+			@php
+				$iterasus = 1;
+			@endphp
+
+			<div class="w-full @error('learning_outcome') border border-red px-4 @enderror" style="@error('learning_outcome') border-width: 3px; @enderror">
+				@forelse ($learning_outcomes as $lo)
+					<div class="my-4 flex">
+						<input type="checkbox" id="checkbox{{ $iterasus }}"
+						class="mt-1 mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('learning_outcome.' . $loop->index) == "on") checked @elseif($checkbox_values[$loop->index] == "on") checked @endif >
+						<label for="checkbox{{ $iterasus }}">LO {{ $lo->number }}: {{ $lo->title }}</label>
+					</div>
+
+					@php
+						$iterasus++;
+					@endphp
+				@empty
+
+				@endforelse
+			</div>
+			@error('learning_outcome')
+				<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> Please select minimum 1 item.</p>
+			@enderror
+
 			<div class="flex gap-2 items-stretch justify-center w-full mt-20 mb-3">
 				<x-button class="bg-orange-500 w-full md:w-1/6">
 					{{ __('Save') }}
@@ -60,4 +85,19 @@
 			</div>
 		</form>
 	</x-section-container>
+
+	<script>
+		$("form").on("submit", function(){
+			$('input[type="checkbox"]').each(function(){
+				if($(this).is(":checked")){
+					$("form").append($("<input>").attr({"type": "hidden", "name": "learning_outcome[]", "value": "on"}));
+				}
+				else {
+					$("form").append($("<input>").attr({"type": "hidden", "name": "learning_outcome[]", "value": "off"}));
+				}
+			});
+
+			this.submit();
+		});
+	</script>
 @endsection

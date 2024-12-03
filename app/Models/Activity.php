@@ -19,6 +19,6 @@ class Activity extends Model {
 	}
 
 	public function learning_outcomes(){
-		return $this->belongsToMany(LearningOutcome::class);
+		return $this->belongsToMany(LearningOutcome::class, "learning_outcome_activities")->orderBy('number');;
 	}
 }

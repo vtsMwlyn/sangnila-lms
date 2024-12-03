@@ -9,6 +9,9 @@ use App\Models\Activity;
 use Illuminate\Http\Request;
 use App\Models\CurriculumTopic;
 use App\Models\CurriculumActivity;
+use App\Models\LearningOutcome;
+use App\Models\LearningOutcomeActivity;
+use App\Models\LearningOutcomeCurriculumActivity;
 use App\Rules\MinimumOneCheckbox;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -82,9 +85,12 @@ class CurriculumController extends Controller
 
 
 	public function admin_create_activity($course_id, $curriculum_topic_id){
+		$course = Course::findOrFail($course_id);
+
 		return view("roles.admin.curriculum.create-activity", [
-			"course" => Course::findOrFail($course_id),
-			"curriculum_topic" => CurriculumTopic::findOrFail($curriculum_topic_id)
+			"course" => $course,
+			"curriculum_topic" => CurriculumTopic::findOrFail($curriculum_topic_id),
+			"learning_outcomes" => LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get()
 		]);
 	}
 
@@ -92,18 +98,31 @@ class CurriculumController extends Controller
 		$request->validate([
 			"title" => "required|min:3",
 			"desc" => "required|min:3",
-			"link" => "required|url"
+			"link" => "required|url",
+			"learning_outcome" => new MinimumOneCheckbox
 		]);
 
+
 		$ctopic = CurriculumTopic::findOrFail($curriculum_topic_id);
+		$course = Course::findOrFail($course_id);
 
 		try {
-			CurriculumActivity::create([
+			$new_ca = CurriculumActivity::create([
 				"title" => $request->title,
 				"desc" => $request->desc,
 				"link" => $request->link,
 				"curriculum_topic_id" => $ctopic->id
 			]);
+
+			foreach(LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get() as $i => $lo){
+				if($request->learning_outcome[$i] == "on"){
+					LearningOutcomeCurriculumActivity::create([
+						"curriculum_activity_id" => $new_ca->id,
+						"learning_outcome_id" => $lo->id
+					]);
+				}
+			}
+
 		}
 		catch(Exception $e){
 			return back()->with("systemFail", "System failed to create curriculum activity, please report the error to our IT team. Error detail: " . $e->getMessage());
@@ -114,9 +133,34 @@ class CurriculumController extends Controller
 	}
 
 	public function admin_edit_activity($course_id, $curriculum_topic_id, $curriculum_activity_id){
+		$course = Course::findOrFail($course_id);
+		$learning_outcomes = LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get();
+
+		$cactivity = CurriculumActivity::findOrFail($curriculum_activity_id);
+		$checkbox_values = [];
+
+		foreach($learning_outcomes as $lo){
+			$found = false;
+			foreach($cactivity->learning_outcomes as $calo){
+				if($calo->id == $lo->id){
+					$found = true;
+					break;
+				}
+			}
+
+			if($found){
+				array_push($checkbox_values, "on");
+			}
+			else {
+				array_push($checkbox_values, "off");
+			}
+		}
+
 		return view("roles.admin.curriculum.edit-activity", [
-			"course" => Course::findOrFail($course_id),
-			"curriculum_activity" => CurriculumActivity::findOrFail($curriculum_activity_id)
+			"course" => $course,
+			"curriculum_activity" => $cactivity,
+			"learning_outcomes" => $learning_outcomes,
+			"checkbox_values" => $checkbox_values
 		]);
 	}
 
@@ -124,17 +168,38 @@ class CurriculumController extends Controller
 		$request->validate([
 			"title" => "required|min:3",
 			"desc" => "required|min:3",
-			"link" => "required|url"
+			"link" => "required|url",
+			"learning_outcome" => new MinimumOneCheckbox
 		]);
 
-		$cactivity = CurriculumActivity::findOrFail($curriculum_activity_id);
-
 		try {
+			$cactivity = CurriculumActivity::findOrFail($curriculum_activity_id);
+			$course = Course::findOrFail($course_id);
+
 			$cactivity->update([
 				"title" => $request->title,
 				"desc" => $request->desc,
 				"link" => $request->link
 			]);
+
+			$learning_outcomes = LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get();
+			foreach($request->learning_outcome as $i => $rlo){
+				if($rlo == "on"){
+					$existing_calo = LearningOutcomeCurriculumActivity::where("learning_outcome_id", $learning_outcomes[$i]->id)->where("curriculum_activity_id", $cactivity->id)->first();
+					if(!$existing_calo){
+						LearningOutcomeCurriculumActivity::create([
+							"curriculum_activity_id" => $cactivity->id,
+							"learning_outcome_id" => $learning_outcomes[$i]->id
+						]);
+					}
+				}
+				else {
+					$existing_calo = LearningOutcomeCurriculumActivity::where("learning_outcome_id", $learning_outcomes[$i]->id)->where("curriculum_activity_id", $cactivity->id)->first();
+					if($existing_calo){
+						LearningOutcomeCurriculumActivity::destroy($existing_calo->id);
+					}
+				}
+			}
 		}
 		catch(Exception $e){
 			return back()->with("systemFail", "System failed to edit curriculum activity, please report the error to our IT team. Error detail: " . $e->getMessage());
@@ -181,12 +246,19 @@ class CurriculumController extends Controller
 				]);
 
 				foreach($ctopic->curriculum_activities as $activity){
-					Activity::create([
+					$nyuu = Activity::create([
 						"topic_id" => $ntopic->id,
 						"title" => $activity->title,
 						"desc" => $activity->desc,
 						"link" => $activity->link
 					]);
+
+					foreach($activity->learning_outcomes as $ctlo){
+						LearningOutcomeActivity::create([
+							"learning_outcome_id" => $ctlo->id,
+							"activity_id" => $nyuu->id
+						]);
+					}
 				}
 			}
 
@@ -228,8 +300,6 @@ class CurriculumController extends Controller
 
 			$curriculum_topics = CurriculumTopic::where("course_id", $course_id)->get();
 
-			$bikingaya = [];
-
 			$i = 0;
 			foreach($curriculum_topics as $ctopic){
 				$ntopic = Topic::create([
@@ -240,12 +310,19 @@ class CurriculumController extends Controller
 
 				foreach($ctopic->curriculum_activities as $cactivity){
 					if($request->selected[$i] == "on"){
-						Activity::create([
+						$nyuu = Activity::create([
 							"topic_id" => $ntopic->id,
 							"title" => $cactivity->title,
 							"desc" => $cactivity->desc,
 							"link" => $cactivity->link
 						]);
+
+						foreach($cactivity->learning_outcomes as $ctlo){
+							LearningOutcomeActivity::create([
+								"learning_outcome_id" => $ctlo->id,
+								"activity_id" => $nyuu->id
+							]);
+						}
 					}
 
 					$i++;

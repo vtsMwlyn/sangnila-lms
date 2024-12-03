@@ -24,9 +24,22 @@
 			<x-badge-warning badge_text="{{ session('successDeleteTopic') }}"></x-badge-warning>
 		@endif
 
-		<p class="text-blue-950 font-semibold my-8 text-center">{{ $course->course_description }}</p>
+		<p class="font-bold my-4">Description:</p>
+		<p class="text-blue-950 font-semibold">{{ $course->course_description }}</p>
 
-		<div class="w-full bg-slate-400 mt-4" style="height: 2px;"></div>
+		<p class="font-bold mt-6">Learning Outcomes:</p>
+		<div class="flex flex-col gap-1 mt-2">
+			@forelse($learning_outcomes as $lo)
+				<div class="flex gap-2 items-center">
+					<img src="{{ asset('img/bullet.svg') }}" alt="icon" class="w-3 h-3">
+					<div>LO{{ $lo->number }}: {{ $lo->title }}</div>
+				</div>
+			@empty
+				N/A
+			@endforelse
+		</div>
+
+		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
 		<h2 class="my-4 font-extrabold text-xl text-dark-blue">Student List</h2>
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
@@ -88,6 +101,7 @@
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Topic Title</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activities</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Outcomes</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 				</thead>
 				<tbody >
@@ -106,6 +120,25 @@
 											<li>{{ $activity->title }}</li>
 										@endforeach
 									</ul>
+								</td>
+
+								<td class="py-2 px-4">
+									@php
+										$lolist = [];
+										foreach ($topic->activities as $activity) {
+											foreach ($activity->learning_outcomes as $leaout) {
+												if (!in_array($leaout->number, $lolist)) {
+													$lolist[] = $leaout->number;
+												}
+											}
+										}
+
+										sort($lolist);
+									@endphp
+
+									@foreach($lolist as $los)
+										LO{{ $los }}@if(count($lolist) > 1 && $loop->index != count($lolist) - 1), @endif
+									@endforeach
 								</td>
 
 								<td class="py-2 px-4">

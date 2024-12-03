@@ -15,7 +15,7 @@
 					<p class="text-3xl font-extrabold">{{ $courses_enrolled }}</p>
 				</div>
 				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-2 p-5">
-					<img src="{{ asset('img/studentdashboard-activitiesunlocked.svg') }}" class="w-12 h-12" alt="icon">
+					<img src="{{ asset('img/studentdashboard-materialsunlocked.svg') }}" class="w-12 h-12" alt="icon">
 					<p class="font-bold text-black text-center">Materials Unlocked</p>
 					<p class="text-3xl font-extrabold">{{ $activities_unlocked }}</p>
 				</div>

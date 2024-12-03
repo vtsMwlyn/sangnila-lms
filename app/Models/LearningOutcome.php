@@ -16,6 +16,10 @@ class LearningOutcome extends Model
 	}
 
 	public function activities(){
-		return $this->belongsToMany(LearningOutcome::class);
+		return $this->belongsToMany(Activity::class, "learning_outcome_activities");
+	}
+
+	public function curriculum_activities(){
+		return $this->belongsToMany(CurriculumActivity::class, "learning_outcome_curriculum_activities");
 	}
 }

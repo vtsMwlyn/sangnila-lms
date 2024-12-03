@@ -24,7 +24,7 @@
 			<table class="w-full">
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Topic</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activities</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activities Selection</th>
 				</thead>
 				<tbody >
 					@php
@@ -36,12 +36,23 @@
 							<td class="py-2 px-4">{{ $topic->title }}</td>
 
 							<td class="py-2 px-4">
-								<div class="h-full w-2/3 flex flex-col gap-2">
+								<div class="h-full w-full flex flex-col gap-2">
 									@foreach ($topic->curriculum_activities as $activity)
 										<div class="flex w-full justify-between">
-											<div>{{ $activity->title }}</div>
-											<input type="checkbox" id="activity_{{ $activity->id }}"
-											class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300">
+											<div class="w-2/3">{{ $activity->title }}</div>
+
+											<div class="w-1/3 flex justify-between">
+												<div class="">
+													@forelse ($activity->learning_outcomes as $leaout)
+														LO{{ $leaout->number }}@if($activity->learning_outcomes->count() > 1 && $loop->index != $activity->learning_outcomes->count() - 1), @endif
+													@empty
+														N/A
+													@endforelse
+												</div>
+												<input type="checkbox" id="activity_{{ $activity->id }}"
+												class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300">
+											</div>
+
 										</div>
 									@endforeach
 								</div>

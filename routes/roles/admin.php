@@ -61,9 +61,9 @@ Route::prefix('/admin')
 				Route::delete('/{course_id}/delete', [CourseController::class, 'admin_destroy'])->name('destroy')->whereNumber('course_id');
 
 				// Manage LO
-				Route::post("/{course_id}/learning-outcome/create", [LearningOutcomeController::class, "admin_store"])->name("learning-outcome.store")->whereNumber("course_id");
-				Route::post("/{course_id}/{learning_outcome_id}/learning-outcome/edit", [LearningOutcomeController::class, "admin_update"])->name("learning-outcome.update")->whereNumber("course_id");
-				Route::post("/{course_id}/{learning_outcome_id}/learning-outcome/delete", [LearningOutcomeController::class, "admin_destroy"])->name("learning-outcome.destroy")->whereNumber("course_id");
+				Route::post("/{course_id}/learning-outcome/create", [LearningOutcomeController::class, "admin_store_lo"])->name("learning-outcome.store")->whereNumber("course_id");
+				Route::post("/{course_id}/{learning_outcome_id}/learning-outcome/edit", [LearningOutcomeController::class, "admin_update_lo"])->name("learning-outcome.update")->whereNumber("course_id");
+				Route::post("/{course_id}/{learning_outcome_id}/learning-outcome/delete", [LearningOutcomeController::class, "admin_destroy_lo"])->name("learning-outcome.destroy")->whereNumber("course_id");
 
 				// Manage curriculum
 					Route::prefix('/{course_id}/curriculum')

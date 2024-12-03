@@ -76,7 +76,7 @@
 			</div>
 
 			@error("checkbox_value")
-				<p class="text-red-800 font-bold mt-3">{{ $message }}</p>
+				<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
 			@enderror
 
 			<div class="flex flex-wrap gap-3 p-3 mt-5 border-2 border-blue-800 rounded-xl bg-white @error("checkbox_value") border p-5 border-red-700 @enderror">

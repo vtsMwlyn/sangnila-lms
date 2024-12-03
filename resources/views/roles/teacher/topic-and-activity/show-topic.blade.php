@@ -60,6 +60,7 @@
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activity Title</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activity Description</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Outcomes</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Link</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 				</thead>
@@ -74,6 +75,13 @@
 								@else
 									{{ $activity->desc }}
 								@endif
+							</td>
+							<td class="py-2 px-4">
+								@forelse ($activity->learning_outcomes as $leaout)
+									LO{{ $leaout->number }}@if($activity->learning_outcomes->count() > 1 && $loop->index != $activity->learning_outcomes->count() - 1), @endif
+								@empty
+									N/A
+								@endforelse
 							</td>
 							<td class="py-2 px-4" style="max-width: 18vw; word-wrap: break-word;">
 								@if($activity->link)

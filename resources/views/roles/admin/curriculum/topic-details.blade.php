@@ -32,7 +32,7 @@
 			<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.curriculum.topic.delete', [$course->id, $curriculum_topic->id]) }}"><i class="bi bi-trash3"></i> Delete Topic</x-anchor-button>
 		</div>
 
-		<h2 class="text-xl font-semibold mb-2 text-white">Activity List:</h2>
+		<h2 class="text-xl font-semibold mb-2">Activity List:</h2>
 		<div class="flex mt-4">
 			<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.curriculum.activity.create', [$course->id, $curriculum_topic->id]) }}"><i class="bi bi-plus-lg"></i> Add New Activity</x-anchor-button>
 		</div>
@@ -42,15 +42,26 @@
 				<x-slot name="head">
 					<th class="template-heads rounded-l-xl">Activity Title</th>
 					<th class="template-heads">Activity Description</th>
+					<th class="template-heads">Learning Outcome</th>
 					<th class="template-heads">Link</th>
 					<th class="template-heads rounded-r-xl">Actions</th>
 				</x-slot>
 
 				@forelse ($curriculum_topic->curriculum_activities as $activity)
 					<tr>
-						<td class="template-bodies rounded-l-xl w-1/4">{{ $activity->title }}</td>
+						<td class="template-bodies rounded-l-xl w-1/4">
+							{{ $activity->title }}
+							<br>
+						</td>
 						<td class="template-bodies w-1/3">
 							<div class="h-full w-full overflow-y-auto" style="max-height: 5.5rem;">{{ $activity->desc }}</div>
+						</td>
+						<td class="template-bodies">
+							@forelse ($activity->learning_outcomes as $leaout)
+								LO{{ $leaout->number }}@if($activity->learning_outcomes->count() > 1 && $loop->index != $activity->learning_outcomes->count() - 1), @endif
+							@empty
+								N/A
+							@endforelse
 						</td>
 						<td class="template-bodies w-1/3">
 							<a class="font-bold text-blue-200 hover:underline hover:text-blue-400" href="{{ $activity->link }}" target="blank">{{ $activity->link }}</a>

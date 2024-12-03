@@ -88,6 +88,35 @@
 			</form>
 		</div>
 	</x-popup>
+
+	<x-popup class="w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="delete-learning-outcome">
+		<!-- Popup header -->
+		<div class="flex items-center w-full">
+			<div class="font-bold text-2xl grow text-center">Delete Learning Outcome</div>
+			<button type="button" class="popup-dismiss">
+				<img src="{{ asset('img/close.svg') }}" alt="history-icon" class="w-6 h-6 hover:scale-110">
+			</button>
+		</div>
+		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
+
+		<!-- Popup content -->
+		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
+			<form method="post" class="mt-4" id="delete-learning-outcome-form">
+				@csrf
+
+				<p class="text-center">Are you sure want to delete the Learning Outcome <span class="font-bold text-light-blue" id="del-lo-name"></span> from this course?</p>
+
+				<div class="flex items-stretch gap-3 justify-center mt-20 mb-3">
+					<x-button class="bg-orange-500 w-full md:w-1/5">
+						{{ __('Yes') }}
+					</x-button>
+					<x-cancel-button class="w-full md:w-1/5">
+						No
+					</x-cancel-button>
+				</div>
+			</form>
+		</div>
+	</x-popup>
 @endsection
 
 @section("content")
@@ -102,6 +131,8 @@
 			<x-badge-success badge_text="{{ session('successAddLearningOutcome') }}"></x-badge-success>
 		@elseif(session()->has("successEditLearningOutcome"))
 			<x-badge-success badge_text="{{ session('successEditLearningOutcome') }}"></x-badge-success>
+		@elseif(session()->has("successDeleteLearningOutcome"))
+			<x-badge-warning badge_text="{{ session('successDeleteLearningOutcome') }}"></x-badge-warning>
 		@elseif(session()->has("successImportStudent"))
 			<x-badge-success badge_text="{{ session('successImportStudent') }}"></x-badge-success>
 		@elseif(session()->has("successImportExcelCurriculum"))
@@ -161,7 +192,7 @@
 									<x-button type="button" class="editlearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.update', [$course->id, $lo->id]) }}" data-learning_outcome="{{ $lo->toJSON() }}">
 										<i class="bi bi-pencil-square"></i>
 									</x-button>
-									<x-button type="button" class="deletelearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.destroy', [$course->id, $lo->id]) }}">
+									<x-button type="button" class="deletelearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.destroy', [$course->id, $lo->id]) }}" data-del_lo_name="{{ $lo->title }}">
 										<i class="bi bi-trash3"></i>
 									</x-button>
 								</div>
@@ -234,6 +265,7 @@
 					<x-slot name="head">
 						<th class="template-heads rounded-l-xl">Topic</th>
 						<th class="template-heads">Activities</th>
+						<th class="template-heads">Learning Outcomes</th>
 						<th class="template-heads rounded-r-xl">Action</th>
 					</x-slot>
 					@forelse ($course->curriculum_topics as $topic)
@@ -243,12 +275,30 @@
 								@if($topic->curriculum_activities->count())
 									<ul>
 										@foreach ($topic->curriculum_activities as $activity)
-											<li>{{ $activity->title }}</li>
+											<li>{{ $activity->title }}</div>
 										@endforeach
 									</ul>
 								@else
 									<span class="text-gray-500 font-semibold">- No activities yet -</span>
 								@endif
+							</td>
+							<td class="template-bodies">
+								@php
+									$lolist = [];
+									foreach ($topic->curriculum_activities as $activity) {
+										foreach ($activity->learning_outcomes as $leaout) {
+											if (!in_array($leaout->number, $lolist)) {
+												$lolist[] = $leaout->number;
+											}
+										}
+									}
+
+									sort($lolist);
+								@endphp
+
+								@foreach($lolist as $los)
+									LO{{ $los }}@if(count($lolist) > 1 && $loop->index != count($lolist) - 1), @endif
+								@endforeach
 							</td>
 							<td class="template-bodies rounded-r-xl w-1/4">
 								<div class="w-full flex flex-col items-center justify-center gap-3">
@@ -268,10 +318,9 @@
 
 	<script>
 		function initializeNewLearningOutcomePopup(route, whichpopup){
-			// // Retrieve and save selected data
+			// Fill popups with data
 			$(".h-route").val(route);
 			$(".h-last-popup").val(whichpopup);
-
 			$("#new-learning-outcome-form").attr("action", route);
 
 			// Display the popup
@@ -279,11 +328,12 @@
 		}
 
 		function initializeEditLearningOutcomePopup(route, learning_outcome, whichpopup){
-			// Retrieve and save selected data
+			// Fill helpers popup data
 			$(".h-route").val(route);
 			$(".h-last-popup").val(whichpopup);
 			$(".h-lo").val(JSON.stringify(learning_outcome));
 
+			// Retrieve old values
 			const oldTitle = '{{ old('title') }}';
 			const oldNumber = '{{ old('number') }}';
 
@@ -291,9 +341,9 @@
 			$('input[name="title"]').val(oldTitle ?  oldTitle : learning_outcome.title);
 			$('input[name="number"]').val(oldNumber ? oldNumber : learning_outcome.number);
 
+			// Fill the other popup data
 			$(".h-title").val(learning_outcome.title);
 			$(".h-number").val(learning_outcome.number);
-
 			$("#edit-learning-outcome-form").attr("action", route);
 
 			// Display the popup
@@ -301,6 +351,7 @@
 		}
 
 		$(document).ready(() => {
+			// If create button is clicked
 			$('.newlearningoutcome-popuptrigger').on('click', function() {
 				// Retrieve and save selected data
 				const route = $(this).data('route');
@@ -309,6 +360,7 @@
 				initializeNewLearningOutcomePopup(route, whichpopup);
 			});
 
+			// If edit button is clicked
 			$('.editlearningoutcome-popuptrigger').on('click', function() {
 				// Retrieve and save selected data
 				const route = $(this).data('route');
@@ -318,11 +370,22 @@
 				initializeEditLearningOutcomePopup(route, learning_outcome, whichpopup);
 			});
 
+			// If delete button is clicked
+			$('.deletelearningoutcome-popuptrigger').on('click', function() {
+				// Retrieve data and set the data to the popup
+				$("#delete-learning-outcome-form").attr("action", $(this).data('route'));
+				$("#del-lo-name").text($(this).data('del_lo_name'));
+
+				// Show the popup
+				$("#delete-learning-outcome").parent().show();
+			});
+
+			// Clear inputs when any popup is closed
 			$(".popup-dismiss").click(function(){
 				$('input[name]:not([name="_token"])').val("");
 			});
 
-			// Redisplay popup and fill with prev data
+			// Redisplay popup and fill with prev data (for invalidated data)
 			@if ($errors->any())
 				// Retrieve and re-save saved data
 				const old_popup = @json(old('h-last-popup'));
@@ -338,7 +401,6 @@
 
 					initializeEditLearningOutcomePopup(old_route, JSON.parse(old_lo), old_popup);
 				}
-
 			@endif
 		});
 	</script>
