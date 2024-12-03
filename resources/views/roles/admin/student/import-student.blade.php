@@ -236,7 +236,7 @@
 						course.topics.forEach(topic => {
 							if(topic.user_id == teacher.id){
 								topic.activities.forEach(activity => {
-									$("#last_activity_unlocked").append($("<option>").text(`${topic.title} - ${activity.title}`)).attr({"value": activity});
+									$("#last_activity_unlocked").append($("<option>").text(`${topic.title} - ${activity.title}`).attr({"value": JSON.stringify(activity)}));
 								});
 							}
 						});
@@ -365,7 +365,7 @@
 						const colTeacherName = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(JSON.parse(formData.teacher_name).full_name);
 						const colLastAttendanceCount = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.last_attendance_count);
 						const colMaxCourseSession = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(formData.max_course_session);
-						const colLastActivityUnlocked = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(formData.last_activity_unlocked.title);
+						const colLastActivityUnlocked = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2 fixed1").text(JSON.parse(formData.last_activity_unlocked).title);
 						const colNewStudent = $("<td>").addClass("border-r border-t border-blue-950 px-4 py-2").text(cbv);
 
 						const delBtn = $("<button>").attr({"type": "button"}).addClass("text-center px-5 py-2 border border-transparent rounded-lg text-white bg-red-700 hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 transition ease-in-out duration-150").html("<i class='bi bi-trash3'></i>");
@@ -393,7 +393,7 @@
 						const hidTeacherName = $("<input>").attr({"type": "hidden", "name": "inp_teacher_name[]", "value": JSON.parse(formData.teacher_name).id});
 						const hidLastAttendanceCount = $("<input>").attr({"type": "hidden", "name": "inp_last_attendance_count[]", "value": formData.last_attendance_count});
 						const hidMaxCourseSession = $("<input>").attr({"type": "hidden", "name": "inp_max_course_session[]", "value": formData.max_course_session});
-						const hidLastActivityUnlocked = $("<input>").attr({"type": "hidden", "name": "inp_last_activity_unlocked[]", "value": formData.last_activity_unlocked.id});
+						const hidLastActivityUnlocked = $("<input>").attr({"type": "hidden", "name": "inp_last_activity_unlocked[]", "value": JSON.parse(formData.last_activity_unlocked).id});
 						const hidNewStudent = $("<input>").attr({"type": "hidden", "name": "is_new_student[]", "value": cbv});
 
 						const hidPhoneNumber = $("<input>").attr({"type": "hidden", "name": "inp_phone_number[]", "value": formData.phone_number});
