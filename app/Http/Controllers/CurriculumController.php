@@ -99,7 +99,6 @@ class CurriculumController extends Controller
 			"title" => "required|min:3",
 			"desc" => "required|min:3",
 			"link" => "required|url",
-			"learning_outcome" => new MinimumOneCheckbox
 		]);
 
 
@@ -169,7 +168,6 @@ class CurriculumController extends Controller
 			"title" => "required|min:3",
 			"desc" => "required|min:3",
 			"link" => "required|url",
-			"learning_outcome" => new MinimumOneCheckbox
 		]);
 
 		try {

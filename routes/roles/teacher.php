@@ -37,8 +37,8 @@ Route::prefix('/teacher')
 			Route::post("/{course_id}/synchronize", [CurriculumController::class, "teacher_synchronize"])->name("synchronize")->whereNumber('course_id');
 
 			// Import from excel
-			Route::get("/{course_id}/import-excel", [ExcelImportController::class, "import_excel_topics_and_activities_index"])->name("import-excel-topicsandactivities")->whereNumber("course_id");
-			Route::post("/{course_id}/import-excel", [ExcelImportController::class, "import_excel_topics_and_activities_store"])->name("import-excel-topicsandactivities.store")->whereNumber("course_id");
+			Route::get("/{course_id}/import-excel", [ExcelImportController::class, "import_excel_topics_and_activities_index"])->name("import-excel-topicandactivities")->whereNumber("course_id");
+			Route::post("/{course_id}/import-excel", [ExcelImportController::class, "import_excel_topics_and_activities_store"])->name("import-excel-topicandactivities.store")->whereNumber("course_id");
 
 			// Download import excel template
 			Route::get("/import-excel/download-template", [DownloadResourceController::class, "topics_and_activities_import_excel_template"])->name("import-excel.download");
