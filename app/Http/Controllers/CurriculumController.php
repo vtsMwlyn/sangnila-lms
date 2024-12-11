@@ -30,7 +30,7 @@ class CurriculumController extends Controller
 		$request->validate(["topic_title" => "required|min:3"]);
 
 		try {
-			CurriculumTopic::create([
+			$new_curriculum_topic = CurriculumTopic::create([
 				"course_id" => $course_id,
 				"title" => $request->topic_title
 			]);
@@ -39,7 +39,7 @@ class CurriculumController extends Controller
 			return back()->with("systemFail", "System failed to create curriculum topic, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route('admin.course.show', $course_id))->with("successAddCurriculumTopic", "Successfully added new curriculum topic to the course!");
+		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $new_curriculum_topic->id]))->with("successEditCurriculumTopic", "Successfully added new curriculum topic data!");
 	}
 
 	public function admin_edit_topic($course_id, $curriculum_topic_id){
@@ -98,7 +98,7 @@ class CurriculumController extends Controller
 		$request->validate([
 			"title" => "required|min:3",
 			"desc" => "required|min:3",
-			"link" => "required|url",
+			"link" => "nullable|url",
 		]);
 
 
@@ -113,12 +113,15 @@ class CurriculumController extends Controller
 				"curriculum_topic_id" => $ctopic->id
 			]);
 
-			foreach(LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get() as $i => $lo){
-				if($request->learning_outcome[$i] == "on"){
-					LearningOutcomeCurriculumActivity::create([
-						"curriculum_activity_id" => $new_ca->id,
-						"learning_outcome_id" => $lo->id
-					]);
+			$learning_outcomes = LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get();
+            if($learning_outcomes->count()){
+				foreach($learning_outcomes as $i => $lo){
+					if($request->learning_outcome[$i] == "on"){
+						LearningOutcomeCurriculumActivity::create([
+							"curriculum_activity_id" => $new_ca->id,
+							"learning_outcome_id" => $lo->id
+						]);
+					}
 				}
 			}
 
@@ -138,20 +141,22 @@ class CurriculumController extends Controller
 		$cactivity = CurriculumActivity::findOrFail($curriculum_activity_id);
 		$checkbox_values = [];
 
-		foreach($learning_outcomes as $lo){
-			$found = false;
-			foreach($cactivity->learning_outcomes as $calo){
-				if($calo->id == $lo->id){
-					$found = true;
-					break;
+		if($learning_outcomes->count()){
+			foreach($learning_outcomes as $lo){
+				$found = false;
+				foreach($cactivity->learning_outcomes as $calo){
+					if($calo->id == $lo->id){
+						$found = true;
+						break;
+					}
 				}
-			}
 
-			if($found){
-				array_push($checkbox_values, "on");
-			}
-			else {
-				array_push($checkbox_values, "off");
+				if($found){
+					array_push($checkbox_values, "on");
+				}
+				else {
+					array_push($checkbox_values, "off");
+				}
 			}
 		}
 
@@ -167,7 +172,7 @@ class CurriculumController extends Controller
 		$request->validate([
 			"title" => "required|min:3",
 			"desc" => "required|min:3",
-			"link" => "required|url",
+			"link" => "nullable|url",
 		]);
 
 		try {
@@ -181,20 +186,23 @@ class CurriculumController extends Controller
 			]);
 
 			$learning_outcomes = LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get();
-			foreach($request->learning_outcome as $i => $rlo){
-				if($rlo == "on"){
-					$existing_calo = LearningOutcomeCurriculumActivity::where("learning_outcome_id", $learning_outcomes[$i]->id)->where("curriculum_activity_id", $cactivity->id)->first();
-					if(!$existing_calo){
-						LearningOutcomeCurriculumActivity::create([
-							"curriculum_activity_id" => $cactivity->id,
-							"learning_outcome_id" => $learning_outcomes[$i]->id
-						]);
+
+			if($learning_outcomes->count()){
+				foreach($request->learning_outcome as $i => $rlo){
+					if($rlo == "on"){
+						$existing_calo = LearningOutcomeCurriculumActivity::where("learning_outcome_id", $learning_outcomes[$i]->id)->where("curriculum_activity_id", $cactivity->id)->first();
+						if(!$existing_calo){
+							LearningOutcomeCurriculumActivity::create([
+								"curriculum_activity_id" => $cactivity->id,
+								"learning_outcome_id" => $learning_outcomes[$i]->id
+							]);
+						}
 					}
-				}
-				else {
-					$existing_calo = LearningOutcomeCurriculumActivity::where("learning_outcome_id", $learning_outcomes[$i]->id)->where("curriculum_activity_id", $cactivity->id)->first();
-					if($existing_calo){
-						LearningOutcomeCurriculumActivity::destroy($existing_calo->id);
+					else {
+						$existing_calo = LearningOutcomeCurriculumActivity::where("learning_outcome_id", $learning_outcomes[$i]->id)->where("curriculum_activity_id", $cactivity->id)->first();
+						if($existing_calo){
+							LearningOutcomeCurriculumActivity::destroy($existing_calo->id);
+						}
 					}
 				}
 			}

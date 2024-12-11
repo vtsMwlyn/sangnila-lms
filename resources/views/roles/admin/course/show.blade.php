@@ -137,10 +137,6 @@
 			<x-badge-success badge_text="{{ session('successImportStudent') }}"></x-badge-success>
 		@elseif(session()->has("successImportExcelCurriculum"))
 			<x-badge-success badge_text="{{ session('successImportExcelCurriculum') }}"></x-badge-success>
-		@elseif(session()->has("successAddCurriculumTopic"))
-			<x-badge-success badge_text="{{ session('successAddCurriculumTopic') }}"></x-badge-success>
-		@elseif(session()->has("successEditCurriculumTopic"))
-			<x-badge-success badge_text="{{ session('successEditCurriculumTopic') }}"></x-badge-success>
 		@elseif(session()->has("successDeleteCurriculumTopic"))
 			<x-badge-warning badge_text="{{ session('successDeleteCurriculumTopic') }}"></x-badge-warning>
 		@endif
@@ -271,11 +267,11 @@
 					@forelse ($course->curriculum_topics as $topic)
 						<tr>
 							<td class="template-bodies rounded-l-xl"><a href="{{ route('admin.course.curriculum.topic.details', [$course->id, $topic->id]) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $topic->title }}</a></td>
-							<td class="template-bodies">
+							<td class="template-bodies" style="text-align: start">
 								@if($topic->curriculum_activities->count())
-									<ul>
+									<ul class="list-disc">
 										@foreach ($topic->curriculum_activities as $activity)
-											<li>{{ $activity->title }}</div>
+											<li class="mb-2">{{ $activity->title }}</div>
 										@endforeach
 									</ul>
 								@else

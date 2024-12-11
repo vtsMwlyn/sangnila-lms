@@ -69,7 +69,7 @@
 
 			<div class="flex gap-5">
 				<x-anchor-button class="bg-orange-500"
-					href="{{ route('teacher.mycourse.import-excel-topicsandactivities', $course->id) }}">
+					href="{{ route('teacher.mycourse.import-excel-topicandactivities', $course->id) }}">
 					<i class="bi bi-file-earmark-arrow-up"></i> Import from Excel
 				</x-anchor-button>
 

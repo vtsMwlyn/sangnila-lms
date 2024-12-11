@@ -12,13 +12,14 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title>
-			<a href="{{ route('admin.course.show', $course->id) }}">{{ $course->course_name }}</a>
-		</x-page-title>
-		<h1 class="text-2xl font-semibold text-blue-900 mb-8 text-center">{{ $curriculum_topic->title }}</h1>
+		<x-back-button href="{{ route('admin.course.show', $course->id) }}"></x-back-button>
+		<x-page-title style="margin-bottom: 0;">{{ $course->course_name }}</x-page-title>
+		<h1 class="text-2xl font-semibold text-blue-900 mb-8 mt-4 text-center">{{ $curriculum_topic->title }}</h1>
 
 		@if(session()->has("successEditCurriculumTopic"))
 			<x-badge-success badge_text="{{ session('successEditCurriculumTopic') }}"></x-badge-success>
+		@elseif(session()->has("successAddCurriculumTopic"))
+			<x-badge-success badge_text="{{ session('successAddCurriculumTopic') }}"></x-badge-success>
 		@elseif(session()->has('successAddCurriculumActivity'))
 			<x-badge-success badge_text="{{ session('successAddCurriculumActivity') }}"></x-badge-success>
 		@elseif(session()->has('successEditCurriculumActivity'))
@@ -64,7 +65,7 @@
 							@endforelse
 						</td>
 						<td class="template-bodies w-1/3">
-							<a class="font-bold text-blue-200 hover:underline hover:text-blue-400" href="{{ $activity->link }}" target="blank">{{ $activity->link }}</a>
+							<a class="font-bold text-blue-200 hover:underline hover:text-blue-400" href="{{ $activity->link ?? '#' }}" target="blank">{{ $activity->link ?? 'N/A' }}</a>
 						</td>
 						<td class="template-bodies rounded-r-xl">
 							<div class="flex gap-1 w-full justify-center items-stretch">
