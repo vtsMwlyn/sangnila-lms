@@ -10,7 +10,7 @@ class GuestController extends Controller {
 	// ===== GUEST ===== //
 	// Showing list of available courses in Sangnila LMS
 	public function index() {
-		$courses = Course::where('visibility', 'public')->get();
+		$courses = Course::where('status', 'active')->get();
 		return view('roles.guest.index', [
 			'courses' => $courses,
 		]);

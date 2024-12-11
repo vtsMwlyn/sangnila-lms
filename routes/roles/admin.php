@@ -77,15 +77,12 @@ Route::prefix('/admin')
 						Route::get("/import-excel/download-template", [DownloadResourceController::class, "topics_and_activities_import_excel_template"])->name("import-excel.download");
 
 						// Add new curriculum topic
-						Route::get("/create", [CurriculumController::class, "admin_create_topic"])->name("topic.create");
 						Route::post("/create", [CurriculumController::class, "admin_store_topic"])->name("topic.store");
 
 						// Modify curriculum topic
-						Route::get("/{curriculum_topic_id}/edit", [CurriculumController::class, "admin_edit_topic"])->name("topic.edit")->whereNumber('curriculum_topic_id');
 						Route::post("/{curriculum_topic_id}/edit", [CurriculumController::class, "admin_update_topic"])->name("topic.update")->whereNumber('curriculum_topic_id');
 
 						// Delete curriculum topic
-						Route::get("/{curriculum_topic_id}/delete", [CurriculumController::class, "admin_delete_topic"])->name("topic.delete")->whereNumber('curriculum_topic_id');
 						Route::post("/{curriculum_topic_id}/delete", [CurriculumController::class, "admin_destroy_topic"])->name("topic.destroy")->whereNumber('curriculum_topic_id');
 
 						// Show curriculum topic's detail

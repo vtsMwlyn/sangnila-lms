@@ -23,7 +23,7 @@
 				<form action="#" id="foomu" class="mt-5">
 					<div class="flex flex-col gap-3 w-full" id="serekushon">
 						<div class="flex items-stretch gap-3">
-							<x-boxed-label for="visibility" :value="__('Course Name')"/>
+							<x-boxed-label for="status" :value="__('Course Name')"/>
 							<x-select name="course_name" id="course_name" class="w-full">
 							</x-select>
 						</div>

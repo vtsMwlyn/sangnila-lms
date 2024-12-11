@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('curriculum_activities', function (Blueprint $table) {
             $table->id();
 			$table->unsignedBigInteger('curriculum_topic_id');
+			$table->unsignedInteger('session');
 			$table->string('title');
 			$table->longText("desc");
 			$table->longText("link")->nullable();

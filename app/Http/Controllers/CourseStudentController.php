@@ -35,7 +35,7 @@ class CourseStudentController extends Controller {
 			array_push($arr_ct, ["course_id" => $c->id, "teachers" => $teacher_list]);
 		}
 
-		$courses = Course::where('visibility', 'public')->get();
+		$courses = Course::where('status', 'active')->get();
 		$unenrolled_courses = [];
 
 		foreach($courses as $course){

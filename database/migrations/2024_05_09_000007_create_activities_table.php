@@ -9,6 +9,7 @@ return new class extends Migration {
 		Schema::create('activities', function (Blueprint $table) {
 			$table->id();
 			$table->unsignedBigInteger('topic_id');
+			$table->unsignedInteger('session');
 			$table->string('title');
 			$table->longText("desc");
 			$table->longText('link')->nullable();

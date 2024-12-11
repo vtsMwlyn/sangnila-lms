@@ -17,7 +17,7 @@ class CourseTeacherController extends Controller {
 		$user = User::findOrFail($teacher_id);
 
 		$existingCourseIds = CourseTeacher::where('user_id', $teacher_id)->get()->pluck('course_id')->toArray();
-		$courses = Course::where('visibility', 'public')
+		$courses = Course::where('status', 'active')
 			->whereNotIn('id', $existingCourseIds)
 			->get();
 

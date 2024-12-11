@@ -49,7 +49,7 @@ class ScheduleController extends Controller {
 
 
 	public function admin_edit($schedule_id) {
-		$courses = Course::where('visibility', 'public')->get();
+		$courses = Course::where('status', 'active')->get();
 		$schedule = CourseSchedule::findOrFail($schedule_id);
 		return view('roles.admin.schedule.edit', [
 			'schedule' => $schedule,

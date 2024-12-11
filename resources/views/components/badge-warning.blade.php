@@ -1,6 +1,6 @@
 @props(["badge_text" => "Warning!"])
 
-<div {{ $attributes->merge(["class" => "bg-yellow-400 text-orange-700 p-5 px-5 rounded-lg font-semibold mt-8 w-full flex justify-between items-center gap-3 badge"]) }}>
+<div {{ $attributes->merge(["class" => "bg-yellow-400 text-orange-700 p-5 rounded-lg font-semibold my-4 w-full flex justify-between items-center gap-3 badge"]) }}>
 	<span><i class="bi bi-check-lg"></i> {!! $badge_text !!}</span>
 	<button class="text-orange-700 border-none bg-none" style="shadow: none;" onclick="closeBadge(this);"><i class="bi bi-x-lg"></i></button>
 </div>

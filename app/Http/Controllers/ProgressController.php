@@ -17,7 +17,7 @@ class ProgressController extends Controller {
 	// ===== TEACHER ===== //
 	// Showing list of student's course activities accessibility status (locked/unlocked) and create progress data for the student
 	public function index($student_id, $course_id) {
-		$course = Course::where('visibility', 'public')->where('id', $course_id)->first();
+		$course = Course::where('status', 'active')->where('id', $course_id)->first();
 		$role = Role::where('role_name', 'Student')->first();
 		$student = User::where('role_id', $role->id)->where('id', $student_id)->first();
 		$existingProgress = Progress::where('student_id', $student->id)
@@ -87,7 +87,7 @@ class ProgressController extends Controller {
 	}
 
 	public function students_progress($course_id) {
-		$course = Course::where('visibility', 'public')->where('id', $course_id)->first();
+		$course = Course::where('status', 'active')->where('id', $course_id)->first();
 		return view('roles.teacher.mycourse.progress', [
 			'course' => $course,
 		]);

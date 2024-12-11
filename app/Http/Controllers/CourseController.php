@@ -35,7 +35,9 @@ class CourseController extends Controller {
 		$validatedData = $request->validate([
 			"course_name" => "required|min:3",
 			"course_description" => "required|min:3",
-			"visibility" => "required"
+			"status" => "required",
+			"format" => "required",
+			"level" => "required"
 		]);
 
 		try {
@@ -69,7 +71,9 @@ class CourseController extends Controller {
 		$validatedData = $request->validate([
 			"course_name" => "required|min:3",
 			"course_description" => "required|min:3",
-			"visibility" => "required"
+			"status" => "required",
+			"format" => "required",
+			"level" => "required"
 		]);
 
 		try {

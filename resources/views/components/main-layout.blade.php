@@ -290,17 +290,6 @@
 						showLoadingPopupWithDelay();
 					});
 
-					// // Hide loading popup when a button with onclick="history.back();" is clicked
-					// $('button[onclick*="history.back"]').on('click', function () {
-					// 	// This will not hide the popup here
-					// 	// Instead, we'll handle it in the beforeunload event
-					// });
-
-					// // Hide loading popup when navigating away from the page
-					// $(window).on('beforeunload', function () {
-					// 	hideLoadingPopup();
-					// });
-
 					// Track back button click using popstate event
 					$(window).on('popstate', function () {
 						isPopState = true;  // Set flag to true on back navigation
@@ -430,6 +419,9 @@
 							$('input').removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0').val();
 							$('.error-messages').remove(); // This removes any error messages displayed
 						});
+
+						// Clear inputs when any popup is closed
+						$('input[name]:not([name="_token"])').val("");
 					});
 
 					// Dropdowns

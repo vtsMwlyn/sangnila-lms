@@ -92,8 +92,19 @@ function addTopicAndActivity($course_name, $topic_name, $activities, $teacher_na
 
 	$topic = Topic::create(["course_id" => $course->id, "title" => $topic_name, "user_id" => $teacher->id]);
 
+	$n = 0;
+	$current_all_topics = $course->topics;
+
+	foreach($current_all_topics as $t){
+		foreach($t->activities as $a){
+			$n++;
+		}
+	}
+
 	foreach($activities as $activity){
-		Activity::create(["topic_id" => $topic->id, "title" => $activity, "link" => "https://www.google.com/", "desc" => "This is the description of the activity. It serves as a comprehensive overview, providing a clear explanation or summary of the content. By reading or watching this activity, students will gain a solid understanding of the main concepts and topics covered. They can expect to learn key insights, practical applications, and theoretical foundations that are essential for mastering the subject matter. The description aims to orientate students, helping them to grasp the significance of the activity and its relevance to their learning journey."]);
+		Activity::create(["topic_id" => $topic->id, "session" => $n + 1, "title" => $activity, "link" => "https://www.google.com/", "desc" => "This is the description of the activity. It serves as a comprehensive overview, providing a clear explanation or summary of the content. By reading or watching this activity, students will gain a solid understanding of the main concepts and topics covered. They can expect to learn key insights, practical applications, and theoretical foundations that are essential for mastering the subject matter. The description aims to orientate students, helping them to grasp the significance of the activity and its relevance to their learning journey."]);
+
+		$n++;
 	}
 }
 
@@ -110,8 +121,19 @@ function generateCurriculum($course_name, $topic_name, $activities){
 
 	$topic = CurriculumTopic::create(["course_id" => $course->id, "title" => $topic_name]);
 
-	foreach($activities as $activity){
-		CurriculumActivity::create(["curriculum_topic_id" => $topic->id, "title" => $activity, "link" => "https://www.google.com/", "desc" => "This is the description of the activity. It serves as a comprehensive overview, providing a clear explanation or summary of the content. By reading or watching this activity, students will gain a solid understanding of the main concepts and topics covered. They can expect to learn key insights, practical applications, and theoretical foundations that are essential for mastering the subject matter. The description aims to orientate students, helping them to grasp the significance of the activity and its relevance to their learning journey."]);
+	$n = 0;
+	$current_all_topics = $course->curriculum_topics;
+
+	foreach($current_all_topics as $t){
+		foreach($t->curriculum_activities as $a){
+			$n++;
+		}
+	}
+
+	foreach($activities as $index => $activity){
+		CurriculumActivity::create(["curriculum_topic_id" => $topic->id, "session" => $n + 1, "title" => $activity, "link" => "https://www.google.com/", "desc" => "This is the description of the activity. It serves as a comprehensive overview, providing a clear explanation or summary of the content. By reading or watching this activity, students will gain a solid understanding of the main concepts and topics covered. They can expect to learn key insights, practical applications, and theoretical foundations that are essential for mastering the subject matter. The description aims to orientate students, helping them to grasp the significance of the activity and its relevance to their learning journey."]);
+
+		$n++;
 	}
 }
 

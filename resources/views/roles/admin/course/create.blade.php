@@ -11,52 +11,77 @@
 @section("content")
 	<x-section-container>
 		<x-page-title>{{ __("Add New Course") }}</x-page-title>
+		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("systemFail"))
-			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('admin.course.store') }}" method="post" class="w-full">
+		<form action="{{ route('admin.course.store') }}" method="post" class="w-full flex flex-col gap-y-4">
 			@csrf
-			<!-- Course Name -->
-			<div class="mb-4 flex gap-3 @error('course_name') items-start @else items-stretch @enderror">
-				<x-boxed-label for="course_name" :value="__('Course Name')" />
-				<div class="flex flex-col items-stretch w-full">
+			<div class="w-full flex gap-x-4">
+				<div class="flex flex-col w-1/2">
+					<p>Course Name</p>
 					<x-input id="course_name" class="block w-full" type="text" name="course_name" placeholder="New course name"
 						:value="old('course_name')" autofocus />
 				</div>
-			</div>
 
-			<!-- Course Description -->
-			<div class="mb-4 flex gap-3 @error('course_description') items-start @else items-stretch @enderror">
-				<x-boxed-label for="course_description" :value="__('Course Description')" />
-				<div class="flex flex-col w-full items-stretch">
-					<x-input id="course_description" class="block w-full" type="text" name="course_description" placeholder="New course description"
-						:value="old('course_description')" />
+				<div class="flex flex-col w-1/2">
+					<p>Status</p>
+					<div class="flex flex-col w-full items-stretch">
+						<x-select name="status" id="status" class="w-full">
+							<option selected disabled>Course Status</option>
+							<option value="active" @if(old("status") == "active") selected @endif>Active</option>
+							<option value="hidden" @if(old("status") == "hidden") selected @endif>Hidden</option>
+						</x-select>
+					</div>
 				</div>
 			</div>
 
-			<!-- Visibility Selection -->
-			<div class="mb-4 flex gap-3 @error('visibility') items-start @else items-stretch @enderror">
-				<x-boxed-label for="visibility" :value="__('Visibility')" />
-				<div class="flex flex-col w-full items-stretch">
-					<x-select name="visibility" id="visibility" class="w-full">
-						<option selected disabled>Course Visibility</option>
-						<option value="public" @if(old("visibility") == "public") selected @endif>Public</option>
-						<option value="private" @if(old("visibility") == "private") selected @endif>Private</option>
-					</x-select>
+			<div class="w-full flex gap-x-4">
+				<div class="flex flex-col w-1/2">
+					<p>Level</p>
+					<div class="flex flex-col w-full items-stretch">
+						<x-select name="level" id="level" class="w-full">
+							<option selected disabled>Course Level</option>
+							<option value="basic" @if(old("level") == "basic") selected @endif>Basic</option>
+							<option value="intermediate" @if(old("level") == "intermediate") selected @endif>Intermediate</option>
+							<option value="advanced" @if(old("level") == "advanced") selected @endif>Advanced</option>
+						</x-select>
+					</div>
+				</div>
+
+				<div class="flex flex-col w-1/2">
+					<p>Format</p>
+					<div class="flex flex-col w-full items-stretch">
+						<x-select name="format" id="format" class="w-full">
+							<option selected disabled>Course Format</option>
+							<option value="20" @if(old("format") == 20) selected @endif>20 Sessions</option>
+							<option value="40" @if(old("format") == 40) selected @endif>40 Sessions</option>
+						</x-select>
+					</div>
 				</div>
 			</div>
 
+			<div class="flex flex-col w-full">
+				<p>Course Description</p>
+				<div class="flex flex-col w-full items-stretch">
+					<x-textarea name="course_description" rows="4" placeholder="Course Descriptions">
+						{{ old("course_description") }}
+					</x-textarea>
+				</div>
+			</div>
 
-			<div class="flex items-stretch gap-3 justify-center mt-20 mb-3">
-				<x-button class="bg-orange-500 w-full md:w-1/5">
-					{{ __('Submit') }}
-				</x-button>
-				<x-cancel-button class="w-full md:w-1/5">
+			<div class="flex items-stretch gap-3 justify-end mt-4 mb-3">
+				<x-cancel-button class="w-full md:w-1/6">
 					Cancel
 				</x-cancel-button>
+				<x-button class="bg-orange-500 w-full md:w-1/6">
+					{{ __('Submit') }}
+				</x-button>
+
 			</div>
 		</form>
+
 	</x-section-container>
 @endsection
