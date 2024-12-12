@@ -4,9 +4,16 @@
 	<h1>Manage Courses</h1>
 @endsection
 
+@section('popup')
+	<!-- Delete course -->
+	<x-delete-confirmation method="delete" popup_title="Delete Course" id="delete-course-popup">
+		Are you sure want to <span class="font-bold text-red">delete</span> the Course <span class="font-bold text-light-blue" id="del-course-name"></span> from Sangnila LMS? <strong>This action will erase all data related to the course and can't be undone!</strong>
+	</x-delete-confirmation>
+@endsection
+
 @section("content")
 	<x-section-container>
-		<x-page-title>{{ __("List of All Courses") }}</x-page-title>
+		<x-page-title class="text-center">{{ __("List of All Courses") }}</x-page-title>
 
 		<div class="flex items-center mt-6">
 			<div class="w-1/4">
@@ -62,10 +69,7 @@
 										href="{{ route('admin.course.edit', $course->id) }}">
 										<i class="bi bi-pencil-square"></i>
 									</x-anchor-button>
-									<x-anchor-button class="bg-orange-500"
-										href="{{ route('admin.course.delete', $course->id) }}">
-										<i class="bi bi-trash3"></i>
-									</x-anchor-button>
+									<x-button type="button" class="delete-course-btn" data-route="{{ route('admin.course.destroy', $course->id) }}" data-del_course_name="{{ $course->course_name }}"><i class="bi bi-trash3"></i></x-button>
 								</div>
 							</td>
 						</tr>
@@ -78,5 +82,19 @@
 			</table>
 		</div>
 	</x-section-container>
+
+	<script>
+		$(document).ready(() => {
+			// Delete course
+			$('.delete-course-btn').on('click', function() {
+				// Retrieve data and set the data to the popup
+				$("#delete-course-popup").find('form').attr("action", $(this).data('route'));
+				$("#del-course-name").text($(this).data('del_course_name'));
+
+				// Show the popup
+				$("#delete-course-popup").parent().show();
+			});
+		});
+	</script>
 
 @endsection

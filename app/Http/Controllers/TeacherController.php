@@ -10,23 +10,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class TeacherAccountController extends Controller {
+class TeacherController extends Controller {
 	// ===== ADMIN ===== //
 	// List of all active teachers in Sangnila LMS
 	public function index() {
-		$users = User::where("role_id", 2)->filter(request(["search"]))->get();
+		$teachers = User::where("role_id", 2)->filter(request(["search"]))->get();
 
 		return view('roles.admin.teacher.index', [
-			'accounts' => $users,
+			'teachers' => $teachers,
 		]);
 	}
 
 	// Shows teacher's details
 	public function show($teacher_id) {
 		$role = Role::where('role_name', 'Teacher')->first();
-		$user = User::where('id', $teacher_id)->where('role_id', $role->id)->first();
+		$teacher = User::where('id', $teacher_id)->where('role_id', $role->id)->first();
 		return view('roles.admin.teacher.show', [
-			'user' => $user
+			'teacher' => $teacher
 		]);
 	}
 

@@ -29,22 +29,8 @@ class CourseTeacherController extends Controller {
 
 	// Save the course into database to teacher's assigned course
 	public function assign(Request $request, $teacher_id){
-		try {
-			DB::beginTransaction();
-
-			foreach($request->courses_list as $course_to_assign){
-				$selectedNewCourse = Course::findOrFail($course_to_assign);
-
-				CourseTeacher::create(["user_id" => $teacher_id, "course_id" => $selectedNewCourse->id]);
-			}
-
-			DB::commit();
-		}
-		catch(Exception $e){
-			DB::rollback();
-
-			return back()->with("systemFail", "System failed to assign the courses to the teacher, please report the error to our IT team. Error detail: " . $e->getMessage());
-		}
+		$selectedCourse = Course::findOrFail($request->course_name);
+		CourseTeacher::create(["user_id" => $teacher_id, "course_id" => $selectedCourse->id]);
 
 		return redirect(route("admin.teacher.show", $teacher_id))->with("successAssignToCourse", "Successfully assigned the teacher to the course!");
 	}

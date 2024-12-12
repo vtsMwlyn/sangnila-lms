@@ -99,6 +99,7 @@ class CurriculumController extends Controller
 			"title" => "required|min:3",
 			"desc" => "required|min:3",
 			"link" => "nullable|url",
+			"session" => "required|numeric|min:0|not_in:0"
 		]);
 
 
@@ -110,7 +111,8 @@ class CurriculumController extends Controller
 				"title" => $request->title,
 				"desc" => $request->desc,
 				"link" => $request->link,
-				"curriculum_topic_id" => $ctopic->id
+				"curriculum_topic_id" => $ctopic->id,
+				"session" => $request->session
 			]);
 
 			$learning_outcomes = LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get();
@@ -173,6 +175,7 @@ class CurriculumController extends Controller
 			"title" => "required|min:3",
 			"desc" => "required|min:3",
 			"link" => "nullable|url",
+			"session" => "required|numeric|min:0|not_in:0"
 		]);
 
 		try {
@@ -182,7 +185,8 @@ class CurriculumController extends Controller
 			$cactivity->update([
 				"title" => $request->title,
 				"desc" => $request->desc,
-				"link" => $request->link
+				"link" => $request->link,
+				"session" => $request->session
 			]);
 
 			$learning_outcomes = LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get();

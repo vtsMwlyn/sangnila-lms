@@ -12,12 +12,13 @@
 @section("content")
 	<x-section-container>
 		<x-page-title>{{ __("Edit Teacher's Data") }}</x-page-title>
+		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("systemFail"))
 			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('admin.teacher.update', $teacher->id) }}" method="post">
+		<form action="{{ route('admin.teacher.update', $teacher->id) }}" method="post" class="mt-3">
 			@csrf
 			@method('PATCH')
 			<!-- Teacher Name -->
@@ -57,13 +58,13 @@
 				</div>
 			</div>
 
-			<div class="flex items-stretch justify-center mt-20 mb-3 gap-3">
-				<x-button class="bg-orange-500 w-full md:w-1/5">
-					{{ __('Save') }}
-				</x-button>
-				<x-cancel-button class="w-full md:w-1/5">
+			<div class="flex items-stretch justify-end mt-8 mb-3 gap-3">
+				<x-cancel-button class="w-full md:w-1/6">
 					Cancel
 				</x-cancel-button>
+				<x-button class="bg-orange-500 w-full md:w-1/6">
+					{{ __('Save') }}
+				</x-button>
 			</div>
 		</form>
 	</x-section-container>

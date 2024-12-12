@@ -39,7 +39,12 @@
 
 	<!-- Delete curriculum topic -->
 	<x-delete-confirmation popup_title="Delete Curriculum Topic" id="delete-curriculum-topic">
-		Are you sure want to delete the Curriculum Topic <span class="font-bold text-light-blue" id="del-ct-name"></span> from this course?
+		Are you sure want to <span class="font-bold text-red">delete</span> the Curriculum Topic <span class="font-bold text-light-blue" id="del-ct-name"></span> from this course?
+	</x-delete-confirmation>
+
+	<!-- Delete curriculum activity -->
+	<x-delete-confirmation popup_title="Delete Curriculum Activity" id="delete-curriculum-activity">
+		Are you sure want to <span class="font-bold text-red">delete</span> the Curriculum Activity <span class="font-bold text-light-blue" id="del-ca-name"></span> from this topic?
 	</x-delete-confirmation>
 @endsection
 
@@ -94,7 +99,7 @@
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 				</thead>
 				<tbody>
-					@forelse ($curriculum_topic->curriculum_activities as $activity)
+					@forelse ($curriculum_topic->curriculum_activities()->orderBy('session')->get() as $activity)
 						<tr class="@if($loop->index % 2 == 0) bg-white @endif">
 							<td class="py-2 px-4 text-center">{{ $activity->session }}</td>
 							<td class="py-2 px-4 w-1/4">{{ $activity->title }}</td>
@@ -127,10 +132,10 @@
 										href="{{ route('admin.course.curriculum.activity.edit', [$curriculum_topic->course->id, $curriculum_topic->id, $activity->id]) }}">
 										<i class="bi bi-pencil-square"></i>
 									</x-anchor-button>
-									<x-anchor-button class="bg-orange-500"
-										href="{{ route('admin.course.curriculum.activity.destroy', [$curriculum_topic->course->id, $curriculum_topic->id, $activity->id]) }}">
+									<x-button type="button" class="bg-orange-500"
+										data-route="{{ route('admin.course.curriculum.activity.destroy', [$curriculum_topic->course->id, $curriculum_topic->id, $activity->id]) }}" data-del_ca_name="{{ $activity->title }}" class="delete-curriculum-activity-btn">
 										<i class="bi bi-trash3"></i>
-									</x-anchor-button>
+									</x-button>
 								</div>
 							</td>
 						</tr>
@@ -191,6 +196,16 @@
 
 				// Show the popup
 				$("#delete-curriculum-topic").parent().show();
+			});
+
+			// Delete curriculum activity
+			$('.delete-curriculum-activity-btn').on('click', function() {
+				// Retrieve data and set the data to the popup
+				$("#delete-curriculum-activity").find('form').attr("action", $(this).data('route'));
+				$("#del-ca-name").text($(this).data('del_ca_name'));
+
+				// Show the popup
+				$("#delete-curriculum-activity").parent().show();
 			});
 
 			// Redisplay popup and fill with prev data (for invalidated data)

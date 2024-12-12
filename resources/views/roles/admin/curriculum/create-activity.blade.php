@@ -13,39 +13,41 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-4">
-			<a href="{{ route("admin.course.show", $course->id) }}">{{ $course->course_name }}</a>
-		</x-page-title>
-		<h1 class="text-2xl font-semibold text-blue-900 mb-8 text-center">Upload Activity to Topic "{{ $curriculum_topic->title }}"</h1>
+		<x-back-button href="{{ route('admin.course.curriculum.topic.details', [$course->id, $curriculum_topic->id]) }}"></x-back-button>
+		<x-page-title style="margin-bottom: 0;">New Curriculum Activity</x-page-title>
+		<h1 class="text-xl font-semibold text-blue-900 mt-2">Topic: {{ $curriculum_topic->title }}</h1>
+		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("systemFail"))
 			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route("admin.course.curriculum.activity.store", [$course->id, $curriculum_topic->id]) }}" method="post">
+		<form action="{{ route("admin.course.curriculum.activity.store", [$course->id, $curriculum_topic->id]) }}" method="post" class="mt-3">
 			@csrf
-			<!-- Activity Title -->
-			<div class="flex gap-2 @error('title') items-start @else items-stretch @enderror">
-				<x-boxed-label for="title" :value="__('Activity Title')" />
-				<div class="flex flex-col w-full items-stretch">
-					<x-input id="title" class="w-full" type="text" name="title" placeholder="Enter activity title" :value="old('title')" autofocus />
+			<div class="flex w-full gap-4">
+				<!-- Activity Title -->
+				<div class="flex flex-col w-1/2">
+					<x-label for="title" :value="__('Activity Title')" />
+					<x-input id="title" class="w-full mt-1" type="text" name="title" placeholder="Enter activity title" :value="old('title')" autofocus />
+				</div>
+
+				<!-- Session -->
+				<div class="flex flex-col w-1/2">
+					<x-label for="session" :value="__('Session')" />
+					<x-input id="session" class="w-full mt-1" type="text" name="session" placeholder="Enter activity session" :value="old('session')" autofocus />
 				</div>
 			</div>
 
 			<!-- Activity Description -->
-			<div class="mt-4 flex gap-2 @error('desc') items-start @else items-stretch @enderror">
-				<x-boxed-label for="desc" :value="__('Activity Description')" />
-				<div class="flex flex-col w-full items-stretch">
-					<x-input id="desc" class="w-full" type="text" name="desc" placeholder="Enter activity description" :value="old('desc')" />
-				</div>
+			<div class="mt-4 flex flex-col w-full">
+				<x-label for="desc" :value="__('Activity Description')" />
+				<x-input id="desc" class="w-full mt-1" type="text" name="desc" placeholder="Enter activity description" :value="old('desc')" />
 			</div>
 
-			<!-- Activity Link -->
-			<div class="mt-4 flex gap-2 @error('link') items-start @else items-stretch @enderror">
-				<x-boxed-label for="link" :value="__('Activity Link')" />
-				<div class="flex flex-col w-full items-stretch">
-					<x-input id="link" class="w-full" type="text" name="link" placeholder="Enter activity link" :value="old('link')" />
-				</div>
+			<!-- Material Link -->
+			<div class="mt-4 flex flex-col w-full">
+				<x-label for="link" :value="__('Material Link')" />
+				<x-input id="link" class="w-full mt-1" type="text" name="link" placeholder="Enter activity link" :value="old('link')" />
 			</div>
 
 			<!-- Learning Outcome -->
@@ -66,7 +68,7 @@
 						$iterasus++;
 					@endphp
 				@empty
-
+					- This course has no learning outcomes yet -
 				@endforelse
 			</div>
 			@error('learning_outcome')

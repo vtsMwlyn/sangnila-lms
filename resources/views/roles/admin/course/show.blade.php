@@ -9,6 +9,12 @@
 @endsection
 
 @section("popup")
+	<!-- Delete course -->
+	<x-delete-confirmation method="delete" popup_title="Delete Course" id="delete-course-popup">
+		Are you sure want to <span class="font-bold text-red">delete</span> the Course <span class="font-bold text-light-blue" id="del-course-name"></span> from Sangnila LMS? <strong>This action will erase all data related to the course and can't be undone!</strong>
+	</x-delete-confirmation>
+
+	<!-- New LO -->
 	<x-popup popup_title="New Learning Outcome" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="new-learning-outcome">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" class="mt-4" id="new-learning-outcome-form">
@@ -38,6 +44,7 @@
 		</div>
 	</x-popup>
 
+	<!-- Edit -->
 	<x-popup popup_title="Edit Learning Outcome" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-learning-outcome">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" class="mt-4" id="edit-learning-outcome-form">
@@ -67,8 +74,9 @@
 		</div>
 	</x-popup>
 
+	<!-- Delete LO -->
 	<x-delete-confirmation popup_title="Delete Learning Outcome" id="delete-learning-outcome">
-		Are you sure want to delete the Learning Outcome <span class="font-bold text-light-blue" id="del-lo-name"></span> from this course?
+		Are you sure want to <span class="font-bold text-red">delete</span> the Learning Outcome <span class="font-bold text-light-blue" id="del-lo-name"></span> from this course?
 	</x-delete-confirmation>
 
 	<!-- New topic -->
@@ -125,7 +133,7 @@
 
 	<!-- Delete curriculum topic -->
 	<x-delete-confirmation popup_title="Delete Curriculum Topic" id="delete-curriculum-topic">
-		Are you sure want to delete the Curriculum Topic <span class="font-bold text-light-blue" id="del-ct-name"></span> from this course?
+		Are you sure want to <span class="font-bold text-red">delete</span> the Curriculum Topic <span class="font-bold text-light-blue" id="del-ct-name"></span> from this course?
 	</x-delete-confirmation>
 @endsection
 
@@ -188,9 +196,9 @@
 
 		</div>
 
-		<div class="flex gap-4 mt-8 w-full justify-end">
+		<div class="flex gap-3 mt-8 w-full justify-end">
 			<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.edit', $course->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
-			<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.delete', $course->id) }}"><i class="bi bi-trash3"></i> Delete</x-anchor-button>
+			<x-button type="button" id="delete-course-btn" class="bg-orange-500" data-route="{{ route('admin.course.destroy', $course->id) }}" data-del_course_name="{{ $course->course_name }}"><i class="bi bi-trash3"></i> Delete</x-button>
 		</div>
 
 		<!-- Learning Outcomes -->
@@ -252,6 +260,7 @@
 					</div>
 				</a>
 			@empty
+				- No teachers assigned to this course yet -
 			@endforelse
 		</div>
 
@@ -278,6 +287,7 @@
 					</div>
 				</a>
 			@empty
+				- No students assigned yet to this course -
 			@endforelse
 		</div>
 
@@ -319,7 +329,7 @@
 						<td class="py-2 px-4" style="text-align: start">
 							@if($topic->curriculum_activities->count())
 								<ul class="list-disc list-inside">
-									@foreach ($topic->curriculum_activities as $activity)
+									@foreach ($topic->curriculum_activities()->orderBy('session')->get() as $activity)
 										<li class="mb-2">{{ $activity->title }}</li>
 									@endforeach
 								</ul>
@@ -425,7 +435,17 @@
 		}
 
 		$(document).ready(() => {
-			// If create button is clicked
+			// Delete course
+			$('#delete-course-btn').on('click', function() {
+				// Retrieve data and set the data to the popup
+				$("#delete-course-popup").find('form').attr("action", $(this).data('route'));
+				$("#del-course-name").text($(this).data('del_course_name'));
+
+				// Show the popup
+				$("#delete-course-popup").parent().show();
+			});
+
+			// New LO
 			$('.newlearningoutcome-popuptrigger').on('click', function() {
 				// Retrieve and save selected data
 				const route = $(this).data('route');
@@ -434,7 +454,7 @@
 				initializeNewLearningOutcomePopup(route, whichpopup);
 			});
 
-			// If edit button is clicked
+			// Edit LO
 			$('.editlearningoutcome-popuptrigger').on('click', function() {
 				// Retrieve and save selected data
 				const route = $(this).data('route');
@@ -444,7 +464,7 @@
 				initializeEditLearningOutcomePopup(route, learning_outcome, whichpopup);
 			});
 
-			// If delete learning outcome button is clicked
+			// Delete LO
 			$('.deletelearningoutcome-popuptrigger').on('click', function() {
 				// Retrieve data and set the data to the popup
 				$("#delete-learning-outcome").find('form').attr("action", $(this).data('route'));

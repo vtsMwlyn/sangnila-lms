@@ -1,7 +1,7 @@
 @extends("layouts.main-admin")
 
 @section("title")
-	<h1>{{ $student->full_name }}</h1>
+	<h1>Student's Details</h1>
 @endsection
 
 @section("breadcrumbs-extension")
@@ -10,7 +10,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title>{{ __("Student's Details") }}</x-page-title>
+		<x-page-title>{{ $student->full_name }}</x-page-title>
 
 		@if(App\Models\ImportedStudent::where("student_id", $student->id)->first())
 			<div class="w-full bg-yellow-300 px-5 py-3 my-8 rounded-lg">

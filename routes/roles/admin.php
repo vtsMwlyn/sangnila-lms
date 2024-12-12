@@ -13,7 +13,7 @@ use App\Http\Controllers\AdminAccountController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\CourseStudentController;
 use App\Http\Controllers\CourseTeacherController;
-use App\Http\Controllers\TeacherAccountController;
+use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\DownloadResourceController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\LearningOutcomeController;
@@ -110,15 +110,15 @@ Route::prefix('/admin')
 			->group(function () {
 
 				// Active teachers list
-				Route::get('/', [TeacherAccountController::class, 'index'])->name('index');
+				Route::get('/', [TeacherController::class, 'index'])->name('index');
 
 				// Teacher details
-				Route::get('/{teacher_id}', [TeacherAccountController::class, 'show'])->name('show')
+				Route::get('/{teacher_id}', [TeacherController::class, 'show'])->name('show')
 					->whereNumber('teacher_id');
 
 				// Edit teacher data
-				Route::get('/{teacher_id}/edit', [TeacherAccountController::class, 'admin_edit'])->name('edit')->whereNumber('teacher_id');
-				Route::patch('/{teacher_id}', [TeacherAccountController::class, 'admin_update'])->name('update')->whereNumber('teacher_id');
+				Route::get('/{teacher_id}/edit', [TeacherController::class, 'admin_edit'])->name('edit')->whereNumber('teacher_id');
+				Route::patch('/{teacher_id}', [TeacherController::class, 'admin_update'])->name('update')->whereNumber('teacher_id');
 
 				// Assign/unassign teacher to/from a course
 				Route::get("/{teacher_id}/assign", [CourseTeacherController::class, "show"])->name("assign")->whereNumber('teacher_id');
