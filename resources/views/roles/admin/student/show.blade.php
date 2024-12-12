@@ -10,7 +10,9 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title>{{ $student->full_name }}</x-page-title>
+		<x-back-button href="{{ route('admin.student.index') }}"></x-back-button>
+		<x-page-title style="margin-bottom: 0;">{{ $student->full_name }}</x-page-title>
+		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(App\Models\ImportedStudent::where("student_id", $student->id)->first())
 			<div class="w-full bg-yellow-300 px-5 py-3 my-8 rounded-lg">
@@ -30,121 +32,102 @@
 			<x-badge-success badge_text="{{ session('successUpdateMaxSession') }}"></x-badge-success>
 		@endif
 
-		<div class="h-fit my-8">
+		<!-- Students Information -->
+		<div class="w-full flex flex-col gap-y-4">
+			<div class="w-full flex gap-x-4">
+				<div class="flex flex-col w-1/2">
+					<p>Student Name</p>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ ($student->details->gender == 1)? "Mr." : "Ms." }} {{ $student->full_name }}</div>
+				</div>
+
+				<div class="flex flex-col w-1/2">
+					<p>Phone Number</p>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $student->details->phone_number ?? 'N/A' }}</div>
+				</div>
+			</div>
+
+			<div class="w-full flex gap-x-4">
+				<div class="flex flex-col w-1/2">
+					<p>City of Birth</p>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $student->details->city_of_birth ?? 'N/A' }}</div>
+				</div>
+
+				<div class="flex flex-col w-1/2">
+					<p>Date of Birth</p>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $student->details->date_of_birth ? Carbon\Carbon::parse($teacher->details->date_of_birth)->format('d F Y') : 'N/A' }}</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="w-full flex flex-col gap-y-4 mt-4" id="more_details" style="display: none;">
+			<div class="w-full flex gap-x-4">
+				<div class="flex flex-col w-1/2">
+					<p>Parent's Name</p>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $student->details->name_parent ?? 'N/A' }}</div>
+				</div>
+
+				<div class="flex flex-col w-1/2">
+					<p>Parent's Phone Number</p>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $student->details->phone_parent ?? 'N/A' }}</div>
+				</div>
+			</div>
+
+			<div class="w-full flex gap-x-4">
+				<div class="flex flex-col w-1/2">
+					<p>School Name</p>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ $student->details->school_name ?? 'N/A' }}</div>
+				</div>
+
+				<div class="flex flex-col w-1/2">
+					<p>Education Level</p>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $student->details->student_level ?? 'N/A' }}</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="w-full flex justify-end items-start mt-5 gap-3">
+			<x-button type="button" class="bg-orange-500" id="show_more_less_button">Show More</x-button>
 			<x-anchor-button type="button" class="bg-orange-500" href="{{ route('admin.student.edit', $student->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		</div>
 
-		<div class="overflow-x-auto">
-			<x-horizontal-table>
-				<tbody>
-					<tr>
-						<td class="template-hheads w-1/3">Full Name</td>
-						<td class="template-hbodies">@if($student->full_name){{ $student->full_name }}@else{{ __("N/A") }}@endif</td>
-					</tr>
-					<tr>
-						<td class="template-hheads w-1/3">Phone number</td>
-						<td class="template-hbodies">@if($student->details->phone_number){{ $student->details->phone_number }}@else{{ __("N/A") }}@endif</td>
-					</tr>
-					<tr>
-						<td class="template-hheads w-1/3">City of Birth</td>
-						<td class="template-hbodies">@if($student->details->city_of_birth){{ $student->details->city_of_birth }}@else{{ __("N/A") }}@endif</td>
-					</tr>
-					<tr>
-						<td class="template-hheads w-1/3">Date of Birth</td>
-						<td class="template-hbodies">@if($student->details->date_of_birth){{ $student->details->date_of_birth }}@else{{ __("N/A") }}@endif</td>
-					</tr>
-				</tbody>
-
-				<tbody id="more_details" class="overflow-hidden opacity-0" style="display: none;">
-					<tr>
-						<td class="template-hheads w-1/3">School Name</td>
-						<td class="template-hbodies">@if($student->details->school_name){{ $student->details->school_name }}@else{{ __("N/A") }}@endif</td>
-					</tr>
-					<tr>
-						<td class="template-hheads w-1/3">Education Level</td>
-						<td class="template-hbodies">@if($student->details->student_level){{ $student->details->student_level }}@else{{ __("N/A") }}@endif</td>
-					</tr>
-					<tr>
-						<td class="template-hheads w-1/3">Parent's Name
-						</td>
-						<td class="template-hbodies">@if($student->details->name_parent){{ $student->details->name_parent }}@else{{ __("N/A") }}@endif</td>
-					</tr>
-					<tr>
-						<td class="template-hheads w-1/3">Parent's Phone Number</td>
-						<td class="template-hbodies">@if($student->details->phone_parent){{ $student->details->phone_parent }}@else{{ __("N/A") }}@endif</td>
-					</tr>
-				</tbody>
-			</x-horizontal-table>
-		</div>
-
-		<div class="flex justify-center mt-4">
-			<x-button type="button" class="bg-orange-500 w-full md:w-1/3" id="show_more_less_button">{{ __("Show More") }}</x-button>
-		</div>
-
-		<script>
-			const moreDetails = document.getElementById('more_details');
-			const button = document.getElementById('show_more_less_button');
-
-			button.addEventListener('click', function() {
-				if (moreDetails.classList.contains('opacity-0')) {
-					moreDetails.style.display = "table-row-group";
-
-					// Delaying animation (make the tbody is appeared then the button will go to bottom and finally play the animation)
-					setTimeout(() => {
-						// Fade in animation
-						moreDetails.classList.remove('opacity-0');
-						moreDetails.classList.add('transition-opacity', 'duration-300', 'ease-in', 'opacity-100', 'h-full');
-					}, 200);
-
-					button.textContent = 'Show Less';
-
-				} else {
-					// Fade out animation
-					moreDetails.classList.remove('opacity-100');
-					moreDetails.classList.add('transition-opacity', 'duration-300', 'ease-out', 'opacity-0', 'max-h-0');
-
-					// Display none the tbody after the animation ends and finally the button will go up back to it previous position
-					moreDetails.addEventListener("transitionend", function afterShowLessClicked(){
-						moreDetails.removeEventListener("transitionend", afterShowLessClicked);
-						moreDetails.style.display = "none";
-						button.textContent = 'Show More';
-					});
-				}
-			});
-		</script>
-
-		<h1 class="mt-8 text-blue-950 font-bold text-2xl" style="text-align: left;">{{ __("Courses Enrolled") }}</h1>
-		<div class="mt-8">
-			<div class="">
+		<div class="w-full bg-slate-400 mt-16" style="height: 2px;"></div>
+			<div class="w-full flex items-center justify-between">
+				<h2 class="my-4 font-extrabold text-xl text-dark-blue">List of Enrolled Courses</h2>
 				<x-anchor-button class="bg-orange-500"
-					href="{{ route('admin.student.assign.create', $student->id) }}">
+						href="{{ route('admin.student.assign.create', $student->id) }}">
 					<i class="bi bi-plus-lg"></i> Assign to course
 				</x-anchor-button>
 			</div>
-			<div class="flex gap-10 flex-wrap mt-5">
+		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
+
+		<div class="mt-4">
+			<div class="flex gap-4">
 				@forelse ($student->enrolled_courses as $course)
 					<!-- Card -->
-					<div class="flex flex-col justify-center items-center gap-5 border-2 border-white rounded-xl text-white w-full md:w-1/4 px-8 " style="background: linear-gradient(to bottom, rgba(40, 55, 133, 0.53) 25%, rgba(235, 126, 37, 0.58)); min-height: 400px;">
-						<h1 class="text-3xl font-bold"><a href="{{ route('admin.course.show', $course->id) }}" class="text-white hover:text-yellow-500">{{ $course->course_name }}</a></h1>
-						<span class="border border-white rounded-lg px-4 py-2 text-md">Teacher: {{ (App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->details->gender == 1)? "Mr." : "Ms." }} {{ App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first()->teacher->full_name }}</span>
+					<div class="w-1/3 flex flex-col bg-white rounded-xl p-5">
+						@php
+							$cs = App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first();
+							$teacher = $cs->teacher;
+						@endphp
 
-						<span class="text-white">{{ __("Maximum Sessions") }}</span>
-						<div class="flex flex-col md:flex-row w-full items-center justify-center mt-3 gap-5">
-							<form action="{{ route("admin.student.max-session.update", [$student->id, $course->id]) }}" method="post" class="flex gap-2">
-								@csrf
-								<input type="number" name="{{ __('max_course_session' . $student->id . $course->id) }}" class="rounded-md shadow-sm border text-blue-800 @error('max_course_session' . $student->id . $course->id) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50  @else border-blue-800 focus:border-indigo-400 focus:ring focus:ring-indigo-400 focus:ring-opacity-50 @enderror" value="{{ App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", $student->id)->first()->max_course_session }}"  style="max-width: 100px;"/>
-								<x-button class="bg-orange-700 text-white" onclick="return confirm('Are you sure want to change the maximum session of this student in this course?');"><i class="bi bi-pencil-square"></i></x-button>
-							</form>
-							<x-anchor-button
-								href="{{ route('admin.student.unassign.delete', ['student_id' => $student->id, 'course_id' => $course->id]) }}"
-								class="bg-white text-orange-500 text-sm">
-								Unassign
-							</x-anchor-button>
+						<h1 class="text-xl font-bold"><a href="{{ route('admin.course.show', $course->id) }}" class="text-blue-950 hover:text-cyan-500">{{ $course->course_name }}</a></h1>
+						<div class="w-full bg-slate-400 my-2" style="height: 2px;"></div>
+
+						<div class="flex gap-2 items-center">
+							<img src="{{ asset('img/lecturer.svg') }}" class="w-4 h-4" alt="icon">
+							{{ ($teacher->details->gender == 1)? "Mr." : "Ms." }} {{ $teacher->full_name }}
+						</div>
+						<div class="flex gap-2 items-center">
+							<img src="{{ asset('img/lecturer.svg') }}" class="w-4 h-4" alt="icon">
+							{{ $cs->max_course_session }} Sessions (Max)
 						</div>
 
-						@error('max_course_session' . $student->id . $course->id)
-							<p class="text-red-500 mt-2 text-left">{{ $message }}</p>
-						@enderror
+						<div class="flex w-full justify-end gap-2 text-sm mt-4">
+							<x-button class="text-white" onclick="return confirm('Are you sure want to change the maximum session of this student in this course?');"><i class="bi bi-pencil-square"></i> Edit</x-button>
+							<button type="button" data-route="{{ route('admin.student.unassign.delete', ['student_id' => $student->id, 'course_id' => $course->id]) }}" data-unassign_course_name="{{ $course->course_name }}" class="unassign-teacher-btn text-white bg-red flex items-center justify-center px-4 py-2 rounded-xl hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 text-xs" style="box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
+								Unassign
+							</button>
+						</div>
 					</div>
 				@empty
 					<div class="bg-white p-5 w-full rounded-xl font-semibold text-center">- No courses enrolled yet -</div>
@@ -152,8 +135,45 @@
 			</div>
 		</div>
 
-		<h1 class="mt-10 text-blue-950 font-bold text-2xl" style="text-align: left;" id="student-summary">{{ __("Student's Attendances and Assignments") }}</h1>
-		<div class="overflow-x-auto">
+		<div class="w-full bg-slate-400 mt-16" style="height: 2px;"></div>
+		<h2 class="my-4 font-extrabold text-xl text-dark-blue">Attendance and Assignment Progress</h2>
+		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
+
+		<div class="w-full overflow-x-auto">
+			<table class="w-full">
+				<thead>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Course</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Attendance & Progress</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Assignments</th>
+				</thead>
+				<tbody>
+					@forelse ($student->enrolled_courses as $i => $ec)
+						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
+							<td class="py-2 px-4 w-1/4">
+								{{ $ec->course_name }}
+							</td>
+							<td class="py-2 px-4">
+								{{ $current_progress[$i] }}/{{ $full_progress[$i] }} done
+								<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.atd-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
+									<i class="bi bi-eye"></i>
+								</x-anchor-button>
+							</td>
+							<td class="py-2 px-4">
+								{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done
+								<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.asg-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
+									<i class="bi bi-eye"></i>
+								</x-anchor-button>
+							</td>
+						</tr>
+					@empty
+						<tr class="bg-white">
+							<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+						</tr>
+					@endforelse
+				</tbody>
+			</table>
+		</div>
+		{{-- <div class="overflow-x-auto">
 			<x-table>
 				<x-slot name="head">
 					<th class="template-heads rounded-l-xl">Course</th>
@@ -186,54 +206,15 @@
 					<tr><td colspan="3" class="text-center font-semibold p-5 bg-white rounded-xl">- Student isn't assigned to any courses yet -</td></tr>
 				@endif
 			</x-table>
-		</div>
+		</div> --}}
 
 	</x-section-container>
 
-
-
-	{{-- Schedule --}}
-	{{-- <h2 class="text-xl font-semibold mb-2">Student Schedules:</h2>
-
-	@if ($student->schedules->isNotEmpty())
-		<div class="overflow-x-auto">
-			<table class="min-w-full bg-white border-collapse">
-				<thead>
-					<tr>
-						<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-5 sm:w-1/4">Course Name</th>
-						<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-5 sm:w-1/4">Day of Week</th>
-						<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-5 sm:w-1/4">Start Time</th>
-						<th class="bg-blue-300 border-b border-blue-400 font-bold px-4 py-5 sm:w-1/4">End Time</th>
-					</tr>
-				</thead>
-				<tbody>
-					@forelse ($student->schedules as $schedule)
-						<tr>
-							<td class="bg-blue-100 border-b border-blue-300 px-4 py-5 sm:w-1/4">
-								<a href="{{ route('admin.course.show', ['course_id' => $schedule->schedule->course->id ]) }}"
-									class="text-blue-600 hover:text-blue-800 font-semibold hover:underline">
-									{{ $schedule->schedule->course->course_name }}
-								</a>
-							</td>
-							<td class="bg-blue-100 border-b border-blue-300 px-4 py-5 sm:w-1/4">
-								{{ $schedule->schedule->day_of_week }}
-							</td>
-							<td class="bg-blue-100 border-b border-blue-300 px-4 py-5 sm:w-1/4">
-								{{ $schedule->schedule->start_time }}
-							</td>
-							<td class="bg-blue-100 border-b border-blue-300 px-4 py-5 sm:w-1/4">
-								{{ $schedule->schedule->end_time }}
-							</td>
-						</tr>
-					@empty
-						<tr>
-							<td colspan="4" class="text-center py-5">No schedules found for this student.</td>
-						</tr>
-					@endforelse
-				</tbody>
-			</table>
-		</div>
-	@else
-		<div class="text-blue-900">N/A</div>
-	@endif --}}
+	<script>
+		$(document).ready(() => {
+			$('#show_more_less_button').click(() => {
+				$('#more_details').slideToggle();
+			});
+		});
+	</script>
 @endsection
