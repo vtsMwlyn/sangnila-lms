@@ -8,6 +8,81 @@
 	> <span>{{ $student->full_name }}</span>
 @endsection
 
+@section("popup")
+	<!-- Assign course to student -->
+	<x-popup popup_title="Assign Student to Course" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="assign-student-popup">
+		<form method="post" class="w-full flex flex-col mt-3">
+			@csrf
+
+			<div class="flex flex-col gap-3 w-full">
+				<div class="flex flex-col w-full">
+					<x-label for="status" :value="__('Course Name')"/>
+					<x-select name="course" id="course" class="w-full mt-1">
+					</x-select>
+				</div>
+
+				<div class="flex flex-col w-full">
+					<x-label for="status" :value="__('Teacher')"/>
+					<x-select name="teacher" id="teacher" class="w-full mt-1">
+					</x-select>
+				</div>
+
+				<div class="flex flex-col w-full">
+					<x-label for="status" :value="__('Max Course Session')"/>
+					<x-input type="text" name="max_course_session" id="max_course_session" class="w-full mt-1" />
+				</div>
+
+				<div class="flex gap-3 w-full justify-center">
+					<x-button type="submit" class="bg-orange-500 w-1/6 mt-5">
+						Assign
+					</x-button>
+				</div>
+			</div>
+
+			<!-- Helper -->
+			<input type="hidden" name="h-last-popup" class="h-last-popup">
+			<input type="hidden" name="h-route" class="h-route">
+		</form>
+	</x-popup>
+
+	<!-- Edit student course assign information -->
+	<x-popup popup_title="Edit Course Assign Information" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-assign-info-popup">
+		<form method="post" class="w-full flex flex-col mt-3">
+			@csrf
+
+			<div class="flex flex-col gap-3 w-full">
+				<div class="flex flex-col w-full">
+					<x-label for="status" :value="__('Course Name')"/>
+					<x-select name="course" id="course" class="w-full mt-1">
+					</x-select>
+				</div>
+
+				<div class="flex flex-col w-full">
+					<x-label for="status" :value="__('Teacher')"/>
+					<x-select name="teacher" id="teacher" class="w-full mt-1">
+					</x-select>
+				</div>
+
+				<div class="flex flex-col w-full">
+					<x-label for="status" :value="__('Max Course Session')"/>
+					<x-input type="text" name="max_course_session" id="max_course_session" class="w-full mt-1" />
+				</div>
+
+				<div class="flex gap-3 w-full justify-center">
+					<x-button type="submit" class="bg-orange-500 w-1/6 mt-5">
+						Assign
+					</x-button>
+				</div>
+			</div>
+
+			<!-- Helper -->
+			<input type="hidden" name="h-last-popup" class="h-last-popup">
+			<input type="hidden" name="h-route" class="h-route">
+			<input type="hidden" name="h-courseStudent" class="h-courseStudent">
+		</form>
+	</x-popup>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-back-button href="{{ route('admin.student.index') }}"></x-back-button>
@@ -42,19 +117,19 @@
 
 				<div class="flex flex-col w-1/2">
 					<p>Phone Number</p>
-					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $student->details->phone_number ?? 'N/A' }}</div>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ $student->details->phone_number ?? 'N/A' }}</div>
 				</div>
 			</div>
 
 			<div class="w-full flex gap-x-4">
 				<div class="flex flex-col w-1/2">
 					<p>City of Birth</p>
-					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $student->details->city_of_birth ?? 'N/A' }}</div>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ $student->details->city_of_birth ?? 'N/A' }}</div>
 				</div>
 
 				<div class="flex flex-col w-1/2">
 					<p>Date of Birth</p>
-					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $student->details->date_of_birth ? Carbon\Carbon::parse($teacher->details->date_of_birth)->format('d F Y') : 'N/A' }}</div>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ $student->details->date_of_birth ? Carbon\Carbon::parse($teacher->details->date_of_birth)->format('d F Y') : 'N/A' }}</div>
 				</div>
 			</div>
 		</div>
@@ -63,24 +138,24 @@
 			<div class="w-full flex gap-x-4">
 				<div class="flex flex-col w-1/2">
 					<p>Parent's Name</p>
-					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $student->details->name_parent ?? 'N/A' }}</div>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ $student->details->name_parent ?? 'N/A' }}</div>
 				</div>
 
 				<div class="flex flex-col w-1/2">
 					<p>Parent's Phone Number</p>
-					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $student->details->phone_parent ?? 'N/A' }}</div>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ $student->details->phone_parent ?? 'N/A' }}</div>
 				</div>
 			</div>
 
 			<div class="w-full flex gap-x-4">
 				<div class="flex flex-col w-1/2">
 					<p>School Name</p>
-					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ $student->details->school_name ?? 'N/A' }}</div>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold font-bold" style="border-width: 3px">{{ $student->details->school_name ?? 'N/A' }}</div>
 				</div>
 
 				<div class="flex flex-col w-1/2">
 					<p>Education Level</p>
-					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $student->details->student_level ?? 'N/A' }}</div>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ $student->details->student_level ?? 'N/A' }}</div>
 				</div>
 			</div>
 		</div>
@@ -93,20 +168,19 @@
 		<div class="w-full bg-slate-400 mt-16" style="height: 2px;"></div>
 			<div class="w-full flex items-center justify-between">
 				<h2 class="my-4 font-extrabold text-xl text-dark-blue">List of Enrolled Courses</h2>
-				<x-anchor-button class="bg-orange-500"
-						href="{{ route('admin.student.assign.create', $student->id) }}">
+				<x-button type="button" id="assign-student-btn" class="bg-orange-500" data-route="{{ route('admin.student.assign.store', $student->id) }}">
 					<i class="bi bi-plus-lg"></i> Assign to course
-				</x-anchor-button>
+				</x-button>
 			</div>
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
 		<div class="mt-4">
-			<div class="flex gap-4">
+			<div class="flex flex-wrap gap-4">
 				@forelse ($student->enrolled_courses as $course)
 					<!-- Card -->
-					<div class="w-1/3 flex flex-col bg-white rounded-xl p-5">
+					<div class="flex flex-col bg-white rounded-xl p-5" style="width: 32%;">
 						@php
-							$cs = App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->first();
+							$cs = App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->with(['course', 'teacher'])->first();
 							$teacher = $cs->teacher;
 						@endphp
 
@@ -123,8 +197,8 @@
 						</div>
 
 						<div class="flex w-full justify-end gap-2 text-sm mt-4">
-							<x-button class="text-white" onclick="return confirm('Are you sure want to change the maximum session of this student in this course?');"><i class="bi bi-pencil-square"></i> Edit</x-button>
-							<button type="button" data-route="{{ route('admin.student.unassign.delete', ['student_id' => $student->id, 'course_id' => $course->id]) }}" data-unassign_course_name="{{ $course->course_name }}" class="unassign-teacher-btn text-white bg-red flex items-center justify-center px-4 py-2 rounded-xl hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 text-xs" style="box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
+							<x-button type="button" data-route="{{ route('admin.student.assign.update', $cs->id) }}" data-cs="{{ $cs }}" class="text-white edit-assign-student-btn"><i class="bi bi-pencil-square"></i> Edit</x-button>
+							<button type="button" data-route="{{ route('admin.student.unassign.destroy', ['student_id' => $student->id, 'course_id' => $course->id]) }}" data-unassign_course_name="{{ $course->course_name }}" class="unassign-student-btn text-white bg-red flex items-center justify-center px-4 py-2 rounded-xl hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 text-xs" style="box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
 								Unassign
 							</button>
 						</div>
@@ -173,48 +247,163 @@
 				</tbody>
 			</table>
 		</div>
-		{{-- <div class="overflow-x-auto">
-			<x-table>
-				<x-slot name="head">
-					<th class="template-heads rounded-l-xl">Course</th>
-					<th class="template-heads">Attendance & Progress</th>
-					<th class="template-heads rounded-r-xl">Assignments</th>
-				</x-slot>
-				@if($student->enrolled_courses->count())
-					@for($i = 0; $i < $student->enrolled_courses->count(); $i++)
-						<tr>
-							<td class="template-bodies rounded-l-xl"><a href="{{ route('admin.course.show', $student->enrolled_courses[$i]->id) }}" class="font-bold text-blue-200 hover:underline hover:text-blue-400">{{ $student->enrolled_courses[$i]->course_name }}</a></td>
-							<td class="template-bodies">
-								<div class="flex w-full items-center justify-center gap-3">
-									<span>{{ $current_progress[$i] }}/{{ $full_progress[$i] }} done</span>
-									<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.atd-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
-										Details
-									</x-anchor-button>
-								</div>
-							</td>
-							<td class="template-bodies rounded-r-xl">
-								<div class="flex w-full items-center justify-center gap-3">
-									<span>{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done</span>
-									<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.asg-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
-										Details
-									</x-anchor-button>
-								</div>
-							</td>
-						</tr>
-					@endfor
-				@else
-					<tr><td colspan="3" class="text-center font-semibold p-5 bg-white rounded-xl">- Student isn't assigned to any courses yet -</td></tr>
-				@endif
-			</x-table>
-		</div> --}}
-
 	</x-section-container>
 
 	<script>
+		const allCoursesWithTeachers = @json(App\Models\Course::where('status', 'active')->with('teachers')->get());
+		const alreadyEnrolled = @json($student->enrolled_courses);
+
+		function initializeAssignStudentPopup(route, whichpopup){
+			// Fill popups with data
+			$(".h-route").val(route);
+			$(".h-last-popup").val(whichpopup);
+			$(`#${whichpopup}`).find("form").attr("action", route);
+
+			$('select[name="course"]').empty();
+			$('select[name="course"]').append($("<option>").prop({"selected": true}).text('Select a course'));
+			const filtered = allCoursesWithTeachers.filter(item =>
+				!alreadyEnrolled.some(course => course.id === item.id)
+			);
+
+			filtered.forEach(course => {
+				if(course.teachers.length != 0){
+					$('select[name="course"]').append($("<option>").attr("value", course.id).text(course.course_name));
+				}
+			});
+
+			$('select[name="teacher"]').empty();
+			$('select[name="teacher"]').append($("<option>").prop({"selected": true}).text('Pick a teacher (select course first)'));
+
+			$('input[name="max_course_session"]').val(8);
+
+			// Display the popup
+			$(`#${whichpopup}`).parent().show();
+		}
+
+		function initializeEditAssignInfoPopup(route, courseStudent, whichpopup){
+			// Fill popups with data
+			$(".h-route").val(route);
+			$(".h-last-popup").val(whichpopup);
+			$('.h-courseStudent').val(JSON.stringify(courseStudent));
+			
+			$(`#${whichpopup}`).find("form").attr("action", route);
+
+			$('select[name="course"]').empty();
+			$('select[name="teacher"]').empty();
+
+			const filtered = allCoursesWithTeachers.filter(item =>
+				!alreadyEnrolled.some(course => course.id == item.id) || item.id == courseStudent.course.id
+			);
+
+			filtered.forEach(course => {
+				if(course.teachers.length != 0){
+					$('select[name="course"]').append($("<option>").attr("value", course.id).text(course.course_name));
+				}
+			});
+
+			// Retrieve old values
+			const oldCourse = '{{ old('course') }}';
+			const oldTeacher = '{{ old('teacher') }}';
+			const oldMaxCourseSession = '{{ old('max_course_session') }}';
+
+			// If old values exist, fill them in
+			if(oldCourse && oldTeacher){
+				$('select[name="course"]').find(`option[value=${oldCourse}]`).prop("selected", "true");
+
+				allCoursesWithTeachers.forEach(course => {
+					if(course.id == oldCourse){
+						$('select[name="teacher"]').empty();
+						for(teacher of course.teachers){
+							$('select[name="teacher"]').append($("<option>").attr("value", teacher.id).text(teacher.full_name));
+						}
+					}
+				});
+
+				$('select[name="teacher"]').find(`option[value=${oldTeacher}]`).prop("selected", "true");
+			}
+			else {
+				$('select[name="course"]').find(`option[value=${courseStudent.course.id}]`).prop("selected", "true");
+
+				allCoursesWithTeachers.forEach(course => {
+					if(course.id == courseStudent.course.id){
+						$('select[name="teacher"]').empty();
+						for(teacher of course.teachers){
+							$('select[name="teacher"]').append($("<option>").attr("value", teacher.id).text(teacher.full_name));
+						}
+					}
+				});
+
+				$('select[name="teacher"]').find(`option[value=${courseStudent.teacher.id}]`).prop("selected", "true");
+			}
+
+			$('input[name="max_course_session"]').val(oldMaxCourseSession ? oldMaxCourseSession : courseStudent.max_course_session);
+
+			// Display the popup
+			$(`#${whichpopup}`).parent().show();
+		}
+
 		$(document).ready(() => {
 			$('#show_more_less_button').click(() => {
 				$('#more_details').slideToggle();
 			});
+
+			$('select[name="course"]').on('change', function(){
+				allCoursesWithTeachers.forEach(course => {
+					if(course.id == $(this).val()){
+						$('select[name="teacher"]').empty();
+						for(teacher of course.teachers){
+							$('select[name="teacher"]').append($("<option>").attr("value", teacher.id).text(teacher.full_name));
+						}
+					}
+				});
+			});
+
+			$('#assign-student-btn').on('click', function() {
+				// Retrieve and save selected data
+				const route = $(this).data('route');
+				const whichpopup = "assign-student-popup";
+
+				initializeAssignStudentPopup(route, whichpopup);
+			});
+
+			$('.edit-assign-student-btn').on('click', function() {
+				// Retrieve and save selected data
+				const route = $(this).data('route');
+				const whichpopup = "edit-assign-info-popup";
+				const courseStudent = $(this).data('cs');
+
+				initializeEditAssignInfoPopup(route, courseStudent, whichpopup);
+			});
+
+			// Redisplay popup and fill with prev data (for invalidated data)
+			@if ($errors->any())
+				// Retrieve and re-save saved data
+				const old_popup = @json(old('h-last-popup'));
+
+				if(old_popup == "assign-student-popup"){
+					const old_route = @json(old('h-route'));
+					const old_popup = @json(old('h-last-popup'));
+
+					initializeAssignStudentPopup(old_route, old_popup);
+				}
+				else if(old_popup == "edit-assign-info-popup") {
+					const old_route = @json(old('h-route'));
+					const old_popup = @json(old('h-last-popup'));
+					const old_courseStudent = @json(old('h-courseStudent'));
+
+					initializeEditAssignInfoPopup(old_route, JSON.parse(old_courseStudent), old_popup);
+				}
+				// else if(old_popup == "new-curriculum-topic"){
+				// 	const old_route = @json(old('h-route'));
+
+				// 	initializeNewCurriculumTopicPopup(old_route, old_popup);
+				// }
+				// else if(old_popup == "edit-curriculum-topic"){
+				// 	const old_route = @json(old('h-route'));
+
+				// 	initializeEditCurriculumTopicPopup(old_route, old_popup);
+				// }
+			@endif
 		});
 	</script>
 @endsection

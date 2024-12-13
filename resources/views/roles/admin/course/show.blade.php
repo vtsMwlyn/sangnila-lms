@@ -36,27 +36,24 @@
 
 				<!-- Helper -->
 				<input type="hidden" name="h-last-popup" class="h-last-popup">
-
 				<input type="hidden" name="h-route" class="h-route">
-				<input type="hidden" name="h-title" class="h-title">
-				<input type="hidden" name="h-number" class="h-number">
 			</form>
 		</div>
 	</x-popup>
 
-	<!-- Edit -->
+	<!-- Edit LO -->
 	<x-popup popup_title="Edit Learning Outcome" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-learning-outcome">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" class="mt-4" id="edit-learning-outcome-form">
 				@csrf
 				<div class="flex flex-col">
 					<label for="title">Learning Outcome Title</label>
-					<x-input id="title" class="w-full mt-1" type="text" name="title" style="border-width: 3px;" value="{{ old('title') }}" placeholder="Learning Outcome Title" autofocus />
+					<x-input id="title" class="w-full mt-1" type="text" name="title" style="border-width: 3px;" placeholder="Learning Outcome Title" autofocus />
 				</div>
 
 				<div class="flex flex-col mt-4">
 					<label for="number">Order/Number of Learning Outcome</label>
-					<x-input id="number" class="w-full mt-1" type="text" name="number" style="border-width: 3px;" value="{{ old('number') }}" placeholder="Learning Outcome Order/Number" autofocus />
+					<x-input id="number" class="w-full mt-1" type="text" name="number" style="border-width: 3px;" placeholder="Learning Outcome Order/Number" autofocus />
 				</div>
 
 				<div class="flex items-center justify-center w-full mt-8 mb-3 gap-3">
@@ -67,9 +64,7 @@
 				<!-- Helper -->
 				<input type="hidden" name="h-last-popup" class="h-last-popup">
 				<input type="hidden" name="h-route" class="h-route">
-
-				<input type="hidden" name="h-title" class="h-title">
-				<input type="hidden" name="h-number" class="h-number">
+				<input type="hidden" name="h-lo" class="h-lo">
 			</form>
 		</div>
 	</x-popup>
@@ -99,8 +94,6 @@
 				<!-- Helper -->
 				<input type="hidden" name="h-last-popup" class="h-last-popup">
 				<input type="hidden" name="h-route" class="h-route">
-
-				<input type="hidden" name="h-curriculum_title" class="h-curriculum_title">
 			</form>
 		</div>
 	</x-popup>
@@ -125,8 +118,7 @@
 				<!-- Helper -->
 				<input type="hidden" name="h-last-popup" class="h-last-popup">
 				<input type="hidden" name="h-route" class="h-route">
-
-				<input type="hidden" name="h-curriculum_title" class="h-curriculum_title">
+				<input type="hidden" name="h-ctopic" class="h-ctopic">
 			</form>
 		</div>
 	</x-popup>
@@ -387,18 +379,16 @@
 			// Fill helpers popup data
 			$(".h-route").val(route);
 			$(".h-last-popup").val(whichpopup);
+			$(".h-lo").val(JSON.stringify(learning_outcome));
 
 			// Retrieve old values
-			const oldTitle = '{{ old('title') }}';
+			const oldTitle = '{{ old ('title') }}';
 			const oldNumber = '{{ old('number') }}';
 
 			// If old values exist, fill them in
-			$('input[name="title"]').val(oldTitle ?  oldTitle : learning_outcome.title);
-			$('input[name="number"]').val(oldNumber ? oldNumber : learning_outcome.number);
+			$('input[name="title"]').val(oldTitle || learning_outcome.title);
+			$('input[name="number"]').val(oldNumber || learning_outcome.number);
 
-			// Fill the other popup data
-			$(".h-title").val(learning_outcome.title);
-			$(".h-number").val(learning_outcome.number);
 			$("#edit-learning-outcome-form").attr("action", route);
 
 			// Display the popup
@@ -419,15 +409,14 @@
 			// Fill popups with data
 			$(".h-route").val(route);
 			$(".h-last-popup").val(whichpopup);
+			$(".h-ctopic").val(JSON.stringify(curriculum_topic));
 
 			// Retrieve old values
 			const oldCurriculumTitle = '{{ old('curriculum_title') }}';
 
 			// If old values exist, fill them in
-			$('input[name="curriculum_title"]').val(oldCurriculumTitle ?  oldCurriculumTitle : curriculum_topic.title);
+			$('input[name="topic_title"]').val(oldCurriculumTitle ?  oldCurriculumTitle : curriculum_topic.title);
 
-			// Fill the other popup data
-			$(".h-curriculum_title").val(curriculum_topic.title);
 			$(`#${whichpopup}`).find('form').attr("action", route);
 
 			// Display the popup
@@ -526,8 +515,9 @@
 				}
 				else if(old_popup == "edit-curriculum-topic"){
 					const old_route = @json(old('h-route'));
+					const old_ctopic = @json(old('h-ctopic'));
 
-					initializeEditCurriculumTopicPopup(old_route, old_popup);
+					initializeEditCurriculumTopicPopup(old_route, JSON.parse(old_ctopic), old_popup);
 				}
 			@endif
 		});

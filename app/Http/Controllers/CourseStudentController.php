@@ -63,14 +63,14 @@ class CourseStudentController extends Controller {
 	public function store(Request $request, $student_id) {
 		$validatedData = $request->validate([
 			"course" => "required",
-			"max_course_session" => "required",
-			"teacher" => "required"
+			"teacher" => "required",
+			"max_course_session" => "required|numeric|min:0",
 		]);
 
 		try {
 			DB::beginTransaction();
 
-			$course = Course::find(json_decode($validatedData["course"])->id);
+			$course = Course::find($validatedData["course"]);
 			$teacher = User::find($validatedData["teacher"]);
 			$student = User::find($student_id);
 
@@ -119,6 +119,17 @@ class CourseStudentController extends Controller {
 
 
 		return redirect(route('admin.student.show', $student_id))->with("successAssignToCourse", "Successfully assigned the student to the course!");
+	}
+
+	// Edit student assignment data
+	public function update(Request $request, $course_student_id){
+		$validatedData = $request->validate([
+			"course" => "required",
+			"teacher" => "required",
+			"max_course_session" => "required|numeric|min:0",
+		]);
+
+		return "ok";
 	}
 
 	// Unassign student from a course confirmation

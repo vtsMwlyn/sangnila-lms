@@ -182,25 +182,6 @@ class StudentController extends Controller {
 		]);
 	}
 
-
-	// Update student's max sessions in a course
-	public function admin_update_max_session(Request $request, $student_id, $course_id){
-		$request->validate(
-			[
-				"max_course_session" . $student_id . $course_id => "required|integer|min:1"
-			],
-			[
-				"max_course_session" . $student_id . $course_id . ".min" => "The number must be greater than 1."
-			]
-		);
-
-		CourseStudent::where("course_id", $course_id)->where("student_id", $student_id)->update(["max_course_session" => $request["max_course_session" . $student_id . $course_id]]);
-
-		$course = Course::findOrFail($course_id);
-
-		return back()->with("successUpdateMaxSession", "Student's max course session in course " . $course->course_name . " has been updated successfully!");
-	}
-
 	// Edit student data page
 	public function admin_edit($student_id){
 		$student = User::findOrFail($student_id);

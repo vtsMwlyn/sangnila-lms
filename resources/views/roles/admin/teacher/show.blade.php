@@ -59,19 +59,19 @@
 
 				<div class="flex flex-col w-1/2">
 					<p>Phone Number</p>
-					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $teacher->details->phone_number ?? 'N/A' }}</div>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ $teacher->details->phone_number ?? 'N/A' }}</div>
 				</div>
 			</div>
 
 			<div class="w-full flex gap-x-4">
 				<div class="flex flex-col w-1/2">
 					<p>City of Birth</p>
-					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $teacher->details->city_of_birth ?? 'N/A' }}</div>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ $teacher->details->city_of_birth ?? 'N/A' }}</div>
 				</div>
 
 				<div class="flex flex-col w-1/2">
 					<p>Date of Birth</p>
-					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $teacher->details->date_of_birth ? Carbon\Carbon::parse($teacher->details->date_of_birth)->format('d F Y') : 'N/A' }}</div>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ $teacher->details->date_of_birth ? Carbon\Carbon::parse($teacher->details->date_of_birth)->format('d F Y') : 'N/A' }}</div>
 				</div>
 			</div>
 		</div>

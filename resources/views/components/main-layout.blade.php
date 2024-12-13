@@ -416,12 +416,12 @@
 					$(".popup-dismiss").click(function(){
 						$(this).closest(".popup-container").fadeOut(function(){
 							// Clear error messages and reset input classes
-							$('input').removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0').val();
+							$('input, select, textarea').removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0').val();
 							$('.error-messages').remove(); // This removes any error messages displayed
 						});
 
 						// Clear inputs when any popup is closed
-						$('input[name]:not([name="_token"])').val("");
+						$('input[name]:not([name="_token"]), select, textarea').val("");
 					});
 
 					// Dropdowns

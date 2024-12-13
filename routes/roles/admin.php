@@ -134,21 +134,17 @@ Route::prefix('/admin')
 		Route::prefix('/student')
 			->name('student.')
 			->group(function () {
-
 				// List of active students
 				Route::get('/', [StudentController::class, 'admin_index'])->name('index');
 				Route::get('/{student_id}', [StudentController::class, 'admin_show'])->name('show')->whereNumber('student_id');
-				Route::post('/{student_id}/{course_id}/max-session-update', [StudentController::class, 'admin_update_max_session'])->name('max-session.update')->whereNumber(['student_id', 'course_id']);
 
 				// Edit student data
 				Route::get('/{student_id}/edit', [StudentController::class, 'admin_edit'])->name('edit')->whereNumber('student_id');
 				Route::patch('/{student_id}', [StudentController::class, 'admin_update'])->name('update')->whereNumber('student_id');
 
-				// Assign/unassign students to/from a course
-				Route::get('/{student_id}/assign', [CourseStudentController::class, 'create'])->name('assign.create')->whereNumber('student_id');
+				// Assign/edit/unassign students to/from a course
 				Route::post('/{student_id}/assign', [CourseStudentController::class, 'store'])->name('assign.store')->whereNumber('student_id');
-
-				Route::get('{student_id}/unassign/{course_id}', [CourseStudentController::class, 'delete'])->name('unassign.delete')->whereNumber(['student_id', 'course_id']);
+				Route::post('/{course_student_id}/edit', [CourseStudentController::class, 'update'])->name('assign.update')->whereNumber('course_student_id');
 				Route::delete('{student_id}/unassign/{course_id}', [CourseStudentController::class, 'destroy'])->name('unassign.destroy')->whereNumber(['student_id', 'course_id']);
 
 				// Assignment and attendance details
