@@ -87,7 +87,7 @@ class AttendanceController extends Controller {
 		// $studentsToRemove = [];
 
 		// foreach($course_students as $cs){
-		// 	$sa = StudentAttendance::where("user_id", $cs->student_id)->get();
+		// 	$sa = StudentAttendance::where("student_id", $cs->student_id)->get();
 		// 	if($cs->is_imported){
 		// 		$count = ImportedStudent::where("student_id", $cs->student_id)->where("course_id", $course_id)->first()->last_attendance_count;
 		// 	} else {
@@ -187,7 +187,7 @@ class AttendanceController extends Controller {
 			foreach($validatedData as $data) {
 				$student = User::findOrFail($data['student_id']);
 				StudentAttendance::create([
-					"user_id" => $student->id,
+					"student_id" => $student->id,
 					"attendance_id" => $newAttendance->id,
 					"is_attend" => $data['attendance_data']['attended'],
 					"attendance_detail" => $data['attendance_data']['attendance_detail'],
@@ -293,7 +293,7 @@ class AttendanceController extends Controller {
 					"activity_progress" => ($vd["attendance_data"]["activity_progress"] == "other")? $vd["attendance_data"]["other_activity"] : $vd['attendance_data']['activity_progress'],
 					"learning_status" => $vd["attendance_data"]["learning_status"],
 					"is_custom" => ($vd["attendance_data"]["activity_progress"] == "other")? 1 : 0,
-					"user_id" => intval($vd["student_id"]),
+					"student_id" => intval($vd["student_id"]),
 					"attendance_id" => $attendance->id
 				]);
 			}
@@ -324,7 +324,7 @@ class AttendanceController extends Controller {
 	// List of all attendance data in the selected course
 	public function student_show($course_id){
 		$student_id = Auth::user()->id;
-		$attendances = StudentAttendance::where("user_id", $student_id)->whereNot("attendance_detail", "Account disabled")->get();
+		$attendances = StudentAttendance::where("student_id", $student_id)->whereNot("attendance_detail", "Account disabled")->get();
 		$cs = CourseStudent::where("student_id", Auth::user()->id)->where("course_id", $course_id)->first();
 
 		$student_attendances = [];
@@ -350,7 +350,7 @@ class AttendanceController extends Controller {
 	// Showing attendance data of a student in all enrolled course
 	public function admin_show($student_id, $course_id){
 		// Eager load the 'attendance' relationship and order by 'attendance_date'
-		$attendances = StudentAttendance::where("user_id", $student_id)
+		$attendances = StudentAttendance::where("student_id", $student_id)
 			->whereNot("attendance_detail", "Account disabled")
 			->with(['attendance' => function($query) {
 				$query->orderBy('attendance_date', 'asc'); // or 'desc' for descending order

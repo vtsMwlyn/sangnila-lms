@@ -5,16 +5,7 @@
 @endsection
 
 @section("popup")
-	<x-popup class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submission-history">
-		<!-- Popup header -->
-		<div class="flex items-center w-full">
-			<div class="font-bold text-2xl grow text-center">History</div>
-			<button type="button" class="popup-dismiss">
-				<img src="{{ asset('img/close.svg') }}" alt="history-icon" class="w-6 h-6 hover:scale-110">
-			</button>
-		</div>
-		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
-
+	<x-popup popup_title="History" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submission-history">
 		<!-- Popup content -->
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<div class="w-full overflow-x-auto">
@@ -33,15 +24,6 @@
 	</x-popup>
 
 	<x-popup class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submit-assignment">
-		<!-- Popup header -->
-		<div class="flex items-center w-full">
-			<div class="font-bold text-2xl grow text-center" id="assignment-title"></div>
-			<button type="button" class="popup-dismiss">
-				<img src="{{ asset('img/close.svg') }}" alt="history-icon" class="w-6 h-6 hover:scale-110">
-			</button>
-		</div>
-		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
-
 		<!-- Popup content -->
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<p class="mt-3 font-semibold">Assignment Description:</p>

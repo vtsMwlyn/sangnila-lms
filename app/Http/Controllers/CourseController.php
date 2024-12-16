@@ -141,7 +141,7 @@ class CourseController extends Controller {
 				$count = 0;
 			}
 
-			$stdatd = StudentAttendance::where("user_id", Auth::user()->id)->get();
+			$stdatd = StudentAttendance::where("student_id", Auth::user()->id)->get();
 
 			foreach($stdatd as $atd){
 				if($atd->attendance->course_id == $c->id && $atd->is_attend == 1){
@@ -177,7 +177,7 @@ class CourseController extends Controller {
 			$count = 0;
 		}
 
-		$stdatd = StudentAttendance::where("user_id", Auth::user()->id)->get();
+		$stdatd = StudentAttendance::where("student_id", Auth::user()->id)->get();
 
 		foreach($stdatd as $atd){
 			if($atd->attendance->course_id == $course_id && $atd->is_attend == 1){

@@ -9,8 +9,8 @@
 @endsection
 
 @section("popup")
-	<!-- Delete curriculum topic -->
-	<x-delete-confirmation method="delete" popup_title="Delete Curriculum Topic" id="unassign-teacher-popup">
+	<!-- Unassign Teacher -->
+	<x-delete-confirmation method="delete" popup_title="Unassign Teacher" id="unassign-teacher-popup">
 		Are you sure want to <span class="font-bold text-red">unassign</span> this teacher from <span class="font-bold text-light-blue" id="unassign-course-name"></span>?
 	</x-delete-confirmation>
 
@@ -127,11 +127,8 @@
 		const allCourses = @json(App\Models\Course::where('status', 'active')->get());
 
 		$(document).ready(() => {
-			// Delete curriculum topic
-			$('.unassign-teacher-btn').on('click', function(e) {
-				e.preventDefault();
-				e.stopPropagation();
-
+			// Unassign teacher
+			$('.unassign-teacher-btn').on('click', function() {
 				// Retrieve data and set the data to the popup
 				$("#unassign-teacher-popup").find('form').attr("action", $(this).data('route'));
 				$("#unassign-course-name").text($(this).data('unassign_course_name'));

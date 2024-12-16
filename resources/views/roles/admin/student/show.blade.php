@@ -9,6 +9,11 @@
 @endsection
 
 @section("popup")
+	<!-- Unassign Student -->
+	<x-delete-confirmation method="delete" popup_title="Unassign Student" id="unassign-student-popup">
+		Are you sure want to <span class="font-bold text-red">unassign</span> this student from <span class="font-bold text-light-blue" id="unassign-course-name"></span>?
+	</x-delete-confirmation>
+
 	<!-- Assign course to student -->
 	<x-popup popup_title="Assign Student to Course" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="assign-student-popup">
 		<form method="post" class="w-full flex flex-col mt-3">
@@ -70,7 +75,7 @@
 
 				<div class="flex gap-3 w-full justify-center">
 					<x-button type="submit" class="bg-orange-500 w-1/6 mt-5">
-						Assign
+						Save
 					</x-button>
 				</div>
 			</div>
@@ -80,6 +85,30 @@
 			<input type="hidden" name="h-route" class="h-route">
 			<input type="hidden" name="h-courseStudent" class="h-courseStudent">
 		</form>
+	</x-popup>
+
+	<!-- Student attendance information -->
+	<x-popup popup_title="Attendance Information" id="attendance-information-popup" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto">
+		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
+			<div class="w-full overflow-x-auto">
+				<table class="w-full">
+					<thead>
+						<th class="py-3 px-4 border-b-2 border-slate-400">No</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Attended</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Details</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Uploader</th>
+					</thead>
+					<tbody id="attendance-information-tbody">
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</x-popup>
+
+	<!-- Student assignment information -->
+	<x-popup popup_title="Assignment Information" id="assignment-information-popup" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto">
+
 	</x-popup>
 @endsection
 
@@ -223,20 +252,24 @@
 				<tbody>
 					@forelse ($student->enrolled_courses as $i => $ec)
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-							<td class="py-2 px-4 w-1/4">
+							<td class="py-2 px-4 w-1/3">
 								{{ $ec->course_name }}
 							</td>
-							<td class="py-2 px-4">
-								{{ $current_progress[$i] }}/{{ $full_progress[$i] }} done
-								<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.atd-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
-									<i class="bi bi-eye"></i>
-								</x-anchor-button>
+							<td class="py-2 px-4 w-1/3">
+								<div class="flex items-center justify-between w-2/3">
+									{{ $current_progress[$i] }}/{{ $full_progress[$i] }} done
+									<x-button type="button" class="attendance-information-btn" data-attendances="{{ $student->attendances }}">
+										<i class="bi bi-eye"></i>
+									</x-button>
+								</div>
 							</td>
-							<td class="py-2 px-4">
-								{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done
-								<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.asg-details', [$student->id, $student->enrolled_courses[$i]->id]) }}">
-									<i class="bi bi-eye"></i>
-								</x-anchor-button>
+							<td class="py-2 px-4 w-1/3">
+								<div class="flex items-center justify-between w-2/3">
+									{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done
+									<x-button type="button" class="assignment-information-btn" data-assignments="{{ $student->assignments }}">
+										<i class="bi bi-eye"></i>
+									</x-button>
+								</div>
 							</td>
 						</tr>
 					@empty
@@ -285,7 +318,7 @@
 			$(".h-route").val(route);
 			$(".h-last-popup").val(whichpopup);
 			$('.h-courseStudent').val(JSON.stringify(courseStudent));
-			
+
 			$(`#${whichpopup}`).find("form").attr("action", route);
 
 			$('select[name="course"]').empty();
@@ -375,6 +408,34 @@
 				initializeEditAssignInfoPopup(route, courseStudent, whichpopup);
 			});
 
+			// Unassign student
+			$('.unassign-student-btn').on('click', function() {
+				// Retrieve data and set the data to the popup
+				$("#unassign-student-popup").find('form').attr("action", $(this).data('route'));
+				$("#unassign-course-name").text($(this).data('unassign_course_name'));
+
+				// Show the popup
+				$("#unassign-student-popup").parent().show();
+			});
+
+			// Show student attendance info
+			$(".attendance-information-btn").on('click', function(){
+				const attendances = $(this).data('attendances');
+
+				console.log(attendances);
+
+				$("#attendance-information-popup").parent().show();
+			});
+
+			// Show student assignment info
+			$(".assignment-information-btn").on('click', function(){
+				const assignments = $(this).data('assignments');
+
+				console.log(assignments);
+
+				$("#assignment-information-popup").parent().show();
+			});
+
 			// Redisplay popup and fill with prev data (for invalidated data)
 			@if ($errors->any())
 				// Retrieve and re-save saved data
@@ -393,16 +454,6 @@
 
 					initializeEditAssignInfoPopup(old_route, JSON.parse(old_courseStudent), old_popup);
 				}
-				// else if(old_popup == "new-curriculum-topic"){
-				// 	const old_route = @json(old('h-route'));
-
-				// 	initializeNewCurriculumTopicPopup(old_route, old_popup);
-				// }
-				// else if(old_popup == "edit-curriculum-topic"){
-				// 	const old_route = @json(old('h-route'));
-
-				// 	initializeEditCurriculumTopicPopup(old_route, old_popup);
-				// }
 			@endif
 		});
 	</script>

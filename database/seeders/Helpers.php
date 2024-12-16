@@ -216,7 +216,7 @@ function newAttendance($course_name, $teacher_name, $students_attended, $attenda
 		}
 
 		$newData = [
-			"user_id" => $cs->student->id,
+			"student_id" => $cs->student->id,
 			"attendance_id" => $newAttendance->id,
 			"activity_progress" => "Ceritanya ini suatu activity"
 		];

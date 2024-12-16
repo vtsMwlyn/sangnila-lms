@@ -20,7 +20,7 @@ class Attendance extends Model {
 	}
 
 	public function students(){
-		return $this->belongsToMany(User::class, "student_attendances");
+		return $this->belongsToMany(User::class, "student_attendances", "user_id");
 	}
 
 	public function schedule() {

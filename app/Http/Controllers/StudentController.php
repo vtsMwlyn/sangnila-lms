@@ -65,7 +65,7 @@ class StudentController extends Controller {
 
 			$prioritized = false;
 
-			$sa = StudentAttendance::where("user_id", $student->id)->get();
+			$sa = StudentAttendance::where("student_id", $student->id)->get();
 
 			foreach($student->enrolled_courses as $course){
 				// Number of attendances (separated for imported students and unimported students)

@@ -73,7 +73,7 @@ class DashboardController extends Controller
 
 		// Progress
 		$course_students = CourseStudent::where("student_id", Auth::user()->id)->get();
-		$student_attendances = StudentAttendance::where("user_id", Auth::user()->id)->get();
+		$student_attendances = StudentAttendance::where("student_id", Auth::user()->id)->get();
 
 		$atd_progress = [];
 		$mtr_progress = [];
