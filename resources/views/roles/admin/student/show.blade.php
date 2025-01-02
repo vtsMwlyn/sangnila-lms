@@ -107,8 +107,23 @@
 	</x-popup>
 
 	<!-- Student assignment information -->
-	<x-popup popup_title="Assignment Information" id="assignment-information-popup" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto">
-
+	<x-popup popup_title="Assignment Information" id="assignment-information-popup" class="w-4/5 flex flex-col items-stretch justify-center overflow-y-auto">
+		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
+			<div class="w-full overflow-x-auto">
+				<table class="w-full">
+					<thead>
+						<th class="py-3 px-4 border-b-2 border-slate-400">No</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Assignment Title</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Description</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Uploader</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Submission Status</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Latest Submission</th>
+					</thead>
+					<tbody id="assignment-information-tbody">
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</x-popup>
 @endsection
 
@@ -258,7 +273,20 @@
 							<td class="py-2 px-4 w-1/3">
 								<div class="flex items-center justify-between w-2/3">
 									{{ $current_progress[$i] }}/{{ $full_progress[$i] }} done
-									<x-button type="button" class="attendance-information-btn" data-attendances="{{ $student->attendances }}">
+									<x-button type="button" class="attendance-information-btn" data-std_attendances="{{ App\Models\StudentAttendance::where('student_id', $student->id)
+										->whereHas('attendance', function ($query) use ($ec) {
+											$query->where('course_id', $ec->id);
+										})
+										->with([
+											'attendance' => function ($query) {
+												$query->select('id', 'attendance_date', 'teacher_id'); // Include attendance_date and teacher_id
+											},
+											'attendance.posted_by' => function ($query) {
+												$query->select('id', 'full_name'); // Include only full_name from teachers
+											}
+										])
+										->get()
+									}}">
 										<i class="bi bi-eye"></i>
 									</x-button>
 								</div>
@@ -420,9 +448,32 @@
 
 			// Show student attendance info
 			$(".attendance-information-btn").on('click', function(){
-				const attendances = $(this).data('attendances');
+				const std_attendances = $(this).data('std_attendances');
 
-				console.log(attendances);
+				$('#attendance-information-tbody').html('');
+
+				let i = 0;
+				for(let satd of std_attendances){
+					console.log(satd);
+
+					const colNo = $("<td>").addClass("px-4 py-2").text(i + 1);
+					const colDate = $("<td>").addClass("px-4 py-2").text(satd.attendance.attendance_date);
+					const colAttended = $("<td>").addClass("px-4 py-2").text(satd.is_attend);
+					const colDetails = $("<td>").addClass("px-4 py-2").text(satd.attendance_detail);
+					const colUploader = $("<td>").addClass("px-4 py-2").text(satd.attendance.posted_by.full_name);
+
+					let rowBg;
+					if(i % 2 == 0){
+						rowBG = "rgb(237, 241, 247)";
+					}
+					else {
+						rowBG = "white";
+					}
+
+					$('#attendance-information-tbody').append($("<tr>").css("background-color", rowBG).append(colNo).append(colDate).append(colAttended).append(colDetails).append(colUploader));
+
+					i++;
+				}
 
 				$("#attendance-information-popup").parent().show();
 			});
