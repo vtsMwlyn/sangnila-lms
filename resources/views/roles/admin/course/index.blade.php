@@ -6,9 +6,9 @@
 
 @section('popup')
 	<!-- Delete course -->
-	<x-delete-confirmation method="delete" popup_title="Delete Course" id="delete-course-popup">
+	<x-confirmation method="delete" popup_title="Delete Course" id="delete-course-popup">
 		Are you sure want to <span class="font-bold text-red">delete</span> the Course <span class="font-bold text-light-blue" id="del-course-name"></span> from Sangnila LMS? <strong>This action will erase all data related to the course and can't be undone!</strong>
-	</x-delete-confirmation>
+	</x-confirmation>
 @endsection
 
 @section("content")

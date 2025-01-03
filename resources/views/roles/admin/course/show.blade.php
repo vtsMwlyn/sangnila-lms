@@ -10,9 +10,9 @@
 
 @section("popup")
 	<!-- Delete course -->
-	<x-delete-confirmation method="delete" popup_title="Delete Course" id="delete-course-popup">
+	<x-confirmation method="delete" popup_title="Delete Course" id="delete-course-popup">
 		Are you sure want to <span class="font-bold text-red">delete</span> the Course <span class="font-bold text-light-blue" id="del-course-name"></span> from Sangnila LMS? <strong>This action will erase all data related to the course and can't be undone!</strong>
-	</x-delete-confirmation>
+	</x-confirmation>
 
 	<!-- New LO -->
 	<x-popup popup_title="New Learning Outcome" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="new-learning-outcome">
@@ -70,9 +70,9 @@
 	</x-popup>
 
 	<!-- Delete LO -->
-	<x-delete-confirmation popup_title="Delete Learning Outcome" id="delete-learning-outcome">
+	<x-confirmation popup_title="Delete Learning Outcome" id="delete-learning-outcome">
 		Are you sure want to <span class="font-bold text-red">delete</span> the Learning Outcome <span class="font-bold text-light-blue" id="del-lo-name"></span> from this course?
-	</x-delete-confirmation>
+	</x-confirmation>
 
 	<!-- New topic -->
 	<x-popup popup_title="New Curriculum Topic" class="w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="new-curriculum-topic">
@@ -124,9 +124,9 @@
 	</x-popup>
 
 	<!-- Delete curriculum topic -->
-	<x-delete-confirmation popup_title="Delete Curriculum Topic" id="delete-curriculum-topic">
+	<x-confirmation popup_title="Delete Curriculum Topic" id="delete-curriculum-topic">
 		Are you sure want to <span class="font-bold text-red">delete</span> the Curriculum Topic <span class="font-bold text-light-blue" id="del-ct-name"></span> from this course?
-	</x-delete-confirmation>
+	</x-confirmation>
 @endsection
 
 @section("content")

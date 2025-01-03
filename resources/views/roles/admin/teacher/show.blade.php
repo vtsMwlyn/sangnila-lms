@@ -10,9 +10,9 @@
 
 @section("popup")
 	<!-- Unassign Teacher -->
-	<x-delete-confirmation method="delete" popup_title="Unassign Teacher" id="unassign-teacher-popup">
+	<x-confirmation method="delete" popup_title="Unassign Teacher" id="unassign-teacher-popup">
 		Are you sure want to <span class="font-bold text-red">unassign</span> this teacher from <span class="font-bold text-light-blue" id="unassign-course-name"></span>?
-	</x-delete-confirmation>
+	</x-confirmation>
 
 	<!-- Assign course to teacher -->
 	<x-popup popup_title="Assign Teacher to Course" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="assign-teacher-popup">

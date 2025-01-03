@@ -147,10 +147,6 @@ Route::prefix('/admin')
 				Route::post('/{course_student_id}/edit', [CourseStudentController::class, 'update'])->name('assign.update')->whereNumber('course_student_id');
 				Route::delete('{student_id}/unassign/{course_id}', [CourseStudentController::class, 'destroy'])->name('unassign.destroy')->whereNumber(['student_id', 'course_id']);
 
-				// Assignment and attendance details
-				Route::get("{student_id}/{course_id}/assignments", [AssignmentController::class, "admin_show"])->name("asg-details")->whereNumber(['student_id', 'course_id']);
-				Route::get("{student_id}/{course_id}/attendance", [AttendanceController::class, "admin_show"])->name("atd-details")->whereNumber(['student_id', 'course_id']);
-
 				// Make student status is not imported again
 				Route::get("{student_id}/normalize", [CourseStudentController::class, "normalize_confirmation"])->name("normalize.confirmation")->whereNumber('student_id');
 				Route::post("{student_id}/normalize", [CourseStudentController::class, "normalize_proceed"])->name("normalize.proceed")->whereNumber('student_id');
@@ -171,9 +167,6 @@ Route::prefix('/admin')
 
 				// List of available accounts (categorized to enabled/disabled)
 				Route::get('/', [AdminAccountController::class, 'index'])->name('index');
-
-				// Account details
-				Route::get('/{user_id}', [AdminAccountController::class, 'show_acc'])->name('show')->whereNumber('user_id');
 
 				// Create new account
 				Route::get('/create', [RegisteredUserController::class, 'admin_create'])->name('create');

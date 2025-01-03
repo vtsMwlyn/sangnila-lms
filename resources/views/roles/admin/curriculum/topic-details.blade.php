@@ -38,14 +38,14 @@
 	</x-popup>
 
 	<!-- Delete curriculum topic -->
-	<x-delete-confirmation popup_title="Delete Curriculum Topic" id="delete-curriculum-topic">
+	<x-confirmation popup_title="Delete Curriculum Topic" id="delete-curriculum-topic">
 		Are you sure want to <span class="font-bold text-red">delete</span> the Curriculum Topic <span class="font-bold text-light-blue" id="del-ct-name"></span> from this course?
-	</x-delete-confirmation>
+	</x-confirmation>
 
 	<!-- Delete curriculum activity -->
-	<x-delete-confirmation popup_title="Delete Curriculum Activity" id="delete-curriculum-activity">
+	<x-confirmation popup_title="Delete Curriculum Activity" id="delete-curriculum-activity">
 		Are you sure want to <span class="font-bold text-red">delete</span> the Curriculum Activity <span class="font-bold text-light-blue" id="del-ca-name"></span> from this topic?
-	</x-delete-confirmation>
+	</x-confirmation>
 @endsection
 
 @section("content")

@@ -14,28 +14,10 @@ use Illuminate\Support\Facades\Hash;
 class AdminAccountController extends Controller {
 	// Shows all available accounts in Sangnila LMS
 	public function index() {
-		$admin_accounts = User::where("status", "enabled")->where("role_id", 1)->whereNot("id", Auth::user()->id)->orderBy('full_name')/*->paginate(5, ['*'], 'admin_page')*/->get();
-		$teacher_accounts = User::where("status", "enabled")->where("role_id", 2)->orderBy('full_name')/*->paginate(5, ['*'], 'teacher_page')*/->get();
-		$student_accounts = User::where("status", "enabled")->where("role_id", 3)->orderBy('full_name')/*->paginate(10, ['*'], 'student_page')*/->get();
-
-		if(request("role") && request("search")){
-			switch(request("role")){
-				case 1:
-					$admin_accounts = User::where("status", "enabled")->where("role_id", 1)->whereNot("id", Auth::user()->id)->orderBy('full_name')/*->paginate(5, ['*'], 'admin_page')*/->filter(request(["search", "role"]))->get();
-					break;
-				case 2:
-					$teacher_accounts = User::where("status", "enabled")->where("role_id", 2)->orderBy('full_name')/*->paginate(5, ['*'], 'teacher_page')*/->filter(request(["search", "role"]))->get();
-					break;
-				case 3:
-					$student_accounts = User::where("status", "enabled")->where("role_id", 3)->orderBy('full_name')/*->paginate(10, ['*'], 'student_page')*/->filter(request(["search", "role"]))->get();
-					break;
-			}
-		}
-
-		$accounts = [];
-		array_push($accounts, $admin_accounts, $teacher_accounts, $student_accounts);
-
-		$disabled = User::where("status", "disabled")/*->paginate(5)*/->get();
+		$admin_accounts = User::filter(request(['search']))->where("status", "enabled")->where("role_id", 1)->whereNot("id", Auth::user()->id)->orderBy('full_name')->get();
+		$teacher_accounts = User::filter(request(['search']))->where("status", "enabled")->where("role_id", 2)->orderBy('full_name')->get();
+		$student_accounts = User::filter(request(['search']))->where("status", "enabled")->where("role_id", 3)->orderBy('full_name')->get();
+		$disabled = User::filter(request(['search']))->where("status", "disabled")->get();
 
 		return view('roles.admin.account.index', [
 			'admin_accounts' => $admin_accounts,
@@ -43,16 +25,6 @@ class AdminAccountController extends Controller {
 			'student_accounts' => $student_accounts,
 			'disabled' => $disabled
 		]);
-	}
-
-	// Shows selected account details
-	public function show_acc($user_id) {
-		$user = User::findOrFail($user_id);
-
-		return view("roles.admin.account.show", [
-			"user" => $user
-		]);
-
 	}
 
 	// Shows input form for edit an account data
@@ -92,7 +64,7 @@ class AdminAccountController extends Controller {
 			return back()->with("systemFail", "System failed to edit account, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("admin.account.show", $account_id))->with("successUpdateAccountData", "Successfully updated account data!");
+		return redirect(route("admin.account.index"))->with("successUpdateAccountData", "Successfully updated account data!");
 	}
 
 	// Account disable confirmation page
@@ -150,6 +122,6 @@ class AdminAccountController extends Controller {
 	public function reset_password_proceed($user_id){
 		User::findOrFail($user_id)->update(["password" => Hash::make(trans("strings.default_password"))]);
 
-		return redirect(route("admin.account.show", $user_id))->with("successResetPassword", "Successfully reset this account's password");
+		return redirect(route("admin.account.index"))->with("successResetPassword", "Successfully reset this account's password");
 	}
 }

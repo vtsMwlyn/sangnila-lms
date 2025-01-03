@@ -26,15 +26,19 @@ class User extends Authenticatable implements MustVerifyEmail{
 	// Query Scopes
 	public function scopeFilter($query, array $filters){
 		$query->when($filters["search"] ?? false, function($query, $search){
-			return $query->where(function($query) use($search){
-				$query->where("full_name", "like", "%" . $search . "%");
-			});
+			return $query->where("full_name", "like", "%" . $search . "%");
 		});
 
 		$query->when($filters["role"] ?? false, function($query, $role){
-			return $query->whereHas("role", function($query) use($role){
-				$query->where("role_id", $role);
-			});
+			if($role == 'Disabled'){
+				return $query->where("status", $role);
+			}
+			else {
+				return $query->whereHas("role", function($query) use($role){
+					$query->where("role_name", $role);
+				});
+			}
+
 		});
 	}
 

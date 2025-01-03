@@ -10,9 +10,9 @@
 
 @section("popup")
 	<!-- Unassign Student -->
-	<x-delete-confirmation method="delete" popup_title="Unassign Student" id="unassign-student-popup">
+	<x-confirmation method="delete" popup_title="Unassign Student" id="unassign-student-popup">
 		Are you sure want to <span class="font-bold text-red">unassign</span> this student from <span class="font-bold text-light-blue" id="unassign-course-name"></span>?
-	</x-delete-confirmation>
+	</x-confirmation>
 
 	<!-- Assign course to student -->
 	<x-popup popup_title="Assign Student to Course" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="assign-student-popup">
@@ -205,7 +205,7 @@
 		</div>
 
 		<div class="w-full flex justify-end items-start mt-5 gap-3">
-			<x-button type="button" class="bg-orange-500" id="show_more_less_button">Show More</x-button>
+			<x-button type="button" class="bg-orange-500" id="show_more_less_button">Show Details</x-button>
 			<x-anchor-button type="button" class="bg-orange-500" href="{{ route('admin.student.edit', $student->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		</div>
 
@@ -294,7 +294,31 @@
 							<td class="py-2 px-4 w-1/3">
 								<div class="flex items-center justify-between w-2/3">
 									{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done
-									<x-button type="button" class="assignment-information-btn" data-assignments="{{ $student->assignments }}">
+									<x-button type="button" class="assignment-information-btn" data-std_assignments="{{ App\Models\StudentAssignment::where('student_id', $student->id)
+										->whereHas('assignment', function ($query) use ($ec) {
+											$query->where('course_id', $ec->id)->select('id', 'title', 'desc');
+										})
+										->with([
+											'assignment' => function ($query) use ($student) {
+												$query->withCount([
+													'submissions as submissions_count' => function ($query) use ($student) {
+														$query->where('student_id', $student->id);
+													}
+												])->with([
+													'submissions' => function ($query) use ($student) {
+														$query->where('student_id', $student->id)
+															->latest('created_at')->select('id', 'assignment_id', 'created_at')
+															->limit(1); // Only get the latest submission
+													}
+												])->with([
+													'posted_by' => function ($query) {
+														$query->select('id', 'full_name');
+													}
+												]);
+											}
+										])
+										->get()
+									}}">
 										<i class="bi bi-eye"></i>
 									</x-button>
 								</div>
@@ -313,6 +337,15 @@
 	<script>
 		const allCoursesWithTeachers = @json(App\Models\Course::where('status', 'active')->with('teachers')->get());
 		const alreadyEnrolled = @json($student->enrolled_courses);
+
+		function formatDate(dateString) {
+			const date = new Date(dateString);
+			return new Intl.DateTimeFormat('en-GB', {
+				day: 'numeric',
+				month: 'short',
+				year: 'numeric'
+			}).format(date);
+		}
 
 		function initializeAssignStudentPopup(route, whichpopup){
 			// Fill popups with data
@@ -405,7 +438,14 @@
 
 		$(document).ready(() => {
 			$('#show_more_less_button').click(() => {
-				$('#more_details').slideToggle();
+				$('#more_details').slideToggle(function(){
+					if($(this).is(":visible")){
+						$('#show_more_less_button').text('Hide Details');
+					}
+					else {
+						$('#show_more_less_button').text('Show Details');
+					}
+				});
 			});
 
 			$('select[name="course"]').on('change', function(){
@@ -454,11 +494,17 @@
 
 				let i = 0;
 				for(let satd of std_attendances){
-					console.log(satd);
-
 					const colNo = $("<td>").addClass("px-4 py-2").text(i + 1);
-					const colDate = $("<td>").addClass("px-4 py-2").text(satd.attendance.attendance_date);
-					const colAttended = $("<td>").addClass("px-4 py-2").text(satd.is_attend);
+					const colDate = $("<td>").addClass("px-4 py-2").text(formatDate(satd.attendance.attendance_date));
+
+					let colAttended = $("<td>").addClass("px-4 py-2");
+					if(satd.is_attend == 1){
+						colAttended.html('<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">');
+					}
+					else {
+						colAttended.html('<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">');
+					}
+
 					const colDetails = $("<td>").addClass("px-4 py-2").text(satd.attendance_detail);
 					const colUploader = $("<td>").addClass("px-4 py-2").text(satd.attendance.posted_by.full_name);
 
@@ -480,9 +526,40 @@
 
 			// Show student assignment info
 			$(".assignment-information-btn").on('click', function(){
-				const assignments = $(this).data('assignments');
+				const std_assignments = $(this).data('std_assignments');
 
-				console.log(assignments);
+				$('#assignment-information-tbody').html('');
+
+				let i = 0;
+				for(let sasg of std_assignments){
+					console.log(sasg);
+					const colNo = $("<td>").addClass("px-4 py-2").text(i + 1);
+					const colAsgDate = $("<td>").addClass("px-4 py-2").text(sasg.assignment.title);
+					const colAsgDesc = $("<td>").addClass("px-4 py-2").text(sasg.assignment.desc);
+					const colUploader = $("<td>").addClass("px-4 py-2").text(sasg.assignment.posted_by.full_name);
+
+					let colStatus = $("<td>").addClass("px-4 py-2");
+					let	colLatestSubmission = $("<td>").addClass("px-4 py-2");
+					if(sasg.assignment.submissions_count > 0){
+						colStatus.html('<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">');
+						colLatestSubmission.text(formatDate(sasg.assignment.submissions[0].created_at));
+					} else {
+						colStatus.html('<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">');
+						colLatestSubmission.text('N/A');
+					}
+
+					let rowBg;
+					if(i % 2 == 0){
+						rowBG = "rgb(237, 241, 247)";
+					}
+					else {
+						rowBG = "white";
+					}
+
+					$('#assignment-information-tbody').append($("<tr>").css("background-color", rowBG).append(colNo).append(colAsgDate).append(colAsgDesc).append(colUploader).append(colStatus).append(colLatestSubmission));
+
+					i++;
+				}
 
 				$("#assignment-information-popup").parent().show();
 			});

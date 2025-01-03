@@ -1,7 +1,7 @@
 @extends("layouts.main-admin")
 
 @section("title")
-	<h1>Upload New Announcement</h1>
+	<h1>Manage Announcement</h1>
 @endsection
 
 @section("breadcrumbs-extension")
@@ -12,41 +12,39 @@
 @section("content")
 	<x-section-container>
 		<x-page-title>{{ __("Upload New Announcement") }}</x-page-title>
+		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("systemFail"))
 			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
 		@endif
 
-		<form action="{{ route("admin.announcement.store") }}" method="post" id="foomu" enctype="multipart/form-data">
+		<form action="{{ route("admin.announcement.store") }}" method="post" id="foomu" enctype="multipart/form-data" class="mt-3">
 			@csrf
-			<!-- Announcement Title -->
-			<div class="mb-4 flex gap-3 items-start">
-				<x-boxed-label for="title" :value="__('Announcement Title')" />
-				<div class="flex w-full flex-col items-stretch">
+
+			<div class="flex w-full gap-5">
+				<!-- Announcement Title -->
+				<div class="flex flex-col w-1/2">
+					<x-label for="title" :value="__('Announcement Title')" />
 					<x-input id="title" class="block w-full" type="text" name="title" placeholder="New announcement title" :value="old('title')" autofocus />
 				</div>
-			</div>
 
-			<!-- Announcement Image -->
-			<div class="mb-4 flex gap-3 @error("image") items-start @else items-stretch @enderror">
-				<x-boxed-label for="image" :value="__('Announcement Image')" />
-				<div class="flex w-full flex-col items-stretch">
+				<!-- Announcement Image -->
+				<div class="flex flex-col w-1/2">
+					<x-label for="image" :value="__('Announcement Image')" />
 					<x-input id="image" class="bg-white w-full block" type="file" name="image" placeholder="New announcement image" />
 				</div>
 			</div>
 
-			<!-- Announcement Start Date -->
-			<div class="mb-4 flex gap-3 items-start">
-				<x-boxed-label for="announce_from" :value="__('Announce From')" />
-				<div class="flex w-full flex-col items-stretch">
+			<div class="flex w-full gap-5 mt-3">
+				<!-- Announcement Start Date -->
+				<div class="flex flex-col w-1/2">
+					<x-label for="announce_from" :value="__('Announce From')" />
 					<x-input id="announce_from" class="block w-full" onfocus="this.type='date';" onblur="this.type='text';" name="announce_from" placeholder="New announcement start date" :value="old('announce_from')" autofocus />
 				</div>
-			</div>
 
-			<!-- Announcement End Date -->
-			<div class="mb-4 flex gap-3 items-start">
-				<x-boxed-label for="announce_until" :value="__('Announce Until')" />
-				<div class="flex w-full flex-col items-stretch">
+				<!-- Announcement End Date -->
+				<div class="flex flex-col w-1/2">
+					<x-label for="announce_until" :value="__('Announce Until')" />
 					<x-input id="announce_until" class="block w-full" onfocus="this.type='date';" onblur="this.type='text';" name="announce_until" placeholder="New announcement end date" :value="old('announce_until')" autofocus />
 				</div>
 			</div>
@@ -54,13 +52,11 @@
 			<x-label :value="__('This is the image of your announcement:')" style="display: none;" class="mt-8" id="img-preview-label"></x-label>
 			<img id="img-preview" class="w-1/2 mt-5">
 
-			<x-label :value="__('Announce this announcement to:')" class="mt-8"></x-label>
+			<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
+			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Announce to:</h2>
+			<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
-			@error("receiver")
-				<p class="text-red-800 font-bold mt-3"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
-			@enderror
-
-			<div class="flex flex-wrap gap-3 p-3 mt-5 border-2 border-blue-800 rounded-xl bg-white @error("receiver") border p-5 border-red-700 @enderror">
+			<div class="flex flex-wrap gap-3 mt-5 rounded-xl @error("receiver") border-2 p-5 border-red @enderror">
 				<div class="flex items-center gap-3 p-5 checkbox-container" style="width: 23%;">
 					<input type="checkbox" id="checkbox1" name="checkbox1"
 					class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old("checkbox1") == "on") checked @endif>
@@ -78,24 +74,30 @@
 				</div>
 			</div>
 
-			<x-label :value="__('Announcement content')" class="mt-8"></x-label>
-
-			@error("content")
-				<p class="text-red-800 font-bold mt-3"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
+			@error("receiver")
+				<p class="text-red font-bold mt-3"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
 			@enderror
 
-			<div class="bg-white p-8 border-2 @error("content") border-red-700 @else border-blue-800 @endif rounded-xl mt-5">
+			<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
+			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Announcement Content</h2>
+			<div class="w-full bg-slate-400 " style="height: 2px;"></div>
+
+			<div class="bg-white p-6 border-2 @error("content") border-red @else border-slate-400 @endif rounded-xl mt-5">
 				<input type="hidden" id="content" name="content">
                 <trix-editor input="content">{!! old("content") !!}</trix-editor>
 			</div>
 
-			<div class="flex items-stretch gap-3 justify-center mt-20 mb-3">
-				<x-button class="bg-orange-500 w-full md:w-1/5">
-					{{ __('Submit') }}
-				</x-button>
+			@error("content")
+				<p class="text-red font-bold mt-3"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
+			@enderror
+
+			<div class="flex items-stretch gap-3 justify-end mt-10 mb-3">
 				<x-cancel-button class="w-full md:w-1/5">
 					Cancel
 				</x-cancel-button>
+				<x-button class="bg-orange-500 w-full md:w-1/5">
+					{{ __('Submit') }}
+				</x-button>
 			</div>
 		</form>
 

@@ -4,187 +4,335 @@
 	<h1>Manage Accounts</h1>
 @endsection
 
+@section("popup")
+	<!-- Reset password -->
+	<x-confirmation popup_title="Reset Password" id="reset-password-popup">
+		Are you sure want to <span class="font-bold text-red">reset the password</span> for <span class="font-bold text-light-blue" id="reset-password-name"></span>'s account? <strong>This action will reset the account's password to the default password.</strong>
+	</x-confirmation>
+
+	<!-- Enable account -->
+	<x-confirmation popup_title="Enable Account" id="enable-account-popup">
+		Are you sure want to <span class="font-bold text-red">enable</span> <span class="font-bold text-light-blue" id="enable-account-name"></span>'s account? <strong>This action will make the account can be used again in Sangnila LMS.</strong>
+	</x-confirmation>
+
+	<!-- Delete account -->
+	<x-confirmation popup_title="Delete Account" id="delete-account-popup">
+		Are you sure want to <span class="font-bold text-red">delete</span> <span class="font-bold text-light-blue" id="del-account-name"></span>'s account from Sangnila LMS? <strong>This action will erase all data related to the account and can't be undone! <i>(It's recommended to disable the account instead of deleting it!)</i></strong>
+	</x-confirmation>
+
+	<!-- Disable account -->
+	<x-popup popup_title="Disable Account" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="disable-account-popup">
+		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
+			<form method="post" class="mt-4">
+				@csrf
+
+				<p>Are you sure want to <span class="font-bold text-red">disable</span> <span class="font-bold text-light-blue" id="disable-account-name"></span>'s account? <strong>This action will make the account cannot be used again in Sangnila LMS.</strong></p>
+
+				<div class="flex flex-col mt-3">
+					<label for="disable_reason">Disable Reason:</label>
+					<x-input id="disable_reason" class="w-full mt-1" type="text" name="disable_reason" style="border-width: 3px;" value="{{ old('disable_reason') }}" placeholder="Enter the reason for disabling account" autofocus />
+				</div>
+
+				<div class="flex items-center justify-center w-full mt-8 mb-3 gap-3">
+					<x-button class="w-full md:w-1/6">Submit</x-button>
+					{{-- <x-button class="w-full md:w-1/6">Cancel</x-button> --}}
+				</div>
+
+				<!-- Helper -->
+				<input type="hidden" name="h-last-popup" class="h-last-popup">
+				<input type="hidden" name="h-route" class="h-route">
+				<input type="hidden" name="h-account-name" id="h-account-name">
+			</form>
+		</div>
+	</x-popup>
+@endsection
+
 @section("content")
 	<x-section-container>
-		<x-page-title>{{ __("List of All Accounts") }}</x-page-title>
+		<x-page-title class="text-center">{{ __("List of All Accounts") }}</x-page-title>
+
+		<div class="flex items-center mt-6 mb-2">
+			<div class="w-1/4">
+				<x-anchor-button href="{{ route('admin.account.create') }}"><i class="bi bi-plus-lg"></i> Create New Account</x-anchor-button>
+			</div>
+
+			<form class="flex w-1/2 justify-center" action="{{ route("admin.account.index") }}">
+				<x-input type="text" class="border-blue-900 border-2 rounded-l-lg rounded-r-none w-full" name="search" placeholder="Search..." :value="request('search')"/>
+				<input type="hidden" name="role" value="{{ request('role') }}">
+				<button class="rounded-l-none rounded-r-lg border-slate-400 border-t-2 border-r-2 border-b-2 py-2 px-4 bg-white text-slate-400 hover:bg-slate-400 hover:text-white" style="border-width: 3px 3px 3px 0;"><i class="bi bi-search"></i></button>
+			</form>
+		</div>
 
 		@if(session()->has("successCreateNewAccount"))
 			<x-badge-success badge_text="{{ session('successCreateNewAccount') }}"></x-badge-success>
 		@elseif(session()->has("successDeleteAccount"))
 			<x-badge-warning badge_text="{{ session('successDeleteAccount') }}"></x-badge-warning>
+		@elseif(session()->has("successResetPassword"))
+			<x-badge-warning badge_text="{{ session('successResetPassword') }}"></x-badge-warning>
+		@elseif(session()->has("successEditAccount"))
+			<x-badge-warning badge_text="{{ session('successEditAccount') }}"></x-badge-warning>
 		@elseif(session()->has("successEnableAccount"))
 			<x-badge-success badge_text="{{ session('successEnableAccount') }}"></x-badge-success>
 		@elseif(session()->has("successDisableAccount"))
 			<x-badge-warning badge_text="{{ session('successDisableAccount') }}"></x-badge-warning>
 		@endif
 
-		<div class="mb-5">
-			<x-anchor-button class="bg-orange-500 mt-5" href="{{ route('admin.account.create') }}"><i class="bi bi-plus-lg"></i> Create New Account</x-anchor-button>
+		<!-- For larger screen -->
+		<div class="lg:flex mt-4 w-full flex-wrap hidden">
+			<a href="{{ route('admin.account.index', ['role' => 'admin']) }}"
+				class="py-2 w-1/6 sm:w-40 text-center hover:bg-slate-200"
+				style="@if(request('role') == 'admin' || !request('role')) border-bottom: 4px solid #1db9cf; @endif">
+				Admin
+			</a>
+
+			<a href="{{ route('admin.account.index', ['role' => 'teacher']) }}"
+				class="py-2 w-1/6 sm:w-40 text-center hover:bg-slate-200"
+				style="@if(request('role') == 'teacher') border-bottom: 4px solid #1db9cf; @endif">
+				Teacher
+			</a>
+
+			<a href="{{ route('admin.account.index', ['role' => 'student']) }}"
+				class="py-2 w-1/6 sm:w-40 text-center hover:bg-slate-200"
+				style="@if(request('role') == 'student') border-bottom: 4px solid #1db9cf; @endif">
+				Student
+			</a>
+
+			<a href="{{ route('admin.account.index', ['role' => 'disabled']) }}"
+				class="py-2 w-1/6 sm:w-40 text-center hover:bg-slate-200"
+				style="@if(request('role') == 'disabled') border-bottom: 4px solid #1db9cf; @endif">
+				Disabled
+			</a>
 		</div>
 
-		@foreach (['admin_accounts', 'teacher_accounts', 'student_accounts'] as $index => $account_type)
-			@php
-				$role = App\Models\Role::findOrFail($index + 1);
-			@endphp
-			<div class="rounded-3xl px-5 py-4 @if($index != 0) mt-5 @endif @if(request("search") && request("role") == $role->id) bg-indigo-100 @endif">
-				<div class="flex flex-col md:flex-row gap-5 md:gap-0 w-full justify-between items-center mb-6">
-					@if(request("role") == $role->id)
-						<h1 class="text-xl text-blue-950 font-bold">{{ $role->role_name }} Accounts <span class="italic">(Showing results for "{{ request("search") }}")</span></h1>
-						<form class="flex" action="{{ route("admin.account.index") }}" onsubmit="handleFormSubmit();">
-							<x-input type="text" class="border-blue-900 border-2 rounded-l-lg rounded-r-none" name="search" placeholder="Search..." :value="request('search')"/>
-							<input type="hidden" name="role" value="{{ $role->id }}">
-							<button class="rounded-l-none rounded-r-lg border-slate-400 border-t-2 border-r-2 border-b-2 py-2 px-4 bg-white text-slate-400 hover:bg-slate-400 hover:text-white" style="border-width: 3px 3px 3px 0;"><i class="bi bi-search"></i></button>
-						</form>
-					@else
-						<h1 class="text-xl text-blue-950 font-bold">{{ $role->role_name }} Accounts</h1>
-						<form class="flex" action="{{ route("admin.account.index") }}" onsubmit="handleFormSubmit();">
-							<x-input type="text" class="border-blue-900 border-2 rounded-l-lg rounded-r-none" name="search" placeholder="Search..." />
-							<input type="hidden" name="role" value="{{ $role->id }}">
-							<button class="rounded-l-none rounded-r-lg border-slate-400 border-t-2 border-r-2 border-b-2 py-2 px-4 bg-white text-slate-400 hover:bg-slate-400 hover:text-white" style="border-width: 3px 3px 3px 0;"><i class="bi bi-search"></i></button>
-						</form>
-					@endif
-				</div>
-				<div class="overflow-x-auto relative" style="max-height: 500px;">
-					<table class="template-tables min-w-full border-collapse sm:table" style="border-collapse: separate; border-spacing: 0 20px;">
-						<thead class="sticky top-0 z-10">
-							<tr>
-								<th class="template-heads rounded-l-xl">Full Name</th>
-								<th class="template-heads">Email</th>
-								<th class="template-heads">Role</th>
-								<th class="template-heads">Status</th>
-								<th class="template-heads rounded-r-xl">Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							@forelse($$account_type as $account)
-								@if($account->id == auth()->user()->id)
-									@continue
-								@endif
+		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
-								<tr>
-									<td class="template-bodies rounded-l-xl" style="min-width: 200px; max-width: 200px; text-wrap: wrap;">
-										@if($account->role_id == 2)
-											<a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ ($account->details->gender == 1)? "Mr." : "Ms." }} {{ $account->full_name }}</a>
-										@else
-											<a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $account->full_name }}</a>
-										@endif
-									</td>
-									<td class="template-bodies" style="min-width: 200px; max-width: 200px; text-wrap: wrap; word-wrap: break-word;">{{ $account->email }}</td>
-									<td class="template-bodies">{{ $account->role->role_name }}</td>
-									<td class="template-bodies">{{ $account->status }}</td>
-									<td class="template-bodies rounded-r-xl">
-										<div class="flex w-full items-stretch gap-1 justify-center">
-											<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.show', $account->id) }}">
-												<i class="bi bi-eye"></i>
-											</x-anchor-button>
-
-											<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_edit', $account->id) }}">
-												<i class="bi bi-pencil-square"></i>
-											</x-anchor-button>
-
-											<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_disable.conf', $account->id) }}">
-												<i class="bi bi-ban"></i>
-											</x-anchor-button>
-
-											<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_delete', $account->id) }}">
-												<i class="bi bi-trash3"></i>
-											</x-anchor-button>
-										</div>
-
-									</td>
-								</tr>
-							@empty
-								<tr>
-									<td colspan="5" class="bg-white p-5 rounded-xl text-center font-semibold">{{ (request("search") && (request("role") == $role->id))? "- No data found -" : "- No accounts available found for this role -" }}</td>
-								</tr>
-							@endforelse
-						</tbody>
-					</table>
-				</div>
-				{{-- <div class="my-5 md:my-2 flex w-full justify-end">
-					{{ $$account_type->links() }}
-				</div> --}}
-			</div>
-
-		@endforeach
-	</x-section-container>
-
-	<x-section-container class="mt-10">
-		<x-page-title class="mt-10">{{ __("Disabled Accounts") }}</x-page-title>
-		<div class="overflow-x-auto">
-			<table class="template-tables min-w-full border-collapse sm:table" style="border-collapse: separate; border-spacing: 0 20px;">
-				<thead>
-					<tr>
-						<th class="template-heads rounded-l-xl">Full Name</th>
-						<th class="template-heads">Email</th>
-						<th class="template-heads">Role</th>
-						<th class="template-heads">Status</th>
-						<th class="template-heads rounded-r-xl">Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					@if($disabled->count())
-						@foreach ($disabled as $account)
-							@if($account->id == auth()->user()->id)
-								@continue
-							@endif
-
-							<tr>
-								<td class="template-bodies rounded-l-xl"><a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $account->full_name }}</a></td>
-								<td class="template-bodies">{{ $account->email }}</td>
-								<td class="template-bodies">{{ $account->role->role_name }}</td>
-								<td class="template-bodies">{{ $account->status }}</td>
-								<td class="template-bodies rounded-r-xl">
-									<div class="flex w-full items-stretch justify-center gap-1">
-										<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.show', $account->id) }}">
-											<i class="bi bi-eye"></i>
-										</x-anchor-button>
-
-										<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_edit', $account->id) }}">
+		@if(request('role') == 'admin' || !request('role'))
+			<!-- Admin accounts -->
+			<div class="w-full overflow-x-auto" style="max-height: 500px;" id="admin-accounts">
+				<table class="w-full">
+					<thead>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Full Name</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Email</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Role</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Status</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
+					</thead>
+					<tbody>
+						@forelse ($admin_accounts as $admin_acc)
+							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
+								<td class="py-2 px-4">{{ $admin_acc->full_name }}</td>
+								<td class="py-2 px-4">{{ $admin_acc->email }}</td>
+								<td class="py-2 px-4">{{ ucwords($admin_acc->role->role_name) }}</td>
+								<td class="py-2 px-4 font-semibold @if($admin_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($admin_acc->status) }}</td>
+								<td class="py-2 px-4">
+									<div class="flex w-full items-stretch gap-1 justify-start">
+										<x-button type="button" class="reset-password-btn" data-account_name="{{ $admin_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $admin_acc->id) }}">
+											<i class="bi bi-regex"></i>
+										</x-button>
+										<x-anchor-button href="{{ route('admin.account.acc_edit', $admin_acc->id) }}">
 											<i class="bi bi-pencil-square"></i>
 										</x-anchor-button>
-
-										<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_enable.conf', $account->id) }}">
-											<i class="bi bi-check-circle"></i>
-										</x-anchor-button>
-
-										<x-anchor-button class="bg-orange-500" href="{{ route('admin.account.acc_delete', $account->id) }}">
+										<x-button type="button" class="disable-account-btn" data-account_name="{{ $admin_acc->full_name }}" data-route="{{ route('admin.account.acc_disable', $admin_acc->id) }}">
+											<i class="bi bi-ban"></i>
+										</x-button>
+										<x-button type="button" class="delete-account-btn" data-account_name="{{ $admin_acc->full_name }}" data-route="{{ route('admin.account.acc_delete', $admin_acc->id) }}">
 											<i class="bi bi-trash3"></i>
-										</x-anchor-button>
+										</x-button>
 									</div>
-
 								</td>
 							</tr>
-						@endforeach
-					@else
-						<tr><td colspan="5" class="bg-white p-5 rounded-xl text-center font-semibold">- No disabled accounts yet -</td></tr>
-					@endif
-				</tbody>
-			</table>
-		</div>
+						@empty
+							<tr class="bg-white">
+								<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+							</tr>
+						@endforelse
+					</tbody>
+				</table>
+			</div>
+		@endif
+
+		@if(request('role') == 'teacher')
+			<!-- Teacher accounts -->
+			<div class="w-full overflow-x-auto" style="max-height: 500px;" id="teacher-accounts">
+				<table class="w-full">
+					<thead>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Full Name</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Email</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Role</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Status</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
+					</thead>
+					<tbody>
+						@forelse ($teacher_accounts as $teacher_acc)
+							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
+								<td class="py-2 px-4">{{ $teacher_acc->details->gender == 1? 'Mr. ' : 'Ms. ' }} {{ $teacher_acc->full_name }}</td>
+								<td class="py-2 px-4">{{ $teacher_acc->email }}</td>
+								<td class="py-2 px-4">{{ ucwords($teacher_acc->role->role_name) }}</td>
+								<td class="py-2 px-4 font-semibold @if($teacher_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($teacher_acc->status) }}</td>
+								<td class="py-2 px-4">
+									<div class="flex w-full items-stretch gap-1 justify-start">
+										<x-button type="button" class="reset-password-btn" data-account_name="{{ $teacher_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $teacher_acc->id) }}">
+											<i class="bi bi-regex"></i>
+										</x-button>
+										<x-anchor-button href="{{ route('admin.account.acc_edit', $teacher_acc->id) }}">
+											<i class="bi bi-pencil-square"></i>
+										</x-anchor-button>
+										<x-button type="button" class="disable-account-btn" data-account_name="{{ $teacher_acc->full_name }}" data-route="{{ route('admin.account.acc_disable', $teacher_acc->id) }}">
+											<i class="bi bi-ban"></i>
+										</x-button>
+										<x-button type="button" class="delete-account-btn" data-account_name="{{ $teacher_acc->full_name }}" data-route="{{ route('admin.account.acc_delete', $teacher_acc->id) }}">
+											<i class="bi bi-trash3"></i>
+										</x-button>
+									</div>
+								</td>
+							</tr>
+						@empty
+							<tr class="bg-white">
+								<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+							</tr>
+						@endforelse
+					</tbody>
+				</table>
+			</div>
+		@endif
+
+		@if(request('role') == 'student')
+			<!-- Student accounts -->
+			<div class="w-full overflow-x-auto" style="max-height: 500px;" id="student-accounts">
+				<table class="w-full">
+					<thead>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Full Name</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Email</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Role</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Status</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
+					</thead>
+					<tbody>
+						@forelse ($student_accounts as $student_acc)
+							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
+								<td class="py-2 px-4">{{ $student_acc->full_name }}</td>
+								<td class="py-2 px-4">{{ $student_acc->email }}</td>
+								<td class="py-2 px-4">{{ ucwords($student_acc->role->role_name) }}</td>
+								<td class="py-2 px-4 font-semibold @if($student_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($student_acc->status) }}</td>
+								<td class="py-2 px-4">
+									<div class="flex w-full items-stretch gap-1 justify-start">
+										<x-button type="button" class="reset-password-btn" data-account_name="{{ $student_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $student_acc->id) }}">
+											<i class="bi bi-regex"></i>
+										</x-button>
+										<x-anchor-button href="{{ route('admin.account.acc_edit', $student_acc->id) }}">
+											<i class="bi bi-pencil-square"></i>
+										</x-anchor-button>
+										<x-button type="button" class="disable-account-btn" data-account_name="{{ $student_acc->full_name }}" data-route="{{ route('admin.account.acc_disable', $student_acc->id) }}">
+											<i class="bi bi-ban"></i>
+										</x-button>
+										<x-button type="button" class="delete-account-btn" data-account_name="{{ $student_acc->full_name }}" data-route="{{ route('admin.account.acc_delete', $student_acc->id) }}">
+											<i class="bi bi-trash3"></i>
+										</x-button>
+									</div>
+								</td>
+							</tr>
+						@empty
+							<tr class="bg-white">
+								<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+							</tr>
+						@endforelse
+					</tbody>
+				</table>
+			</div>
+		@endif
+
+		@if(request('role') == 'disabled')
+			<!-- Disabled accounts -->
+			<div class="w-full overflow-x-auto" style="max-height: 500px;" id="disabled-accounts">
+				<table class="w-full">
+					<thead>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Full Name</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Email</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Role</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Status</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Reason</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
+					</thead>
+					<tbody>
+						@forelse ($disabled as $disabled_acc)
+							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
+								<td class="py-2 px-4">{{ $disabled_acc->full_name }}</td>
+								<td class="py-2 px-4">{{ $disabled_acc->email }}</td>
+								<td class="py-2 px-4">{{ ucwords($disabled_acc->role->role_name) }}</td>
+								<td class="py-2 px-4 font-semibold @if($disabled_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($disabled_acc->status) }}</td>
+								<td class="py-2 px-4">{{ $disabled_acc->disable_reason }}</td>
+								<td class="py-2 px-4">
+									<div class="flex w-full items-stretch gap-1 justify-start">
+										<x-button type="button" class="reset-password-btn" data-account_name="{{ $disabled_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $disabled_acc->id) }}">
+											<i class="bi bi-regex"></i>
+										</x-button>
+										<x-anchor-button href="{{ route('admin.account.acc_edit', $disabled_acc->id) }}">
+											<i class="bi bi-pencil-square"></i>
+										</x-anchor-button>
+										<x-button type="button" class="enable-account-btn" data-account_name="{{ $disabled_acc->full_name }}" data-route="{{ route('admin.account.acc_enable.conf', $disabled_acc->id) }}">
+											<i class="bi bi-check-circle"></i>
+										</x-button>
+										<x-button type="button" class="delete-account-btn" data-account_name="{{ $disabled_acc->full_name }}" data-route="{{ route('admin.account.acc_delete', $disabled_acc->id) }}">
+											<i class="bi bi-trash3"></i>
+										</x-button>
+									</div>
+								</td>
+							</tr>
+						@empty
+							<tr class="bg-white">
+								<td class="py-2 px-4 text-center" colspan="6">- No data found -</td>
+							</tr>
+						@endforelse
+					</tbody>
+				</table>
+			</div>
+		@endif
 	</x-section-container>
 
 	<script>
-		function handleFormSubmit() {
-			// Capture the current scroll position
-			var scrollPosition = window.scrollY || window.pageYOffset;
-			// Store the scroll position in local storage
-			localStorage.setItem('scrollPosition', scrollPosition);
+		function initializeDisableAccountPopup(route, whichpopup, account){
+			$('#disable-account-name').text(account);
+			$(".h-route").val(route);
+			$("#h-account-name").val(account)
+			$(".h-last-popup").val(whichpopup);
+			$(`#${whichpopup}`).find('form').attr('action', route);
+
+			$(`#${whichpopup}`).parent().show();
 		}
 
-		// Restore scroll position after the page loads
-		window.onload = function() {
-			var scrollPosition = localStorage.getItem('scrollPosition');
-			if (scrollPosition !== null) {
-				// Temporarily disable smooth scroll behavior
-				document.documentElement.style.scrollBehavior = 'auto';
-				window.scrollTo(0, parseInt(scrollPosition, 10));
-				localStorage.removeItem('scrollPosition'); // Clean up
-				// Re-enable smooth scroll behavior
-				setTimeout(function() {
-					document.documentElement.style.scrollBehavior = 'smooth';
-				}, 100);
+		$('.reset-password-btn').click(function(){
+			$('#reset-password-name').text($(this).data('account_name'));
+			$('#reset-password-popup').find('form').attr('action', $(this).data('route'));
+			$('#reset-password-popup').parent().show();
+		});
+
+		$('.enable-account-btn').click(function(){
+			$('#enable-account-name').text($(this).data('account_name'));
+			$('#enable-account-popup').find('form').attr('action', $(this).data('route'));
+			$('#enable-account-popup').parent().show();
+		});
+
+		$('.delete-account-btn').click(function(){
+			$('#del-account-name').text($(this).data('account_name'));
+			$('#delete-account-popup').find('form').attr('action', $(this).data('route'));
+			$('#delete-account-popup').parent().show();
+		});
+
+		$('.disable-account-btn').click(function(){
+			initializeDisableAccountPopup($(this).data('route'), 'disable-account-popup', $(this).data('account_name'));
+		});
+
+		// Redisplay popup and fill with prev data (for invalidated data)
+		@if ($errors->any())
+			// Retrieve and re-save saved data
+			const old_popup = @json(old('h-last-popup'));
+
+			if(old_popup == "disable-account-popup"){
+				const old_route = @json(old('h-route'));
+				const account = @json(old('h-account-name'));
+
+				initializeDisableAccountPopup(old_route, old_popup, account);
 			}
-		};
+		@endif
 	</script>
 @endsection

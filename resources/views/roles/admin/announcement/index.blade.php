@@ -11,6 +11,7 @@
 @section("content")
 	<x-section-container>
 		<x-page-title>{{ __("All Announcements") }}</x-page-title>
+		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
 		@if(session()->has("successUploadAnnouncement"))
 			<x-badge-success badge_text="{{ session('successUploadAnnouncement') }}">
@@ -28,7 +29,7 @@
 		</div>
 
 		@foreach($announcements as $announcement)
-			<div class="p-5 my-4 rounded-xl bg-white">
+			<div class="p-5 my-2 rounded-xl" style="background: @if($loop->iteration % 2 == 1) white @else linear-gradient(to right, rgba(190, 226, 219, 0.49) 0%, rgba(104, 124, 120, 0) 100%) @endif;">
 				<div class="flex w-full items-center justify-between">
 					<div class="">
 						<p class="text-blue-900 font-bold text-lg">
@@ -44,7 +45,7 @@
 								}
 							@endphp
 						</p>
-						<p>
+						<p class="mt-2">
 							Announced to
 							@php
 								$sent_to = json_decode($announcement->sent_to, true);
@@ -62,16 +63,18 @@
 								echo $formattedString . (empty($formattedString) ? '' : ', and ') . $lastItem;
 							@endphp
 						</p>
-						<p>Period: <span class="font-bold">{{ $announcement->announce_from }}</span> until <span class="font-bold">{{ $announcement->announce_until }}</span></p>
+						<p class="mt-2">Period: <span class="font-bold">{{ $announcement->announce_from }}</span> until <span class="font-bold">{{ $announcement->announce_until }}</span></p>
 					</div>
-					<div class="flex gap-3">
+					<div class="flex gap-2">
 						<x-anchor-button class="bg-orange-500" href="{{ route('admin.announcement.edit', $announcement->id) }}">
-							Edit
+							<i class="bi bi-pencil-square"></i>
 						</x-anchor-button>
 						<x-anchor-button class="bg-orange-500" href="{{ route('admin.announcement.delete', $announcement->id) }}">
-							Delete
+							<i class="bi bi-trash3"></i>
 						</x-anchor-button>
-						<x-button type="button" class="bg-orange-500 toggleBtn">Show Content</x-button>
+						<x-button type="button" class="bg-orange-500 toggleBtn">
+							<i class="bi bi-eye"></i>
+						</x-button>
 					</div>
 				</div>
 
@@ -97,13 +100,7 @@
 
 			allToggleBtn.each(function(index, element) {
 				$(element).click(() => {
-					allContentTable.eq(index).slideToggle(() => {
-					if (allContentTable.eq(index).is(":visible")) {
-						$(element).text("Hide Content");
-					} else {
-						$(element).text("Show Content");
-					}
-				});
+					allContentTable.eq(index).slideToggle();
 				});
 			});
 
