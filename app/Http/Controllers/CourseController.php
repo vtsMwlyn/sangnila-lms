@@ -195,7 +195,14 @@ class CourseController extends Controller {
 		}
 
 		// Other data
-		$progresses = Progress::where('course_id', $course_id)->where('student_id', Auth::user()->id)->get();
+		$progresses = Progress::where('student_id', $cs->student->id)
+			->where('course_id', $cs->course->id)
+			->with('activity') // Load the related activity
+			->join('activities', 'progress.activity_id', '=', 'activities.id') // Join with activities
+			->orderBy('activities.session', 'asc') // Order by session
+			->orderBy('activities.created_at', 'asc') // Order by created_at
+			->select('progress.*') // Only select columns from Progress
+			->get();
 
 		$progressAndActivity = [];
 		foreach($progresses as $prgs){
@@ -206,6 +213,29 @@ class CourseController extends Controller {
 			$pam["learning_outcomes"] = $prgs->activity->learning_outcomes->toJson();
 			array_push($progressAndActivity, $pam);
 		}
+
+		// Kalo mau digrouping by session tapi keknya masih susan
+		// $progressAndActivity = Progress::where('course_id', $course_id)
+		// 	->where('student_id', Auth::user()->id)
+		// 	->with(['activity.topic', 'activity.learning_outcomes']) // Eager load related models
+		// 	->get()
+		// 	->groupBy(function ($progress) {
+		// 		return $progress->activity->session; // Group by activity's session
+		// 	})
+		// 	->map(function ($progresses, $session) {
+		// 		return [
+		// 			'session' => $session,
+		// 			'progresses' => $progresses->map(function ($progress) {
+		// 				return [
+		// 					'progress' => $progress,
+		// 					'activity' => $progress->activity,
+		// 					'topic' => $progress->activity->topic,
+		// 					'learning_outcomes' => $progress->activity->learning_outcomes,
+		// 				];
+		// 			}),
+		// 		];
+		// 	});
+
 
 		if($max_session_reached){
 			return view('roles.student.course.show', [

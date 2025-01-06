@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Topic;
 use App\Models\Course;
+use App\Models\Activity;
 use App\Models\Progress;
 use App\Models\Notification;
 use Illuminate\Http\Request;
@@ -40,7 +41,16 @@ class ProgressController extends Controller {
 			}
 		}
 
-		$newestProgress = Progress::where('student_id', $student->id)->where('course_id', $course->id)->get();
+		// $newestProgress = Progress::where('student_id', $student->id)->where('course_id', $course->id)->get();
+		$newestProgress = Progress::where('student_id', $student->id)
+			->where('course_id', $course->id)
+			->with('activity') // Load the related activity
+			->join('activities', 'progress.activity_id', '=', 'activities.id') // Join with activities
+			->orderBy('activities.session', 'asc') // Order by session
+			->orderBy('activities.created_at', 'asc') // Order by created_at
+			->select('progress.*') // Only select columns from Progress
+			->get();
+
 
 		return view('roles.teacher.student.progress', [
 			'student' => $student,

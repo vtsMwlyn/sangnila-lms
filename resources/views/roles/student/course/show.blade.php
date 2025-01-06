@@ -117,6 +117,7 @@
 								// Update the content with topic and activity info
 								$("#topic").text(matprog[index].topic.title);
 								$("#activity").text(matprog[index].activity.title);
+								$("#activity-desc").text(matprog[index].activity.desc);
 								$("#preview-link").attr("href", $(this).data('route'));
 								$("#num").text(index + 1);
 
@@ -185,12 +186,12 @@
 
 			<div class="flex flex-col gap-8 mt-8 w-full px-8">
 				<div class="flex flex-col">
-					<h3 class="text-xs">Start time</h3>
-					<h2>N/A</h2>
-				</div>
-				<div class="flex flex-col">
-					<h3 class="text-xs">End time</h3>
-					<h2>N/A</h2>
+					<h3 class="text-xs">Description</h3>
+					@if(count($activityProgresses) > 0)
+						<h2 id="activity-desc">{{ $activityProgresses[0]["activity"]->desc }}</h2>
+					@else
+						<h2 id="activity-desc">N/A</h2>
+					@endif
 				</div>
 				<div class="flex flex-col">
 					<h3 class="text-xs">Delivery Mode</h3>

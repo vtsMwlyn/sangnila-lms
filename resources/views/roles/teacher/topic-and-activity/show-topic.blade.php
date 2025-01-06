@@ -101,7 +101,7 @@
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 				</thead>
 				<tbody>
-					@forelse ($topic->activities as $activity)
+					@forelse ($topic->activities()->orderBy('session', 'asc')->get() as $activity)
 						<tr class="@if($loop->index % 2 == 0) bg-white @endif">
 							<td class="py-2 px-4 text-center">{{ $activity->session }}</td>
 							<td class="py-2 px-4 w-1/4">{{ $activity->title }}</td>

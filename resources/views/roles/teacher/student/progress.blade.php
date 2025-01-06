@@ -29,6 +29,7 @@
 
 				<table class="w-full">
 					<thead>
+						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Session</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Topic</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activity Name</th>
 						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Material Access</th>
@@ -36,6 +37,7 @@
 					<tbody>
 						@forelse ($newestprogress as $progress)
 							<tr class="@if($loop->index % 2 == 0) bg-white @endif">
+								<td class="py-2 px-4 text-center">{{ $progress->activity->session }}</td>
 								<td class="py-2 px-4">{{ $progress->activity->topic->title }}</td>
 								<td class="py-2 px-4">{{ $progress->activity->title }}</td>
 								<td class="py-2 px-4">
