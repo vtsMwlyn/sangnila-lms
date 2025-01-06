@@ -12,39 +12,40 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-4" style="margin-bottom: 0">
-			<a href="{{ route("teacher.mycourse.show", $topic->course->id) }}">{{ $topic->course->course_name }}</a>
-		</x-page-title>
-		<h1 class="text-2xl font-semibold text-blue-900 mb-8 text-center mt-4">Upload Activity to Topic "{{ $topic->title }}"</h1>
+		<x-page-title style="margin-bottom: 0;">New Activity</x-page-title>
+		<h1 class="text-xl font-semibold text-blue-900 mt-2">Topic: {{ $topic->title }}</h1>
+		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("systemFail"))
 			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('teacher.mycourse.activity.store', $topic->id) }}" method="post">
+		<form action="{{ route('teacher.mycourse.activity.store', $topic->id) }}" method="post" class="mt-3">
 			@csrf
-			<!-- Activity Title -->
-			<div class="flex gap-2 @error('title') items-start @else items-stretch @enderror">
-				<x-boxed-label for="title" :value="__('Activity Title')" />
-				<div class="flex flex-col w-full items-stretch">
-					<x-input id="title" class="w-full" type="text" name="title" placeholder="Enter activity title" autofocus />
+			<div class="flex gap-5 w-full">
+				<!-- Activity Title -->
+				<div class="flex flex-col w-1/2">
+					<x-label for="title" :value="__('Activity Title')" />
+					<x-input id="title" class="w-full" type="text" name="title" placeholder="Enter activity title" value="{{ old('title') }}" autofocus />
+				</div>
+
+				<!-- Session -->
+				<div class="flex flex-col w-1/2">
+					<x-label for="session" :value="__('Session')" />
+					<x-input id="session" class="w-full" type="text" name="session" placeholder="Enter activity session" value="{{ old('session') }}" />
 				</div>
 			</div>
 
 			<!-- Activity Description -->
-			<div class="mt-4 flex gap-2 @error('desc') items-start @else items-stretch @enderror">
-				<x-boxed-label for="desc" :value="__('Activity Description')" />
-				<div class="flex flex-col w-full items-stretch">
-					<x-input id="desc" class="w-full" type="text" name="desc" placeholder="Enter activity description" />
-				</div>
+			<div class="w-full flex flex-col mt-4">
+				<x-label for="desc" :value="__('Activity Description')" />
+				<x-input id="desc" class="w-full" type="text" name="desc" placeholder="Enter activity description" value="{{ old('desc') }}" />
 			</div>
 
 			<!-- Activity Link -->
-			<div class="mt-4 flex gap-2 @error('link') items-start @else items-stretch @enderror">
-				<x-boxed-label for="link" :value="__('Activity Link')" />
-				<div class="flex flex-col w-full items-stretch">
-					<x-input id="link" class="w-full" type="text" name="link" placeholder="Enter activity link" />
-				</div>
+			<div class="w-full flex flex-col mt-4">
+				<x-label for="link" :value="__('Activity Link')" />
+				<x-input id="link" class="w-full" type="text" name="link" placeholder="Enter activity link" value="{{ old('link') }}" />
 			</div>
 
 			<!-- Learning Outcome -->
@@ -72,13 +73,13 @@
 				<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> Please select minimum 1 item.</p>
 			@enderror
 
-			<div class="flex gap-2 items-stretch justify-center w-full mt-20 mb-3">
-				<x-button class="bg-orange-500 w-full md:w-1/6">
-					{{ __('Save') }}
-				</x-button>
+			<div class="flex gap-2 items-stretch justify-end w-full mt-10 mb-3">
 				<x-cancel-button class="w-full md:w-1/6">
 					Cancel
 				</x-cancel-button>
+				<x-button class="bg-orange-500 w-full md:w-1/6">
+					{{ __('Save') }}
+				</x-button>
 			</div>
 		</form>
 	</x-section-container>

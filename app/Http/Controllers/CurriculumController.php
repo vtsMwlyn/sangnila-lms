@@ -260,7 +260,8 @@ class CurriculumController extends Controller
 						"topic_id" => $ntopic->id,
 						"title" => $activity->title,
 						"desc" => $activity->desc,
-						"link" => $activity->link
+						"link" => $activity->link,
+						"session" => $activity->session
 					]);
 
 					foreach($activity->learning_outcomes as $ctlo){
@@ -311,12 +312,19 @@ class CurriculumController extends Controller
 			$curriculum_topics = CurriculumTopic::where("course_id", $course_id)->get();
 
 			$i = 0;
+			$session_number = 0;
+			$already_created_topics = [];
+
 			foreach($curriculum_topics as $ctopic){
-				$ntopic = Topic::create([
-					"title" => $ctopic->title,
-					"user_id" => Auth::user()->id,
-					"course_id" => $course->id
-				]);
+				if($request->selected[$i] == 'on' && !in_array($ctopic->id, $already_created_topics)){
+					$ntopic = Topic::create([
+						"title" => $ctopic->title,
+						"user_id" => Auth::user()->id,
+						"course_id" => $course->id
+					]);
+
+					array_push($already_created_topics, $ctopic->id);
+				}
 
 				foreach($ctopic->curriculum_activities as $cactivity){
 					if($request->selected[$i] == "on"){
@@ -324,7 +332,8 @@ class CurriculumController extends Controller
 							"topic_id" => $ntopic->id,
 							"title" => $cactivity->title,
 							"desc" => $cactivity->desc,
-							"link" => $cactivity->link
+							"link" => $cactivity->link,
+							"session" => $session_number + 1
 						]);
 
 						foreach($cactivity->learning_outcomes as $ctlo){
@@ -333,6 +342,8 @@ class CurriculumController extends Controller
 								"activity_id" => $nyuu->id
 							]);
 						}
+
+						$session_number++;
 					}
 
 					$i++;
@@ -343,8 +354,8 @@ class CurriculumController extends Controller
 		}
 		catch(Exception $e){
 			DB::rollback();
-
-			return back()->with("systemFail", "System failed to save selected syllabus topic and activities to your course's topics and activities. Please report this error to our IT team. Error detail: " . $e->getMessage());
+			throw $e;
+			// return back()->with("systemFail", "System failed to save selected syllabus topic and activities to your course's topics and activities. Please report this error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 		return redirect(route('teacher.mycourse.show', $course->id))->with("successPickFromCurriculum", "Successfully picked topics and activities from the curriculum");

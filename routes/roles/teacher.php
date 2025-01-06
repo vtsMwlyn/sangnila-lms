@@ -53,18 +53,15 @@ Route::prefix('/teacher')
 				->name("topic.")
 				->group(function(){
 					// Add new topic
-					Route::get("/{course_id}", [TopicController::class, "teacher_create"])->name("create")->whereNumber('course_id');
 					Route::post("/{course_id}", [TopicController::class, "teacher_store"])->name("store")->whereNumber('course_id');
 
 					// Topic details
 					Route::get("/{course_id}/{topic_id}/detail", [TopicController::class, "teacher_show"])->name("show")->whereNumber(['course_id', 'topic_id']);
 
 					// Edit topic
-					Route::get("/{course_id}/{topic_id}/edit", [TopicController::class, "teacher_edit"])->name("edit")->whereNumber(['course_id', 'topic_id']);
 					Route::patch("/{course_id}/{topic_id}/edit", [TopicController::class, "teacher_update"])->name("update")->whereNumber(['course_id', 'topic_id']);
 
 					// Delete topic
-					Route::get("/{course_id}/{topic_id}/delete", [TopicController::class, "teacher_delete"])->name("delete")->whereNumber(['course_id', 'topic_id']);
 					Route::delete("/{course_id}/{topic_id}/delete", [TopicController::class, "teacher_destroy"])->name("destroy")->whereNumber(['course_id', 'topic_id']);
 				}
 			);
@@ -82,7 +79,6 @@ Route::prefix('/teacher')
 					Route::patch('/{activity_id}', [ActivityController::class, 'teacher_update'])->name('update')->whereNumber('activity_id');
 
 					// Delete activity
-					Route::get('/{activity_id}/delete', [ActivityController::class, 'teacher_delete'])->name('remove')->whereNumber('activity_id');
 					Route::delete('/{activity_id}', [ActivityController::class, 'teacher_destroy'])->name('destroy')->whereNumber('activity_id');
 
 				}

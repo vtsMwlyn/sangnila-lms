@@ -33,6 +33,7 @@ class ActivityController extends Controller {
 			"title" => "required|min:3",
 			"link" => "nullable|url",
 			"desc" => "required|min:3",
+			"session" => "required|numeric|min:1"
 		]);
 
 		$topic = Topic::findOrFail($topic_id);
@@ -42,7 +43,8 @@ class ActivityController extends Controller {
 				"topic_id" => $topic->id,
 				"title" => $validatedData["title"],
 				"link" => $validatedData["link"],
-				"desc" => $validatedData["desc"]
+				"desc" => $validatedData["desc"],
+				"session" => $validatedData["session"]
 			]);
 
 			foreach(LearningOutcome::where("course_id", $topic->course->id)->orderBy("number", "asc")->get() as $i => $lo){
@@ -98,6 +100,7 @@ class ActivityController extends Controller {
 			"title" => "required|min:3",
 			"link" => "nullable|url",
 			"desc" => "required|min:3",
+			"session" => "required|numeric|min:1"
 		]);
 
 		$activity = Activity::findOrFail($activity_id);
@@ -107,7 +110,8 @@ class ActivityController extends Controller {
 			$activity->update([
 				"title" => $request->title,
 				"desc" => $request->desc,
-				"link" => $request->link
+				"link" => $request->link,
+				"session" => $request->session
 			]);
 
 			$learning_outcomes = LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get();

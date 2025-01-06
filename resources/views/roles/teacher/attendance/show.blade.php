@@ -9,16 +9,7 @@
 @endsection
 
 @section("popup")
-	<x-popup class="w-2/3 flex flex-col items-stretch justify-center overflow-y-auto" id="attendance-details">
-		<!-- Popup header -->
-		<div class="flex items-center w-full">
-			<div class="font-bold text-2xl grow text-center">Attendance Details</div>
-			<button type="button" class="popup-dismiss">
-				<img src="{{ asset('img/close.svg') }}" alt="history-icon" class="w-6 h-6 hover:scale-110">
-			</button>
-		</div>
-		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
-
+	<x-popup popup_title="Attendance Details" class="w-2/3 flex flex-col items-stretch justify-center overflow-y-auto" id="attendance-details">
 		<!-- Popup content -->
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<div class="w-full overflow-x-auto">

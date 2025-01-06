@@ -13,41 +13,41 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title class="mt-4" style="margin-bottom: 0">
-			<a href="{{ route("teacher.mycourse.show", $activity->topic->course->id) }}">{{ $activity->topic->course->course_name }}</a>
-		</x-page-title>
-		<h1 class="text-2xl font-semibold text-blue-900 mb-8 text-center mt-4">{{ $activity->topic->title }} - Edit Activity "{{ $activity->title }}"</h1>
+		<x-page-title style="margin-bottom: 0;">Edit Activity</x-page-title>
+		<h1 class="text-xl font-semibold text-blue-900 mt-2">Topic: {{ $activity->topic->title }}</h1>
+		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("systemFail"))
 			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('teacher.mycourse.activity.update', $activity->id) }}" method="post">
+		<form action="{{ route('teacher.mycourse.activity.update', $activity->id) }}" method="post" class="mt-3">
 			@csrf
 			@method('PATCH')
 			<!-- Activity Title -->
-			<div class="flex gap-2 @error('title') items-start @else items-stretch @enderror">
-				<x-boxed-label for="title" :value="__('Activity Title')" />
-				<div class="flex flex-col w-full items-stretch">
-					<x-input id="title" class="w-full" type="text" name="title" :value="old('title', $activity->title)"
-						autofocus />
-					</div>
+			<div class="w-full flex gap-5">
+				<div class="w-1/2 flex flex-col">
+					<x-label for="title" :value="__('Activity Title')" />
+					<x-input id="title" class="w-full" type="text" name="title" :value="old('title', $activity->title)" autofocus />
 				</div>
+
+				<!-- Session -->
+				<div class="w-1/2 flex flex-col">
+					<x-label for="session" :value="__('Session')" />
+					<x-input id="session" class="w-full" type="text" name="session" placeholder="Enter activity session" :value="old('session', $activity->session)" />
+				</div>
+			</div>
 
 			<!-- Activity Description -->
-			<div class="mt-4 flex gap-2 @error('desc') items-start @else items-stretch @enderror">
-				<x-boxed-label for="desc" :value="__('Activity Description')" />
-				<div class="flex flex-col w-full items-stretch">
-					<x-input id="desc" class="w-full" type="text" name="desc" :value="old('desc', $activity->desc)" />
-					</div>
-				</div>
+			<div class="mt-4 w-full flex flex-col">
+				<x-label for="desc" :value="__('Activity Description')" />
+				<x-input id="desc" class="w-full" type="text" name="desc" :value="old('desc', $activity->desc)" />
+			</div>
 
 			<!-- Activity Link -->
-			<div class="mt-4 flex gap-2 @error('link') items-start @else items-stretch @enderror">
-				<x-boxed-label for="link" :value="__('Activity Link')" />
-				<div class="flex flex-col w-full items-stretch">
-					<x-input id="link" class="w-full" type="text" name="link" :value="old('link', $activity->link)" />
-				</div>
+			<div class="mt-4 w-full flex flex-col">
+				<x-label for="link" :value="__('Activity Link')" />
+				<x-input id="link" class="w-full" type="text" name="link" :value="old('link', $activity->link)" />
 			</div>
 
 			<!-- Learning Outcome -->
