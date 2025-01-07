@@ -112,7 +112,7 @@
 				<x-cancel-button class="w-full md:w-1/5">
 					Cancel
 				</x-cancel-button>
-				<x-button class="bg-orange-500 w-full md:w-1/5">
+				<x-button class=" w-full md:w-1/5">
 					{{ __('Submit') }}
 				</x-button>
 			</div>

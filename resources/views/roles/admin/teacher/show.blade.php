@@ -26,7 +26,7 @@
 				</div>
 
 				<div class="flex gap-3 w-full justify-center">
-					<x-button type="submit" class="bg-orange-500 w-1/6 mt-5">
+					<x-button type="submit" class=" w-1/6 mt-5">
 						Assign
 					</x-button>
 				</div>
@@ -77,14 +77,14 @@
 		</div>
 
 		<div class="my-4 w-full flex justify-end">
-			<x-anchor-button class="bg-orange-500" href="{{ route('admin.teacher.edit', $teacher->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
+			<x-anchor-button  href="{{ route('admin.teacher.edit', $teacher->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		</div>
 
 		<!-- Courses and Students List -->
 		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
 		<div class="flex my-4 w-full justify-between items-center">
 			<h2 class="font-extrabold text-xl text-dark-blue">List of Assigned Courses and Students</h2>
-			<x-button type="button" id="assign-teacher-btn" class="bg-orange-500" data-route="{{ route('admin.teacher.assign.store', $teacher->id) }}">
+			<x-button type="button" id="assign-teacher-btn"  data-route="{{ route('admin.teacher.assign.store', $teacher->id) }}">
 				<i class="bi bi-plus-lg"></i> Assign to Course
 			</x-button>
 		</div>

@@ -49,7 +49,7 @@
 				</div>
 
 				<div class="mt-12 w-full flex justify-center">
-					<x-button class="bg-orange-500 w-full py-4">
+					<x-button class=" w-full py-4">
 						{{ __('LOGIN') }}
 					</x-button>
 				</div>

@@ -42,7 +42,7 @@
 							<div class="w-full flex md:flex-row flex-col md:items-center gap-0">
 								<p class="w-full md:w-1/4 font-semibold"><a href="{{ route('student.mycourse.show', $cstudent->course->id) }}" class="hover:underline hover:text-indigo-600">{{ $cstudent->course->course_name }}</a></p>
 								<div class="grow flex flex-col border-l py-3">
-									<div class="h-6 bg-orange-500" style="width: {{ ($attendance_progress[$i][0] / $attendance_progress[$i][1]) * 100 }}%"></div>
+									<div class="h-6 " style="width: {{ ($attendance_progress[$i][0] / $attendance_progress[$i][1]) * 100 }}%"></div>
 									<div class="h-6 bg-blue-600" style="width: {{ ($activity_progress[$i][0] / $activity_progress[$i][1]) * 100 }}%"></div>
 								</div>
 							</div>
@@ -53,7 +53,7 @@
 					N/A
 					<div class="flex md:flex-row flex-col gap-2 md:gap-5 w-full justify-end">
 						<div class="flex items-center gap-3">
-							<div class="h-4 w-4 bg-orange-500"></div>
+							<div class="h-4 w-4 "></div>
 							<p>Item 1</p>
 						</div>
 						<div class="flex items-center gap-3">

@@ -13,6 +13,7 @@ use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\ExcelImportController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\DownloadResourceController;
+use App\Http\Controllers\TeacherController;
 
 Route::prefix('/teacher')
 	->name('teacher.')
@@ -110,7 +111,6 @@ Route::prefix('/teacher')
 		Route::prefix('/attendance')
 			->name('attendance.')
 			->group(function () {
-
 				// Pick an intended course to manage attendance
 				Route::get("/", [AttendanceController::class, "index"])->name("index");
 
@@ -126,6 +126,11 @@ Route::prefix('/teacher')
 				// Edit attendance data
 				Route::get("/{attendance_data_id}/edit", [AttendanceController::class, "edit"])->name("edit")->whereNumber('attendance_data_id');
 				Route::post("/{attendance_data_id}/edit", [AttendanceController::class, "update"])->name("update")->whereNumber('attendance_data_id');
+
+				// Self attendance
+				Route::get("/{course_id}/self/check-in", [TeacherController::class, "check_in"])->name("check-in")->whereNumber("course_id");
+				Route::post("/{course_id}/self/check-in", [TeacherController::class, "check_in_store"])->name("check-in.store")->whereNumber("course_id");
+				Route::post("/{course_id}/self/check-out", [TeacherController::class, "check_out_store"])->name("check-out.store")->whereNumber("course_id");
 			}
 		);
 

@@ -56,7 +56,7 @@
 										<x-input id="feedback" style="min-width: 250px" type="text" name="feedback" placeholder="Your feedback"
 											:value="old('feedback', $submission->feedback)" />
 									</div>
-									<x-button class="bg-orange-500">
+									<x-button >
 										{{ __('Save') }}
 									</x-button>
 								</form>

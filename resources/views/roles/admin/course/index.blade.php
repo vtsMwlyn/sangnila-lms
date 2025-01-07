@@ -17,7 +17,7 @@
 
 		<div class="flex items-center mt-6">
 			<div class="w-1/4">
-				<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.create') }}"><i class="bi bi-plus-lg"></i> Add New Course</x-anchor-button>
+				<x-anchor-button  href="{{ route('admin.course.create') }}"><i class="bi bi-plus-lg"></i> Add New Course</x-anchor-button>
 			</div>
 
 			<form class="flex w-1/2 justify-center" action="{{ route("admin.course.index") }}">
@@ -61,11 +61,11 @@
 							<td class="py-2 px-4 font-semibold @if($course->status == "active") text-light-blue @else text-red @endif">{{ ucwords($course->status) }}</td>
 							<td class="py-2 px-4">
 								<div class="flex gap-1 w-full">
-									<x-anchor-button class="bg-orange-500"
+									<x-anchor-button
 										href="{{ route('admin.course.show', ['course_id' => $course->id]) }}">
 										<i class="bi bi-eye"></i>
 									</x-anchor-button>
-									<x-anchor-button class="bg-orange-500"
+									<x-anchor-button
 										href="{{ route('admin.course.edit', $course->id) }}">
 										<i class="bi bi-pencil-square"></i>
 									</x-anchor-button>

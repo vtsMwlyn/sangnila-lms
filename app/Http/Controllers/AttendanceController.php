@@ -10,7 +10,9 @@ use App\Models\Attendance;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
 use App\Models\ImportedStudent;
+use App\Models\LecturerAttendance;
 use App\Models\StudentAttendance;
+use Carbon\Carbon;
 use Google\Service\Classroom\Student;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -30,9 +32,12 @@ class AttendanceController extends Controller {
 
 		$attendanceData = Attendance::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->with(['student_attendances.student'])->latest()->get();
 
+		$todaySelfAttendance = LecturerAttendance::where("user_id", Auth::user()->id)->where("course_id", $course->id)->where("self_attendance_date", Carbon::today()->format('Y-m-d'))->first();
+
 		return view('roles.teacher.attendance.show', [
 			'attendanceData' => $attendanceData,
-			"course" => $course
+			"course" => $course,
+			"todaySelfAttendance" => $todaySelfAttendance
 		]);
 	}
 

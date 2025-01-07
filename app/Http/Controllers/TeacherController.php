@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Course;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -76,4 +77,24 @@ class TeacherController extends Controller {
 		return redirect(route("admin.teacher.show", $teacher_id))->with("successUpdateTeacherData", "Successfully updated teacher data!");
 	}
 
+	// Teacher self attendance
+	public function check_in($course_id){
+		return view("roles.teacher.check-in", [
+			"course" => Course::findOrFail($course_id)
+		]);
+	}
+
+	public function check_in_store(Request $request, $course_id){
+		if($request->file('image')){
+			$request->file("image")->store("lecturer-checkin");
+
+			return 'ada lho';
+		} else {
+			return 'ga ada lho';
+		}
+	}
+
+	public function check_out_store(Request $request, $course_id){
+		return $request;
+	}
 }

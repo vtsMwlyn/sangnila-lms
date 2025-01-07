@@ -26,8 +26,8 @@
 		</div>
 
 		<div class="flex gap-1 mt-5 w-full justify-end">
-			<x-button class="bg-orange-500" type="button" onclick="history.back();">{{ __("Cancel") }}</x-button>
-			<x-button class="bg-orange-500">{{ __("Proceed") }}</x-button>
+			<x-button  type="button" onclick="history.back();">{{ __("Cancel") }}</x-button>
+			<x-button >{{ __("Proceed") }}</x-button>
 		</div>
 	</form>
 @endsection

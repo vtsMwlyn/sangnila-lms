@@ -21,7 +21,7 @@
 				</div>
 
 				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">
-					<x-button class="bg-orange-500 w-full md:w-1/5">
+					<x-button class=" w-full md:w-1/5">
 						{{ __('Submit') }}
 					</x-button>
 				</div>
@@ -46,7 +46,7 @@
 				</div>
 
 				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">
-					<x-button class="bg-orange-500 w-full md:w-1/5">
+					<x-button class=" w-full md:w-1/5">
 						{{ __('Submit') }}
 					</x-button>
 				</div>
@@ -119,17 +119,17 @@
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
 		<div class="flex justify-between items-stretch w-full mt-5">
-			<x-button type="button" class="bg-orange-500" data-route="{{ route('teacher.mycourse.topic.store', $course->id) }}" id="new-topic-btn"><i class="bi bi-plus-lg"></i> Add New Topic</x-button>
+			<x-button type="button"  data-route="{{ route('teacher.mycourse.topic.store', $course->id) }}" id="new-topic-btn"><i class="bi bi-plus-lg"></i> Add New Topic</x-button>
 
 			<div class="flex gap-5">
-				<x-anchor-button class="bg-orange-500"
+				<x-anchor-button
 					href="{{ route('teacher.mycourse.import-excel-topicandactivities', $course->id) }}">
 					<i class="bi bi-file-earmark-arrow-up"></i> Import from Excel
 				</x-anchor-button>
 
 				@if($has_curriculum > 0)
 					<div class="relative flex flex-col items-end dropdown-container">
-						<x-button class="bg-orange-500" type="button" class="dropdown-toggler">
+						<x-button  type="button" class="dropdown-toggler">
 							<i class="bi bi-arrow-repeat"></i> Generate from Syllabus
 						</x-button>
 						<div class="absolute z-10 overflow-hidden bg-white top-12 w-80 rounded-3xl text-sm font-semibold flex flex-col py-2 dropdown-menu" style="display: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">

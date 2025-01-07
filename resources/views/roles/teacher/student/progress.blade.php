@@ -56,7 +56,7 @@
 
 				@if($newestprogress->isNotEmpty())
 					<div class="flex gap-2 mt-10 mb-3 w-full justify-center">
-						<x-button class="bg-orange-500 w-full md:w-1/6">Save</x-button>
+						<x-button class=" w-full md:w-1/6">Save</x-button>
 						<x-cancel-button class="w-full md:w-1/6" href="{{ route('teacher.student.select-student', $course->id) }}">Cancel</x-cancel-button>
 					</div>
 				@endif
@@ -108,7 +108,7 @@
 
 				@if($newestprogress->isNotEmpty())
 					<div class="flex gap-2 mt-10 mb-3 w-full justify-center">
-						<x-button class="bg-orange-500 w-full md:w-1/6">Save</x-button>
+						<x-button class=" w-full md:w-1/6">Save</x-button>
 						<x-cancel-button class=" w-full md:w-1/6" msg="All changes will be discarded, are you sure want to cancel?">Cancel</x-cancel-button>
 					</div>
 				@endif

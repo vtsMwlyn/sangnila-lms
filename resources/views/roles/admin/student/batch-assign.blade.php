@@ -50,7 +50,7 @@
 						</div>
 					</div>
 					<div class="flex w-full justify-end mt-8">
-						<x-button class="bg-orange-500 w-1/2 md:w-1/6" type="button" id="addBtn">Add Data</x-button>
+						<x-button class=" w-1/2 md:w-1/6" type="button" id="addBtn">Add Data</x-button>
 					</div>
 				</div>
 				<div id="no-more-add-data" class="my-5" style="display: none;">
@@ -79,7 +79,7 @@
 
 				<form action="{{ route("admin.course.batch-assign.store", $course->id) }}" class="mt-10 w-full flex gap-3 justify-end items-center" method="post" id="leForm">
 					@csrf
-					<x-button class="bg-orange-500 w-1/2 md:w-1/6">Assign All</x-button>
+					<x-button class=" w-1/2 md:w-1/6">Assign All</x-button>
 					<x-cancel-button class="w-1/2 md:w-1/6">Cancel</x-cancel-button>
 				</form>
 			</div>
@@ -237,7 +237,7 @@
 		@else
 			<div class="rounded-lg py-5 px-10 bg-blue-800">
 				<p class="text-white italic">- This course still has no teachers or students assigned to it, or there are no more students to assign to course -</p>
-				<x-button type="button" onclick="history.back()" class="bg-orange-500 mt-4">
+				<x-button type="button" onclick="history.back()" class=" mt-4">
 					Return
 				</x-button>
 			</div>

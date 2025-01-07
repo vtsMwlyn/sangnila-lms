@@ -25,7 +25,7 @@
 				<div class="my-10">
 					<div class="flex w-full items-center justify-between mb-3">
 						<h1 class="font-semibold text-lg text-blue-950 px-5 py-2 border-2 border-blue-950 rounded-xl">Student's Profile</h1>
-						<x-button class="bg-orange-500 w-1/2 md:w-1/6" id="show-details-button">Show Details</x-button>
+						<x-button class=" w-1/2 md:w-1/6" id="show-details-button">Show Details</x-button>
 					</div>
 					<div class="flex flex-col md:flex-row gap-3 mt-3">
 						<!-- Student Name -->
@@ -162,7 +162,7 @@
 						<p class="text-red-700 font-bold mt-1" style="display: none" id="err_last_activity_unlocked"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 					</div>
 					<div class="flex w-full justify-end">
-						<x-button class="bg-orange-500 mt-8 w-1/2 md:w-1/6" type="submit" id="addBtn">Add Data</x-button>
+						<x-button class=" mt-8 w-1/2 md:w-1/6" type="submit" id="addBtn">Add Data</x-button>
 					</div>
 				</div>
 			</form>
@@ -208,7 +208,7 @@
 					</div>
 					<div class="flex w-full items-center gap-3 justify-end mt-8">
 						<x-cancel-button class="w-1/2 md:w-1/6">Cancel</x-cancel-button>
-						<x-button class="bg-orange-500 w-1/2 md:w-1/6" type="submit">Import Data</x-button>
+						<x-button class=" w-1/2 md:w-1/6" type="submit">Import Data</x-button>
 					</div>
 				</form>
 			</div>
@@ -457,7 +457,7 @@
 			<x-page-title>Import Old Student Data</x-page-title>
 			<div class="rounded-lg py-5 px-10 bg-blue-800">
 				<p class="text-white italic">- This course still has no teachers assigned or topic and activities added to it -</p>
-				<x-button type="button" onclick="history.back()" class="bg-orange-500 mt-4">
+				<x-button type="button" onclick="history.back()" class=" mt-4">
 					Return
 				</x-button>
 			</div>

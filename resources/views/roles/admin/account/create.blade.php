@@ -73,7 +73,7 @@
 				</div>
 
 				<div class="flex justify-center w-full gap-3 items-center mt-8">
-					<x-button class="bg-orange-500 w-full md:w-1/3">
+					<x-button class=" w-full md:w-1/3">
 						{{ __('Create') }}
 					</x-button>
 					<x-cancel-button class="w-full md:w-1/3">

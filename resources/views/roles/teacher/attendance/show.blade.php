@@ -1,7 +1,7 @@
 @extends("layouts.main-teacher")
 
 @section("title")
-	<h1>Student Attendance</h1>
+	<h1>Attendance</h1>
 @endsection
 
 @section("breadcrumbs-extension")
@@ -33,7 +33,7 @@
 	<x-section-container>
 		<x-back-button href="{{ route('teacher.attendance.index') }}"></x-back-button>
 		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
-		<h1 class="text-xl font-semibold text-blue-900 mt-2">Attendance Reports List</h1>
+		<h1 class="text-xl font-semibold text-blue-900 mt-2">Student Attendance Reports List</h1>
 
 		@if(session()->has("successUploadAttendance"))
 			<x-badge-success badge_text="{{ session('successUploadAttendance') }}"></x-badge-success>
@@ -41,10 +41,35 @@
 			<x-badge-success badge_text="{{ session('successEditAttendance') }}"></x-badge-success>
 		@endif
 
-		<div class="mt-5">
-			<x-anchor-button class="bg-orange-500  mb-3" href="{{ route('teacher.attendance.select-students', $course->id) }}">
-				<i class="bi bi-plus-lg"></i> Upload New Attendance
+		<div class="mt-5 flex justify-between w-full">
+			<x-anchor-button class="mb-3" href="{{ route('teacher.attendance.select-students', $course->id) }}">
+				<i class="bi bi-plus-lg"></i> New Student Attendance
 			</x-anchor-button>
+
+			<div class="flex gap-3 mb-3">
+				@if(!$todaySelfAttendance)
+					<x-anchor-button href="{{ route('teacher.attendance.check-in', $course->id) }}">
+						<i class="bi bi-stopwatch"></i> Check In
+					</x-anchor-button>
+				@else
+					<button disabled class="bg-gray-800 text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold disabled:opacity-50">
+						<i class="bi bi-stopwatch"></i> Check In
+					</button>
+				@endif
+
+				@if($todaySelfAttendance)
+					<form action="{{ route('teacher.attendance.check-out.store', $course->id) }}" method="post">
+						@csrf
+						<x-button>
+							<i class="bi bi-stopwatch"></i> Check Out
+						</x-button>
+					</form>
+				@else
+					<button disabled class="bg-gray-800 text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold disabled:opacity-50">
+						<i class="bi bi-stopwatch"></i> Check Out
+					</button>
+				@endif
+			</div>
 		</div>
 
 		<div class="w-full overflow-x-auto">
@@ -59,16 +84,16 @@
 				<tbody>
 					@forelse ($attendanceData as $atd)
 						<tr class="@if($loop->index % 2 == 0) bg-white @endif">
-							<td class="py-2 px-4">{{ Carbon\Carbon::parse($atd->attendance_date)->format('d F Y') }}</td>
+							<td class="py-2 px-4">{{ Carbon\Carbon::parse($atd->attendance_date)->format('l, d F Y') }}</td>
 							<td class="py-2 px-4 text-center">{{ $atd->student_attendances->count() }}</td>
 							<td class="py-2 px-4 text-center">{{ $atd->student_attendances->where("is_attend", 1)->count() }}</td>
 							<td class="py-2 px-4 text-center">{{ $atd->student_attendances->where("is_attend", 0)->count() }}</td>
 							<td class="py-2 px-4">
 								<div class="flex gap-2">
-									<x-anchor-button class="bg-orange-500" href="{{ route('teacher.attendance.edit', $atd->id) }}">
-										<i class="bi bi-pencil-square"></i> Edit Data
+									<x-anchor-button  href="{{ route('teacher.attendance.edit', $atd->id) }}">
+										<i class="bi bi-pencil-square"></i>
 									</x-anchor-button>
-									<x-button type="button" class="bg-orange-500 show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}"><i class="bi bi-eye"></i> Show Details</x-button>
+									<x-button type="button" class=" show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}"><i class="bi bi-eye"></i></x-button>
 								</div>
 							</td>
 						</tr>

@@ -32,7 +32,7 @@
 		@endif
 
 		<div class="mb-4">
-			<x-anchor-button class="bg-orange-500 mt-8" href="{{ route('admin.announcement.create') }}"><i class="bi bi-plus-lg"></i> Add New Announcement</x-anchor-button>
+			<x-anchor-button class=" mt-8" href="{{ route('admin.announcement.create') }}"><i class="bi bi-plus-lg"></i> Add New Announcement</x-anchor-button>
 		</div>
 
 		@foreach($announcements as $announcement)
@@ -73,13 +73,13 @@
 						<p class="mt-2">Period: <span class="font-bold">{{ $announcement->announce_from }}</span> until <span class="font-bold">{{ $announcement->announce_until }}</span></p>
 					</div>
 					<div class="flex gap-2">
-						<x-anchor-button class="bg-orange-500" href="{{ route('admin.announcement.edit', $announcement->id) }}">
+						<x-anchor-button  href="{{ route('admin.announcement.edit', $announcement->id) }}">
 							<i class="bi bi-pencil-square"></i>
 						</x-anchor-button>
 						<x-button type="button" class="delete-announcement-btn" data-del_announcement_name="{{ $announcement->title }}" data-route="{{ route('admin.announcement.destroy', $announcement->id) }}">
 							<i class="bi bi-trash3"></i>
 						</x-button>
-						<x-button type="button" class="bg-orange-500 toggleBtn">
+						<x-button type="button" class=" toggleBtn">
 							<i class="bi bi-eye"></i>
 						</x-button>
 					</div>

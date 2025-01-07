@@ -143,7 +143,7 @@
 			</div>
 			<div class="fixed bottom-1 right-1 m-2 opacity-0 transition-opacity duration-500 ease-in-out animate-bounce z-50" id="back-to-top">
 				<a href="#">
-					<div class="bg-orange-500 rounded-full w-full text-xl p-2.5 flex justify-center align-center font-bold" style="width: 50px; height: 50px;">
+					<div class=" rounded-full w-full text-xl p-2.5 flex justify-center align-center font-bold" style="width: 50px; height: 50px;">
 						<i class="text-white text-center bi bi-arrow-up"></i>
 					</div>
 				</a>

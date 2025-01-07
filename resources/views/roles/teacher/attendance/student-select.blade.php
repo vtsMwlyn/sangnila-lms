@@ -68,7 +68,7 @@
 			</div>
 
 			<div class="flex items-stretch gap-2 justify-center w-full mt-10 mb-3">
-				<x-button class="bg-orange-500 w-full md:w-1/6">
+				<x-button class=" w-full md:w-1/6">
 					{{ __('Continue') }}
 				</x-button>
 				<x-cancel-button class="w-full md:w-1/6">

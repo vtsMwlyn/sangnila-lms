@@ -38,7 +38,7 @@
 				</div>
 
 				<div class="flex gap-3 w-full justify-center">
-					<x-button type="submit" class="bg-orange-500 w-1/6 mt-5">
+					<x-button type="submit" class=" w-1/6 mt-5">
 						Assign
 					</x-button>
 				</div>
@@ -74,7 +74,7 @@
 				</div>
 
 				<div class="flex gap-3 w-full justify-center">
-					<x-button type="submit" class="bg-orange-500 w-1/6 mt-5">
+					<x-button type="submit" class=" w-1/6 mt-5">
 						Save
 					</x-button>
 				</div>
@@ -205,14 +205,14 @@
 		</div>
 
 		<div class="w-full flex justify-end items-start mt-5 gap-3">
-			<x-button type="button" class="bg-orange-500" id="show_more_less_button">Show Details</x-button>
-			<x-anchor-button type="button" class="bg-orange-500" href="{{ route('admin.student.edit', $student->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
+			<x-button type="button"  id="show_more_less_button">Show Details</x-button>
+			<x-anchor-button type="button"  href="{{ route('admin.student.edit', $student->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		</div>
 
 		<div class="w-full bg-slate-400 mt-16" style="height: 2px;"></div>
 			<div class="w-full flex items-center justify-between">
 				<h2 class="my-4 font-extrabold text-xl text-dark-blue">List of Enrolled Courses</h2>
-				<x-button type="button" id="assign-student-btn" class="bg-orange-500" data-route="{{ route('admin.student.assign.store', $student->id) }}">
+				<x-button type="button" id="assign-student-btn"  data-route="{{ route('admin.student.assign.store', $student->id) }}">
 					<i class="bi bi-plus-lg"></i> Assign to course
 				</x-button>
 			</div>

@@ -23,7 +23,7 @@
 		@endif
 
 		<div class="mt-6">
-			<x-anchor-button class="bg-orange-500"
+			<x-anchor-button
 				href="{{ route('teacher.assignment.upload', $course->id) }}">
 				<i class="bi bi-plus-lg"></i> Upload New Assignment
 			</x-anchor-button>
@@ -60,10 +60,10 @@
 							</td>
 							<td class="py-2 px-4">
 								<div class="flex gap-1">
-									<x-anchor-button class="bg-orange-500" href="{{ route('teacher.assignment.edit', $asg->id) }}">
+									<x-anchor-button  href="{{ route('teacher.assignment.edit', $asg->id) }}">
 										<i class="bi bi-pencil-square"></i>
 									</x-anchor-button>
-									<x-anchor-button class="bg-orange-500" href="{{ route('teacher.assignment.delete', $asg->id) }}">
+									<x-anchor-button  href="{{ route('teacher.assignment.delete', $asg->id) }}">
 										<i class="bi bi-trash3"></i>
 									</x-anchor-button>
 								</div>

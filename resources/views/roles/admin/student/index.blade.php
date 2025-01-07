@@ -10,7 +10,7 @@
 
 		<div class="flex items-center mt-6">
 			<div class="w-1/4">
-				<x-anchor-button class="bg-orange-500" href="{{ route('admin.student.import-excel') }}"><i class="bi bi-file-earmark-arrow-up"></i> Import From Excel</x-anchor-button>
+				<x-anchor-button  href="{{ route('admin.student.import-excel') }}"><i class="bi bi-file-earmark-arrow-up"></i> Import From Excel</x-anchor-button>
 			</div>
 
 			<form class="flex w-1/2 justify-center" action="{{ route("admin.student.index") }}">
@@ -71,11 +71,11 @@
 							</td>
 							<td class="py-2 px-4">
 								<div class="flex w-full justify-start gap-1">
-									<x-anchor-button class="bg-orange-500"
+									<x-anchor-button
 									href="{{ route('admin.student.show', $student->id) }}">
 										<i class="bi bi-eye"></i>
 									</x-anchor-button>
-									<x-anchor-button class="bg-orange-500"
+									<x-anchor-button
 										href="{{ route('admin.student.edit', $student->id) }}">
 										<i class="bi bi-pencil-square"></i>
 									</x-anchor-button>

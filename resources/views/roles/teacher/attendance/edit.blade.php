@@ -27,7 +27,7 @@
 						<div class="flex flex-col items-start grow">
 							<x-input type="date" class="date-input w-full" name="attendance_date" id="attendance_date" :value="$attendance->attendance_date"/>
 						</div>
-						<x-button type="button" id="todaybtn" class="bg-orange-500">Today</x-button>
+						<x-button type="button" id="todaybtn" >Today</x-button>
 					</div>
 				</div>
 				<div class="w-1/3">
@@ -35,7 +35,7 @@
 					<div class="flex items-center gap-3 mt-1 select2_container">
 						<select class="w-full select2 rounded-2xl shadow-sm focus:outline-none py-2 px-4 focus:ring-0" id="student_add" style="border-width: 3px;">
 						</select>
-						<x-button type="button" id="add_student" class="bg-orange-500">Add</x-button>
+						<x-button type="button" id="add_student" >Add</x-button>
 					</div>
 				</div>
 			</div>
@@ -134,7 +134,7 @@
 			</div>
 
 			<div class="flex items-stretch gap-2 justify-center w-full mt-20 mb-3">
-				<x-button class="bg-orange-500 w-full md:w-1/6">
+				<x-button class=" w-full md:w-1/6">
 					{{ __('Submit') }}
 				</x-button>
 				<x-cancel-button class="w-full md:w-1/6">

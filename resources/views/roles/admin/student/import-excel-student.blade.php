@@ -39,8 +39,8 @@
 			</div>
 
 			<div class="flex gap-5  mt-8">
-				<x-button class="bg-orange-500"><i class="bi bi-upload"></i> Import Data</x-button>
-				<x-anchor-button href="{{ route('admin.student.import-excel.download') }}" class="bg-orange-500"><i class="bi bi-download"></i> Download Template</x-anchor-button>
+				<x-button ><i class="bi bi-upload"></i> Import Data</x-button>
+				<x-anchor-button href="{{ route('admin.student.import-excel.download') }}" ><i class="bi bi-download"></i> Download Template</x-anchor-button>
 			</div>
 		</form>
 	</x-section-container>

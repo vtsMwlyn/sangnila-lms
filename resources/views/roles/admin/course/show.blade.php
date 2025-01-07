@@ -86,7 +86,7 @@
 				</div>
 
 				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">
-					<x-button class="bg-orange-500 w-full md:w-1/5">
+					<x-button class=" w-full md:w-1/5">
 						{{ __('Submit') }}
 					</x-button>
 				</div>
@@ -110,7 +110,7 @@
 				</div>
 
 				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">
-					<x-button class="bg-orange-500 w-full md:w-1/5">
+					<x-button class=" w-full md:w-1/5">
 						{{ __('Submit') }}
 					</x-button>
 				</div>
@@ -189,8 +189,8 @@
 		</div>
 
 		<div class="flex gap-3 mt-8 w-full justify-end">
-			<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.edit', $course->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
-			<x-button type="button" id="delete-course-btn" class="bg-orange-500" data-route="{{ route('admin.course.destroy', $course->id) }}" data-del_course_name="{{ $course->course_name }}"><i class="bi bi-trash3"></i> Delete</x-button>
+			<x-anchor-button  href="{{ route('admin.course.edit', $course->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
+			<x-button type="button" id="delete-course-btn"  data-route="{{ route('admin.course.destroy', $course->id) }}" data-del_course_name="{{ $course->course_name }}"><i class="bi bi-trash3"></i> Delete</x-button>
 		</div>
 
 		<!-- Learning Outcomes -->
@@ -260,8 +260,8 @@
 		<div class="flex w-full justify-between items-center">
 			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Student List</h2>
 			<div class="flex gap-4 justify-end">
-				<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.batch-assign', $course->id) }}"><i class="bi bi-ui-checks-grid"></i> Batch Assign</x-anchor-button>
-				<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.import-student-data', $course->id) }}"><i class="bi bi-card-checklist"></i> Import Old Student</x-anchor-button>
+				<x-anchor-button  href="{{ route('admin.course.batch-assign', $course->id) }}"><i class="bi bi-ui-checks-grid"></i> Batch Assign</x-anchor-button>
+				<x-anchor-button  href="{{ route('admin.course.import-student-data', $course->id) }}"><i class="bi bi-card-checklist"></i> Import Old Student</x-anchor-button>
 			</div>
 		</div>
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
@@ -288,8 +288,8 @@
 		<div class="flex w-full justify-between items-center">
 			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Syllabus/Curriculum</h2>
 			<div class="flex gap-4 justify-end">
-				<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.curriculum.import-excel', $course->id) }}"><i class="bi bi-file-earmark-arrow-up"></i> Import from Excel</x-anchor-button>
-				<x-button type="button" class="bg-orange-500" data-route="{{ route('admin.course.curriculum.topic.store', $course->id) }}" id="new-curriculum-topic-btn"><i class="bi bi-plus-lg"></i> Add New Topic</x-button>
+				<x-anchor-button  href="{{ route('admin.course.curriculum.import-excel', $course->id) }}"><i class="bi bi-file-earmark-arrow-up"></i> Import from Excel</x-anchor-button>
+				<x-button type="button"  data-route="{{ route('admin.course.curriculum.topic.store', $course->id) }}" id="new-curriculum-topic-btn"><i class="bi bi-plus-lg"></i> Add New Topic</x-button>
 			</div>
 		</div>
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
@@ -351,9 +351,9 @@
 						</td>
 						<td class="py-2 px-4">
 							<div class="w-full flex items-center gap-2">
-								<x-anchor-button href="{{ route('admin.course.curriculum.topic.details', [$course->id, $topic->id]) }}" class="bg-orange-500 w-1/2"><i class="bi bi-eye"></i></x-anchor-button>
-								<x-button type="button" data-curriculum_topic="{{ $topic }}" data-route="{{ route('admin.course.curriculum.topic.update', [$course->id, $topic->id]) }}" class="bg-orange-500 w-1/2 edit-curriculum-topic-btn"><i class="bi bi-pencil-square"></i></x-button>
-								<x-button type="button" data-del_ct_name="{{ $topic->title }}" data-route="{{ route('admin.course.curriculum.topic.destroy', [$course->id, $topic->id]) }}" class="bg-orange-500 w-1/2 delete-curriculum-topic-btn"><i class="bi bi-trash3"></i></x-button>
+								<x-anchor-button href="{{ route('admin.course.curriculum.topic.details', [$course->id, $topic->id]) }}" class=" w-1/2"><i class="bi bi-eye"></i></x-anchor-button>
+								<x-button type="button" data-curriculum_topic="{{ $topic }}" data-route="{{ route('admin.course.curriculum.topic.update', [$course->id, $topic->id]) }}" class=" w-1/2 edit-curriculum-topic-btn"><i class="bi bi-pencil-square"></i></x-button>
+								<x-button type="button" data-del_ct_name="{{ $topic->title }}" data-route="{{ route('admin.course.curriculum.topic.destroy', [$course->id, $topic->id]) }}" class=" w-1/2 delete-curriculum-topic-btn"><i class="bi bi-trash3"></i></x-button>
 							</div>
 						</td>
 					</tr>

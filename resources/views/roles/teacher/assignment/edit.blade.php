@@ -70,7 +70,7 @@
 			<div class="flex items-center gap-3 mt-8">
 				<x-label :value="__('Pick students to assign or')"></x-label>
 				<div class="flex gap-3">
-					<x-button class="bg-orange-500" type="button" id="checkall">Assign to all</x-button>
+					<x-button  type="button" id="checkall">Assign to all</x-button>
 					<x-button class="bg-slate-600" type="button" id="undo" style="display: none;">Undo</x-button>
 				</div>
 			</div>
@@ -94,7 +94,7 @@
 			</div>
 
 			<div class="flex items-stretch gap-2 justify-center w-full mt-16">
-				<x-button class="bg-orange-500 w-full md:w-1/6">
+				<x-button class=" w-full md:w-1/6">
 					{{ __('Submit') }}
 				</x-button>
 				<x-cancel-button class="w-full md:w-1/6">

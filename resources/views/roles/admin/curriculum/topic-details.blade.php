@@ -23,7 +23,7 @@
 				</div>
 
 				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">
-					<x-button class="bg-orange-500 w-full md:w-1/5">
+					<x-button class=" w-full md:w-1/5">
 						{{ __('Submit') }}
 					</x-button>
 				</div>
@@ -75,15 +75,15 @@
 			</div>
 
 			<div class="flex gap-2 w-full justify-end">
-				<x-button type="button" data-curriculum_topic="{{ $curriculum_topic }}" data-route="{{ route('admin.course.curriculum.topic.update', [$curriculum_topic->course->id, $curriculum_topic->id]) }}" class="bg-orange-500 edit-curriculum-topic-btn"><i class="bi bi-pencil-square"></i> Edit</x-button>
-				<x-button type="button" class="bg-orange-500" id="delete-curriculum-topic-btn" data-del_ct_name="{{ $curriculum_topic->title }}" data-route="{{ route('admin.course.curriculum.topic.destroy', [$curriculum_topic->course->id, $curriculum_topic->id]) }}"><i class="bi bi-trash3"></i> Delete</x-button>
+				<x-button type="button" data-curriculum_topic="{{ $curriculum_topic }}" data-route="{{ route('admin.course.curriculum.topic.update', [$curriculum_topic->course->id, $curriculum_topic->id]) }}" class=" edit-curriculum-topic-btn"><i class="bi bi-pencil-square"></i> Edit</x-button>
+				<x-button type="button"  id="delete-curriculum-topic-btn" data-del_ct_name="{{ $curriculum_topic->title }}" data-route="{{ route('admin.course.curriculum.topic.destroy', [$curriculum_topic->course->id, $curriculum_topic->id]) }}"><i class="bi bi-trash3"></i> Delete</x-button>
 			</div>
 		</div>
 
 		<h2 class="my-4 font-extrabold text-xl text-dark-blue">List of Activities</h2>
 
 		<div class="flex">
-			<x-anchor-button class="bg-orange-500" href="{{ route('admin.course.curriculum.activity.store', [$curriculum_topic->course->id, $curriculum_topic->id]) }}"><i class="bi bi-plus-lg"></i> Add New Activity</x-anchor-button>
+			<x-anchor-button  href="{{ route('admin.course.curriculum.activity.store', [$curriculum_topic->course->id, $curriculum_topic->id]) }}"><i class="bi bi-plus-lg"></i> Add New Activity</x-anchor-button>
 		</div>
 
 		<div class="w-full bg-slate-400 mt-4" style="height: 2px;"></div>
@@ -128,11 +128,11 @@
 
 							<td class="py-2 px-4">
 								<div class="flex gap-1">
-									<x-anchor-button class="bg-orange-500"
+									<x-anchor-button
 										href="{{ route('admin.course.curriculum.activity.edit', [$curriculum_topic->course->id, $curriculum_topic->id, $activity->id]) }}">
 										<i class="bi bi-pencil-square"></i>
 									</x-anchor-button>
-									<x-button type="button" class="bg-orange-500"
+									<x-button type="button"
 										data-route="{{ route('admin.course.curriculum.activity.destroy', [$curriculum_topic->course->id, $curriculum_topic->id, $activity->id]) }}" data-del_ca_name="{{ $activity->title }}" class="delete-curriculum-activity-btn">
 										<i class="bi bi-trash3"></i>
 									</x-button>

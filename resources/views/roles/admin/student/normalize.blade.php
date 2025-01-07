@@ -35,8 +35,8 @@
 
 			<!-- Yes/No Buttons -->
 			<div class="flex gap-3 justify-center w-full mt-10">
-				<x-button type="submit" class="bg-orange-500 w-full md:w-1/6">Confirm</x-button>
-				<x-button type="button" onclick="history.back()" class="bg-orange-500 w-full md:w-1/6">No</x-button>
+				<x-button type="submit" class=" w-full md:w-1/6">Confirm</x-button>
+				<x-button type="button" onclick="history.back()" class=" w-full md:w-1/6">No</x-button>
 			</div>
 		</form>
 
