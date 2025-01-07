@@ -62,7 +62,14 @@ class ProgressController extends Controller {
 
 	// Update the activity accessibility in the database
 	public function update(Request $request, $course_id, $student_id) {
-		$student_progress = Progress::where("course_id", $course_id)->where("student_id", $student_id)->get();
+		$student_progress = Progress::where('student_id', $student_id)
+			->where('course_id', $course_id)
+			->with('activity') // Load the related activity
+			->join('activities', 'progress.activity_id', '=', 'activities.id') // Join with activities
+			->orderBy('activities.session', 'asc') // Order by session
+			->orderBy('activities.created_at', 'asc') // Order by created_at
+			->select('progress.*') // Only select columns from Progress
+			->get();
 
 		try {
 			DB::beginTransaction();

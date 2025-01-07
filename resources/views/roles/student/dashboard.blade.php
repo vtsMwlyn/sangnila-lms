@@ -151,17 +151,14 @@
 							<img src="{{ asset('img/arrow-right.svg') }}" class="w-8" alt="icon">
 						</button>
 					</div>
-				@else
-					<div class="flex gap-2 sm:justify-between justify-center sm:absolute w-full px-2" style="top: 36%;">
-						<button disabled>
-							<img src="{{ asset('img/arrowleft-gray.svg') }}" class="w-8" alt="icon">
-						</button>
-						<button disabled>
-							<img src="{{ asset('img/arrowright-gray.svg') }}" class="w-8" alt="icon">
-						</button>
-					</div>
 				@endif
 			</div>
+
+			@if($n_announcement < 1)
+				<div class="h-full w-full justify-center items-center flex">
+					- There are no announcements -
+				</div>
+			@endif
 		</div>
 
 		<!-- Calendar -->

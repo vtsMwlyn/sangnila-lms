@@ -70,7 +70,7 @@
 
 						<div class="flex flex-col items-center gap-3 grow w-full text-xs py-2 px-1 overflow-y-auto">
 							@forelse($inboxes as $i => $inbox)
-								<div class="@if($inbox->status == "unread") font-extrabold @endif rounded-3xl font-bold text-black px-4 py-5" style="background: linear-gradient(90deg, rgba(190, 226, 219, 0.49) 0%, rgba(104, 124, 120, 0) 100%);">
+								<div class="@if($inbox->status == "unread") font-extrabold @endif rounded-3xl text-black px-4 py-5" style="background: linear-gradient(90deg, rgba(190, 226, 219, 0.49) 0%, rgba(104, 124, 120, 0) 100%);">
 									<p>{{ $inbox->message }}</p>
 
 									@if($inbox->status == "unread")

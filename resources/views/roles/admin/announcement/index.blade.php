@@ -8,6 +8,13 @@
 	> <span>Announcements</span>
 @endsection
 
+@section('popup')
+	<!-- Delete course -->
+	<x-confirmation method="delete" popup_title="Delete Announcement" id="delete-announcement-popup">
+		Are you sure want to <span class="font-bold text-red">delete</span> the Announcement <span class="font-bold text-light-blue" id="del-announcement-name"></span> from Sangnila LMS? <strong></strong>
+	</x-confirmation>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title>{{ __("All Announcements") }}</x-page-title>
@@ -69,9 +76,9 @@
 						<x-anchor-button class="bg-orange-500" href="{{ route('admin.announcement.edit', $announcement->id) }}">
 							<i class="bi bi-pencil-square"></i>
 						</x-anchor-button>
-						<x-anchor-button class="bg-orange-500" href="{{ route('admin.announcement.delete', $announcement->id) }}">
+						<x-button type="button" class="delete-announcement-btn" data-del_announcement_name="{{ $announcement->title }}" data-route="{{ route('admin.announcement.destroy', $announcement->id) }}">
 							<i class="bi bi-trash3"></i>
-						</x-anchor-button>
+						</x-button>
 						<x-button type="button" class="bg-orange-500 toggleBtn">
 							<i class="bi bi-eye"></i>
 						</x-button>
@@ -106,6 +113,16 @@
 
 			$(".announcementContent a").each((index, anchor) => {
 				$(anchor).attr("target", "blank");
+			});
+
+			// Delete LO
+			$('.delete-announcement-btn').on('click', function() {
+				// Retrieve data and set the data to the popup
+				$("#delete-announcement-popup").find('form').attr("action", $(this).data('route'));
+				$("#del-announcement-name").text($(this).data('del_announcement_name'));
+
+				// Show the popup
+				$("#delete-announcement-popup").parent().show();
 			});
 		});
 	</script>

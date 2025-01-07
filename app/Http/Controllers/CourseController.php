@@ -195,46 +195,81 @@ class CourseController extends Controller {
 		}
 
 		// Other data
-		$progresses = Progress::where('student_id', $cs->student->id)
-			->where('course_id', $cs->course->id)
-			->with('activity') // Load the related activity
-			->join('activities', 'progress.activity_id', '=', 'activities.id') // Join with activities
-			->orderBy('activities.session', 'asc') // Order by session
-			->orderBy('activities.created_at', 'asc') // Order by created_at
-			->select('progress.*') // Only select columns from Progress
-			->get();
+		// $progresses = Progress::where('student_id', $cs->student->id)
+		// 	->where('course_id', $cs->course->id)
+		// 	->with('activity') // Load the related activity
+		// 	->join('activities', 'progress.activity_id', '=', 'activities.id') // Join with activities
+		// 	->orderBy('activities.session', 'asc') // Order by session
+		// 	->orderBy('activities.created_at', 'asc') // Order by created_at
+		// 	->select('progress.*') // Only select columns from Progress
+		// 	->get();
 
-		$progressAndActivity = [];
-		foreach($progresses as $prgs){
-			$pam = [];
-			$pam["progress"] = $prgs;
-			$pam["activity"] = $prgs->activity;
-			$pam["topic"] = $prgs->activity->topic;
-			$pam["learning_outcomes"] = $prgs->activity->learning_outcomes->toJson();
-			array_push($progressAndActivity, $pam);
-		}
+		// $progressAndActivity = [];
+		// foreach($progresses as $prgs){
+		// 	$pam = [];
+		// 	$pam["progress"] = $prgs;
+		// 	$pam["activity"] = $prgs->activity;
+		// 	$pam["topic"] = $prgs->activity->topic;
+		// 	$pam["learning_outcomes"] = $prgs->activity->learning_outcomes->toJson();
+		// 	array_push($progressAndActivity, $pam);
+		// }
 
 		// Kalo mau digrouping by session tapi keknya masih susan
-		// $progressAndActivity = Progress::where('course_id', $course_id)
-		// 	->where('student_id', Auth::user()->id)
-		// 	->with(['activity.topic', 'activity.learning_outcomes']) // Eager load related models
-		// 	->get()
-		// 	->groupBy(function ($progress) {
-		// 		return $progress->activity->session; // Group by activity's session
-		// 	})
-		// 	->map(function ($progresses, $session) {
-		// 		return [
-		// 			'session' => $session,
-		// 			'progresses' => $progresses->map(function ($progress) {
-		// 				return [
-		// 					'progress' => $progress,
-		// 					'activity' => $progress->activity,
-		// 					'topic' => $progress->activity->topic,
-		// 					'learning_outcomes' => $progress->activity->learning_outcomes,
-		// 				];
-		// 			}),
-		// 		];
-		// 	});
+		// $progressAndActivity = Progress::where('student_id', $cs->student->id)
+		// 	->where('course_id', $cs->course->id)
+		// 	->join('activities', 'progress.activity_id', '=', 'activities.id') // Join with activities table
+		// 	->orderBy('activities.session', 'asc') // Order by session number ascending
+		// 	->orderBy('activities.created_at', 'asc') // Secondary order by created_at ascending
+		// 	->with([
+		// 		'activity' => function ($query) {
+		// 			$query->select('id', 'session', 'topic_id', 'desc', 'title', 'created_at') // Include necessary columns
+		// 				->with([
+		// 					'topic' => function ($query) {
+		// 						$query->select('id', 'title'); // Include necessary columns from topics
+		// 					},
+		// 					'learning_outcomes' => function ($query) {
+		// 						$query->select('learning_outcomes.id', 'number', 'title'); // Include necessary columns from learning_outcomes
+		// 					},
+		// 				]);
+		// 		}
+		// 	])
+		// 	->select('progress.*') // Select all columns from progress to avoid ambiguity
+		// 	->get();
+
+		$progressAndActivity = Progress::where('student_id', $cs->student_id)
+    ->where('course_id', $cs->course_id)
+    ->with([
+        'activity' => function ($query) {
+            $query->select('id', 'session', 'topic_id', 'desc', 'title');
+        },
+        'activity.topic' => function ($query) {
+            $query->select('id', 'title'); // Fetch only necessary columns
+        },
+        'activity.learning_outcomes' => function ($query) {
+            $query->select('learning_outcomes.id', 'number', 'title');
+        }
+    ])
+    ->join('activities', 'progress.activity_id', '=', 'activities.id')
+    ->orderBy('activities.session', 'asc')
+    ->orderBy('activities.created_at', 'asc')
+    ->select('progress.*') // Select only columns from Progress
+    ->get()
+    ->groupBy('activity.session') // Group by activity's session
+    ->map(function ($progresses, $session) {
+        return [
+            'session' => $session,
+            'progresses' => $progresses->map(function ($progress) {
+                return [
+                    'progress' => $progress,
+                    'activity' => $progress->activity,
+                    'topic' => $progress->activity->topic,
+                    'learning_outcomes' => $progress->activity->learning_outcomes,
+                ];
+            }),
+        ];
+    });
+
+
 
 
 		if($max_session_reached){
