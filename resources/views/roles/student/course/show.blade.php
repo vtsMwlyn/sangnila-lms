@@ -13,20 +13,33 @@
 
 	<div class="rounded-3xl w-full py-5 flex flex-col items-stretch sm:text-base text-sm" style="background: #FEFEFEB2;">
 		<div class="flex flex-col w-full px-8">
-			<x-back-button href="{{ route('student.mycourse.index') }}"></x-back-button>
-			<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
-			<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
-
 			@php
-				$teacher = App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher;
-				$progress_data_exists = count($activityProgresses) > 0 && count($activityProgresses[1]["progresses"]) > 0
+				$courseStudent = App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first();
+				$teacher = $courseStudent->teacher;
+				$progress_data_exists = count($activityProgresses) > 0 && count($activityProgresses->first()["progresses"]) > 0;
+				$existing_teacher_validation = App\Models\LecturerValidation::where("course_id", $course->id)->where("validator", Auth::user()->id)->where('created_at', 'like', Carbon\Carbon::today()->format('Y-m-d') . '%')->get();
 			@endphp
+
+			<x-back-button href="{{ route('student.mycourse.index') }}"></x-back-button>
+			<div class="w-full flex justify-between items-center">
+				<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
+				@if($existing_teacher_validation->count() < 1)
+					<x-anchor-button href="{{ route('student.mycourse.validate-teacher', $course->id) }}"><i class="bi bi-check-square"></i> Validate Teacher</x-anchor-button>
+				@else
+					<button class="text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold bg-slate-800 disabled:opacity-25" disabled><i class="bi bi-check-square"></i> Validate Teacher</button>
+				@endif
+			</div>
+			<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 			<div class="flex gap-2 items-center">
 				<img src="{{ asset('img/lecturer.svg') }}" class="w-4 h-4" alt="icon">
 				{{ ($teacher->details->gender == 1)? "Mr." : "Ms." }} {{ $teacher->full_name }}
 			</div>
 			<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
+
+			@if(session()->has('successValidating'))
+				<x-badge-success badge_text="{{ session('successValidating') }}" class="mb-4"></x-badge-success>
+			@endif
 
 			@if($should_pay_soon)
 				<div class="bg-yellow-400 text-orange-700 py-3 px-6 rounded-lg font-semibold my-4">
@@ -73,67 +86,62 @@
 
 				<div class="swiper" style="padding: 0;">
 					<div class="swiper-wrapper">
-						@forelse ($activityProgresses as $groupedAP)
-							@php
-								$is_unlocked = false;
-								if(count($groupedAP["progresses"]) > 0){
-									foreach($groupedAP["progresses"] as $ap){
-										if($ap["progress"]->status == 'unlocked'){
-											$is_unlocked = true;
-											break;
+						@if(count($activityProgresses) > 0)
+							@foreach ($activityProgresses as $groupedAP)
+								@php
+									$is_unlocked = false;
+									if(count($groupedAP["progresses"]) > 0){
+										foreach($groupedAP["progresses"] as $ap){
+											if($ap["progress"]->status == 'unlocked'){
+												$is_unlocked = true;
+												break;
+											}
 										}
 									}
-								}
 
-								$all_opened = true;
-								if(count($groupedAP["progresses"]) > 0){
-									foreach($groupedAP["progresses"] as $ap){
-										if($ap["progress"]->already_opened == 'no'){
-											$all_opened = false;
-											break;
+									$all_opened = true;
+									if(count($groupedAP["progresses"]) > 0){
+										foreach($groupedAP["progresses"] as $ap){
+											if($ap["progress"]->already_opened == 'no'){
+												$all_opened = false;
+												break;
+											}
 										}
 									}
-								}
-							@endphp
+								@endphp
 
-							<div class="swiper-slide relative">
-								<button type="button" id="{{ $loop->iteration }}" data-session="{{ $groupedAP['session'] }}" data-is_unlocked="{{ $is_unlocked }}"
-									class="flex items-center justify-center session-buttons px-2 py-2.5 mb-8 mt-4 rounded-xl text-base font-extrabold
-									@if($is_unlocked) unlocked-session @else locked-session @endif @if($loop->iteration == 1) selected-session @endif"
-									style="border-width: 3px; min-width: 110px;">
-									Session {{ $loop->iteration }}
-								</button>
-								<div class="absolute top-6 right-3 rounded-full h-2.5 w-2.5 @if(!$is_unlocked || $loop->iteration == 1 || $all_opened) hidden @endif" style="background: linear-gradient(180deg, #1EB8CD 0%, #BEE2DB 100%);"></div>
+								<div class="swiper-slide relative">
+									<button type="button" id="{{ $loop->iteration }}" data-session="{{ $groupedAP['session'] }}" data-is_unlocked="{{ $is_unlocked }}"
+										class="flex items-center justify-center session-buttons px-2 py-2.5 mb-8 mt-4 rounded-xl text-base font-extrabold
+										@if($is_unlocked) unlocked-session @else locked-session @endif @if($loop->iteration == 1) selected-session @endif"
+										style="border-width: 3px; min-width: 110px;">
+										Session {{ $loop->iteration }}
+									</button>
+									<div class="absolute top-6 right-3 rounded-full h-2.5 w-2.5 @if(!$is_unlocked || $loop->iteration == 1 || $all_opened) hidden @endif" style="background: linear-gradient(180deg, #1EB8CD 0%, #BEE2DB 100%);"></div>
+								</div>
+							@endforeach
+						@else
+							<div class="my-6">
+								Your teacher haven't unlocked any activities for you. Please ask him/her to unlock activities for you.
 							</div>
-						@empty
-
-						@endforelse
+						@endif
 					</div>
 				</div>
 
-				{{-- @dd($activityProgresses[1]["progresses"][0]['topic']) --}}
+				{{-- @dd($activityProgresses->first()["progresses"][0]['topic']) --}}
 
 				@if($progress_data_exists)
 					<div class="mb-6">
-						<h1 class="text-dark-blue font-bold text-xl"><span id="num">1</span>. <span id="topic">{{ $activityProgresses[1]["progresses"][0]["topic"]->title }}</span></h1>
+						<h1 class="text-dark-blue font-bold text-xl"><span id="num">1</span>. <span id="topic">{{ $activityProgresses->first()["progresses"][0]["topic"]->title }}</span></h1>
 						<div class="flex flex-col gap-1 mt-2" id="learning-outcomes">
 							@if(count($activityProgresses) > 0)
-								@foreach(json_decode($activityProgresses[1]["progresses"][0]["learning_outcomes"]) as $lo)
+								@foreach(json_decode($activityProgresses->first()["progresses"][0]["learning_outcomes"]) as $lo)
 									<div class="flex gap-2 items-center">
 										<img src="{{ asset('img/bullet.svg') }}" alt="icon" class="w-3 h-3">
 										<div>LO{{ $lo->number }}: {{ $lo->title }}</div>
 									</div>
 								@endforeach
-							@else
-								N/A
 							@endif
-						</div>
-					</div>
-				@else
-					<div class="mb-6">
-						<h1 class="text-dark-blue font-bold text-xl"><span id="num">1</span>. <span id="topic">N/A</span></h1>
-						<div class="flex flex-col gap-1 mt-2" id="learning-outcomes">
-							N/A
 						</div>
 					</div>
 				@endif
@@ -144,7 +152,7 @@
 		@if(!$max_session_reached)
 			@if($progress_data_exists)
 				<div id="activities-container" class="w-full">
-					@foreach($activityProgresses[1]['progresses'] as $ap)
+					@foreach($activityProgresses->first()['progresses'] as $ap)
 						@if($ap['progress']->status == 'unlocked')
 							<div class="w-full bg-white px-8 py-3">
 								<div class="w-full flex items-center">
@@ -235,6 +243,9 @@
 							const activityTitle = ap.activity.title;
 							const activityDesc = ap.activity.desc;
 							const materialPreviewLink = `{{ route('student.mycourse.preview', ':id') }}`.replace(':id', ap.activity.id);
+							const topicTitle = ap.topic.title;
+							$("#topic").text(topicTitle);
+							$("#num").text(sessionNumber);
 
 							const whiteLongBox = $("<div>").addClass("w-full bg-white px-8 py-3")
 								.append(

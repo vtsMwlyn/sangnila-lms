@@ -70,20 +70,22 @@ class ActivityController extends Controller {
 
 		$checkbox_values = [];
 
-		foreach($learning_outcomes as $lo){
-			$found = false;
-			foreach($activity->learning_outcomes as $calo){
-				if($calo->id == $lo->id){
-					$found = true;
-					break;
+		if($learning_outcomes->count() > 0){
+			foreach($learning_outcomes as $lo){
+				$found = false;
+				foreach($activity->learning_outcomes as $calo){
+					if($calo->id == $lo->id){
+						$found = true;
+						break;
+					}
 				}
-			}
 
-			if($found){
-				array_push($checkbox_values, "on");
-			}
-			else {
-				array_push($checkbox_values, "off");
+				if($found){
+					array_push($checkbox_values, "on");
+				}
+				else {
+					array_push($checkbox_values, "off");
+				}
 			}
 		}
 
@@ -115,20 +117,22 @@ class ActivityController extends Controller {
 			]);
 
 			$learning_outcomes = LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get();
-			foreach($request->learning_outcome as $i => $rlo){
-				if($rlo == "on"){
-					$existing_calo = LearningOutcomeActivity::where("learning_outcome_id", $learning_outcomes[$i]->id)->where("activity_id", $activity->id)->first();
-					if(!$existing_calo){
-						LearningOutcomeActivity::create([
-							"activity_id" => $activity->id,
-							"learning_outcome_id" => $learning_outcomes[$i]->id
-						]);
+			if($learning_outcomes->count() > 0){
+				foreach($request->learning_outcome as $i => $rlo){
+					if($rlo == "on"){
+						$existing_calo = LearningOutcomeActivity::where("learning_outcome_id", $learning_outcomes[$i]->id)->where("activity_id", $activity->id)->first();
+						if(!$existing_calo){
+							LearningOutcomeActivity::create([
+								"activity_id" => $activity->id,
+								"learning_outcome_id" => $learning_outcomes[$i]->id
+							]);
+						}
 					}
-				}
-				else {
-					$existing_calo = LearningOutcomeActivity::where("learning_outcome_id", $learning_outcomes[$i]->id)->where("activity_id", $activity->id)->first();
-					if($existing_calo){
-						LearningOutcomeActivity::destroy($existing_calo->id);
+					else {
+						$existing_calo = LearningOutcomeActivity::where("learning_outcome_id", $learning_outcomes[$i]->id)->where("activity_id", $activity->id)->first();
+						if($existing_calo){
+							LearningOutcomeActivity::destroy($existing_calo->id);
+						}
 					}
 				}
 			}

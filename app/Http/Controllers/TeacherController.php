@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
+use App\Models\LecturerAttendance;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class TeacherController extends Controller {
@@ -85,16 +89,59 @@ class TeacherController extends Controller {
 	}
 
 	public function check_in_store(Request $request, $course_id){
-		if($request->file('image')){
-			$request->file("image")->store("lecturer-checkin");
+		$validatedData = $request->validate([
+			'check_in_time' => 'required'
+		]);
 
-			return 'ada lho';
-		} else {
-			return 'ga ada lho';
+		try {
+			$course = Course::findOrFail($course_id);
+
+			if($request->file('image')){
+				$validatedData['attendance_evidence'] = $request->file("image")->store("lecturer-checkin");
+			}
+			else {
+				return back()->with('failedCheckIn', 'Check in requires evidence image. Please allow the usage of the camera then try again, or if the problem persists, please kindly contact our IT team.');
+			}
+
+			LecturerAttendance::create([
+				'course_id' => $course->id,
+				'user_id' => Auth::user()->id,
+				'self_attendance_date' => Carbon::today()->format('Y-m-d'),
+				'check_in_time' => $validatedData['check_in_time'],
+				'attendance_evidence' => $validatedData['attendance_evidence'],
+			]);
 		}
+		catch(Exception $e){
+			if(isset($validatedData['attendance_evidence'])){
+				Storage::delete($validatedData['attendance_evidence']);
+			}
+
+			return back()->with('failedCheckIn', 'Cannot sign in due to system error, please contact our IT team. Error detail: ' . $e->getMessage());
+		}
+
+		return redirect(route('teacher.attendance.show', $course->id))->with('successCheckIn', 'Successfully checked in on course ' . $course->course_name . ' at ' . $validatedData['check_in_time'] . ' (GMT+7)');
 	}
 
-	public function check_out_store(Request $request, $course_id){
-		return $request;
+	public function check_out_store($course_id){
+		$course = Course::findOrFail($course_id);
+
+		$currentTime = Carbon::now();
+		$checkOutTime = Carbon::parse($currentTime)->format('H:i:s');
+
+		$existingLecturerAtd = LecturerAttendance::where('user_id', Auth::user()->id)->where('course_id', $course->id)->where('self_attendance_date', Carbon::parse($currentTime)->format('Y-m-d'))->get();
+		$unfinishedSelfAttendance = $existingLecturerAtd->filter(function($item){
+			return $item->check_out_time == null;
+		})->first();
+
+		if($unfinishedSelfAttendance){
+			$unfinishedSelfAttendance->update([
+				'check_out_time' => $checkOutTime
+			]);
+		}
+		else {
+			return back()->with('failedCheckOut', 'No attendance data found, probably because you have not checked in yet. If the problem persists please contact our IT team.');
+		}
+
+		return back()->with('successCheckOut', 'Successfully checked out from course ' . $course->course_name . ' at ' . $checkOutTime . ' (GMT+7)');
 	}
 }

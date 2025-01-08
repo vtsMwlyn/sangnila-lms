@@ -13,21 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('lecturer_attendances', function (Blueprint $table) {
+        Schema::create('lecturer_validations', function (Blueprint $table) {
             $table->id();
 
-			$table->unsignedBigInteger('user_id');
-			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+			$table->unsignedBigInteger('teacher_id');
+			$table->foreign('teacher_id')->references('id')->on('users')->onDelete('cascade');
 
 			$table->unsignedBigInteger('course_id');
 			$table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
 
-			$table->date('self_attendance_date');
-			$table->time('check_in_time');
-			$table->time('check_out_time')->nullable();
+			$table->unsignedBigInteger('validator_id');
+			$table->foreign('validator')->references('id')->on('users')->onDelete('cascade');
 
-			$table->enum('validation_status', ['awaiting', 'valid', 'invalid'])->default('awaiting');
-			$table->string('attendance_evidence');
+			$table->string('evidence');
 
             $table->timestamps();
         });
@@ -40,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lecturer_attendances');
+        Schema::dropIfExists('lecturer_validations');
     }
 };

@@ -32,12 +32,15 @@ class AttendanceController extends Controller {
 
 		$attendanceData = Attendance::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->with(['student_attendances.student'])->latest()->get();
 
-		$todaySelfAttendance = LecturerAttendance::where("user_id", Auth::user()->id)->where("course_id", $course->id)->where("self_attendance_date", Carbon::today()->format('Y-m-d'))->first();
+		$todaySelfAttendances = LecturerAttendance::where("user_id", Auth::user()->id)->where("course_id", $course->id)->where("self_attendance_date", Carbon::today()->format('Y-m-d'))->get();
+		$unfinishedSelfAttendance = $todaySelfAttendances->filter(function($item){
+			return $item->check_out_time == null;
+		});
 
 		return view('roles.teacher.attendance.show', [
 			'attendanceData' => $attendanceData,
 			"course" => $course,
-			"todaySelfAttendance" => $todaySelfAttendance
+			"unfinishedSelfAttendance" => $unfinishedSelfAttendance->first()
 		]);
 	}
 
@@ -382,5 +385,12 @@ class AttendanceController extends Controller {
 			"student" => $student
 		]);
 
+	}
+
+	// View all lecturer attendances
+	public function admin_index_lecturer_attendance(){
+		return view('roles.admin.teacher.attendance-index', [
+			'all_lecturer_attendances' => LecturerAttendance::filter(request(['search']))->orderBy('self_attendance_date')->orderBy('user_id')->get()
+		]);
 	}
 }

@@ -37,8 +37,14 @@
 
 		@if(session()->has("successUploadAttendance"))
 			<x-badge-success badge_text="{{ session('successUploadAttendance') }}"></x-badge-success>
+		@elseif(session()->has("successCheckOut"))
+			<x-badge-success badge_text="{{ session('successCheckOut') }}"></x-badge-success>
+		@elseif(session()->has("failedCheckOut"))
+			<x-badge-danger badge_text="{{ session('failedCheckOut') }}"></x-badge-danger>
 		@elseif(session()->has("successEditAttendance"))
 			<x-badge-success badge_text="{{ session('successEditAttendance') }}"></x-badge-success>
+		@elseif(session()->has("successCheckIn"))
+			<x-badge-success badge_text="{{ session('successCheckIn') }}"></x-badge-success>
 		@endif
 
 		<div class="mt-5 flex justify-between w-full">
@@ -47,23 +53,43 @@
 			</x-anchor-button>
 
 			<div class="flex gap-3 mb-3">
-				@if(!$todaySelfAttendance)
+				{{-- <x-anchor-button href="{{ route('teacher.attendance.check-in', $course->id) }}">
+					<i class="bi bi-stopwatch"></i> Check In
+				</x-anchor-button>
+
+				<form action="{{ route('teacher.attendance.check-out.store', $course->id) }}" method="post">
+					@csrf
+					<x-button>
+						<i class="bi bi-stopwatch"></i> Check Out
+					</x-button>
+				</form> --}}
+
+				@if(!$unfinishedSelfAttendance)
 					<x-anchor-button href="{{ route('teacher.attendance.check-in', $course->id) }}">
 						<i class="bi bi-stopwatch"></i> Check In
 					</x-anchor-button>
 				@else
 					<button disabled class="bg-gray-800 text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold disabled:opacity-50">
-						<i class="bi bi-stopwatch"></i> Check In
+						<i class="bi bi-stopwatch"></i> {{ $unfinishedSelfAttendance->check_in_time }}
 					</button>
 				@endif
 
-				@if($todaySelfAttendance)
+				<!-- Already checked in but haven't checked out -->
+				@if($unfinishedSelfAttendance && !$unfinishedSelfAttendance->check_out_time)
 					<form action="{{ route('teacher.attendance.check-out.store', $course->id) }}" method="post">
 						@csrf
 						<x-button>
 							<i class="bi bi-stopwatch"></i> Check Out
 						</x-button>
 					</form>
+
+				<!-- Already checked in and checked out -->
+				@elseif($unfinishedSelfAttendance && $unfinishedSelfAttendance->check_out_time)
+					<button disabled class="bg-gray-800 text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold disabled:opacity-50">
+						<i class="bi bi-stopwatch"></i> {{ $unfinishedSelfAttendance->check_out_time }}
+					</button>
+
+				<!-- Haven't checked in and haven't checked out -->
 				@else
 					<button disabled class="bg-gray-800 text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold disabled:opacity-50">
 						<i class="bi bi-stopwatch"></i> Check Out

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Topic;
@@ -15,9 +16,11 @@ use App\Models\CourseStudent;
 use App\Models\CourseTeacher;
 use App\Models\ImportedStudent;
 use App\Rules\MinimumOneCheckbox;
+use App\Models\LecturerValidation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class CourseStudentController extends Controller {
 	// ===== ADMIN ===== //
@@ -65,6 +68,7 @@ class CourseStudentController extends Controller {
 			"course" => "required",
 			"teacher" => "required",
 			"max_course_session" => "required|numeric|min:0",
+			'is_validator' => 'required'
 		]);
 
 		try {
@@ -79,7 +83,8 @@ class CourseStudentController extends Controller {
 				'course_id' => $course->id,
 				'max_course_session' => $validatedData["max_course_session"],
 				"teacher_id" => $teacher->id,
-				"is_imported" => 0
+				"is_imported" => 0,
+				'is_validator' => $validatedData['is_validator'] == 'on'? 1 : 0
 			]);
 
 			$existingProgress = Progress::where('student_id', $student->id)
@@ -124,12 +129,18 @@ class CourseStudentController extends Controller {
 	// Edit student assignment data
 	public function update(Request $request, $course_student_id){
 		$validatedData = $request->validate([
-			"course" => "required",
-			"teacher" => "required",
 			"max_course_session" => "required|numeric|min:0",
+			'is_validator' => 'required'
 		]);
 
-		return "ok";
+		$course_student = CourseStudent::findOrFail($course_student_id);
+
+		$course_student->update([
+			'max_course_session' => $validatedData["max_course_session"],
+			'is_validator' => $validatedData['is_validator'] == 'on'? 1 : 0
+		]);
+
+		return redirect(route('admin.student.show', $course_student->student_id))->with("successEditAssignInfo", "Successfully edited the student assignment info!");
 	}
 
 	// Unassign student from a course confirmation
@@ -405,4 +416,48 @@ class CourseStudentController extends Controller {
 		return redirect(route("admin.student.show", $student->id))->with("successNormalize", "Successfully normalized the student");
 	}
 
+
+	// ===== STUDENT ===== //
+
+	// Validate lecturer's attendance
+	public function student_validate_teacher($course_id){
+		$cs = CourseStudent::where('student_id', Auth::user()->id)->where('course_id', $course_id)->first();
+
+		return view('roles.student.validate-teacher', [
+			'course' => $cs->course,
+			'teacher' => $cs->teacher
+		]);
+	}
+
+	// Submit validation data
+	public function student_validate_teacher_store(Request $request, $course_id){
+		try {
+			$course = Course::findOrFail($course_id);
+
+			$photoEvidence = '';
+
+			if($request->file('image')){
+				$photoEvidence = $request->file("image")->store("lecturer-validation");
+			}
+			else {
+				return back()->with('failedValidating', 'Validating teacher requires evidence image. Please allow the usage of the camera then try again, or if the problem persists, please kindly contact our IT team.');
+			}
+
+			LecturerValidation::create([
+				'course_id' => $course->id,
+				'validator' => Auth::user()->id,
+				'teacher_id' => $request->teacher,
+				'evidence' => $photoEvidence,
+			]);
+		}
+		catch(Exception $e){
+			if(isset($validatedData['attendance_evidence'])){
+				Storage::delete($validatedData['attendance_evidence']);
+			}
+
+			return back()->with('failedValidating', 'Cannot sign in due to system error, please contact our IT team. Error detail: ' . $e->getMessage());
+		}
+
+		return redirect(route('student.mycourse.show', $course->id))->with('successValidating', 'Successfully validate your teacher attendance in course ' . $course->course_name);
+	}
 }

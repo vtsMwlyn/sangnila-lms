@@ -206,5 +206,10 @@ Route::prefix('/admin')
 
 			Route::get("/{announcement_id}", [AnnouncementController::class, "all_view_announcement"])->name("view-announcement")->whereNumber("announcement_id");
 		});
+
+		// View lecturer's attendance
+		Route::prefix('/lecturer-attendance')->name('lecturer-attendance.')->group(function(){
+			Route::get('/', [AttendanceController::class, 'admin_index_lecturer_attendance'])->name('index');
+		});
 	}
 );

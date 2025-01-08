@@ -8,10 +8,10 @@
 	<x-section-container>
 		<x-page-title class="text-center">{{ __("List of Active Teachers") }}</x-page-title>
 
-		<div class="flex items-center justify-center mt-6">
-			{{-- <div class="w-1/4">
-				<x-anchor-button  href="{{ route('admin.course.create') }}"><i class="bi bi-plus-lg"></i> Add New Course</x-anchor-button>
-			</div> --}}
+		<div class="flex items-center justify-start mt-6">
+			<div class="w-1/4">
+				<x-anchor-button href="{{ route('admin.lecturer-attendance.index') }}"><i class="bi bi-clipboard-check"></i> Lecturer Attendances</x-anchor-button>
+			</div>
 
 			<form class="flex w-1/2 justify-center" action="{{ route("admin.teacher.index") }}">
 				<x-input type="text" class="border-blue-900 border-2 rounded-l-lg rounded-r-none w-full" name="search" placeholder="Search..." :value="request('search')"/>

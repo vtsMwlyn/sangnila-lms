@@ -37,6 +37,13 @@
 					<x-input type="text" name="max_course_session" id="max_course_session" class="w-full mt-1" />
 				</div>
 
+				<div class="flex flex-col w-full mt-2">
+					<label for="cbiv-assign" class="flex items-center">
+						<input type="checkbox" id="cbiv-assign" class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('is_validator') == 'on') checked @endif />
+						Make as lecturer's attendance validator
+					</label>
+				</div>
+
 				<div class="flex gap-3 w-full justify-center">
 					<x-button type="submit" class=" w-1/6 mt-5">
 						Assign
@@ -56,7 +63,7 @@
 			@csrf
 
 			<div class="flex flex-col gap-3 w-full">
-				<div class="flex flex-col w-full">
+				{{-- <div class="flex flex-col w-full">
 					<x-label for="status" :value="__('Course Name')"/>
 					<x-select name="course" id="course" class="w-full mt-1">
 					</x-select>
@@ -66,11 +73,18 @@
 					<x-label for="status" :value="__('Teacher')"/>
 					<x-select name="teacher" id="teacher" class="w-full mt-1">
 					</x-select>
-				</div>
+				</div> --}}
 
 				<div class="flex flex-col w-full">
 					<x-label for="status" :value="__('Max Course Session')"/>
 					<x-input type="text" name="max_course_session" id="max_course_session" class="w-full mt-1" />
+				</div>
+
+				<div class="flex flex-col w-full mt-2">
+					<label for="cbiv-edit-assign" class="flex items-center">
+						<input type="checkbox" id="cbiv-edit-assign" class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" />
+						Make as lecturer's attendance validator
+					</label>
 				</div>
 
 				<div class="flex gap-3 w-full justify-center">
@@ -141,6 +155,8 @@
 
 		@if(session()->has("successAssignToCourse"))
 			<x-badge-success badge_text="{{ session('successAssignToCourse') }}"></x-badge-success>
+		@elseif(session()->has("successEditAssignInfo"))
+			<x-badge-success badge_text="{{ session('successEditAssignInfo') }}"></x-badge-success>
 		@elseif(session()->has("successNormalize"))
 			<x-badge-success badge_text="{{ session('successNormalize') }}"></x-badge-success>
 		@elseif(session()->has("successUnassignFromCourse"))
@@ -240,11 +256,19 @@
 							{{ $cs->max_course_session }} Sessions (Max)
 						</div>
 
-						<div class="flex w-full justify-end gap-2 text-sm mt-4">
-							<x-button type="button" data-route="{{ route('admin.student.assign.update', $cs->id) }}" data-cs="{{ $cs }}" class="text-white edit-assign-student-btn"><i class="bi bi-pencil-square"></i> Edit</x-button>
-							<button type="button" data-route="{{ route('admin.student.unassign.destroy', ['student_id' => $student->id, 'course_id' => $course->id]) }}" data-unassign_course_name="{{ $course->course_name }}" class="unassign-student-btn text-white bg-red flex items-center justify-center px-4 py-2 rounded-xl hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 text-xs" style="box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
-								Unassign
-							</button>
+						<div class="flex w-full justify-between items-center text-sm mt-4">
+							<div class="text-light-blue font-semibold">
+								@if($cs->is_validator == 1)
+									<i class="bi bi-check-square"></i> Validator
+								@endif
+							</div>
+
+							<div class="flex items-center gap-2">
+								<x-button type="button" data-route="{{ route('admin.student.assign.update', $cs->id) }}" data-cs="{{ $cs }}" class="text-white edit-assign-student-btn"><i class="bi bi-pencil-square"></i> Edit</x-button>
+								<button type="button" data-route="{{ route('admin.student.unassign.destroy', ['student_id' => $student->id, 'course_id' => $course->id]) }}" data-unassign_course_name="{{ $course->course_name }}" class="unassign-student-btn text-white bg-red flex items-center justify-center px-4 py-2 rounded-xl hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 text-xs" style="box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
+									Unassign
+								</button>
+							</div>
 						</div>
 					</div>
 				@empty
@@ -382,55 +406,11 @@
 
 			$(`#${whichpopup}`).find("form").attr("action", route);
 
-			$('select[name="course"]').empty();
-			$('select[name="teacher"]').empty();
-
-			const filtered = allCoursesWithTeachers.filter(item =>
-				!alreadyEnrolled.some(course => course.id == item.id) || item.id == courseStudent.course.id
-			);
-
-			filtered.forEach(course => {
-				if(course.teachers.length != 0){
-					$('select[name="course"]').append($("<option>").attr("value", course.id).text(course.course_name));
-				}
-			});
-
-			// Retrieve old values
-			const oldCourse = '{{ old('course') }}';
-			const oldTeacher = '{{ old('teacher') }}';
 			const oldMaxCourseSession = '{{ old('max_course_session') }}';
-
-			// If old values exist, fill them in
-			if(oldCourse && oldTeacher){
-				$('select[name="course"]').find(`option[value=${oldCourse}]`).prop("selected", "true");
-
-				allCoursesWithTeachers.forEach(course => {
-					if(course.id == oldCourse){
-						$('select[name="teacher"]').empty();
-						for(teacher of course.teachers){
-							$('select[name="teacher"]').append($("<option>").attr("value", teacher.id).text(teacher.full_name));
-						}
-					}
-				});
-
-				$('select[name="teacher"]').find(`option[value=${oldTeacher}]`).prop("selected", "true");
-			}
-			else {
-				$('select[name="course"]').find(`option[value=${courseStudent.course.id}]`).prop("selected", "true");
-
-				allCoursesWithTeachers.forEach(course => {
-					if(course.id == courseStudent.course.id){
-						$('select[name="teacher"]').empty();
-						for(teacher of course.teachers){
-							$('select[name="teacher"]').append($("<option>").attr("value", teacher.id).text(teacher.full_name));
-						}
-					}
-				});
-
-				$('select[name="teacher"]').find(`option[value=${courseStudent.teacher.id}]`).prop("selected", "true");
-			}
+			const oldIsValidator = '{{ old('is_validator') }}';
 
 			$('input[name="max_course_session"]').val(oldMaxCourseSession ? oldMaxCourseSession : courseStudent.max_course_session);
+			$('#cbiv-edit-assign').prop('checked', oldIsValidator ? (oldIsValidator == 'on' ? true : false) : (courseStudent.is_validator == 1 ? true : false));
 
 			// Display the popup
 			$(`#${whichpopup}`).parent().show();
@@ -562,6 +542,24 @@
 				}
 
 				$("#assignment-information-popup").parent().show();
+			});
+
+			$('#assign-student-popup').find("form").on('submit', function(e){
+				e.preventDefault();
+
+				const cbval = $(this).find('input[type="checkbox"]').is(':checked')? 'on' : 'off';
+				$(this).append($("<input>").attr({'type': 'hidden', 'name': 'is_validator', 'value': cbval}));
+
+				this.submit();
+			});
+
+			$('#edit-assign-info-popup').find("form").on('submit', function(e){
+				e.preventDefault();
+
+				const cbval = $(this).find('input[type="checkbox"]').is(':checked')? 'on' : 'off';
+				$(this).append($("<input>").attr({'type': 'hidden', 'name': 'is_validator', 'value': cbval}));
+
+				this.submit();
 			});
 
 			// Redisplay popup and fill with prev data (for invalidated data)

@@ -60,6 +60,8 @@ class AnnouncementController extends Controller
 			Announcement::create($data_to_create);
 		}
 		catch(Exception $e){
+
+
 			return back()->with("systemFail", "System failed to create announcement, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 

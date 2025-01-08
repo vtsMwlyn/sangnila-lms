@@ -9,6 +9,7 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\CourseStudentController;
 
 Route::prefix('/student')
 	->name('student.')
@@ -37,6 +38,9 @@ Route::prefix('/student')
 
 				Route::get("/{activity_id}/preview", [ActivityController::class, "preview"])->name("preview")->whereNumber("activity_id");
 
+				// Validate teacher
+				Route::get('/{course_id}/validate-teacher', [CourseStudentController::class, "student_validate_teacher"])->name('validate-teacher')->whereNumber('course_id');
+				Route::post('/{course_id}/validate-teacher', [CourseStudentController::class, "student_validate_teacher_store"])->name('validate-teacher.store')->whereNumber('course_id');
 			}
 		);
 
