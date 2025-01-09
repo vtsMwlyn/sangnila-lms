@@ -441,7 +441,7 @@ class CourseStudentController extends Controller {
 
 			LecturerValidation::create([
 				'course_id' => $course->id,
-				'validator' => Auth::user()->id,
+				'validator_id' => Auth::user()->id,
 				'teacher_id' => $request->teacher,
 				'evidence' => $photoEvidence,
 			]);

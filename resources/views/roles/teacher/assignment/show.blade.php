@@ -43,10 +43,10 @@
 				<tbody>
 					@forelse ($assignments as $asg)
 						<tr class="@if($loop->index % 2 == 0) bg-white @endif">
-							<td class="py-2 px-4">
+							<td class="py-2 px-4 w-1/5">
 								<a class="text-blue-600 hover:underline font-bold" href="{{ route('teacher.assignment.check', $asg->id) }}">{{ $asg->title }}</a>
 							</td>
-							<td class="py-2 px-4">
+							<td class="py-2 px-4 w-1/5">
 								<ul class="list-disc list-inside">
 									@foreach ($asg->student_assignments as $sasg)
 										<li>{{ $sasg->student->full_name }}</li>
@@ -54,7 +54,7 @@
 								</ul>
 							</td>
 							<td class="py-2 px-4">{{ Carbon\Carbon::parse($asg->deadline_date)->format('d M Y') }}<br>{{ Carbon\Carbon::parse($asg->deadline_time)->format("H:i") }} GMT+7</td>
-							<td class="py-2 px-4">
+							<td class="py-2 px-4 w-1/4">
 								{{ $asg->desc }}<br>
 								<a href="{{ $asg->link }}" class="text-blue-600 hover:underline font-bold">{{ $asg->link }}</a>
 							</td>

@@ -11,7 +11,8 @@
 
 @section("content")
 	<x-section-container>
-        <x-page-title class="text-3xl font-semibold text-blue-900 mt-5 mb-6">Upload New Attendance Data</x-page-title>
+        <x-page-title>Upload New Attendance Data</x-page-title>
+		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("systemFail"))
 			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
@@ -103,13 +104,13 @@
 					</table>
 				</div>
 
-				<div class="flex items-stretch gap-2 justify-center w-full mt-20 mb-3">
-					<x-button class=" w-full md:w-1/6">
-						{{ __('Submit') }}
-					</x-button>
+				<div class="flex items-stretch gap-2 justify-end w-full mt-10 mb-3">
 					<x-cancel-button class="w-full md:w-1/6">
 						Cancel
 					</x-cancel-button>
+					<x-button class=" w-full md:w-1/6">
+						{{ __('Submit') }}
+					</x-button>
 				</div>
 			</form>
 		@else
