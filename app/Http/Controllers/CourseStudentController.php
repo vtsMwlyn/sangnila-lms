@@ -68,7 +68,6 @@ class CourseStudentController extends Controller {
 			"course" => "required",
 			"teacher" => "required",
 			"max_course_session" => "required|numeric|min:0",
-			'is_validator' => 'required'
 		]);
 
 		try {
@@ -84,7 +83,6 @@ class CourseStudentController extends Controller {
 				'max_course_session' => $validatedData["max_course_session"],
 				"teacher_id" => $teacher->id,
 				"is_imported" => 0,
-				'is_validator' => $validatedData['is_validator'] == 'on'? 1 : 0
 			]);
 
 			$existingProgress = Progress::where('student_id', $student->id)
@@ -130,14 +128,12 @@ class CourseStudentController extends Controller {
 	public function update(Request $request, $course_student_id){
 		$validatedData = $request->validate([
 			"max_course_session" => "required|numeric|min:0",
-			'is_validator' => 'required'
 		]);
 
 		$course_student = CourseStudent::findOrFail($course_student_id);
 
 		$course_student->update([
 			'max_course_session' => $validatedData["max_course_session"],
-			'is_validator' => $validatedData['is_validator'] == 'on'? 1 : 0
 		]);
 
 		return redirect(route('admin.student.show', $course_student->student_id))->with("successEditAssignInfo", "Successfully edited the student assignment info!");

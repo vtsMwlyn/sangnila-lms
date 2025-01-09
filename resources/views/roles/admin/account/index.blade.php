@@ -16,7 +16,7 @@
 	</x-confirmation>
 
 	<!-- Delete account -->
-	<x-confirmation popup_title="Delete Account" id="delete-account-popup">
+	<x-confirmation method="delete" popup_title="Delete Account" id="delete-account-popup">
 		Are you sure want to <span class="font-bold text-red">delete</span> <span class="font-bold text-light-blue" id="del-account-name"></span>'s account from Sangnila LMS? <strong>This action will erase all data related to the account and can't be undone! <i>(It's recommended to disable the account instead of deleting it!)</i></strong>
 	</x-confirmation>
 

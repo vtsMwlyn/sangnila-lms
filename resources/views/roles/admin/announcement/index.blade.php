@@ -10,7 +10,7 @@
 
 @section('popup')
 	<!-- Delete course -->
-	<x-confirmation method="delete" popup_title="Delete Announcement" id="delete-announcement-popup">
+	<x-confirmation popup_title="Delete Announcement" id="delete-announcement-popup">
 		Are you sure want to <span class="font-bold text-red">delete</span> the Announcement <span class="font-bold text-light-blue" id="del-announcement-name"></span> from Sangnila LMS? <strong></strong>
 	</x-confirmation>
 @endsection

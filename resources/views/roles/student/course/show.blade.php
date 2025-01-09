@@ -17,7 +17,7 @@
 				$courseStudent = App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first();
 				$teacher = $courseStudent->teacher;
 				$progress_data_exists = count($activityProgresses) > 0 && count($activityProgresses->first()["progresses"]) > 0;
-				$existing_teacher_validation = App\Models\LecturerValidation::where("course_id", $course->id)->where("validator", Auth::user()->id)->where('created_at', 'like', Carbon\Carbon::today()->format('Y-m-d') . '%')->get();
+				$existing_teacher_validation = App\Models\LecturerValidation::where("course_id", $course->id)->where("validator_id", Auth::user()->id)->where('created_at', 'like', Carbon\Carbon::today()->format('Y-m-d') . '%')->get();
 			@endphp
 
 			<x-back-button href="{{ route('student.mycourse.index') }}"></x-back-button>

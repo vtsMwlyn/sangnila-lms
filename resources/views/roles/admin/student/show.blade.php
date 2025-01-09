@@ -37,13 +37,6 @@
 					<x-input type="text" name="max_course_session" id="max_course_session" class="w-full mt-1" />
 				</div>
 
-				<div class="flex flex-col w-full mt-2">
-					<label for="cbiv-assign" class="flex items-center">
-						<input type="checkbox" id="cbiv-assign" class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('is_validator') == 'on') checked @endif />
-						Make as lecturer's attendance validator
-					</label>
-				</div>
-
 				<div class="flex gap-3 w-full justify-center">
 					<x-button type="submit" class=" w-1/6 mt-5">
 						Assign
@@ -78,13 +71,6 @@
 				<div class="flex flex-col w-full">
 					<x-label for="status" :value="__('Max Course Session')"/>
 					<x-input type="text" name="max_course_session" id="max_course_session" class="w-full mt-1" />
-				</div>
-
-				<div class="flex flex-col w-full mt-2">
-					<label for="cbiv-edit-assign" class="flex items-center">
-						<input type="checkbox" id="cbiv-edit-assign" class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" />
-						Make as lecturer's attendance validator
-					</label>
 				</div>
 
 				<div class="flex gap-3 w-full justify-center">
@@ -407,10 +393,8 @@
 			$(`#${whichpopup}`).find("form").attr("action", route);
 
 			const oldMaxCourseSession = '{{ old('max_course_session') }}';
-			const oldIsValidator = '{{ old('is_validator') }}';
 
 			$('input[name="max_course_session"]').val(oldMaxCourseSession ? oldMaxCourseSession : courseStudent.max_course_session);
-			$('#cbiv-edit-assign').prop('checked', oldIsValidator ? (oldIsValidator == 'on' ? true : false) : (courseStudent.is_validator == 1 ? true : false));
 
 			// Display the popup
 			$(`#${whichpopup}`).parent().show();
@@ -542,24 +526,6 @@
 				}
 
 				$("#assignment-information-popup").parent().show();
-			});
-
-			$('#assign-student-popup').find("form").on('submit', function(e){
-				e.preventDefault();
-
-				const cbval = $(this).find('input[type="checkbox"]').is(':checked')? 'on' : 'off';
-				$(this).append($("<input>").attr({'type': 'hidden', 'name': 'is_validator', 'value': cbval}));
-
-				this.submit();
-			});
-
-			$('#edit-assign-info-popup').find("form").on('submit', function(e){
-				e.preventDefault();
-
-				const cbval = $(this).find('input[type="checkbox"]').is(':checked')? 'on' : 'off';
-				$(this).append($("<input>").attr({'type': 'hidden', 'name': 'is_validator', 'value': cbval}));
-
-				this.submit();
 			});
 
 			// Redisplay popup and fill with prev data (for invalidated data)
