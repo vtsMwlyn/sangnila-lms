@@ -183,7 +183,7 @@
 
 			<div class="flex flex-col w-full">
 				<p>Course Description</p>
-				<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $course->course_description }}</div>
+				<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{!! nl2br($course->course_description) !!}</div>
 			</div>
 
 		</div>
@@ -227,7 +227,7 @@
 						</tr>
 					@empty
 						<tr class="bg-white">
-							<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+							<td class="p-5 text-center" colspan="5">- No data found -</td>
 						</tr>
 					@endforelse
 				</tbody>
@@ -295,7 +295,7 @@
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
 		<div class="overflow-x-auto mt-3">
-			<table>
+			<table class="w-full">
 				<thead>
 					<th class="text-center py-3 px-4 border-b-2 border-slate-400">Session</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Topic</th>
@@ -358,7 +358,7 @@
 						</td>
 					</tr>
 				@empty
-					<tr><td colspan="3" class="text-center font-semibold rounded-xl p-5 bg-white">- No curriculum topics and activities yet -</td></tr>
+					<tr><td colspan="5" class="text-center p-5 bg-white">- No curriculum topics and activities yet -</td></tr>
 				@endforelse
 			</table>
 		</div>

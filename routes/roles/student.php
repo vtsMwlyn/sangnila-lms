@@ -4,6 +4,7 @@ use App\Models\StudentAttendance;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AssignmentController;
@@ -38,9 +39,10 @@ Route::prefix('/student')
 
 				Route::get("/{activity_id}/preview", [ActivityController::class, "preview"])->name("preview")->whereNumber("activity_id");
 
-				// Validate teacher
-				Route::get('/{course_id}/validate-teacher', [CourseStudentController::class, "student_validate_teacher"])->name('validate-teacher')->whereNumber('course_id');
-				Route::post('/{course_id}/validate-teacher', [CourseStudentController::class, "student_validate_teacher_store"])->name('validate-teacher.store')->whereNumber('course_id');
+				// Self attendance (check in/out)
+				Route::get('/{course_id}/check-in', [StudentController::class, "student_check_in"])->name('check-in')->whereNumber('course_id');
+				Route::post('/{course_id}/check-in', [StudentController::class, "student_check_in_store"])->name('check-in.store')->whereNumber('course_id');
+				Route::post('/{course_id}/check-out', [StudentController::class, "student_check_out_store"])->name('check-out.store')->whereNumber('course_id');
 			}
 		);
 

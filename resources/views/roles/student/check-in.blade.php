@@ -1,24 +1,28 @@
-@extends("layouts.main-teacher")
+@extends("layouts.main-student")
 
 @section("title")
-	<h1>Lecturer Attendance</h1>
+	<h1>Student Self Attendance</h1>
 @endsection
 
 @section("content")
 	<x-section-container>
-		<x-back-button href="{{ route('teacher.attendance.show', $course->id) }}"></x-back-button>
+		<x-back-button href="{{ route('student.mycourse.show', $course->id) }}"></x-back-button>
 		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
-		<h1 class="text-xl font-semibold text-blue-900 mt-2">Validate Teacher's Attendance</h1>
+		<h1 class="text-xl font-semibold text-blue-900 mt-2">Self Attendance</h1>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("failedValidating"))
 			<x-badge-danger badge_text="{{ session('failedValidating') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('student.mycourse.validate-teacher.store', $course->id) }}" method="post" enctype="multipart/form-data">
+		<form action="{{ route('student.mycourse.check-in.store', $course->id) }}" method="post" enctype="multipart/form-data">
 			@csrf
 
-			<input type="hidden" name="teacher" value="{{ $teacher->id }}">
+			<!-- Check In Time -->
+			<div class="w-full flex flex-col mt-4">
+				<x-label for="check_in_time" :value="__('Check In Time')" />
+				<x-input id="check_in_time" name="check_in_time" class="w-full pointer-events-none" type="text" />
+			</div>
 
 			<div class="w-full flex flex-col mt-2 items-start">
 				<div class="w-full flex">
@@ -52,6 +56,26 @@
 
 	<script>
 		$(document).ready(() => {
+			let serverTime = @json(\Carbon\Carbon::now()->toDateTimeString());
+			let currentTime = new Date(serverTime);
+
+			function updateTime() {
+				currentTime.setSeconds(currentTime.getSeconds() + 1);
+
+				let hours = currentTime.getHours();
+				let minutes = currentTime.getMinutes();
+				let seconds = currentTime.getSeconds();
+
+				hours = (hours < 10) ? '0' + hours : hours;
+				minutes = (minutes < 10) ? '0' + minutes : minutes;
+				seconds = (seconds < 10) ? '0' + seconds : seconds;
+
+				$('#check_in_time').val(hours + ':' + minutes + ':' + seconds);
+			}
+
+			updateTime();
+            setInterval(updateTime, 1000);
+
 			// Get references to the video and canvas elements
 			const video = document.getElementById('video');
 			const canvas = document.getElementById('canvas');

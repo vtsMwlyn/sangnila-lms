@@ -112,7 +112,7 @@
 								</td>
 								<td class="w-1/2 py-5">
 									<div class="flex flex-col items-stretch">
-										<textarea name="attendance_detail[]" rows="8" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $i) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px; border-width: 3px;">{{ old("attendance_detail." . $i, $attenDet) }}</textarea>
+										<textarea name="attendance_detail[]" rows="8" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $i) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px; border-width: 3px;">{!! old("attendance_detail." . $i, $attenDet) !!}</textarea>
 										@error("attendance_detail." . $i)
 											<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> The attendance detail field is required.</p>
 										@enderror

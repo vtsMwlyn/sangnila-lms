@@ -17,16 +17,46 @@
 				$courseStudent = App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first();
 				$teacher = $courseStudent->teacher;
 				$progress_data_exists = count($activityProgresses) > 0 && count($activityProgresses->first()["progresses"]) > 0;
-				$existing_teacher_validation = App\Models\LecturerValidation::where("course_id", $course->id)->where("validator_id", Auth::user()->id)->where('created_at', 'like', Carbon\Carbon::today()->format('Y-m-d') . '%')->get();
 			@endphp
 
 			<x-back-button href="{{ route('student.mycourse.index') }}"></x-back-button>
 			<div class="w-full flex justify-between items-center">
 				<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
-				@if($existing_teacher_validation->count() < 1)
-					<x-anchor-button href="{{ route('student.mycourse.validate-teacher', $course->id) }}"><i class="bi bi-check-square"></i> Validate Teacher</x-anchor-button>
-				@else
-					<button class="text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold bg-slate-800 disabled:opacity-25" disabled><i class="bi bi-check-square"></i> Validate Teacher</button>
+
+				@if(!$max_session_reached)
+					<div class="flex items-center gap-3">
+						@if(!$unfinishedSelfAttendance)
+							<x-anchor-button href="{{ route('student.mycourse.check-in', $course->id) }}">
+								<i class="bi bi-stopwatch"></i> Check In
+							</x-anchor-button>
+						@else
+							<button disabled class="bg-gray-800 text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold disabled:opacity-50">
+								<i class="bi bi-stopwatch"></i> {{ $unfinishedSelfAttendance->check_in_time }}
+							</button>
+						@endif
+
+						<!-- Already checked in but haven't checked out -->
+						@if($unfinishedSelfAttendance && !$unfinishedSelfAttendance->check_out_time)
+							<form action="{{ route('student.mycourse.check-out.store', $course->id) }}" method="post">
+								@csrf
+								<x-button>
+									<i class="bi bi-stopwatch"></i> Check Out
+								</x-button>
+							</form>
+
+						<!-- Already checked in and checked out -->
+						@elseif($unfinishedSelfAttendance && $unfinishedSelfAttendance->check_out_time)
+							<button disabled class="bg-gray-800 text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold disabled:opacity-50">
+								<i class="bi bi-stopwatch"></i> {{ $unfinishedSelfAttendance->check_out_time }}
+							</button>
+
+						<!-- Haven't checked in and haven't checked out -->
+						@else
+							<button disabled class="bg-gray-800 text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold disabled:opacity-50">
+								<i class="bi bi-stopwatch"></i> Check Out
+							</button>
+						@endif
+					</div>
 				@endif
 			</div>
 			<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
@@ -37,8 +67,10 @@
 			</div>
 			<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
-			@if(session()->has('successValidating'))
-				<x-badge-success badge_text="{{ session('successValidating') }}" class="mb-4"></x-badge-success>
+			@if(session()->has('successCheckIn'))
+				<x-badge-success badge_text="{{ session('successCheckIn') }}" class="mb-4"></x-badge-success>
+			@elseif(session()->has('successCheckOut'))
+				<x-badge-success badge_text="{{ session('successCheckOut') }}" class="mb-4"></x-badge-success>
 			@endif
 
 			@if($should_pay_soon)
@@ -178,7 +210,7 @@
 							<div class="flex flex-col gap-8 my-8 w-full px-8">
 								<div class="flex flex-col">
 									<h3 class="text-xs">Description</h3>
-									<h2>{{ $ap["activity"]->desc }}</h2>
+									<h2>{!! nl2br($ap["activity"]->desc) !!}</h2>
 								</div>
 								<div class="flex flex-col">
 									<h3 class="text-xs">Delivery Mode</h3>
@@ -282,7 +314,7 @@
 											$("<h3>").addClass("text-xs").text("Description")
 										)
 										.append(
-											$("<h2>").text(activityDesc)
+											$("<h2>").html(activityDesc.replace(/\n/g, '<br>'))
 										)
 								).append(
 									$("<div>").addClass("flex flex-col")

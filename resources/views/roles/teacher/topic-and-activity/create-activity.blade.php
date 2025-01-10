@@ -36,16 +36,16 @@
 				</div>
 			</div>
 
-			<!-- Activity Description -->
-			<div class="w-full flex flex-col mt-4">
-				<x-label for="desc" :value="__('Activity Description')" />
-				<x-input id="desc" class="w-full" type="text" name="desc" placeholder="Enter activity description" value="{{ old('desc') }}" />
-			</div>
-
 			<!-- Activity Link -->
 			<div class="w-full flex flex-col mt-4">
 				<x-label for="link" :value="__('Activity Link')" />
 				<x-input id="link" class="w-full" type="text" name="link" placeholder="Enter activity link" value="{{ old('link') }}" />
+			</div>
+
+			<!-- Activity Description -->
+			<div class="w-full flex flex-col mt-4">
+				<x-label for="desc" :value="__('Activity Description')" />
+				<x-textarea rows="4" id="desc" class="w-full" type="text" name="desc" placeholder="Enter activity description" >{!! old('desc') !!}</x-textarea>
 			</div>
 
 			<!-- Learning Outcome -->

@@ -42,7 +42,7 @@
 			<!-- Activity Description -->
 			<div class="mt-4 flex flex-col w-full">
 				<x-label for="desc" :value="__('Activity Description')" />
-				<x-input id="desc" class="w-full mt-1" type="text" name="desc" placeholder="Enter activity description" :value="old('desc', $curriculum_activity->desc)" />
+				<x-textarea rows="4" id="desc" class="w-full mt-1" type="text" name="desc" placeholder="Enter activity description">{!! old('desc', $curriculum_activity->desc) !!}</x-textarea>
 			</div>
 
 			<!-- Material Link -->

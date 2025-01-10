@@ -55,7 +55,12 @@
 							</td>
 							<td class="py-2 px-4">{{ Carbon\Carbon::parse($asg->deadline_date)->format('d M Y') }}<br>{{ Carbon\Carbon::parse($asg->deadline_time)->format("H:i") }} GMT+7</td>
 							<td class="py-2 px-4 w-1/4">
-								{{ $asg->desc }}<br>
+								@if(strlen($asg->desc) > 60)
+									<div class="">{!! nl2br(substr($asg->desc, 0, 60)) !!}... <button type="button" class="show-more-button text-blue font-semibold text-xs">[Show More]</button></div>
+									<div class="hidden">{!! nl2br($asg->desc) !!} <button type="button" class="show-less-button text-blue font-semibold text-xs">[Show Less]</button></div>
+								@else
+									{!! nl2br($asg->desc) !!}
+								@endif
 								<a href="{{ $asg->link }}" class="text-blue-600 hover:underline font-bold">{{ $asg->link }}</a>
 							</td>
 							<td class="py-2 px-4">
@@ -76,4 +81,18 @@
 			</table>
 		</div>
 	</x-section-container>
+
+	<script>
+		$(document).ready(() => {
+			$(".show-more-button").click(function(){
+				$(this).closest("div").next().removeClass("hidden");
+				$(this).closest("div").addClass("hidden");
+			});
+
+			$(".show-less-button").click(function(){
+				$(this).closest("div").prev().removeClass("hidden");
+				$(this).closest("div").addClass("hidden");
+			});
+		});
+	</script>
 @endsection

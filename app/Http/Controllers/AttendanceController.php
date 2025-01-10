@@ -10,7 +10,7 @@ use App\Models\Attendance;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
 use App\Models\ImportedStudent;
-use App\Models\LecturerAttendance;
+use App\Models\SelfAttendance;
 use App\Models\StudentAttendance;
 use Carbon\Carbon;
 use Google\Service\Classroom\Student;
@@ -32,7 +32,7 @@ class AttendanceController extends Controller {
 
 		$attendanceData = Attendance::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->with(['student_attendances.student'])->latest()->get();
 
-		$todaySelfAttendances = LecturerAttendance::where("user_id", Auth::user()->id)->where("course_id", $course->id)->where("self_attendance_date", Carbon::today()->format('Y-m-d'))->get();
+		$todaySelfAttendances = SelfAttendance::where("user_id", Auth::user()->id)->where("course_id", $course->id)->where("self_attendance_date", Carbon::today()->format('Y-m-d'))->get();
 		$unfinishedSelfAttendance = $todaySelfAttendances->filter(function($item){
 			return $item->check_out_time == null;
 		});
@@ -389,8 +389,17 @@ class AttendanceController extends Controller {
 
 	// View all lecturer attendances
 	public function admin_index_lecturer_attendance(){
+		$all_lecturer_attendances = SelfAttendance::filter(request(['search']))->whereHas('user', function($query){
+			return $query->where('role_id', 2);
+		})->orderBy('self_attendance_date')->orderBy('user_id')->get();
+
+		$all_student_attendances = SelfAttendance::filter(request(['search']))->whereHas('user', function($query){
+			return $query->where('role_id', 3);
+		})->orderBy('self_attendance_date')->orderBy('user_id')->get();
+
 		return view('roles.admin.teacher.attendance-index', [
-			'all_lecturer_attendances' => LecturerAttendance::filter(request(['search']))->orderBy('self_attendance_date')->orderBy('user_id')->get()
+			'all_lecturer_attendances' => $all_lecturer_attendances,
+			'all_student_attendances' => $all_student_attendances
 		]);
 	}
 }

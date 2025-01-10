@@ -47,37 +47,41 @@
 				</thead>
 				<tbody>
 					@forelse ($all_lecturer_attendances as $la)
+						@php
+							$checkInPhotoL = Storage::url('app/public/' . $la->attendance_evidence);
+
+							$courseStudents = App\Models\CourseStudent::where('teacher_id', $la->user->id)
+								->where('course_id', $la->course->id)->get();
+
+							$filtered = $all_student_attendances
+								->where('self_attendance_date', $la->self_attendance_date)
+								->filter(function($ssa) use ($courseStudents) {
+									return $courseStudents->contains(function ($cs) use ($ssa) {
+										return $cs->course_id === $ssa->course_id && $cs->student_id === $ssa->user_id;
+									});
+								});
+
+							$sourceStudents = [];
+							foreach($filtered as $f){
+								$ss = [];
+
+								$ss['src'] = Storage::url('app/public/' . $f->attendance_evidence);
+								$ss['validator'] = $f->user->full_name . ' (' . $f->check_in_time . '-' . $f->check_out_time . ')';
+
+								array_push($sourceStudents, $ss);
+							}
+						@endphp
+
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
 							<td class="py-2 px-4">{{ Carbon\Carbon::parse($la->self_attendance_date)->format('d M Y') }}</td>
-							<td class="py-2 px-4">{{ ($la->teacher->details->gender == 1)? "Mr." : "Ms." }} {{ $la->teacher->full_name }}</td>
+							<td class="py-2 px-4">{{ ($la->user->details->gender == 1)? "Mr." : "Ms." }} {{ $la->user->full_name }}</td>
 							<td class="py-2 px-4">{{ $la->course->course_name }}</td>
 							<td class="py-2 px-4">{{ $la->check_in_time }}</td>
 							<td class="py-2 px-4">{{ $la->check_out_time ?? 'N/A' }}</td>
 							{{-- <td class="py-2 px-4">{{ $la->validation_status }}</td> --}}
 							<td class="py-2 px-4">
-								@php
-									$checkInPhoto = Storage::url('app/public/' . $la->attendance_evidence);
-
-									$validationFromStudentData = App\Models\LecturerValidation::where('course_id', $la->course->id)->where('teacher_id', $la->teacher->id)->get();
-									// $filtered = $validationFromStudentData->filter(function ($item) {
-									// 	$hour_submitted = Carbon\Carbon::parse($item->created_at)->format('H:i:s');
-									// 	return $hour_submitted >= $la->check_in_time && $hour_submitted <= $la->check_out_time;
-									// });
-
-									$sourceStudents = [];
-
-									if($validationFromStudentData->count()){
-										foreach($validationFromStudentData as $vfsd){
-											$errey = [];
-											$errey['src'] = Storage::url('app/public/' . $vfsd->evidence);
-											$errey['validator'] = $vfsd->validator->full_name;
-											array_push($sourceStudents, $errey);
-										}
-									}
-								@endphp
-
 								<div class="flex gap-1 w-full">
-									<x-button type="button" class="lecturer-attendance-detail-btn" data-source_teacher="{{ $checkInPhoto }}" data-student_validations="{{ json_encode($sourceStudents) }}"><i class="bi bi-image"></i></x-button>
+									<x-button type="button" class="lecturer-attendance-detail-btn" data-source_teacher="{{ $checkInPhotoL }}" data-student_validations="{{ json_encode($sourceStudents) }}"><i class="bi bi-image"></i></x-button>
 								</div>
 							</td>
 						</tr>
@@ -89,6 +93,44 @@
 				</tbody>
 			</table>
 		</div>
+
+		{{-- <div class="w-full overflow-x-auto">
+			<table class="w-full">
+				<thead>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Validator</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Class</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Check In</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Check Out</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
+				</thead>
+				<tbody>
+					@forelse ($all_student_attendances as $sa)
+						@php
+							$teacher = App\Models\CourseStudent::where('course_id', $sa->course->id)->where('student_id', $sa->user->id)->first()->teacher;
+							$checkInPhotoS = Storage::url('app/public/' . $sa->attendance_evidence);
+						@endphp
+
+						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
+							<td class="py-2 px-4">{{ Carbon\Carbon::parse($sa->self_attendance_date)->format('d M Y') }}</td>
+							<td class="py-2 px-4">{{ $sa->user->full_name }}</td>
+							<td class="py-2 px-4">{{ $sa->course->course_name }} ({{ $teacher->full_name }})</td>
+							<td class="py-2 px-4">{{ $sa->check_in_time }}</td>
+							<td class="py-2 px-4">{{ $sa->check_out_time ?? 'N/A' }}</td>
+							<td class="py-2 px-4">
+								<div class="flex gap-1 w-full">
+									<x-button type="button" class="lecturer-attendance-detail-btn" data-source_teacher="{{ $checkInPhotoS }}"><i class="bi bi-image"></i></x-button>
+								</div>
+							</td>
+						</tr>
+					@empty
+						<tr class="bg-white">
+							<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+						</tr>
+					@endforelse
+				</tbody>
+			</table>
+		</div> --}}
 	</x-section-container>
 
 	<script>
@@ -108,7 +150,6 @@
 				else {
 					$('#check-in-photo-students').append($("<div>").text('N/A'));
 				}
-
 
 				$('#lecturer-attendance-detail-popup').parent().show();
 			});

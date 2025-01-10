@@ -104,11 +104,11 @@
 							<td class="py-2 px-4 text-center">{{ $activity->session }}</td>
 							<td class="py-2 px-4 w-1/4">{{ $activity->title }}</td>
 							<td class="py-2 px-4 w-1/2">
-								@if(strlen($activity->desc) > 120)
-									<div class="">{{ substr($activity->desc, 0, 120) }}... <button type="button" class="show-more-button text-blue font-semibold text-xs">[Show More]</button></div>
-									<div class="hidden">{{ $activity->desc }} <button type="button" class="show-less-button text-blue font-semibold text-xs">[Show Less]</button></div>
+								@if(strlen($activity->desc) > 90)
+									<div class="">{!! nl2br(substr($activity->desc, 0, 90)) !!}... <button type="button" class="show-more-button text-blue font-semibold text-xs">[Show More]</button></div>
+									<div class="hidden">{!! nl2br($activity->desc) !!} <button type="button" class="show-less-button text-blue font-semibold text-xs">[Show Less]</button></div>
 								@else
-									{{ $activity->desc }}
+									{!! nl2br($activity->desc) !!}
 								@endif
 							</td>
 							<td class="py-2 px-4 text-center">

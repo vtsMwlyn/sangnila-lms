@@ -91,7 +91,7 @@
 									</td>
 									<td class="p-5 w-1/2">
 										<div class="flex flex-col items-stretch">
-											<textarea name="attendance_detail[]" rows="8" class="h-full rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror" placeholder="Enter student in class progress details" style="resize: none; box-sizing: border-box; padding: 10px; border-width: 3px;">{{ old("attendance_detail." . $loop->index) }}</textarea>
+											<textarea name="attendance_detail[]" rows="8" class="h-full rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror" placeholder="Enter student in class progress details" style="resize: none; box-sizing: border-box; padding: 10px; border-width: 3px;">{!! old("attendance_detail." . $loop->index) !!}</textarea>
 
 											@error("attendance_detail." . $loop->index)
 												<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> The attendance detail field is required.</p>

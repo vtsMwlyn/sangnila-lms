@@ -273,6 +273,13 @@
 				}
 
 				$(document).ready(() => {
+					// Prevent form from submitting when enter key presses
+					$('input[type="text"]').on("keydown", function(event) {
+						if (event.key === "Enter") {
+							event.preventDefault();
+						}
+					});
+
 					// Show loading popup on form submission
 					$('form').on('submit', function () {
 						showLoadingPopupWithDelay();

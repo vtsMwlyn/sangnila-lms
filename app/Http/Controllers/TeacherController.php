@@ -9,7 +9,7 @@ use App\Models\User;
 use App\Models\Course;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
-use App\Models\LecturerAttendance;
+use App\Models\SelfAttendance;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -103,7 +103,7 @@ class TeacherController extends Controller {
 				return back()->with('failedCheckIn', 'Check in requires evidence image. Please allow the usage of the camera then try again, or if the problem persists, please kindly contact our IT team.');
 			}
 
-			LecturerAttendance::create([
+			SelfAttendance::create([
 				'course_id' => $course->id,
 				'user_id' => Auth::user()->id,
 				'self_attendance_date' => Carbon::today()->format('Y-m-d'),
@@ -119,7 +119,7 @@ class TeacherController extends Controller {
 			return back()->with('failedCheckIn', 'Cannot sign in due to system error, please contact our IT team. Error detail: ' . $e->getMessage());
 		}
 
-		return redirect(route('teacher.attendance.show', $course->id))->with('successCheckIn', 'Successfully checked in on course ' . $course->course_name . ' at ' . $validatedData['check_in_time'] . ' (GMT+7)');
+		return redirect(route('teacher.attendance.show', $course->id))->with('successCheckIn', 'Successfully checked in to course ' . $course->course_name . ' at ' . $validatedData['check_in_time'] . ' (GMT+7)');
 	}
 
 	public function check_out_store($course_id){
@@ -128,7 +128,7 @@ class TeacherController extends Controller {
 		$currentTime = Carbon::now();
 		$checkOutTime = Carbon::parse($currentTime)->format('H:i:s');
 
-		$existingLecturerAtd = LecturerAttendance::where('user_id', Auth::user()->id)->where('course_id', $course->id)->where('self_attendance_date', Carbon::parse($currentTime)->format('Y-m-d'))->get();
+		$existingLecturerAtd = SelfAttendance::where('user_id', Auth::user()->id)->where('course_id', $course->id)->where('self_attendance_date', Carbon::parse($currentTime)->format('Y-m-d'))->get();
 		$unfinishedSelfAttendance = $existingLecturerAtd->filter(function($item){
 			return $item->check_out_time == null;
 		})->first();

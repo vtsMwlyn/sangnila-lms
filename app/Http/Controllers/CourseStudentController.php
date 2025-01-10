@@ -16,7 +16,7 @@ use App\Models\CourseStudent;
 use App\Models\CourseTeacher;
 use App\Models\ImportedStudent;
 use App\Rules\MinimumOneCheckbox;
-use App\Models\LecturerValidation;
+use App\Models\SelfAttendance;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -410,50 +410,5 @@ class CourseStudentController extends Controller {
 		}
 
 		return redirect(route("admin.student.show", $student->id))->with("successNormalize", "Successfully normalized the student");
-	}
-
-
-	// ===== STUDENT ===== //
-
-	// Validate lecturer's attendance
-	public function student_validate_teacher($course_id){
-		$cs = CourseStudent::where('student_id', Auth::user()->id)->where('course_id', $course_id)->first();
-
-		return view('roles.student.validate-teacher', [
-			'course' => $cs->course,
-			'teacher' => $cs->teacher
-		]);
-	}
-
-	// Submit validation data
-	public function student_validate_teacher_store(Request $request, $course_id){
-		try {
-			$course = Course::findOrFail($course_id);
-
-			$photoEvidence = '';
-
-			if($request->file('image')){
-				$photoEvidence = $request->file("image")->store("lecturer-validation");
-			}
-			else {
-				return back()->with('failedValidating', 'Validating teacher requires evidence image. Please allow the usage of the camera then try again, or if the problem persists, please kindly contact our IT team.');
-			}
-
-			LecturerValidation::create([
-				'course_id' => $course->id,
-				'validator_id' => Auth::user()->id,
-				'teacher_id' => $request->teacher,
-				'evidence' => $photoEvidence,
-			]);
-		}
-		catch(Exception $e){
-			if(isset($validatedData['attendance_evidence'])){
-				Storage::delete($validatedData['attendance_evidence']);
-			}
-
-			return back()->with('failedValidating', 'Cannot sign in due to system error, please contact our IT team. Error detail: ' . $e->getMessage());
-		}
-
-		return redirect(route('student.mycourse.show', $course->id))->with('successValidating', 'Successfully validate your teacher attendance in course ' . $course->course_name);
 	}
 }

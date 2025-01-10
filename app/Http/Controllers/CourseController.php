@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attendance;
+use Exception;
+use Carbon\Carbon;
+use App\Models\Topic;
 use App\Models\Course;
+use App\Models\Progress;
+use App\Models\Attendance;
+use Illuminate\Http\Request;
 use App\Models\CourseStudent;
+use App\Models\SelfAttendance;
 use App\Models\CurriculumTopic;
 use App\Models\ImportedStudent;
 use App\Models\LearningOutcome;
-use App\Models\Progress;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
-use App\Models\Topic;
-use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller {
@@ -21,7 +23,7 @@ class CourseController extends Controller {
 	// Showing list of all available courses in Sangnila LMS
 	public function admin_index() {
 		return view('roles.admin.course.index', [
-			'courses' => Course::filter(request(["search"]))->get()
+			'courses' => Course::filter(request(["search"]))->orderBy('course_name')->get()
 		]);
 	}
 
@@ -162,7 +164,7 @@ class CourseController extends Controller {
 		// $pushNotif->sendPushNotification();
 
 		return view('roles.student.course.index', [
-			"payment_reminders" => $paymentReminders
+			"payment_reminders" => $paymentReminders,
 		]);
 	}
 
@@ -194,99 +196,60 @@ class CourseController extends Controller {
 			$max_session_reached = true;
 		}
 
-		// Other data
-		// $progresses = Progress::where('student_id', $cs->student->id)
-		// 	->where('course_id', $cs->course->id)
-		// 	->with('activity') // Load the related activity
-		// 	->join('activities', 'progress.activity_id', '=', 'activities.id') // Join with activities
-		// 	->orderBy('activities.session', 'asc') // Order by session
-		// 	->orderBy('activities.created_at', 'asc') // Order by created_at
-		// 	->select('progress.*') // Only select columns from Progress
-		// 	->get();
-
-		// $progressAndActivity = [];
-		// foreach($progresses as $prgs){
-		// 	$pam = [];
-		// 	$pam["progress"] = $prgs;
-		// 	$pam["activity"] = $prgs->activity;
-		// 	$pam["topic"] = $prgs->activity->topic;
-		// 	$pam["learning_outcomes"] = $prgs->activity->learning_outcomes->toJson();
-		// 	array_push($progressAndActivity, $pam);
-		// }
-
-		// Kalo mau digrouping by session tapi keknya masih susan
-		// $progressAndActivity = Progress::where('student_id', $cs->student->id)
-		// 	->where('course_id', $cs->course->id)
-		// 	->join('activities', 'progress.activity_id', '=', 'activities.id') // Join with activities table
-		// 	->orderBy('activities.session', 'asc') // Order by session number ascending
-		// 	->orderBy('activities.created_at', 'asc') // Secondary order by created_at ascending
-		// 	->with([
-		// 		'activity' => function ($query) {
-		// 			$query->select('id', 'session', 'topic_id', 'desc', 'title', 'created_at') // Include necessary columns
-		// 				->with([
-		// 					'topic' => function ($query) {
-		// 						$query->select('id', 'title'); // Include necessary columns from topics
-		// 					},
-		// 					'learning_outcomes' => function ($query) {
-		// 						$query->select('learning_outcomes.id', 'number', 'title'); // Include necessary columns from learning_outcomes
-		// 					},
-		// 				]);
-		// 		}
-		// 	])
-		// 	->select('progress.*') // Select all columns from progress to avoid ambiguity
-		// 	->get();
-
 		$progressAndActivity = Progress::where('student_id', $cs->student_id)
-    ->where('course_id', $cs->course_id)
-    ->with([
-        'activity' => function ($query) {
-            $query->select('id', 'session', 'topic_id', 'desc', 'title');
-        },
-        'activity.topic' => function ($query) {
-            $query->select('id', 'title'); // Fetch only necessary columns
-        },
-        'activity.learning_outcomes' => function ($query) {
-            $query->select('learning_outcomes.id', 'number', 'title');
-        }
-    ])
-    ->join('activities', 'progress.activity_id', '=', 'activities.id')
-    ->orderBy('activities.session', 'asc')
-    ->orderBy('activities.created_at', 'asc')
-    ->select('progress.*') // Select only columns from Progress
-    ->get()
-    ->groupBy('activity.session') // Group by activity's session
-    ->map(function ($progresses, $session) {
-        return [
-            'session' => $session,
-            'progresses' => $progresses->map(function ($progress) {
-                return [
-                    'progress' => $progress,
-                    'activity' => $progress->activity,
-                    'topic' => $progress->activity->topic,
-                    'learning_outcomes' => $progress->activity->learning_outcomes,
-                ];
-            }),
-        ];
-    });
+			->where('course_id', $cs->course_id)
+			->with([
+				'activity' => function ($query) {
+					$query->select('id', 'session', 'topic_id', 'desc', 'title');
+				},
+				'activity.topic' => function ($query) {
+					$query->select('id', 'title'); // Fetch only necessary columns
+				},
+				'activity.learning_outcomes' => function ($query) {
+					$query->select('learning_outcomes.id', 'number', 'title');
+				}
+			])
+			->join('activities', 'progress.activity_id', '=', 'activities.id')
+			->orderBy('activities.session', 'asc')
+			->orderBy('activities.created_at', 'asc')
+			->select('progress.*') // Select only columns from Progress
+			->get()
+			->groupBy('activity.session') // Group by activity's session
+			->map(function ($progresses, $session) {
+				return [
+					'session' => $session,
+					'progresses' => $progresses->map(function ($progress) {
+						return [
+							'progress' => $progress,
+							'activity' => $progress->activity,
+							'topic' => $progress->activity->topic,
+							'learning_outcomes' => $progress->activity->learning_outcomes,
+						];
+					}),
+				];
+			});
 
+		$todaySelfAttendances = SelfAttendance::where("user_id", Auth::user()->id)->where("course_id", $course_id)->where("self_attendance_date", Carbon::today()->format('Y-m-d'))->get();
+		$unfinishedSelfAttendance = $todaySelfAttendances->filter(function($item){
+			return $item->check_out_time == null;
+		});
 
-
-
-		if($max_session_reached){
-			return view('roles.student.course.show', [
-				'course' => $cs->course,
-				"should_pay_soon" => $shouldPaySoon,
-				"max_session_reached" => $max_session_reached
-			]);
-		}
-		else {
+		// if($max_session_reached){
+		// 	return view('roles.student.course.show', [
+		// 		'course' => $cs->course,
+		// 		"should_pay_soon" => $shouldPaySoon,
+		// 		"max_session_reached" => $max_session_reached
+		// 	]);
+		// }
+		// else {
 			return view('roles.student.course.show', [
 				'course' => $cs->course,
 				'activityProgresses' => $progressAndActivity,
 				"should_pay_soon" => $shouldPaySoon,
-				"max_session_reached" => $max_session_reached
+				"max_session_reached" => $max_session_reached,
+				"unfinishedSelfAttendance" => $unfinishedSelfAttendance->first()
 			]);
-		}
+		// }
 	}
 
 

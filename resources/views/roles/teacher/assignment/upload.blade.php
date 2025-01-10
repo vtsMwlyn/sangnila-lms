@@ -28,10 +28,10 @@
 						<x-input id="title" class="block w-full" type="text" name="title" :value="old('title')" placeholder="Enter title" autofocus />
 					</div>
 
-					<!-- Description -->
+					<!-- Deadline Time -->
 					<div class="flex flex-col w-1/2">
-						<x-label for="desc" :value="__('Description')" />
-						<x-input id="desc" class="block w-full" type="text" name="desc" :value="old('desc')" placeholder="Enter description"/>
+						<x-label for="deadline_time" :value="__('Deadline Time')" />
+						<x-input id="deadline_time" class="block w-full" onblur="this.type = 'text';" onfocus="this.type = 'time';" name="deadline_time" :value="old('deadline_time')" placeholder="Enter deadline time"/>
 					</div>
 				</div>
 
@@ -49,10 +49,10 @@
 					</div>
 				</div>
 
-				<!-- Deadline Time -->
-				<div class="flex flex-col w-1/2 mt-4 pr-2">
-					<x-label for="deadline_time" :value="__('Deadline Time')" />
-					<x-input id="deadline_time" class="block w-full" onblur="this.type = 'text';" onfocus="this.type = 'time';" name="deadline_time" :value="old('deadline_time')" placeholder="Enter deadline time"/>
+				<!-- Description -->
+				<div class="flex flex-col w-full mt-4">
+					<x-label for="desc" :value="__('Description')" />
+					<x-textarea rows="4" id="desc" class="block w-full" type="text" name="desc" placeholder="Enter description">{!! old('desc') !!}</x-textarea>
 				</div>
 
 				<!-- Select Students to Assign -->

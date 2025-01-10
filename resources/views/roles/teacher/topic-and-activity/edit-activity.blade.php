@@ -38,16 +38,16 @@
 				</div>
 			</div>
 
-			<!-- Activity Description -->
-			<div class="mt-4 w-full flex flex-col">
-				<x-label for="desc" :value="__('Activity Description')" />
-				<x-input id="desc" class="w-full" type="text" name="desc" :value="old('desc', $activity->desc)" />
-			</div>
-
 			<!-- Activity Link -->
 			<div class="mt-4 w-full flex flex-col">
 				<x-label for="link" :value="__('Activity Link')" />
 				<x-input id="link" class="w-full" type="text" name="link" :value="old('link', $activity->link)" />
+			</div>
+
+			<!-- Activity Description -->
+			<div class="mt-4 w-full flex flex-col">
+				<x-label for="desc" :value="__('Activity Description')" />
+				<x-textarea rows="4" id="desc" class="w-full" type="text" name="desc">{!! old('desc', $activity->desc) !!}</x-textarea>
 			</div>
 
 			<!-- Learning Outcome -->
@@ -75,13 +75,13 @@
 				<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> Please select minimum 1 item.</p>
 			@enderror
 
-			<div class="flex gap-2 items-stretch justify-center w-full mt-20 mb-3">
-				<x-button class=" w-full md:w-1/6">
-					{{ __('Save') }}
-				</x-button>
+			<div class="flex gap-2 items-stretch justify-end w-full mt-10 mb-3">
 				<x-cancel-button class="w-full md:w-1/6">
 					Cancel
 				</x-cancel-button>
+				<x-button class=" w-full md:w-1/6">
+					{{ __('Save') }}
+				</x-button>
 			</div>
 		</form>
 	</x-section-container>

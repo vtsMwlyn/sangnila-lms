@@ -115,7 +115,15 @@
 				<tbody>
 					@forelse ($assignments as $index => $asg)
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-							<td class="py-2 px-4">{{ $asg->title }}</td>
+							<td class="py-2 px-4">
+								<strong>{{ $asg->title }}</strong><br>
+								@if(strlen($asg->desc) > 30)
+									<div class="">{!! nl2br(substr($asg->desc, 0, 30)) !!}... <button type="button" class="show-more-button text-blue font-semibold text-xs">[Show More]</button></div>
+									<div class="hidden">{!! nl2br($asg->desc) !!} <button type="button" class="show-less-button text-blue font-semibold text-xs">[Show Less]</button></div>
+								@else
+									{!! nl2br($asg->desc) !!}
+								@endif
+							</td>
 							<td class="py-2 px-4">
 								<div class="flex justify-center">
 									{{ date("d M Y", strtotime($asg->deadline_date)) }},<br>{{ substr($asg->deadline_time, 0, 5) }} GMT+7
@@ -247,6 +255,16 @@
 				}
 
 				$("#submission-history").parent().show();
+			});
+
+			$(".show-more-button").click(function(){
+				$(this).closest("div").next().removeClass("hidden");
+				$(this).closest("div").addClass("hidden");
+			});
+
+			$(".show-less-button").click(function(){
+				$(this).closest("div").prev().removeClass("hidden");
+				$(this).closest("div").addClass("hidden");
 			});
 		});
 	</script>
