@@ -18,7 +18,7 @@ return new class extends Migration {
 			$table->timestamp("last_login")->nullable();
 			$table->string("disable_reason")->nullable();
 			$table->rememberToken();
-			$table->foreign('role_id')->references('id')->on('roles');
+			$table->foreign('role_id')->references('id')->on('roles')->onDelete("cascade");
 			$table->timestamps();
 		});
 	}

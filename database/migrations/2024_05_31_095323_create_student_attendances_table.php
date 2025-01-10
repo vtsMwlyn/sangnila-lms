@@ -20,7 +20,7 @@ return new class extends Migration
 			$table->string("learning_status")->nullable();
 
 			$table->foreign("student_id")->references("id")->on("users")->onDelete("cascade");
-			$table->foreign("attendance_id")->references("id")->on("attendances");
+			$table->foreign("attendance_id")->references("id")->on("attendances")->onDelete("cascade");
 
             $table->timestamps();
         });
