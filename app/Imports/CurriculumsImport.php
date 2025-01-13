@@ -35,9 +35,10 @@ class CurriculumsImport implements ToModel, WithHeadingRow
 
 			CurriculumActivity::create([
 				"curriculum_topic_id" => $ctopic->id,
+				"session" => $row["session"],
 				"title" => $row["activity"],
 				"desc" => $row["description"],
-				"link" => $row["link"]
+				"link" => $row["link"],
 			]);
 
             // Commit the transaction

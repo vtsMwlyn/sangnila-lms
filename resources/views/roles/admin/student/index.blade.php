@@ -8,15 +8,25 @@
 	<x-section-container>
 		<x-page-title class="text-center">{{ __("List of Active Students") }}</x-page-title>
 
-		<div class="flex items-center mt-6">
-			<div class="w-1/4">
-				<x-anchor-button  href="{{ route('admin.student.import-excel') }}"><i class="bi bi-file-earmark-arrow-up"></i> Import From Excel</x-anchor-button>
+		<!-- Filter -->
+		<form action="{{ route("admin.student.index") }}" id="filter-form">
+		</form>
+
+		<div class="flex items-center justify-between gap-5 mt-5 w-full">
+			<x-anchor-button class="w-56" href="{{ route('admin.student.import-excel') }}"><i class="bi bi-file-earmark-arrow-up"></i> Import From Excel</x-anchor-button>
+
+			<div class="flex w-1/2 items-stretch">
+				<x-input type="text" class="border-blue-900 border-2 rounded-l-lg rounded-r-none w-full" placeholder="Search..." :value="request('search')" id="search-name"/>
+				<button class="rounded-l-none rounded-r-lg border-slate-400 border-t-2 border-r-2 border-b-2 py-2 px-4 bg-white text-slate-400 hover:bg-slate-400 hover:text-white" style="border-width: 3px 3px 3px 0;" id="search-btn"><i class="bi bi-search"></i></button>
 			</div>
 
-			<form class="flex w-1/2 justify-center" action="{{ route("admin.student.index") }}">
-				<x-input type="text" class="border-blue-900 border-2 rounded-l-lg rounded-r-none w-full" name="search" placeholder="Search..." :value="request('search')"/>
-				<button class="rounded-l-none rounded-r-lg border-slate-400 border-t-2 border-r-2 border-b-2 py-2 px-4 bg-white text-slate-400 hover:bg-slate-400 hover:text-white" style="border-width: 3px 3px 3px 0;"><i class="bi bi-search"></i></button>
-			</form>
+			<x-select id="filter-course" class="w-56" value="{{ request('course_name') }}">
+				<option value="">All</option>
+				@forelse(App\Models\Course::where("status", "active")->get() as $c)
+					<option value="{{ $c->id }}" @if(request('course') == $c->id) selected @endif>{{ $c->course_name }}</option>
+				@empty
+				@endforelse
+			</x-select>
 		</div>
 
 		<div class="w-full bg-slate-400 mt-6" style="height: 2px;"></div>
@@ -25,7 +35,7 @@
 			<x-badge-success badge_text="{{ session('successImportExcelStudent') }}" class="mb-4"></x-badge-success>
 		@endif
 
-		<div class="w-full overflow-x-auto">
+		<div class="w-full overflow-x-auto" style="max-height: 500px;">
 			<table class="w-full">
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Student Name</th>
@@ -91,4 +101,18 @@
 			</table>
 		</div>
 	</x-section-container>
+
+	<script>
+		$(document).ready(() => {
+			$('#search-btn').click(() => {
+				const form = $('#filter-form');
+				form.html('');
+
+				form.append($("<input>").attr({"type": "hidden", "name": "course", "value": $('#filter-course').val()}));
+				form.append($("<input>").attr({"type": "hidden", "name": "search", "value": $('#search-name').val()}));
+
+				form.submit();
+			});
+		});
+	</script>
 @endsection

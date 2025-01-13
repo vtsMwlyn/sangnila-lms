@@ -16,6 +16,12 @@
 				<div class="bg-slate-400 mx-5 mt-3 mb-1" style="height: 1.5px;"></div>
 				<a href="{{ route("profile.show") }}"><div class="w-full px-5 py-1 hover:bg-slate-300 text-black font-semibold flex items-center gap-1"><img src="{{ asset('img/sidebar-edit-profile.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Edit Profile</div></a>
 				<a href="{{ route("profile.show") }}"><div class="w-full px-5 py-1 hover:bg-slate-300 text-black font-semibold flex items-center gap-1"><img src="{{ asset('img/sidebar-change-password.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Change Password</div></a>
+				@can('can_swap_role')
+					<form action="{{ route('change-role') }}" method="post">
+						@csrf
+						<button type="submit" onclick="return confirm('Are you sure want to swap your role into teacher?');" class="w-full"><div class="w-full px-5 py-1 hover:bg-slate-300 text-black font-semibold flex items-center gap-1"><i class="bi bi-arrow-left-right text-slate-400"></i> Change Role</div></button>
+					</form>
+				@endcan
 			</div>
 		</div>
 

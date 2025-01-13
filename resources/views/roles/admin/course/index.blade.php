@@ -81,6 +81,10 @@
 				</tbody>
 			</table>
 		</div>
+
+		<div class="mt-6 w-full flex justify-center">
+			{{ $courses->links() }}
+		</div>
 	</x-section-container>
 
 	<script>

@@ -37,6 +37,7 @@ class TopicsAndActivitiesImport implements ToModel, WithHeadingRow
 
 			Activity::create([
 				"topic_id" => $topic->id,
+				"session" => $row["session"],
 				"title" => $row["activity"],
 				"desc" => $row["description"],
 				"link" => $row["link"]

@@ -158,7 +158,7 @@
 			<div class="w-full flex gap-x-4">
 				<div class="flex flex-col w-1/2">
 					<p>Student Name</p>
-					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ ($student->details->gender == 1)? "Mr." : "Ms." }} {{ $student->full_name }}</div>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ $student->full_name }}</div>
 				</div>
 
 				<div class="flex flex-col w-1/2">

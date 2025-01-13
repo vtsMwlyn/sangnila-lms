@@ -40,6 +40,12 @@ class User extends Authenticatable implements MustVerifyEmail{
 			}
 
 		});
+
+		$query->when($filters['course'] ?? false, function ($query, $course) {
+            return $query->whereHas('enrolled_courses', function($query) use ($course){
+				return $query->where('course_id', $course);
+			});
+        });
 	}
 
 
