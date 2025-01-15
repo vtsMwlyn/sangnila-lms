@@ -23,7 +23,7 @@
 		</div>
 	</x-popup>
 
-	<x-popup class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submit-assignment">
+	<x-popup popup_title="Assignment Submission" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submit-assignment">
 		<!-- Popup content -->
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<p class="mt-3 font-semibold">Assignment Description:</p>
@@ -39,7 +39,7 @@
 				</div>
 
 				<div class="flex flex-col mt-4">
-					<label for="link">You Work Link</label>
+					<label for="link">Your Work Link</label>
 					<x-input id="link" class="w-full mt-1" type="text" name="link" style="border-width: 3px;" value="{{ old('link') }}" placeholder="Your Work Link" autofocus />
 				</div>
 

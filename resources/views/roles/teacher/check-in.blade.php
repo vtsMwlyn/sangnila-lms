@@ -23,6 +23,7 @@
 				<x-input id="check_in_time" name="check_in_time" class="w-full pointer-events-none" type="text" />
 			</div>
 
+			<!-- Evidence -->
 			<div class="w-full flex flex-col mt-4 items-start">
 				<div class="w-full flex">
 					<div class="flex flex-col w-1/2 pr-2">
@@ -40,6 +41,12 @@
 				<x-button type="button" class="mt-3" id="capture"><i class="bi bi-camera"></i> Capture Photo</x-button>
 
 				<input type="file" name="image" id="image" style="display: none;">
+			</div>
+
+			<!-- Description -->
+			<div class="w-full flex flex-col mt-4">
+				<x-label for="description" :value="__('Description')" />
+				<x-textarea rows="4" id="description" name="description" class="w-full" placeholder="Enter description">{{ old('description') }}</x-textarea>
 			</div>
 
 			<div class="flex items-stretch gap-2 justify-end w-full mt-10 mb-3">

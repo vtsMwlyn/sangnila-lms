@@ -10,6 +10,9 @@
 			<h5 class="mt-4 text-blue font-semibold text-base">Check In Photo from Lecturer</h5>
 			<img alt="N/A" class="w-full mt-2" id="check-in-photo-lecturer" style="object-fit: cover; object-position: center; max-height: 60vh;">
 
+			<h5 class="mt-4 text-blue font-semibold text-base">Description from Lecturer</h5>
+			<p id="description-lecturer"></p>
+
 			<h5 class="mt-4 text-blue font-semibold text-base">Validation Photo from Students</h5>
 			<div id="check-in-photo-students">
 			</div>
@@ -81,7 +84,7 @@
 							{{-- <td class="py-2 px-4">{{ $la->validation_status }}</td> --}}
 							<td class="py-2 px-4">
 								<div class="flex gap-1 w-full">
-									<x-button type="button" class="lecturer-attendance-detail-btn" data-source_teacher="{{ $checkInPhotoL }}" data-student_validations="{{ json_encode($sourceStudents) }}"><i class="bi bi-image"></i></x-button>
+									<x-button type="button" class="lecturer-attendance-detail-btn" data-desc="{!! $la->description? nl2br($la->description) : 'N/A' !!}" data-source_teacher="{{ $checkInPhotoL }}" data-student_validations="{{ json_encode($sourceStudents) }}"><i class="bi bi-image"></i></x-button>
 								</div>
 							</td>
 						</tr>
@@ -137,6 +140,7 @@
 		$(document).ready(() => {
 			$('.lecturer-attendance-detail-btn').click(function(){
 				$('#check-in-photo-lecturer').attr('src', $(this).data('source_teacher'));
+				$('#description-lecturer').html($(this).data('desc'));
 				$('#check-in-photo-students').html('');
 
 				const studentValidations = $(this).data('student_validations');

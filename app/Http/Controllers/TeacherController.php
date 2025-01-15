@@ -90,7 +90,8 @@ class TeacherController extends Controller {
 
 	public function check_in_store(Request $request, $course_id){
 		$validatedData = $request->validate([
-			'check_in_time' => 'required'
+			'check_in_time' => 'required',
+			'description' => 'required'
 		]);
 
 		try {
@@ -109,6 +110,7 @@ class TeacherController extends Controller {
 				'self_attendance_date' => Carbon::today()->format('Y-m-d'),
 				'check_in_time' => $validatedData['check_in_time'],
 				'attendance_evidence' => $validatedData['attendance_evidence'],
+				'description' => $validatedData['description']
 			]);
 		}
 		catch(Exception $e){
