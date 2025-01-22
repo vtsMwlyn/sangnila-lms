@@ -12,6 +12,7 @@
 @section("content")
 	<x-section-container>
 		<x-page-title>Batch Assign</x-page-title>
+		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("systemFail"))
 			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
@@ -20,9 +21,9 @@
 		<x-badge-danger id="emptyDataNotif" badge_text="Please input minimum 1 data to proceed." style="display: none;"></x-badge-danger>
 
 		@if($allStudents->count() && $course->teachers->count())
-			<div class="my-10">
+			<div class="my-4">
 				<div class="flex">
-					<h1 class="font-semibold text-lg text-blue-950 px-5 py-2 border-2 border-blue-950 rounded-xl">Input New Data</h1>
+					<h1 class="font-bold text-lg text-blue">Input New Data</h1>
 				</div>
 				<div id="form-area">
 					<div class="flex flex-col md:flex-row gap-3">
@@ -60,21 +61,22 @@
 
 			<div class="">
 				<div class="flex">
-					<h1 class="font-semibold text-lg text-blue-950 px-5 py-2 border-2 border-blue-950 rounded-xl">Data to Add</h1>
+					<h1 class="font-bold text-lg text-blue">Data to Add</h1>
 				</div>
-				<div class="overflow-x-auto mt-5">
-					<div class="w-full overflow-hidden rounded-xl border border-blue-950">
-						<table class="w-full bg-slate-200 text-blue-950">
-							<thead>
-								<th class="border-r border-blue-950 px-4 py-2">Student Name</th>
-								<th class="border-r border-blue-950 px-4 py-2">Teacher Name</th>
-								<th class="border-r border-blue-950 px-4 py-2" style="min-width: 100px; max-width: 100px;">Max Session</th>
-								<th class="px-4 py-2">Action</th>
-							</thead>
-							<tbody id="tableBody">
-							</tbody>
-						</table>
-					</div>
+				<div class="overflow-x-auto mt-2">
+					<table class="w-full">
+						<thead>
+							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Student Name</th>
+							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Teacher Name</th>
+							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Max Session</th>
+							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Action</th>
+						</thead>
+						<tbody id="tableBody">
+							<tr class="bg-white" id="empty-placeholder">
+								<td colspan="4" class="p-4 text-center">- No data yet -</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 
 				<form action="{{ route("admin.course.batch-assign.store", $course->id) }}" class="mt-10 w-full flex gap-3 justify-end items-center" method="post" id="leForm">
@@ -176,12 +178,20 @@
 							return;
 						}
 
+						if($("#tableBody").find('#empty-placeholder').length){
+							$("#tableBody").html('');
+						}
+
 						// Generate new data element
 						const row = $("<tr>");
-						const col1 = $("<td>").addClass("border-r border-blue-950 border-t py-2 px-4 font-semibold");
-						const col2 = $("<td>").addClass("border-r border-blue-950 border-t py-2 px-4 font-semibold");
-						const col3 = $("<td>").addClass("border-r border-blue-950 border-t py-2 px-4 font-semibold");
-						const col4 = $("<td>").addClass("border-blue-950 border-t py-2 px-4 font-semibold");
+						if($("#tableBody").children().length % 2 == 0){
+							row.addClass('bg-white');
+						}
+
+						const col1 = $("<td>").addClass("py-2 px-4");
+						const col2 = $("<td>").addClass("py-2 px-4");
+						const col3 = $("<td>").addClass("py-2 px-4");
+						const col4 = $("<td>").addClass("py-2 px-4");
 
 						const studentObj = JSON.parse(inpStudentName);
 
@@ -189,9 +199,9 @@
 						col2.text(inpTeacherName);
 						col3.text(inpMaxCourseSession);
 
-						const removeBtn = $("<button>").html("<i class='bi bi-trash3'></i>").attr({"type": "button"}).addClass("text-center px-5 py-2 border border-transparent rounded-lg text-white bg-red-700 hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 transition ease-in-out duration-150");
+						const removeBtn = $("<button>").html("<i class='bi bi-trash3'></i>").attr({"type": "button"}).addClass("text-center px-5 py-2 border border-transparent rounded-lg text-white bg-red hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 transition ease-in-out duration-150");
 
-						const btnContainer = $("<div>").addClass("flex w-full justify-center").append(removeBtn);
+						const btnContainer = $("<div>").addClass("flex w-full justify-start").append(removeBtn);
 
 						col4.append(btnContainer);
 
