@@ -34,7 +34,7 @@
 						<x-select name="status" id="status" class="w-full">
 							<option selected disabled>Course Status</option>
 							<option value="active" @if(old("status", $course->status) == "active") selected @endif>Active</option>
-							<option value="hidden" @if(old("status", $course->status) == "hidden") selected @endif>Hidden</option>
+							<option value="disabled" @if(old("status", $course->status) == "disabled") selected @endif>Hidden</option>
 						</x-select>
 					</div>
 				</div>

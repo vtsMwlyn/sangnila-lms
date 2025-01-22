@@ -40,7 +40,8 @@
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Student Name</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Enrolled Courses & Progress</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Status</th>
+					<th class="text-center py-3 px-4 border-b-2 border-slate-400">Periods Paid</th>
+					<th class="text-center py-3 px-4 border-b-2 border-slate-400">Status</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 				</thead>
 				<tbody>
@@ -72,8 +73,28 @@
 									<p class="text-center">- No courses assigned yet -</p>
 								@endif
 							</td>
-							<td class="py-2 px-4">
-								@if ($student	->status == "enabled")
+							<td class="py-2 px-4 text-center">
+								@if($student->enrolled_courses->count())
+									@php
+										$paid_periods = [];
+
+										foreach($student->course_students as $cs){
+											$receipts = App\Models\Receipt::where('course_student_id', $cs->id)->get();
+
+											array_push($paid_periods, $receipts->count());
+										}
+									@endphp
+									<ul>
+										@foreach ($paid_periods as $paidp)
+											<li>{{ $paidp }}</li>
+										@endforeach
+									</ul>
+								@else
+									N/A
+								@endif
+							</td>
+							<td class="py-2 px-4 text-center">
+								@if ($student->status == "enabled")
 									<span class="font-bold text-light-blue">Active</span>
 								@else
 									<span class="font-bold text-red">Inactive</span>
