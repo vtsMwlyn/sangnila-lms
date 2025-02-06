@@ -402,4 +402,13 @@ class AttendanceController extends Controller {
 			'all_student_attendances' => $all_student_attendances
 		]);
 	}
+
+	// Input student attendance
+	public function admin_input($student_id){
+		$student = User::find($student_id);
+
+		return view('roles.admin.student.input-attendance', [
+			'student' => $student,
+		]);
+	}
 }

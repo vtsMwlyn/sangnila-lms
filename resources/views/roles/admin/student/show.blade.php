@@ -264,7 +264,10 @@
 		</div>
 
 		<div class="w-full bg-slate-400 mt-16" style="height: 2px;"></div>
-		<h2 class="my-4 font-extrabold text-xl text-dark-blue">Attendance and Assignment Progress</h2>
+		<div class="w-full flex items-center justify-between">
+			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Attendance and Assignment Progress</h2>
+			<x-anchor-button href="{{ route('admin.student.input-attendance', $student->id) }}">Input Attendances Data</x-anchor-button>
+		</div>
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
 		<div class="w-full overflow-x-auto">

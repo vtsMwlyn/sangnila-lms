@@ -155,6 +155,10 @@ Route::prefix('/admin')
 				Route::get("/import-excel", [ExcelImportController::class, "import_excel_student_index"])->name("import-excel");
 				Route::post("/import-excel", [ExcelImportController::class, "import_excel_student_store"])->name("import-excel.store");
 
+				// Input attendances
+				Route::get('/{student_id}/attendance-input', [AttendanceController::class, 'admin_input'])->name('input-attendance');
+				Route::post('/{student_id}/attendance-input', [AttendanceController::class, 'admin_store'])->name('store-attendance');
+
 				// Download import excel template
 				Route::get("/import-excel/download-template", [DownloadResourceController::class, "student_import_excel_template"])->name("import-excel.download");
 			}
