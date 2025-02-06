@@ -25,15 +25,15 @@
 			</div>
 
 			<div class="w-full flex flex-col mt-2 items-start">
-				<div class="w-full flex">
-					<div class="flex flex-col w-1/2 pr-2">
+				<div class="w-full flex md:flex-row flex-col">
+					<div class="flex flex-col w-full md:w-1/2 pr-2">
 						{{-- <div style="aspect-ratio: 19 / 6;">
 							<video id="video" class="w-full h-full" style="object-fit: cover;" autoplay playsinline></video>
 						</div> --}}
 						<x-label :value="__('Photo Evidence')" />
 						<video id="video" class="w-full" autoplay playsinline></video>
 					</div>
-					<div class="flex flex-col w-1/2 pl-2">
+					<div class="flex flex-col w-full md:w-1/2 pl-0 md:pl-2">
 						<x-label :value="__('Preview')" id="preview-label" style="display: none;" />
 						<canvas id="canvas" class="w-full"></canvas>
 					</div>

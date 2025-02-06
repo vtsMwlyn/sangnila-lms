@@ -21,19 +21,22 @@
 		</div>
 		<div class="w-full bg-slate-400 mt-4" style="height: 2px;"></div>
 
-		<div class="flex w-full my-4">
-			<div class="text-lg w-1/4">Attendance Summary</div>
-			<div class="flex flex-col w-1/5">
-				<h2>Total Session</h2>
-				<h1 class="font-extrabold text-xl">{{ $course_student->max_course_session }}</h1>
-			</div>
-			<div class="flex flex-col w-1/5">
-				<h2>Total Attendance</h2>
-				<h1 class="font-extrabold text-xl">{{ $n_attend }}</h1>
-			</div>
-			<div class="flex flex-col w-1/5">
-				<h2>Minimal Attendance</h2>
-				<h1 class="font-extrabold text-xl">N/A</h1>
+		<div class="flex flex-col md:flex-row w-full my-4">
+			<div class="text-lg w-full md:w-1/4">Attendance Summary</div>
+
+			<div class="flex grow">
+				<div class="flex flex-col w-full md:w-1/5">
+					<h2>Total Session</h2>
+					<h1 class="font-extrabold text-xl">{{ $course_student->max_course_session }}</h1>
+				</div>
+				<div class="flex flex-col w-full md:w-1/5">
+					<h2>Total Attendance</h2>
+					<h1 class="font-extrabold text-xl">{{ $n_attend }}</h1>
+				</div>
+				<div class="flex flex-col w-full md:w-1/5">
+					<h2>Minimal Attendance</h2>
+					<h1 class="font-extrabold text-xl">N/A</h1>
+				</div>
 			</div>
 		</div>
 		<div class="w-full bg-slate-400" style="height: 2px;"></div>

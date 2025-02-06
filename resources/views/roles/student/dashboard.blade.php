@@ -5,29 +5,29 @@
 @endsection
 
 @section("content")
-	<div class="w-full flex gap-5">
-		<div class="flex flex-col gap-5 w-2/3">
+	<div class="w-full flex flex-col md:flex-row gap-5">
+		<div class="flex flex-col gap-5 w-full md:w-2/3">
 			<!-- Main stats -->
-			<div class="w-full flex sm:flex-row flex-col gap-5">
-				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-2 p-5">
-					<img src="{{ asset('img/studentdashboard-courseenrolled.svg') }}" class="w-12 h-12" alt="icon">
+			<div class="w-full flex flex-wrap md:flex-nowrap justify-center gap-5">
+				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5">
+					<img src="{{ asset('img/studentdashboard-courseenrolled.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
 					<p class="font-bold text-black text-center">Courses Enrolled</p>
-					<p class="text-3xl font-extrabold">{{ $courses_enrolled }}</p>
+					<p class="text-xl md:text-3xl font-extrabold">{{ $courses_enrolled }}</p>
 				</div>
-				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-2 p-5">
-					<img src="{{ asset('img/studentdashboard-materialsunlocked.svg') }}" class="w-12 h-12" alt="icon">
+				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5">
+					<img src="{{ asset('img/studentdashboard-materialsunlocked.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
 					<p class="font-bold text-black text-center">Materials Unlocked</p>
-					<p class="text-3xl font-extrabold">{{ $activities_unlocked }}</p>
+					<p class="text-xl md:text-3xl font-extrabold">{{ $activities_unlocked }}</p>
 				</div>
-				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-2 p-5">
-					<img src="{{ asset('img/studentdashboard-sessionsattended.svg') }}" class="w-12 h-12" alt="icon">
+				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5">
+					<img src="{{ asset('img/studentdashboard-sessionsattended.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
 					<p class="font-bold text-black text-center">Sessions Attended</p>
-					<p class="text-3xl font-extrabold">{{ $sessions_attended }}</p>
+					<p class="text-xl md:text-3xl font-extrabold">{{ $sessions_attended }}</p>
 				</div>
-				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-full sm:w-1/3 items-center gap-2 p-5">
-					<img src="{{ asset('img/studentdashboard-assignmentsdone.svg') }}" class="w-12 h-12" alt="icon">
+				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5">
+					<img src="{{ asset('img/studentdashboard-assignmentsdone.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
 					<p class="font-bold text-black text-center">Assignments Done</p>
-					<p class="text-3xl font-extrabold">{{ $assignments_done }}</p>
+					<p class="text-xl md:text-3xl font-extrabold">{{ $assignments_done }}</p>
 				</div>
 			</div>
 
@@ -77,7 +77,7 @@
 		</div>
 
 		<!-- Todo list -->
-		<div class="w-1/3 flex gap-5">
+		<div class="w-full md:w-1/3 flex gap-5">
 			<div class="w-full bg-white rounded-3xl p-5 shadow-lg">
 				<p class="font-bold text-dark-blue">To Do List</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>

@@ -142,14 +142,14 @@
 							<td class="py-2 px-4">
 								<div class="flex justify-center gap-2 w-full">
 									<a href="{{ $asg->link }}" target="blank">
-										<img src="{{ asset('img/view.svg') }}" alt="view-icon" class="w-8 h-8 hover:scale-110">
+										<img src="{{ asset('img/view.svg') }}" alt="view-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</a>
 									<a href="{{ $asg->link }}" target="blank">
-										<img src="{{ asset('img/download.svg') }}" alt="download-icon" class="w-8 h-8 hover:scale-110">
+										<img src="{{ asset('img/download.svg') }}" alt="download-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</a>
 									<button type="button" class="submitassignment-popuptrigger" data-route="{{ route('student.assignment.store', [$course->id, $asg->id]) }}"
 										data-assignment="{{ $asg->toJSON() }}" data-submissions="{{ count($submissions_per_assignment[$index]) }}">
-										<img src="{{ asset('img/attach.svg') }}" alt="history-icon" class="w-8 h-8 hover:scale-110">
+										<img src="{{ asset('img/attach.svg') }}" alt="history-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</button>
 								</div>
 							</td>

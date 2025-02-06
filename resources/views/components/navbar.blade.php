@@ -12,7 +12,7 @@
 			<div class="w-0 border-blue my-2" style="border-width: 1.5px"></div>
 
 			<div class="flex items-start flex-col justify-center">
-				<div class="text-lg text-blue font-semibold ">LEARNING MANAGEMENT SYSTEM</div>
+				<div class="text-md md:text-lg text-blue font-semibold mb-1.5 md:mb-0">LEARNING MANAGEMENT SYSTEM</div>
 				<div class="flex gap-1 text-slate-400 font-light italic" style="font-size: 8pt; margin-top: -5px">{{ trans("strings.version") }}<h1 id="screen"></h1></div>
 			</div>
 		</div>

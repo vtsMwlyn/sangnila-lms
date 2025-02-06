@@ -4,14 +4,14 @@
 	<div class="w-11/12 h-screen flex justify-evenly items-center" style="max-width: 2000px;">
 		<img src="{{ asset('img/loginwords.svg') }}" class="md:block hidden w-2/5" alt="login-words">
 
-		<form method="POST" action="{{ route('login') }}" class="flex flex-col overflow-y-auto justify-center items-center w-full md:w-1/2 h-5/6 py-6 rounded-2xl shadow-xl" style="background: rgba(254, 254, 254, 0.7); max-width: 36vw;" id="login-form">
+		<form method="POST" action="{{ route('login') }}" class="flex flex-col overflow-y-auto justify-center items-center w-full md:w-2/5 md:h-5/6 py-6 rounded-2xl shadow-xl" style="background: rgba(254, 254, 254, 0.7);" id="login-form">
 			@csrf
 
 			<img src="{{ asset('img/Sangnila_Arts.png') }}" class="h-24 w-24" alt="logo">
 
 			<div class="text-center">
-				<h1 class="font-extrabold text-blue text-3xl">Welcome to</h1>
-				<h1 class="font-extrabold text-blue text-3xl">Sangnila Arts Academy!</h1>
+				<h1 class="font-extrabold text-blue text-2xl md:text-3xl">Welcome to</h1>
+				<h1 class="font-extrabold text-blue text-2xl md:text-3xl">Sangnila Arts Academy!</h1>
 			</div>
 
 			<div class="w-4/5 flex flex-col items-stretch mt-8">
@@ -34,7 +34,7 @@
 						autocomplete="current-password" placeholder="Password" />
 				</div>
 
-				<div class="w-full flex justify-between mt-3 items-center">
+				<div class="w-full flex justify-between mt-0 md:mt-3 items-center">
 					<!-- Remember Me -->
 					<div class="flex items-center">
 						<input type="checkbox" name="remember" id="remember_me" class="mr-2 form-checkbox h-5 w-5 border-2 rounded border-slate-400 text-blue-500 bg-white" />
@@ -42,19 +42,19 @@
 					</div>
 
 					@if (Route::has('password.request'))
-						<a class="underline text-sm text-dark-blue hover:text-slate-600 text-right" href="{{ route('password.request') }}">
+						<a class="underline text-sm text-dark-blue hover:text-slate-600 text-right mt-16 md:mt-0" href="{{ route('password.request') }}">
 							{{ __('Forgot your password?') }}
 						</a>
 					@endif
 				</div>
 
-				<div class="mt-12 w-full flex justify-center">
+				<div class="mt-6 md:mt-12 w-full flex justify-center">
 					<x-button class=" w-full py-4">
 						{{ __('LOGIN') }}
 					</x-button>
 				</div>
 
-				<a class="underline text-sm text-dark-blue hover:text-slate-600 text-right mt-4"
+				<a class="underline text-sm text-dark-blue hover:text-slate-600 text-center md:text-right mt-4"
 					href="{{ route('guest.index') }}">
 					{{ __('Or login as guest') }}
 				</a>

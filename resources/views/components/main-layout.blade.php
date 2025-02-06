@@ -133,7 +133,7 @@
 
 		<!-- Loading popup -->
 		<div class="popup-container w-full h-full fixed top-0 flex items-center justify-center" style="backdrop-filter: blur(5px); z-index: 100; background: rgba(0, 0, 0, 0.3);">
-			<div class="rounded-3xl bg-white py-5 px-6 popup w-1/3 h-1/4 flex gap-3 items-center justify-center" id="loading-popup">
+			<div class="rounded-3xl bg-white py-5 px-6 popup w-11/12 md:w-1/3 h-1/4 flex gap-3 items-center justify-center" id="loading-popup">
 				<div class="loader w-12 h-12 border-8 border-t-transparent border-light-blue rounded-full animate-spin"></div>
 				<p class="font-extrabold text-xl animate-pulse">Please Wait...</p>
 			</div>

@@ -20,11 +20,11 @@
 			@endphp
 
 			<x-back-button href="{{ route('student.mycourse.index') }}"></x-back-button>
-			<div class="w-full flex justify-between items-center">
+			<div class="w-full flex flex-col md:flex-row justify-between items-center">
 				<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
 
 				@if(!$max_session_reached)
-					<div class="flex items-center gap-3">
+					<div class="flex items-center gap-3 my-4 md:my-0">
 						@if(!$unfinishedSelfAttendance)
 							<x-anchor-button href="{{ route('student.mycourse.check-in', $course->id) }}">
 								<i class="bi bi-stopwatch"></i> Check In

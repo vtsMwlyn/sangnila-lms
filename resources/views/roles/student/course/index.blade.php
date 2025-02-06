@@ -16,7 +16,7 @@
 		@endforeach
 
 		@forelse (Auth::user()->enrolled_courses->where('status', 'active') as $course)
-			<a href="{{ route('student.mycourse.show', $course->id) }}"  style="width: 32%;" class="transition duration-300 hover:scale-105">
+			<a href="{{ route('student.mycourse.show', $course->id) }}" class="w-full md:w-1/3 transition duration-300 hover:scale-105">
 				<div class="bg-white rounded-3xl p-5 shadow-lg">
 					<!-- Course information -->
 					<p class="font-bold text-dark-blue">{{ $course->course_name }}</p>
