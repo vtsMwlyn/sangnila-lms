@@ -52,6 +52,9 @@
 							class="mt-1 w-full">
 							<option selected disabled>Pick a Role</option>
 							@forelse ($roles as $role)
+								@if($role->role_name == 'Finance Admin')
+									@continue
+								@endif
 								<option value="{{ $role->role_name }}" @if(old("role") == $role->role_name) selected @endif>{{ $role->role_name }}</option>
 							@empty
 							@endforelse
