@@ -14,7 +14,7 @@ return new class extends Migration {
 
 			// $table->unsignedBigInteger('schedule_id');
 			$table->date("attendance_date");
-			$table->string("attendance_identifier");
+			// $table->string("attendance_identifier");
 
 			// $table->foreign('schedule_id')->references('id')->on('course_schedules');
 			$table->foreign('teacher_id')->references('id')->on('users')->onDelete("cascade");

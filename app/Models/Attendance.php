@@ -16,7 +16,7 @@ class Attendance extends Model {
 	}
 
 	public function posted_by(){
-		return $this->belongsTo(User::class, "teacher_id");
+		return $this->belongsTo(User::class, "uploader_id");
 	}
 
 	public function students(){

@@ -292,7 +292,7 @@
 										})
 										->with([
 											'attendance' => function ($query) {
-												$query->select('id', 'attendance_date', 'teacher_id'); // Include attendance_date and teacher_id
+												$query->select('id', 'attendance_date', 'uploader_id'); // Include attendance_date and teacher_id
 											},
 											'attendance.posted_by' => function ($query) {
 												$query->select('id', 'full_name'); // Include only full_name from teachers

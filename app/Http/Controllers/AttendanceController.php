@@ -30,7 +30,7 @@ class AttendanceController extends Controller {
 	public function show($course_id) {
 		$course = Course::findOrFail($course_id);
 
-		$attendanceData = Attendance::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->with(['student_attendances.student'])->latest()->get();
+		$attendanceData = Attendance::where("course_id", $course->id)->where("uploader_id", Auth::user()->id)->with(['student_attendances.student'])->latest()->get();
 
 		$todaySelfAttendances = SelfAttendance::where("user_id", Auth::user()->id)->where("course_id", $course->id)->where("self_attendance_date", Carbon::today()->format('Y-m-d'))->get();
 		$unfinishedSelfAttendance = $todaySelfAttendances->filter(function($item){
@@ -141,7 +141,7 @@ class AttendanceController extends Controller {
 
 		$course = Course::findOrFail($course_id);
 		$teacher = Auth::user();
-		$identifier = $course->id . "_" . $teacher->id . "/" . round(microtime(true) * 1000);
+		// $identifier = $course->id . "_" . $teacher->id . "/" . round(microtime(true) * 1000);
 
 		foreach($request->students as $i => $student_id){
 			$isAttend = ($request["checkbox_value"][$i] == "on")? 1 : 0;
@@ -185,10 +185,10 @@ class AttendanceController extends Controller {
 			DB::beginTransaction();
 
 			$newAttendance = Attendance::create([
-				"teacher_id" => $teacher->id,
+				"uploader_id" => $teacher->id,
 				"course_id" => $course->id,
 				"attendance_date" => $request["attendance_date"],
-				"attendance_identifier" => $identifier
+				// "attendance_identifier" => $identifier
 			]);
 
 			 // Create StudentAttendance records
@@ -405,10 +405,57 @@ class AttendanceController extends Controller {
 
 	// Input student attendance
 	public function admin_input($student_id){
-		$student = User::find($student_id);
+		$studentOnly = User::with('enrolled_courses.topics.activities')->findOrFail($student_id);
 
 		return view('roles.admin.student.input-attendance', [
-			'student' => $student,
+			'student' => $studentOnly,
+			'allCoursesWithTopicsAndActivities' => $studentOnly->enrolled_courses,
 		]);
+	}
+
+	// Retrieve data and store student attendance by admin
+	public function admin_store(Request $request, $student_id){
+		$request->validate([
+			'course_id' => 'required',
+			'teacher_id' => 'required',
+			'attendance_date' => 'required',
+			'is_attended.*' => 'required',
+			'activity_progress.*' => 'required',
+			'learning_status.*' => 'required',
+			'attendance_details.*' => 'required',
+		]);
+
+		try {
+			DB::beginTransaction();
+
+			$student = User::findOrFail($student_id);
+			$course = Course::findOrFail($request->course_id);
+
+			foreach($request->is_attended as $i => $isAttended){
+				$newAttendance = Attendance::create([
+					'uploader_id' => Auth::user()->id,
+					'course_id' => $course->id,
+					'attendance_date' => $request->attendance_date[$i],
+				]);
+
+				StudentAttendance::create([
+					'attendance_id' => $newAttendance->id,
+					'student_id' => $student->id,
+					'is_attend' => $isAttended,
+					'attendance_detail' => $request->attendance_details[$i],
+					'activity_progress' => $request->activity_progress[$i],
+					'learning_status' => $request->learning_status[$i],
+				]);
+			}
+
+			DB::commit();
+		}
+		catch(Exception $e){
+			throw $e;
+
+			DB::rollback();
+		}
+
+		return redirect(route('admin.student.show', $student->id))->with('successInputAttendance', 'Successfully inputed new attendance data for the student!');
 	}
 }

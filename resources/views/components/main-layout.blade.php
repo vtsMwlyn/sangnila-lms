@@ -6,22 +6,27 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
+		<!-- App title -->
+		<title>Sangnila Academy | LMS</title>
+
 		<!-- App icon -->
 		<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
 		<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
 		<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
 
-		<!-- Manifest(?) -->
+		<!-- Manifest -->
 		<link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
 		<!-- CSS -->
 		<link rel="stylesheet" href="{{ asset('css/app.css') }}">
 		<link rel="stylesheet" href="{{ asset('css/color-pallete.css') }}">
+		<link rel="stylesheet" href="{{ asset("css/custom-styles.css") }}">
 
 		<!--Font-->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
+
 
 		<!-- Bootstrap icons -->
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -40,91 +45,12 @@
 		<link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
 		<script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
 
-
-		<!-- Custom styles -->
-		<link rel="stylesheet" href="{{ asset("css/custom_styles.css") }}">
-
-		<style>
-			body {
-				background: white;
-				font-family: "Geologica";
-			}
-
-			trix-toolbar [data-trix-button-group="file-tools"] {
-				display: none;
-			}
-
-			/* Targeting unordered lists specifically within Trix editor */
-			trix-editor[input="content"] ul {
-				list-style-type: disc; /* Use the disc style for unordered lists */
-				padding-left: 1.5em; /* Adjust the padding for proper indentation */
-			}
-
-			/* Targeting ordered lists specifically within Trix editor */
-			trix-editor[input="content"] ol {
-				list-style-type: decimal; /* Use decimal style for ordered lists */
-				padding-left: 1.5em; /* Adjust the padding for proper indentation */
-			}
-
-			/* Targeting list items within Trix editor */
-			trix-editor[input="content"] ul li,
-			trix-editor[input="content"] ol li {
-				margin-bottom: 0.5em; /* Adjust spacing between list items */
-			}
-
-			trix-editor[input="content"] a {
-				font-weight: bold;
-				color: rgb(30 58 138);
-			}
-
-			div.announcementContent ul {
-				list-style-type: disc; /* Use the disc style for unordered lists */
-				padding-left: 1.5em; /* Adjust the padding for proper indentation */
-			}
-
-			/* Targeting ordered lists specifically within Trix editor */
-			div.announcementContent ol {
-				list-style-type: decimal; /* Use decimal style for ordered lists */
-				padding-left: 1.5em; /* Adjust the padding for proper indentation */
-			}
-
-			/* Targeting list items within Trix editor */
-			div.announcementContent ul li,
-			div.announcementContent ol li {
-				margin-bottom: 0.5em; /* Adjust spacing between list items */
-			}
-
-			div.announcementContent a {
-				font-weight: bold;
-				color: rgb(30 58 138);
-			}
-
-			div.announcementContent a:hover {
-				text-decoration: underline;
-			}
-
-			.select2-container .select2-selection {
-				display: flex !important;
-				align-items: center !important;
-				height: 2.45rem !important;
-				border: solid 3px rgb(148 163 184);
-				height: 2.9rem !important;
-				border-radius: 1rem !important;
-			}
-
-			@media screen and (max-width: 1024px){
-				#page-title {
-					z-index: 15;
-				}
-			}
-
-		</style>
-
 		<!-- Include jQuery  -->
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-		<!-- App title -->
-		<title>Sangnila Academy | LMS</title>
+		<!-- Include Select2 JavaScript -->
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 	</head>
 
 	<body class="min-h-screen flex flex-col items-center text-xs sm:text-sm">
@@ -226,24 +152,6 @@
 								<div class="absolute z-10 text-white top-16 w-80 rounded-xl flex flex-col py-2" id="medsmallmenu-dropdown" style="display: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center; background-size: cover;">
 								</div>
 							</div>
-
-							<script>
-								$(document).ready(function () {
-									// Toggle dropdown on button click
-									$("#medsmallmenu-toggler").click(function (e) {
-										e.stopPropagation(); // Prevent the click event from bubbling up to the document
-
-										$("#medsmallmenu-dropdown").toggle();
-									});
-
-									// Close dropdown when clicking outside of it
-									$(document).click(function (e) {
-										if (!$(e.target).closest("#medsmallmenu-dropdown, #medsmallmenu-toggler").length) {
-											$("#medsmallmenu-dropdown").hide();
-										}
-									});
-								});
-							</script>
 						</div>
 
 						<div class="p-8 flex flex-col items-center grow" style="background: radial-gradient(circle at left top, rgb(175, 193, 221) 0%, #FFFFFF 100%)">
@@ -254,210 +162,27 @@
 					<x-footer></x-footer>
 				</div>
 			</div>
+		</div>
 
-			<!-- Scripts -->
-			<script>
-				let loadingTimeout;
+		<!-- Scripts -->
+		<script src="{{ asset('js/custom-script.js') }}"></script>
 
-				// Function to show the loading popup with a delay
-				function showLoadingPopupWithDelay() {
-					loadingTimeout = setTimeout(function() {
-						$('#loading-popup').parent().removeClass('hidden');
-					}, 500); // Show loader only if loading takes longer than 500ms
-				}
+		<script>
+			$(document).ready(function () {
+				// Toggle dropdown on button click
+				$("#medsmallmenu-toggler").click(function (e) {
+					e.stopPropagation(); // Prevent the click event from bubbling up to the document
 
-				// Function to hide the loading popup
-				function hideLoadingPopup() {
-					clearTimeout(loadingTimeout);
-					$('#loading-popup').parent().addClass('hidden');
-				}
-
-				$(document).ready(() => {
-					// Prevent form from submitting when enter key presses
-					$('input[type="text"]').on("keydown", function(event) {
-						if (event.key === "Enter") {
-							event.preventDefault();
-						}
-					});
-
-					// Show loading popup on form submission
-					$('form').on('submit', function () {
-						showLoadingPopupWithDelay();
-					});
-
-					// Show loading popup on anchor link clicks that reload the page
-					$('a[href]').on('click', function (e) {
-						const href = $(this).attr('href');
-
-						// If the href is "#" or opens in a different tab, skip showing the loading popup
-						if (href === "#" || $(this).attr('target') && $(this).attr('target') !== '_self') {
-							return;
-						}
-
-						showLoadingPopupWithDelay();
-					});
-
-					// Track back button click using popstate event
-					$(window).on('popstate', function () {
-						isPopState = true;  // Set flag to true on back navigation
-						hideLoadingPopup();  // Ensure the popup is hidden
-					});
-
-					// Hide loading popup once the page is fully loaded
-					$(window).on('pageshow', function () {
-						isPopState = false;  // Reset flag on full page load
-						hideLoadingPopup();
-					});
-
-					// Display back to top button on page scroll more than 100vh
-					const backToTopButton = document.getElementById("back-to-top");
-
-					window.addEventListener("scroll", function() {
-						if (window.scrollY > window.innerHeight * 0.3) {
-							backToTopButton.classList.remove("opacity-0");
-							backToTopButton.classList.add("opacity-100");
-						} else {
-							backToTopButton.classList.remove("opacity-100");backToTopButton.classList.add("opacity-0");
-						}
-					});
-
-					function adjustLayouts(){
-						// Minimum height for sidebar
-						$("#sidebar").css("height", ($(this).height() - $("#navbar").outerHeight()));
-
-						// Set content and sidebar width
-						if($(this).width() < 1024){
-							$("#sidebar-container").css("display", "none");
-							$("#content-container").css("width", "100%");
-						}
-						else {
-							$("#sidebar-container").css("display", "block");
-							$("#content-container").css("width", "83%");
-						}
-
-						$("#screen").text(`(Resolution: ${window.innerWidth}x${window.innerHeight})`);
-					}
-
-					adjustLayouts();
-
-					$(window).on("resize", function(){
-						adjustLayouts();
-					});
-
-
-					// Select2 initialization
-					$('.select2').select2({
-						allowClear: false
-					});
-
-					// Apply resize observer to each container with class 'container_select2'
-					$('.container_select2').each(function () {
-						const container = this;
-						const resizeObserver = new ResizeObserver(() => {
-							$(container).find('.select2').each(function () {
-								$(this).select2('destroy').select2({
-									allowClear: false
-								});
-							});
-
-							// stylingSelect2();
-						});
-
-						resizeObserver.observe(container);
-					});
-
-
-					// Datepicker mechanique
-					const testinput = document.createElement('input');
-					testinput.setAttribute('type', 'date');
-
-					// If native date input is not supported, use jQuery UI Datepicker
-					if (testinput.type !== 'date') {
-						$('.date-input').datepicker({
-							dateFormat: "yy-mm-dd", // Set the desired date format
-							changeMonth: true, // Enable month dropdown
-							changeYear: true,  // Enable year dropdown
-							yearRange: "1900:+10", // Set the range of years
-						});
-					}
-					else {
-						$('.date-input').on({
-							"focus": function(){
-								this.showPicker();
-							},
-							"click": function(){
-								this.showPicker();
-							}
-						});
-					}
-
-
-					// Announcement popups
-					let popups = $(".announcement-popup-container").length;
-
-					function remove_dismiss_announcement_popup(){
-						popups--;
-						if(popups == 0){
-							$("#dismiss-announcements-btn").fadeOut();
-						}
-					}
-
-					$(".announcement-popup-container").click(function(e){
-						if (!$(e.target).closest(".announcement-popup").length) {
-							remove_dismiss_announcement_popup();
-							$(this).fadeOut();
-						}
-
-					});
-
-					$("#dismiss-announcements-btn").click(function(){
-						$(".announcement-popup-container").fadeOut();
-						$(this).fadeOut();
-					});
-
-					$(".announcementContent a").each((index, anchor) => {
-						$(anchor).attr("target", "blank");
-					});
-
-					// Other popups
-					$(".popup-dismiss").click(function(){
-						$(this).closest(".popup-container").fadeOut(function(){
-							// Clear error messages and reset input classes
-							$('input, select, textarea').removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0').val();
-							$('.error-messages').remove(); // This removes any error messages displayed
-						});
-
-						// Clear inputs when any popup is closed
-						$('input[name]:not([name="_token"]), select, textarea').val("");
-					});
-
-					// Dropdowns
-					$(".dropdown-toggler").click(function (e) {
-						e.stopPropagation();
-
-						$(this).closest(".dropdown-container").find(".dropdown-menu").toggle();
-					});
-
-					$(document).click(function (e) {
-						if (!$(e.target).closest(".dropdown-menu, .dropdown-toggler").length) {
-							$(".dropdown-menu").hide();
-						}
-					});
-
-					const testus = $("#large-sidebar").clone();
-					$("#medsmallmenu-dropdown").empty().append(testus);
+					$("#medsmallmenu-dropdown").toggle();
 				});
 
-				// Hide the loading popup once the page is fully loaded
-				$(window).on('load', hideLoadingPopup);
-
-			</script>
-
-
-			<!-- Include Select2 JavaScript -->
-			<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-		</div>
+				// Close dropdown when clicking outside of it
+				$(document).click(function (e) {
+					if (!$(e.target).closest("#medsmallmenu-dropdown, #medsmallmenu-toggler").length) {
+						$("#medsmallmenu-dropdown").hide();
+					}
+				});
+			});
+		</script>
 	</body>
-
 </html>

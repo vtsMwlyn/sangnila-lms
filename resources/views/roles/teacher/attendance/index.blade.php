@@ -15,7 +15,7 @@
 				<div class="bg-white rounded-3xl p-5 shadow-lg">
 					<!-- Counting assignments posted and nearest deadline -->
 					@php
-						$attendances = App\Models\Attendance::where("teacher_id", Auth::user()->id)->where("course_id", $course->id)->latest()->get();
+						$attendances = App\Models\Attendance::where("uploader_id", Auth::user()->id)->where("course_id", $course->id)->latest()->get();
 					@endphp
 
 					<!-- Course information -->

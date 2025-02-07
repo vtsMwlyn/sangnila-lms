@@ -201,7 +201,7 @@ function newAttendance($course_name, $teacher_name, $students_attended, $attenda
 		"teacher_id" => $teacher->id,
 		"course_id" =>  $course->id,
 		"attendance_date" => $attendance_date,
-		"attendance_identifier" => $course->id . "_" . $teacher->id . "/" . round(microtime(true) * 1000)
+		// "attendance_identifier" => $course->id . "_" . $teacher->id . "/" . round(microtime(true) * 1000)
 	]);
 
 	$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", $teacher->id)->get();
