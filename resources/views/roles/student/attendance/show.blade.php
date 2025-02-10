@@ -11,11 +11,11 @@
 @section("content")
 	<div class="rounded-3xl w-full py-5 px-8 mb-6 flex flex-col sm:text-base text-sm" style="background: #FEFEFEB2;">
 
-		<div class="relative flex flex-col items-start w-60 dropdown-container">
+		<div class="relative flex flex-col items-start w-96 first-letter:0 dropdown-container">
 			<button type="button" class="border-slate-400 py-2 px-4 rounded-2xl font-bold text-dark-blue w-full bg-white flex justify-between items-center dropdown-toggler" style="border-width: 3px;">{{ $course_student->course->course_name }} <img src="{{ asset('img/dropdown-arrow.svg') }}" class="w-5 h-5" alt="icon"></button>
 			<div class="absolute bg-slate-100 top-12 w-full rounded-xl flex flex-col hidden overflow-hidden dropdown-menu" style="box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
 				@foreach(Auth::user()->enrolled_courses as $c)
-					<a href="{{ route('student.attendance.show', $c->id) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">{{ $c->course_name }}</div></a>
+					<a href="{{ route('student.attendance.show', $c->id) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">{{ $c->course_name }} - {{ ucwords($c->level) }}</div></a>
 				@endforeach
 			</div>
 		</div>

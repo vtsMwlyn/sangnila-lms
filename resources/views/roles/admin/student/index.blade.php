@@ -16,7 +16,7 @@
 			<x-anchor-button class="w-56" href="{{ route('admin.student.import-excel') }}"><i class="bi bi-file-earmark-arrow-up"></i> Import From Excel</x-anchor-button>
 
 			<div class="flex w-1/2 items-stretch">
-				<x-input type="text" class="border-blue-900 border-2 rounded-l-lg rounded-r-none w-full" placeholder="Search..." :value="request('search')" id="search-name"/>
+				<x-input type="text" class="rounded-l-lg rounded-r-none w-full" placeholder="Search..." :value="request('search')" id="search-name"/>
 				<button class="rounded-l-none rounded-r-lg border-slate-400 border-t-2 border-r-2 border-b-2 py-2 px-4 bg-white text-slate-400 hover:bg-slate-400 hover:text-white" style="border-width: 3px 3px 3px 0;" id="search-btn"><i class="bi bi-search"></i></button>
 			</div>
 
@@ -48,7 +48,14 @@
 					@forelse ($students as $index1 => $student)
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
 							<td class="py-2 px-4 w-1/4">
-								{{ $student->full_name }}
+								<div class="flex w-full items-center gap-3">
+									@if($student->details->profpic)
+										<img src="{{ Storage::url("app/public/" . $student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+									@else
+										<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+									@endif
+									{{ $student->full_name }}
+								</div>
 							</td>
 							<td class="py-2 px-4">
 								@if($student->enrolled_courses->count())
@@ -56,7 +63,7 @@
 										@foreach ($student->enrolled_courses as $index2 => $course)
 											<li class="flex justify-between gap-3 items-center my-2">
 												<div class="w-2/3">
-													<span>{{ $course->course_name }}</span>
+													<span>{{ $course->course_name }} - {{ ucwords($course->level) }}</span>
 												</div>
 												<div class="w-1/3">
 													<div class="w-full bg-gray-200 rounded-lg h-4 overflow-hidden relative">

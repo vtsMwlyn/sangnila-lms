@@ -160,18 +160,25 @@ class StudentController extends Controller {
 		$count_curr_progress = [];
 		$count_full_progress = [];
 
+		$sa = StudentAttendance::where("student_id", $student->id)->get();
+
 		foreach($student->enrolled_courses as $course){
-			$cs = CourseStudent::where("course_id", $course->id)->where("student_id", $student_id)->first();
-			array_push($count_full_progress, $cs->max_course_session);
+			// Number of attendances (separated for imported students and unimported students)
+			$cs = CourseStudent::where("course_id", $course->id)->where("student_id", $student->id)->first();
 
-			$progresses = Progress::where("course_id", $course->id)->where("student_id", $student_id)->get();
+			if($cs->is_imported){
+				$count = ImportedStudent::where("course_id", $course->id)->where("student_id", $student->id)->first()->last_attendance_count;
+			} else {
+				$count = 0;
+			}
 
-			$count = 0;
-			foreach($progresses as $progress){
-				if($progress->status == "unlocked"){
+			foreach($sa as $atd){
+				if($atd->attendance->course_id == $course->id && $atd->is_attend == 1){
 					$count++;
 				}
 			}
+
+			array_push($count_full_progress, $cs->max_course_session);
 			array_push($count_curr_progress, $count);
 		}
 

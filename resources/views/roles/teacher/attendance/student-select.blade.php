@@ -25,9 +25,14 @@
 				<h1 class="text-blue font-semibold">Students Currently Teached in This Course</h1>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 				@forelse ($course_students as $cs)
-					<div class="my-2">
+					<div class="my-2 flex gap-3 items-center">
 						<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $cs->student_id }}" checked
-						class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif >
+						class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif>
+						@if($cs->student->details->profpic)
+							<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+						@else
+							<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+						@endif
 						<label for="checkbox{{ $iterasus }}">{{ $cs->student->full_name }}</label>
 					</div>
 
@@ -52,9 +57,14 @@
 				</div>
 				<div class="w-full overflow-y-auto px-5" style="max-height: 40vh;">
 					@forelse ($remaining_students as $rs)
-						<div class="my-4 other-students">
+						<div class="my-4 other-students flex gap-3 items-center">
 							<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $rs->id }}"
 							class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif >
+							@if($rs->details->profpic)
+								<img src="{{ Storage::url("app/public/" . $rs->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+							@else
+								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+							@endif
 							<label for="checkbox{{ $iterasus }}">{{ $rs->full_name }}</label>
 						</div>
 

@@ -57,7 +57,7 @@
 			</div>
 
 			<form class="flex w-1/2 justify-center" action="{{ route("admin.account.index") }}">
-				<x-input type="text" class="border-blue-900 border-2 rounded-l-lg rounded-r-none w-full" name="search" placeholder="Search..." :value="request('search')"/>
+				<x-input type="text" class="rounded-l-lg rounded-r-none w-full" name="search" placeholder="Search..." :value="request('search')"/>
 				<input type="hidden" name="role" value="{{ request('role') }}">
 				<button class="rounded-l-none rounded-r-lg border-slate-400 border-t-2 border-r-2 border-b-2 py-2 px-4 bg-white text-slate-400 hover:bg-slate-400 hover:text-white" style="border-width: 3px 3px 3px 0;"><i class="bi bi-search"></i></button>
 			</form>
@@ -120,7 +120,16 @@
 					<tbody>
 						@forelse ($admin_accounts as $admin_acc)
 							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-								<td class="py-2 px-4">{{ $admin_acc->full_name }}</td>
+								<td class="py-2 px-4">
+									<div class="flex w-full items-center gap-3">
+										@if($admin_acc->details->profpic)
+											<img src="{{ Storage::url("app/public/" . $admin_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+										@else
+											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+										@endif
+										{{ $admin_acc->full_name }}
+									</div>
+								</td>
 								<td class="py-2 px-4">{{ $admin_acc->email }}</td>
 								<td class="py-2 px-4">{{ ucwords($admin_acc->role->role_name) }}</td>
 								<td class="py-2 px-4 font-semibold @if($admin_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($admin_acc->status) }}</td>
@@ -165,7 +174,17 @@
 					<tbody>
 						@forelse ($teacher_accounts as $teacher_acc)
 							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-								<td class="py-2 px-4">{{ $teacher_acc->details->gender == 1? 'Mr. ' : 'Ms. ' }} {{ $teacher_acc->full_name }}</td>
+								<td class="py-2 px-4">
+									<div class="flex w-full items-center gap-3">
+										@if($teacher_acc->details->profpic)
+											<img src="{{ Storage::url("app/public/" . $teacher_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+										@else
+											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+										@endif
+										{{ $teacher_acc->details->gender == 1? 'Mr. ' : 'Ms. ' }} {{ $teacher_acc->full_name }}
+									</div>
+
+								</td>
 								<td class="py-2 px-4">{{ $teacher_acc->email }}</td>
 								<td class="py-2 px-4">{{ ucwords($teacher_acc->role->role_name) }}</td>
 								<td class="py-2 px-4 font-semibold @if($teacher_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($teacher_acc->status) }}</td>
@@ -210,7 +229,16 @@
 					<tbody>
 						@forelse ($student_accounts as $student_acc)
 							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-								<td class="py-2 px-4">{{ $student_acc->full_name }}</td>
+								<td class="py-2 px-4">
+									<div class="flex w-full items-center gap-3">
+										@if($student_acc->details->profpic)
+											<img src="{{ Storage::url("app/public/" . $student_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+										@else
+											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+										@endif
+										{{ $student_acc->full_name }}
+									</div>
+								</td>
 								<td class="py-2 px-4">{{ $student_acc->email }}</td>
 								<td class="py-2 px-4">{{ ucwords($student_acc->role->role_name) }}</td>
 								<td class="py-2 px-4 font-semibold @if($student_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($student_acc->status) }}</td>
@@ -256,7 +284,16 @@
 					<tbody>
 						@forelse ($disabled as $disabled_acc)
 							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-								<td class="py-2 px-4">{{ $disabled_acc->full_name }}</td>
+								<td class="py-2 px-4">
+									<div class="flex w-full items-center gap-3">
+										@if($disabled_acc->details->profpic)
+											<img src="{{ Storage::url("app/public/" . $disabled_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+										@else
+											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+										@endif
+										{{ $disabled_acc->full_name }}
+									</div>
+								</td>
 								<td class="py-2 px-4">{{ $disabled_acc->email }}</td>
 								<td class="py-2 px-4">{{ ucwords($disabled_acc->role->role_name) }}</td>
 								<td class="py-2 px-4 font-semibold @if($disabled_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($disabled_acc->status) }}</td>

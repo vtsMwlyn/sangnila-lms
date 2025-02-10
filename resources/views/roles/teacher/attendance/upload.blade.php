@@ -43,16 +43,19 @@
 						</thead>
 						<tbody id="table-body">
 							@foreach ($students as $index => $s)
-								@if($s->status == "disabled")
-									@continue
-								@endif
-
 								<tr class="table-row @if($loop->index % 2 == 0) bg-white @endif">
 									<td class="p-5 grow">
 										<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
 											<input type="checkbox" id="checkbox{{ $loop->iteration }}"
 											class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif >
-											<label for="checkbox{{ $loop->iteration }}">{{ $s->full_name }}</label>
+											<label for="checkbox{{ $loop->iteration }}" class="flex gap-3 items-center">
+												@if($s->details->profpic)
+													<img src="{{ Storage::url("app/public/" . $s->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+												@else
+													<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+												@endif
+												{{ $s->full_name }}
+											</label>
 											<input type="hidden" name="students[]" value="{{ $s->id }}">
 										</div>
 

@@ -29,7 +29,7 @@
 					@endphp
 
 					<!-- Course information -->
-					<p class="font-bold text-dark-blue">{{ $course->course_name }}</p>
+					<p class="font-bold text-dark-blue">{{ $course->course_name }} - {{ ucwords($course->level) }}</p>
 					<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 					<div class="flex gap-2 items-center">

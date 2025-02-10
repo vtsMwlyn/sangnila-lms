@@ -153,7 +153,7 @@
 				filtered.forEach(element => {
 					const newOption = $("<option>")
 						.attr("value", element.id) // Use `id` as the value
-						.text(element.course_name);
+						.text(`${element.course_name} - ${element.level.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`);
 					$("#course_name").append(newOption);
 				});
 

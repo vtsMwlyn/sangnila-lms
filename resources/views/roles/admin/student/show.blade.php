@@ -235,6 +235,10 @@
 
 						<div class="flex gap-2 items-center">
 							<img src="{{ asset('img/lecturer.svg') }}" class="w-4 h-4" alt="icon">
+							{{ ucwords($course->level) }}
+						</div>
+						<div class="flex gap-2 items-center">
+							<img src="{{ asset('img/lecturer.svg') }}" class="w-4 h-4" alt="icon">
 							{{ ($teacher->details->gender == 1)? "Mr." : "Ms." }} {{ $teacher->full_name }}
 						</div>
 						<div class="flex gap-2 items-center">
@@ -243,12 +247,6 @@
 						</div>
 
 						<div class="flex w-full justify-between items-center text-sm mt-4">
-							<div class="text-light-blue font-semibold">
-								@if($cs->is_validator == 1)
-									<i class="bi bi-check-square"></i> Validator
-								@endif
-							</div>
-
 							<div class="flex items-center gap-2">
 								<x-button type="button" data-route="{{ route('admin.student.assign.update', $cs->id) }}" data-cs="{{ $cs }}" class="text-white edit-assign-student-btn"><i class="bi bi-pencil-square"></i> Edit</x-button>
 								<button type="button" data-route="{{ route('admin.student.unassign.destroy', ['student_id' => $student->id, 'course_id' => $course->id]) }}" data-unassign_course_name="{{ $course->course_name }}" class="unassign-student-btn text-white bg-red flex items-center justify-center px-4 py-2 rounded-xl hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 text-xs" style="box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
@@ -281,7 +279,7 @@
 					@forelse ($student->enrolled_courses as $i => $ec)
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
 							<td class="py-2 px-4 w-1/3">
-								{{ $ec->course_name }}
+								{{ $ec->course_name }} - {{ ucwords($ec->level) }}
 							</td>
 							<td class="py-2 px-4 w-1/3">
 								<div class="flex items-center justify-between w-2/3">
@@ -374,7 +372,7 @@
 
 			filtered.forEach(course => {
 				if(course.teachers.length != 0){
-					$('select[name="course"]').append($("<option>").attr("value", course.id).text(course.course_name));
+					$('select[name="course"]').append($("<option>").attr("value", course.id).text(`${course.course_name} - ${course.level.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`));
 				}
 			});
 

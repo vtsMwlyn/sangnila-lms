@@ -10,7 +10,7 @@
 			<a href="{{ route('teacher.mycourse.show', ['course_id' => $course->id]) }}"  style="width: 32%;" class="transition duration-300 hover:scale-105">
 				<div class="bg-white rounded-3xl p-5 shadow-lg">
 					<!-- Course information -->
-					<p class="font-bold text-dark-blue">{{ $course->course_name }}</p>
+					<p class="font-bold text-dark-blue">{{ $course->course_name }} - {{ ucwords($course->level) }}</p>
 					<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 					<div class="flex gap-2 items-center">

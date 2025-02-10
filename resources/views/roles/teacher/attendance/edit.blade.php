@@ -73,7 +73,14 @@
 									<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
 										<input type="checkbox" id="checkbox{{ old('students.' . $i, $studentId) }}"
 										class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $i, $studentId) == "on") checked @elseif($isAtten == 1) checked @endif>
-										<label for="checkbox{{ old('students.' . $i, $studentId) }}">{{ App\Models\User::find(old('students.' . $i, $studentId))->full_name }}</label>
+										<label for="checkbox{{ old('students.' . $i, $studentId) }}" class="flex gap-3 items-center">
+											@if(App\Models\User::find(old('students.' . $i, $studentId))->details->profpic)
+												<img src="{{ Storage::url("app/public/" . App\Models\User::find(old('students.' . $i, $studentId))->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+											@else
+												<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+											@endif
+											{{ App\Models\User::find(old('students.' . $i, $studentId))->full_name }}
+										</label>
 										<input type="hidden" name="students[]" value="{{ old('students.' . $i, $studentId) }}">
 									</div>
 									<div class="flex flex-col w-full gap-3 mt-2 activity_progress_detail items-start justify-between @error('activity_progress.' . $i) border-red rounded-2xl p-1 @enderror @error('learning_status.' . $i) border-red p-1 rounded-2xl @enderror">
