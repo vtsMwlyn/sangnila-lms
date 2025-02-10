@@ -90,7 +90,7 @@ class AttendanceController extends Controller {
 	public function create($course_id){
 		$course = Course::findOrFail($course_id);
 		$selected_student_ids = session('selected_students', []);
-		$students = User::whereIn('id', $selected_student_ids)->get();
+		$students = User::whereIn('id', $selected_student_ids)->with('details')->get();
 		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
 
 		// Mechanism to remove student's who reached his/her maximum session and haven't paid yet (if agreed to be implemented)
@@ -119,15 +119,20 @@ class AttendanceController extends Controller {
 		// 	return in_array($courseStudent->student_id, $studentsToRemove);
 		// });
 
+		$allStudents = User::where("role_id", 3)->with('details')->get();
+
 		return view("roles.teacher.attendance.upload", [
 			"course" => $course,
 			"topics" => $topics,
-			"students" => $students/*$filteredUsers*/
+			"students" => $students/*$filteredUsers*/,
+			"allStudents" => $allStudents,
+			"exclude_from_dropdown" => $selected_student_ids
 		]);
 	}
 
 	// Insert new attendance data into database
 	public function store(Request $request, $course_id) {
+		return $request;
 		$validator = Validator::make($request->all(), [
 			"attendance_date" => "required",
 			"attendance_detail.*" => "required",

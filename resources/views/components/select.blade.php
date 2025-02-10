@@ -1,7 +1,7 @@
 @props(['disabled' => false])
 
 @php
-    $classList = 'rounded-2xl shadow-sm focus:outline-none py-2 px-4';
+    $classList = 'rounded-2xl shadow-sm focus:outline-none py-2 px-4 cursor-pointer disabled:cursor-not-allowed';
     if($errors->has($attributes->get('name'))) {
         $classList .= ' border-red focus:border-red-700 focus:ring-0';
     } else {

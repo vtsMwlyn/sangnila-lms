@@ -212,7 +212,6 @@
 				}
 
 				function refreshAddStudent(){
-
 					$("#student_add").html("");
 					if(exclude_dropdown.length < allStudents.length){
 						for(let std of allStudents){
