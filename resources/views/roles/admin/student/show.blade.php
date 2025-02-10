@@ -9,6 +9,31 @@
 @endsection
 
 @section("popup")
+	<!-- Change imported student information -->
+	<x-popup popup_title="Edit Student Import Information" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-student-import-info-popup">
+		<form method="post" class="w-full flex flex-col mt-3">
+			@csrf
+
+			<div class="flex flex-col gap-3 w-full">
+				<div class="flex flex-col w-full">
+					<x-label for="status" :value="__('Uninserted Attendance Count')"/>
+					<x-input type="text" name="last_attendance_count" id="last_attendance_count" class="w-full mt-1" />
+				</div>
+
+				<div class="flex gap-3 w-full justify-center">
+					<x-button type="submit" class=" w-1/6 mt-5">
+						Edit
+					</x-button>
+				</div>
+			</div>
+
+			<!-- Helper -->
+			<input type="hidden" name="h-last-popup" class="h-last-popup">
+			<input type="hidden" name="h-route" class="h-route">
+			<input type="hidden" name="h-imported-student" class="h-imported-student">
+		</form>
+	</x-popup>
+
 	<!-- Unassign Student -->
 	<x-confirmation method="delete" popup_title="Unassign Student" id="unassign-student-popup">
 		Are you sure want to <span class="font-bold text-red">unassign</span> this student from <span class="font-bold text-light-blue" id="unassign-course-name"></span>?
@@ -133,12 +158,6 @@
 		<x-page-title style="margin-bottom: 0;">{{ $student->full_name }}</x-page-title>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(App\Models\ImportedStudent::where("student_id", $student->id)->first())
-			<div class="w-full bg-yellow-300 px-5 py-3 my-8 rounded-lg">
-				<p class="text-yellow-700 font-semibold" ><i class="bi bi-info-circle"></i> <span class="font-bold">This student is imported.</span> You can unset the imported status when the attendance data of the students are fully inserted by <a href="{{ route("admin.student.normalize.confirmation", [$student->id]) }}" class="hover:underline font-bold hover:font-extrabold">clicking here</a>.</p>
-			</div>
-		@endif
-
 		@if(session()->has("successAssignToCourse"))
 			<x-badge-success badge_text="{{ session('successAssignToCourse') }}"></x-badge-success>
 		@elseif(session()->has("successEditAssignInfo"))
@@ -153,8 +172,50 @@
 			<x-badge-success badge_text="{{ session('successUpdateMaxSession') }}"></x-badge-success>
 		@endif
 
+		@php
+			$isImportedData = App\Models\ImportedStudent::where("student_id", $student->id)->get()
+		@endphp
+
+		@if($isImportedData->count())
+			<div class="w-full bg-yellow-300 px-5 py-3 rounded-lg">
+				<p class="text-yellow-700 font-semibold"><i class="bi bi-info-circle"></i> <span class="font-extrabold">This student is imported.</span> Total existing attendance with status 'attended' of this student will always be added by the uninserted attendance counts. You can unset the imported status when the attendance data of the students are fully inserted.</p>
+			</div>
+
+			<h1 class="font-bold text-lg text-blue mt-4">Previous Progress Information</h1>
+
+			<div class="w-full overflow-x-auto mt-2 mb-8">
+				<table class="w-full">
+					<thead>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Course</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Uninserted Attendance Count</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
+					</thead>
+					<tbody>
+						@foreach ($isImportedData as $impdat)
+							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
+								<td class="py-2 px-4">{{ $impdat->course->course_name }} - {{ ucwords($impdat->course->level) }}</td>
+								<td class="py-2 px-4">{{ $impdat->last_attendance_count }}</td>
+								<td class="py-2 px-4">
+									<div class="w-full flex gap-3 justify-start">
+										<x-button type="button" class="edit-student-import-info-btn" data-route="{{ route('admin.student.imported-data.update', [$impdat->student->id, $impdat->course_id]) }}" data-uninserted_attendance_count="{{ $impdat->last_attendance_count }}"><i class="bi bi-pencil-square"></i> Edit</x-button>
+
+										<form action="{{ route('admin.student.normalize.proceed', [$impdat->student->id, $impdat->course->id]) }}" method="post">
+											@csrf
+											<x-button type="submit" onclick="return confirm('Are you sure want to normalize this student?');"><i class="bi bi-database-check"></i> Normalize</x-button>
+										</form>
+									</div>
+								</td>
+							</tr>
+						@endforeach
+					</tbody>
+				</table>
+			</div>
+		@endif
+
 		<!-- Students Information -->
-		<div class="w-full flex flex-col gap-y-4">
+		<h1 class="font-bold text-lg text-blue">Student Information</h1>
+
+		<div class="w-full flex flex-col gap-y-4 mt-2">
 			<div class="w-full flex gap-x-4">
 				<div class="flex flex-col w-1/2">
 					<p>Student Name</p>
@@ -207,7 +268,7 @@
 		</div>
 
 		<div class="w-full flex justify-end items-start mt-5 gap-3">
-			<x-button type="button"  id="show_more_less_button">Show Details</x-button>
+			<x-button type="button"  id="show_more_less_button"><i class="bi bi-eye"></i> Show Details</x-button>
 			<x-anchor-button type="button"  href="{{ route('admin.student.edit', $student->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		</div>
 
@@ -358,6 +419,19 @@
 			}).format(date);
 		}
 
+		function initializeEditStudentImportInformationPopup(route, whichpopup, uninsertedAttendanceCount){
+			$(".h-route").val(route);
+			$(".h-last-popup").val(whichpopup);
+			$(`#${whichpopup}`).find("form").attr("action", route);
+
+			const oldUninsertedAttendanceCount = '{{ old('last_attendance_count') }}';
+
+			$('input[name="last_attendance_count"]').val(oldUninsertedAttendanceCount ? oldUninsertedAttendanceCount : uninsertedAttendanceCount);
+
+			// Display the popup
+			$(`#${whichpopup}`).parent().show();
+		}
+
 		function initializeAssignStudentPopup(route, whichpopup){
 			// Fill popups with data
 			$(".h-route").val(route);
@@ -422,6 +496,15 @@
 						}
 					}
 				});
+			});
+
+			$('.edit-student-import-info-btn').on('click', function() {
+				// Retrieve and save selected data
+				const route = $(this).data('route');
+				const uninsertedAttendanceCount = $(this).data('uninserted_attendance_count');
+				const whichpopup = "edit-student-import-info-popup";
+
+				initializeEditStudentImportInformationPopup(route, whichpopup, uninsertedAttendanceCount);
 			});
 
 			$('#assign-student-btn').on('click', function() {
@@ -534,7 +617,14 @@
 				// Retrieve and re-save saved data
 				const old_popup = @json(old('h-last-popup'));
 
-				if(old_popup == "assign-student-popup"){
+				if(old_popup == "edit-student-import-info-popup"){
+					const old_route = @json(old('h-route'));
+					const old_popup = @json(old('h-last-popup'));
+					const old_imported_student = @json(old('h-imported-student'));
+
+					initializeEditStudentImportInformationPopup(old_route, old_popup, JSON.parse(old_imported_student));
+				}
+				else if(old_popup == "assign-student-popup"){
 					const old_route = @json(old('h-route'));
 					const old_popup = @json(old('h-last-popup'));
 

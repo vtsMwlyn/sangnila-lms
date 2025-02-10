@@ -148,8 +148,8 @@ Route::prefix('/admin')
 				Route::delete('{student_id}/unassign/{course_id}', [CourseStudentController::class, 'destroy'])->name('unassign.destroy')->whereNumber(['student_id', 'course_id']);
 
 				// Make student status is not imported again
-				Route::get("{student_id}/normalize", [CourseStudentController::class, "normalize_confirmation"])->name("normalize.confirmation")->whereNumber('student_id');
-				Route::post("{student_id}/normalize", [CourseStudentController::class, "normalize_proceed"])->name("normalize.proceed")->whereNumber('student_id');
+				Route::post("{student_id}/{course_id}/imported-data/edit", [CourseStudentController::class, "imported_data_update"])->name("imported-data.update")->whereNumber(['student_id', 'course_id']);
+				Route::post("{student_id}/{course_id}/normalize", [CourseStudentController::class, "normalize_proceed"])->name("normalize.proceed")->whereNumber(['student_id', 'course_id']);
 
 				// Import from excel
 				Route::get("/import-excel", [ExcelImportController::class, "import_excel_student_index"])->name("import-excel");

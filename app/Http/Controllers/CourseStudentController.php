@@ -17,6 +17,7 @@ use App\Models\CourseTeacher;
 use App\Models\ImportedStudent;
 use App\Rules\MinimumOneCheckbox;
 use App\Models\SelfAttendance;
+use Google\Service\ServiceUsage\Impact;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -368,45 +369,34 @@ class CourseStudentController extends Controller {
 		return redirect(route("admin.course.show", $course_id))->with("successImportStudent", "Students data imported successfully!");
 	}
 
-	public function normalize_confirmation($student_id){
-		return view("roles.admin.student.normalize", [
-			"student" => User::findOrFail($student_id),
-			"imported" => ImportedStudent::where("student_id", $student_id)->get()
-		]);
-	}
-
-	public function normalize_proceed(Request $request, $student_id){
+	public function imported_data_update(Request $request, $student_id, $course_id){
 		$request->validate([
-			"checkbox_values" => ["required", new MinimumOneCheckbox]
+			'last_attendance_count' => 'required|numeric|min:0'
 		]);
 
 		$student = User::findOrFail($student_id);
+		$course = Course::findOrFail($course_id);
 
-		try {
-			DB::beginTransaction();
-
-			$imported = ImportedStudent::where("student_id", $student->id)->get();
-
-			$to_be_deleted = [];
-
-			foreach($imported as $index => $imp){
-				if($request["checkbox_values"][$index] == "on"){
-					CourseStudent::where("student_id", $student->id)->where("course_id", $imp->course_id)->update(["is_imported" => 0]);
-
-					array_push($to_be_deleted, $imp->id);
-				}
-			}
-
-			foreach($to_be_deleted as $del){
-				ImportedStudent::destroy($del);
-			}
-
-			DB::commit();
+		$importedStudentData = ImportedStudent::where('student_id', $student->id)->where('course_id', $course->id)->first();
+		if($importedStudentData){
+			$importedStudentData->update([
+				'last_attendance_count' => $request->last_attendance_count
+			]);
 		}
-		catch(Exception $e){
-			DB::rollback();
 
-			return back()->with("systemFail", "System failed to normalize_student, please report the error to our IT team. Error detail: " . $e->getMessage());
+		return redirect(route("admin.student.show", $student->id))->with("successNormalize", "Successfully normalized the student");
+	}
+
+	public function normalize_proceed(Request $request, $student_id, $course_id){
+		$student = User::findOrFail($student_id);
+		$course = Course::findOrFail($course_id);
+
+		$cs = CourseStudent::where('student_id', $student->id)->where('course_id', $course->id)->first();
+		$cs->update(['is_imported' => 0]);
+
+		$importedStudentData = ImportedStudent::where('student_id', $student->id)->where('course_id', $course->id)->first();
+		if($importedStudentData){
+			$importedStudentData->delete();
 		}
 
 		return redirect(route("admin.student.show", $student->id))->with("successNormalize", "Successfully normalized the student");
