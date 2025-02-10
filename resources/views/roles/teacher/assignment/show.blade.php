@@ -47,11 +47,18 @@
 								<a class="text-blue-600 hover:underline font-bold" href="{{ route('teacher.assignment.check', $asg->id) }}">{{ $asg->title }}</a>
 							</td>
 							<td class="py-2 px-4 w-1/5">
-								<ul class="list-disc list-inside">
+								<div class="flex w-full flex-col gap-3">
 									@foreach ($asg->student_assignments as $sasg)
-										<li>{{ $sasg->student->full_name }}</li>
+										<div class="flex items-center gap-3">
+											@if($sasg->student->details->profpic)
+												<img src="{{ Storage::url("app/public/" . $sasg->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+											@else
+												<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+											@endif
+											{{ $sasg->student->full_name }}
+										</div>
 									@endforeach
-								</ul>
+								</div>
 							</td>
 							<td class="py-2 px-4">{{ Carbon\Carbon::parse($asg->deadline_date)->format('d M Y') }}<br>{{ Carbon\Carbon::parse($asg->deadline_time)->format("H:i") }} GMT+7</td>
 							<td class="py-2 px-4 w-1/4">

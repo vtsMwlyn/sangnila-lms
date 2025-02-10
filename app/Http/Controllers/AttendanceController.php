@@ -30,7 +30,9 @@ class AttendanceController extends Controller {
 	public function show($course_id) {
 		$course = Course::findOrFail($course_id);
 
-		$attendanceData = Attendance::where("course_id", $course->id)->where("uploader_id", Auth::user()->id)->with(['student_attendances.student'])->latest()->get();
+		$attendanceData = Attendance::where("course_id", $course->id)->whereHas('posted_by', function($query){
+			return $query->where('id', Auth::user()->id)->orWhere('role_id', 1);
+		})->with(['student_attendances.student'])->orderBy('attendance_date', 'desc')->get();
 
 		$todaySelfAttendances = SelfAttendance::where("user_id", Auth::user()->id)->where("course_id", $course->id)->where("self_attendance_date", Carbon::today()->format('Y-m-d'))->get();
 		$unfinishedSelfAttendance = $todaySelfAttendances->filter(function($item){

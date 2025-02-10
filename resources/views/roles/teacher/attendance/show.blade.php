@@ -105,6 +105,7 @@
 					<th class="text-center py-3 px-4 border-b-2 border-slate-400">Students</th>
 					<th class="text-center py-3 px-4 border-b-2 border-slate-400">Attended</th>
 					<th class="text-center py-3 px-4 border-b-2 border-slate-400">Absent</th>
+					<th class="text-center py-3 px-4 border-b-2 border-slate-400">Uploader</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 				</thead>
 				<tbody>
@@ -114,6 +115,7 @@
 							<td class="py-2 px-4 text-center">{{ $atd->student_attendances->count() }}</td>
 							<td class="py-2 px-4 text-center">{{ $atd->student_attendances->where("is_attend", 1)->count() }}</td>
 							<td class="py-2 px-4 text-center">{{ $atd->student_attendances->where("is_attend", 0)->count() }}</td>
+							<td class="py-2 px-4 text-center">{{ $atd->posted_by->id == Auth::user()->id? 'Me' : $atd->posted_by->full_name }}</td>
 							<td class="py-2 px-4">
 								<div class="flex gap-2">
 									<x-anchor-button  href="{{ route('teacher.attendance.edit', $atd->id) }}">

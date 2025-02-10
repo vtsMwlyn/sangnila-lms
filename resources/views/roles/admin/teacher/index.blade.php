@@ -46,7 +46,7 @@
 								@if($teacher->teached_courses->count())
 									<ul class="list-disc list-inside">
 										@foreach ($teacher->teached_courses as $course)
-											<li>{{ $course->course_name }}</li>
+											<li>{{ $course->course_name }} - {{ $course->level }}</li>
 										@endforeach
 									</ul>
 								@else
