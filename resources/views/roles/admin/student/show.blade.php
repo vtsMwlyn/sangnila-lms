@@ -113,14 +113,16 @@
 	</x-popup>
 
 	<!-- Student attendance information -->
-	<x-popup popup_title="Attendance Information" id="attendance-information-popup" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto">
+	<x-popup popup_title="Attendance Information" id="attendance-information-popup" class="w-5/6 flex flex-col items-stretch justify-center overflow-y-auto">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<div class="w-full overflow-x-auto">
 				<table class="w-full">
 					<thead>
 						<th class="py-3 px-4 border-b-2 border-slate-400">No</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Session</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Attended</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Time</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Details</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Uploader</th>
 					</thead>
@@ -343,22 +345,28 @@
 								{{ $ec->course_name }} - {{ ucwords($ec->level) }}
 							</td>
 							<td class="py-2 px-4 w-1/3">
-								<div class="flex items-center justify-between w-2/3">
-									{{ $current_progress[$i] }}/{{ $full_progress[$i] }} done
-									<x-button type="button" class="attendance-information-btn" data-std_attendances="{{ App\Models\StudentAttendance::where('student_id', $student->id)
+								@php
+									$sortedAndEagerLoadedAttendanceData = App\Models\StudentAttendance::where('student_id', $student->id)
 										->whereHas('attendance', function ($query) use ($ec) {
 											$query->where('course_id', $ec->id);
 										})
+										->join('attendances', 'student_attendances.attendance_id', '=', 'attendances.id')
+										->orderBy('attendances.attendance_date', 'desc') // Sort by attendance_date
 										->with([
 											'attendance' => function ($query) {
-												$query->select('id', 'attendance_date', 'uploader_id'); // Include attendance_date and teacher_id
+												$query->select('id', 'attendance_date', 'uploader_id');
 											},
 											'attendance.posted_by' => function ($query) {
-												$query->select('id', 'full_name'); // Include only full_name from teachers
+												$query->select('id', 'full_name');
 											}
 										])
+										->select('student_attendances.*') // Ensure to select main table fields
 										->get()
-									}}">
+								@endphp
+
+								<div class="flex items-center justify-between w-2/3">
+									{{ $current_progress[$i] }}/{{ $full_progress[$i] }} done
+									<x-button type="button" class="attendance-information-btn" data-std_attendances="{{ $sortedAndEagerLoadedAttendanceData }}">
 										<i class="bi bi-eye"></i>
 									</x-button>
 								</div>
@@ -553,6 +561,8 @@
 						colAttended.html('<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">');
 					}
 
+					const colSession = $("<td>").addClass("px-4 py-2").text(satd.nth_session);
+					const colLearningTime = $("<td>").addClass("px-4 py-2").text((satd.is_attend == 1)? `${satd.start_time.slice(0, 5)}-${satd.end_time.slice(0, 5)}` : 'Absent');
 					const colDetails = $("<td>").addClass("px-4 py-2").text(satd.attendance_detail);
 					const colUploader = $("<td>").addClass("px-4 py-2").text(satd.attendance.posted_by.full_name);
 
@@ -564,7 +574,7 @@
 						rowBG = "white";
 					}
 
-					$('#attendance-information-tbody').append($("<tr>").css("background-color", rowBG).append(colNo).append(colDate).append(colAttended).append(colDetails).append(colUploader));
+					$('#attendance-information-tbody').append($("<tr>").css("background-color", rowBG).append(colNo).append(colDate).append(colSession).append(colAttended).append(colLearningTime).append(colDetails).append(colUploader));
 
 					i++;
 				}

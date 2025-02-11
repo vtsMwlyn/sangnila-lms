@@ -9,7 +9,7 @@
 @endsection
 
 @section("popup")
-	<x-popup popup_title="Attendance Details" class="w-2/3 flex flex-col items-stretch justify-center overflow-y-auto" id="attendance-details">
+	<x-popup popup_title="Attendance Details" class="w-5/6 flex flex-col items-stretch justify-center overflow-y-auto" id="attendance-details">
 		<!-- Popup content -->
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<div class="w-full overflow-x-auto">
@@ -18,6 +18,7 @@
 						<th class="py-3 px-4 border-b-2 border-slate-400">No</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Student</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Session</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Time</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Attended</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">In Class Progress</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Notes</th>
@@ -147,9 +148,10 @@
 						const col1 = $("<td>").addClass("py-2 px-4 text-center").text(i + 1);
 						const col2 = $("<td>").addClass("py-2 px-4").text(sa.student.full_name);
 						const col3 = $("<td>").addClass("py-2 px-4").text(sa.nth_session);
-						const col4 = $("<td>").addClass("py-2 px-4").html(sa.is_attend == 1 ? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`);
-						const col5 = $("<td>").addClass("py-2 px-4").text(`${sa.activity_progress ? sa.activity_progress : 'N/A'} [${sa.learning_status ? sa.learning_status : 'N/A'}]`);
-						const col6 = $("<td>").addClass("py-2 px-4").text(sa.attendance_detail);
+						const col4 = $("<td>").addClass("py-2 px-4").text(sa.is_attend == 1 ? `${sa.start_time.slice(0, 5)}-${sa.end_time.slice(0, 5)}` : 'Absent');
+						const col5 = $("<td>").addClass("py-2 px-4").html(sa.is_attend == 1 ? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`);
+						const col6 = $("<td>").addClass("py-2 px-4").text(sa.is_attend == 1 ? `${sa.activity_progress} [${sa.learning_status}]` : 'Absent');
+						const col7 = $("<td>").addClass("py-2 px-4").text(sa.attendance_detail);
 
 						let rowBG;
 						if(i % 2 == 0){
@@ -160,7 +162,7 @@
 						}
 
 						$("#attendance-details-tbody").append(
-							$("<tr>").css("background-color", rowBG).append(col1).append(col2).append(col3).append(col4).append(col5).append(col6)
+							$("<tr>").css("background-color", rowBG).append(col1).append(col2).append(col3).append(col4).append(col5).append(col6).append(col7)
 						);
 						i++;
 					}
