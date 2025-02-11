@@ -70,11 +70,37 @@
 							<button type="button" class="bg-red text-white rounded-xl hover:bg-slate-600 py-2 px-4 remove-student-btn" onclick="return confirm('Are you sure want to remove this student from the new attendance report?');" data-sid="{{ $student->id }}"><i class="bi bi-trash3"></i></button>
 						</div>
 
-						<!-- Nth Session -->
-						<div class="flex flex-col w-full mt-4">
-							<x-label for="_session{{ $student->id }}">N-th Session</x-label>
-							<x-input class="_session" type="text" id="_session{{ $student->id }}" value="1"/>
-							<p class="text-red font-bold mt-2 error-session hidden"><i class="bi bi-exclamation-circle"></i> Please input a valid value.</p>
+						<div class="flex gap-5 mt-4 w-full container-session-present">
+							<!-- Nth Session -->
+							<div class="flex flex-col w-1/3 mt-4">
+								<x-label for="_session{{ $student->id }}">N-th Session</x-label>
+								<x-input class="_session" type="text" id="_session{{ $student->id }}" value="1"/>
+								<p class="text-red font-bold mt-2 error-session hidden"><i class="bi bi-exclamation-circle"></i> Please input the nth-session.</p>
+							</div>
+
+							<!-- Start Time -->
+							<div class="flex flex-col w-1/3 mt-4 start_time-container-present">
+								<x-label for="_start_time{{ $student->id }}">Start Time</x-label>
+								<x-input class="_start_time" type="time" id="_start_time{{ $student->id }}" value="00:00"/>
+							</div>
+
+							<!-- End Time -->
+							<div class="flex flex-col w-1/3 mt-4 start_time-container-present">
+								<x-label for="_end_time{{ $student->id }}">End Time</x-label>
+								<x-input class="_end_time" type="time" id="_end_time{{ $student->id }}" value="00:00"/>
+							</div>
+
+							<!-- Start Time (Absent) -->
+							<div class="hidden flex-col w-1/3 mt-4 start_time-container-absent">
+								<x-label>Start Time</x-label>
+								<x-input class="_start_time_absent" type="text" value="Absent" disabled/>
+							</div>
+
+							<!-- End Time (Absent) -->
+							<div class="hidden flex-col w-1/3 mt-4 end_time-container-absent">
+								<x-label>End Time</x-label>
+								<x-input class="_end_time_absent" type="text" value="Absent" disabled/>
+							</div>
 						</div>
 
 						<!-- Activity (Present) -->
@@ -222,6 +248,8 @@
 				const currCard = $(this).closest('.attendance-detail-accordion-area');
 				const _isAttended = currCard.find('._checkbox').is(':checked')? 'on' : 'off';
 				const _nthSession = currCard.find('._session').val();
+				const _start_time = currCard.find('._start_time').val();
+				const _end_time = currCard.find('._end_time').val();
 				const _activity = currCard.find('._activity').val();
 				const _learning_status = currCard.find('._learning_status').val();
 				const _details = currCard.find('._details').val();
@@ -254,15 +282,17 @@
 				let atdIcon = (_isAttended == 'on')? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`;
 				const delRowBtn = $('<button>').attr('type', 'button').addClass('bg-red text-white rounded-xl hover:bg-slate-600 py-2 px-4').html('<i class="bi bi-trash3"></i>');
 
-				const newRow = $('<tr>')
+				const rowCount = currCard.find('.session-details-tbody').find('tr').length;
+
+				const newRow = $('<tr>').addClass(rowCount % 2 == 0? 'bg-slate-100' : '')
 					.append(
-						$('<td>').addClass('py-2 px-4').text(_nthSession)
+						$('<td>').addClass('py-2 px-4').text((_isAttended == 'on')? `${_nthSession} (${_start_time}-${_end_time})` : `${_nthSession}`)
 					).append(
 						$('<td>').addClass('py-2 px-4').html(atdIcon)
 					).append(
-						$('<td>').addClass('py-2 px-4').text(JSON.parse(_activity).title)
+						$('<td>').addClass('py-2 px-4').text((_isAttended == 'on')? JSON.parse(_activity).title : 'Absent')
 					).append(
-						$('<td>').addClass('py-2 px-4').text(_learning_status)
+						$('<td>').addClass('py-2 px-4').text((_isAttended == 'on')? _learning_status : 'Absent')
 					).append(
 						$('<td>').addClass('py-2 px-4').text(_details)
 					).append(
@@ -272,8 +302,10 @@
 				const student = $(this).data('student');
 				const hidIsAttend = $('<input>').attr({'type': 'hidden', 'name': `is_attend[${student.id}][]`, 'value': _isAttended});
 				const hidNthSession = $('<input>').attr({'type': 'hidden', 'name': `nth_session[${student.id}][]`, 'value': _nthSession});
-				const hidActivity = $('<input>').attr({'type': 'hidden', 'name': `activity[${student.id}][]`, 'value': JSON.parse(_activity).title});
-				const hidLearningStatus = $('<input>').attr({'type': 'hidden', 'name': `learning_status[${student.id}][]`, 'value': _learning_status});
+				const hidStartTime = $('<input>').attr({'type': 'hidden', 'name': `start_time[${student.id}][]`, 'value': (_isAttended == 'on')?_start_time : '00:00'});
+				const hidEndTime = $('<input>').attr({'type': 'hidden', 'name': `end_time[${student.id}][]`, 'value': (_isAttended == 'on')?_end_time : '00:00'});
+				const hidActivity = $('<input>').attr({'type': 'hidden', 'name': `activity[${student.id}][]`, 'value': (_isAttended == 'on')? JSON.parse(_activity).title : 'Absent'});
+				const hidLearningStatus = $('<input>').attr({'type': 'hidden', 'name': `learning_status[${student.id}][]`, 'value': (_isAttended == 'on')? _learning_status : 'Absent'});
 				const hidDetails = $('<input>').attr({'type': 'hidden', 'name': `details[${student.id}][]`, 'value': _details});
 
 				delRowBtn.on('click', () => {
@@ -282,6 +314,8 @@
 
 						hidIsAttend.remove();
 						hidNthSession.remove();
+						hidStartTime.remove();
+						hidEndTime.remove();
 						hidActivity.remove();
 						hidLearningStatus.remove();
 						hidDetails.remove();
@@ -289,7 +323,7 @@
 				});
 
 				currCard.find('.session-details-tbody').append(newRow);
-				currCard.append(hidIsAttend).append(hidNthSession).append(hidActivity).append(hidLearningStatus).append(hidDetails);
+				currCard.append(hidIsAttend).append(hidNthSession).append(hidStartTime).append(hidEndTime).append(hidActivity).append(hidLearningStatus).append(hidDetails);
 			});
 
 			$(document).on('change', '.form-checkbox', function(){
@@ -298,10 +332,18 @@
 				if($(this).is(':checked')){
 					currCard.find('.container-activity-present').removeClass('hidden').addClass('flex');
 					currCard.find('.container-activity-absent').removeClass('flex').addClass('hidden');
+					currCard.find('.start_time-container-present').removeClass('hidden').addClass('flex');
+					currCard.find('.start_time-container-absent').removeClass('flex').addClass('hidden');
+					currCard.find('.end_time-container-present').removeClass('hidden').addClass('flex');
+					currCard.find('.end_time-container-absent').removeClass('flex').addClass('hidden');
 				}
 				else {
 					currCard.find('.container-activity-absent').removeClass('hidden').addClass('flex');
 					currCard.find('.container-activity-present').removeClass('flex').addClass('hidden');
+					currCard.find('.start_time-container-absent').removeClass('hidden').addClass('flex');
+					currCard.find('.start_time-container-present').removeClass('flex').addClass('hidden');
+					currCard.find('.end_time-container-absent').removeClass('hidden').addClass('flex');
+					currCard.find('.end_time-container-present').removeClass('flex').addClass('hidden');
 				}
 			});
 
@@ -337,6 +379,12 @@
 
 				newStudentCard.find('._session').attr('id', `_session${student.id}`).val(1);
 				newStudentCard.find('._session').prev().attr('for', `_session${student.id}`);
+
+				newStudentCard.find('._start_time').attr('id', `_start_time${student.id}`).val('00:00');
+				newStudentCard.find('._start_time').prev().attr('for', `_start_time${student.id}`);
+
+				newStudentCard.find('._end_time').attr('id', `_end_time${student.id}`).val('00:00');
+				newStudentCard.find('._end_time').prev().attr('for', `_end_time${student.id}`);
 
 				newStudentCard.find('.container-select2').empty();
 				newStudentCard.find('.container-select2').append($('<label>').attr('for', `_activity${student.id}`).text('Activity')).append(newSelect);

@@ -132,7 +132,6 @@ $(document).ready(() => {
 		});
 	}
 
-
 	// Announcement popups
 	let popups = $(".announcement-popup-container").length;
 

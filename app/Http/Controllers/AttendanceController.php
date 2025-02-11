@@ -111,6 +111,8 @@ class AttendanceController extends Controller {
 			'attendance_date' => 'required|date',
 			'is_attend.*' => 'required',
 			'nth_session.*' => 'required',
+			'start_time.*' => 'required',
+			'end_time.*' => 'required',
 			'activity.*' => 'required',
 			'learning_status.*' => 'required',
 			'details.*' => 'required',
@@ -139,6 +141,8 @@ class AttendanceController extends Controller {
 						'activity_progress' => $request->activity[$studentId][$i],
 						'learning_status' => $request->learning_status[$studentId][$i],
 						'attendance_detail' => $request->details[$studentId][$i],
+						'start_time' => $request->start_time[$studentId][$i],
+						'end_time' => $request->end_time[$studentId][$i],
 					]);
 				}
 			}
