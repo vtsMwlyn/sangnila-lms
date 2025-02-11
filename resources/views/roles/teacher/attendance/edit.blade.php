@@ -33,8 +33,8 @@
 				</div>
 				<div class="w-1/3">
 					<x-label for="student_add">{{ __("Add Student to Attendance") }}</x-label>
-					<div class="flex items-center gap-3 mt-1 select2_container">
-						<select class="w-full select2 rounded-2xl shadow-sm focus:outline-none py-2 px-4 focus:ring-0" id="student_add" style="border-width: 3px;">
+					<div class="flex items-center gap-3 mt-1 select-2_container">
+						<select class="w-full select-2 rounded-2xl shadow-sm focus:outline-none py-2 px-4 focus:ring-0" id="student_add" style="border-width: 3px;">
 						</select>
 						<x-button type="button" id="add_student" >Add</x-button>
 					</div>
@@ -84,8 +84,8 @@
 										<input type="hidden" name="students[]" value="{{ old('students.' . $i, $studentId) }}">
 									</div>
 									<div class="flex flex-col w-full gap-3 mt-2 activity_progress_detail items-start justify-between @error('activity_progress.' . $i) border-red rounded-2xl p-1 @enderror @error('learning_status.' . $i) border-red p-1 rounded-2xl @enderror">
-										<div class="flex flex-col w-full container_select2">
-											<x-select class="activity_progress select2" name="fake_activity_progress[]">
+										<div class="flex flex-col w-full container-select2">
+											<x-select class="activity_progress select-2" name="fake_activity_progress[]">
 												<option selected disabled>Select Activity Progress</option>
 												@foreach ($attendance->course->topics as $topic)
 													@foreach ($topic->activities as $activity)
@@ -182,7 +182,7 @@
 				$(document).on("item_list_modified", () => {
 					refreshAddStudent();
 					reapplyEventListeners();
-					reinitializeSelect2();
+					reinitializeselect2();
 				});
 
 				// Initialization
@@ -190,17 +190,17 @@
 				applyRemoveRowButton();
 				refreshAddStudent();
 
-				function reinitializeSelect2(){
-					// Select2 initialization
-					$('.select2').select2({
+				function reinitializeselect2(){
+					// select-2 initialization
+					$('.select-2').select2({
 						allowClear: false
 					});
 
-					// Apply resize observer to each container with class 'container_select2'
-					$('.container_select2').each(function () {
+					// Apply resize observer to each container with class 'container-select2'
+					$('.container-select2').each(function () {
 						const container = this;
 						const resizeObserver = new ResizeObserver(() => {
-							$(container).find('.select2').each(function () {
+							$(container).find('.select-2').each(function () {
 								$(this).select2('destroy').select2({
 									allowClear: false
 								});
@@ -331,8 +331,8 @@
 					const newHiddenInput = $("<input>").attr({"type": "hidden", "name": "students[]", "value": studentToAdd.id});
 					checkNameContainer.append(newCheckBox).append(newLabelCheckBox).append(newHiddenInput);
 
-					const selectContainer = $("<div>").addClass("flex flex-col w-full container_select2");
-					const newActivityProgressDropdown = $("<select>").addClass("select2 activity_progress w-full rounded-2xl shadow-sm focus:outline-none py-2 px-4 border-slate-400 focus:border-slate-600 focus:ring-0").css("border-width", "3px");
+					const selectContainer = $("<div>").addClass("flex flex-col w-full container-select2");
+					const newActivityProgressDropdown = $("<select>").addClass("select-2 activity_progress w-full rounded-2xl shadow-sm focus:outline-none py-2 px-4 border-slate-400 focus:border-slate-600 focus:ring-0").css("border-width", "3px");
 					const activityProgressDropdownPlaceholder = $("<option>").attr({"disabled": true, "selected": true}).text("Select Activity Progress");
 					newActivityProgressDropdown.append(activityProgressDropdownPlaceholder);
 					const allTopicsAndActivities = @json($all_topics_and_activities);

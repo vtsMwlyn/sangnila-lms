@@ -87,15 +87,15 @@ $(document).ready(() => {
 
 
 	// Select2 initialization
-	$('.select2').select2({
+	$('.select-2').select2({
 		allowClear: false
 	});
 
-	// Apply resize observer to each container with class 'container_select2'
-	$('.container_select2').each(function () {
+	// Apply resize observer to each container with class 'container-select2'
+	$('.container-select2').each(function () {
 		const container = this;
 		const resizeObserver = new ResizeObserver(() => {
-			$(container).find('.select2').each(function () {
+			$(container).find('.select-2').each(function () {
 				$(this).select2({
 					allowClear: false
 				});

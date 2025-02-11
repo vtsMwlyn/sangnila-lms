@@ -23,17 +23,18 @@
 			<div class="my-4 flex w-full justify-between items-start">
 				<div class="w-1/3">
 					<x-label for="attendance_date">{{ __("Attendance Date") }}</x-label>
-					<div class="flex gap-3 mt-1 items-center" id="date-inp-cont">
+					<div class="flex gap-3 mt-1 items-start" id="date-inp-cont">
 						<div class="flex flex-col items-start grow">
 							<x-input type="date" class="date-input w-full" name="attendance_date" id="attendance_date"/>
+							<p class="text-red font-bold mt-2 hidden" id="error-date"><i class="bi bi-exclamation-circle"></i> Attendance date field is required.</p>
 						</div>
-						<x-button type="button" id="todaybtn" >Today</x-button>
+						<x-button type="button" id="todaybtn" class="mt-1">Today</x-button>
 					</div>
 				</div>
 				<div class="w-1/3">
 					<x-label for="student_add">{{ __("Add Student to Attendance") }}</x-label>
-					<div class="flex items-center gap-3 mt-1 select2_container">
-						<select class="w-full select2 rounded-2xl shadow-sm focus:outline-none py-2 px-4 focus:ring-0" id="student_add" style="border-width: 3px;">
+					<div class="flex items-center gap-3 mt-1 select-2_container">
+						<select class="w-full select-2 rounded-2xl shadow-sm focus:outline-none py-2 px-4 focus:ring-0" id="student_add" style="border-width: 3px;">
 						</select>
 						<x-button type="button" id="add_student" >Add</x-button>
 					</div>
@@ -42,16 +43,16 @@
 
 			<h2 class="mt-12 font-extrabold text-xl text-dark-blue">Attendance Report</h2>
 			@foreach ($students as $student)
-				<div class="bg-white rounded-xl p-5 flex flex-col w-full my-6">
+				<div class="bg-white rounded-xl p-5 flex flex-col w-full my-6 student-card">
 					<!-- Accordion trigger -->
 					<button type="button" class="flex justify-between attendance-detail-accordion-btn items-center">
 						<div class="flex items-center gap-3">
 							@if($student->details->profpic)
-								<img src="{{ Storage::url("app/public/" . $student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+								<img src="{{ Storage::url("app/public/" . $student->details->profpic) }}" class="rounded-full w-12 h-12 card_profpic" alt="profpic" style="object-fit: cover; object-position: center;">
 							@else
-								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12 card_profpic" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
 							@endif
-							{{ $student->full_name }}
+							<span class="card_student_name">{{ $student->full_name }}</span>
 						</div>
 						<div class="accordion-icon"><i class="bi bi-chevron-up text-slate-600"></i></div>
 					</button>
@@ -62,25 +63,25 @@
 					<div class="w-full flex flex-col attendance-detail-accordion-area">
 						<!-- Is Attended -->
 						<div class="w-full flex items-center justify-between">
-							<label for="_checkbox{{ $loop->iteration }}" class="flex gap-3 items-center mt-2">
-								<input class="_checkbox" type="checkbox" id="_checkbox{{ $loop->iteration }}" class="form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" checked/>
+							<label for="_checkbox{{ $student->id }}" class="flex gap-3 items-center mt-2">
+								<input type="checkbox" id="_checkbox{{ $student->id }}" class="_checkbox form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" checked/>
 								Is Attended
 							</label>
-							<button type="button" class="bg-red text-white rounded-xl hover:bg-slate-600 py-2 px-4" onclick="return confirm('Are you sure want to remove this student from the new attendance report?');"><i class="bi bi-trash3"></i></button>
+							<button type="button" class="bg-red text-white rounded-xl hover:bg-slate-600 py-2 px-4 remove-student-btn" onclick="return confirm('Are you sure want to remove this student from the new attendance report?');" data-sid="{{ $student->id }}"><i class="bi bi-trash3"></i></button>
 						</div>
 
 						<!-- Nth Session -->
 						<div class="flex flex-col w-full mt-4">
-							<x-label for="_session{{ $loop->iteration }}">N-th Session</x-label>
-							<x-input class="_session" type="text" id="_session{{ $loop->iteration }}" value="1"/>
+							<x-label for="_session{{ $student->id }}">N-th Session</x-label>
+							<x-input class="_session" type="text" id="_session{{ $student->id }}" value="1"/>
 							<p class="text-red font-bold mt-2 error-session hidden"><i class="bi bi-exclamation-circle"></i> Please input a valid value.</p>
 						</div>
 
 						<!-- Activity (Present) -->
 						<div class="flex gap-5 mt-4 w-full container-activity-present">
-							<div class="flex flex-col w-1/2 container_select2">
-								<x-label for="_activity{{ $loop->iteration }}">Activity</x-label>
-								<x-select id="_activity{{ $loop->iteration }}" class="select2 w-full _activity">
+							<div class="flex flex-col w-1/2 container-select2">
+								<x-label for="_activity{{ $student->id }}">Activity</x-label>
+								<x-select id="_activity{{ $student->id }}" class="select-2 w-full _activity">
 									@foreach($course->topics as $topic)
 										@foreach($topic->activities as $activity)
 											<option value="{{ $activity }}">{{ $activity->title }}</option>
@@ -91,8 +92,8 @@
 							</div>
 
 							<div class="flex flex-col w-1/2">
-								<x-label for="_learning_status{{ $loop->iteration }}">Learning Status</x-label>
-								<x-select type="text" id="_learning_status{{ $loop->iteration }}" class="w-full _learning_status" value="1">
+								<x-label for="_learning_status{{ $student->id }}">Learning Status</x-label>
+								<x-select id="_learning_status{{ $student->id }}" class="w-full _learning_status">
 									<option value="Done">Done</option>
 									<option value="On Progress">On Progress</option>
 								</x-select>
@@ -100,7 +101,7 @@
 						</div>
 
 						<!-- Activity (Absent) -->
-						<div class="flex gap-5 mt-4 w-full container-activity-absent">
+						<div class="hidden gap-5 mt-4 w-full container-activity-absent">
 							<div class="flex flex-col w-1/2">
 								<x-label>Activity</x-label>
 								<x-input class="w-full _activity_absent" value="Absent" disabled/>
@@ -114,8 +115,8 @@
 
 						<!-- Details -->
 						<div class="flex flex-col w-full mt-4">
-							<x-label for="_details{{ $loop->iteration }}">Details</x-label>
-							<x-textarea class="_details" rows="4" type="text" id="_details{{ $loop->iteration }}" placeholder="Enter attendance details..."></x-textarea>
+							<x-label for="_details{{ $student->id }}">Details</x-label>
+							<x-textarea class="_details" rows="4" type="text" id="_details{{ $student->id }}" placeholder="Enter attendance details..."></x-textarea>
 							<p class="text-red font-bold mt-2 error-details hidden"><i class="bi bi-exclamation-circle"></i> Please input the attendance details for this session.</p>
 						</div>
 
@@ -141,13 +142,14 @@
 						</div>
 					</div>
 				</div>
+				<p class="text-red font-bold error-card hidden"><i class="bi bi-exclamation-circle"></i> Please input minimum 1 attendance data for this student!</p>
 			@endforeach
 
-			<div class="flex items-stretch gap-2 justify-end w-full mt-10 mb-3">
+			<div class="flex items-stretch gap-2 justify-end w-full mt-10 mb-3" id="button-area">
 				<x-cancel-button class="w-full md:w-1/6">
 					Cancel
 				</x-cancel-button>
-				<x-button class=" w-full md:w-1/6">
+				<x-button type="button" id="submit-btn" class="w-full md:w-1/6">
 					{{ __('Submit') }}
 				</x-button>
 			</div>
@@ -155,8 +157,10 @@
 	</x-section-container>
 
 	<script>
+		const baseUrl = "{{ url('/') }}";
 		const allStudents = @json($allStudents);
 		let exclude_dropdown = @json($exclude_from_dropdown).map(Number);
+		const course = @json($course);
 
 		function refreshAddStudent(){
 			$("#student_add").html("");
@@ -172,94 +176,231 @@
 			}
 		}
 
-		refreshAddStudent();
+		function reinitializeselect2(){
+			// select-2 initialization
+			$('.select-2').select2({
+				allowClear: false
+			});
 
-		$('#add_student').on('click', function(){
-			console.log(JSON.parse($("#student_add").val()));
-		});
+			// Apply resize observer to each container with class 'container-select2'
+			$('.container-select2').each(function () {
+				const container = this;
+				const resizeObserver = new ResizeObserver(() => {
+					$(container).find('.select-2').each(function () {
+						$(this).select2('destroy').select2({
+							allowClear: false
+						});
+					});
+				});
 
-		$('.add-data-btn').on('click', function(){
-			const currCard = $(this).closest('.attendance-detail-accordion-area');
-			const _isAttended = currCard.find('._checkbox').is(':checked')? 'on' : 'off';
-			const _nthSession = currCard.find('._session').val();
-			const _activity = currCard.find('._activity').val();
-			const _learning_status = currCard.find('._learning_status').val();
-			const _details = currCard.find('._details').val();
+				resizeObserver.observe(container);
+			});
+		}
 
-			let input_error = false;
+		$(document).ready(() => {
+			refreshAddStudent();
 
-			currCard.find('.error-session').addClass('hidden');
-			currCard.find('._session').removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0');
-			currCard.find('.error-details').addClass('hidden');
-			currCard.find('._details').removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0');
+			$(document).on('click', '.remove-student-btn', function(){
+				const nCard = $('.student-card').length;
+				if(nCard == 1){
+					alert('Cannot delete the card since the attendance report needs minimum 1 student to be reported!');
 
-			if(!_nthSession || _nthSession < 1){
-				currCard.find('.error-session').removeClass('hidden');
-				currCard.find('._session').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
+					return;
+				}
 
-				input_error = true;
-			}
+				const delId = $(this).data('sid');
 
-			if(!_details || _details == ''){
-				currCard.find('.error-details').removeClass('hidden');
-				currCard.find('._details').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
+				$(this).closest('.student-card').fadeOut(500, function(){
+					$(this).remove();
+					exclude_dropdown = exclude_dropdown.filter(item => item !== delId);
 
-				input_error = true;
-			}
+					refreshAddStudent();
+				});
+			});
 
-			if(input_error){
-				return;
-			}
+			$(document).on('click', '.add-data-btn', function(){
+				const currCard = $(this).closest('.attendance-detail-accordion-area');
+				const _isAttended = currCard.find('._checkbox').is(':checked')? 'on' : 'off';
+				const _nthSession = currCard.find('._session').val();
+				const _activity = currCard.find('._activity').val();
+				const _learning_status = currCard.find('._learning_status').val();
+				const _details = currCard.find('._details').val();
 
-			let atdIcon = (_isAttended == 'on')? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`;
-			const delRowBtn = $('<button>').attr('type', 'button').addClass('bg-red text-white rounded-xl hover:bg-slate-600 py-2 px-4').html('<i class="bi bi-trash3"></i>');
+				let input_error = false;
 
-			const newRow = $('<tr>')
-				.append(
-					$('<td>').addClass('py-2 px-4').text(_nthSession)
-				).append(
-					$('<td>').addClass('py-2 px-4').html(atdIcon)
-				).append(
-					$('<td>').addClass('py-2 px-4').text(JSON.parse(_activity).title)
-				).append(
-					$('<td>').addClass('py-2 px-4').text(_learning_status)
-				).append(
-					$('<td>').addClass('py-2 px-4').text(_details)
-				).append(
-					$('<td>').addClass('py-2 px-4').html(delRowBtn)
-				);
+				currCard.find('.error-session').addClass('hidden');
+				currCard.find('._session').removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0');
+				currCard.find('.error-details').addClass('hidden');
+				currCard.find('._details').removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0');
 
-			const student = $(this).data('student');
-			const hidIsAttend = $('<input>').attr({'type': 'hidden', 'name': `is_attend[${student.id}][]`, 'value': _isAttended});
-			const hidNthSession = $('<input>').attr({'type': 'hidden', 'name': `nth_session[${student.id}][]`, 'value': _nthSession});
-			const hidActivity = $('<input>').attr({'type': 'hidden', 'name': `activity[${student.id}][]`, 'value': JSON.parse(_activity).title});
-			const hidLearningStatus = $('<input>').attr({'type': 'hidden', 'name': `learning_status[${student.id}][]`, 'value': _learning_status});
-			const hidDetails = $('<input>').attr({'type': 'hidden', 'name': `details[${student.id}][]`, 'value': _details});
+				if(!_nthSession || _nthSession < 1){
+					currCard.find('.error-session').removeClass('hidden');
+					currCard.find('._session').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
 
-			delRowBtn.on('click', () => {
-				if(confirm('Are you sure want to remove this item?')){
-					newRow.remove();
+					input_error = true;
+				}
 
-					hidIsAttend.remove();
-					hidNthSession.remove();
-					hidActivity.remove();
-					hidLearningStatus.remove();
-					hidDetails.remove();
+				if(!_details || _details == ''){
+					currCard.find('.error-details').removeClass('hidden');
+					currCard.find('._details').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
+
+					input_error = true;
+				}
+
+				if(input_error){
+					return;
+				}
+
+				let atdIcon = (_isAttended == 'on')? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`;
+				const delRowBtn = $('<button>').attr('type', 'button').addClass('bg-red text-white rounded-xl hover:bg-slate-600 py-2 px-4').html('<i class="bi bi-trash3"></i>');
+
+				const newRow = $('<tr>')
+					.append(
+						$('<td>').addClass('py-2 px-4').text(_nthSession)
+					).append(
+						$('<td>').addClass('py-2 px-4').html(atdIcon)
+					).append(
+						$('<td>').addClass('py-2 px-4').text(JSON.parse(_activity).title)
+					).append(
+						$('<td>').addClass('py-2 px-4').text(_learning_status)
+					).append(
+						$('<td>').addClass('py-2 px-4').text(_details)
+					).append(
+						$('<td>').addClass('py-2 px-4').html(delRowBtn)
+					);
+
+				const student = $(this).data('student');
+				const hidIsAttend = $('<input>').attr({'type': 'hidden', 'name': `is_attend[${student.id}][]`, 'value': _isAttended});
+				const hidNthSession = $('<input>').attr({'type': 'hidden', 'name': `nth_session[${student.id}][]`, 'value': _nthSession});
+				const hidActivity = $('<input>').attr({'type': 'hidden', 'name': `activity[${student.id}][]`, 'value': JSON.parse(_activity).title});
+				const hidLearningStatus = $('<input>').attr({'type': 'hidden', 'name': `learning_status[${student.id}][]`, 'value': _learning_status});
+				const hidDetails = $('<input>').attr({'type': 'hidden', 'name': `details[${student.id}][]`, 'value': _details});
+
+				delRowBtn.on('click', () => {
+					if(confirm('Are you sure want to remove this item?')){
+						newRow.remove();
+
+						hidIsAttend.remove();
+						hidNthSession.remove();
+						hidActivity.remove();
+						hidLearningStatus.remove();
+						hidDetails.remove();
+					}
+				});
+
+				currCard.find('.session-details-tbody').append(newRow);
+				currCard.append(hidIsAttend).append(hidNthSession).append(hidActivity).append(hidLearningStatus).append(hidDetails);
+			});
+
+			$(document).on('change', '.form-checkbox', function(){
+				const currCard = $(this).closest('.attendance-detail-accordion-area');
+
+				if($(this).is(':checked')){
+					currCard.find('.container-activity-present').removeClass('hidden').addClass('flex');
+					currCard.find('.container-activity-absent').removeClass('flex').addClass('hidden');
+				}
+				else {
+					currCard.find('.container-activity-absent').removeClass('hidden').addClass('flex');
+					currCard.find('.container-activity-present').removeClass('flex').addClass('hidden');
 				}
 			});
 
-			currCard.find('.session-details-tbody').append(newRow);
-			currCard.append(hidIsAttend).append(hidNthSession).append(hidActivity).append(hidLearningStatus).append(hidDetails);
-		});
+			$(document).on('click', '.attendance-detail-accordion-btn', function(){
+				if($(this).parent().find('.attendance-detail-accordion-area').is(':visible')){
+					$(this).find('.accordion-icon').html('<i class="bi bi-chevron-down text-slate-600"></i>');
+				}
+				else {
+					$(this).find('.accordion-icon').html('<i class="bi bi-chevron-up text-slate-600"></i>');
+				}
+				$(this).parent().find('.attendance-detail-accordion-area').slideToggle();
+			});
 
-		$('.attendance-detail-accordion-btn').on('click', function(){
-			if($(this).parent().find('.attendance-detail-accordion-area').is(':visible')){
-				$(this).find('.accordion-icon').html('<i class="bi bi-chevron-down text-slate-600"></i>');
-			}
-			else {
-				$(this).find('.accordion-icon').html('<i class="bi bi-chevron-up text-slate-600"></i>');
-			}
-			$(this).parent().find('.attendance-detail-accordion-area').slideToggle();
+			$('#add_student').on('click', function(){
+				const student = JSON.parse($("#student_add").val());
+				const blankProfpic = "{{ asset('img/tempblankprofpic.png') }}";
+
+				const newStudentCard = $('.student-card').first().clone();
+				const newSelect = $('<select>').addClass('border-slate-400 focus:border-slate-600 focus:ring-0 rounded-2xl shadow-sm focus:outline-none py-2 px-4 cursor-pointer disabled:cursor-not-allowed select-2 w-full _activity').css('border-width', '3px').attr({'id': `_activity${student.id}`});
+				course.topics.forEach(topic => {
+					topic.activities.forEach(activity => {
+						newSelect.append($('<option>').attr('value', JSON.stringify(activity)).text(activity.title));
+					});
+				});
+
+				newStudentCard.find('input[type="hidden"]').remove();
+
+				newStudentCard.find('.card_student_name').text(student.full_name);
+				newStudentCard.find('.card_profpic').attr('src', ((student.details.profpic !== null)? `${baseUrl}/storage/${student.details.profpic}` : blankProfpic)).css('border-width', ((student.details.profpic !== null)? '3px' : '0'));
+
+				newStudentCard.find('._checkbox').attr('id', `_checkbox${student.id}`).prop('checked', true);
+				newStudentCard.find('._checkbox').closest('label').attr('for', `_checkbox${student.id}`);
+
+				newStudentCard.find('._session').attr('id', `_session${student.id}`).val(1);
+				newStudentCard.find('._session').prev().attr('for', `_session${student.id}`);
+
+				newStudentCard.find('.container-select2').empty();
+				newStudentCard.find('.container-select2').append($('<label>').attr('for', `_activity${student.id}`).text('Activity')).append(newSelect);
+
+				newStudentCard.find('._learning_status').attr('id', `_learning_status${student.id}`).val('Done');
+				newStudentCard.find('._learning_status').prev().attr('for', `_learning_status${student.id}`);
+
+				newStudentCard.find('._details').attr('id', `_details${student.id}`).val('');
+				newStudentCard.find('._details').prev().attr('for', `_details${student.id}`);
+
+				newStudentCard.find('.session-details-tbody').html('');
+				newStudentCard.find('.add-data-btn').data('student', student);
+
+				newStudentCard.insertBefore('#button-area');
+
+				const cardError = $('<p>').addClass('text-red font-bold error-card hidden').html('<i class="bi bi-exclamation-circle"></i> Please input minimum 1 attendance data for this student!');
+
+				cardError.insertBefore('#button-area');
+
+				exclude_dropdown.push(student.id);
+
+				reinitializeselect2();
+				refreshAddStudent();
+			});
+
+			$('#todaybtn').on('click', function(){
+				const currentDate = new Date();
+				const year = currentDate.getFullYear();
+				const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+				const day = String(currentDate.getDate()).padStart(2, '0');
+				$('#attendance_date').val(`${year}-${month}-${day}`);
+			});
+
+			$('#submit-btn').on('click', function(){
+				const nCard = $('.student-card').length;
+				if(nCard == 0){
+					alert('Cannot submit empty data!');
+					return;
+				}
+
+				$('.student-card').each(function(){
+					if($(this).find('input[type="hidden"]').length == 0){
+						$(this).addClass('border-red');
+						$(this).next().removeClass('hidden');
+					}
+					else {
+						$(this).removeClass('border-red');
+						$(this).next().addClass('hidden');
+					}
+				});
+
+				$('#error-date').addClass('hidden');
+				$('#attendance_date').removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0');
+
+
+				if(!$('#attendance_date').val()){
+					$('#error-date').removeClass('hidden');
+					$('#attendance_date').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
+
+					return;
+				}
+
+				$('form').submit();
+			});
 		});
 	</script>
 @endsection

@@ -17,6 +17,7 @@
 					<thead>
 						<th class="py-3 px-4 border-b-2 border-slate-400">No</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Student</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Session</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Attended</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">In Class Progress</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Notes</th>
@@ -145,9 +146,10 @@
 					for(let sa of student_attendances){
 						const col1 = $("<td>").addClass("py-2 px-4 text-center").text(i + 1);
 						const col2 = $("<td>").addClass("py-2 px-4").text(sa.student.full_name);
-						const col3 = $("<td>").addClass("py-2 px-4").html(sa.is_attend == 1 ? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`);
-						const col4 = $("<td>").addClass("py-2 px-4").text(`${sa.activity_progress ? sa.activity_progress : 'N/A'} [${sa.learning_status ? sa.learning_status : 'N/A'}]`);
-						const col5 = $("<td>").addClass("py-2 px-4").text(sa.attendance_detail);
+						const col3 = $("<td>").addClass("py-2 px-4").text(sa.nth_session);
+						const col4 = $("<td>").addClass("py-2 px-4").html(sa.is_attend == 1 ? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`);
+						const col5 = $("<td>").addClass("py-2 px-4").text(`${sa.activity_progress ? sa.activity_progress : 'N/A'} [${sa.learning_status ? sa.learning_status : 'N/A'}]`);
+						const col6 = $("<td>").addClass("py-2 px-4").text(sa.attendance_detail);
 
 						let rowBG;
 						if(i % 2 == 0){
@@ -158,7 +160,7 @@
 						}
 
 						$("#attendance-details-tbody").append(
-							$("<tr>").css("background-color", rowBG).append(col1).append(col2).append(col3).append(col4).append(col5)
+							$("<tr>").css("background-color", rowBG).append(col1).append(col2).append(col3).append(col4).append(col5).append(col6)
 						);
 						i++;
 					}

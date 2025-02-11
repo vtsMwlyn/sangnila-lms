@@ -14,6 +14,7 @@ use App\Models\SelfAttendance;
 use App\Models\StudentAttendance;
 use Carbon\Carbon;
 use Google\Service\Classroom\Student;
+use Google\Service\CloudTasks\Attempt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -93,32 +94,6 @@ class AttendanceController extends Controller {
 		$students = User::whereIn('id', $selected_student_ids)->with('details')->get();
 		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
 
-		// Mechanism to remove student's who reached his/her maximum session and haven't paid yet (if agreed to be implemented)
-		// $studentsToRemove = [];
-
-		// foreach($course_students as $cs){
-		// 	$sa = StudentAttendance::where("student_id", $cs->student_id)->get();
-		// 	if($cs->is_imported){
-		// 		$count = ImportedStudent::where("student_id", $cs->student_id)->where("course_id", $course_id)->first()->last_attendance_count;
-		// 	} else {
-		// 		$count = 0;
-		// 	}
-
-		// 	foreach($sa as $atd){
-		// 		if($atd->attendance->course_id == $course_id && $atd->is_attend == 1){
-		// 			$count++;
-		// 		}
-		// 	}
-
-		// 	if($cs->max_course_session == $count){
-		// 		array_push($studentsToRemove, $cs->student->id);
-		// 	}
-		// }
-
-		// $filteredUsers = $course_students->reject(function ($courseStudent) use ($studentsToRemove) {
-		// 	return in_array($courseStudent->student_id, $studentsToRemove);
-		// });
-
 		$allStudents = User::where("role_id", 3)->with('details')->get();
 
 		return view("roles.teacher.attendance.upload", [
@@ -132,84 +107,40 @@ class AttendanceController extends Controller {
 
 	// Insert new attendance data into database
 	public function store(Request $request, $course_id) {
-		return $request;
-		$validator = Validator::make($request->all(), [
-			"attendance_date" => "required",
-			"attendance_detail.*" => "required",
+		$request->validate([
+			'attendance_date' => 'required|date',
+			'is_attend.*' => 'required',
+			'nth_session.*' => 'required',
+			'activity.*' => 'required',
+			'learning_status.*' => 'required',
+			'details.*' => 'required',
 		]);
-
-		// Collect initial validation errors into the $errors array
-		$errors = [];
-		$validatedData = [];
-
-		if ($validator->fails()) {
-			$errors = $validator->errors()->toArray(); // Collect errors from the initial validation
-		}
-
-		$course = Course::findOrFail($course_id);
-		$teacher = Auth::user();
-		// $identifier = $course->id . "_" . $teacher->id . "/" . round(microtime(true) * 1000);
-
-		foreach($request->students as $i => $student_id){
-			$isAttend = ($request["checkbox_value"][$i] == "on")? 1 : 0;
-
-			// Validate conditional fields based on attendance status
-			$attendanceData = [
-				'attendance_detail' => $request->input("attendance_detail.$i"),
-				'activity_progress' => $isAttend ? $request->input("activity_progress.$i") : null,
-				'learning_status' => $isAttend ? $request->input("learning_status.$i") : null,
-				'other_activity' => $isAttend ? $request->input("other_activity.$i") : null,
-				'attended' => $isAttend,
-			];
-
-			// If activity_progress is filled, ensure learning_status is provided
-			if ($isAttend == 1 && $attendanceData['activity_progress'] && !$attendanceData['learning_status']) {
-				$errors["learning_status.$i"] = "Learning status is required if activity progress is provided.";
-			}
-			else if ($isAttend == 1 && !$attendanceData['activity_progress'] && $attendanceData['learning_status']) {
-				$errors["activity_progress.$i"] = "Activity progress is required if learning status is provided.";
-			}
-
-			if($isAttend == 1 && $attendanceData['activity_progress'] == "other" && !$attendanceData['other_activity']){
-				$errors["other_activity.$i"] = "Please specified the activity.";
-			}
-
-			// Collect valid data for the second loop if no errors
-			if (empty($errors)) {
-				$validatedData[] = [
-					"student_id" => $student_id,
-					"attendance_data" => $attendanceData
-				];
-			}
-		}
-
-		// If errors exist (from either the initial validation or the loop), return them
-		if (!empty($errors)) {
-			return back()->withErrors($errors)->withInput();
-		}
 
 		try {
 			DB::beginTransaction();
 
+			$course = Course::findOrFail($course_id);
+
 			$newAttendance = Attendance::create([
-				"uploader_id" => $teacher->id,
-				"course_id" => $course->id,
-				"attendance_date" => $request["attendance_date"],
-				// "attendance_identifier" => $identifier
+				'attendance_date' => $request->attendance_date,
+				'course_id' => $course->id,
+				'uploader_id' => Auth::user()->id,
 			]);
 
-			 // Create StudentAttendance records
-			foreach($validatedData as $data) {
-				$student = User::findOrFail($data['student_id']);
-				StudentAttendance::create([
-					"student_id" => $student->id,
-					"attendance_id" => $newAttendance->id,
-					"is_attend" => $data['attendance_data']['attended'],
-					"attendance_detail" => $data['attendance_data']['attendance_detail'],
-					"activity_progress" => ($data['attendance_data']['activity_progress'] == 'other') ? $data['attendance_data']['other_activity'] : $data['attendance_data']['activity_progress'],
-					"is_custom" => ($data['attendance_data']['activity_progress'] == 'other') ? 1 : 0,
-					"learning_status" => $data['attendance_data']['learning_status']
-				]);
+			foreach($request->is_attend as $studentId => $reqIsAttend){
+				$student = User::findOrFail($studentId);
+
+				foreach($reqIsAttend as $i => $isAttend){
+					StudentAttendance::create([
+						'attendance_id' => $newAttendance->id,
+						'student_id' => $student->id,
+						'is_attend' => $isAttend == 'on'? 1 : 0,
+						'nth_session' => $request->nth_session[$studentId][$i],
+						'activity_progress' => $request->activity[$studentId][$i],
+						'learning_status' => $request->learning_status[$studentId][$i],
+						'attendance_detail' => $request->details[$studentId][$i],
+					]);
+				}
 			}
 
 			DB::commit();

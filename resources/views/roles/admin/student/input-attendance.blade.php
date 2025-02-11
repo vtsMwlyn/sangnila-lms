@@ -64,9 +64,9 @@
 						</div>
 
 						<div class="w-full flex gap-3 mt-3 attendance-detail-fields">
-							<div class="w-full md:w-1/2 container_select2">
+							<div class="w-full md:w-1/2 container-select2">
 								<x-label class="mb-1">Activity</x-label>
-								<x-select name="_activity_progress" id="_activity_progress" class="w-full select2">
+								<x-select name="_activity_progress" id="_activity_progress" class="w-full select-2">
 									<option disabled selected>Pick a course first</option>
 								</x-select>
 							</div>

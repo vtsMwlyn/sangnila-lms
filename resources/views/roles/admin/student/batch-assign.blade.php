@@ -27,9 +27,9 @@
 				</div>
 				<div id="form-area">
 					<div class="flex flex-col md:flex-row gap-3">
-						<div class="mt-3 w-full md:w-1/3 select2_container" id="inpStudentField">
+						<div class="mt-3 w-full md:w-1/3 select-2_container" id="inpStudentField">
 							<x-label class="mb-1">{{ __("Student Name") }}</x-label>
-							<x-select name="student_name" id="student_name" class="w-full select2" required>
+							<x-select name="student_name" id="student_name" class="w-full select-2" required>
 								<option disabled selected>Select Student</option>
 							</x-select>
 							<p class="text-red-700 font-bold mt-1" id="errStudent"><i class="bi bi-exclamation-circle"></i> This field is required.</p>

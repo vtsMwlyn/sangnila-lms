@@ -14,6 +14,8 @@ return new class extends Migration
 			$table->unsignedBigInteger("student_id");
 			$table->unsignedBigInteger("attendance_id");
 
+			$table->unsignedInteger('nth_session');
+
 			$table->unsignedInteger("is_attend");
 			$table->longText('attendance_detail');
 			$table->longText("activity_progress")->nullable();

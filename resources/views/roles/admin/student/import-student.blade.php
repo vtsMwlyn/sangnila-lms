@@ -155,9 +155,9 @@
 					</div>
 
 					<!-- Student's last activity unlocked -->
-					<div class="w-full mt-3 select2_container" id="container_last_activity_unlocked">
+					<div class="w-full mt-3 select-2_container" id="container_last_activity_unlocked">
 						<x-label for="last_activity_unlocked" class="mb-1" :value="__('Last Activity Unlock')"/>
-						<x-select name="last_activity_unlocked" id="last_activity_unlocked" class="mt-1 w-full select2">
+						<x-select name="last_activity_unlocked" id="last_activity_unlocked" class="mt-1 w-full select-2">
 						</x-select>
 						<p class="text-red-700 font-bold mt-1" style="display: none" id="err_last_activity_unlocked"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 					</div>

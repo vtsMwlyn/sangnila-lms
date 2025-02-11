@@ -34,8 +34,8 @@
 		<!-- Tailwind CDN -->
 		<script src="https://cdn.tailwindcss.com"></script>
 
-		<!-- Include Select2 CSS -->
-		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+		<!-- Include select2 CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 
 		<!-- Swiper.js CDN Links -->
 		<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
@@ -48,8 +48,8 @@
 		<!-- Include jQuery  -->
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-		<!-- Include Select2 JavaScript -->
-		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+		<!-- Include select2 JavaScript -->
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
 	</head>
 
