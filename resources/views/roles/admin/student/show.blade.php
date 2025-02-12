@@ -125,6 +125,7 @@
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Time</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Details</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Uploader</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Action</th>
 					</thead>
 					<tbody id="attendance-information-tbody">
 					</tbody>
@@ -174,6 +175,8 @@
 			<x-badge-success badge_text="{{ session('successUpdateMaxSession') }}"></x-badge-success>
 		@elseif(session()->has("successInputAttendance"))
 			<x-badge-success badge_text="{{ session('successInputAttendance') }}"></x-badge-success>
+		@elseif(session()->has("successDeleteStudentAttendance"))
+			<x-badge-warning badge_text="{{ session('successDeleteStudentAttendance') }}"></x-badge-warning>
 		@endif
 
 		@php
@@ -349,7 +352,7 @@
 							<td class="py-2 px-4 w-1/3">
 								<div class="flex items-center justify-between w-2/3">
 									{{ $current_progress[$i] }}/{{ $full_progress[$i] }} done
-									<x-button type="button" class="attendance-information-btn" data-std_attendances="{{ json_encode($attendance_data[$ec->id]) }}">
+									<x-button type="button" class="attendance-information-btn" data-student="{{ $student->id }}" data-std_attendances="{{ json_encode($attendance_data[$ec->id]) }}">
 										<i class="bi bi-eye"></i>
 									</x-button>
 								</div>
@@ -376,6 +379,7 @@
 	<script>
 		const allCoursesWithTeachers = @json(App\Models\Course::where('status', 'active')->with('teachers')->get());
 		const alreadyEnrolled = @json($student->enrolled_courses);
+		const baseUrl = '{{ url('/') }}';
 
 		function formatDate(dateString) {
 			const date = new Date(dateString);
@@ -522,8 +526,22 @@
 
 					const colSession = $("<td>").addClass("px-4 py-2").text(satd.nth_session);
 					const colLearningTime = $("<td>").addClass("px-4 py-2").text((satd.is_attend == 1)? `${satd.start_time.slice(0, 5)}-${satd.end_time.slice(0, 5)}` : 'Absent');
-					const colDetails = $("<td>").addClass("px-4 py-2").text(satd.attendance_detail);
+					const colDetails = $("<td>").addClass("px-4 py-2").html(`${satd.activity_progress} [${satd.learning_status}]<br><br>${satd.attendance_detail}`);
 					const colUploader = $("<td>").addClass("px-4 py-2").text(satd.attendance.posted_by.full_name);
+					const colAction = $('<td>').addClass('px-4 py-2').append(
+						$('<div>').addClass('flex gap-2 w-full').append(
+							$('<a>').addClass('text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25').css({'box-shadow': '0 1px 2px rgba(0, 0, 0, 0.3)', 'background': 'linear-gradient(90deg, #1EB8CD 0%, #354D9B 100%)'}).html('<i class="bi bi-pencil-square"></i>')
+						)
+						.append(
+							$('<form>').attr({'method': 'post', 'action': `${baseUrl}/admin/student/${satd.id}/delete`}).append(
+								$('<input>').attr('type', 'hidden').attr('name', '_token').val($('body').data('tjzlptoheng'))
+							).append(
+								$('<button>').attr('type', 'submit').addClass('text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25').css({'box-shadow': '0 1px 2px rgba(0, 0, 0, 0.3)', 'background': 'linear-gradient(90deg, #1EB8CD 0%, #354D9B 100%)'}).html('<i class="bi bi-trash3"></i>').on('click', () => {
+									return confirm('Are you sure want to delete this attendance data?');
+								})
+							)
+						)
+					);
 
 					let rowBg;
 					if(i % 2 == 0){
@@ -533,7 +551,7 @@
 						rowBG = "white";
 					}
 
-					$('#attendance-information-tbody').append($("<tr>").css("background-color", rowBG).append(colNo).append(colDate).append(colSession).append(colAttended).append(colLearningTime).append(colDetails).append(colUploader));
+					$('#attendance-information-tbody').append($("<tr>").css("background-color", rowBG).append(colNo).append(colDate).append(colSession).append(colAttended).append(colLearningTime).append(colDetails).append(colUploader).append(colAction));
 
 					i++;
 				}

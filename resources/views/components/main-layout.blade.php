@@ -53,7 +53,7 @@
 
 	</head>
 
-	<body class="min-h-screen flex flex-col items-center text-xs sm:text-sm">
+	<body class="min-h-screen flex flex-col items-center text-xs sm:text-sm" data-tjzlptoheng="{{ csrf_token() }}">
 		<!-- Other popups -->
 		@yield("popup")
 

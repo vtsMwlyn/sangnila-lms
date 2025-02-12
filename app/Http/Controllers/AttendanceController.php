@@ -405,4 +405,20 @@ class AttendanceController extends Controller {
 
 		return redirect(route('admin.student.show', $student->id))->with('successInputAttendance', 'Successfully inputed new attendance data for the student!');
 	}
+
+	public function admin_destroy_student_attendance($student_attendance_id){
+		$studentAttendance = StudentAttendance::findOrFail($student_attendance_id);
+
+		$attendance = $studentAttendance->attendance;
+
+		if($attendance->student_attendances->count() == 1){
+			$studentAttendance->delete();
+			$attendance->delete();
+		}
+		else {
+			$studentAttendance->delete();
+		}
+
+		return back()->with('successDeleteStudentAttendance', 'Successfully removed the attendance data!');
+	}
 }
