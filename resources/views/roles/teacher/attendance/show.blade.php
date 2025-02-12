@@ -47,6 +47,8 @@
 			<x-badge-success badge_text="{{ session('successEditAttendance') }}"></x-badge-success>
 		@elseif(session()->has("successCheckIn"))
 			<x-badge-success badge_text="{{ session('successCheckIn') }}"></x-badge-success>
+		@elseif(session()->has("courseHasNoTopicsAndActivities"))
+			<x-badge-danger badge_text="{!! session('courseHasNoTopicsAndActivities') !!}"></x-badge-danger>
 		@endif
 
 		<div class="mt-5 flex justify-between w-full">

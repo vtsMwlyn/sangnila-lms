@@ -50,6 +50,11 @@ class AttendanceController extends Controller {
 	// Pick students to include in new attendance report
 	public function select_students($course_id){
 		$course = Course::findOrFail($course_id);
+
+		if($course->topics->count() == 0){
+			return back()->with('courseHasNoTopicsAndActivities', 'Please fill the topics and activities for this course first! <a href="' . route('teacher.mycourse.show', $course->id) . '" class="font-extrabold underline hover:text-yellow-500">Go to course</a>');
+		}
+
 		$students = User::where("role_id", 3)->get();
 		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
 

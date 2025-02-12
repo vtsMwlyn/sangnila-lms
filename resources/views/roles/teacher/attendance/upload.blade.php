@@ -163,6 +163,9 @@
 									<th class="text-start py-3 px-4 border-b-2 border-slate-400">Action</th>
 								</thead>
 								<tbody class="session-details-tbody">
+									<tr class="bg-slate-100 empty-table-placeholder">
+										<td colspan="6" class="py-2 px-4 text-center">- No attendance data inputted for this student -</td>
+									</tr>
 								</tbody>
 							</table>
 						</div>
@@ -277,6 +280,10 @@
 
 				if(input_error){
 					return;
+				}
+
+				if(currCard.find('.session-details-tbody').find('.empty-table-placeholder').length > 0){
+					currCard.find('.session-details-tbody').empty();
 				}
 
 				let atdIcon = (_isAttended == 'on')? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`;
@@ -396,6 +403,11 @@
 				newStudentCard.find('._details').prev().attr('for', `_details${student.id}`);
 
 				newStudentCard.find('.session-details-tbody').html('');
+				newStudentCard.find('.session-details-tbody').append(
+					$('<tr>').addClass('bg-slate-100 empty-table-placeholder').append(
+						$('<td>').attr('colspan', '6').addClass('py-2 px-4 text-center').text('- No attendance data inputted for this student -')
+					)
+				)
 				newStudentCard.find('.add-data-btn').data('student', student);
 
 				newStudentCard.insertBefore('#button-area');
@@ -425,10 +437,13 @@
 					return;
 				}
 
+				let dataEmpty = false;
 				$('.student-card').each(function(){
 					if($(this).find('input[type="hidden"]').length == 0){
 						$(this).addClass('border-red');
 						$(this).next().removeClass('hidden');
+
+						dataEmpty = true;
 					}
 					else {
 						$(this).removeClass('border-red');
@@ -439,15 +454,20 @@
 				$('#error-date').addClass('hidden');
 				$('#attendance_date').removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0');
 
-
 				if(!$('#attendance_date').val()){
 					$('#error-date').removeClass('hidden');
 					$('#attendance_date').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
 
-					return;
+					dataEmpty = true;
 				}
 
-				$('form').submit();
+				if(dataEmpty){
+					return;
+				}
+				else {
+					$('form').submit();
+				}
+
 			});
 		});
 	</script>
