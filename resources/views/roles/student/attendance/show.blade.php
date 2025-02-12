@@ -33,10 +33,10 @@
 					<h2>Total Attendance</h2>
 					<h1 class="font-extrabold text-xl">{{ $n_attend }}</h1>
 				</div>
-				<div class="flex flex-col w-full md:w-1/5">
+				{{-- <div class="flex flex-col w-full md:w-1/5">
 					<h2>Minimal Attendance</h2>
 					<h1 class="font-extrabold text-xl">N/A</h1>
-				</div>
+				</div> --}}
 			</div>
 		</div>
 		<div class="w-full bg-slate-400" style="height: 2px;"></div>
@@ -45,9 +45,9 @@
 			<table class="w-full">
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Session</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Delivery</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Start Date</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">End Date</th>
+					{{-- <th class="text-start py-3 px-4 border-b-2 border-slate-400">Delivery</th> --}}
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Time</th>
 					<th class="text-center py-3 px-4 border-b-2 border-slate-400">Attend</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400" style="max-width: 300px;">Note</th>
 				</thead>
@@ -55,9 +55,9 @@
 					@forelse($attendances as $atd)
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
 							<td class="py-2 px-4">Session {{ $loop->iteration }}</td>
-							<td class="py-2 px-4">Onsite/Online</td>
+							{{-- <td class="py-2 px-4">Onsite/Online</td> --}}
 							<td class="py-2 px-4">{{ Carbon\Carbon::parse($atd->attendance->attendance_date)->format('d M Y') }}</td>
-							<td class="py-2 px-4">{{ Carbon\Carbon::parse($atd->attendance->attendance_date)->format('d M Y') }}</td>
+							<td class="py-2 px-4">{{ Carbon\Carbon::parse($atd->start_time)->format('H:i') }}-{{ Carbon\Carbon::parse($atd->end_time)->format('H:i') }}</td>
 							<td class="py-2 px-4">
 								<div class="w-full flex justify-center">
 									@if($atd->is_attend == 1)

@@ -358,13 +358,15 @@ class AttendanceController extends Controller {
 	// Retrieve data and store student attendance by admin
 	public function admin_store(Request $request, $student_id){
 		$request->validate([
-			'course_id' => 'required',
-			'teacher_id' => 'required',
-			'attendance_date' => 'required',
+			'course_id.*' => 'required',
+			'attendance_date.*' => 'required',
 			'is_attended.*' => 'required',
 			'activity_progress.*' => 'required',
+			'start_time.*' => 'required',
+			'end_time.*' => 'required',
 			'learning_status.*' => 'required',
 			'attendance_details.*' => 'required',
+			'session.*' => 'required',
 		]);
 
 		try {
@@ -376,12 +378,15 @@ class AttendanceController extends Controller {
 			foreach($request->is_attended as $i => $isAttended){
 				$newAttendance = Attendance::create([
 					'uploader_id' => Auth::user()->id,
-					'course_id' => $course->id,
+					'course_id' => $request->course_id[$i],
 					'attendance_date' => $request->attendance_date[$i],
 				]);
 
 				StudentAttendance::create([
 					'attendance_id' => $newAttendance->id,
+					'nth_session' => $request->session[$i],
+					'start_time' => $request->start_time[$i],
+					'end_time' => $request->end_time[$i],
 					'student_id' => $student->id,
 					'is_attend' => $isAttended,
 					'attendance_detail' => $request->attendance_details[$i],

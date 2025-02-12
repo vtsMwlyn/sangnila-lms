@@ -15,6 +15,8 @@ return new class extends Migration
 			$table->unsignedBigInteger("attendance_id");
 
 			$table->unsignedInteger('nth_session');
+			$table->time('start_time');
+			$table->time('end_time');
 
 			$table->unsignedInteger("is_attend");
 			$table->longText('attendance_detail');

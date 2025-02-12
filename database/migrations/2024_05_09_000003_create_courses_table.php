@@ -13,6 +13,7 @@ return new class extends Migration {
 			$table->text('course_description');
 			$table->enum('level', ['basic', 'intermediate', 'advanced']);
 			$table->unsignedInteger('format');
+			$table->enum('delivery_mode', ['onsite', 'online']);
 
 			$table->enum('status', ['active', 'disabled']);
 

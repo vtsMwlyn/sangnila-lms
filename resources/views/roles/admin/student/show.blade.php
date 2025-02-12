@@ -172,6 +172,8 @@
 			<x-badge-success badge_text="{{ session('successUpdateStudentData') }}"></x-badge-success>
 		@elseif(session()->has("successUpdateMaxSession"))
 			<x-badge-success badge_text="{{ session('successUpdateMaxSession') }}"></x-badge-success>
+		@elseif(session()->has("successInputAttendance"))
+			<x-badge-success badge_text="{{ session('successInputAttendance') }}"></x-badge-success>
 		@endif
 
 		@php
@@ -327,7 +329,7 @@
 		<div class="w-full bg-slate-400 mt-16" style="height: 2px;"></div>
 		<div class="w-full flex items-center justify-between">
 			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Attendance and Assignment Progress</h2>
-			<x-anchor-button href="{{ route('admin.student.input-attendance', $student->id) }}">Input Attendances Data</x-anchor-button>
+			<x-anchor-button href="{{ route('admin.student.input-attendance', $student->id) }}"><i class="bi bi-database-add"></i> Input Attendances Data</x-anchor-button>
 		</div>
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
@@ -345,28 +347,9 @@
 								{{ $ec->course_name }} - {{ ucwords($ec->level) }}
 							</td>
 							<td class="py-2 px-4 w-1/3">
-								@php
-									$sortedAndEagerLoadedAttendanceData = App\Models\StudentAttendance::where('student_id', $student->id)
-										->whereHas('attendance', function ($query) use ($ec) {
-											$query->where('course_id', $ec->id);
-										})
-										->join('attendances', 'student_attendances.attendance_id', '=', 'attendances.id')
-										->orderBy('attendances.attendance_date', 'desc') // Sort by attendance_date
-										->with([
-											'attendance' => function ($query) {
-												$query->select('id', 'attendance_date', 'uploader_id');
-											},
-											'attendance.posted_by' => function ($query) {
-												$query->select('id', 'full_name');
-											}
-										])
-										->select('student_attendances.*') // Ensure to select main table fields
-										->get()
-								@endphp
-
 								<div class="flex items-center justify-between w-2/3">
 									{{ $current_progress[$i] }}/{{ $full_progress[$i] }} done
-									<x-button type="button" class="attendance-information-btn" data-std_attendances="{{ $sortedAndEagerLoadedAttendanceData }}">
+									<x-button type="button" class="attendance-information-btn" data-std_attendances="{{ json_encode($attendance_data[$ec->id]) }}">
 										<i class="bi bi-eye"></i>
 									</x-button>
 								</div>
@@ -374,31 +357,7 @@
 							<td class="py-2 px-4 w-1/3">
 								<div class="flex items-center justify-between w-2/3">
 									{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done
-									<x-button type="button" class="assignment-information-btn" data-std_assignments="{{ App\Models\StudentAssignment::where('student_id', $student->id)
-										->whereHas('assignment', function ($query) use ($ec) {
-											$query->where('course_id', $ec->id)->select('id', 'title', 'desc');
-										})
-										->with([
-											'assignment' => function ($query) use ($student) {
-												$query->withCount([
-													'submissions as submissions_count' => function ($query) use ($student) {
-														$query->where('student_id', $student->id);
-													}
-												])->with([
-													'submissions' => function ($query) use ($student) {
-														$query->where('student_id', $student->id)
-															->latest('created_at')->select('id', 'assignment_id', 'created_at')
-															->limit(1); // Only get the latest submission
-													}
-												])->with([
-													'posted_by' => function ($query) {
-														$query->select('id', 'full_name');
-													}
-												]);
-											}
-										])
-										->get()
-									}}">
+									<x-button type="button" class="assignment-information-btn" data-std_assignments="{{ json_encode($assignment_data[$ec->id]) }}">
 										<i class="bi bi-eye"></i>
 									</x-button>
 								</div>
@@ -590,7 +549,7 @@
 
 				let i = 0;
 				for(let sasg of std_assignments){
-					console.log(sasg);
+					// console.log(sasg);
 					const colNo = $("<td>").addClass("px-4 py-2").text(i + 1);
 					const colAsgDate = $("<td>").addClass("px-4 py-2").text(sasg.assignment.title);
 					const colAsgDesc = $("<td>").addClass("px-4 py-2").text(sasg.assignment.desc);
@@ -598,7 +557,7 @@
 
 					let colStatus = $("<td>").addClass("px-4 py-2");
 					let	colLatestSubmission = $("<td>").addClass("px-4 py-2");
-					if(sasg.assignment.submissions_count > 0){
+					if(sasg.assignment.submissions.length > 0){
 						colStatus.html('<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">');
 						colLatestSubmission.text(formatDate(sasg.assignment.submissions[0].created_at));
 					} else {

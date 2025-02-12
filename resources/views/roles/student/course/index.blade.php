@@ -29,7 +29,7 @@
 						{{ ($teacher->details->gender == 1)? "Mr." : "Ms." }} {{ $teacher->full_name }}
 					</div>
 					<div class="flex gap-2 items-center">
-						<img src="{{ asset('img/clock.svg') }}" class="w-4 h-4" alt="icon">N/A
+						<img src="{{ asset('img/clock.svg') }}" class="w-4 h-4" alt="icon">{{ ucwords($course->delivery_mode) }} Class
 					</div>
 
 					<!-- Course progress -->

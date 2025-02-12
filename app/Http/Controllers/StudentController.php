@@ -131,9 +131,17 @@ class StudentController extends Controller {
 		//Counting assignments done
 		$count_assignment_all = [];
 		$count_assignment_col = [];
+		$assignment_all = [];
 
 		foreach($student->enrolled_courses as $crs){
-			$student_assignments = StudentAssignment::where("student_id", $student_id)->get();
+			$student_assignments = StudentAssignment::where("student_id", $student_id)
+				->with('assignment.posted_by', function($query){
+					return $query->select('id', 'full_name');
+				})
+				->with('assignment.submissions', function($query) use ($student_id){
+					return $query->select('id', 'student_id', 'assignment_id', 'created_at')->where('student_id', $student_id)->latest();
+				})
+				->get();
 
 			$student_assignments_in_the_course = [];
 			foreach($student_assignments as $asg){
@@ -154,13 +162,28 @@ class StudentController extends Controller {
 
 			array_push($count_assignment_all, count($student_assignments_in_the_course));
 			array_push($count_assignment_col, $n_asg_subm);
+
+			$assignment_all[$crs->id] = $student_assignments_in_the_course;
 		}
 
 		//Counting attended sessions
 		$count_curr_progress = [];
 		$count_full_progress = [];
+		$attendance_all = [];
 
-		$sa = StudentAttendance::where("student_id", $student->id)->get();
+		$sa = StudentAttendance::where('student_id', $student->id)
+		->join('attendances', 'student_attendances.attendance_id', '=', 'attendances.id')
+		->orderBy('attendances.attendance_date', 'asc') // Sort by attendance_date
+		->with([
+			'attendance' => function ($query) {
+				$query->select('id', 'attendance_date', 'uploader_id', 'course_id');
+			},
+			'attendance.posted_by' => function ($query) {
+				$query->select('id', 'full_name');
+			}
+		])
+		->select('student_attendances.*') // Ensure to select main table fields
+		->get();
 
 		foreach($student->enrolled_courses as $course){
 			// Number of attendances (separated for imported students and unimported students)
@@ -172,14 +195,21 @@ class StudentController extends Controller {
 				$count = 0;
 			}
 
+			$student_attendances_in_the_course = [];
 			foreach($sa as $atd){
-				if($atd->attendance->course_id == $course->id && $atd->is_attend == 1){
-					$count++;
+				if($atd->attendance->course_id == $course->id){
+					array_push($student_attendances_in_the_course, $atd);
+
+					if($atd->is_attend == 1){
+						$count++;
+					}
 				}
 			}
 
 			array_push($count_full_progress, $cs->max_course_session);
 			array_push($count_curr_progress, $count);
+
+			$attendance_all[$course->id] = $student_attendances_in_the_course;
 		}
 
 		//Return view with data
@@ -188,7 +218,9 @@ class StudentController extends Controller {
 			"full_progress" => $count_full_progress,
 			"current_progress" => $count_curr_progress,
 			"assignment_if_full" => $count_assignment_all,
-			"done_assignment" => $count_assignment_col
+			"done_assignment" => $count_assignment_col,
+			'assignment_data' => $assignment_all,
+			'attendance_data' => $attendance_all,
 		]);
 	}
 

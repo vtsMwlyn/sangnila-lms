@@ -214,7 +214,7 @@
 								</div>
 								<div class="flex flex-col">
 									<h3 class="text-xs">Delivery Mode</h3>
-									<h2>Onsite/Online</h2>
+									<h2>{{ ucwords($course->delivery_mode) }}</h2>
 								</div>
 							</div>
 						@endif
@@ -231,7 +231,7 @@
 	<script>
 		$(document).ready(() => {
 			const actprog = @json($activityProgresses);
-			console.log(actprog);
+			const deliveryMode = '{{ ucwords($course->delivery_mode) }}';
 
 			// Initialize Swiper
 			const swiper = new Swiper('.swiper', {
@@ -322,7 +322,7 @@
 											$("<h3>").addClass("text-xs").text("Delivery Mode")
 										)
 										.append(
-											$("<h2>").text("Onsite/Online")
+											$("<h2>").text(deliveryMode)
 										)
 								);
 

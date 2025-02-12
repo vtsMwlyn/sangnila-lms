@@ -34,10 +34,12 @@
 							<x-select name="_course_name" id="_course_name" class="w-full">
 								<option disabled selected>Pick a course</option>
 								@foreach ($student->enrolled_courses as $c)
-									<option value="{{ App\Models\CourseStudent::where('course_id', $c->id)->where('student_id', $student->id)->with(['teacher'])->first() }}">{{ $c->course_name }}</option>
+									<option value="{{ App\Models\CourseStudent::where('course_id', $c->id)->where('student_id', $student->id)->with(['teacher'])->with('course', function($query){
+										return $query->select('id', 'course_name');
+									})->first() }}">{{ $c->course_name }}</option>
 								@endforeach
 							</x-select>
-							<input type="hidden" name="course_id" id="course_id">
+							<p class="text-red font-bold mt-2 hidden" id="error-course"><i class="bi bi-exclamation-circle"></i> Please pick a course.</p>
 						</div>
 						<div class="mt-3 w-full md:w-1/2">
 							<x-label class="mb-1">Teacher</x-label>
@@ -50,29 +52,48 @@
 					<h1 class="font-bold text-lg text-blue mt-8">Attendance Data</h1>
 					<div class="flex flex-col w-full">
 						<div class="w-full flex gap-3 mt-3">
-							<div class="w-full md:w-1/2">
+							<div class="w-full md:w-1/3">
 								<x-label class="mb-1">Attendance Date</x-label>
 								<x-input type="date" name="_attendance_date" id="_attendance_date" class="w-full date-input" value="{{ Carbon\Carbon::today()->format('Y-m-d') }}"/>
 							</div>
-							<div class="w-full md:w-1/2">
+							<div class="w-full md:w-1/3">
 								<x-label class="mb-1">Attendance Status</x-label>
 								<x-select name="_is_attended" id="_is_attended" class="w-full">
 									<option value="1">Attended</option>
 									<option value="0">Absent</option>
 								</x-select>
 							</div>
+							<div class="flex flex-col w-full md:w-1/3">
+								<x-label class="mb-1" for="_session">N-th Session</x-label>
+								<x-input class="_session" type="text" id="_session" value="1"/>
+								<p class="text-red font-bold mt-2 error-session hidden"><i class="bi bi-exclamation-circle"></i> Please input the nth-session.</p>
+							</div>
+						</div>
+
+						<div class="flex gap-5 w-full mt-6 attendance-detail-fields">
+							<!-- Start Time -->
+							<div class="flex flex-col w-1/2">
+								<x-label for="_start_time">Start Time</x-label>
+								<x-input class="_start_time" type="time" id="_start_time" value="00:00"/>
+							</div>
+
+							<!-- End Time -->
+							<div class="flex flex-col w-1/2">
+								<x-label for="_end_time">End Time</x-label>
+								<x-input class="_end_time" type="time" id="_end_time" value="00:00"/>
+							</div>
 						</div>
 
 						<div class="w-full flex gap-3 mt-3 attendance-detail-fields">
 							<div class="w-full md:w-1/2 container-select2">
-								<x-label class="mb-1">Activity</x-label>
+								<x-label for="_activity_progress" class="mb-1">Activity</x-label>
 								<x-select name="_activity_progress" id="_activity_progress" class="w-full select-2">
 									<option disabled selected>Pick a course first</option>
 								</x-select>
 							</div>
 
 							<div class="w-full md:w-1/2">
-								<x-label class="mb-1">Learning Status</x-label>
+								<x-label for="_learning_status" class="mb-1">Learning Status</x-label>
 								<x-select name="_learning_status" id="_learning_status" class="w-full">
 									<option value="Done">Done</option>
 									<option value="On Progress">On Progress</option>
@@ -80,8 +101,8 @@
 							</div>
 						</div>
 
-						<div class="w-full mt-3 attendance-detail-fields">
-							<x-label class="mb-1">Details</x-label>
+						<div class="w-full mt-8 attendance-detail-fields">
+							<x-label for="_attendance_details" class="mb-1">Details</x-label>
 							<x-textarea rows="4" name="_attendance_details" id="_attendance_details" class="w-full" placeholder="Input details">N/A</x-textarea>
 						</div>
 					</div>
@@ -90,19 +111,17 @@
 						<x-button class=" w-1/2 md:w-1/6" type="button" id="addBtn">Add Data</x-button>
 					</div>
 				</div>
-				<div id="no-more-add-data" class="my-5" style="display: none;">
-					<p class="italic text-slate-500">- No more students can be added -</p>
-				</div>
 
-				<div class="flex">
+				<div class="flex mt-8">
 					<h1 class="font-bold text-lg text-blue">Data to Add</h1>
 				</div>
 				<div class="overflow-x-auto mt-2">
 					<table class="w-full">
 						<thead>
-							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date</th>
+							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Course</th>
+							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date & Time</th>
+							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Session</th>
 							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Attended</th>
-							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activity</th>
 							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Details</th>
 							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Action</th>
 						</thead>
@@ -157,48 +176,74 @@
 					});
 
 					$('#addBtn').on('click', function(){
-						if($('#tableBody').find('#empty-table-placeholder').length){
-							$('#empty-table-placeholder').remove();
+						const inpCourse = JSON.parse($('#_course_name').val());
+
+						$('#_course_name').addClass('border-slate-400 focus:border-slate-600 focus:ring-0').removeClass('border-red focus:border-red-700 focus:ring-0');
+						$('#error-course').addClass('hidden');
+
+						if(!inpCourse){
+							$('#_course_name').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
+							$('#error-course').removeClass('hidden');
+
+							$(window).scrollTop($('#_course_name').offset().top - 100);
+
+							return;
 						}
 
 						const inpDate = $('#_attendance_date').val();
+						const inpSession = $('#_session').val();
 						const inpIsAttended = $('#_is_attended').val();
-						let inpActivityProgress = $('#_activity_progress').val();
-						let inpLearningStatus = $('#_learning_status').val();
-						let inpAttendanceDetails = $('#_attendance_details').val();
+						const inpActivityProgress = $('#_activity_progress').val();
+						const inpLearningStatus = $('#_learning_status').val();
+						const inpAttendanceDetails = $('#_attendance_details').val();
+						let inpStartTime = $('#_start_time').val();
+						let inpEndTime = $('#_end_time').val();
 
 						if(inpIsAttended == 0){
-							inpActivityProgress = 'Absent';
-							inpLearningStatus = 'Absent';
-							inpAttendanceDetails = 'Absent';
+							inpStartTime = '00:00';
+							inpEndTime = '00:00';
+						}
+
+						if($('#tableBody').find('#empty-table-placeholder').length){
+							$('#empty-table-placeholder').remove();
 						}
 
 						const newRow = $('<tr>');
 						const removeBtn = $('<button>').html('<i class="bi bi-trash3"></i>').attr('type', 'button').addClass('text-center px-5 py-2 border border-transparent rounded-lg text-white bg-red hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 transition ease-in-out duration-150');
 
 						newRow.append(
-								$('<td>').addClass('py-2 px-4').text(inpDate)
+								$('<td>').addClass('py-2 px-4').text(inpCourse.course.course_name)
+							).append(
+								$('<td>').addClass('py-2 px-4').html(inpIsAttended == 0? `${inpDate}<br>Absent` : `${inpDate}<br>${inpStartTime}-${inpEndTime}`)
+							).append(
+								$('<td>').addClass('py-2 px-4').text(inpSession)
 							).append(
 								$('<td>').addClass('py-2 px-4').text(inpIsAttended)
 							).append(
-								$('<td>').addClass('py-2 px-4').text(inpIsAttended == 1? JSON.parse(inpActivityProgress).title : inpActivityProgress)
-							).append(
-								$('<td>').addClass('py-2 px-4').text(inpAttendanceDetails)
+								$('<td>').addClass('py-2 px-4').html(inpIsAttended == 1? `${JSON.parse(inpActivityProgress).title}<br>(${inpLearningStatus})<br>${inpAttendanceDetails}` : `Absent<br>${inpAttendanceDetails}`)
 							).append(
 								$('<td>').addClass('py-2 px-4').append(removeBtn)
 							);
 
+						const hidCourseId = $('<input>').attr({'type': 'hidden', 'name': 'course_id[]', 'value': inpCourse.course.id});
+						const hidSession = $('<input>').attr({'type': 'hidden', 'name': 'session[]', 'value': inpSession});
 						const hidDate = $('<input>').attr({'type': 'hidden', 'name': 'attendance_date[]', 'value': inpDate});
+						const hidStartTime = $('<input>').attr({'type': 'hidden', 'name': 'start_time[]', 'value': inpStartTime});
+						const hidEndTime = $('<input>').attr({'type': 'hidden', 'name': 'end_time[]', 'value': inpEndTime});
 						const hidIsAttended = $('<input>').attr({'type': 'hidden', 'name': 'is_attended[]', 'value': inpIsAttended});
-						const hidActivityProgress = $('<input>').attr({'type': 'hidden', 'name': 'activity_progress[]', 'value': inpIsAttended == 1? JSON.parse(inpActivityProgress).title : inpActivityProgress});
-						const hidLearningStatus = $('<input>').attr({'type': 'hidden', 'name': 'learning_status[]', 'value': inpLearningStatus});
+						const hidActivityProgress = $('<input>').attr({'type': 'hidden', 'name': 'activity_progress[]', 'value': inpIsAttended == 1? JSON.parse(inpActivityProgress).title : 'Absent'});
+						const hidLearningStatus = $('<input>').attr({'type': 'hidden', 'name': 'learning_status[]', 'value': inpIsAttended == 1? inpLearningStatus : 'Absent'});
 						const hidAttendanceDetails = $('<input>').attr({'type': 'hidden', 'name': 'attendance_details[]', 'value': inpAttendanceDetails});
 
-						$('form').append(hidDate).append(hidIsAttended).append(hidActivityProgress).append(hidLearningStatus).append(hidAttendanceDetails);
+						$('form').append(hidCourseId).append(hidSession).append(hidDate).append(hidStartTime).append(hidEndTime).append(hidIsAttended).append(hidActivityProgress).append(hidLearningStatus).append(hidAttendanceDetails);
 
 						removeBtn.click(() => {
 							if(confirm('Are you sure want to remove this student from the list?')){
+								hidCourseId.remove();
+								hidSession.remove();
 								hidDate.remove();
+								hidStartTime.remove();
+								hidEndTime.remove();
 								hidIsAttended.remove();
 								hidActivityProgress.remove();
 								hidLearningStatus.remove();
