@@ -39,7 +39,8 @@ class CourseController extends Controller {
 			"course_description" => "required|min:3",
 			"status" => "required",
 			"format" => "required",
-			"level" => "required"
+			"level" => "required",
+			'delivery_mode' => 'required'
 		]);
 
 		try {
@@ -75,7 +76,8 @@ class CourseController extends Controller {
 			"course_description" => "required|min:3",
 			"status" => "required",
 			"format" => "required",
-			"level" => "required"
+			"level" => "required",
+			'delivery_mode' => 'required'
 		]);
 
 		try {

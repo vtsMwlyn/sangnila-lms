@@ -181,6 +181,15 @@
 				</div>
 			</div>
 
+			<div class="w-full flex gap-x-4">
+				<div class="flex flex-col w-1/2">
+					<p>Delivery Mode</p>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ ucwords($course->delivery_mode) }}</div>
+				</div>
+
+				<div class="flex flex-col w-1/2"></div>
+			</div>
+
 			<div class="flex flex-col w-full">
 				<p>Course Description</p>
 				<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{!! nl2br($course->course_description) !!}</div>
@@ -241,7 +250,7 @@
 
 		<div class="mt-8 flex flex-wrap">
 			@forelse ($course->teachers as $index => $teacher)
-				<a href="{{ route('admin.teacher.show', $teacher->id) }}" class="w-1/6 mb-6">
+				<a href="{{ route('admin.teacher.show', $teacher->id) }}" class="w-1/6 mb-6 hover:text-cyan-500">
 					<div class="flex flex-col items-center">
 						@if($teacher->details->profpic)
 							<img src="{{ Storage::url("app/public/" . $teacher->details->profpic) }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;">
@@ -268,7 +277,7 @@
 
 		<div class="mt-8 flex flex-wrap">
 			@forelse ($course->students as $index => $student)
-				<a href="{{ route('admin.student.show', $student->id) }}" class="w-1/6 mb-6">
+				<a href="{{ route('admin.student.show', $student->id) }}" class="w-1/6 mb-6 hover:text-cyan-500">
 					<div class="flex flex-col items-center">
 						@if($student->details->profpic)
 							<img src="{{ Storage::url("app/public/" . $student->details->profpic) }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;">

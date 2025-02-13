@@ -65,6 +65,19 @@
 				</div>
 			</div>
 
+			<div class="w-full flex gap-x-4">
+				<div class="flex flex-col w-1/2">
+					<p>Delivery Mode</p>
+					<div class="flex flex-col w-full items-stretch">
+						<x-select name="delivery_mode" id="delivery_mode" class="w-full">
+							<option value="onsite" @if(old("delivery_mode", $course->delivery_mode) == "onsite") selected @endif>Onsite</option>
+							<option value="online" @if(old("delivery_mode", $course->delivery_mode) == "online") selected @endif>Online</option>
+						</x-select>
+					</div>
+				</div>
+				<div class="flex flex-col w-1/2"></div>
+			</div>
+
 			<div class="flex flex-col w-full">
 				<p>Course Description</p>
 				<div class="flex flex-col w-full items-stretch">

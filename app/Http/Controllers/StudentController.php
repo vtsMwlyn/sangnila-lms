@@ -48,7 +48,7 @@ class StudentController extends Controller {
 	// ===== ADMIN ===== //
 	// Showing list of all active students in Sangnila LMS
 	public function admin_index() {
-		$students = User::where("role_id", 3)->filter(request(["search", "course"]))->get();
+		$students = User::where("role_id", 3)->filter(request(["search", "course"]))->orderBy('full_name', 'asc')->get();
 
 		$max_attendances = [];
 		$current_attendances = [];

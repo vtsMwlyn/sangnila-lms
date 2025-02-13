@@ -30,7 +30,6 @@
 					<p>Status</p>
 					<div class="flex flex-col w-full items-stretch">
 						<x-select name="status" id="status" class="w-full">
-							<option selected disabled>Course Status</option>
 							<option value="active" @if(old("status") == "active") selected @endif>Active</option>
 							<option value="hidden" @if(old("status") == "hidden") selected @endif>Hidden</option>
 						</x-select>
@@ -43,7 +42,6 @@
 					<p>Level</p>
 					<div class="flex flex-col w-full items-stretch">
 						<x-select name="level" id="level" class="w-full">
-							<option selected disabled>Course Level</option>
 							<option value="basic" @if(old("level") == "basic") selected @endif>Basic</option>
 							<option value="intermediate" @if(old("level") == "intermediate") selected @endif>Intermediate</option>
 							<option value="advanced" @if(old("level") == "advanced") selected @endif>Advanced</option>
@@ -55,12 +53,24 @@
 					<p>Format</p>
 					<div class="flex flex-col w-full items-stretch">
 						<x-select name="format" id="format" class="w-full">
-							<option selected disabled>Course Format</option>
 							<option value="20" @if(old("format") == 20) selected @endif>20 Sessions</option>
 							<option value="40" @if(old("format") == 40) selected @endif>40 Sessions</option>
 						</x-select>
 					</div>
 				</div>
+			</div>
+
+			<div class="w-full flex gap-x-4">
+				<div class="flex flex-col w-1/2">
+					<p>Delivery Mode</p>
+					<div class="flex flex-col w-full items-stretch">
+						<x-select name="delivery_mode" id="delivery_mode" class="w-full">
+							<option value="onsite" @if(old("delivery_mode") == "onsite") selected @endif>Onsite</option>
+							<option value="online" @if(old("delivery_mode") == "online") selected @endif>Online</option>
+						</x-select>
+					</div>
+				</div>
+				<div class="flex flex-col w-1/2"></div>
 			</div>
 
 			<div class="flex flex-col w-full">

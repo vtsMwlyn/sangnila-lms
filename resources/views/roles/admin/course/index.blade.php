@@ -42,6 +42,7 @@
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Course Name</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Level</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Format</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Delivery Mode</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Participants</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Status</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
@@ -51,7 +52,8 @@
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
 							<td class="py-2 px-4">{{ $course->course_name }}</td>
 							<td class="py-2 px-4">{{ ucwords($course->level) }}</td>
-							<td class="py-2 px-4">{{ $course->format }}</td>
+							<td class="py-2 px-4">{{ $course->format }} Sessions</td>
+							<td class="py-2 px-4">{{ ucwords($course->delivery_mode) }}</td>
 							<td class="py-2 px-4">
 								<div class="w-full flex flex-col">
 									<div class="">{{ $course->teachers->count() }} Teachers</div>

@@ -46,80 +46,66 @@
 				</thead>
 				<tbody>
 					@forelse ($students as $index1 => $student)
-						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-							<td class="py-2 px-4 w-1/4">
-								<div class="flex w-full items-center gap-3">
-									@if($student->details->profpic)
-										<img src="{{ Storage::url("app/public/" . $student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
-									@else
-										<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
-									@endif
-									{{ $student->full_name }}
-								</div>
-							</td>
-							<td class="py-2 px-4">
-								@if($student->enrolled_courses->count())
-									<ul>
-										@foreach ($student->enrolled_courses as $index2 => $course)
-											<li class="flex justify-between gap-3 items-center my-2">
-												<div class="w-2/3">
-													<span>{{ $course->course_name }} - {{ ucwords($course->level) }}</span>
-												</div>
-												<div class="w-1/3">
-													<div class="w-full bg-gray-200 rounded-lg h-4 overflow-hidden relative">
-														<div class="absolute w-full h-full @if((($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) && $current_attendances[$index1][$index2] != 0) text-red-100 @else text-green-950 @endif  flex justify-center items-center font-semibold">
-															{{ __($current_attendances[$index1][$index2] . "/" . $max_attendances[$index1][$index2]) }}
-														</div>
-														<div class="@if(($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) bg-red @else bg-green-700 @endif h-full" style="width: {{ $percentages[$index1][$index2] }}%;"></div>
-													</div>
-												</div>
-											</li>
-										@endforeach
-									</ul>
-								@else
-									<p class="text-center">- No courses assigned yet -</p>
-								@endif
-							</td>
-							<td class="py-2 px-4 text-center">
-								@if($student->enrolled_courses->count())
-									@php
-										$paid_periods = [];
+						@php
+							$courseStudents = $student->course_students;
+						@endphp
 
-										foreach($student->course_students as $cs){
-											$receipts = App\Models\Receipt::where('course_student_id', $cs->id)->get();
-
-											array_push($paid_periods, $receipts->count());
-										}
-									@endphp
-									<ul>
-										@foreach ($paid_periods as $paidp)
-											<li>{{ $paidp }}</li>
-										@endforeach
-									</ul>
-								@else
-									N/A
+						@forelse($courseStudents as $index2 => $cs)
+							<tr class="@if($index1 % 2 == 0) bg-white @endif">
+								@if($index2 == 0)
+									<td class="py-2 px-4 w-1/4" rowspan="{{ $courseStudents->count() }}">
+										<div class="flex w-full items-center gap-3">
+											@if($student->details->profpic)
+												<img src="{{ Storage::url("app/public/" . $student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+											@else
+												<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+											@endif
+											{{ $student->full_name }}
+										</div>
+									</td>
 								@endif
-							</td>
-							<td class="py-2 px-4 text-center">
-								@if ($student->status == "enabled")
-									<span class="font-bold text-light-blue">Active</span>
-								@else
-									<span class="font-bold text-red">Inactive</span>
+								<td class="py-2 px-4">
+									<div class="flex justify-between gap-3 items-center">
+										<div class="w-2/3">
+											<span>{{ $cs->course->course_name }} - {{ ucwords($cs->course->level) }}</span>
+										</div>
+										<div class="w-1/3">
+											<div class="w-full bg-gray-200 rounded-lg h-4 overflow-hidden relative">
+												<div class="absolute w-full h-full @if((($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) && $current_attendances[$index1][$index2] != 0) text-red-100 @else text-green-950 @endif  flex justify-center items-center font-semibold">
+													{{ __($current_attendances[$index1][$index2] . "/" . $max_attendances[$index1][$index2]) }}
+												</div>
+												<div class="@if(($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) bg-red @else bg-green-700 @endif h-full" style="width: {{ $percentages[$index1][$index2] }}%;"></div>
+											</div>
+										</div>
+									</div>
+								</td>
+								<td class="py-2 px-4 text-center">
+									{{ $cs->temp_periods_paid }}
+								</td>
+								@if($index2 == 0)
+									<td class="py-2 px-4 text-center" rowspan="{{ $courseStudents->count() }}">
+										@if ($student->status == "enabled")
+											<span class="font-bold text-light-blue">Active</span>
+										@else
+											<span class="font-bold text-red">Inactive</span>
+										@endif
+									</td>
+									<td class="py-2 px-4" rowspan="{{ $courseStudents->count() }}">
+										<div class="flex w-full justify-start gap-1">
+											<x-anchor-button
+											href="{{ route('admin.student.show', $student->id) }}">
+												<i class="bi bi-eye"></i>
+											</x-anchor-button>
+											<x-anchor-button
+												href="{{ route('admin.student.edit', $student->id) }}">
+												<i class="bi bi-pencil-square"></i>
+											</x-anchor-button>
+										</div>
+									</td>
 								@endif
-							</td>
-							<td class="py-2 px-4">
-								<div class="flex w-full justify-start gap-1">
-									<x-anchor-button
-									href="{{ route('admin.student.show', $student->id) }}">
-										<i class="bi bi-eye"></i>
-									</x-anchor-button>
-									<x-anchor-button
-										href="{{ route('admin.student.edit', $student->id) }}">
-										<i class="bi bi-pencil-square"></i>
-									</x-anchor-button>
-								</div>
-							</td>
-						</tr>
+							</tr>
+						@empty
+						@endforelse
 					@empty
 						<tr class="bg-white">
 							<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
