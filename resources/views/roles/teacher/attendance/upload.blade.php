@@ -253,9 +253,11 @@
 				const _nthSession = currCard.find('._session').val();
 				const _start_time = currCard.find('._start_time').val();
 				const _end_time = currCard.find('._end_time').val();
-				const _activity = currCard.find('._activity').val();
+				const __activity = currCard.find('._activity').val();
 				const _learning_status = currCard.find('._learning_status').val();
 				const _details = currCard.find('._details').val();
+
+				const _activity = (__activity == 'Other') ? 'Other' : JSON.parse(__activity).title;
 
 				let input_error = false;
 
@@ -297,7 +299,7 @@
 					).append(
 						$('<td>').addClass('py-2 px-4').html(atdIcon)
 					).append(
-						$('<td>').addClass('py-2 px-4').text((_isAttended == 'on')? JSON.parse(_activity).title : 'Absent')
+						$('<td>').addClass('py-2 px-4').text(_isAttended == 'on'? _activity : 'Absent')
 					).append(
 						$('<td>').addClass('py-2 px-4').text((_isAttended == 'on')? _learning_status : 'Absent')
 					).append(
@@ -311,7 +313,7 @@
 				const hidNthSession = $('<input>').attr({'type': 'hidden', 'name': `nth_session[${student.id}][]`, 'value': _nthSession});
 				const hidStartTime = $('<input>').attr({'type': 'hidden', 'name': `start_time[${student.id}][]`, 'value': (_isAttended == 'on')?_start_time : '00:00'});
 				const hidEndTime = $('<input>').attr({'type': 'hidden', 'name': `end_time[${student.id}][]`, 'value': (_isAttended == 'on')?_end_time : '00:00'});
-				const hidActivity = $('<input>').attr({'type': 'hidden', 'name': `activity[${student.id}][]`, 'value': (_isAttended == 'on')? JSON.parse(_activity).title : 'Absent'});
+				const hidActivity = $('<input>').attr({'type': 'hidden', 'name': `activity[${student.id}][]`, 'value': (_isAttended == 'on')? _activity : 'Absent'});
 				const hidLearningStatus = $('<input>').attr({'type': 'hidden', 'name': `learning_status[${student.id}][]`, 'value': (_isAttended == 'on')? _learning_status : 'Absent'});
 				const hidDetails = $('<input>').attr({'type': 'hidden', 'name': `details[${student.id}][]`, 'value': _details});
 

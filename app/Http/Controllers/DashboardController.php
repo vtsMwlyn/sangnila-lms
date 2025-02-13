@@ -84,15 +84,15 @@ class DashboardController extends Controller
 			// Attendance progress
 			$current_and_full = [];
 
-			$n_present = 0;
+			$n_atd = 0;
 			foreach($student_attendances as $sa){
 				if($sa->attendance->course_id == $cs->course_id /*&& $sa->is_attend == 1*/){
-					$n_present++;
+					$n_atd++;
 				}
 			}
 
-			array_push($current_and_full, $n_present);
-			array_push($current_and_full, $cs->max_course_session);
+			array_push($current_and_full, $n_atd);
+			array_push($current_and_full, $cs->course->format);
 			array_push($atd_progress, $current_and_full);
 
 			// Activity progress

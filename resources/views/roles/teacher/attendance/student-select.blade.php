@@ -13,6 +13,10 @@
 	<x-section-container>
 		<x-page-title>Student Attendance for {{ $course->course_name }}</x-page-title>
 
+		@if(session()->has('failProceed'))
+			<x-badge-danger badge_text="{{ session('failProceed') }}"></x-badge-danger>
+		@endif
+
 		@php
 			$iterasus = 1;
 		@endphp
@@ -26,8 +30,8 @@
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 				@forelse ($course_students as $cs)
 					<div class="my-2 flex gap-3 items-center">
-						<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $cs->student_id }}" checked
-						class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif>
+						<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $cs->student_id }}"
+						class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300">
 						@if($cs->student->details->profpic)
 							<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
 						@else
@@ -59,7 +63,7 @@
 					@forelse ($remaining_students as $rs)
 						<div class="my-4 other-students flex gap-3 items-center">
 							<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $rs->id }}"
-							class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif >
+							class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300">
 							@if($rs->details->profpic)
 								<img src="{{ Storage::url("app/public/" . $rs->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
 							@else
@@ -114,7 +118,7 @@
 
 				$('input[type="checkbox"]').each(function(){
 					if($(this).is(":checked")){
-						$("form").append($("<input>").attr({"type": "hidden", "name": "selected_students[]", "value": $(this).data("sid")}));
+						$("form").append($("<input>").addClass('selected_student').attr({"type": "hidden", "name": "selected_students[]", "value": $(this).data("sid")}));
 					}
 				});
 

@@ -82,7 +82,7 @@ class AttendanceController extends Controller {
 	}
 
 	public function submit_and_proceed(Request $request, $course_id){
-		if(count($request->selected_students) == 0){
+		if(!$request->selected_students){
 			return back()->with("failProceed", "Please select minimum one student!");
 		}
 
