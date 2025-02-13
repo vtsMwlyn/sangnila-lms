@@ -353,7 +353,7 @@
 							</td>
 							<td class="py-2 px-4 w-1/3">
 								<div class="flex items-center justify-between w-2/3">
-									{{ $current_progress[$i] }}/{{ $full_progress[$i] }} done
+									{{ $current_progress[$i] }}/{{ $full_progress[$i] }} sessions
 									<x-button type="button" class="attendance-information-btn" data-student="{{ $student->id }}" data-std_attendances="{{ json_encode($attendance_data[$ec->id]) }}">
 										<i class="bi bi-eye"></i>
 									</x-button>

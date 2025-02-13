@@ -86,7 +86,7 @@ class DashboardController extends Controller
 
 			$n_present = 0;
 			foreach($student_attendances as $sa){
-				if($sa->attendance->course_id == $cs->course_id && $sa->is_attend == 1){
+				if($sa->attendance->course_id == $cs->course_id /*&& $sa->is_attend == 1*/){
 					$n_present++;
 				}
 			}

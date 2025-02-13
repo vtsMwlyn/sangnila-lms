@@ -81,7 +81,7 @@ class StudentController extends Controller {
 				}
 
 				foreach($sa as $atd){
-					if($atd->attendance->course_id == $course->id && $atd->is_attend == 1){
+					if($atd->attendance->course_id == $course->id /*&& $atd->is_attend == 1*/){
 						$count++;
 					}
 				}
@@ -199,10 +199,7 @@ class StudentController extends Controller {
 			foreach($sa as $atd){
 				if($atd->attendance->course_id == $course->id){
 					array_push($student_attendances_in_the_course, $atd);
-
-					if($atd->is_attend == 1){
-						$count++;
-					}
+					$count++;
 				}
 			}
 
