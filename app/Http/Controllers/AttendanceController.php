@@ -411,6 +411,37 @@ class AttendanceController extends Controller {
 		return redirect(route('admin.student.show', $student->id))->with('successInputAttendance', 'Successfully inputed new attendance data for the student!');
 	}
 
+	public function admin_edit_student_attendance($student_attendance_id){
+		return view('roles.admin.student.edit-attendance', [
+			'student_attendance' => StudentAttendance::findOrFail($student_attendance_id)
+		]);
+	}
+
+	public function admin_update_student_attendance(Request $request, $student_attendance_id){
+		$validatedData = $request->validate([
+			'attendance_date' => 'required|date',
+			'is_attend' => 'required',
+			'activity_progress' => 'required',
+			'learning_status' => 'required',
+			'attendance_detail' => 'required',
+			'nth_session' => 'required|numeric|min:0',
+			'start_time' => 'required',
+			'end_time' => 'required',
+		]);
+
+		if($validatedData['is_attend'] == 0){
+			$validatedData['activity_progress'] = 'Absent';
+			$validatedData['learning_status'] = 'Absent';
+			$validatedData['start_time'] = '00:00';
+			$validatedData['end_time'] = '00:00';
+		}
+
+		$sa = StudentAttendance::findOrFail($student_attendance_id);
+		$sa->update($validatedData);
+
+		return redirect(route('admin.student.show', $sa->student->id))->with('successEditAttendance', 'The attendance data has been updated successfully!');
+	}
+
 	public function admin_destroy_student_attendance($student_attendance_id){
 		$studentAttendance = StudentAttendance::findOrFail($student_attendance_id);
 

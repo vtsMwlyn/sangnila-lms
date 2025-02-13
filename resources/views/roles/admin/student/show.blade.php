@@ -177,6 +177,8 @@
 			<x-badge-success badge_text="{{ session('successInputAttendance') }}"></x-badge-success>
 		@elseif(session()->has("successDeleteStudentAttendance"))
 			<x-badge-warning badge_text="{{ session('successDeleteStudentAttendance') }}"></x-badge-warning>
+		@elseif(session()->has("successEditAttendance"))
+			<x-badge-success badge_text="{{ session('successEditAttendance') }}"></x-badge-success>
 		@endif
 
 		@php
@@ -530,10 +532,10 @@
 					const colUploader = $("<td>").addClass("px-4 py-2").text(satd.attendance.posted_by.full_name);
 					const colAction = $('<td>').addClass('px-4 py-2').append(
 						$('<div>').addClass('flex gap-2 w-full').append(
-							$('<a>')attr('href', `${baseUrl}/admin/student/${satd.id}/edit`).addClass('text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25').css({'box-shadow': '0 1px 2px rgba(0, 0, 0, 0.3)', 'background': 'linear-gradient(90deg, #1EB8CD 0%, #354D9B 100%)'}).html('<i class="bi bi-pencil-square"></i>')
+							$('<a>').attr('href', `${baseUrl}/admin/student/attendance/${satd.id}/edit`).addClass('text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25').css({'box-shadow': '0 1px 2px rgba(0, 0, 0, 0.3)', 'background': 'linear-gradient(90deg, #1EB8CD 0%, #354D9B 100%)'}).html('<i class="bi bi-pencil-square"></i>')
 						)
 						.append(
-							$('<form>').attr({'method': 'post', 'action': `${baseUrl}/admin/student/${satd.id}/delete`}).append(
+							$('<form>').attr({'method': 'post', 'action': `${baseUrl}/admin/student/attendance/${satd.id}/delete`}).append(
 								$('<input>').attr('type', 'hidden').attr('name', '_token').val($('body').data('tjzlptoheng'))
 							).append(
 								$('<button>').attr('type', 'submit').addClass('text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25').css({'box-shadow': '0 1px 2px rgba(0, 0, 0, 0.3)', 'background': 'linear-gradient(90deg, #1EB8CD 0%, #354D9B 100%)'}).html('<i class="bi bi-trash3"></i>').on('click', () => {

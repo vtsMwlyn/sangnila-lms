@@ -101,7 +101,7 @@
 							</div>
 						</div>
 
-						<div class="w-full mt-8 attendance-detail-fields">
+						<div class="w-full mt-8">
 							<x-label for="_attendance_details" class="mb-1">Details</x-label>
 							<x-textarea rows="4" name="_attendance_details" id="_attendance_details" class="w-full" placeholder="Input details">N/A</x-textarea>
 						</div>
@@ -127,7 +127,7 @@
 						</thead>
 						<tbody id="tableBody">
 							<tr class="bg-white" id="empty-placeholder">
-								<td colspan="5" class="p-4 text-center" id="empty-table-placeholder">- No data yet -</td>
+								<td colspan="6" class="p-4 text-center" id="empty-table-placeholder">- No data yet -</td>
 							</tr>
 						</tbody>
 					</table>

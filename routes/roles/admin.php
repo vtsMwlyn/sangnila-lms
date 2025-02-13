@@ -156,11 +156,15 @@ Route::prefix('/admin')
 				Route::post("/import-excel", [ExcelImportController::class, "import_excel_student_store"])->name("import-excel.store");
 
 				// Input attendances
-				Route::get('/{student_id}/attendance-input', [AttendanceController::class, 'admin_input'])->name('input-attendance');
-				Route::post('/{student_id}/attendance-input', [AttendanceController::class, 'admin_store'])->name('store-attendance');
+				Route::get('/attendance/{student_id}/attendance-input', [AttendanceController::class, 'admin_input'])->name('input-attendance');
+				Route::post('/attendance/{student_id}/attendance-input', [AttendanceController::class, 'admin_store'])->name('store-attendance');
+
+				// Edit attendances
+				Route::get('/attendance/{student_attendance_id}/edit', [AttendanceController::class, 'admin_edit_student_attendance'])->name('edit-student-attendance');
+				Route::post('/attendance/{student_attendance_id}/edit', [AttendanceController::class, 'admin_update_student_attendance'])->name('update-student-attendance');
 
 				// Delete attendances
-				Route::post('/{student_attendance_id}/delete', [AttendanceController::class, 'admin_destroy_student_attendance'])->name('destroy-student-attendance');
+				Route::post('/attendance/{student_attendance_id}/delete', [AttendanceController::class, 'admin_destroy_student_attendance'])->name('destroy-student-attendance');
 
 				// Download import excel template
 				Route::get("/import-excel/download-template", [DownloadResourceController::class, "student_import_excel_template"])->name("import-excel.download");
