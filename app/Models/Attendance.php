@@ -27,8 +27,14 @@ class Attendance extends Model {
 		return $this->belongsTo(CourseSchedule::class, 'schedule_id');
 	}
 
-	public function student_attendances(){
-		return $this->hasMany(StudentAttendance::class);
+	public function student_attendances()
+	{
+		return $this->hasMany(StudentAttendance::class)
+			->join('users', 'users.id', '=', 'student_attendances.student_id')
+			->orderBy('users.full_name')
+			->orderBy('student_attendances.start_time')
+			->select('student_attendances.*');
 	}
+
 
 }

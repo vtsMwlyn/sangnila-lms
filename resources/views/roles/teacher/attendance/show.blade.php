@@ -122,9 +122,9 @@
 							<td class="py-2 px-4 text-center">{{ $atd->posted_by->id == Auth::user()->id? 'Me' : $atd->posted_by->full_name }}</td>
 							<td class="py-2 px-4">
 								<div class="flex gap-2">
-									<x-anchor-button  href="{{ route('teacher.attendance.edit', $atd->id) }}">
+									{{-- <x-anchor-button  href="{{ route('teacher.attendance.edit', $atd->id) }}">
 										<i class="bi bi-pencil-square"></i>
-									</x-anchor-button>
+									</x-anchor-button> --}}
 									<x-button type="button" class=" show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}"><i class="bi bi-eye"></i></x-button>
 								</div>
 							</td>

@@ -72,32 +72,32 @@
 
 						<div class="flex gap-5 mt-4 w-full container-session-present">
 							<!-- Nth Session -->
-							<div class="flex flex-col w-1/3 mt-4">
+							{{-- <div class="flex flex-col w-1/3 mt-4">
 								<x-label for="_session{{ $student->id }}">N-th Session</x-label>
 								<x-input class="_session" type="text" id="_session{{ $student->id }}" value="1"/>
 								<p class="text-red font-bold mt-2 error-session hidden"><i class="bi bi-exclamation-circle"></i> Please input the nth-session.</p>
-							</div>
+							</div> --}}
 
 							<!-- Start Time -->
-							<div class="flex flex-col w-1/3 mt-4 start_time-container-present">
+							<div class="flex flex-col w-1/2 mt-4 start_time-container-present">
 								<x-label for="_start_time{{ $student->id }}">Start Time</x-label>
 								<x-input class="_start_time" type="time" id="_start_time{{ $student->id }}" value="00:00"/>
 							</div>
 
 							<!-- End Time -->
-							<div class="flex flex-col w-1/3 mt-4 start_time-container-present">
+							<div class="flex flex-col w-1/2 mt-4 end_time-container-present">
 								<x-label for="_end_time{{ $student->id }}">End Time</x-label>
 								<x-input class="_end_time" type="time" id="_end_time{{ $student->id }}" value="00:00"/>
 							</div>
 
 							<!-- Start Time (Absent) -->
-							<div class="hidden flex-col w-1/3 mt-4 start_time-container-absent">
+							<div class="hidden flex-col w-1/2 mt-4 start_time-container-absent">
 								<x-label>Start Time</x-label>
 								<x-input class="_start_time_absent" type="text" value="Absent" disabled/>
 							</div>
 
 							<!-- End Time (Absent) -->
-							<div class="hidden flex-col w-1/3 mt-4 end_time-container-absent">
+							<div class="hidden flex-col w-1/2 mt-4 end_time-container-absent">
 								<x-label>End Time</x-label>
 								<x-input class="_end_time_absent" type="text" value="Absent" disabled/>
 							</div>
@@ -155,7 +155,7 @@
 						<div class="w-full overflow-x-auto mt-4">
 							<table class="w-full">
 								<thead>
-									<th class="text-start py-3 px-4 border-b-2 border-slate-400">N-th Session</th>
+									<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Time</th>
 									<th class="text-start py-3 px-4 border-b-2 border-slate-400">Is Attended</th>
 									<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activity</th>
 									<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Status</th>
@@ -250,7 +250,7 @@
 			$(document).on('click', '.add-data-btn', function(){
 				const currCard = $(this).closest('.attendance-detail-accordion-area');
 				const _isAttended = currCard.find('._checkbox').is(':checked')? 'on' : 'off';
-				const _nthSession = currCard.find('._session').val();
+				// const _nthSession = currCard.find('._session').val();
 				const _start_time = currCard.find('._start_time').val();
 				const _end_time = currCard.find('._end_time').val();
 				const __activity = currCard.find('._activity').val();
@@ -266,12 +266,12 @@
 				currCard.find('.error-details').addClass('hidden');
 				currCard.find('._details').removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0');
 
-				if(!_nthSession || _nthSession < 1){
-					currCard.find('.error-session').removeClass('hidden');
-					currCard.find('._session').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
+				// if(!_nthSession || _nthSession < 1){
+				// 	currCard.find('.error-session').removeClass('hidden');
+				// 	currCard.find('._session').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
 
-					input_error = true;
-				}
+				// 	input_error = true;
+				// }
 
 				if(!_details || _details == ''){
 					currCard.find('.error-details').removeClass('hidden');
@@ -295,7 +295,8 @@
 
 				const newRow = $('<tr>').addClass(rowCount % 2 == 0? 'bg-slate-100' : '')
 					.append(
-						$('<td>').addClass('py-2 px-4').text((_isAttended == 'on')? `${_nthSession} (${_start_time}-${_end_time})` : `${_nthSession}`)
+						// $('<td>').addClass('py-2 px-4').text((_isAttended == 'on')? `${_nthSession} (${_start_time}-${_end_time})` : `${_nthSession}`)
+						$('<td>').addClass('py-2 px-4').text((_isAttended == 'on')? `${_start_time}-${_end_time}` : 'Absent')
 					).append(
 						$('<td>').addClass('py-2 px-4').html(atdIcon)
 					).append(
@@ -310,7 +311,7 @@
 
 				const student = $(this).data('student');
 				const hidIsAttend = $('<input>').attr({'type': 'hidden', 'name': `is_attend[${student.id}][]`, 'value': _isAttended});
-				const hidNthSession = $('<input>').attr({'type': 'hidden', 'name': `nth_session[${student.id}][]`, 'value': _nthSession});
+				// const hidNthSession = $('<input>').attr({'type': 'hidden', 'name': `nth_session[${student.id}][]`, 'value': _nthSession});
 				const hidStartTime = $('<input>').attr({'type': 'hidden', 'name': `start_time[${student.id}][]`, 'value': (_isAttended == 'on')?_start_time : '00:00'});
 				const hidEndTime = $('<input>').attr({'type': 'hidden', 'name': `end_time[${student.id}][]`, 'value': (_isAttended == 'on')?_end_time : '00:00'});
 				const hidActivity = $('<input>').attr({'type': 'hidden', 'name': `activity[${student.id}][]`, 'value': (_isAttended == 'on')? _activity : 'Absent'});
@@ -322,7 +323,7 @@
 						newRow.remove();
 
 						hidIsAttend.remove();
-						hidNthSession.remove();
+						// hidNthSession.remove();
 						hidStartTime.remove();
 						hidEndTime.remove();
 						hidActivity.remove();
@@ -332,7 +333,7 @@
 				});
 
 				currCard.find('.session-details-tbody').append(newRow);
-				currCard.append(hidIsAttend).append(hidNthSession).append(hidStartTime).append(hidEndTime).append(hidActivity).append(hidLearningStatus).append(hidDetails);
+				currCard.append(hidIsAttend)/*.append(hidNthSession)*/.append(hidStartTime).append(hidEndTime).append(hidActivity).append(hidLearningStatus).append(hidDetails);
 			});
 
 			$(document).on('change', '.form-checkbox', function(){
@@ -386,8 +387,8 @@
 				newStudentCard.find('._checkbox').attr('id', `_checkbox${student.id}`).prop('checked', true);
 				newStudentCard.find('._checkbox').closest('label').attr('for', `_checkbox${student.id}`);
 
-				newStudentCard.find('._session').attr('id', `_session${student.id}`).val(1);
-				newStudentCard.find('._session').prev().attr('for', `_session${student.id}`);
+				// newStudentCard.find('._session').attr('id', `_session${student.id}`).val(1);
+				// newStudentCard.find('._session').prev().attr('for', `_session${student.id}`);
 
 				newStudentCard.find('._start_time').attr('id', `_start_time${student.id}`).val('00:00');
 				newStudentCard.find('._start_time').prev().attr('for', `_start_time${student.id}`);

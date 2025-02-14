@@ -173,7 +173,7 @@ class StudentController extends Controller {
 
 		$sa = StudentAttendance::where('student_id', $student->id)
 		->join('attendances', 'student_attendances.attendance_id', '=', 'attendances.id')
-		->orderBy('attendances.attendance_date', 'asc') // Sort by attendance_date
+		->orderBy('attendances.attendance_date', 'asc')->orderBy('student_attendances.start_time') // Sort by attendance_date then start time
 		->with([
 			'attendance' => function ($query) {
 				$query->select('id', 'attendance_date', 'uploader_id', 'course_id');

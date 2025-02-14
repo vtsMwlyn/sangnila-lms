@@ -22,7 +22,7 @@
 			<div id="form-area">
 				{{-- Class data --}}
 				<h1 class="font-bold text-lg text-blue">Class Data</h1>
-				<div class="flex gap-3">
+				<div class="flex gap-5">
 					<div class="mt-3 w-full md:w-1/2">
 						<x-label class="mb-1">Course Name</x-label>
 						<x-input type="text" name="_course_name" class="w-full" value="{{ $course->course_name }}" disabled />
@@ -36,22 +36,22 @@
 				{{-- Attendance data --}}
 				<h1 class="font-bold text-lg text-blue mt-8">Attendance Data</h1>
 				<div class="flex flex-col w-full">
-					<div class="w-full flex gap-3 mt-3">
-						<div class="w-full md:w-1/3">
+					<div class="w-full flex gap-5 mt-3">
+						<div class="w-full md:w-1/2">
 							<x-label class="mb-1" for="attendance_date">Attendance Date</x-label>
 							<x-input type="date" name="attendance_date" id="attendance_date" class="w-full date-input" value="{{ $student_attendance->attendance->attendance_date }}"/>
 						</div>
-						<div class="w-full md:w-1/3">
+						<div class="w-full md:w-1/2">
 							<x-label class="mb-1" for="is_attend">Attendance Status</x-label>
 							<x-select name="is_attend" id="is_attend" class="w-full">
 								<option value="1" @if(old('is_attend', $student_attendance->is_attend) == 1) selected @endif>Attended</option>
 								<option value="0" @if(old('is_attend', $student_attendance->is_attend) == 0) selected @endif>Absent</option>
 							</x-select>
 						</div>
-						<div class="flex flex-col w-full md:w-1/3">
+						{{-- <div class="flex flex-col w-full md:w-1/3">
 							<x-label class="mb-1" for="nth_session">N-th Session</x-label>
 							<x-input type="text" name="nth_session" id="nth_session" value="{{ $student_attendance->nth_session }}"/>
-						</div>
+						</div> --}}
 					</div>
 
 					<div class="flex gap-5 w-full mt-6 attendance-detail-fields" @if($student_attendance->is_attend == 0) style="display: none;" @endif>
@@ -68,7 +68,7 @@
 						</div>
 					</div>
 
-					<div class="w-full flex gap-3 mt-3 attendance-detail-fields" @if($student_attendance->is_attend == 0) style="display: none;" @endif>
+					<div class="w-full flex gap-5 mt-3 attendance-detail-fields" @if($student_attendance->is_attend == 0) style="display: none;" @endif>
 						<div class="w-full md:w-1/2 container-select2">
 							<x-label for="activity_progress" class="mb-1">Activity</x-label>
 							<x-select name="activity_progress" id="activity_progress" class="w-full select-2">

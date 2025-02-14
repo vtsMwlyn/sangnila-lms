@@ -115,7 +115,7 @@ class AttendanceController extends Controller {
 		$request->validate([
 			'attendance_date' => 'required|date',
 			'is_attend.*' => 'required',
-			'nth_session.*' => 'required',
+			// 'nth_session.*' => 'required',
 			'start_time.*' => 'required',
 			'end_time.*' => 'required',
 			'activity.*' => 'required',
@@ -142,7 +142,7 @@ class AttendanceController extends Controller {
 						'attendance_id' => $newAttendance->id,
 						'student_id' => $student->id,
 						'is_attend' => $isAttend == 'on'? 1 : 0,
-						'nth_session' => $request->nth_session[$studentId][$i],
+						// 'nth_session' => $request->nth_session[$studentId][$i],
 						'activity_progress' => $request->activity[$studentId][$i],
 						'learning_status' => $request->learning_status[$studentId][$i],
 						'attendance_detail' => $request->details[$studentId][$i],
@@ -371,7 +371,7 @@ class AttendanceController extends Controller {
 			'end_time.*' => 'required',
 			'learning_status.*' => 'required',
 			'attendance_details.*' => 'required',
-			'session.*' => 'required',
+			// 'session.*' => 'required',
 		]);
 
 		try {
@@ -389,7 +389,7 @@ class AttendanceController extends Controller {
 
 				StudentAttendance::create([
 					'attendance_id' => $newAttendance->id,
-					'nth_session' => $request->session[$i],
+					// 'nth_session' => $request->session[$i],
 					'start_time' => $request->start_time[$i],
 					'end_time' => $request->end_time[$i],
 					'student_id' => $student->id,
@@ -424,7 +424,7 @@ class AttendanceController extends Controller {
 			'activity_progress' => 'required',
 			'learning_status' => 'required',
 			'attendance_detail' => 'required',
-			'nth_session' => 'required|numeric|min:0',
+			// 'nth_session' => 'required|numeric|min:0',
 			'start_time' => 'required',
 			'end_time' => 'required',
 		]);
@@ -437,6 +437,9 @@ class AttendanceController extends Controller {
 		}
 
 		$sa = StudentAttendance::findOrFail($student_attendance_id);
+
+		$sa->attendance->update(['attendance_date' => $validatedData['attendance_date']]);
+
 		$sa->update($validatedData);
 
 		return redirect(route('admin.student.show', $sa->student->id))->with('successEditAttendance', 'The attendance data has been updated successfully!');

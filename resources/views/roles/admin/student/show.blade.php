@@ -118,9 +118,8 @@
 			<div class="w-full overflow-x-auto">
 				<table class="w-full">
 					<thead>
-						<th class="py-3 px-4 border-b-2 border-slate-400">No</th>
+						<th class="py-3 px-4 border-b-2 border-slate-400">Session</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date</th>
-						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Session</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Attended</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Time</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Details</th>
@@ -515,7 +514,7 @@
 
 				let i = 0;
 				for(let satd of std_attendances){
-					const colNo = $("<td>").addClass("px-4 py-2").text(i + 1);
+					const colSession = $("<td>").addClass("px-4 py-2").text(i + 1);
 					const colDate = $("<td>").addClass("px-4 py-2").text(formatDate(satd.attendance.attendance_date));
 
 					let colAttended = $("<td>").addClass("px-4 py-2");
@@ -526,7 +525,6 @@
 						colAttended.html('<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">');
 					}
 
-					const colSession = $("<td>").addClass("px-4 py-2").text(satd.nth_session);
 					const colLearningTime = $("<td>").addClass("px-4 py-2").text((satd.is_attend == 1)? `${satd.start_time.slice(0, 5)}-${satd.end_time.slice(0, 5)}` : 'Absent');
 					const colDetails = $("<td>").addClass("px-4 py-2").html(`${satd.activity_progress} [${satd.learning_status}]<br><br>${satd.attendance_detail}`);
 					const colUploader = $("<td>").addClass("px-4 py-2").text(satd.attendance.posted_by.full_name);
@@ -553,7 +551,7 @@
 						rowBG = "white";
 					}
 
-					$('#attendance-information-tbody').append($("<tr>").css("background-color", rowBG).append(colNo).append(colDate).append(colSession).append(colAttended).append(colLearningTime).append(colDetails).append(colUploader).append(colAction));
+					$('#attendance-information-tbody').append($("<tr>").css("background-color", rowBG).append(colSession).append(colDate).append(colAttended).append(colLearningTime).append(colDetails).append(colUploader).append(colAction));
 
 					i++;
 				}

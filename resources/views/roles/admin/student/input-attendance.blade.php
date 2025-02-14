@@ -28,7 +28,7 @@
 				<div id="form-area">
 					{{-- Class data --}}
 					<h1 class="font-bold text-lg text-blue">Class Data</h1>
-					<div class="flex gap-3">
+					<div class="flex gap-5">
 						<div class="mt-3 w-full md:w-1/2">
 							<x-label class="mb-1">Course Name</x-label>
 							<x-select name="_course_name" id="_course_name" class="w-full">
@@ -51,23 +51,23 @@
 					{{-- Attendance data --}}
 					<h1 class="font-bold text-lg text-blue mt-8">Attendance Data</h1>
 					<div class="flex flex-col w-full">
-						<div class="w-full flex gap-3 mt-3">
-							<div class="w-full md:w-1/3">
+						<div class="w-full flex gap-5 mt-3">
+							<div class="w-full md:w-1/2">
 								<x-label class="mb-1">Attendance Date</x-label>
 								<x-input type="date" name="_attendance_date" id="_attendance_date" class="w-full date-input" value="{{ Carbon\Carbon::today()->format('Y-m-d') }}"/>
 							</div>
-							<div class="w-full md:w-1/3">
+							<div class="w-full md:w-1/2">
 								<x-label class="mb-1">Attendance Status</x-label>
 								<x-select name="_is_attended" id="_is_attended" class="w-full">
 									<option value="1">Attended</option>
 									<option value="0">Absent</option>
 								</x-select>
 							</div>
-							<div class="flex flex-col w-full md:w-1/3">
+							{{-- <div class="flex flex-col w-full md:w-1/3">
 								<x-label class="mb-1" for="_session">N-th Session</x-label>
 								<x-input class="_session" type="text" id="_session" value="1"/>
 								<p class="text-red font-bold mt-2 error-session hidden"><i class="bi bi-exclamation-circle"></i> Please input the nth-session.</p>
-							</div>
+							</div> --}}
 						</div>
 
 						<div class="flex gap-5 w-full mt-6 attendance-detail-fields">
@@ -84,7 +84,7 @@
 							</div>
 						</div>
 
-						<div class="w-full flex gap-3 mt-3 attendance-detail-fields">
+						<div class="w-full flex gap-5 mt-3 attendance-detail-fields">
 							<div class="w-full md:w-1/2 container-select2">
 								<x-label for="_activity_progress" class="mb-1">Activity</x-label>
 								<x-select name="_activity_progress" id="_activity_progress" class="w-full select-2">
@@ -120,7 +120,7 @@
 						<thead>
 							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Course</th>
 							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date & Time</th>
-							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Session</th>
+							{{-- <th class="text-start py-3 px-4 border-b-2 border-slate-400">Session</th> --}}
 							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Attended</th>
 							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Details</th>
 							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Action</th>
@@ -162,6 +162,8 @@
 									$('#_activity_progress').append($('<option>').attr('value', JSON.stringify(activity)).text(activity.title));
 								});
 							});
+
+							$('#_activity_progress').append($('<option>').attr('value', 'Other').text('Other'));
 						}
 
 					});
@@ -191,13 +193,15 @@
 						}
 
 						const inpDate = $('#_attendance_date').val();
-						const inpSession = $('#_session').val();
+						// const inpSession = $('#_session').val();
 						const inpIsAttended = $('#_is_attended').val();
-						const inpActivityProgress = $('#_activity_progress').val();
+						const _inpActivityProgress = $('#_activity_progress').val();
 						const inpLearningStatus = $('#_learning_status').val();
 						const inpAttendanceDetails = $('#_attendance_details').val();
 						let inpStartTime = $('#_start_time').val();
 						let inpEndTime = $('#_end_time').val();
+
+						const inpActivityProgress = (_inpActivityProgress == 'Other') ? 'Other' : JSON.parse(_inpActivityProgress).title;
 
 						if(inpIsAttended == 0){
 							inpStartTime = '00:00';
@@ -211,36 +215,37 @@
 						const newRow = $('<tr>');
 						const removeBtn = $('<button>').html('<i class="bi bi-trash3"></i>').attr('type', 'button').addClass('text-center px-5 py-2 border border-transparent rounded-lg text-white bg-red hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 transition ease-in-out duration-150');
 
-						newRow.append(
+						let atdIcon = (inpIsAttended == 1)? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`;
+						const rowCount = $('#tableBody').find('tr').length;
+
+						newRow.addClass(rowCount % 2 == 1? 'bg-white' : '').append(
 								$('<td>').addClass('py-2 px-4').text(inpCourse.course.course_name)
 							).append(
 								$('<td>').addClass('py-2 px-4').html(inpIsAttended == 0? `${inpDate}<br>Absent` : `${inpDate}<br>${inpStartTime}-${inpEndTime}`)
 							).append(
-								$('<td>').addClass('py-2 px-4').text(inpSession)
+								$('<td>').addClass('py-2 px-4').html(atdIcon)
 							).append(
-								$('<td>').addClass('py-2 px-4').text(inpIsAttended)
-							).append(
-								$('<td>').addClass('py-2 px-4').html(inpIsAttended == 1? `${JSON.parse(inpActivityProgress).title}<br>(${inpLearningStatus})<br>${inpAttendanceDetails}` : `Absent<br>${inpAttendanceDetails}`)
+								$('<td>').addClass('py-2 px-4').html(inpIsAttended == 1? `${inpActivityProgress}<br><br>(${inpLearningStatus})<br>${inpAttendanceDetails}` : `Absent<br>${inpAttendanceDetails}`)
 							).append(
 								$('<td>').addClass('py-2 px-4').append(removeBtn)
 							);
 
 						const hidCourseId = $('<input>').attr({'type': 'hidden', 'name': 'course_id[]', 'value': inpCourse.course.id});
-						const hidSession = $('<input>').attr({'type': 'hidden', 'name': 'session[]', 'value': inpSession});
+						// const hidSession = $('<input>').attr({'type': 'hidden', 'name': 'session[]', 'value': inpSession});
 						const hidDate = $('<input>').attr({'type': 'hidden', 'name': 'attendance_date[]', 'value': inpDate});
 						const hidStartTime = $('<input>').attr({'type': 'hidden', 'name': 'start_time[]', 'value': inpStartTime});
 						const hidEndTime = $('<input>').attr({'type': 'hidden', 'name': 'end_time[]', 'value': inpEndTime});
 						const hidIsAttended = $('<input>').attr({'type': 'hidden', 'name': 'is_attended[]', 'value': inpIsAttended});
-						const hidActivityProgress = $('<input>').attr({'type': 'hidden', 'name': 'activity_progress[]', 'value': inpIsAttended == 1? JSON.parse(inpActivityProgress).title : 'Absent'});
+						const hidActivityProgress = $('<input>').attr({'type': 'hidden', 'name': 'activity_progress[]', 'value': inpIsAttended == 1? inpActivityProgress : 'Absent'});
 						const hidLearningStatus = $('<input>').attr({'type': 'hidden', 'name': 'learning_status[]', 'value': inpIsAttended == 1? inpLearningStatus : 'Absent'});
 						const hidAttendanceDetails = $('<input>').attr({'type': 'hidden', 'name': 'attendance_details[]', 'value': inpAttendanceDetails});
 
-						$('form').append(hidCourseId).append(hidSession).append(hidDate).append(hidStartTime).append(hidEndTime).append(hidIsAttended).append(hidActivityProgress).append(hidLearningStatus).append(hidAttendanceDetails);
+						$('form').append(hidCourseId).append(hidDate).append(hidStartTime).append(hidEndTime).append(hidIsAttended).append(hidActivityProgress).append(hidLearningStatus).append(hidAttendanceDetails);
 
 						removeBtn.click(() => {
 							if(confirm('Are you sure want to remove this student from the list?')){
 								hidCourseId.remove();
-								hidSession.remove();
+								// hidSession.remove();
 								hidDate.remove();
 								hidStartTime.remove();
 								hidEndTime.remove();
