@@ -57,17 +57,6 @@
 			</x-anchor-button>
 
 			<div class="flex gap-3 mb-3">
-				{{-- <x-anchor-button href="{{ route('teacher.attendance.check-in', $course->id) }}">
-					<i class="bi bi-stopwatch"></i> Check In
-				</x-anchor-button>
-
-				<form action="{{ route('teacher.attendance.check-out.store', $course->id) }}" method="post">
-					@csrf
-					<x-button>
-						<i class="bi bi-stopwatch"></i> Check Out
-					</x-button>
-				</form> --}}
-
 				@if(!$unfinishedSelfAttendance)
 					<x-anchor-button href="{{ route('teacher.attendance.check-in', $course->id) }}">
 						<i class="bi bi-stopwatch"></i> Check In
@@ -113,6 +102,31 @@
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 				</thead>
 				<tbody>
+					@php
+						$sessionCounter = [];  // Stores total session count per student
+						$sessionNumberPerAttendance = []; // Stores session number per attendance
+
+						foreach($attendanceData2 as $atddat) {
+							$currentSessionNumbers = []; // Session count for this specific attendance
+
+							foreach($atddat->student_attendances as $sa) {
+								$studentId = $sa->student->id;
+
+								// Initialize session count if first time seeing this student
+								if (!isset($sessionCounter[$studentId])) {
+									$sessionCounter[$studentId] = 0;
+								}
+
+								// Increase session counter and store the current session number for this attendance
+								$sessionCounter[$studentId]++;
+								$currentSessionNumbers[$sa->id] = $sessionCounter[$studentId];
+							}
+
+							// Store the session numbers for this attendance
+							$sessionNumberPerAttendance[$atddat->id] = $currentSessionNumbers;
+						}
+					@endphp
+
 					@forelse ($attendanceData as $atd)
 						<tr class="@if($loop->index % 2 == 0) bg-white @endif">
 							<td class="py-2 px-4">{{ Carbon\Carbon::parse($atd->attendance_date)->format('l, d F Y') }}</td>
@@ -125,7 +139,7 @@
 									{{-- <x-anchor-button  href="{{ route('teacher.attendance.edit', $atd->id) }}">
 										<i class="bi bi-pencil-square"></i>
 									</x-anchor-button> --}}
-									<x-button type="button" class=" show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}"><i class="bi bi-eye"></i></x-button>
+									<x-button type="button" class=" show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}" data-session_number="{{ json_encode($sessionNumberPerAttendance[$atd->id]) }}"><i class="bi bi-eye"></i></x-button>
 								</div>
 							</td>
 						</tr>
@@ -143,13 +157,14 @@
 					$("#attendance-details-tbody").empty();
 
 					const attendance = $(this).data('attendance');
+					const sessionNumberPerStudent = $(this).data('session_number');
 					const student_attendances = $(this).data('student_attendances');
 
 					let i = 0;
 					for(let sa of student_attendances){
 						const col1 = $("<td>").addClass("py-2 px-4 text-center").text(i + 1);
 						const col2 = $("<td>").addClass("py-2 px-4").text(sa.student.full_name);
-						const col3 = $("<td>").addClass("py-2 px-4").text(sa.nth_session);
+						const col3 = $("<td>").addClass("py-2 px-4").text(sessionNumberPerStudent[sa.id]);
 						const col4 = $("<td>").addClass("py-2 px-4").text(sa.is_attend == 1 ? `${sa.start_time.slice(0, 5)}-${sa.end_time.slice(0, 5)}` : 'Absent');
 						const col5 = $("<td>").addClass("py-2 px-4").html(sa.is_attend == 1 ? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`);
 						const col6 = $("<td>").addClass("py-2 px-4").text(sa.is_attend == 1 ? `${sa.activity_progress} [${sa.learning_status}]` : 'Absent');

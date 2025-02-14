@@ -35,6 +35,10 @@ class AttendanceController extends Controller {
 			return $query->where('id', Auth::user()->id)->orWhere('role_id', 1);
 		})->with(['student_attendances.student'])->orderBy('attendance_date', 'desc')->get();
 
+		$attendanceData2 = Attendance::where("course_id", $course->id)->whereHas('posted_by', function($query){
+			return $query->where('id', Auth::user()->id)->orWhere('role_id', 1);
+		})->with(['student_attendances.student'])->orderBy('attendance_date', 'asc')->get();
+
 		$todaySelfAttendances = SelfAttendance::where("user_id", Auth::user()->id)->where("course_id", $course->id)->where("self_attendance_date", Carbon::today()->format('Y-m-d'))->get();
 		$unfinishedSelfAttendance = $todaySelfAttendances->filter(function($item){
 			return $item->check_out_time == null;
@@ -42,6 +46,7 @@ class AttendanceController extends Controller {
 
 		return view('roles.teacher.attendance.show', [
 			'attendanceData' => $attendanceData,
+			'attendanceData2' => $attendanceData2,
 			"course" => $course,
 			"unfinishedSelfAttendance" => $unfinishedSelfAttendance->first()
 		]);
