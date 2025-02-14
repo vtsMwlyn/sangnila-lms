@@ -383,17 +383,29 @@ class AttendanceController extends Controller {
 			DB::beginTransaction();
 
 			$student = User::findOrFail($student_id);
-			$course = Course::findOrFail($request->course_id);
 
 			foreach($request->is_attended as $i => $isAttended){
-				$newAttendance = Attendance::create([
-					'uploader_id' => Auth::user()->id,
-					'course_id' => $request->course_id[$i],
-					'attendance_date' => $request->attendance_date[$i],
-				]);
+				$course = Course::findOrFail($request->course_id[$i]);
+
+				$existingAttendance = Attendance::where('attendance_date', $request->attendance_date)->where('course_id', $course->id)->where('uploader_id', Auth::user()->id)->first();
+
+				$attendanceId = 0;
+
+				if($existingAttendance){
+					$attendanceId = $existingAttendance->id;
+				}
+				else {
+					$newAttendance = Attendance::create([
+						'uploader_id' => Auth::user()->id,
+						'course_id' => $request->course_id[$i],
+						'attendance_date' => $request->attendance_date[$i],
+					]);
+
+					$attendanceId = $newAttendance->id;
+				}
 
 				StudentAttendance::create([
-					'attendance_id' => $newAttendance->id,
+					'attendance_id' => $attendanceId,
 					// 'nth_session' => $request->session[$i],
 					'start_time' => $request->start_time[$i],
 					'end_time' => $request->end_time[$i],

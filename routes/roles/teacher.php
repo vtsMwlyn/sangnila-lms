@@ -124,8 +124,8 @@ Route::prefix('/teacher')
 				Route::post('/{course_id}/upload', [AttendanceController::class, 'store'])->name('store')->whereNumber('course_id');
 
 				// Edit attendance data
-				Route::get("/{attendance_data_id}/edit", [AttendanceController::class, "edit"])->name("edit")->whereNumber('attendance_data_id');
-				Route::post("/{attendance_data_id}/edit", [AttendanceController::class, "update"])->name("update")->whereNumber('attendance_data_id');
+				// Route::get("/{attendance_data_id}/edit", [AttendanceController::class, "edit"])->name("edit")->whereNumber('attendance_data_id');
+				// Route::post("/{attendance_data_id}/edit", [AttendanceController::class, "update"])->name("update")->whereNumber('attendance_data_id');
 
 				// Self attendance
 				Route::get("/{course_id}/self/check-in", [TeacherController::class, "check_in"])->name("check-in")->whereNumber("course_id");

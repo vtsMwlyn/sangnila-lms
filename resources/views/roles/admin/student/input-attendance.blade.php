@@ -156,13 +156,18 @@
 
 						$('#_activity_progress').html('');
 
-						if(course){
-							course.topics.forEach(topic => {
+						if (course) {
+							// Filter topics based on the teacher's user_id
+							const filteredTopics = course.topics.filter(topic => topic.user_id === classData.teacher.id);
+
+							// Loop through each topic and its activities
+							filteredTopics.forEach(topic => {
 								topic.activities.forEach(activity => {
 									$('#_activity_progress').append($('<option>').attr('value', JSON.stringify(activity)).text(activity.title));
 								});
 							});
 
+							// Add the "Other" option at the end
 							$('#_activity_progress').append($('<option>').attr('value', 'Other').text('Other'));
 						}
 

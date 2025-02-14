@@ -72,7 +72,7 @@
 						<div class="w-full md:w-1/2 container-select2">
 							<x-label for="activity_progress" class="mb-1">Activity</x-label>
 							<x-select name="activity_progress" id="activity_progress" class="w-full select-2">
-								@foreach ($course->topics as $topic)
+								@foreach ($course->topics->where('user_id', $cs->teacher->id) as $topic)
 									@foreach ($topic->activities as $activity)
 										<option value="{{ $activity->title }}" @if(old('activity_progress', $student_attendance->activity_progress == $activity->title)) selected @endif>{{ $activity->title }}</option>
 									@endforeach

@@ -108,7 +108,7 @@
 							<div class="flex flex-col w-1/2 container-select2">
 								<x-label for="_activity{{ $student->id }}">Activity</x-label>
 								<x-select id="_activity{{ $student->id }}" class="select-2 w-full _activity">
-									@foreach($course->topics as $topic)
+									@foreach($topics as $topic)
 										@foreach($topic->activities as $activity)
 											<option value="{{ $activity }}">{{ $activity->title }}</option>
 										@endforeach
