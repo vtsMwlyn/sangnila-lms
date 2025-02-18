@@ -56,9 +56,25 @@ class CourseController extends Controller {
 	// Shows a course details
 	public function admin_show($course_id) {
 		$course = Course::findOrFail($course_id);
+
+		$learning_outcomes = $course->learning_outcomes->count();
+		$ctopics = $course->curriculum_topics->count();
+
+		$learning_outcomes_empty = $learning_outcomes == 0 ? true : false;
+		$syllabus_empty = $ctopics == 0 ? true : false;
+		$course_empty = ($ctopics == 0 && $learning_outcomes == 0) ? true : false;
+		$no_students_assigned = ($course->students->count() == 0) ? true : false;
+		$no_teachers_assigned = ($course->teachers->count() == 0) ? true : false;
+
 		return view('roles.admin.course.show', [
 			'course' => $course,
-			'learning_outcomes' => LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get()
+			'learning_outcomes' => LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get(),
+			'course_empty' => $course_empty,
+			'syllabus_empty' => $syllabus_empty,
+			'learning_outcomes_empty' => $learning_outcomes_empty,
+			'no_students_assigned' => $no_students_assigned,
+			'no_teachers_assigned' => $no_teachers_assigned,
+			'all_courses' => Course::where('status', 'active')->orderBy('course_name', 'asc')->get(),
 		]);
 	}
 

@@ -30,11 +30,6 @@
 		// $n = $n_all_asg - $n_asg_subm;
 	@endphp
 
-	{{-- <!-- Sidebar toggler for mobile -->
-	<button id="mobileMenuButton" class="md:hidden bg-blue-950 text-white font-semibold text-xl transition duration-300 absolute m-2 px-4 py-3 z-10">
-		<span class="inline-block">&#9776;</span>
-	</button> --}}
-
 	<div class="md:flex flex-col items-stretch sticky hidden z-0 m-0" style="top: 65px; background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center left; background-size: cover;" id="sidebar">
 		<div class="relative flex flex-col dropdown-container">
 			<button type="button" class="flex flex-col items-center dropdown-toggler px-10 py-4 mb-6 hover:bg-slate-400" style="background: {{ Request::is('profile*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">

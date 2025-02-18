@@ -7,7 +7,7 @@
 @section("content")
 	<div class="w-full flex flex-wrap gap-5">
 		@forelse (Auth::user()->teached_courses as $course)
-			<a href="{{ route('teacher.mycourse.show', ['course_id' => $course->id]) }}"  style="width: 32%;" class="transition duration-300 hover:scale-105">
+			<a href="{{ route('teacher.mycourse.show', ['course_id' => $course->id]) }}"  style="width: 32%;" class="transition duration-300 hover:scale-105 relative">
 				<div class="bg-white rounded-3xl p-5 shadow-lg">
 					<!-- Course information -->
 					<p class="font-bold text-dark-blue">{{ $course->course_name }} - {{ ucwords($course->level) }}</p>
@@ -30,7 +30,11 @@
 						<i class="bi bi-book-half text-slate-400"></i>{{ $n_mat }} Activities
 					</div>
 				</div>
+				@if($course->topics->count() == 0)
+					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -4px; right: -4px;">!</div>
+				@endif
 			</a>
+
 		@empty
 			<div class="bg-white rounded-xl text-center font-semibold w-full mt-5 p-5">- No courses assigned yet -</div>
 		@endforelse

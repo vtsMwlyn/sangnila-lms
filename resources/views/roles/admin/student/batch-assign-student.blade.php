@@ -79,7 +79,7 @@
 					</table>
 				</div>
 
-				<form action="{{ route("admin.course.batch-assign.store", $course->id) }}" class="mt-10 w-full flex gap-3 justify-end items-center" method="post" id="leForm">
+				<form action="{{ route("admin.course.batch-assign-student.store", $course->id) }}" class="mt-10 w-full flex gap-3 justify-end items-center" method="post" id="leForm">
 					@csrf
 					<x-button class=" w-1/2 md:w-1/6">Assign All</x-button>
 					<x-cancel-button class="w-1/2 md:w-1/6">Cancel</x-cancel-button>

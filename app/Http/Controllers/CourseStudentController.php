@@ -162,7 +162,7 @@ class CourseStudentController extends Controller {
 	}
 
 	// Batch assign student to course
-	public function batch_assign($course_id){
+	public function batch_assign_student($course_id){
 		$course = Course::findOrFail($course_id);
 		$students = User::where("role_id", 3)->get();
 
@@ -178,14 +178,14 @@ class CourseStudentController extends Controller {
 			return $notEnrolledYet;
 		});
 
-		return view("roles.admin.student.batch-assign", [
+		return view("roles.admin.student.batch-assign-student", [
 			"course" => $course,
 			"allStudents" => $filtered,
 			"allTeachers" => $course->teachers
 		]);
 	}
 
-	public function batch_assign_store(Request $request, $course_id){
+	public function batch_assign_student_store(Request $request, $course_id){
 		$students = $request->studentName;
 		$teachers = $request->teacherName;
 		$maxcoursesessions = $request->maxCourseSession;

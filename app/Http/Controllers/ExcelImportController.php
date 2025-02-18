@@ -53,10 +53,7 @@ class ExcelImportController extends Controller
 			DB::beginTransaction();
 
 			// Remove the old data
-			$old_ctopics = CurriculumTopic::where("course_id", $course->id)->get();
-			foreach($old_ctopics as $ctopic){
-				CurriculumTopic::destroy($ctopic->id);
-			}
+			$old_ctopics = CurriculumTopic::where("course_id", $course->id)->delete();
 
 			// Add with the new data
 			Excel::import(new CurriculumsImport($course_id), $request->file('file')->store('temp'));
@@ -90,10 +87,7 @@ class ExcelImportController extends Controller
 			DB::beginTransaction();
 
 			// Remove the old data
-			$old_topics = Topic::where("course_id", $course->id)->get();
-			foreach($old_topics as $topic){
-				Topic::destroy($topic->id);
-			}
+			$old_topics = Topic::where("course_id", $course->id)->delete();
 
 			// Add with the new data
 			Excel::import(new TopicsAndActivitiesImport($course_id), $request->file('file')->store('temp'));

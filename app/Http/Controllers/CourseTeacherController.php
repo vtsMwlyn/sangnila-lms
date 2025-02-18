@@ -43,6 +43,40 @@ class CourseTeacherController extends Controller {
 		]);
 	}
 
+	// Batch assign teacher
+	public function batch_assign_teacher($course_id){
+		$course = Course::findOrFail($course_id);
+		return view('roles.admin.student.batch-assign-teacher', [
+			'teachers' => User::where('role_id', 2)->where('status', 'enabled')->get(),
+			'course' => $course
+		]);
+	}
+
+	// Save batch assign teacher
+	public function batch_assign_teacher_store(Request $request, $course_id){
+		$course = Course::findOrFail($course_id);
+
+		try {
+			DB::beginTransaction();
+
+			foreach($request->selected_teachers as $teacher_id){
+				CourseTeacher::create([
+					'user_id' => User::findOrFail($teacher_id)->id,
+					'course_id' => $course->id,
+				]);
+			}
+
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return back()->with('errorBatchAssignTeacher', 'System failed to batch assign teacher. Please report to our IT team, error detail: ' . $e->getMessage());
+		}
+
+		return redirect(route('admin.course.show', $course->id))->with('successBatchAssignTeacher', 'Successfully assigned the teachers into the course!');
+	}
+
 	// Remove the course from teacher's assigned course in the database
 	public function unassign($teacher_id, $course_id) {
 		try {

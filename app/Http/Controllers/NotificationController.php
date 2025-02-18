@@ -30,11 +30,7 @@ class NotificationController extends Controller
 	}
 
 	public function dismiss_all(){
-		foreach(Auth::user()->inboxes as $notif){
-			if($notif->status == "read"){
-				Notification::destroy($notif->id);
-			}
-		}
+		Notification::where('user_id', Auth::user()->id)->where('status', 'read')->delete();
 
 		return back()->with("successNotifAction", "Action on notification is success");
 	}

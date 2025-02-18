@@ -105,6 +105,38 @@
 								@endif
 							</tr>
 						@empty
+							<tr class="@if($index1 % 2 == 0) bg-white @endif">
+								<td class="py-2 px-4 w-1/4">
+									<div class="flex w-full items-center gap-3">
+										@if($student->details->profpic)
+											<img src="{{ Storage::url("app/public/" . $student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+										@else
+											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+										@endif
+										{{ $student->full_name }}
+									</div>
+								</td>
+								<td class="py-2 px-4 text-center" colspan="2">- No courses enrolled -</td>
+								<td class="py-2 px-4 text-center">
+									@if ($student->status == "enabled")
+										<span class="font-bold text-light-blue">Active</span>
+									@else
+										<span class="font-bold text-red">Inactive</span>
+									@endif
+								</td>
+								<td class="py-2 px-4">
+									<div class="flex w-full justify-start gap-1">
+										<x-anchor-button
+										href="{{ route('admin.student.show', $student->id) }}">
+											<i class="bi bi-eye"></i>
+										</x-anchor-button>
+										<x-anchor-button
+											href="{{ route('admin.student.edit', $student->id) }}">
+											<i class="bi bi-pencil-square"></i>
+										</x-anchor-button>
+									</div>
+								</td>
+							</tr>
 						@endforelse
 					@empty
 						<tr class="bg-white">

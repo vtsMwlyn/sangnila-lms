@@ -82,8 +82,11 @@
 
 		<h2 class="my-4 font-extrabold text-xl text-dark-blue">List of Activities</h2>
 
-		<div class="flex">
+		<div class="relative w-fit">
 			<x-anchor-button  href="{{ route('admin.course.curriculum.activity.store', [$curriculum_topic->course->id, $curriculum_topic->id]) }}"><i class="bi bi-plus-lg"></i> Add New Activity</x-anchor-button>
+			@if($curriculum_topic->curriculum_activities->count() == 0)
+				<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+			@endif
 		</div>
 
 		<div class="w-full bg-slate-400 mt-4" style="height: 2px;"></div>

@@ -36,7 +36,7 @@
 								@foreach ($student->enrolled_courses as $c)
 									<option value="{{ App\Models\CourseStudent::where('course_id', $c->id)->where('student_id', $student->id)->with(['teacher'])->with('course', function($query){
 										return $query->select('id', 'course_name');
-									})->first() }}">{{ $c->course_name }}</option>
+									})->first() }}">{{ $c->course_name }} - {{ ucwords($c->level) }}</option>
 								@endforeach
 							</x-select>
 							<p class="text-red font-bold mt-2 hidden" id="error-course"><i class="bi bi-exclamation-circle"></i> Please pick a course.</p>

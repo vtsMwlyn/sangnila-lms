@@ -179,6 +179,8 @@ class CurriculumController extends Controller
 		]);
 
 		try {
+			DB::beginTransaction();
+
 			$cactivity = CurriculumActivity::findOrFail($curriculum_activity_id);
 			$course = Course::findOrFail($course_id);
 
@@ -210,8 +212,12 @@ class CurriculumController extends Controller
 					}
 				}
 			}
+
+			DB::commit();
 		}
 		catch(Exception $e){
+			DB::rollBack();
+
 			return back()->with("systemFail", "System failed to edit curriculum activity, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
@@ -235,16 +241,72 @@ class CurriculumController extends Controller
 	}
 
 
+	public function copy_syllabus(Request $request, $course_id){
+		try {
+			DB::beginTransaction();
+
+			$current_course = Course::findOrFail($course_id);
+			$source_course = Course::findOrFail($request->course_id);
+
+			CurriculumTopic::where('course_id', $current_course->id)->delete();
+			LearningOutcome::where('course_id', $current_course->id)->delete();
+
+			foreach($source_course->learning_outcomes as $lo){
+				LearningOutcome::create([
+					'course_id' => $current_course->id,
+					'title' => $lo->title,
+					'number' => $lo->number,
+				]);
+			}
+
+			foreach($source_course->curriculum_topics as $ctopic){
+				$ntopic = CurriculumTopic::create([
+					"title" => $ctopic->title,
+					"course_id" => $current_course->id
+				]);
+
+				foreach($ctopic->curriculum_activities as $cactivity){
+					$nyuu = CurriculumActivity::create([
+						"curriculum_topic_id" => $ntopic->id,
+						"title" => $cactivity->title,
+						"desc" => $cactivity->desc,
+						"link" => $cactivity->link,
+						"session" => $cactivity->session
+					]);
+
+					foreach(LearningOutcomeCurriculumActivity::where('curriculum_activity_id', $cactivity->id)->get() as $loca){
+						$elo = LearningOutcome::where('course_id', $current_course->id)->where('title', $loca->learning_outcome->title)->first();
+
+						if ($elo) {
+							LearningOutcomeCurriculumActivity::create([
+								'learning_outcome_id' => $elo->id,
+								'curriculum_activity_id' => $nyuu->id,
+							]);
+						}
+					}
+				}
+			}
+
+
+
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return back()->with("failCopySyllabus", "System failed to copy syllabus data from the targetted course, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
+
+		return redirect(route("admin.course.show", $current_course->id))->with("successCopySyllabus", "Successfully copied syllabus data from the targetted course!");
+	}
+
+
 	/* ===== TEACHER ====== */
 	public function teacher_synchronize($course_id){
 		try {
 			DB::beginTransaction();
 
-			$current_topics = Topic::where("course_id", $course_id)->where("user_id", Auth::user()->id)->get();
-
-			foreach($current_topics as $utopic){
-				Topic::destroy($utopic->id);
-			}
+			Topic::where("course_id", $course_id)->where("user_id", Auth::user()->id)->delete();
 
 			$curriculum_topics = CurriculumTopic::where("course_id", $course_id)->get();
 
@@ -303,11 +365,7 @@ class CurriculumController extends Controller
 
 			$course = Course::findOrFail($course_id);
 
-			$current_topics = Topic::where("course_id", $course_id)->where("user_id", Auth::user()->id)->get();
-
-			foreach($current_topics as $utopic){
-				Topic::destroy($utopic->id);
-			}
+			$current_topics = Topic::where("course_id", $course_id)->where("user_id", Auth::user()->id)->delete();
 
 			$curriculum_topics = CurriculumTopic::where("course_id", $course_id)->get();
 

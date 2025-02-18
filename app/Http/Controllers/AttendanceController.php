@@ -387,7 +387,7 @@ class AttendanceController extends Controller {
 			foreach($request->is_attended as $i => $isAttended){
 				$course = Course::findOrFail($request->course_id[$i]);
 
-				$existingAttendance = Attendance::where('attendance_date', $request->attendance_date)->where('course_id', $course->id)->where('uploader_id', Auth::user()->id)->first();
+				$existingAttendance = Attendance::where('attendance_date', $request->attendance_date[$i])->where('course_id', $course->id)->where('uploader_id', Auth::user()->id)->first();
 
 				$attendanceId = 0;
 

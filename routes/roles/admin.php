@@ -45,8 +45,12 @@ Route::prefix('/admin')
 				Route::get('/{course_id}', [CourseController::class, 'admin_show'])->name('show')->whereNumber('course_id');
 
 				// Batch assign student
-				Route::get("/{course_id}/batch-assign", [CourseStudentController::class, "batch_assign"])->name("batch-assign")->whereNumber('course_id');
-				Route::post("/{course_id}/batch-assign", [CourseStudentController::class, "batch_assign_store"])->name("batch-assign.store")->whereNumber('course_id');
+				Route::get("/{course_id}/batch-assign/student", [CourseStudentController::class, "batch_assign_student"])->name("batch-assign-student")->whereNumber('course_id');
+				Route::post("/{course_id}/batch-assign/student", [CourseStudentController::class, "batch_assign_student_store"])->name("batch-assign-student.store")->whereNumber('course_id');
+
+				// Batch assign teacher
+				Route::get("/{course_id}/batch-assign/teacher", [CourseTeacherController::class, "batch_assign_teacher"])->name("batch-assign-teacher")->whereNumber('course_id');
+				Route::post("/{course_id}/batch-assign/teacher", [CourseTeacherController::class, "batch_assign_teacher_store"])->name("batch-assign-teacher.store")->whereNumber('course_id');
 
 				// Batch import old student data
 				Route::get("/{course_id}/import-data", [CourseStudentController::class, "import_student_data"])->name("import-student-data")->whereNumber('course_id');
@@ -99,6 +103,9 @@ Route::prefix('/admin')
 						// Remove curriculum activity from curriculum topic
 						Route::get("/{curriculum_topic_id}/{curriculum_activity_id}/delete", [CurriculumController::class, "admin_delete_activity"])->name("activity.delete")->whereNumber(['curriculum_topic_id', 'curriculum_activity_id']);
 						Route::post("/{curriculum_topic_id}/{curriculum_activity_id}/delete", [CurriculumController::class, "admin_destroy_activity"])->name("activity.destroy")->whereNumber(['curriculum_topic_id', 'curriculum_activity_id']);
+
+						// Copy syllabus from other course
+						Route::post('/copy-syllabus', [CurriculumController::class, 'copy_syllabus'])->name('copy-syllabus');
 					}
 				)->whereNumber("course_id");
 			}

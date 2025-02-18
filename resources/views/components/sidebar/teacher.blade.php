@@ -1,40 +1,35 @@
 <!-- Main sidebar -->
-<!-- Main sidebar -->
 <div class="text-white z-10 min-h-screen" style="width: 17%;" id="sidebar-container">
-	@php
-		// $student = Auth::user();
-		// $n_asg_subm = 0;
-		// $n_all_asg = 0;
+	{{-- @php
+		$all_course_has_topics = true;
 
-		// foreach($student->enrolled_courses as $crs){
-		// 	$student_assignments = App\Models\StudentAssignment::where("student_id", $student->id)->get();
+		foreach(Auth::user()->teached_courses as $c){
+			if($c->topics->count() == 0){
+				$all_course_has_topics = false;
+				break;
+			}
+		}
 
-		// 	$student_assignments_in_the_course = [];
-		// 	foreach($student_assignments as $asg){
-		// 		if($asg->assignment->course_id == $crs->id){
-		// 			array_push($student_assignments_in_the_course, $asg);
-		// 		}
-		// 	}
+		$there_is_student_with_no_progress_unlocked = false;
 
-		// 	foreach($student_assignments_in_the_course as $assg){
-		// 		foreach($assg->assignment->submissions as $submission){
-		// 			if($submission->student_id == $student->id){
-		// 				$n_asg_subm++;
-		// 				break;
-		// 			}
-		// 		}
-		// 	}
+		foreach (Auth::user()->teached_courses as $course) {
+			$students = App\Models\CourseStudent::where('teacher_id', Auth::user()->id)
+				->where('course_id', $course->id)
+				->get();
 
-		// 	$n_all_asg += count($student_assignments_in_the_course);
-		// }
+			foreach ($students as $student) {
+				$progress_statuses = App\Models\Progress::where("course_id", $course->id)
+					->where("student_id", $student->student_id)
+					->pluck("status");
 
-		// $n = $n_all_asg - $n_asg_subm;
-	@endphp
-
-	{{-- <!-- Sidebar toggler for mobile -->
-	<button id="mobileMenuButton" class="md:hidden bg-blue-950 text-white font-semibold text-xl transition duration-300 absolute m-2 px-4 py-3 z-10">
-		<span class="inline-block">&#9776;</span>
-	</button> --}}
+				// If no progress data exists OR no "unlocked" status exists at all
+				if ($progress_statuses->isEmpty() || !$progress_statuses->contains("unlocked")) {
+					$there_is_student_with_no_progress_unlocked = true;
+					break 2; // Exit both loops immediately
+				}
+			}
+		}
+	@endphp --}}
 
 	<div class="md:flex flex-col items-stretch sticky hidden z-0 m-0" style="top: 65px; background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center left; background-size: cover;" id="sidebar">
 		<div class="relative flex flex-col dropdown-container">
@@ -71,11 +66,17 @@
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
 				href="{{ route('teacher.mycourse.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*my-course*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-courses.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Courses
+				@if(!session('all_course_has_topics'))
+					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: 0; right: 0;">!</div>
+				@endif
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
 				href="{{ route('teacher.student.select-course') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*student*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-assignment.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Material Access
+				@if(session('there_is_student_with_no_progress_unlocked'))
+					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: 0; right: 0;">!</div>
+				@endif
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"

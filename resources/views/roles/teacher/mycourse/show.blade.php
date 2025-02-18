@@ -68,7 +68,7 @@
 @section("content")
 	<x-section-container>
 		<x-back-button href="{{ route('teacher.mycourse.index') }}"></x-back-button>
-		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
+		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("successSynchronizeCurriculum"))
@@ -119,7 +119,12 @@
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
 		<div class="flex justify-between items-stretch w-full mt-5">
-			<x-button type="button"  data-route="{{ route('teacher.mycourse.topic.store', $course->id) }}" id="new-topic-btn"><i class="bi bi-plus-lg"></i> Add New Topic</x-button>
+			<div class="relative">
+				<x-button type="button"  data-route="{{ route('teacher.mycourse.topic.store', $course->id) }}" id="new-topic-btn"><i class="bi bi-plus-lg"></i> Add New Topic</x-button>
+				@if($topics->count() == 0)
+					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+				@endif
+			</div>
 
 			<div class="flex gap-5">
 				<x-anchor-button
@@ -231,10 +236,13 @@
 								<td class="py-2 px-4">N/A</td>
 								<td class="py-2 px-4">
 									<div class="flex w-full items-center gap-2">
-										<x-anchor-button
-											href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}">
-											<i class="bi bi-eye"></i>
-										</x-anchor-button>
+										<div class="relative">
+											<x-anchor-button
+												href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}">
+												<i class="bi bi-eye"></i>
+											</x-anchor-button>
+											<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+										</div>
 										<x-button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.mycourse.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn"><i class="bi bi-pencil-square"></i></x-button>
 										<x-button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.mycourse.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn"><i class="bi bi-trash3"></i></x-button>
 									</div>

@@ -127,13 +127,44 @@
 	<x-confirmation popup_title="Delete Curriculum Topic" id="delete-curriculum-topic">
 		Are you sure want to <span class="font-bold text-red">delete</span> the Curriculum Topic <span class="font-bold text-light-blue" id="del-ct-name"></span> from this course?
 	</x-confirmation>
+
+	<!-- Copy syllabus -->
+	<x-popup popup_title="Copy Syllabus Data" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="copy-syllabus-data">
+		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
+			<p class="mt-4"><strong class="text-red">Warning:</strong> You're about to copy topics, activities, sessions, and learning outcomes from the selected course below. This will <strong>erase current existing topics, activities, sessions, and learning outcomes from this course</strong> and replace with the data from the selected couse.</p>
+
+			<form action="{{ route('admin.course.curriculum.copy-syllabus', $course->id) }}" method="post" class="mt-4">
+				@csrf
+				<div class="flex flex-col">
+					<label for="course_id">Copy from:</label>
+					<x-select id="course_id" class="w-full mt-1" type="text" name="course_id" style="border-width: 3px;">
+						@foreach ($all_courses as $c)
+							<option value="{{ $c->id }}">{{ $c->course_name }} - {{ ucwords($c->level) }}</option>
+						@endforeach
+					</x-select>
+				</div>
+
+				<div class="flex items-center justify-center w-full mt-8 mb-3 gap-3">
+					<x-button class="w-full md:w-1/6">Proceed</x-button>
+				</div>
+			</form>
+		</div>
+	</x-popup>
 @endsection
 
 @section("content")
 	<x-section-container class="mb-10">
 		<!-- Page title -->
 		<x-back-button href="{{ route('admin.course.index') }}"></x-back-button>
-		<x-page-title style="margin-bottom: 0;">{{ $course->course_name }}</x-page-title>
+		<div class="flex items-center justify-between">
+			<x-page-title style="margin-bottom: 0;">{{ $course->course_name }}</x-page-title>
+			<div class="relative">
+				<x-button type="button" id="copy-syllabus-data-btn"><i class="bi bi-copy"></i> Copy Syllabus Data</x-button>
+				@if($course_empty)
+					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+				@endif
+			</div>
+		</div>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		<!-- Flash messages -->
@@ -153,6 +184,12 @@
 			<x-badge-success badge_text="{{ session('successImportExcelCurriculum') }}"></x-badge-success>
 		@elseif(session()->has("successDeleteCurriculumTopic"))
 			<x-badge-warning badge_text="{{ session('successDeleteCurriculumTopic') }}"></x-badge-warning>
+		@elseif(session()->has("successBatchAssignTeacher"))
+			<x-badge-success badge_text="{{ session('successBatchAssignTeacher') }}"></x-badge-success>
+		@elseif(session()->has("successCopySyllabus"))
+			<x-badge-success badge_text="{{ session('successCopySyllabus') }}"></x-badge-success>
+		@elseif(session()->has("failCopySyllabus"))
+			<x-badge-danger badge_text="{{ session('failCopySyllabus') }}"></x-badge-danger>
 		@endif
 
 		<!-- Course informations -->
@@ -203,13 +240,17 @@
 		</div>
 
 		<!-- Learning Outcomes -->
-		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
-		<h2 class="my-4 font-extrabold text-xl text-dark-blue">Learning Outcomes</h2>
-		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
-
-		<div class="mt-4">
-			<x-button type="button" class="newlearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.store', $course->id) }}"><i class="bi bi-plus-lg"></i> New Learning Outcome</x-button>
+		<div class="w-full bg-slate-400 mt-12" style="height: 2px;"></div>
+		<div class="flex items-center justify-between">
+			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Learning Outcomes</h2>
+			<div class="relative">
+				<x-button type="button" class="newlearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.store', $course->id) }}"><i class="bi bi-plus-lg"></i> New Learning Outcome</x-button>
+				@if($learning_outcomes_empty)
+					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+				@endif
+			</div>
 		</div>
+		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
 		<div class="w-full overflow-x-auto my-6">
 			<table class="w-full">
@@ -245,7 +286,15 @@
 
 		<!-- Assigned teachers and students -->
 		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
-		<h2 class="my-4 font-extrabold text-xl text-dark-blue">List of Assigned Teachers</h2>
+		<div class="my-3 flex items-center justify-between">
+			<h2 class="font-extrabold text-xl text-dark-blue">List of Assigned Teachers</h2>
+			<div class="relative">
+				<x-anchor-button href="{{ route('admin.course.batch-assign-teacher', $course->id) }}"><i class="bi bi-ui-checks-grid"></i> Assign Teachers</x-anchor-button>
+				@if($no_teachers_assigned)
+					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+				@endif
+			</div>
+		</div>
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
 		<div class="mt-8 flex flex-wrap">
@@ -269,7 +318,12 @@
 		<div class="flex w-full justify-between items-center">
 			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Student List</h2>
 			<div class="flex gap-4 justify-end">
-				<x-anchor-button  href="{{ route('admin.course.batch-assign', $course->id) }}"><i class="bi bi-ui-checks-grid"></i> Batch Assign</x-anchor-button>
+				<div class="relative">
+					<x-anchor-button  href="{{ route('admin.course.batch-assign-student', $course->id) }}"><i class="bi bi-ui-checks-grid"></i> Assign Students</x-anchor-button>
+					@if($no_students_assigned)
+						<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+					@endif
+				</div>
 				<x-anchor-button  href="{{ route('admin.course.import-student-data', $course->id) }}"><i class="bi bi-card-checklist"></i> Import Old Student</x-anchor-button>
 			</div>
 		</div>
@@ -298,7 +352,12 @@
 			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Syllabus/Curriculum</h2>
 			<div class="flex gap-4 justify-end">
 				<x-anchor-button  href="{{ route('admin.course.curriculum.import-excel', $course->id) }}"><i class="bi bi-file-earmark-arrow-up"></i> Import from Excel</x-anchor-button>
-				<x-button type="button"  data-route="{{ route('admin.course.curriculum.topic.store', $course->id) }}" id="new-curriculum-topic-btn"><i class="bi bi-plus-lg"></i> Add New Topic</x-button>
+				<div class="relative">
+					<x-button type="button"  data-route="{{ route('admin.course.curriculum.topic.store', $course->id) }}" id="new-curriculum-topic-btn"><i class="bi bi-plus-lg"></i> Add New Topic</x-button>
+					@if($syllabus_empty)
+						<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+					@endif
+				</div>
 			</div>
 		</div>
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
@@ -360,9 +419,14 @@
 						</td>
 						<td class="py-2 px-4">
 							<div class="w-full flex items-center gap-2">
-								<x-anchor-button href="{{ route('admin.course.curriculum.topic.details', [$course->id, $topic->id]) }}" class=" w-1/2"><i class="bi bi-eye"></i></x-anchor-button>
-								<x-button type="button" data-curriculum_topic="{{ $topic }}" data-route="{{ route('admin.course.curriculum.topic.update', [$course->id, $topic->id]) }}" class=" w-1/2 edit-curriculum-topic-btn"><i class="bi bi-pencil-square"></i></x-button>
-								<x-button type="button" data-del_ct_name="{{ $topic->title }}" data-route="{{ route('admin.course.curriculum.topic.destroy', [$course->id, $topic->id]) }}" class=" w-1/2 delete-curriculum-topic-btn"><i class="bi bi-trash3"></i></x-button>
+								<div class="relative">
+									<x-anchor-button href="{{ route('admin.course.curriculum.topic.details', [$course->id, $topic->id]) }}"><i class="bi bi-eye"></i></x-anchor-button>
+									@if($topic->curriculum_activities->count() == 0)
+										<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+									@endif
+								</div>
+								<x-button type="button" data-curriculum_topic="{{ $topic }}" data-route="{{ route('admin.course.curriculum.topic.update', [$course->id, $topic->id]) }}" class="edit-curriculum-topic-btn"><i class="bi bi-pencil-square"></i></x-button>
+								<x-button type="button" data-del_ct_name="{{ $topic->title }}" data-route="{{ route('admin.course.curriculum.topic.destroy', [$course->id, $topic->id]) }}" class="delete-curriculum-topic-btn"><i class="bi bi-trash3"></i></x-button>
 							</div>
 						</td>
 					</tr>
@@ -433,6 +497,10 @@
 		}
 
 		$(document).ready(() => {
+			$('#copy-syllabus-data-btn').on('click', function(){
+				$('#copy-syllabus-data').parent().show();
+			});
+
 			// Delete course
 			$('#delete-course-btn').on('click', function() {
 				// Retrieve data and set the data to the popup
