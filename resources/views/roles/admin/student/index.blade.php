@@ -126,10 +126,13 @@
 								</td>
 								<td class="py-2 px-4">
 									<div class="flex w-full justify-start gap-1">
-										<x-anchor-button
-										href="{{ route('admin.student.show', $student->id) }}">
-											<i class="bi bi-eye"></i>
-										</x-anchor-button>
+										<div class="relative">
+											<x-anchor-button
+											href="{{ route('admin.student.show', $student->id) }}">
+												<i class="bi bi-eye"></i>
+											</x-anchor-button>
+											<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -4px; right: -4px;">!</div>
+										</div>
 										<x-anchor-button
 											href="{{ route('admin.student.edit', $student->id) }}">
 											<i class="bi bi-pencil-square"></i>

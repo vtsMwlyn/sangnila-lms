@@ -27,12 +27,12 @@
 				</div>
 				<div id="form-area">
 					<div class="flex flex-col md:flex-row gap-3">
-						<div class="mt-3 w-full md:w-1/3 select-2_container" id="inpStudentField">
+						<div class="mt-3 w-full md:w-1/3 container-select2" id="inpStudentField">
 							<x-label class="mb-1">{{ __("Student Name") }}</x-label>
 							<x-select name="student_name" id="student_name" class="w-full select-2" required>
 								<option disabled selected>Select Student</option>
 							</x-select>
-							<p class="text-red-700 font-bold mt-1" id="errStudent"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
+							<p class="text-red font-bold mt-1" id="errStudent"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 						</div>
 						<div class="mt-3 w-full md:w-1/3" id="inpTeacherField">
 							<x-label class="mb-1">{{ __("Teacher Name") }}</x-label>
@@ -42,12 +42,12 @@
 									<option value="{{ $t->full_name }}">{{ ($t->details->gender == 1)? "Mr." : "Ms." }} {{ $t->full_name }}</option>
 								@endforeach
 							</x-select>
-							<p class="text-red-700 font-bold mt-1" id="errTeacher"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
+							<p class="text-red font-bold mt-1" id="errTeacher"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 						</div>
 						<div class="mt-3 w-full md:w-1/3" id="inpMaxCourseSessionField">
 							<x-label class="mb-1">{{ __("Max Course Session") }}</x-label>
 							<x-input id="max_course_session" class="w-full" type="number" name="max_course_session" placeholder="Maximum sessions" value="8" />
-							<p class="text-red-700 font-bold mt-1" id="errMaxCourseSession"><i class="bi bi-exclamation-circle"></i> Invalid input.</p>
+							<p class="text-red font-bold mt-1" id="errMaxCourseSession"><i class="bi bi-exclamation-circle"></i> Invalid input.</p>
 						</div>
 					</div>
 					<div class="flex w-full justify-end mt-8">
@@ -102,9 +102,9 @@
 						$("#student_name").append(newOption);
 					});
 
-					$("#errStudent").css({"display": "none"});
-					$("#errTeacher").css({"display": "none"});
-					$("#errMaxCourseSession").css({"display": "none"});
+					$("#errStudent").hide();
+					$("#errTeacher").hide();
+					$("#errMaxCourseSession").hide();
 
 					// Event trigger
 					const itemListModifiedEvent = new Event("item_list_modified");
@@ -141,36 +141,33 @@
 
 					// Add items when add button clicked (main logic)
 					$("#addBtn").click(() => {
-						const inpStudentName = $("#student_name").val();
-						const inpTeacherName = $("#teacher_name").val();
-						const inpMaxCourseSession = $("#max_course_session").val();
+						const inpStudentName = $("#student_name");
+						const inpTeacherName = $("#teacher_name");
+						const inpMaxCourseSession = $("#max_course_session");
 
 						// Some validations
-						$("#inpStudentField").css({"border": "none", "padding": 0});
-						$("#inpTeacherField").css({"border": "none", "padding": 0});
-						$("#inpMaxCourseSessionField").css({"border": "none", "padding": 0});
-						$("#errStudent").css({"display": "none"});
-						$("#errTeacher").css({"display": "none"});
-						$("#errMaxCourseSession").css({"display": "none"});
+						inpStudentName.removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0');
+						inpTeacherName.removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0');
+						inpMaxCourseSession.removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0');
+
+						$("#errStudent").hide();
+						$("#errTeacher").hide();
+						$("#errMaxCourseSession").hide();
 
 						let invalidInput = false;
 
 						if(!inpStudentName){
-							$("#inpStudentField").css({"border": "2px solid rgb(185 28 28)", "padding": "10px"});
-							$("#errStudent").css({"display": "block"});
+							$("#errStudent").show();
 							invalidInput = true;
 						}
 
 						if(!inpTeacherName){
-							$("#inpTeacherField").css({"border": "2px solid rgb(185 28 28)", "padding": "10px"});
-							$("#errTeacher").css({"display": "block"});
+							$("#errTeacher").show();
 							invalidInput = true;
 						}
 
 						if(inpMaxCourseSession < 1){
-							$("#inpMaxCourseSessionField").css({"border": "2px solid rgb(185 28 28)", "padding": "10px"});
-							$("#inpMaxCourseSession")
-							$("#errMaxCourseSession").css({"display": "block"});
+							$("#errMaxCourseSession").show();
 							invalidInput = true;
 						}
 
@@ -193,11 +190,11 @@
 						const col3 = $("<td>").addClass("py-2 px-4");
 						const col4 = $("<td>").addClass("py-2 px-4");
 
-						const studentObj = JSON.parse(inpStudentName);
+						const studentObj = JSON.parse(inpStudentName.val());
 
 						col1.text(studentObj.full_name);
-						col2.text(inpTeacherName);
-						col3.text(inpMaxCourseSession);
+						col2.text(inpTeacherName.val());
+						col3.text(inpMaxCourseSession.val());
 
 						const removeBtn = $("<button>").html("<i class='bi bi-trash3'></i>").attr({"type": "button"}).addClass("text-center px-5 py-2 border border-transparent rounded-lg text-white bg-red hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 transition ease-in-out duration-150");
 
@@ -207,9 +204,21 @@
 
 						row.append(col1, col2, col3, col4);
 
+						$("#tableBody").append(row);
+
+						// Generate helper hidden input for Laravel data retrieval
+						const hiddenInput1 = $("<input>").attr({"type": "hidden", "value": studentObj.id, "name": "studentName[]"});
+						const hiddenInput2 = $("<input>").attr({"type": "hidden", "value": inpTeacherName.val(), "name": "teacherName[]"});
+						const hiddenInput3 = $("<input>").attr({"type": "hidden", "value": inpMaxCourseSession.val(), "name": "maxCourseSession[]"});
+						$("#leForm").append(hiddenInput1, hiddenInput2, hiddenInput3);
+
 						removeBtn.click(() => {
 							if(confirm("Are you sure want to remove this student from the list?")){
 								row.remove();
+
+								hiddenInput1.remove();
+								hiddenInput2.remove();
+								hiddenInput3.remove();
 
 								const index = without.indexOf(inpStudentName);
 								without.splice(index, 1);
@@ -217,14 +226,6 @@
 								document.dispatchEvent(itemListModifiedEvent);
 							}
 						});
-
-						$("#tableBody").append(row);
-
-						// Generate helper hidden input for Laravel data retrieval
-						const hiddenInput1 = $("<input>").attr({"type": "hidden", "value": studentObj.id, "name": "studentName[]"});
-						const hiddenInput2 = $("<input>").attr({"type": "hidden", "value": inpTeacherName, "name": "teacherName[]"});
-						const hiddenInput3 = $("<input>").attr({"type": "hidden", "value": inpMaxCourseSession, "name": "maxCourseSession[]"});
-						$("#leForm").append(hiddenInput1, hiddenInput2, hiddenInput3);
 
 						without.push(studentObj.full_name);
 

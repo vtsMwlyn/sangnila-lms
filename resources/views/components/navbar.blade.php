@@ -43,7 +43,7 @@
 
 				<div class="relative flex flex-col items-end dropdown-container">
 					@if($n > 0)
-						<div class="absolute h-3 w-3 bg-red rounded-full flex justify-center items-center text-white" style="top: -0.25rem; right: -0.25rem;"></div>
+						<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
 					@endif
 					<button type="button" class="dropdown-toggler"><img src="{{ asset('img/mail-icon.svg') }}" alt="mail-icon" class="h-6"></button>
 

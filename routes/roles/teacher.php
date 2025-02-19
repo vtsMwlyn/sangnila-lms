@@ -17,7 +17,7 @@ use App\Http\Controllers\TeacherController;
 
 Route::prefix('/teacher')
 	->name('teacher.')
-	->middleware(['auth', 'role:Teacher', 'verified', "acc_not_disabled", 'remind_teacher'])
+	->middleware(['auth', 'role:Teacher', 'verified', "acc_not_disabled", 'remind_user'])
 	->group(function () {
 
 		// ===== DASHBOARD ===== //

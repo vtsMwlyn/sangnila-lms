@@ -23,7 +23,7 @@ class CourseController extends Controller {
 	// Showing list of all available courses in Sangnila LMS
 	public function admin_index() {
 		return view('roles.admin.course.index', [
-			'courses' => Course::filter(request(["search"]))->orderBy('course_name')->paginate(15)
+			'courses' => Course::filter(request(["search"]))->with(['curriculum_topics', 'learning_outcomes', 'teachers', 'students'])->orderByRaw('CASE WHEN status = "active" THEN 0 ELSE 1 END')->orderBy('course_name')->get()
 		]);
 	}
 

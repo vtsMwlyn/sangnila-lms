@@ -21,7 +21,7 @@ use App\Models\LearningOutcome;
 
 Route::prefix('/admin')
 	->name('admin.')
-	->middleware(['auth', 'role:LMS Admin', 'verified', "acc_not_disabled"])
+	->middleware(['auth', 'role:LMS Admin', 'verified', "acc_not_disabled", 'remind_user'])
 	->group(function () {
 
 		// Landing page

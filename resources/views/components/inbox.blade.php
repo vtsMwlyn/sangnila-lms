@@ -1,6 +1,6 @@
 @php
 	// Remove expired announcement
-	
+
 
 	// Remove 30 days read inboxes
 	$n = 0;
@@ -24,7 +24,7 @@
 
 <div class="relative flex flex-col items-end" id="inbox-container">
 	@if($n > 0)
-		<div class="absolute h-6 w-7 bg-red-600 rounded-full flex justify-center items-center text-white" style="top: -0.5rem; right: -0.5rem;">{{ $n }}</div>
+		<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
 	@endif
 	<x-button class="bg-yellow-600" type="button" id="inbox-toggler">Inbox <i class="bi bi-chevron-compact-down"></i></x-button>
 	<div class="absolute z-10 bg-white top-11 h-96 w-80 rounded-xl p-2 flex flex-col" id="inbox-dropdown" style="@if(!session()->has('successNotifAction')) display: none; @endif box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">

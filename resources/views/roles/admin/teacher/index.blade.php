@@ -62,10 +62,15 @@
 							</td>
 							<td class="py-2 px-4">
 								<div class="flex gap-1 w-full">
-									<x-anchor-button
-										href="{{ route('admin.teacher.show', $teacher->id) }}">
-										<i class="bi bi-eye"></i>
-									</x-anchor-button>
+									<div class="relative">
+										<x-anchor-button
+											href="{{ route('admin.teacher.show', $teacher->id) }}">
+											<i class="bi bi-eye"></i>
+										</x-anchor-button>
+										@if ($teacher->teached_courses->count() == 0)
+											<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -4px; right: -4px;">!</div>
+										@endif
+									</div>
 									<x-anchor-button
 										href="{{ route('admin.teacher.edit', $teacher->id) }}">
 										<i class="bi bi-pencil-square"></i>

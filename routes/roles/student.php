@@ -14,7 +14,7 @@ use App\Http\Controllers\CourseStudentController;
 
 Route::prefix('/student')
 	->name('student.')
-	->middleware(['auth', 'role:Student', 'verified', "acc_not_disabled"])
+	->middleware(['auth', 'role:Student', 'verified', "acc_not_disabled", 'remind_user'])
 	->group(function() {
 
 		// Landing page

@@ -31,7 +31,7 @@ Route::middleware([])->group(function(){
 		return view('roles.guest.home');
 	})->name('home');
 
-	Route::middleware(["auth", "verified"])->group(function(){
+	Route::middleware(["auth", "verified", 'remind_user'])->group(function(){
 		Route::get('/dashboard', [DashboardController::class, "index"])->middleware(['auth', 'verified'])->name('dashboard');
 
 		// Profile & notifications

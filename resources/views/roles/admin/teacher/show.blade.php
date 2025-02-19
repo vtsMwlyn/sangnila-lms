@@ -84,9 +84,14 @@
 		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
 		<div class="flex my-4 w-full justify-between items-center">
 			<h2 class="font-extrabold text-xl text-dark-blue">List of Assigned Courses and Students</h2>
-			<x-button type="button" id="assign-teacher-btn"  data-route="{{ route('admin.teacher.assign.store', $teacher->id) }}">
-				<i class="bi bi-plus-lg"></i> Assign to Course
-			</x-button>
+			<div class="relative">
+				<x-button type="button" id="assign-teacher-btn"  data-route="{{ route('admin.teacher.assign.store', $teacher->id) }}">
+					<i class="bi bi-plus-lg"></i> Assign to Course
+				</x-button>
+				@if($teacher->teached_courses->count() == 0)
+					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+				@endif
+			</div>
 		</div>
 		<div class="w-full bg-slate-400" style="height: 2px;"></div>
 

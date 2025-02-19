@@ -68,6 +68,6 @@ class Kernel extends HttpKernel
 		"acc_not_disabled" => \App\Http\Middleware\Disabled::class,
 		"maintenance" => \App\Http\Middleware\Maintenance::class,
 
-		'remind_teacher' => \App\Http\Middleware\RemindTeacher::class,
+		'remind_user' => \App\Http\Middleware\RemindUser::class,
     ];
 }

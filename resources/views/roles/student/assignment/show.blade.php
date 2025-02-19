@@ -147,10 +147,15 @@
 									<a href="{{ $asg->link }}" target="blank">
 										<img src="{{ asset('img/download.svg') }}" alt="download-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</a>
-									<button type="button" class="submitassignment-popuptrigger" data-route="{{ route('student.assignment.store', [$course->id, $asg->id]) }}"
-										data-assignment="{{ $asg->toJSON() }}" data-submissions="{{ count($submissions_per_assignment[$index]) }}">
-										<img src="{{ asset('img/attach.svg') }}" alt="history-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
-									</button>
+									<div class="relative">
+										<button type="button" class="submitassignment-popuptrigger" data-route="{{ route('student.assignment.store', [$course->id, $asg->id]) }}"
+											data-assignment="{{ $asg->toJSON() }}" data-submissions="{{ count($submissions_per_assignment[$index]) }}">
+											<img src="{{ asset('img/attach.svg') }}" alt="history-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</button>
+										@if(count($submissions_per_assignment[$index]) == 0)
+											<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+										@endif
+									</div>
 								</div>
 							</td>
 							<td class="py-2 px-4">

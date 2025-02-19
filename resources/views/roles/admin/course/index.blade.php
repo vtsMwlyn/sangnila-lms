@@ -36,7 +36,7 @@
 			</x-badge-warning>
 		@endif
 
-		<div class="w-full overflow-x-auto">
+		<div class="w-full overflow-x-auto" style="height: 60vh;">
 			<table class="w-full">
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Course Name</th>
@@ -63,10 +63,15 @@
 							<td class="py-2 px-4 font-semibold @if($course->status == "active") text-light-blue @else text-red @endif">{{ ucwords($course->status) }}</td>
 							<td class="py-2 px-4">
 								<div class="flex gap-1 w-full">
-									<x-anchor-button
-										href="{{ route('admin.course.show', ['course_id' => $course->id]) }}">
-										<i class="bi bi-eye"></i>
-									</x-anchor-button>
+									<div class="relative">
+										<x-anchor-button
+											href="{{ route('admin.course.show', ['course_id' => $course->id]) }}">
+											<i class="bi bi-eye"></i>
+										</x-anchor-button>
+										@if($course->teachers->count() == 0 || $course->students->count() == 0 || $course->learning_outcomes->count() == 0 || $course->curriculum_topics->count() == 0)
+											<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -4px; right: -4px;">!</div>
+										@endif
+									</div>
 									<x-anchor-button
 										href="{{ route('admin.course.edit', $course->id) }}">
 										<i class="bi bi-pencil-square"></i>
@@ -84,9 +89,9 @@
 			</table>
 		</div>
 
-		<div class="mt-6 w-full flex justify-center">
+		{{-- <div class="mt-6 w-full flex justify-center">
 			{{ $courses->links() }}
-		</div>
+		</div> --}}
 	</x-section-container>
 
 	<script>

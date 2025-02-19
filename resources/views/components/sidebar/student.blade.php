@@ -1,35 +1,5 @@
 <!-- Main sidebar -->
 <div class="text-white z-10 min-h-screen" style="width: 17%;" id="sidebar-container">
-	@php
-		// $student = Auth::user();
-		// $n_asg_subm = 0;
-		// $n_all_asg = 0;
-
-		// foreach($student->enrolled_courses as $crs){
-		// 	$student_assignments = App\Models\StudentAssignment::where("student_id", $student->id)->get();
-
-		// 	$student_assignments_in_the_course = [];
-		// 	foreach($student_assignments as $asg){
-		// 		if($asg->assignment->course_id == $crs->id){
-		// 			array_push($student_assignments_in_the_course, $asg);
-		// 		}
-		// 	}
-
-		// 	foreach($student_assignments_in_the_course as $assg){
-		// 		foreach($assg->assignment->submissions as $submission){
-		// 			if($submission->student_id == $student->id){
-		// 				$n_asg_subm++;
-		// 				break;
-		// 			}
-		// 		}
-		// 	}
-
-		// 	$n_all_asg += count($student_assignments_in_the_course);
-		// }
-
-		// $n = $n_all_asg - $n_asg_subm;
-	@endphp
-
 	<div class="md:flex flex-col items-stretch sticky hidden z-0 m-0" style="top: 65px; background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center left; background-size: cover;" id="sidebar">
 		<div class="relative flex flex-col dropdown-container">
 			<button type="button" class="flex flex-col items-center dropdown-toggler px-10 py-4 mb-6 hover:bg-slate-400" style="background: {{ Request::is('profile*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
@@ -69,6 +39,9 @@
 					href="{{ route('student.assignment.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('student*assignment*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 					<img src="{{ asset('img/sidebar-assignment.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Assignment
 				</x-anchor-button>
+				@if(session('some_assignments_not_submitted'))
+					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: 0; right: 0;">!</div>
+				@endif
 			</div>
 
 			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6 hover:bg-cyan-500"
