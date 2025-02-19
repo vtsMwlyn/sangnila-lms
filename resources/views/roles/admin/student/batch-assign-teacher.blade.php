@@ -1,4 +1,4 @@
-@extends("layouts.main-teacher")
+@extends("layouts.main-admin")
 
 @section("title")
 	<h1>Manage Course</h1>
@@ -12,7 +12,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title>Student Attendance for {{ $course->course_name }}</x-page-title>
+		<x-page-title>Teacher Batch Assign</x-page-title>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has('errorBatchAssignTeacher'))
@@ -23,7 +23,7 @@
 			$iterasus = 1;
 		@endphp
 
-		<h1>Select Teachers to Assign to this Course:</h1>
+		<h1>Select Teachers to Assign to Course <strong>{{ $course->course_name }} - {{ ucwords($course->level) }}</strong>:</h1>
 		<form action="{{ route('admin.course.batch-assign-teacher.store', $course->id) }}" method="post" class="flex flex-col py-6">
 			@csrf
 
