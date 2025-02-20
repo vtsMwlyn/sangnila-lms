@@ -62,6 +62,15 @@
 					<x-input type="text" name="max_course_session" id="max_course_session" class="w-full mt-1" />
 				</div>
 
+				<div class="flex flex-col w-full">
+					<x-label for="status" :value="__('Learning Status')"/>
+					<x-select name="learning_status" id="learning_status" class="w-full mt-1">
+						<option value="learning">Learning</option>
+						<option value="complete">Complete</option>
+						<option value="undone">Undone</option>
+					</x-select>
+				</div>
+
 				<div class="flex gap-3 w-full justify-center">
 					<x-button type="submit" class=" w-1/6 mt-5">
 						Assign
@@ -81,21 +90,24 @@
 			@csrf
 
 			<div class="flex flex-col gap-3 w-full">
-				{{-- <div class="flex flex-col w-full">
-					<x-label for="status" :value="__('Course Name')"/>
-					<x-select name="course" id="course" class="w-full mt-1">
-					</x-select>
-				</div>
-
 				<div class="flex flex-col w-full">
 					<x-label for="status" :value="__('Teacher')"/>
 					<x-select name="teacher" id="teacher" class="w-full mt-1">
 					</x-select>
-				</div> --}}
+				</div>
 
 				<div class="flex flex-col w-full">
 					<x-label for="status" :value="__('Max Course Session')"/>
 					<x-input type="text" name="max_course_session" id="max_course_session" class="w-full mt-1" />
+				</div>
+
+				<div class="flex flex-col w-full">
+					<x-label for="status" :value="__('Learning Status')"/>
+					<x-select name="learning_status" id="learning_status" class="w-full mt-1">
+						<option value="learning">Learning</option>
+						<option value="complete">Complete</option>
+						<option value="undone">Undone</option>
+					</x-select>
 				</div>
 
 				<div class="flex gap-3 w-full justify-center">
@@ -304,12 +316,18 @@
 							$teacher = $cs->teacher;
 						@endphp
 
-						<h1 class="text-xl font-bold"><a href="{{ route('admin.course.show', $course->id) }}" class="text-blue-950 hover:text-cyan-500">{{ $course->course_name }}</a></h1>
+						<h1 class="text-xl font-bold"><a href="{{ route('admin.course.show', $course->id) }}" class="text-blue-950 hover:text-cyan-500">{{ $course->course_name }} - {{ ucwords($course->level) }}</a></h1>
 						<div class="w-full bg-slate-400 my-2" style="height: 2px;"></div>
 
 						<div class="flex gap-2 items-center">
 							<img src="{{ asset('img/lecturer.svg') }}" class="w-4 h-4" alt="icon">
-							{{ ucwords($course->level) }}
+							@if($cs->learning_status == 'learning')
+								<span class="font-bold text-light-blue">Learning</span>
+							@elseif($cs->learning_status == 'complete')
+								<span class="font-bold text-green-600">Complete</span>
+							@else
+								<span class="font-bold text-red">Undone</span>
+							@endif
 						</div>
 						<div class="flex gap-2 items-center">
 							<img src="{{ asset('img/lecturer.svg') }}" class="w-4 h-4" alt="icon">
@@ -416,7 +434,7 @@
 			$(`#${whichpopup}`).find("form").attr("action", route);
 
 			$('select[name="course"]').empty();
-			$('select[name="course"]').append($("<option>").prop({"selected": true}).text('Select a course'));
+			$('select[name="course"]').append($("<option>").attr('value', '').prop({"selected": true}).text('Select a course'));
 			const filtered = allCoursesWithTeachers.filter(item =>
 				!alreadyEnrolled.some(course => course.id === item.id)
 			);
@@ -428,7 +446,7 @@
 			});
 
 			$('select[name="teacher"]').empty();
-			$('select[name="teacher"]').append($("<option>").prop({"selected": true}).text('Pick a teacher (select course first)'));
+			$('select[name="teacher"]').append($("<option>").attr('value', '').prop({"selected": true}).text('Pick a teacher (select course first)'));
 
 			$('input[name="max_course_session"]').val(8);
 
@@ -444,9 +462,20 @@
 
 			$(`#${whichpopup}`).find("form").attr("action", route);
 
-			const oldMaxCourseSession = '{{ old('max_course_session') }}';
+			const oldMaxCourseSession = '{{ old("max_course_session") }}';
+			const oldLearningStatus = '{{ old("learning_status") }}';
+
+			allCoursesWithTeachers.forEach(course => {
+				if(course.id == courseStudent.course_id){
+					$('select[name="teacher"]').empty();
+					for(teacher of course.teachers){
+						$('select[name="teacher"]').append($("<option>").attr("value", teacher.id).text(teacher.full_name).prop('selected', (teacher.id == courseStudent.teacher_id? true : false)));
+					}
+				}
+			});
 
 			$('input[name="max_course_session"]').val(oldMaxCourseSession ? oldMaxCourseSession : courseStudent.max_course_session);
+			$('select[name="learning_status"]').find(`option[value='${oldLearningStatus ? oldLearningStatus : courseStudent.learning_status}']`).prop('selected', true);
 
 			// Display the popup
 			$(`#${whichpopup}`).parent().show();

@@ -6,19 +6,100 @@ use Exception;
 use App\Models\Topic;
 use App\Models\Course;
 use App\Models\Activity;
+use App\Models\Progress;
 use Illuminate\Http\Request;
+use App\Models\CourseStudent;
+use App\Models\CourseTeacher;
 use App\Models\CurriculumTopic;
-use App\Models\CurriculumActivity;
 use App\Models\LearningOutcome;
-use App\Models\LearningOutcomeActivity;
-use App\Models\LearningOutcomeCurriculumActivity;
 use App\Rules\MinimumOneCheckbox;
+use App\Models\CurriculumActivity;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\LearningOutcomeActivity;
+use App\Models\LearningOutcomeCurriculumActivity;
+use App\Models\StudentAttendance;
 
 class CurriculumController extends Controller
 {
+	// ===== SYSADMIN ONLY ===== //
+	public function sync_syllabus_for_all_course(){
+		try {
+			DB::beginTransaction();
+	
+			foreach(CourseTeacher::all() as $ct){
+				$course = $ct->course;
+				$teacher = $ct->teacher;
+
+				Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->delete();
+	
+				$curriculum_topics = CurriculumTopic::where("course_id", $course->id)->get();
+		
+				foreach($curriculum_topics as $ctopic){
+					$ntopic = Topic::create([
+						"title" => $ctopic->title,
+						"user_id" => Auth::user()->id,
+						"course_id" => $course->id
+					]);
+		
+					foreach($ctopic->curriculum_activities as $activity){
+						$nyuu = Activity::create([
+							"topic_id" => $ntopic->id,
+							"title" => $activity->title,
+							"desc" => $activity->desc,
+							"link" => $activity->link,
+							"session" => $activity->session
+						]);
+		
+						foreach($activity->learning_outcomes as $ctlo){
+							LearningOutcomeActivity::create([
+								"learning_outcome_id" => $ctlo->id,
+								"activity_id" => $nyuu->id
+							]);
+						}
+					}
+				}
+				
+				// Auto unlock and update student progress
+				$activities = Activity::whereHas('topic', function($query) use ($course, $teacher){
+					return $query->where('course_id', $course->id)->where('user_id', $teacher->id);
+				})->orderBy('session', 'asc')->get();
+		
+				foreach(CourseStudent::where('teacher_id', $teacher->id)->where('course_id', $course->id)->get() as $cs){
+					$student = $cs->student;
+		
+					$student_attendances = StudentAttendance::where('student_id', $student->id)->whereHas('attendance', function($query) use ($course){
+						return $query->where('course_id', $course->id);
+					})->get();
+		
+					$session_counter = 1;
+		
+					foreach($activities as $index => $activity){
+						if($activity->session != $session_counter){
+							$session_counter++;
+						}
+		
+						Progress::create([
+							"student_id" => $student->id,
+							"activity_id" => $activity->id,
+							"course_id" => $course->id,
+							"status" => $session_counter <= $student_attendances->count() || $index == 0? 'unlocked' : 'locked',
+						]);
+					}
+				}
+			}
+	
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+	
+			throw $e;
+		}
+	}
+	
+
 	/* ===== ADMIN ===== */
 	public function admin_create_topic($course_id){
 		return view("roles.admin.curriculum.create-topic", [
@@ -287,8 +368,6 @@ class CurriculumController extends Controller
 				}
 			}
 
-
-
 			DB::commit();
 		}
 		catch(Exception $e){
@@ -305,6 +384,8 @@ class CurriculumController extends Controller
 	public function teacher_synchronize($course_id){
 		try {
 			DB::beginTransaction();
+
+			$course = Course::findOrFail($course_id);
 
 			Topic::where("course_id", $course_id)->where("user_id", Auth::user()->id)->delete();
 
@@ -334,6 +415,34 @@ class CurriculumController extends Controller
 					}
 				}
 			}
+			
+			// Auto unlock and update student progress
+			$activities = Activity::whereHas('topic', function($query) use ($course){
+				return $query->where('course_id', $course->id)->where('user_id', Auth::user()->id);
+			})->orderBy('session', 'asc')->get();
+
+			foreach(CourseStudent::where('teacher_id', Auth::user()->id)->where('course_id', $course_id)->get() as $cs){
+				$student = $cs->student;
+
+				$student_attendances = StudentAttendance::where('student_id', $student->id)->whereHas('attendance', function($query) use ($course){
+					return $query->where('course_id', $course->id);
+				})->get();
+
+				$session_counter = 1;
+
+				foreach($activities as $index => $activity){
+					if($activity->session != $session_counter){
+						$session_counter++;
+					}
+
+					Progress::create([
+						"student_id" => $student->id,
+						"activity_id" => $activity->id,
+						"course_id" => $course->id,
+						"status" => $session_counter <= $student_attendances->count() || $index == 0? 'unlocked' : 'locked',
+					]);
+				}
+			}
 
 			DB::commit();
 		}
@@ -342,7 +451,6 @@ class CurriculumController extends Controller
 
 			return back()->with("systemFail", "System failed to synchronize your course topics and activities with the curriculum, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
-
 
 		return redirect(route("teacher.mycourse.show", $course_id))->with("successSynchronizeCurriculum", "Your class' topic and activities have been successfully synchronized with the curriculum!");
 	}
@@ -365,12 +473,11 @@ class CurriculumController extends Controller
 
 			$course = Course::findOrFail($course_id);
 
-			$current_topics = Topic::where("course_id", $course_id)->where("user_id", Auth::user()->id)->delete();
+			Topic::where("course_id", $course_id)->where("user_id", Auth::user()->id)->delete();
 
 			$curriculum_topics = CurriculumTopic::where("course_id", $course_id)->get();
 
 			$i = 0;
-			$session_number = 0;
 			$already_created_topics = [];
 
 			foreach($curriculum_topics as $ctopic){
@@ -391,7 +498,7 @@ class CurriculumController extends Controller
 							"title" => $cactivity->title,
 							"desc" => $cactivity->desc,
 							"link" => $cactivity->link,
-							"session" => $session_number + 1
+							"session" => $cactivity->session,
 						]);
 
 						foreach($cactivity->learning_outcomes as $ctlo){
@@ -400,11 +507,37 @@ class CurriculumController extends Controller
 								"activity_id" => $nyuu->id
 							]);
 						}
-
-						$session_number++;
 					}
 
 					$i++;
+				}
+			}
+
+			// Auto unlock and update student progress
+			$activities = Activity::whereHas('topic', function($query) use ($course){
+				return $query->where('course_id', $course->id)->where('user_id', Auth::user()->id);
+			})->orderBy('session', 'asc')->get();
+
+			foreach(CourseStudent::where('teacher_id', Auth::user()->id)->where('course_id', $course_id)->get() as $cs){
+				$student = $cs->student;
+
+				$student_attendances = StudentAttendance::where('student_id', $student->id)->whereHas('attendance', function($query) use ($course){
+					return $query->where('course_id', $course->id);
+				})->get();
+
+				$session_counter = 1;
+
+				foreach($activities as $index => $activity){
+					if($activity->session != $session_counter){
+						$session_counter++;
+					}
+
+					Progress::create([
+						"student_id" => $student->id,
+						"activity_id" => $activity->id,
+						"course_id" => $course->id,
+						"status" => $session_counter <= $student_attendances->count() || $index == 0? 'unlocked' : 'locked',
+					]);
 				}
 			}
 

@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\PushNotificationController;
 use App\Http\Controllers\SysAdminController;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +21,8 @@ Route::post("/sysadmin/login", [SysAdminController::class, "sysadmin_authenticat
 Route::post("/sysadmin/logout", [SysAdminController::class, "sysadmin_logout"])->name("sysadmin.logout");
 
 Route::get("/test-add-event", [CalendarController::class, "createEvent"]);
+// Route::get('/generate-progresses', [ProgressController::class, 'generate_progress_for_all_student']);
+// Route::get('/sync-syllabus-all', [CurriculumController::class, 'sync_syllabus_for_all_course']);
 
 // Main routes
 Route::middleware([])->group(function(){

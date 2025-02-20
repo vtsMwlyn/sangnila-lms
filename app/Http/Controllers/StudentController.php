@@ -48,18 +48,30 @@ class StudentController extends Controller {
 	// ===== ADMIN ===== //
 	// Showing list of all active students in Sangnila LMS
 	public function admin_index() {
-		$students = User::where("role_id", 3)->filter(request(["search", "course"]))->orderByRaw('CASE WHEN status = "disabled" THEN 1 ELSE 0 END')->orderBy('full_name', 'asc')->get();
+		$students = User::where("role_id", 3)->filter(request(["search", "course"]))->orderByRaw('CASE WHEN status = "disabled" THEN 1 ELSE 0 END')->orderBy('full_name', 'asc')->with(['course_students', 'student_attendances'])->get();
 
-		$max_attendances = [];
-		$current_attendances = [];
-		$percentages = [];
-		$studentList = [];
+		$max_attendances_learning = [];
+		$current_attendances_learning = [];
+		$percentages_learning = [];
+		$studentList_learning = [];
 
 		// To contain prioritized students with current attendance of max attendance - 1
-		$max_attendances2 = [];
-		$current_attendances2 = [];
-		$percentages2 = [];
-		$studentList2 = [];
+		$max_attendances_prioritized = [];
+		$current_attendances_prioritized = [];
+		$percentages_prioritized = [];
+		$studentList_prioritized = [];
+
+		// To move completed students to the bottom
+		$max_attendances_complete = [];
+		$current_attendances_complete = [];
+		$percentages_complete = [];
+		$studentList_complete = [];
+
+		// To move unassigned students to the bottom 
+		$max_attendances_unassigned = [];
+		$current_attendances_unassigned = [];
+		$percentages_unassigned = [];
+		$studentList_unassigned = [];
 
 		foreach($students as $student){
 			$maiscec = []; //max attendances in student current enrolled course
@@ -67,13 +79,14 @@ class StudentController extends Controller {
 			$piscec = []; //percentage in student current enrolled course
 
 			$prioritized = false;
+			$completed = 0;
 
-			$sa = StudentAttendance::where("student_id", $student->id)->get();
+			$sa = StudentAttendance::where("student_id", $student->id)->with('attendance')->get();
 
-			foreach($student->enrolled_courses as $course){
+			foreach($student->course_students as $cs){
+				$course = $cs->course;
+
 				// Number of attendances (separated for imported students and unimported students)
-				$cs = CourseStudent::where("course_id", $course->id)->where("student_id", $student->id)->first();
-
 				if($cs->is_imported){
 					$count = ImportedStudent::where("course_id", $course->id)->where("student_id", $student->id)->first()->last_attendance_count;
 				} else {
@@ -90,8 +103,12 @@ class StudentController extends Controller {
 					$prioritized = true;
 				}
 
-				if($student->status == 'disabled'){
+				if($student->status == 'disabled' || $cs->learning_status == 'complete'){
 					$prioritized = false;
+				}
+
+				if($cs->learning_status == 'complete'){
+					$completed++;
 				}
 
 				array_push($maiscec, $cs->max_course_session);
@@ -100,24 +117,46 @@ class StudentController extends Controller {
 
 			}
 
+			// Students reaching max session
 			if($prioritized){
-				array_push($max_attendances2, $maiscec);
-				array_push($current_attendances2, $caiscec);
-				array_push($percentages2, $piscec);
-				array_push($studentList2, $student);
-			} else {
-				array_push($max_attendances, $maiscec);
-				array_push($current_attendances, $caiscec);
-				array_push($percentages, $piscec);
-				array_push($studentList, $student);
+				array_push($max_attendances_prioritized, $maiscec);
+				array_push($current_attendances_prioritized, $caiscec);
+				array_push($percentages_prioritized, $piscec);
+				array_push($studentList_prioritized, $student);
+			}
+			else {
+				// Students has no courses assigned at all
+				if($student->course_students->count() == 0){
+					array_push($max_attendances_unassigned, $maiscec);
+					array_push($current_attendances_unassigned, $caiscec);
+					array_push($percentages_unassigned, $piscec);
+					array_push($studentList_unassigned, $student);
+				}
+
+				// Students completed all the assigned courses
+				else if($completed == $student->course_students->count()){
+					array_push($max_attendances_complete, $maiscec);
+					array_push($current_attendances_complete, $caiscec);
+					array_push($percentages_complete, $piscec);
+					array_push($studentList_complete, $student);
+				}
+
+				// Students still learning
+				else {
+					array_push($max_attendances_learning, $maiscec);
+					array_push($current_attendances_learning, $caiscec);
+					array_push($percentages_learning, $piscec);
+					array_push($studentList_learning, $student);
+				}
+				
 			}
 
 		}
 
-		$students = collect(array_merge($studentList2, $studentList));
-		$current_attendances = array_merge($current_attendances2, $current_attendances);
-		$max_attendances = array_merge($max_attendances2, $max_attendances);
-		$percentages = array_merge($percentages2, $percentages);
+		$students = collect(array_merge($studentList_prioritized, $studentList_learning, $studentList_complete, $studentList_unassigned));
+		$current_attendances = array_merge($current_attendances_prioritized, $current_attendances_learning, $current_attendances_complete, $current_attendances_unassigned);
+		$max_attendances = array_merge($max_attendances_prioritized, $max_attendances_learning, $max_attendances_complete, $max_attendances_unassigned);
+		$percentages = array_merge($percentages_prioritized, $percentages_learning, $percentages_complete, $percentages_unassigned);
 
 		// Return view with data
 		return view('roles.admin.student.index', [

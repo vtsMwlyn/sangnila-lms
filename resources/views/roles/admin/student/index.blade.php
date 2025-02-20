@@ -71,10 +71,20 @@
 										</div>
 										<div class="w-1/3">
 											<div class="w-full bg-gray-200 rounded-lg h-4 overflow-hidden relative">
-												<div class="absolute w-full h-full @if((($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) && $current_attendances[$index1][$index2] != 0) text-red-100 @else text-green-950 @endif  flex justify-center items-center font-semibold">
+												<div class="absolute w-full h-full
+													@if((($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) && $current_attendances[$index1][$index2] != 0 && $cs->learning_status != 'complete') 
+														text-red-100
+													@else 
+														text-green-950
+													@endif flex justify-center items-center font-semibold">
 													{{ __($current_attendances[$index1][$index2] . "/" . $max_attendances[$index1][$index2]) }}
 												</div>
-												<div class="@if(($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) bg-red @else bg-green-700 @endif h-full" style="width: {{ $percentages[$index1][$index2] }}%;"></div>
+												<div class="h-full 
+													@if(($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2] && $cs->learning_status != 'complete')
+														bg-red
+													@else 
+														bg-green-600
+													@endif" style="width: {{ $percentages[$index1][$index2] }}%;"></div>
 											</div>
 										</div>
 									</div>
@@ -82,14 +92,16 @@
 								<td class="py-2 px-4 text-center">
 									{{ $cs->temp_periods_paid }}
 								</td>
+								<td class="py-2 px-4 text-center">
+									@if($cs->learning_status == 'learning')
+										<span class="font-bold text-light-blue">Learning</span>
+									@elseif($cs->learning_status == 'complete')
+										<span class="font-bold text-green-600">Complete</span>
+									@else
+										<span class="font-bold text-red">Complete</span>
+									@endif
+								</td>
 								@if($index2 == 0)
-									<td class="py-2 px-4 text-center" rowspan="{{ $courseStudents->count() }}">
-										@if ($student->status == "enabled")
-											<span class="font-bold text-light-blue">Active</span>
-										@else
-											<span class="font-bold text-red">Inactive</span>
-										@endif
-									</td>
 									<td class="py-2 px-4" rowspan="{{ $courseStudents->count() }}">
 										<div class="flex w-full justify-start gap-1">
 											<x-anchor-button
@@ -116,14 +128,7 @@
 										{{ $student->full_name }}
 									</div>
 								</td>
-								<td class="py-2 px-4 text-center" colspan="2">- No courses enrolled -</td>
-								<td class="py-2 px-4 text-center">
-									@if ($student->status == "enabled")
-										<span class="font-bold text-light-blue">Active</span>
-									@else
-										<span class="font-bold text-red">Inactive</span>
-									@endif
-								</td>
+								<td class="py-2 px-4 text-center" colspan="3">- No courses enrolled -</td>
 								<td class="py-2 px-4">
 									<div class="flex w-full justify-start gap-1">
 										<div class="relative">

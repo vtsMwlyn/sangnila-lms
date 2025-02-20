@@ -169,7 +169,7 @@ class CourseController extends Controller {
 				}
 			}
 
-			if((($count + 1) % $cs->max_course_session == 0) || $count >= $cs->max_course_session){
+			if(((($count + 1) % $cs->max_course_session == 0) || $count >= $cs->max_course_session) && $cs->learning_status != 'complete'){
 				$shouldPaySoon = true;
 			} else {
 				$shouldPaySoon = false;
@@ -209,7 +209,7 @@ class CourseController extends Controller {
 		$max_session_reached = false;
 		if(($count + 1) % $cs->max_course_session == 0){
 			$shouldPaySoon = true;
-		} else if($count >= $cs->max_course_session) {
+		} else if($count >= $cs->max_course_session && $cs->learning_status == 'learning') {
 			$shouldPaySoon = true;
 			$max_session_reached = true;
 		}

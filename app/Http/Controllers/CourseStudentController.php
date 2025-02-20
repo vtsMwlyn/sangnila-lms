@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Role;
@@ -17,6 +18,7 @@ use App\Models\CourseTeacher;
 use App\Models\ImportedStudent;
 use App\Rules\MinimumOneCheckbox;
 use App\Models\SelfAttendance;
+use App\Models\StudentAttendance;
 use Google\Service\ServiceUsage\Impact;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -69,19 +71,21 @@ class CourseStudentController extends Controller {
 			"course" => "required",
 			"teacher" => "required",
 			"max_course_session" => "required|numeric|min:0",
+			'learning_status' => 'required'
 		]);
 
 		try {
 			DB::beginTransaction();
 
-			$course = Course::find($validatedData["course"]);
-			$teacher = User::find($validatedData["teacher"]);
-			$student = User::find($student_id);
+			$course = Course::findorFail($validatedData["course"]);
+			$teacher = User::findOrFail($validatedData["teacher"]);
+			$student = User::findOrFail($student_id);
 
 			CourseStudent::create([
 				'student_id' => $student_id,
 				'course_id' => $course->id,
 				'max_course_session' => $validatedData["max_course_session"],
+				'learning_status' => $validatedData['learning_status'], 
 				"teacher_id" => $teacher->id,
 				"is_imported" => 0,
 			]);
@@ -91,7 +95,7 @@ class CourseStudentController extends Controller {
 				->pluck('activity_id')
 				->toArray();
 
-			$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+			$topics = Topic::where("course_id", $course->id)->where("user_id", $teacher->id)->get();
 
 			foreach ($topics as $index1 => $topic) {
 				foreach($topic->activities as $index2 => $activity) {
@@ -129,12 +133,16 @@ class CourseStudentController extends Controller {
 	public function update(Request $request, $course_student_id){
 		$validatedData = $request->validate([
 			"max_course_session" => "required|numeric|min:0",
+			'learning_status' => 'required',
+			'teacher' => 'required',
 		]);
 
 		$course_student = CourseStudent::findOrFail($course_student_id);
-
+		
 		$course_student->update([
-			'max_course_session' => $validatedData["max_course_session"],
+			"max_course_session" => $validatedData['max_course_session'],
+			'learning_status' => $validatedData['learning_status'],
+			'teacher_id' => $validatedData['teacher'],
 		]);
 
 		return redirect(route('admin.student.show', $course_student->student_id))->with("successEditAssignInfo", "Successfully edited the student assignment info!");
@@ -264,6 +272,7 @@ class CourseStudentController extends Controller {
 	}
 
 	public function import_student_data_store(Request $request, $course_id){
+		// return $request;
 		$course = Course::findOrFail($course_id);
 
 		try {
@@ -313,10 +322,14 @@ class CourseStudentController extends Controller {
 					}
 				}
 
+				// return $student;
+
+				$teacher_id = $request->inp_teacher_name[$index];
+
 				CourseStudent::create([
 					"course_id" => $course->id,
 					"student_id" => $student->id,
-					"teacher_id" => $request->inp_teacher_name[$index],
+					"teacher_id" => $teacher_id,
 					"is_imported" => 1,
 					"max_course_session" => $request->inp_max_course_session[$index]
 				]);
@@ -327,33 +340,35 @@ class CourseStudentController extends Controller {
 					"last_attendance_count" => $request->inp_last_attendance_count[$index]
 				]);
 
-				$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+				// return $request->inp_last_activity_unlocked[$index];
+				$activity_id = $request->inp_last_activity_unlocked[$index];
+				$targetLastActivity = Activity::findOrFail($activity_id);
 
-				$targetFound = false;
-				foreach($topics as $topic){
-					foreach($topic->activities as $activity){
-						if($activity->id != $request->inp_last_activity_unlocked[$index]){
-							Progress::create([
-								"student_id" => $student->id,
-								"activity_id" => $activity->id,
-								"course_id" => $course->id,
-								"status" => "unlocked"
-							]);
-						} else {
-							Progress::create([
-								"student_id" => $student->id,
-								"activity_id" => $activity->id,
-								"course_id" => $course->id,
-								"status" => "unlocked"
-							]);
+				$existingProgress = Progress::where('student_id', $student->id)
+					->where('course_id', $course->id)
+					->pluck('activity_id')
+					->toArray();
 
-							$targetFound = true;
-							break;
-						}
+				$activities = Activity::whereHas('topic', function($query) use ($course, $teacher_id){
+					return $query->where('course_id', $course->id)->where('user_id', $teacher_id);
+				})->orderBy('session', 'asc')->get();
+
+				$found = false;
+
+				foreach($activities as $activity){
+					if(!in_array($activity->id, $existingProgress)){
+						Progress::create([
+							"student_id" => $student->id,
+							"activity_id" => $activity->id,
+							"course_id" => $course->id,
+							"status" => $found? "locked" : 'unlocked'
+						]);
+						
+						
 					}
-
-					if($targetFound){
-						break;
+					
+					if($activity->id == $targetLastActivity->id){
+						$found = true;
 					}
 				}
 			}
@@ -362,6 +377,8 @@ class CourseStudentController extends Controller {
 		}
 		catch(Exception $e){
 			DB::rollback();
+
+			throw $e;
 
 			return back()->with("systemFail", "System failed to import old student data, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}

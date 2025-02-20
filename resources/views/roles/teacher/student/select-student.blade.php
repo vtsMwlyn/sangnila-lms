@@ -48,7 +48,7 @@
 						<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 						<div class="flex gap-2 items-center @if($n_unlocked == 0) text-red @endif">
-							<i class="bi bi-book-half text-slate-400"></i>{{ __($n_unlocked . "/" . $progress_per_student->count()) }} Materials Unlocked
+							<i class="bi bi-book-half text-slate-400"></i>{{ __($n_unlocked . "/" . $progress_per_student->count()) }} Activities Unlocked
 						</div>
 
 						<div class="flex gap-2 items-center">

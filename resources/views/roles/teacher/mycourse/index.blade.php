@@ -7,6 +7,9 @@
 @section("content")
 	<div class="w-full flex flex-wrap gap-5">
 		@forelse (Auth::user()->teached_courses as $course)
+			@php
+				$topics = $course->topics->where('user_id', Auth::user()->id);
+			@endphp
 			<a href="{{ route('teacher.mycourse.show', ['course_id' => $course->id]) }}"  style="width: 32%;" class="transition duration-300 hover:scale-105 relative">
 				<div class="bg-white rounded-3xl p-5 shadow-lg">
 					<!-- Course information -->
@@ -18,12 +21,12 @@
 						{{ App\Models\CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get()->count() }} Students Teached
 					</div>
 					<div class="flex gap-2 items-center">
-						<i class="bi bi-book-half text-slate-400"></i>{{ $course->topics->count() }} Topics
+						<i class="bi bi-book-half text-slate-400"></i>{{ $topics->count() }} Topics
 					</div>
 					<div class="flex gap-2 items-center">
 						@php
 							$n_mat = 0;
-							foreach($course->topics as $t){
+							foreach($topics as $t){
 								$n_mat += $t->activities->count();
 							}
 						@endphp
