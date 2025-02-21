@@ -143,12 +143,12 @@
 				</div>
 
 				@if($n_announcement > 1)
-					<div class="slider-controls flex gap-2 sm:justify-between justify-center sm:absolute w-full px-2" style="top: 36%;">
-						<button id="prevBtn">
-							<img src="{{ asset('img/arrow-left.svg') }}" class="w-8" alt="icon">
+					<div class="slider-controls flex gap-2 sm:justify-between justify-center absolute w-full px-2" style="top: 36%;">
+						<button id="prevBtn" class="absolute left-3">
+							<img src="{{ asset('img/arrow-left.svg') }}" class="w-6" alt="icon">
 						</button>
-						<button id="nextBtn">
-							<img src="{{ asset('img/arrow-right.svg') }}" class="w-8" alt="icon">
+						<button id="nextBtn" class="absolute right-3">
+							<img src="{{ asset('img/arrow-right.svg') }}" class="w-6" alt="icon">
 						</button>
 					</div>
 				@endif
@@ -189,6 +189,13 @@
 			// Custom navigation buttons
 			$('#prevBtn').click(() => swiper.slidePrev());
 			$('#nextBtn').click(() => swiper.slideNext());
+
+			setInterval(function(){
+				$('#prevBtn').animate({'left': '0.5rem'}, 800);
+				$('#prevBtn').animate({'left': '1rem'}, 800);
+				$('#nextBtn').animate({'right': '0.5rem'}, 800);
+				$('#nextBtn').animate({'right': '1rem'}, 800);
+			}, 1000);
 		});
 	</script>
 @endsection

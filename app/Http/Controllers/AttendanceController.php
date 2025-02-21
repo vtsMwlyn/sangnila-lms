@@ -291,7 +291,7 @@ class AttendanceController extends Controller {
 	public function admin_index_lecturer_attendance(){
 		$all_lecturer_attendances = SelfAttendance::filter(request(['search']))->whereHas('user', function($query){
 			return $query->where('role_id', 2)->orWhere('role_id', 1);
-		})->orderBy('self_attendance_date')->orderBy('user_id')->get();
+		})->orderBy('self_attendance_date', 'desc')->orderBy('user_id')->get();
 
 		$all_student_attendances = SelfAttendance::filter(request(['search']))->whereHas('user', function($query){
 			return $query->where('role_id', 3);

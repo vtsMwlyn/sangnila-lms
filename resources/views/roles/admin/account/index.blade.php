@@ -119,6 +119,9 @@
 					</thead>
 					<tbody>
 						@forelse ($admin_accounts as $admin_acc)
+							@if($admin_acc->email == 'sysadmin@sangnilaindonesia.com')
+								@continue
+							@endif
 							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
 								<td class="py-2 px-4">
 									<div class="flex w-full items-center gap-3">

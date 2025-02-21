@@ -144,7 +144,7 @@
 							</td>
 						</tr>
 					@empty
-						<tr><td class="p-5 bg-white font-semibold text-center" colspan="5">- No attendance data yet -</td></tr>
+						<tr><td class="p-5 bg-white font-semibold text-center" colspan="6">- No attendance data yet -</td></tr>
 					@endforelse
 				</tbody>
 			</table>

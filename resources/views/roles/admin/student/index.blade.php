@@ -98,7 +98,7 @@
 									@elseif($cs->learning_status == 'complete')
 										<span class="font-bold text-green-600">Complete</span>
 									@else
-										<span class="font-bold text-red">Complete</span>
+										<span class="font-bold text-red">Undone</span>
 									@endif
 								</td>
 								@if($index2 == 0)

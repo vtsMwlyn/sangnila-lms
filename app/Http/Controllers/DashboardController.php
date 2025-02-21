@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Assignment;
+use App\Models\Activity;
+use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Topic;
+use App\Models\Progress;
+use App\Models\Assignment;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
-use App\Models\Progress;
+use App\Models\SelfAttendance;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
-use App\Models\Topic;
+use Google\Service\Classroom\Resource\Courses;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -38,7 +42,36 @@ class DashboardController extends Controller
 	}
 
 	public function teacher_dashboard(){
-		return view("roles.teacher.dashboard");
+		$courses_teached_by_this_teacher = Auth::user()->teached_courses;
+		
+		$n_courses_assigned = $courses_teached_by_this_teacher->count();
+		$n_activities_created = 0;
+
+		$students_checked = [];
+		$n_students_teached = 0;
+		$n_assignments_given = 0;
+
+		foreach($courses_teached_by_this_teacher as $c){
+			foreach($c->students as $s){
+				if(!in_array($s->id, $students_checked)){
+					array_push($students_checked, $s->id);
+					$n_students_teached++;
+				}
+			}
+
+			foreach($c->topics->where('user_id', Auth::user()->id) as $t){
+				$n_activities_created += $t->activities->count();
+			}
+
+			$n_assignments_given += Assignment::where('course_id', $c->id)->where('teacher_id', Auth::user()->id)->count();
+		}
+
+		return view("roles.teacher.dashboard", [
+			'courses_assigned' => $n_courses_assigned,
+			'students_teached' => $n_students_teached,
+			'activities_created' => $n_activities_created,
+			'assignments_given' => $n_assignments_given,
+		]);
 	}
 
 	public function student_dashboard(){
