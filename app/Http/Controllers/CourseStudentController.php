@@ -137,13 +137,56 @@ class CourseStudentController extends Controller {
 			'teacher' => 'required',
 		]);
 
-		$course_student = CourseStudent::findOrFail($course_student_id);
-		
-		$course_student->update([
-			"max_course_session" => $validatedData['max_course_session'],
-			'learning_status' => $validatedData['learning_status'],
-			'teacher_id' => $validatedData['teacher'],
-		]);
+		try {
+			DB::beginTransaction();
+
+			$course_student = CourseStudent::findOrFail($course_student_id);
+			$course = $course_student->course;
+			$student = $course_student->student;
+			$teacher = $course_student->teacher;
+			
+			$course_student->update([
+				"max_course_session" => $validatedData['max_course_session'],
+				'learning_status' => $validatedData['learning_status'],
+				'teacher_id' => $validatedData['teacher'],
+			]);
+
+			// Remove old progress
+			Progress::where('student_id', $course_student->student->id)->where('course_id', $course_student->course->id)->delete();
+
+			// Regenerate progress
+			$activities = Activity::whereHas('topic', function($query) use ($course, $teacher){
+				return $query->where('course_id', $course->id)->where('user_id', $teacher->id);
+			})->orderBy('session', 'asc')->get();
+
+			$student_attendances = StudentAttendance::where('student_id', $student->id)->whereHas('attendance', function($query) use ($course){
+				return $query->where('course_id', $course->id);
+			})->get();
+
+			$session_counter = 1;
+
+			foreach($activities as $index => $activity){
+				if($activity->session != $session_counter){
+					$session_counter++;
+				}
+
+				Progress::updateOrCreate([
+					"student_id" => $student->id,
+					"course_id" => $course->id,
+					"activity_id" => $activity->id,
+				],
+				[
+					"status" => $session_counter <= $student_attendances->count() + 1 || $index == 0? 'unlocked' : 'locked',
+				]);
+			}
+
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return back()->with('errorEditCourseStudent', 'System failed to edit the course student data. Please report to our IT team, error detail: ' . $e->getMessage());
+		}
 
 		return redirect(route('admin.student.show', $course_student->student_id))->with("successEditAssignInfo", "Successfully edited the student assignment info!");
 	}

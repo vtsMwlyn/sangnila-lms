@@ -91,7 +91,7 @@
 			</div>
 		</div>
 
-		<div class="w-full overflow-x-auto">
+		<div class="w-full overflow-auto" style="height: 60vh;">
 			<table class="w-full">
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date</th>

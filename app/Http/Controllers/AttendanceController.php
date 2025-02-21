@@ -33,14 +33,34 @@ class AttendanceController extends Controller {
 	public function show($course_id) {
 		$course = Course::findOrFail($course_id);
 
-		// 💀 Student yang ga diajar ama dia masih muncul di ni attendance 💀
-		$attendanceData = Attendance::where("course_id", $course->id)->whereHas('posted_by', function($query){
-			return $query->where('id', Auth::user()->id)->orWhere('role_id', 1);
-		})->with(['student_attendances.student'])->orderBy('attendance_date', 'desc')->get();
+		$teached_student_id_list = CourseStudent::where('course_id', $course_id)
+			->where('teacher_id', Auth::user()->id)
+			->pluck('student_id')
+			->toArray();
 
-		$attendanceData2 = Attendance::where("course_id", $course->id)->whereHas('posted_by', function($query){
-			return $query->where('id', Auth::user()->id)->orWhere('role_id', 1);
-		})->with(['student_attendances.student'])->orderBy('attendance_date', 'asc')->get();
+		$attendanceData = Attendance::where("course_id", $course->id)
+			->with(['student_attendances' => function ($query) use ($teached_student_id_list) {
+				$query->whereIn('student_id', $teached_student_id_list)->with('student');
+			}])
+			->orderBy('attendance_date', 'desc')
+			->get();
+
+		// Remove Attendance records where student_attendances is empty
+		$attendanceData = $attendanceData->filter(function ($attendance) {
+			return $attendance->student_attendances->isNotEmpty(); // Keep only if it has student_attendances
+		})->values(); // Reset array indexes
+
+		$attendanceData2 = Attendance::where("course_id", $course->id)
+			->with(['student_attendances' => function ($query) use ($teached_student_id_list) {
+				$query->whereIn('student_id', $teached_student_id_list)->with('student');
+			}])
+			->orderBy('attendance_date', 'asc')
+			->get();
+
+		// Remove Attendance records where student_attendances is empty
+		$attendanceData2 = $attendanceData2->filter(function ($attendance) {
+			return $attendance->student_attendances->isNotEmpty(); // Keep only if it has student_attendances
+		})->values(); // Reset array indexes
 
 		$todaySelfAttendances = SelfAttendance::where("user_id", Auth::user()->id)->where("course_id", $course->id)->where("self_attendance_date", Carbon::today()->format('Y-m-d'))->get();
 		$unfinishedSelfAttendance = $todaySelfAttendances->filter(function($item){

@@ -190,6 +190,8 @@
 			<x-badge-warning badge_text="{{ session('successDeleteStudentAttendance') }}"></x-badge-warning>
 		@elseif(session()->has("successEditAttendance"))
 			<x-badge-success badge_text="{{ session('successEditAttendance') }}"></x-badge-success>
+		@elseif(session()->has("errorEditCourseStudent"))
+			<x-badge-danger badge_text="{{ session('errorEditCourseStudent') }}"></x-badge-danger>
 		@endif
 
 		@php
