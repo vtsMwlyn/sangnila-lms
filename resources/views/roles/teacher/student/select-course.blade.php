@@ -40,7 +40,7 @@
 				}
 			@endphp
 
-			<a href="{{ route('teacher.student.select-student', $course->id) }}"  style="width: 32%;" class="transition duration-300 hover:scale-105 relative">
+			<a href="{{ route('teacher.student.select-student', $course->id) }}"  class="oneperthree transition duration-300 hover:scale-105 relative">
 				<div class="bg-white rounded-3xl p-5 shadow-lg">
 					<!-- Course information -->
 					<p class="font-bold text-dark-blue">{{ $course->course_name }} - {{ ucwords($course->level) }}</p>

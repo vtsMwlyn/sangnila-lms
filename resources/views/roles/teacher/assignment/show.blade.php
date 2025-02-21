@@ -11,7 +11,7 @@
 @section("content")
 	<x-section-container>
 		<x-back-button href="{{ route('teacher.assignment.index') }}"></x-back-button>
-		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
+		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Assignments List</h1>
 
 		@if(session()->has("successUploadAssignment"))
@@ -34,10 +34,9 @@
 		<div class="w-full overflow-x-auto">
 			<table class="w-full">
 				<thead>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Title</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Title & Deadline</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Assigned to</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Deadline</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Description & Link</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400" style="max-width: 350px;">Description & Link</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 				</thead>
 				<tbody>
@@ -45,9 +44,13 @@
 						<tr class="@if($loop->index % 2 == 0) bg-white @endif">
 							<td class="py-2 px-4 w-1/5">
 								<a class="text-blue-600 hover:underline font-bold" href="{{ route('teacher.assignment.check', $asg->id) }}">{{ $asg->title }}</a>
+								<br><br>
+								{{ Carbon\Carbon::parse($asg->deadline_date)->format('d M Y') }}
+								<br>
+								{{ Carbon\Carbon::parse($asg->deadline_time)->format("H:i") }} GMT+7
 							</td>
 							<td class="py-2 px-4 w-1/5">
-								<div class="flex w-full flex-col gap-3">
+								<div class="flex w-full flex-col gap-3 overflow-y-auto" style="max-height: 100px;">
 									@foreach ($asg->student_assignments as $sasg)
 										<div class="flex items-center gap-3">
 											@if($sasg->student->details->profpic)
@@ -60,8 +63,7 @@
 									@endforeach
 								</div>
 							</td>
-							<td class="py-2 px-4">{{ Carbon\Carbon::parse($asg->deadline_date)->format('d M Y') }}<br>{{ Carbon\Carbon::parse($asg->deadline_time)->format("H:i") }} GMT+7</td>
-							<td class="py-2 px-4 w-1/4">
+							<td class="py-2 px-4" style="max-width: 350px; overflow-wrap: break-word;">
 								@if(strlen($asg->desc) > 60)
 									<div class="">{!! nl2br(substr($asg->desc, 0, 60)) !!}... <button type="button" class="show-more-button text-blue font-semibold text-xs">[Show More]</button></div>
 									<div class="hidden">{!! nl2br($asg->desc) !!} <button type="button" class="show-less-button text-blue font-semibold text-xs">[Show Less]</button></div>

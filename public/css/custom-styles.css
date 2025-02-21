@@ -52,86 +52,6 @@ html {
 	/* margin-left: 12px; */
 }
 
-/* Import student table */
-table#student-to-import thead th.fixed1 {
-	min-width: 200px;
-	max-width: 200px;
-}
-
-table#student-to-import thead th.fixed2 {
-	min-width: 150px;
-	max-width: 150px;
-}
-
-table#student-to-import tbody td.fixed1 {
-	min-width: 200px;
-	max-width: 200px;
-	word-wrap: break-word;
-}
-
-table#student-to-import tbody td.fixed2 {
-	min-width: 150px;
-	max-width: 150px;
-	word-wrap: break-word;
-}
-
-/* Template table */
-table.template-tables thead tr th.template-heads {
-	background-color: #000C48;
-
-	padding-top: 1.5rem;
-	padding-bottom: 1.5rem;
-	padding-left: 1.5rem;
-	padding-right: 1.5rem;
-
-	font-weight: bold;
-	color: white;
-}
-
-table.template-tables tbody tr td.template-bodies {
-	background-color: #283785;
-
-	padding-top: 1.25rem;
-	padding-bottom: 1.25rem;
-	padding-left: 1.25rem;
-	padding-right: 1.25rem;
-
-	text-align: center;
-	color: white;
-	word-wrap: break-word;
-}
-
-table.template-htables tr td.template-hheads {
-	background-color: white;
-
-	padding-top: 0.75rem;
-	padding-bottom: 0.75rem;
-	padding-left: 1.5rem;
-	padding-right: 1.5rem;
-
-	font-weight: bold;
-	color: #283785;
-
-	border: solid 2px #283785;
-	border-radius: 15px;
-}
-
-table.template-htables tr td.template-hbodies {
-	background-color: white;
-
-	padding-top: 0.75rem;
-	padding-bottom: 0.75rem;
-	padding-left: 1.5rem;
-	padding-right: 1.5rem;
-
-	color: #283785;
-	word-wrap: break-word;
-	font-weight: bold;
-
-	border: solid 2px #283785;
-	border-radius: 15px;
-}
-
 body {
 	background: white;
 	font-family: "Geologica";
@@ -190,8 +110,22 @@ div.announcementContent a:hover {
 	text-decoration: underline;
 }
 
+.oneperthree {
+	width: 32%;
+}
+
 @media screen and (max-width: 1024px){
 	#page-title {
 		z-index: 15;
+	}
+
+	.oneperthree {
+		width: 47%;
+	}
+}
+
+@media screen and (max-width: 768px){
+	.oneperthree {
+		width: 100%;
 	}
 }

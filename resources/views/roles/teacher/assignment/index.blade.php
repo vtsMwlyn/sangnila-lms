@@ -11,7 +11,7 @@
 @section("content")
 	<div class="w-full flex flex-wrap gap-5">
 		@forelse (Auth::user()->teached_courses as $course)
-			<a href="{{ route('teacher.assignment.show', $course->id) }}"  style="width: 32%;" class="transition duration-300 hover:scale-105">
+			<a href="{{ route('teacher.assignment.show', $course->id) }}" class="oneperthree transition duration-300 hover:scale-105">
 				<div class="bg-white rounded-3xl p-5 shadow-lg">
 					<!-- Counting assignments posted and nearest deadline -->
 					@php

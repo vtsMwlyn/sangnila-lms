@@ -33,7 +33,7 @@
 				}
 			@endphp
 
-			<a href="{{ route('teacher.student.show.progress', ['student_id' => $cs->student->id, 'course_id' => $course->id]) }}"  style="width: 32%;" class="transition duration-300 hover:scale-105 relative">
+			<a href="{{ route('teacher.student.show.progress', ['student_id' => $cs->student->id, 'course_id' => $course->id]) }}"   class="oneperthree transition duration-300 hover:scale-105 relative">
 				<div class="bg-white rounded-3xl p-5 shadow-lg flex gap-4 items-start">
 					<div class="">
 						@if($cs->student->details->profpic)
