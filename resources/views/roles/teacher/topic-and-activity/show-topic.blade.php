@@ -100,7 +100,7 @@
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activity Title</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activity Description</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Outcomes</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Link</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Material Link</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 				</thead>
 				<tbody>

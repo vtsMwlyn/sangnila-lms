@@ -1,7 +1,7 @@
 @extends("layouts.main-teacher")
 
 @section("title")
-	<h1>Courses</h1>
+	<h1>Manage Courses</h1>
 @endsection
 
 @section("breadcrumbs-extension")

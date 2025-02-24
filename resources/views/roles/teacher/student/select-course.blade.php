@@ -1,7 +1,7 @@
 @extends("layouts.main-teacher")
 
 @section("title")
-	<h1>Student Progress</h1>
+	<h1>Manage Students</h1>
 @endsection
 
 @section("breadcrumbs-extension")

@@ -38,16 +38,16 @@
 				</div>
 			</div>
 
-			<!-- Activity Link -->
+			<!-- Material Link -->
 			<div class="mt-4 w-full flex flex-col">
-				<x-label for="link" :value="__('Activity Link')" />
-				<x-input id="link" class="w-full" type="text" name="link" :value="old('link', $activity->link)" />
+				<x-label for="link" :value="__('Material Link')" />
+				<x-input id="link" class="w-full" type="text" name="link" placeholder="Enter material link" :value="old('link', $activity->link)" />
 			</div>
 
 			<!-- Activity Description -->
 			<div class="mt-4 w-full flex flex-col">
 				<x-label for="desc" :value="__('Activity Description')" />
-				<x-textarea rows="4" id="desc" class="w-full" type="text" name="desc">{!! old('desc', $activity->desc) !!}</x-textarea>
+				<x-textarea rows="4" id="desc" class="w-full" type="text" name="desc" placeholder="Enter activity description">{!! old('desc', $activity->desc) !!}</x-textarea>
 			</div>
 
 			<!-- Learning Outcome -->

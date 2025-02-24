@@ -36,10 +36,10 @@
 				</div>
 			</div>
 
-			<!-- Activity Link -->
+			<!-- Material Link -->
 			<div class="w-full flex flex-col mt-4">
-				<x-label for="link" :value="__('Activity Link')" />
-				<x-input id="link" class="w-full" type="text" name="link" placeholder="Enter activity link" value="{{ old('link') }}" />
+				<x-label for="link" :value="__('Material Link')" />
+				<x-input id="link" class="w-full" type="text" name="link" placeholder="Enter material link" value="{{ old('link') }}" />
 			</div>
 
 			<!-- Activity Description -->

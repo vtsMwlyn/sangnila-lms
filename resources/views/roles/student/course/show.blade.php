@@ -21,7 +21,7 @@
 
 			<x-back-button href="{{ route('student.mycourse.index') }}"></x-back-button>
 			<div class="w-full flex flex-col md:flex-row justify-between items-center">
-				<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
+				<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
 
 				@if(!$max_session_reached)
 					<div class="flex items-center gap-3 my-4 md:my-0">
@@ -202,6 +202,11 @@
 									<div class="flex w-1/2 items-start ">
 										<div class="flex gap-1">
 											<a href="{{ route('student.mycourse.preview', $ap["activity"]->id) }}"><img src="{{ asset('img/view.svg') }}" alt="icon" class="w-8 h-8 hover:scale-110"></a>
+											@if($ap["progress"]->meeting_link && $ap["progress"]->meeting_link != '')
+												<a href="{{ $ap["progress"]->meeting_link }}" target="blank" class="h-8 w-8 border-slate-400 rounded-lg flex items-center justify-center hover:scale-110" style="border-width: 3px;"><i class="bi bi-camera-video text-slate-400"></i></a>
+											@else
+												<a href="#" target="blank" class="h-8 w-8 border-slate-400 rounded-lg flex items-center justify-center hover:scale-110" style="border-width: 3px;"><i class="bi bi-camera-video text-slate-400"></i></a>
+											@endif
 										</div>
 									</div>
 								</div>
@@ -275,6 +280,8 @@
 							const activityTitle = ap.activity.title;
 							const activityDesc = ap.activity.desc;
 							const materialPreviewLink = `{{ route('student.mycourse.preview', ':id') }}`.replace(':id', ap.activity.id);
+							const meetingLink = ap.progress.meeting_link ? ap.progress.meeting_link : '#';
+							const anchorTarget = ap.progress.meeting_link ? 'blank' : 'self';
 							const topicTitle = ap.topic.title;
 							$("#topic").text(topicTitle);
 							$("#num").text(sessionNumber);
@@ -302,7 +309,13 @@
 										)
 										.append(
 											$("<div>").addClass("flex w-1/2 items-start").append(
-												$("<div>").addClass("flex gap-1").html(`<a href="${materialPreviewLink}"><img src="{{ asset('img/view.svg') }}" alt="icon" class="w-8 h-8 hover:scale-110"></a>`)
+												$("<div>").addClass("flex gap-1")
+													.append(
+														$('<a>').attr('href', materialPreviewLink).html('<img src="{{ asset('img/view.svg') }}" alt="icon" class="w-8 h-8 hover:scale-110">')
+													)
+													.append(
+														$('<a>').attr({'href': meetingLink, 'target': anchorTarget}).addClass('h-8 w-8 border-slate-400 rounded-lg flex items-center justify-center hover:scale-110').css('border-width', '3px').html('<i class="bi bi-camera-video text-slate-400"></i>')
+													)
 											)
 										)
 								);

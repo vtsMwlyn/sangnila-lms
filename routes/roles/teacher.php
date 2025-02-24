@@ -87,7 +87,7 @@ Route::prefix('/teacher')
 		});
 
 
-		// ===== STUDENTS MATERIAL ACCESS ===== //
+		// ===== MANAGE STUDENTS ===== //
 		Route::prefix('/student')
 			->name('student.')
 			->group(function () {
@@ -98,11 +98,14 @@ Route::prefix('/teacher')
 				// Pick an intended student to manage
 				Route::get('/{course_id}', [StudentController::class, 'teacher_select_student'])->name('select-student')->whereNumber('course_id');
 
-				// List of student's activity progress
-				Route::get('/{student_id}/progress/{course_id}', [ProgressController::class, 'index'])->name('show.progress')->whereNumber(['student_id', 'course_id']);
+				// Student information (activity progress and meeting link)
+				Route::get('/{student_id}/progress/{course_id}', [StudentController::class, 'teacher_index'])->name('show')->whereNumber(['student_id', 'course_id']);
 
 				// Update student's activity progress
-				Route::patch('/progress/{course_id}/{student_id}', [ProgressController::class, 'update'])->name('update.progress')->whereNumber(['course_id', 'student_id']);
+				Route::patch('/progress/{course_id}/{student_id}/activity-access', [StudentController::class, 'teacher_update_activity_access'])->name('update.progress.activity-access')->whereNumber(['course_id', 'student_id']);
+
+				// Update student's meeting link
+				Route::patch('/progress/{course_id}/{student_id}/meeting-link', [StudentController::class, 'teacher_update_meeting_link'])->name('update.progress.meeting-link')->whereNumber(['course_id', 'student_id']);
 			}
 		);
 

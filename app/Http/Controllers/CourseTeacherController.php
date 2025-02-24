@@ -46,7 +46,7 @@ class CourseTeacherController extends Controller {
 	// Batch assign teacher
 	public function batch_assign_teacher($course_id){
 		$course = Course::findOrFail($course_id);
-		return view('roles.admin.student.batch-assign-teacher', [
+		return view('roles.admin.teacher.batch-assign-teacher', [
 			'teachers' => User::where('role_id', 2)->where('status', 'enabled')->get(),
 			'course' => $course
 		]);

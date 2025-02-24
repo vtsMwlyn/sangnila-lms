@@ -1,7 +1,7 @@
 @extends("layouts.main-teacher")
 
 @section("title")
-	<h1>Student Progress</h1>
+	<h1>Manage Students</h1>
 @endsection
 
 @section("breadcrumbs-extension")
@@ -33,7 +33,7 @@
 				}
 			@endphp
 
-			<a href="{{ route('teacher.student.show.progress', ['student_id' => $cs->student->id, 'course_id' => $course->id]) }}"   class="oneperthree transition duration-300 hover:scale-105 relative">
+			<a href="{{ route('teacher.student.show', ['student_id' => $cs->student->id, 'course_id' => $course->id]) }}"   class="oneperthree transition duration-300 hover:scale-105 relative">
 				<div class="bg-white rounded-3xl p-5 shadow-lg flex gap-4 items-start">
 					<div class="">
 						@if($cs->student->details->profpic)

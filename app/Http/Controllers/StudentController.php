@@ -6,11 +6,14 @@ use Exception;
 use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Topic;
 use App\Models\Course;
+use App\Models\Activity;
 use App\Models\Progress;
 use App\Models\Assignment;
 use App\Models\Attendance;
 use App\Models\UserDetail;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
 use App\Models\SelfAttendance;
@@ -43,6 +46,138 @@ class StudentController extends Controller {
 			'course_students' => $course_students,
 			"course" => $course
 		]);
+	}
+
+	// Showing list of student's course activities accessibility status (locked/unlocked) and create progress data for the student
+	public function teacher_index($student_id, $course_id) {
+		$course = Course::where('status', 'active')->where('id', $course_id)->first();
+		$role = Role::where('role_name', 'Student')->first();
+		$student = User::where('role_id', $role->id)->where('id', $student_id)->first();
+		$existingProgress = Progress::where('student_id', $student->id)
+			->where('course_id', $course->id)
+			->pluck('activity_id')
+			->toArray();
+
+		$activities = Activity::whereHas('topic', function($query) use ($course){
+			return $query->where('course_id', $course->id)->where('user_id', Auth::user()->id);
+		})->orderBy('session', 'asc')->get();
+
+		foreach($activities as $activity) {
+			if (!in_array($activity->id, $existingProgress)) {
+				Progress::create([
+					'student_id' => $student->id,
+					'activity_id' => $activity->id,
+					'course_id' => $course->id,
+					'status' => 'locked'
+				]);
+			}
+		}
+
+		$topics = Topic::where('course_id', $course->id)->where('user_id', Auth::user()->id)->get();
+
+		// $newestProgress = Progress::where('student_id', $student->id)->where('course_id', $course->id)->get();
+		$newestProgress = Progress::where('student_id', $student->id)
+			->where('course_id', $course->id)
+			->with('activity') // Load the related activity
+			->join('activities', 'progress.activity_id', '=', 'activities.id') // Join with activities
+			->orderBy('activities.session', 'asc') // Order by session
+			->orderBy('activities.created_at', 'asc') // Order by created_at
+			->select('progress.*') // Only select columns from Progress
+			->get();
+
+
+		return view('roles.teacher.student.show', [
+			'student' => $student,
+			'course' => $course,
+			"topics" => $topics,
+			'newestprogress' => $newestProgress
+		]);
+	}
+
+	// Update the activity accessibility in the database
+	public function teacher_update_activity_access(Request $request, $course_id, $student_id) {
+		$student_progress = Progress::where('student_id', $student_id)
+			->where('course_id', $course_id)
+			->with('activity') // Load the related activity
+			->join('activities', 'progress.activity_id', '=', 'activities.id') // Join with activities
+			->orderBy('activities.session', 'asc') // Order by session
+			->orderBy('activities.created_at', 'asc') // Order by created_at
+			->select('progress.*') // Only select columns from Progress
+			->get();
+
+		try {
+			DB::beginTransaction();
+
+			foreach($student_progress as $index => $progress){
+				$newStatus = ($request->checkbox_value[$index] == 'on') ? "unlocked" : "locked";
+
+				if ($progress->status == "locked" && $newStatus == "unlocked") {
+					$updateStatus = $progress->update(["status" => $newStatus]);
+
+					if($updateStatus) {
+						Notification::create([
+							"user_id" => $student_id,
+							"status" => "unread",
+							"message" => "New activity \"" . $progress->activity->title . "\" in course " . $progress->course->course_name . " is now accessible!"
+						]);
+					}
+				} else {
+					Progress::findOrFail($progress->id)->update(["status" => $newStatus]);
+				}
+			}
+
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return back()->with("systemFail", "System failed to update activity access, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
+
+		return redirect(route('teacher.student.show', ['student_id' => $student_id, 'course_id' => $course_id]))->with("successUpdateProgress", "Student's activity access updated successfully!");
+	}
+
+	// Update meeting links
+	public function teacher_update_meeting_link(Request $request, $course_id, $student_id) {
+		$request->validate([
+			'meeting_links.*' => 'nullable|url'
+		]);
+
+		// return $request->content;
+
+		$student_progress = Progress::where('student_id', $student_id)
+			->where('course_id', $course_id)
+			->with('activity') // Load the related activity
+			->join('activities', 'progress.activity_id', '=', 'activities.id') // Join with activities
+			->orderBy('activities.session', 'asc') // Order by session
+			->orderBy('activities.created_at', 'asc') // Order by created_at
+			->select('progress.*') // Only select columns from Progress
+			->get();
+
+		try {
+			DB::beginTransaction();
+
+			foreach($student_progress as $index => $progress){
+				$updateStatus = $progress->update(["meeting_link" => $request->meeting_links[$index]]);
+
+				// if ($updateStatus > 0) {
+				// 	Notification::create([
+				// 		"user_id" => $student_id,
+				// 		"status" => "unread",
+				// 		"message" => "New activity \"" . $progress->activity->title . "\" in course " . $progress->course->course_name . " is now accessible!"
+				// 	]);
+				// }
+			}
+
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return back()->with("systemFail", "System failed to update meeting links, please report the error to our IT team. Error detail: " . $e->getMessage());
+		}
+
+		return redirect()->route('teacher.student.show', ['student_id' => $student_id, 'course_id' => $course_id, 'content' => $request->content])->withQuery(['content' => request('content')])->with("successUpdateProgress", "Student's meeting links updated successfully!");
 	}
 
 	// ===== ADMIN ===== //
