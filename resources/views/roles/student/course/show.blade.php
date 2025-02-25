@@ -202,10 +202,10 @@
 									<div class="flex w-1/2 items-start ">
 										<div class="flex gap-1">
 											<a href="{{ route('student.mycourse.preview', $ap["activity"]->id) }}"><img src="{{ asset('img/view.svg') }}" alt="icon" class="w-8 h-8 hover:scale-110"></a>
-											@if($ap["progress"]->meeting_link && $ap["progress"]->meeting_link != '')
-												<a href="{{ $ap["progress"]->meeting_link }}" target="blank" class="h-8 w-8 border-slate-400 rounded-lg flex items-center justify-center hover:scale-110" style="border-width: 3px;"><i class="bi bi-camera-video text-slate-400"></i></a>
+											@if($ap["progress"]->meeting_link)
+												<a href="{{ $ap["progress"]->meeting_link }}" target="_blank" class="h-8 w-8 border-slate-400 rounded-lg flex items-center justify-center hover:scale-110" style="border-width: 3px;"><i class="bi bi-camera-video text-slate-400"></i></a>
 											@else
-												<a href="#" target="blank" class="h-8 w-8 border-slate-400 rounded-lg flex items-center justify-center hover:scale-110" style="border-width: 3px;"><i class="bi bi-camera-video text-slate-400"></i></a>
+												<a href="#" class="h-8 w-8 border-slate-400 rounded-lg flex items-center justify-center hover:scale-110" style="border-width: 3px;"><i class="bi bi-camera-video text-slate-400"></i></a>
 											@endif
 										</div>
 									</div>
@@ -219,7 +219,7 @@
 								</div>
 								<div class="flex flex-col">
 									<h3 class="text-xs">Delivery Mode</h3>
-									<h2>{{ ucwords($course->delivery_mode) }}</h2>
+									<h2>{{ $ap["progress"]->meeting_link ? 'Online' : 'Onsite' }}</h2>
 								</div>
 							</div>
 						@endif
@@ -236,7 +236,6 @@
 	<script>
 		$(document).ready(() => {
 			const actprog = @json($activityProgresses);
-			const deliveryMode = '{{ ucwords($course->delivery_mode) }}';
 
 			// Initialize Swiper
 			const swiper = new Swiper('.swiper', {
@@ -281,7 +280,7 @@
 							const activityDesc = ap.activity.desc;
 							const materialPreviewLink = `{{ route('student.mycourse.preview', ':id') }}`.replace(':id', ap.activity.id);
 							const meetingLink = ap.progress.meeting_link ? ap.progress.meeting_link : '#';
-							const anchorTarget = ap.progress.meeting_link ? 'blank' : 'self';
+							const anchorTarget = ap.progress.meeting_link ? '_blank' : '_self';
 							const topicTitle = ap.topic.title;
 							$("#topic").text(topicTitle);
 							$("#num").text(sessionNumber);
@@ -320,6 +319,7 @@
 										)
 								);
 
+							const deliveryMode = ap.progress.meeting_link ? 'Online' : 'Onsite';							
 							const activityDetails = $("<div>").addClass("flex flex-col gap-8 my-8 w-full px-8")
 								.append(
 									$("<div>").addClass("flex flex-col")

@@ -125,7 +125,7 @@
 							</td>
 							<td class="py-2 px-4" style="max-width: 18vw; word-wrap: break-word;">
 								@if($activity->link)
-									<a href="{{ $activity->link }}" target="blank" class="font-bold text-blue-600 hover:underline">{{ $activity->link }}</a>
+									<a href="{{ $activity->link }}" target="_blank" class="font-bold text-blue-600 hover:underline">{{ $activity->link }}</a>
 								@else
 									N/A
 								@endif

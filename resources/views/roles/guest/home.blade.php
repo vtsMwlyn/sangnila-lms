@@ -54,10 +54,17 @@
 					</x-button>
 				</div>
 
-				<a class="underline text-sm text-dark-blue hover:text-slate-600 text-center md:text-right mt-4"
-					href="{{ route('guest.index') }}">
-					{{ __('Or login as guest') }}
-				</a>
+				<div class="mt-4 flex justify-between items-center">
+					<a class="underline text-sm text-dark-blue hover:text-slate-600"
+						href="https://register.sangnilaindonesia.com/trial-class/book">
+						{{ __('Trial Class') }}
+					</a>
+
+					<a class="underline text-sm text-dark-blue hover:text-slate-600"
+						href="{{ route('guest.index') }}">
+						{{ __('Go Without Account') }}
+					</a>
+				</div>
 			</div>
 		</form>
 

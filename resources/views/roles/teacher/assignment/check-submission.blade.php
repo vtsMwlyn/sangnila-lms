@@ -42,7 +42,7 @@
 								<div class="font-bold whitespace-nowrap @if($submission->status == 'Late') text-red @else text-light-blue @endif">{{ $submission->status }}</div>
 							</td>
 							<td class="py-2 px-4">
-								<a class="text-blue-600 hover:underline font-bold" href="{{ $submission->link }}" target="blank">{{ $submission->link }}</a>
+								<a class="text-blue-600 hover:underline font-bold" href="{{ $submission->link }}" target="_blank">{{ $submission->link }}</a>
 							</td>
 						</tr>
 					@empty

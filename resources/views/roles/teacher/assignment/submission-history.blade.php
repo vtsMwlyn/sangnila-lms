@@ -43,7 +43,7 @@
 							</td>
 							<td class="py-2 px-4">{{ $submission->title }}</td>
 							<td class="py-2 px-4">
-								<a href="{{ $submission->link }}" target="blank" class="text-blue-600 hover:underline font-bold">{{ $submission->link }}</a>
+								<a href="{{ $submission->link }}" target="_blank" class="text-blue-600 hover:underline font-bold">{{ $submission->link }}</a>
 							</td>
 							<td class="py-2 px-4">
 								<div class="font-bold whitespace-nowrap @if($submission->status == 'Late') text-red @else text-light-blue @endif">{{ $submission->status }}</div>

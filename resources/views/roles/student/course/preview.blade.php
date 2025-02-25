@@ -19,7 +19,7 @@
 		<h2 class="">{{ $activity->desc }}</h2>
 
 		<div class="flex gap-3 mt-8 mb-4">
-			<x-anchor-button type="button" target="blank" href="{{ $activity->link }}" style="background: linear-gradient(90deg, #1EB8CD 0%, #354D9B 100%);">
+			<x-anchor-button type="button" target="_blank" href="{{ $activity->link }}" style="background: linear-gradient(90deg, #1EB8CD 0%, #354D9B 100%);">
 				<i class="bi bi-box-arrow-up-right"></i> Visit Link
 			</x-anchor-button>
 		</div>

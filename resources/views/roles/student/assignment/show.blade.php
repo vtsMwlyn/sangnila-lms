@@ -141,10 +141,10 @@
 							</td>
 							<td class="py-2 px-4">
 								<div class="flex justify-center gap-2 w-full">
-									<a href="{{ $asg->link }}" target="blank">
+									<a href="{{ $asg->link }}" target="_blank">
 										<img src="{{ asset('img/view.svg') }}" alt="view-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</a>
-									<a href="{{ $asg->link }}" target="blank">
+									<a href="{{ $asg->link }}" target="_blank">
 										<img src="{{ asset('img/download.svg') }}" alt="download-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</a>
 									<div class="relative">
