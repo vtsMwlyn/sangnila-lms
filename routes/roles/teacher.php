@@ -106,6 +106,12 @@ Route::prefix('/teacher')
 
 				// Update student's meeting link
 				Route::patch('/progress/{course_id}/{student_id}/meeting-link', [StudentController::class, 'teacher_update_meeting_link'])->name('update.progress.meeting-link')->whereNumber(['course_id', 'student_id']);
+
+				// Upload portfolio for student
+				Route::post('/{student_id}/{course_id}/upload-portfolio', [StudentController::class, 'teacher_store_portfolio'])->name('store.portfolio')->whereNumber(['course_id', 'student_id']);
+
+				// Delete a portfolio image of a student
+				Route::delete('/portfolio/{portfolio_id}/delete', [StudentController::class, 'teacher_destroy_portfolio'])->name('destroy.portfolio')->whereNumber('portfolio_id');
 			}
 		);
 

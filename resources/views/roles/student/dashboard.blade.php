@@ -127,7 +127,7 @@
 										@if($announcement->image_path)
 											<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full rounded-3xl" style="object-fit: cover; object-position: center; height: 340px;">
 										@else
-											<div class="flex bg-slate-200 items-center justify-center text-white font-extrabold rounded-3xl grow" style="height: 340px;">
+											<div class="flex bg-slate-400 items-center justify-center text-white font-extrabold rounded-3xl grow" style="height: 340px;">
 												<i class="bi bi-megaphone-fill text-6xl"></i>
 											</div>
 										@endif

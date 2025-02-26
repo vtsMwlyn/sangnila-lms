@@ -31,17 +31,17 @@ $(document).ready(() => {
 		showLoadingPopupWithDelay();
 	});
 
-	// Track back button click using popstate event
-	$(window).on('popstate', function () {
-		isPopState = true;  // Set flag to true on back navigation
-		hideLoadingPopup();  // Ensure the popup is hidden
-	});
+	// // Track back button click using popstate event
+	// $(window).on('popstate', function () {
+	// 	isPopState = true;  // Set flag to true on back navigation
+	// 	hideLoadingPopup();  // Ensure the popup is hidden
+	// });
 
-	// Hide loading popup once the page is fully loaded
-	$(window).on('pageshow', function () {
-		isPopState = false;  // Reset flag on full page load
-		hideLoadingPopup();
-	});
+	// // Hide loading popup once the page is fully loaded
+	// $(window).on('pageshow', function () {
+	// 	isPopState = false;  // Reset flag on full page load
+	// 	hideLoadingPopup();
+	// });
 
 	// Display back to top button on page scroll more than 100vh
 	const backToTopButton = document.getElementById("back-to-top");

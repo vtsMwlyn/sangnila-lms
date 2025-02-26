@@ -83,7 +83,7 @@
 			@endphp
 
 			@if($m > 0)
-				<button class="fixed bottom-3 right-3 font-bold text-blue py-2 px-3 border-2 border-blue rounded-xl hover:text-slate-500 hover:border-slate-500" id="dismiss-announcements-btn" type="button" style="z-index: 70;">Dismiss all</button>
+				<button class="bg-light-blue py-2 px-4 rounded-xl text-white hover:bg-slate-600 fixed bottom-3 right-3" id="dismiss-announcements-btn" type="button" style="z-index: 70;">Dismiss all</button>
 			@endif
 
 			@forelse ($all_announcements as $announcement)
@@ -92,7 +92,7 @@
 				@if($target[Auth::user()->role_id - 1] == "on")
 					@php $n++; @endphp
 					@if($announcement->announce_from < now() && $announcement->announce_until > now())
-						<div class="h-screen w-screen flex items-center justify-center fixed top-0 announcement-popup-container" style="backdrop-filter: blur(5px); background: {{ ($n == 1)? 'rgba(0, 0, 0, 0.3)' : 'none' }}; z-index: 60;">
+						<div class="h-screen w-screen flex items-center justify-center fixed top-0 announcement-popup-container" style="@if($n == 1) backdrop-filter: blur(5px) brightness(0.5);@endif z-index: 60;">
 							<div class="bg-white w-1/2 h-4/5 flex flex-col gap-5 justify-between items-center p-8 rounded-3xl announcement-popup" >
 								<h1 class="text-xl font-bold text-blue-900">{{ $announcement->title }}</h1>
 								<div class="grow overflow-y-auto">

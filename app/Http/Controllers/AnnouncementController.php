@@ -56,15 +56,7 @@ class AnnouncementController extends Controller
 			$data_to_create["image_path"] = $validatedData["image"];
 		}
 
-		try {
-			Announcement::create($data_to_create);
-		}
-		catch(Exception $e){
-
-
-			return back()->with("systemFail", "System failed to create announcement, please report the error to our IT team. Error detail: " . $e->getMessage());
-		}
-
+		Announcement::create($data_to_create);
 
 		return redirect(route("admin.announcement.index"))->with("successUploadAnnouncement", "Announcement uploaded successfully!");
 	}
