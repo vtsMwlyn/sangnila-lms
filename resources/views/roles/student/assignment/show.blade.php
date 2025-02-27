@@ -34,12 +34,12 @@
 			<form action="#" method="post" class="mt-4" id="submit-form">
 				@csrf
 				<div class="flex flex-col">
-					<label for="title">Submission Title</label>
+					<label for="title">Submission Title<span class="text-red">*</span></label>
 					<x-input id="title" class="w-full mt-1" type="text" name="title" style="border-width: 3px;" value="{{ old('title') }}" placeholder="Submission Title" autofocus />
 				</div>
 
 				<div class="flex flex-col mt-4">
-					<label for="link">Your Work Link</label>
+					<label for="link">Your Work Link<span class="text-red">*</span></label>
 					<x-input id="link" class="w-full mt-1" type="text" name="link" style="border-width: 3px;" value="{{ old('link') }}" placeholder="Your Work Link" autofocus />
 				</div>
 

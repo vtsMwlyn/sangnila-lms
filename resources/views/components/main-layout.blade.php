@@ -33,6 +33,8 @@
 
 		<!-- Tailwind CDN -->
 		<script src="https://cdn.tailwindcss.com"></script>
+		{{-- <script src="https://unpkg.com/@tailwindcss/browser@4"></script> --}}
+
 
 		<!-- Include select2 CSS -->
 		<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
@@ -51,6 +53,12 @@
 		<!-- Include select2 JavaScript -->
 		<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
+		<!-- Include chart.js -->
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+		<!-- Include cropper.js -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
 	</head>
 
 	<body class="min-h-screen flex flex-col items-center text-xs sm:text-sm" data-tjzlptoheng="{{ csrf_token() }}">
@@ -90,8 +98,8 @@
 				@php $target = json_decode($announcement->sent_to); @endphp
 
 				@if($target[Auth::user()->role_id - 1] == "on")
-					@php $n++; @endphp
 					@if($announcement->announce_from < now() && $announcement->announce_until > now())
+						@php $n++; @endphp
 						<div class="h-screen w-screen flex items-center justify-center fixed top-0 announcement-popup-container" style="@if($n == 1) backdrop-filter: blur(5px) brightness(0.5);@endif z-index: 60;">
 							<div class="bg-white w-1/2 h-4/5 flex flex-col gap-5 justify-between items-center p-8 rounded-3xl announcement-popup" >
 								<h1 class="text-xl font-bold text-blue-900">{{ $announcement->title }}</h1>

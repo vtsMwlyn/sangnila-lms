@@ -23,13 +23,13 @@
 			@method('patch')
 			<div class="w-full flex gap-x-4">
 				<div class="flex flex-col w-1/2">
-					<p>Course Name</p>
+					<p>Course Name<span class="text-red">*</span></p>
 					<x-input id="course_name" class="block w-full" type="text" name="course_name" placeholder="New course name"
 						:value="old('course_name', $course->course_name)" autofocus />
 				</div>
 
 				<div class="flex flex-col w-1/2">
-					<p>Status</p>
+					<p>Status<span class="text-red">*</span></p>
 					<div class="flex flex-col w-full items-stretch">
 						<x-select name="status" id="status" class="w-full">
 							<option selected disabled>Course Status</option>
@@ -42,7 +42,7 @@
 
 			<div class="w-full flex gap-x-4">
 				<div class="flex flex-col w-1/2">
-					<p>Level</p>
+					<p>Level<span class="text-red">*</span></p>
 					<div class="flex flex-col w-full items-stretch">
 						<x-select name="level" id="level" class="w-full">
 							<option selected disabled>Course Level</option>
@@ -54,7 +54,7 @@
 				</div>
 
 				<div class="flex flex-col w-1/2">
-					<p>Format</p>
+					<p>Format<span class="text-red">*</span></p>
 					<div class="flex flex-col w-full items-stretch">
 						<x-select name="format" id="format" class="w-full">
 							<option selected disabled>Course Format</option>
@@ -67,7 +67,7 @@
 
 			<div class="w-full flex gap-x-4">
 				<div class="flex flex-col w-1/2">
-					<p>Delivery Mode</p>
+					<p>Delivery Mode<span class="text-red">*</span></p>
 					<div class="flex flex-col w-full items-stretch">
 						<x-select name="delivery_mode" id="delivery_mode" class="w-full">
 							<option value="onsite" @if(old("delivery_mode", $course->delivery_mode) == "onsite") selected @endif>Onsite</option>
@@ -79,7 +79,7 @@
 			</div>
 
 			<div class="flex flex-col w-full">
-				<p>Course Description</p>
+				<p>Course Description<span class="text-red">*</span></p>
 				<div class="flex flex-col w-full items-stretch">
 					<x-textarea name="course_description" rows="4" placeholder="Course Descriptions">
 						{{ old("course_description", $course->course_description) }}

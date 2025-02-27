@@ -31,7 +31,7 @@
 					<div class="flex flex-col md:flex-row gap-3 mt-3">
 						<!-- Student Name -->
 						<div class="w-full md:w-1/2">
-							<x-label for="full_name" :value="__('Student Name')" />
+							<x-label for="full_name">Student Name<span class="text-red">*</span></x-label>
 							<x-input id="full_name" class="block mt-1 w-full" type="text" name="full_name" placeholder="Full Name" :value="old('full_name')" autofocus />
 							<p class="text-red font-bold mt-1" style="display: none" id="err_full_name"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 						</div>
@@ -39,14 +39,14 @@
 						<div class="w-full md:w-1/2 flex flex-col md:flex-row gap-3">
 							<!-- Student Email -->
 							<div class="w-full md:w-2/3">
-								<x-label for="email" :value="__('Student Email')" />
+								<x-label for="email">Student Email<span class="text-red">*</span></x-label>
 								<x-input id="email" class="block mt-1 w-full" type="text" name="email" placeholder="Student's Email" :value="old('email')"
 									autofocus />
 								<p class="text-red font-bold mt-1" style="display: none" id="err_email"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 							</div>
 							<!-- Gender -->
 							<div class="w-full md:w-1/3">
-								<x-label for="gender" :value="__('Gender')" />
+								<x-label for="gender">Gender<span class="text-red">*</span></x-label>
 								<x-select name="gender" id="gender"
 								class="mt-1 w-full">
 									<option value="" selected disabled>Select Gender
@@ -127,7 +127,7 @@
 					<div class="mt-4 flex flex-col md:flex-row gap-3">
 						<!-- Student's Teacher -->
 						<div class="w-full md:w-1/2">
-							<x-label for="teacher_name" :value="__('Student\'s Teacher')" />
+							<x-label for="teacher_name">Student's Teacher<span class="text-red">*</span></x-label>
 							<x-select name="teacher_name" id="teacher_name" class="mt-1 w-full">
 								<option value="" disabled selected>Pick a teacher</option>
 								@foreach ($course->teachers as $teacher)
@@ -140,14 +140,14 @@
 						<div class="w-full md:w-1/2 flex gap-3">
 							<!-- Last attendance count -->
 							<div class="w-1/2">
-								<x-label for="last_attendance_count" :value="__('Last Attendance Count')" />
+								<x-label for="last_attendance_count">Last Attendance Count<span class="text-red">*</span></x-label>
 								<x-input id="last_attendance_count" class="block mt-1 w-full" type="number" name="last_attendance_count" placeholder="Last Attendance Count" value="0" />
 								<p class="text-red font-bold mt-1" style="display: none" id="err_last_attendance_count"><i class="bi bi-exclamation-circle"></i> Invalid input.</p>
 							</div>
 
 							<!-- Student's max course session -->
 							<div class="w-1/2">
-								<x-label for="max_course_session" :value="__('Maximum Sessions')"/>
+								<x-label for="max_course_session">Maximum Sessions<span class="text-red">*</span></x-label>
 								<x-input id="max_course_session" class="block mt-1 w-full" type="number" name="max_course_session" placeholder="Maximum sessions" value="8" />
 								<p class="text-red font-bold mt-1" style="display: none" id="err_max_course_session"><i class="bi bi-exclamation-circle"></i> Invalid input.</p>
 							</div>
@@ -156,7 +156,7 @@
 
 					<!-- Student's last activity unlocked -->
 					<div class="w-full mt-3 container-select2">
-						<x-label for="last_activity_unlocked" class="mb-1" :value="__('Last Activity Unlock')"/>
+						<x-label for="last_activity_unlocked" class="mb-1">Last Activity Unlock<span class="text-red">*</span></x-label>
 						<x-select name="last_activity_unlocked" id="last_activity_unlocked" class="mt-1 w-full select-2">
 						</x-select>
 						<p class="text-red font-bold mt-1" style="display: none" id="err_last_activity_unlocked"><i class="bi bi-exclamation-circle"></i> This field is required.</p>

@@ -20,7 +20,7 @@
 			@csrf
 			<div class="flex flex-col gap-3 w-full">
 				<div class="flex flex-col w-full">
-					<x-label for="status" :value="__('Course Name')"/>
+					<x-label for="status">Course Name<span class="text-red">*</span></x-label>
 					<x-select name="course_name" id="course_name" class="w-full">
 					</x-select>
 				</div>

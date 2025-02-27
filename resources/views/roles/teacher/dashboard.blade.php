@@ -61,7 +61,7 @@
 								@if($selfAttendances && $selfAttendances->check_in_time && !$selfAttendances->check_out_time)
 									<form action="{{ route('teacher.attendance.check-out.store', $course->id) }}" method="post">
 										@csrf
-										<button type="submit" href="{{ route('teacher.attendance.show', $course->id) }}" class="bg-indigo-600 hover:bg-slate-700 py-0.5 px-1.5 rounded-lg font-bold text-white">Check Out</button>
+										<button type="submit" href="{{ route('teacher.attendance.show', $course->id) }}" class="bg-indigo-600 hover:bg-slate-700 py-0.5 px-1.5 rounded-lg font-bold text-white" onclick="return confirm('Are you sure want to check out now?');">Check Out</button>
 									</form>
 								@else
 									<a href="{{ route('teacher.attendance.check-in', $course->id) }}" class="bg-indigo-600 hover:bg-slate-700 py-0.5 px-1.5 rounded-lg font-bold text-white">Check In</a>

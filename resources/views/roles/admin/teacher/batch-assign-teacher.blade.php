@@ -19,6 +19,10 @@
 			<x-badge-danger badge_text="{{ session('errorBatchAssignTeacher') }}"></x-badge-danger>
 		@endif
 
+		@error('selected_teachers')
+			<x-badge-danger badge_text="Please select minimum 1 teacher to assign to this course!"></x-badge-danger>
+		@enderror
+
 		@php
 			$iterasus = 1;
 		@endphp
@@ -32,7 +36,7 @@
 					<div class="w-full flex justify-between items-center">
 						<h1 class="text-blue font-semibold">Teacher List</h1>
 						<div class="flex gap-3 w-1/3 items-center">
-							<x-input id="search-teacher" class="grow" placeholder="Search Teacher..."/>
+							<x-input id="search-teacher" name="_dummy_search" class="grow" placeholder="Search Teacher..."/>
 							<x-button type="button" id="clear-button">Clear</x-button>
 						</div>
 					</div>
@@ -98,6 +102,7 @@
 				$('input[type="checkbox"]').each(function(){
 					if($(this).is(":checked")){
 						$("form").append($("<input>").attr({"type": "hidden", "name": "selected_teachers[]", "value": $(this).data("sid")}));
+						n++;
 					}
 				});
 

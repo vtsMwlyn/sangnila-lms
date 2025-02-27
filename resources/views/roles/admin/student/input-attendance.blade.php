@@ -30,7 +30,7 @@
 					<h1 class="font-bold text-lg text-blue">Class Data</h1>
 					<div class="flex gap-5">
 						<div class="mt-3 w-full md:w-1/2">
-							<x-label class="mb-1">Course Name</x-label>
+							<x-label class="mb-1">Course Name<span class="text-red">*</span></x-label>
 							<x-select name="_course_name" id="_course_name" class="w-full">
 								<option disabled selected>Pick a course</option>
 								@foreach ($student->enrolled_courses as $c)
@@ -42,7 +42,7 @@
 							<p class="text-red font-bold mt-2 hidden" id="error-course"><i class="bi bi-exclamation-circle"></i> Please pick a course.</p>
 						</div>
 						<div class="mt-3 w-full md:w-1/2">
-							<x-label class="mb-1">Teacher</x-label>
+							<x-label class="mb-1">Teacher<span class="text-red">*</span></x-label>
 							<x-input type="text" name="_teacher_name" id="_teacher_name" class="w-full" disabled value="Pick a course first"/>
 							<input type="hidden" name="teacher_id" id="teacher_id">
 						</div>
@@ -53,11 +53,11 @@
 					<div class="flex flex-col w-full">
 						<div class="w-full flex gap-5 mt-3">
 							<div class="w-full md:w-1/2">
-								<x-label class="mb-1">Attendance Date</x-label>
+								<x-label class="mb-1">Attendance Date<span class="text-red">*</span></x-label>
 								<x-input type="date" name="_attendance_date" id="_attendance_date" class="w-full date-input" value="{{ Carbon\Carbon::today()->format('Y-m-d') }}"/>
 							</div>
 							<div class="w-full md:w-1/2">
-								<x-label class="mb-1">Attendance Status</x-label>
+								<x-label class="mb-1">Attendance Status<span class="text-red">*</span></x-label>
 								<x-select name="_is_attended" id="_is_attended" class="w-full">
 									<option value="1">Attended</option>
 									<option value="0">Absent</option>
@@ -73,27 +73,27 @@
 						<div class="flex gap-5 w-full mt-6 attendance-detail-fields">
 							<!-- Start Time -->
 							<div class="flex flex-col w-1/2">
-								<x-label for="_start_time">Start Time</x-label>
+								<x-label for="_start_time">Start Time<span class="text-red">*</span></x-label>
 								<x-input class="_start_time" type="time" id="_start_time" value="00:00"/>
 							</div>
 
 							<!-- End Time -->
 							<div class="flex flex-col w-1/2">
-								<x-label for="_end_time">End Time</x-label>
+								<x-label for="_end_time">End Time<span class="text-red">*</span></x-label>
 								<x-input class="_end_time" type="time" id="_end_time" value="00:00"/>
 							</div>
 						</div>
 
 						<div class="w-full flex gap-5 mt-3 attendance-detail-fields">
 							<div class="w-full md:w-1/2 container-select2">
-								<x-label for="_activity_progress" class="mb-1">Activity</x-label>
+								<x-label for="_activity_progress" class="mb-1">Activity<span class="text-red">*</span></x-label>
 								<x-select name="_activity_progress" id="_activity_progress" class="w-full select-2">
 									<option disabled selected>Pick a course first</option>
 								</x-select>
 							</div>
 
 							<div class="w-full md:w-1/2">
-								<x-label for="_learning_status" class="mb-1">Learning Status</x-label>
+								<x-label for="_learning_status" class="mb-1">Learning Status<span class="text-red">*</span></x-label>
 								<x-select name="_learning_status" id="_learning_status" class="w-full">
 									<option value="Done">Done</option>
 									<option value="On Progress">On Progress</option>
@@ -102,7 +102,7 @@
 						</div>
 
 						<div class="w-full mt-8">
-							<x-label for="_attendance_details" class="mb-1">Details</x-label>
+							<x-label for="_attendance_details" class="mb-1">Details<span class="text-red">*</span></x-label>
 							<x-textarea rows="4" name="_attendance_details" id="_attendance_details" class="w-full" placeholder="Input details">N/A</x-textarea>
 						</div>
 					</div>

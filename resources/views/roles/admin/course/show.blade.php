@@ -20,13 +20,13 @@
 			<form method="post" class="mt-4" id="new-learning-outcome-form">
 				@csrf
 				<div class="flex flex-col">
-					<label for="title">Learning Outcome Title</label>
+					<label for="title">Learning Outcome Title<span class="text-red">*</span></label>
 					<x-input id="title" class="w-full mt-1" type="text" name="title" style="border-width: 3px;" value="{{ old('title') }}" placeholder="Learning Outcome Title" autofocus />
 				</div>
 
 				<div class="flex flex-col mt-4">
-					<label for="number">Order/Number of Learning Outcome</label>
-					<x-input id="number" class="w-full mt-1" type="text" name="number" style="border-width: 3px;" value="{{ old('number') }}" placeholder="Learning Outcome Order/Number" autofocus />
+					<label for="number">Order/Number of Learning Outcome<span class="text-red">*</span></label>
+					<x-input id="number" class="w-full mt-1" type="number" name="number" style="border-width: 3px;" value="{{ old('number') }}" placeholder="Learning Outcome Order/Number" autofocus />
 				</div>
 
 				<div class="flex items-center justify-center w-full mt-8 mb-3 gap-3">
@@ -47,13 +47,13 @@
 			<form method="post" class="mt-4" id="edit-learning-outcome-form">
 				@csrf
 				<div class="flex flex-col">
-					<label for="title">Learning Outcome Title</label>
+					<label for="title">Learning Outcome Title<span class="text-red">*</span></label>
 					<x-input id="title" class="w-full mt-1" type="text" name="title" style="border-width: 3px;" placeholder="Learning Outcome Title" autofocus />
 				</div>
 
 				<div class="flex flex-col mt-4">
-					<label for="number">Order/Number of Learning Outcome</label>
-					<x-input id="number" class="w-full mt-1" type="text" name="number" style="border-width: 3px;" placeholder="Learning Outcome Order/Number" autofocus />
+					<label for="number">Order/Number of Learning Outcome<span class="text-red">*</span></label>
+					<x-input id="number" class="w-full mt-1" type="number" name="number" style="border-width: 3px;" placeholder="Learning Outcome Order/Number" autofocus />
 				</div>
 
 				<div class="flex items-center justify-center w-full mt-8 mb-3 gap-3">
@@ -81,7 +81,7 @@
 				@csrf
 				<!-- Curriculum Topic Title -->
 				<div class="flex flex-col">
-					<label for="topic_title">Curriculum Topic Title</label>
+					<label for="topic_title">Curriculum Topic Title<span class="text-red">*</span></label>
 					<x-input id="topic_title" class="w-full mt-1" type="text" name="topic_title" style="border-width: 3px;" value="{{ old('topic_title') }}" placeholder="Curriculum topic title" autofocus />
 				</div>
 
@@ -105,7 +105,7 @@
 				@csrf
 				<!-- Curriculum Topic Title -->
 				<div class="flex flex-col">
-					<label for="topic_title">Curriculum Topic Title</label>
+					<label for="topic_title">Curriculum Topic Title<span class="text-red">*</span></label>
 					<x-input id="topic_title" class="w-full mt-1" type="text" name="topic_title" style="border-width: 3px;" value="{{ old('topic_title') }}" placeholder="Curriculum topic title" autofocus />
 				</div>
 
@@ -136,7 +136,7 @@
 			<form action="{{ route('admin.course.curriculum.copy-syllabus', $course->id) }}" method="post" class="mt-4">
 				@csrf
 				<div class="flex flex-col">
-					<label for="course_id">Copy from:</label>
+					<label for="course_id">Copy from:<span class="text-red">*</span></label>
 					<x-select id="course_id" class="w-full mt-1" type="text" name="course_id" style="border-width: 3px;">
 						@foreach ($all_courses as $c)
 							<option value="{{ $c->id }}">{{ $c->course_name }} - {{ ucwords($c->level) }}</option>

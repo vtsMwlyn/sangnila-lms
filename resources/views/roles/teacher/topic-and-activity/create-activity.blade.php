@@ -25,26 +25,26 @@
 			<div class="flex gap-5 w-full">
 				<!-- Activity Title -->
 				<div class="flex flex-col w-1/2">
-					<x-label for="title" :value="__('Activity Title')" />
+					<x-label for="title">Activity Title<span class="text-red">*</span></x-label>
 					<x-input id="title" class="w-full" type="text" name="title" placeholder="Enter activity title" value="{{ old('title') }}" autofocus />
 				</div>
 
 				<!-- Session -->
 				<div class="flex flex-col w-1/2">
-					<x-label for="session" :value="__('Session')" />
+					<x-label for="session">Session<span class="text-red">*</span></x-label>
 					<x-input id="session" class="w-full" type="text" name="session" placeholder="Enter activity session" value="{{ old('session') }}" />
 				</div>
 			</div>
 
 			<!-- Material Link -->
 			<div class="w-full flex flex-col mt-4">
-				<x-label for="link" :value="__('Material Link')" />
+				<x-label for="link">Material Link</x-label>
 				<x-input id="link" class="w-full" type="text" name="link" placeholder="Enter material link" value="{{ old('link') }}" />
 			</div>
 
 			<!-- Activity Description -->
 			<div class="w-full flex flex-col mt-4">
-				<x-label for="desc" :value="__('Activity Description')" />
+				<x-label for="desc">Activity Description<span class="text-red">*</span></x-label>
 				<x-textarea rows="4" id="desc" class="w-full" type="text" name="desc" placeholder="Enter activity description" >{!! old('desc') !!}</x-textarea>
 			</div>
 

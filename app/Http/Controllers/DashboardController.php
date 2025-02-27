@@ -8,8 +8,10 @@ use App\Models\User;
 use App\Models\Topic;
 use App\Models\Progress;
 use App\Models\Assignment;
+use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
+use App\Models\ImportedStudent;
 use App\Models\SelfAttendance;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
@@ -38,7 +40,32 @@ class DashboardController extends Controller
 	}
 
     public function admin_dashboard(){
-		return view("roles.admin.dashboard");
+		$n_active_courses = Course::where('status', 'active')->count();
+		$n_active_students = User::where('role_id', 3)->where('status', 'enabled')->count();
+		$n_active_teachers = User::where('role_id', 2)->where('status', 'enabled')->count();
+		$n_max_session_students = 0;
+
+		foreach(CourseStudent::all() as $cs){
+			$studentAttendances = StudentAttendance::where('student_id', $cs->student->id)->whereHas('attendance', function($query) use ($cs){
+				return $query->where('course_id', $cs->course->id);
+			})->get();
+
+			$n_atd = $studentAttendances->count();
+			if($cs->is_imported == 1){
+				$n_atd += ImportedStudent::where('student_id', $cs->student->id)->where('course_id', $cs->course->id)->first()->last_attendance_count;
+			}
+
+			if($n_atd == $cs->max_course_session && $cs->learning_status == 'learning'){
+				$n_max_session_students++;
+			}
+		}
+
+		return view("roles.admin.dashboard", [
+			'active_courses' => $n_active_courses,
+			'active_students' => $n_active_students,
+			'active_teachers' => $n_active_teachers,
+			'max_session_students' => $n_max_session_students,
+		]);
 	}
 
 	public function teacher_dashboard(){

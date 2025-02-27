@@ -27,26 +27,26 @@
 			<!-- Activity Title -->
 			<div class="w-full flex gap-5">
 				<div class="w-1/2 flex flex-col">
-					<x-label for="title" :value="__('Activity Title')" />
+					<x-label for="title">Activity Title<span class="text-red">*</span></x-label>
 					<x-input id="title" class="w-full" type="text" name="title" :value="old('title', $activity->title)" autofocus />
 				</div>
 
 				<!-- Session -->
 				<div class="w-1/2 flex flex-col">
-					<x-label for="session" :value="__('Session')" />
+					<x-label for="session">Session<span class="text-red">*</span></x-label>
 					<x-input id="session" class="w-full" type="text" name="session" placeholder="Enter activity session" :value="old('session', $activity->session)" />
 				</div>
 			</div>
 
 			<!-- Material Link -->
 			<div class="mt-4 w-full flex flex-col">
-				<x-label for="link" :value="__('Material Link')" />
+				<x-label for="link">Material Link</x-label>
 				<x-input id="link" class="w-full" type="text" name="link" placeholder="Enter material link" :value="old('link', $activity->link)" />
 			</div>
 
 			<!-- Activity Description -->
 			<div class="mt-4 w-full flex flex-col">
-				<x-label for="desc" :value="__('Activity Description')" />
+				<x-label for="desc">Activity Description<span class="text-red">*</span></x-label>
 				<x-textarea rows="4" id="desc" class="w-full" type="text" name="desc" placeholder="Enter activity description">{!! old('desc', $activity->desc) !!}</x-textarea>
 			</div>
 

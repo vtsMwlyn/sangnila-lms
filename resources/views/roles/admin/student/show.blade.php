@@ -16,7 +16,7 @@
 
 			<div class="flex flex-col gap-3 w-full">
 				<div class="flex flex-col w-full">
-					<x-label for="status" :value="__('Uninserted Attendance Count')"/>
+					<x-label for="status">Uninserted Attendance Count<span class="text-red">*</span></x-label>
 					<x-input type="text" name="last_attendance_count" id="last_attendance_count" class="w-full mt-1" />
 				</div>
 
@@ -46,28 +46,29 @@
 
 			<div class="flex flex-col gap-3 w-full">
 				<div class="flex flex-col w-full">
-					<x-label for="status" :value="__('Course Name')"/>
+					<x-label for="status">Course Name<span class="text-red">*</span></x-label>
 					<x-select name="course" id="course" class="w-full mt-1">
 					</x-select>
 				</div>
 
 				<div class="flex flex-col w-full">
-					<x-label for="status" :value="__('Teacher')"/>
+					<x-label for="status">Teacher<span class="text-red">*</span></x-label>
 					<x-select name="teacher" id="teacher" class="w-full mt-1">
 					</x-select>
 				</div>
 
 				<div class="flex flex-col w-full">
-					<x-label for="status" :value="__('Max Course Session')"/>
-					<x-input type="text" name="max_course_session" id="max_course_session" class="w-full mt-1" />
+					<x-label for="status">Max Course Session<span class="text-red">*</span></x-label>
+					<x-input type="number" name="max_course_session" id="max_course_session" class="w-full mt-1" value="{{ old('max_course_session') }}" placeholder="Enter max course session"/>
 				</div>
 
 				<div class="flex flex-col w-full">
-					<x-label for="status" :value="__('Learning Status')"/>
+					<x-label for="status">Learning Status<span class="text-red">*</span></x-label>
 					<x-select name="learning_status" id="learning_status" class="w-full mt-1">
-						<option value="learning">Learning</option>
-						<option value="complete">Complete</option>
-						<option value="undone">Undone</option>
+						<option>Select a learning status</option>
+						<option value="learning" @if(old('learning_status') == 'learning') selected @endif>Learning</option>
+						<option value="complete" @if(old('learning_status') == 'complete') selected @endif>Complete</option>
+						<option value="undone" @if(old('learning_status') == 'undone') selected @endif>Undone</option>
 					</x-select>
 				</div>
 
@@ -91,18 +92,18 @@
 
 			<div class="flex flex-col gap-3 w-full">
 				<div class="flex flex-col w-full">
-					<x-label for="status" :value="__('Teacher')"/>
+					<x-label for="status">Teacher<span class="text-red">*</span></x-label>
 					<x-select name="teacher" id="teacher" class="w-full mt-1">
 					</x-select>
 				</div>
 
 				<div class="flex flex-col w-full">
-					<x-label for="status" :value="__('Max Course Session')"/>
-					<x-input type="text" name="max_course_session" id="max_course_session" class="w-full mt-1" />
+					<x-label for="status">Max Course Session<span class="text-red">*</span></x-label>
+					<x-input type="number" name="max_course_session" id="max_course_session" class="w-full mt-1" />
 				</div>
 
 				<div class="flex flex-col w-full">
-					<x-label for="status" :value="__('Learning Status')"/>
+					<x-label for="status">Learning Status<span class="text-red">*</span></x-label>
 					<x-select name="learning_status" id="learning_status" class="w-full mt-1">
 						<option value="learning">Learning</option>
 						<option value="complete">Complete</option>
@@ -449,8 +450,6 @@
 
 			$('select[name="teacher"]').empty();
 			$('select[name="teacher"]').append($("<option>").attr('value', '').prop({"selected": true}).text('Pick a teacher (select course first)'));
-
-			$('input[name="max_course_session"]').val(8);
 
 			// Display the popup
 			$(`#${whichpopup}`).parent().show();

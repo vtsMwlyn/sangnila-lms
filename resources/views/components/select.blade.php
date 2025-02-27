@@ -9,7 +9,7 @@
 	}
 @endphp
 
-<select {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => $classList, 'style' => 'border-width: 3px;']) !!}>
+<select {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => $classList, 'style' => 'border-width: 3px; padding-top: 0.5rem; padding-bottom: 0.5rem;']) !!}>
 	{{ $slot }}
 </select>
 

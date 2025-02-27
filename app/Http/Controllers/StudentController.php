@@ -261,7 +261,7 @@ class StudentController extends Controller {
 	// ===== ADMIN ===== //
 	// Showing list of all active students in Sangnila LMS
 	public function admin_index() {
-		$students = User::where("role_id", 3)->filter(request(["search", "course"]))->orderByRaw('CASE WHEN status = "disabled" THEN 1 ELSE 0 END')->orderBy('full_name', 'asc')->with(['course_students', 'student_attendances'])->get();
+		$students = User::where("role_id", 3)->filter(request(["search", "course"]))->orderBy('full_name', 'asc')->with(['course_students', 'student_attendances'])->get();
 
 		$max_attendances_learning = [];
 		$current_attendances_learning = [];
@@ -312,12 +312,8 @@ class StudentController extends Controller {
 					}
 				}
 
-				if((($count + 1) % $cs->max_course_session == 0) || $count >= $cs->max_course_session){
+				if(((($count + 1) % $cs->max_course_session == 0) || $count >= $cs->max_course_session) && $cs->learning_status != 'complete'){
 					$prioritized = true;
-				}
-
-				if($student->status == 'disabled' || $cs->learning_status == 'complete'){
-					$prioritized = false;
 				}
 
 				if($cs->learning_status == 'complete'){

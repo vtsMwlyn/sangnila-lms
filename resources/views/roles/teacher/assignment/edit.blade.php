@@ -26,45 +26,42 @@
 			<div class="flex w-full gap-5">
 				<!-- Assignment Title -->
 				<div class="flex flex-col w-1/2">
-					<x-label for="title" :value="__('Assignment Title')" />
+					<x-label for="title">Assignment Title<span class="text-red">*</span></x-label>
 					<x-input id="title" class="block w-full" type="text" name="title" placeholder="Enter title"
 						:value="old('title', $assignment->title)" autofocus />
 				</div>
 
 				<!-- Deadline Time -->
 				<div class="flex flex-col w-1/2">
-					<x-label for="deadline_time" :value="__('Deadline Time')" />
-					<x-input id="deadline_time" class="block w-full" type="time" name="deadline_time" placeholder="Enter deadline time"
-						:value="old('deadline_time', $assignment->deadline_time)" />
+					<x-label for="deadline_time">Deadline Time<span class="text-red">*</span></x-label>
+					<x-input id="deadline_time" class="block w-full" type="time" name="deadline_time" placeholder="Enter deadline time" :value="old('deadline_time', $assignment->deadline_time)" />
 				</div>
 			</div>
 
 			<div class="flex w-full gap-5 mt-4">
 				<!-- Link -->
 				<div class="flex flex-col w-1/2">
-					<x-label for="link" :value="__('Link')" />
-					<x-input id="link" class="block w-full" type="text" name="link" placeholder="Enter link"
-						:value="old('link', $assignment->link)" />
+					<x-label for="link">Link<span class="text-red">*</span></x-label>
+					<x-input id="link" class="block w-full" type="text" name="link" placeholder="Enter link" :value="old('link', $assignment->link)" />
 				</div>
 
 				<!-- Deadline Date -->
 				<div class="flex flex-col w-1/2">
-					<x-label for="deadline_date" :value="__('Deadline Date')" />
-					<x-input id="deadline_date" class="block w-full date-input" type="date" name="deadline_date" placeholder="Enter deadline date"
-						:value="old('deadline_date', $assignment->deadline_date)" />
+					<x-label for="deadline_date">Deadline Date<span class="text-red">*</span></x-label>
+					<x-input id="deadline_date" class="block w-full date-input" type="date" name="deadline_date" placeholder="Enter deadline date" :value="old('deadline_date', $assignment->deadline_date)" />
 				</div>
 			</div>
 
 			<!-- Description -->
 			<div class="flex flex-col w-full mt-4">
-				<x-label for="desc" :value="__('Description')" />
+				<x-label for="desc">Description<span class="text-red">*</span></x-label>
 				<x-textarea rows="4" id="desc" class="block w-full" type="text" name="desc" placeholder="Enter description">{!! old('desc', $assignment->desc) !!}</x-textarea>
 			</div>
 
 			<!-- Select Students to Assign -->
 			<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
 			<div class="w-full flex items-center justify-between">
-				<h2 class="my-4 font-extrabold text-xl text-dark-blue">Pick students to assign</h2>
+				<h2 class="my-4 font-extrabold text-xl text-dark-blue">Select students to assign<span class="text-red">*</span></h2>
 				<div class="flex gap-3">
 					<x-button  type="button" id="checkall">Assign to all</x-button>
 					<x-button class="bg-slate-600" type="button" id="undo" style="display: none;">Undo</x-button>

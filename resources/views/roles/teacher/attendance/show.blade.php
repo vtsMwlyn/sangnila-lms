@@ -51,7 +51,7 @@
 				@if($unfinishedSelfAttendance && !$unfinishedSelfAttendance->check_out_time)
 					<form action="{{ route('teacher.attendance.check-out.store', $course->id) }}" method="post">
 						@csrf
-						<x-button>
+						<x-button onclick="return confirm('Are you sure want to check out now?');">
 							<i class="bi bi-stopwatch"></i> Check Out
 						</x-button>
 					</form>
@@ -102,10 +102,18 @@
 		@endif
 
 		@if(request('content') == 'student attendances' || !request('content'))
-			<div class="mb-3 mt-5">
+			<div class="mb-3 mt-5 flex w-full justify-between items-center">
 				<x-anchor-button href="{{ route('teacher.attendance.select-students', $course->id) }}">
 					<i class="bi bi-plus-lg"></i> New Student Attendance
 				</x-anchor-button>
+				<form action="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances']) }}" method="get">
+					<x-select class="w-80" name="show">
+						<option value="my students only" @if(!request('show') || request('show') == 'my students only') selected @endif>My Students Only</option>
+						<option value="all" @if(request('show') == 'all') selected @endif>All Students</option>
+					</x-select>
+					
+					<x-button type="submit">Filter</x-button>
+				</form>
 			</div>
 
 			<div class="w-full overflow-auto" style="height: 60vh;">

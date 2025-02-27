@@ -29,7 +29,7 @@
 				<p>Are you sure want to <span class="font-bold text-red">disable</span> <span class="font-bold text-light-blue" id="disable-account-name"></span>'s account? <strong>This action will make the account cannot be used again in Sangnila LMS.</strong></p>
 
 				<div class="flex flex-col mt-3">
-					<label for="disable_reason">Disable Reason:</label>
+					<label for="disable_reason">Disable Reason<span class="text-red">*</span></label>
 					<x-input id="disable_reason" class="w-full mt-1" type="text" name="disable_reason" style="border-width: 3px;" value="{{ old('disable_reason') }}" placeholder="Enter the reason for disabling account" autofocus />
 				</div>
 

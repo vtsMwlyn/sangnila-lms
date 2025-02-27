@@ -24,13 +24,13 @@
 			<div class="flex w-full gap-5">
 				<!-- Announcement Title -->
 				<div class="flex flex-col w-1/2">
-					<x-label for="title" :value="__('Announcement Title')" />
+					<x-label for="title">Announcement Title<span class="text-red">*</span></x-label>
 					<x-input id="title" class="block w-full" type="text" name="title" placeholder="New announcement title" :value="old('title')" autofocus />
 				</div>
 
 				<!-- Announcement Image -->
 				<div class="flex flex-col w-1/2">
-					<x-label for="image" :value="__('Announcement Image')" />
+					<x-label for="image">Announcement Image</x-label>
 					<x-input id="image" class="bg-white w-full block" type="file" name="image" placeholder="New announcement image" />
 				</div>
 			</div>
@@ -38,13 +38,13 @@
 			<div class="flex w-full gap-5 mt-3">
 				<!-- Announcement Start Date -->
 				<div class="flex flex-col w-1/2">
-					<x-label for="announce_from" :value="__('Announce From')" />
+					<x-label for="announce_from">Announce From<span class="text-red">*</span></x-label>
 					<x-input id="announce_from" class="block w-full" onfocus="this.type='date';" onblur="this.type='text';" name="announce_from" placeholder="New announcement start date" :value="old('announce_from')" autofocus />
 				</div>
 
 				<!-- Announcement End Date -->
 				<div class="flex flex-col w-1/2">
-					<x-label for="announce_until" :value="__('Announce Until')" />
+					<x-label for="announce_until">Announce Until<span class="text-red">*</span></x-label>
 					<x-input id="announce_until" class="block w-full" onfocus="this.type='date';" onblur="this.type='text';" name="announce_until" placeholder="New announcement end date" :value="old('announce_until')" autofocus />
 				</div>
 			</div>
@@ -53,7 +53,7 @@
 			<img id="img-preview" class="w-1/2 mt-5">
 
 			<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
-			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Announce to:</h2>
+			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Announce to<span class="text-red">*</span></h2>
 			<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
 			<div class="flex flex-wrap gap-3 mt-5 rounded-xl @error("receiver") border-2 p-5 border-red @enderror">
@@ -79,12 +79,12 @@
 			@enderror
 
 			<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
-			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Announcement Content</h2>
+			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Announcement Content<span class="text-red">*</span></h2>
 			<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
 			<div class="bg-white p-6 border-2 @error("content") border-red @else border-slate-400 @endif rounded-xl mt-5">
 				<input type="hidden" id="content" name="content">
-                <trix-editor input="content">{!! old("content") !!}</trix-editor>
+                <trix-editor input="content" style="height: 300px;" class="overflow-y-auto">{!! old("content") !!}</trix-editor>
 			</div>
 
 			@error("content")

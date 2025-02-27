@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Models\CourseTeacher;
+use App\Rules\MinimumOneCheckbox;
 use Illuminate\Support\Facades\DB;
 
 class CourseTeacherController extends Controller {
@@ -54,6 +55,10 @@ class CourseTeacherController extends Controller {
 
 	// Save batch assign teacher
 	public function batch_assign_teacher_store(Request $request, $course_id){
+		$request->validate([
+			'selected_teachers' => ['required', new MinimumOneCheckbox]
+		]);
+
 		$course = Course::findOrFail($course_id);
 
 		try {

@@ -25,7 +25,7 @@
 			<div class="flex w-full gap-5">
 				<!-- Announcement Title -->
 				<div class="flex flex-col w-1/2">
-					<x-label for="title" :value="__('New title')" />
+					<x-label for="title">New title<span class="text-red">*</span></x-label>
 					<div class="flex w-full flex-col items-stretch">
 						<x-input id="title" class="block w-full" type="text" name="title" placeholder="New announcement title" :value="$announcement->title" autofocus />
 					</div>
@@ -33,7 +33,7 @@
 
 				<!-- Announcement Image -->
 				<div class="flex flex-col w-1/2">
-					<x-label for="image" :value="__('New Image')" />
+					<x-label for="image">New Image</x-label>
 					<div class="flex w-full flex-col items-stretch">
 						<x-input id="image" class="bg-white w-full block" type="file" name="image" placeholder="New announcement image"/>
 					</div>
@@ -43,17 +43,17 @@
 			<div class="flex w-full gap-5 mt-3">
 				<!-- Announcement Start Date -->
 				<div class="flex flex-col w-1/2">
-					<x-label for="announce_from" :value="__('New Start Date')" />
+					<x-label for="announce_from">New Start Date<span class="text-red">*</span></x-label>
 					<div class="flex w-full flex-col items-stretch">
-						<x-input id="announce_from" class="block w-full" onfocus="this.type='date';" onblur="this.type='text';" name="announce_from" placeholder="New announcement start date" :value="old('announce_from', $announcement->announce_from)" autofocus />
+						<x-input id="announce_from" class="block w-full" onfocus="this.type='date';" onblur="this.type='text';" name="announce_from" placeholder="New announcement start date" :value="old('announce_from', Carbon\Carbon::parse($announcement->announce_from)->format('Y-m-d'))" autofocus />
 					</div>
 				</div>
 
 				<!-- Announcement End Date -->
 				<div class="flex flex-col w-1/2">
-					<x-label for="announce_until" :value="__('New End Date')" />
+					<x-label for="announce_until">New End Date<span class="text-red">*</span></x-label>
 					<div class="flex w-full flex-col items-stretch">
-						<x-input id="announce_until" class="block w-full" onfocus="this.type='date';" onblur="this.type='text';" name="announce_until" placeholder="New announcement end date" :value="old('announce_until', $announcement->announce_until)" autofocus />
+						<x-input id="announce_until" class="block w-full" onfocus="this.type='date';" onblur="this.type='text';" name="announce_until" placeholder="New announcement end date" :value="old('announce_until', Carbon\Carbon::parse($announcement->announce_until)->format('Y-m-d'))" autofocus />
 					</div>
 				</div>
 			</div>
@@ -66,7 +66,7 @@
 			@endif
 
 			<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
-			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Announce to:</h2>
+			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Announce to<span class="text-red">*</span></h2>
 			<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
 			@error("receiver")
@@ -96,7 +96,7 @@
 			</div>
 
 			<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
-			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Announcement Content</h2>
+			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Announcement Content<span class="text-red">*</span></h2>
 			<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
 			@error("content")

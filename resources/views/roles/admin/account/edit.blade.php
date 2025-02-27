@@ -29,7 +29,7 @@
 			<div class="flex w-full gap-5">
 				<!-- Account Name -->
 				<div class="flex w-1/2 flex-col">
-					<x-label for="full_name" :value="__('New Account Name')" />
+					<x-label for="full_name">New Account Name<span class="text-red">*</span></x-label>
 					<div class="flex flex-col w-full items-stretch">
 						<x-input id="full_name" class="block w-full" type="text" name="full_name" :value="$account->full_name"
 						autofocus />
@@ -38,7 +38,7 @@
 
 				<!-- Account Email -->
 				<div class="flex w-1/2 flex-col">
-					<x-label for="email" :value="__('New Account Email')"/>
+					<x-label for="email">New Account Email<span class="text-red">*</span></x-label>
 					<div class="flex flex-col w-full items-stretch">
 						<x-input id="email" class="block w-full" type="text" name="email" :value="$account->email"  />
 					</div>
@@ -48,11 +48,14 @@
 			<div class="flex w-full gap-5 mt-3">
 				<!-- Role Selection -->
 				<div class="flex w-1/2 flex-col">
-					<x-label for="role_id" :value="__('Change Role')" />
+					<x-label for="role_id">Change Role<span class="text-red">*</span></x-label>
 					<div class="flex flex-col w-full items-stretch">
 						<x-select name="role_id" id="role_id"
 						class="w-full">
 							@forelse ($roles as $role)
+								@if($role->id == 4)
+									@continue
+								@endif
 								<option value="{{ $role->id }}" @if($account->role->role_name == $role->role_name) selected @endif>{{ $role->role_name }}</option>
 							@empty
 							@endforelse
@@ -62,7 +65,7 @@
 
 				<!-- Gender Selection -->
 				<div class="flex w-1/2 flex-col">
-					<x-label for="gender" :value="__('Change Gender')" />
+					<x-label for="gender">Change Gender<span class="text-red">*</span></x-label>
 					<div class="flex flex-col w-full items-stretch">
 						<x-select name="gender" id="gender"
 						class="w-full">

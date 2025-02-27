@@ -28,7 +28,7 @@
 				@method('patch')
 				<!-- Topic Title -->
 				<div class="flex flex-col">
-					<label for="title">Topic Title</label>
+					<label for="title">Topic Title<span class="text-red">*</span></label>
 					<x-input id="title" class="w-full mt-1" type="text" name="title" style="border-width: 3px;" value="{{ old('title') }}" placeholder="Topic title" autofocus />
 				</div>
 

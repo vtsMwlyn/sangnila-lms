@@ -22,7 +22,7 @@
 			@csrf
 			<div class="my-4 flex w-full justify-between items-start">
 				<div class="w-1/3">
-					<x-label for="attendance_date">{{ __("Attendance Date") }}</x-label>
+					<x-label for="attendance_date">Attendance Date<span class="text-red">*</span></x-label>
 					<div class="flex gap-3 mt-1 items-start" id="date-inp-cont">
 						<div class="flex flex-col items-start grow">
 							<x-input type="date" class="date-input w-full" name="attendance_date" id="attendance_date"/>
@@ -32,7 +32,7 @@
 					</div>
 				</div>
 				<div class="w-1/3">
-					<x-label for="student_add">{{ __("Add Student to Attendance") }}</x-label>
+					<x-label for="student_add">Add Student to Attendance</x-label>
 					<div class="flex items-center gap-3 mt-1 select-2_container">
 						<select class="w-full select-2 rounded-2xl shadow-sm focus:outline-none py-2 px-4 focus:ring-0" id="student_add" style="border-width: 3px;">
 						</select>
@@ -80,25 +80,25 @@
 
 							<!-- Start Time -->
 							<div class="flex flex-col w-1/2 mt-4 start_time-container-present">
-								<x-label for="_start_time{{ $student->id }}">Start Time</x-label>
+								<x-label for="_start_time{{ $student->id }}">Start Time<span class="text-red">*</span></x-label>
 								<x-input class="_start_time" type="time" id="_start_time{{ $student->id }}" value="00:00"/>
 							</div>
 
 							<!-- End Time -->
 							<div class="flex flex-col w-1/2 mt-4 end_time-container-present">
-								<x-label for="_end_time{{ $student->id }}">End Time</x-label>
+								<x-label for="_end_time{{ $student->id }}">End Time<span class="text-red">*</span></x-label>
 								<x-input class="_end_time" type="time" id="_end_time{{ $student->id }}" value="00:00"/>
 							</div>
 
 							<!-- Start Time (Absent) -->
 							<div class="hidden flex-col w-1/2 mt-4 start_time-container-absent">
-								<x-label>Start Time</x-label>
+								<x-label>Start Time<span class="text-red">*</span></x-label>
 								<x-input class="_start_time_absent" type="text" value="Absent" disabled/>
 							</div>
 
 							<!-- End Time (Absent) -->
 							<div class="hidden flex-col w-1/2 mt-4 end_time-container-absent">
-								<x-label>End Time</x-label>
+								<x-label>End Time<span class="text-red">*</span></x-label>
 								<x-input class="_end_time_absent" type="text" value="Absent" disabled/>
 							</div>
 						</div>
@@ -106,7 +106,7 @@
 						<!-- Activity (Present) -->
 						<div class="flex gap-5 mt-4 w-full container-activity-present">
 							<div class="flex flex-col w-1/2 container-select2">
-								<x-label for="_activity{{ $student->id }}">Activity</x-label>
+								<x-label for="_activity{{ $student->id }}">Activity<span class="text-red">*</span></x-label>
 								<x-select id="_activity{{ $student->id }}" class="select-2 w-full _activity">
 									@foreach($topics as $topic)
 										@foreach($topic->activities as $activity)
@@ -118,7 +118,7 @@
 							</div>
 
 							<div class="flex flex-col w-1/2">
-								<x-label for="_learning_status{{ $student->id }}">Learning Status</x-label>
+								<x-label for="_learning_status{{ $student->id }}">Learning Status<span class="text-red">*</span></x-label>
 								<x-select id="_learning_status{{ $student->id }}" class="w-full _learning_status">
 									<option value="Done">Done</option>
 									<option value="On Progress">On Progress</option>
@@ -129,19 +129,19 @@
 						<!-- Activity (Absent) -->
 						<div class="hidden gap-5 mt-4 w-full container-activity-absent">
 							<div class="flex flex-col w-1/2">
-								<x-label>Activity</x-label>
+								<x-label>Activity<span class="text-red">*</span></x-label>
 								<x-input class="w-full _activity_absent" value="Absent" disabled/>
 							</div>
 
 							<div class="flex flex-col w-1/2">
-								<x-label>Learning Status</x-label>
+								<x-label>Learning Status<span class="text-red">*</span></x-label>
 								<x-input class="w-full _learning_status_absent" value="Absent" disabled/>
 							</div>
 						</div>
 
 						<!-- Details -->
 						<div class="flex flex-col w-full mt-4">
-							<x-label for="_details{{ $student->id }}">Details</x-label>
+							<x-label for="_details{{ $student->id }}">Details<span class="text-red">*</span></x-label>
 							<x-textarea class="_details" rows="4" type="text" id="_details{{ $student->id }}" placeholder="Enter attendance details..."></x-textarea>
 							<p class="text-red font-bold mt-2 error-details hidden"><i class="bi bi-exclamation-circle"></i> Please input the attendance details for this session.</p>
 						</div>
@@ -190,6 +190,7 @@
 		const allStudents = @json($allStudents);
 		let exclude_dropdown = @json($exclude_from_dropdown).map(Number);
 		const course = @json($course);
+		const topics = @json($topics);
 
 		function refreshAddStudent(){
 			$("#student_add").html("");
@@ -373,16 +374,19 @@
 
 				const newStudentCard = $('.student-card').first().clone();
 				const newSelect = $('<select>').addClass('border-slate-400 focus:border-slate-600 focus:ring-0 rounded-2xl shadow-sm focus:outline-none py-2 px-4 cursor-pointer disabled:cursor-not-allowed select-2 w-full _activity').css('border-width', '3px').attr({'id': `_activity${student.id}`});
-				course.topics.forEach(topic => {
+
+
+				topics.forEach(topic => {
 					topic.activities.forEach(activity => {
 						newSelect.append($('<option>').attr('value', JSON.stringify(activity)).text(activity.title));
 					});
 				});
-
+				
 				newStudentCard.find('input[type="hidden"]').remove();
 
 				newStudentCard.find('.card_student_name').text(student.full_name);
-				newStudentCard.find('.card_profpic').attr('src', ((student.details.profpic !== null)? `${baseUrl}/storage/${student.details.profpic}` : blankProfpic)).css('border-width', ((student.details.profpic !== null)? '3px' : '0'));
+				let have_profpic = student.details.profpic !== null ? 1 : 0;
+				newStudentCard.find('.card_profpic').attr('src', (have_profpic? `${baseUrl}/storage/${student.details.profpic}` : blankProfpic)).css('border-width', (have_profpic? '0' : '3px'));
 
 				newStudentCard.find('._checkbox').attr('id', `_checkbox${student.id}`).prop('checked', true);
 				newStudentCard.find('._checkbox').closest('label').attr('for', `_checkbox${student.id}`);

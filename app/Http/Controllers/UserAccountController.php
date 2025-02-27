@@ -42,7 +42,6 @@ class UserAccountController extends Controller{
 		$validationRule = [
 			"full_name" => "required|min:3",
 			"phone_number" => ["nullable", 'min:4', 'regex:/^(0|\+)([0-9]+[\s|-]?)+$/'],
-			"image" => "nullable|file|image|max:4096"
 		];
 
 		if($request->password){
@@ -57,42 +56,33 @@ class UserAccountController extends Controller{
 			unset($validatedData["password_confirmation"]);
 		}
 
-		$user_detail = Auth::user()->details;
-
-		$old_image_path = "";
-		if($request->file("image")){
-			if($user_detail->profpic){
-				$old_image_path = $user_detail->profpic;
-			}
-			$validatedData["image"] = $request->file("image")->store("profpic-images");
-		}
-
 		try {
 			DB::beginTransaction();
 
-			if($request->file("image")){
+			$user_detail = Auth::user()->details;
+
+			$old_image_path = "";
+			if($request->file("cropped_image")){
+				if($user_detail->profpic){
+					$old_image_path = $user_detail->profpic;
+				}
+				$new_profpic_path = $request->file("cropped_image")->store("profpic-images");
+
 				UserDetail::where("user_id", Auth::user()->id)->update([
-					"phone_number" => $validatedData["phone_number"],
-					"profpic" => $validatedData["image"]
-				]);
-			}
-			else {
-				UserDetail::where("user_id", Auth::user()->id)->update([
-					"phone_number" => $validatedData["phone_number"],
+					"profpic" => $new_profpic_path
 				]);
 			}
 
 			if($request->password){
 				User::findOrFail(Auth::user()->id)->update([
-					"full_name" => $validatedData["full_name"],
 					"password" => $validatedData["password"]
 				]);
 			}
-			else {
-				User::findOrFail(Auth::user()->id)->update([
-					"full_name" => $validatedData["full_name"],
-				]);
-			}
+
+			User::findOrFail(Auth::user()->id)->update([
+				"full_name" => $validatedData["full_name"],
+				"phone_number" => $validatedData["phone_number"],
+			]);
 
 			if($old_image_path != ""){
 				Storage::delete($old_image_path);
@@ -103,9 +93,11 @@ class UserAccountController extends Controller{
 		catch(Exception $e){
 			DB::rollback();
 
-			if($request->file("image")){
-				Storage::delete($validatedData["image"]);
+			if($request->file("cropped_image")){
+				Storage::delete($validatedData["cropped_image"]);
 			}
+
+			throw $e;
 
 			return back()->with("systemFail", "System failed to edit profile, please report the error to our IT team. Error detail: " . $e);
 		}

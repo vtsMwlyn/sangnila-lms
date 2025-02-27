@@ -20,8 +20,9 @@
 
 			<!-- Check In Time -->
 			<div class="w-full flex flex-col mt-4">
-				<x-label for="check_in_time" :value="__('Check In Time')" />
-				<x-input id="check_in_time" name="check_in_time" class="w-full pointer-events-none" type="text" />
+				<x-label for="check_in_time">Check In Time<span class="text-red">*</span></x-label>
+				<x-input id="_check_in_time" name="_check_in_time" class="w-full cursor-not-allowed" type="text" disabled/>
+				<x-input id="check_in_time" name="check_in_time" type="hidden"/>
 			</div>
 
 			<div class="w-full flex flex-col mt-2 items-start">
@@ -30,7 +31,7 @@
 						{{-- <div style="aspect-ratio: 19 / 6;">
 							<video id="video" class="w-full h-full" style="object-fit: cover;" autoplay playsinline></video>
 						</div> --}}
-						<x-label :value="__('Photo Evidence')" />
+						<x-label>Photo Evidence<span class="text-red">*</span></x-label>
 						<video id="video" class="w-full" autoplay playsinline></video>
 					</div>
 					<div class="flex flex-col w-full md:w-1/2 pl-0 md:pl-2">
@@ -70,6 +71,7 @@
 				minutes = (minutes < 10) ? '0' + minutes : minutes;
 				seconds = (seconds < 10) ? '0' + seconds : seconds;
 
+				$('#_check_in_time').val(hours + ':' + minutes + ':' + seconds);
 				$('#check_in_time').val(hours + ':' + minutes + ':' + seconds);
 			}
 

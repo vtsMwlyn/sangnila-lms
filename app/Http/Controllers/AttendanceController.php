@@ -30,7 +30,7 @@ class AttendanceController extends Controller {
 	}
 
 	// Showing all attendance data in the selected course
-	public function show($course_id) {
+	public function show(Request $request, $course_id) {
 		$course = Course::findOrFail($course_id);
 
 		$teached_student_id_list = CourseStudent::where('course_id', $course_id)
@@ -38,25 +38,48 @@ class AttendanceController extends Controller {
 			->pluck('student_id')
 			->toArray();
 
-		$attendanceData = Attendance::where("course_id", $course->id)
-			->with(['student_attendances' => function ($query) use ($teached_student_id_list) {
-				$query->whereIn('student_id', $teached_student_id_list)->with('student');
-			}])
-			->orderBy('attendance_date', 'desc')
-			->get();
+		$attendanceData = new Attendance();
+		if(!$request->show || $request->show == 'my students only'){
+			$attendanceData = Attendance::where("course_id", $course->id)
+				->with(['student_attendances' => function ($query) use ($teached_student_id_list) {
+					$query->whereIn('student_id', $teached_student_id_list)->with('student');
+				}])
+				->orderBy('attendance_date', 'desc')
+				->get();
+		}
+		else if($request->show == 'all') {
+			$attendanceData = Attendance::where("course_id", $course->id)
+				->with(['student_attendances' => function ($query) use ($teached_student_id_list) {
+					$query->with('student');
+				}])
+				->orderBy('attendance_date', 'desc')
+				->get();
+		}
+		
 
 		// Remove Attendance records where student_attendances is empty
 		$attendanceData = $attendanceData->filter(function ($attendance) {
 			return $attendance->student_attendances->isNotEmpty(); // Keep only if it has student_attendances
 		})->values(); // Reset array indexes
 
-		$attendanceData2 = Attendance::where("course_id", $course->id)
-			->with(['student_attendances' => function ($query) use ($teached_student_id_list) {
-				$query->whereIn('student_id', $teached_student_id_list)->with('student');
-			}])
-			->orderBy('attendance_date', 'asc')
-			->get();
-
+		$attendanceData2 = new Attendance();
+		if(!$request->show || $request->show == 'my students only'){
+			$attendanceData2 = Attendance::where("course_id", $course->id)
+				->with(['student_attendances' => function ($query) use ($teached_student_id_list) {
+					$query->whereIn('student_id', $teached_student_id_list)->with('student');
+				}])
+				->orderBy('attendance_date', 'asc')
+				->get();
+		}
+		else if($request->show == 'all') {
+			$attendanceData2 = Attendance::where("course_id", $course->id)
+				->with(['student_attendances' => function ($query) use ($teached_student_id_list) {
+					$query->with('student');
+				}])
+				->orderBy('attendance_date', 'asc')
+				->get();
+		}
+		
 		// Remove Attendance records where student_attendances is empty
 		$attendanceData2 = $attendanceData2->filter(function ($attendance) {
 			return $attendance->student_attendances->isNotEmpty(); // Keep only if it has student_attendances
@@ -125,8 +148,7 @@ class AttendanceController extends Controller {
 		$course = Course::findOrFail($course_id);
 		$selected_student_ids = session('selected_students', []);
 		$students = User::whereIn('id', $selected_student_ids)->with('details')->get();
-		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
-
+		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->with('activities')->get();
 		$allStudents = User::where("role_id", 3)->with('details')->get();
 
 		return view("roles.teacher.attendance.upload", [

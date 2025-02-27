@@ -18,7 +18,9 @@
 			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
 		@endif
 
-		<x-badge-danger id="emptyDataNotif" badge_text="Please input minimum 1 data to proceed." style="display: none;"></x-badge-danger>
+		@error('studentName')
+			<x-badge-danger badge_text="Please input minimum 1 data to proceed."></x-badge-danger>
+		@enderror
 
 		@if($allStudents->count() && $course->teachers->count())
 			<div class="my-4">
@@ -28,14 +30,14 @@
 				<div id="form-area">
 					<div class="flex flex-col md:flex-row gap-3">
 						<div class="mt-3 w-full md:w-1/3 container-select2" id="inpStudentField">
-							<x-label class="mb-1">{{ __("Student Name") }}</x-label>
+							<x-label class="mb-1">Student Name<span class="text-red">*</span></x-label>
 							<x-select name="student_name" id="student_name" class="w-full select-2" required>
 								<option disabled selected>Select Student</option>
 							</x-select>
 							<p class="text-red font-bold mt-1" id="errStudent"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 						</div>
 						<div class="mt-3 w-full md:w-1/3" id="inpTeacherField">
-							<x-label class="mb-1">{{ __("Teacher Name") }}</x-label>
+							<x-label class="mb-1">Teacher Name<span class="text-red">*</span></x-label>
 							<x-select name="teacher_name" id="teacher_name" class="w-full" required>
 								<option disabled selected>Pick a teacher</option>
 								@foreach ($allTeachers as $t)
@@ -45,7 +47,7 @@
 							<p class="text-red font-bold mt-1" id="errTeacher"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 						</div>
 						<div class="mt-3 w-full md:w-1/3" id="inpMaxCourseSessionField">
-							<x-label class="mb-1">{{ __("Max Course Session") }}</x-label>
+							<x-label class="mb-1">Max Course Session<span class="text-red">*</span></x-label>
 							<x-input id="max_course_session" class="w-full" type="number" name="max_course_session" placeholder="Maximum sessions" value="8" />
 							<p class="text-red font-bold mt-1" id="errMaxCourseSession"><i class="bi bi-exclamation-circle"></i> Invalid input.</p>
 						</div>
@@ -156,18 +158,24 @@
 
 						let invalidInput = false;
 
-						if(!inpStudentName){
+						if(!inpStudentName.val()){
 							$("#errStudent").show();
+							inpStudentName.addClass('border-red focus:border-red-700 focus:ring-0').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0');
+
 							invalidInput = true;
 						}
 
-						if(!inpTeacherName){
+						if(!inpTeacherName.val()){
 							$("#errTeacher").show();
+							inpTeacherName.addClass('border-red focus:border-red-700 focus:ring-0').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0');
+
 							invalidInput = true;
 						}
 
-						if(inpMaxCourseSession < 1){
+						if(inpMaxCourseSession.val() < 1){
 							$("#errMaxCourseSession").show();
+							inpMaxCourseSession.addClass('border-red focus:border-red-700 focus:ring-0').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0');
+
 							invalidInput = true;
 						}
 
@@ -230,18 +238,6 @@
 						without.push(studentObj.full_name);
 
 						document.dispatchEvent(itemListModifiedEvent);
-					});
-
-					$("#leForm").on("submit", function(e){
-						e.preventDefault();
-
-						if(without.length == 0){
-							$("#emptyDataNotif").css("display", "flex");
-
-							return;
-						}
-
-						this.submit();
 					});
 				});
 			</script>

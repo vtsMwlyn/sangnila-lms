@@ -34,7 +34,7 @@
 			@csrf
 
 			<div>
-				<x-label for="file">{{ __('Your Excel File') }}</x-label>
+				<x-label for="file">Your Excel File<span class="text-red">*</span></x-label>
 				<x-input type="file" name="file" id="file" class="bg-white w-full block mt-1"/>
 			</div>
 

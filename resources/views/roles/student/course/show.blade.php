@@ -39,7 +39,7 @@
 						@if($unfinishedSelfAttendance && !$unfinishedSelfAttendance->check_out_time)
 							<form action="{{ route('student.mycourse.check-out.store', $course->id) }}" method="post">
 								@csrf
-								<x-button>
+								<x-button onclick="return confirm('Are you sure want to check out now?');">
 									<i class="bi bi-stopwatch"></i> Check Out
 								</x-button>
 							</form>

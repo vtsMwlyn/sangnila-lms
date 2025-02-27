@@ -70,7 +70,7 @@ class CourseStudentController extends Controller {
 		$validatedData = $request->validate([
 			"course" => "required",
 			"teacher" => "required",
-			"max_course_session" => "required|numeric|min:0",
+			"max_course_session" => "required|numeric|min:1",
 			'learning_status' => 'required'
 		]);
 
@@ -132,7 +132,7 @@ class CourseStudentController extends Controller {
 	// Edit student assignment data
 	public function update(Request $request, $course_student_id){
 		$validatedData = $request->validate([
-			"max_course_session" => "required|numeric|min:0",
+			"max_course_session" => "required|numeric|min:1",
 			'learning_status' => 'required',
 			'teacher' => 'required',
 		]);
@@ -237,6 +237,10 @@ class CourseStudentController extends Controller {
 	}
 
 	public function batch_assign_student_store(Request $request, $course_id){
+		$request->validate([
+			'studentName' => 'required'
+		]);
+
 		$students = $request->studentName;
 		$teachers = $request->teacherName;
 		$maxcoursesessions = $request->maxCourseSession;

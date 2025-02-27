@@ -25,7 +25,7 @@
 			<div class="flex w-full gap-5">
 				<!-- Student Name -->
 				<div class="flex flex-col w-1/2">
-					<x-label for="full_name" :value="__('Full Name')" />
+					<x-label for="full_name">Full Name<span class="text-red">*</span></x-label>
 					<div class="flex flex-col w-full items-stretch">
 						<x-input id="full_name" class="block w-full" type="text" name="full_name" placeholder="Student's Name" :value="$student->full_name"
 						autofocus />
