@@ -13,7 +13,7 @@
 		@endif
 	</div>
 
-	<div class="w-full">
+	<div class="w-full announcementContent">
 		{!! $announcement->content !!}
 	</div>
 </div>

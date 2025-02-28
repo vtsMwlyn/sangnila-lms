@@ -105,7 +105,7 @@
 
 			<div class="bg-white p-8 border-2 @error("content") border-red @else border-slate-400 @endif rounded-xl mt-5">
 				<input type="hidden" id="content" name="content">
-                <trix-editor input="content">{!! old("content", $announcement->content) !!}</trix-editor>
+                <trix-editor style="height: 300px;" input="content">{!! old("content", $announcement->content) !!}</trix-editor>
 			</div>
 
 			<div class="flex items-stretch gap-3 justify-end mt-10 mb-3">
