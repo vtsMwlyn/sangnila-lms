@@ -14,10 +14,14 @@ function hideLoadingPopup() {
 }
 
 $(document).ready(() => {
-	// Show loading popup on form submission
-	$('form').on('submit', function () {
-		showLoadingPopupWithDelay();
-	});
+    $(document).on('submit', '.ajax-form', function (e) {
+        e.preventDefault();
+    });
+
+    $(document).on('submit', 'form:not(.ajax-form)', function () {
+        showLoadingPopupWithDelay();
+        $(this).find(':submit').prop('disabled', true);
+    });
 
 	// Show loading popup on anchor link clicks that reload the page
 	$('a[href]').on('click', function (e) {
