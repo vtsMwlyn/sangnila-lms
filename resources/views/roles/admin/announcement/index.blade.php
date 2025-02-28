@@ -70,7 +70,7 @@
 								echo $formattedString . (empty($formattedString) ? '' : ', and ') . $lastItem;
 							@endphp
 						</p>
-						<p class="mt-2">Period: <span class="font-bold">{{ $announcement->announce_from }}</span> until <span class="font-bold">{{ $announcement->announce_until }}</span></p>
+						<p class="mt-2">Period: <span class="font-bold">{{ Carbon\Carbon::parse($announcement->announce_from)->format('D, d M Y H:i') }} GMT+7</span> until <span class="font-bold">{{ Carbon\Carbon::parse($announcement->announce_until)->format('D, d M Y H:i') }} GMT+7</span></p>
 					</div>
 					<div class="flex gap-2">
 						<x-anchor-button  href="{{ route('admin.announcement.edit', $announcement->id) }}">

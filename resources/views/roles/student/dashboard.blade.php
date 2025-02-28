@@ -110,7 +110,7 @@
 					<ul class="list-disc list-inside">
 						@forelse($undone_assignment as $todoasg)
 							<li class="mb-4" style="text-indent: -1.5rem; padding-left: 1.5rem;">
-								Do and submit your work for assignment <span class="font-bold">"{{ $todoasg->assignment->title }}"</span> before <span class="italic font-bold">{{ $todoasg->assignment->deadline_date }} {{ $todoasg->assignment->deadline_time }}</span>
+								Do and submit your work for assignment <span class="font-bold">"{{ $todoasg->assignment->title }}"</span> before <span class="font-bold">{{ Carbon\Carbon::parse($todoasg->assignment->deadline_date)->format('D, d M Y') }} {{ Carbon\Carbon::parse($todoasg->assignment->deadline_time)->format('H:i') }} GMT+7</span>
 							</li>
 						@empty
 							<div class="w-full h-full flex items-center justify-center">- There's nothing to do for now -</div>
@@ -155,13 +155,11 @@
 												<i class="bi bi-megaphone-fill text-6xl"></i>
 											</div>
 										@endif
+										<div class="text-blue-900 text-center py-5 font-extrabold">{{ $announcement->title }}</div>
 									@endif
-
-									<div class="text-blue-900 text-center py-5 font-extrabold">{{ $announcement->title }}</div>
 								</a>
 							@endif
 						@empty
-
 						@endforelse
 					</div>
 				</div>

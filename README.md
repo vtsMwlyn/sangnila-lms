@@ -39,7 +39,25 @@ There are 5 roles (types of account) in Sangnila LMS:
 - Student attendance progress is now counting for both attended and absent attendance data
 - Admins now can input, edit, and delete attendance data and it will be merged with the attendance data uploaded by the teacher
 - Added details to course data such as delivery mode, price, and code; then now displayed courses level beside courses name
-- Improvements in some data displays (sorting, paginations)
+- Improvements in some data displays sorting
 - Changed the attendance upload mechanism to suit multiple sessions in 1 day
 - Redesigned the attendance upload page
+- Auto session counting by system in displaying attendances data, so admins and teachers won't have to specify the nth-session when uploading attendances data
+
+### v0.9.9-beta until v1.0.0-beta
+- Fixed bugs and errors encountered in displaying data or performing some actions, also optimized some data display such as datetime data reformatting, data placement and sorting, etc
+- Redesign batch assign and import old student page for admins
+- Added batch assign teacher page for admin
+- Added learning status to course-student data and now it's edittable along the teacher teaching the student
+- Fixed bugs in displaying some popup forms
+- Now the system will auto-unlock student progresses on attendance addition/deletion and when teacher re-sync or picking topics and activities from the syllabus
+- Added meeting link attachment for each students in an activity
+- Added self attendance checking page for teachers
+- Added link to book trial class in the login page
+- Added portfolio image/video/link uploads by teacher for student progress documentation
+- Now all accounts can edit the new profile picture when uploading it
+- Added red asterisk mark for required inputs
+- Bug fixes on multiple entry pages where the form can be submitted although the data is still empty
+- Added new dashboard page for admins and teachers
+- Bug fixes on displaying announcement images in dashboard pages, announcement popups, and announcement show page
 

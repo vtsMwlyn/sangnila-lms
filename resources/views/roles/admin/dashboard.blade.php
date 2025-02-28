@@ -116,13 +116,12 @@
 												<i class="bi bi-megaphone-fill text-6xl"></i>
 											</div>
 										@endif
-									@endif
 
-									<div class="text-blue-900 text-center py-5 font-extrabold">{{ $announcement->title }}</div>
+										<div class="text-blue-900 text-center py-5 font-extrabold">{{ $announcement->title }}</div>
+									@endif
 								</a>
 							@endif
 						@empty
-
 						@endforelse
 					</div>
 				</div>

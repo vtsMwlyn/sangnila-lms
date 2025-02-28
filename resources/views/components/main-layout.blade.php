@@ -108,6 +108,12 @@
 										<div class="flex justify-center w-full mb-8">
 											<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-3/4">
 										</div>
+									@else
+										<div class="w-full flex justify-center">
+											<div class="flex bg-slate-200 items-center justify-center text-white font-extrabold w-3/4 h-[300px] mb-8">
+												<i class="bi bi-megaphone-fill text-6xl"></i>
+											</div>
+										</div>
 									@endif
 									<div class="announcementContent">
 										{!! $announcement->content !!}

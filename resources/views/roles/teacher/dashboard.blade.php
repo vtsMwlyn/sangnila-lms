@@ -144,9 +144,8 @@
 												<i class="bi bi-megaphone-fill text-6xl"></i>
 											</div>
 										@endif
+										<div class="text-blue-900 text-center py-5 font-extrabold">{{ $announcement->title }}</div>
 									@endif
-
-									<div class="text-blue-900 text-center py-5 font-extrabold">{{ $announcement->title }}</div>
 								</a>
 							@endif
 						@empty
