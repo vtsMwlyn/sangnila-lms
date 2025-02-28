@@ -31,11 +31,10 @@
 				</div>
 			</div>
 
-			<!-- Something -->
+			<!-- Popular Courses -->
 			<div class="bg-white rounded-3xl p-5 shadow-lg">
 				<div class="flex w-full justify-between">
 					<p class="font-bold text-dark-blue">Popular Courses</p>
-					{{-- <p class="italic text-slate-600">Server time: <span id="server-time"></span> GMT+7</p> --}}
 				</div>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
@@ -53,11 +52,13 @@
 
 				<div class="w-full flex flex-col overflow-y-auto" style="height: 250px;">
 					<ul class="list-disc list-inside">
-						@foreach(App\Models\Attendance::where('created_at', 'like', '%'. Carbon\Carbon::today()->format('Y-m-d') .'%')->orderBy('created_at', 'desc')->get() as $recent_attendance)
+						@forelse($recent_attendances as $recent_attendance)
 							<li class="mb-4">
-								<strong>{{ $recent_attendance->posted_by->details->gender == 1? 'Mr. ' : 'Ms. ' }} {{ $recent_attendance->posted_by->full_name }}</strong> has uploaded new attendance report for course <strong>{{ $recent_attendance->course->course_name }}</strong> at {{ Carbon\Carbon::parse($recent_attendance->created_at)->format('H:i:s') }} GMT+7
+								<strong>@if($recent_attendance->posted_by->role_id == 2){{ ($recent_attendance->posted_by->details->gender == 1)? 'Mr. ' : 'Ms. ' }}@endif {{ $recent_attendance->posted_by->full_name }}</strong> has uploaded new attendance report for course <strong>{{ $recent_attendance->course->course_name }}</strong> at {{ Carbon\Carbon::parse($recent_attendance->created_at)->format('D, d M Y H:i:s') }} GMT+7
 							</li>
-						@endforeach
+						@empty
+							- No recent teacher activities -
+						@endforelse
 					</ul>
 				</div>
 			</div>
@@ -68,11 +69,13 @@
 
 				<div class="w-full flex flex-col overflow-y-auto" style="height: 250px;">
 					<ul class="list-disc list-inside">
-						@foreach(App\Models\SelfAttendance::where('created_at', 'like', '%'. Carbon\Carbon::today()->format('Y-m-d') .'%')->orderBy('created_at', 'desc')->get() as $recent_self_attendance)
+						@forelse($recent_self_attendances as $recent_self_attendance)
 							<li class="mb-4">
-								<strong>{{ $recent_self_attendance->user->details->gender == 1 && $recent_self_attendance->user->role_id == 2? 'Mr. ' : 'Ms. ' }} {{ $recent_self_attendance->user->full_name }}</strong> has checked in to course <strong>{{ $recent_self_attendance->course->course_name }}</strong> at {{ Carbon\Carbon::parse($recent_self_attendance->created_at)->format('H:i:s') }} GMT+7
+								<strong>@if($recent_self_attendance->user->role_id == 2){{ ($recent_self_attendance->user->details->gender == 1)? 'Mr. ' : 'Ms. ' }}@endif {{ $recent_self_attendance->user->full_name }}</strong> has checked in to course <strong>{{ $recent_self_attendance->course->course_name }}</strong> at {{ Carbon\Carbon::parse($recent_self_attendance->created_at)->format('D, d M Y H:i:s') }} GMT+7
 							</li>
-						@endforeach
+						@empty
+							- No recent self attendances -
+						@endforelse
 					</ul>
 				</div>
 			</div>
@@ -152,16 +155,6 @@
 		</div>
 	</div>
 
-	@php
-		$num = [];
-		$course_names = [];
-		$courses = App\Models\Course::where('status', 'active')->get();
-		foreach($courses as $c){
-			array_push($course_names, $c->course_name);
-			array_push($num, App\Models\CourseStudent::where('course_id', $c->id)->get()->count());
-		}
-	@endphp
-
 	<script>
 		$(document).ready(() => {
 			// Initialize Swiper
@@ -194,14 +187,24 @@
 			
 			// Data for the bar chart
 			const data = {
-				labels: {!! json_encode($course_names) !!},
-				datasets: [{
-					label: 'Students Enrolled',
-					data: {!! json_encode($num) !!},
-					backgroundColor: 'rgba(54, 162, 235, 0.5)', // Bar color
-					borderColor: 'rgba(54, 162, 235, 1)', // Border color
-					borderWidth: 1 // Border thickness
-				}]
+				labels: {!! json_encode($course_names) !!}.slice(0, 10),
+				datasets: [
+					{
+						label: 'Students Enrolled',
+						data: {!! json_encode($nums_total) !!}.slice(0, 10),
+						backgroundColor: '#344C9B',
+					},
+					{
+						label: 'Students Learning',
+						data: {!! json_encode($nums_learning) !!}.slice(0, 10),
+						backgroundColor: '#1DB9CF',
+					},
+					{
+						label: 'Students Completed',
+						data: {!! json_encode($nums_complete) !!}.slice(0, 10),
+						backgroundColor: 'rgb(22 163 74)',
+					},
+				]
 			};
 
 			// Chart configuration

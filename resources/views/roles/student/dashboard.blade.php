@@ -36,8 +36,32 @@
 				<p class="font-bold text-dark-blue">Courses Progress</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
+				@php
+					$activity_bars = [];
+					$attendance_bars = [];
+					$course_names = [];
+
+					foreach($course_students as $i => $cstudent){
+						$mp_bar_percentage = 0;
+						$ap_bar_percentage = 0;
+
+						if($activity_progress[$i][1] != 0){
+							$mp_bar_percentage = ($activity_progress[$i][0] / $activity_progress[$i][1]) * 100;
+						}
+
+						if($attendance_progress[$i][1] != 0){
+							$ap_bar_percentage = ($attendance_progress[$i][0] / $attendance_progress[$i][1]) * 100;
+						}
+
+						array_push($activity_bars, $mp_bar_percentage);
+						array_push($attendance_bars, $ap_bar_percentage);
+						array_push($course_names, $cstudent->course->course_name);
+					}
+				@endphp
+
 				<div class="flex flex-col justify-between" style="height: 400px;">
-					<div class="w-full flex flex-col overflow-y-auto py-3" style="height: 360px;">
+					<canvas id="myHorizontalBarChart"></canvas>
+					{{-- <div class="w-full flex flex-col overflow-y-auto py-3" style="height: 360px;">
 						@forelse ($course_students as $i => $cstudent)
 							<div class="w-full flex md:flex-row flex-col md:items-center gap-0">
 								<p class="w-full md:w-1/4"><a href="{{ route('student.mycourse.show', $cstudent->course->id) }}" class="hover:underline hover:text-indigo-600">{{ $cstudent->course->course_name }}</a></p>
@@ -71,7 +95,7 @@
 							<div class="h-4 w-4" style="background: linear-gradient(90deg, #212F63 0%, #354D9B 100%);"></div>
 							<p>Activity</p>
 						</div>
-					</div>
+					</div> --}}
 				</div>
 			</div>
 		</div>
@@ -196,6 +220,54 @@
 				$('#nextBtn').animate({'right': '0.5rem'}, 800);
 				$('#nextBtn').animate({'right': '1rem'}, 800);
 			}, 1000);
+
+			const ctx = document.getElementById('myHorizontalBarChart').getContext('2d');
+		
+			const data = {
+				labels: {!! json_encode($course_names) !!},
+				datasets: [
+					{
+						label: 'Activity',
+						data: {!! json_encode($activity_bars) !!},
+						backgroundColor: [],
+					},
+					{
+						label: 'Attendance',
+						data: {!! json_encode($attendance_bars) !!},
+						backgroundColor: [],
+					},
+				]
+			};
+
+			const config = {
+				type: 'bar',
+				data: data,
+				options: {
+					indexAxis: 'y',
+					scales: {
+						x: {
+							beginAtZero: true,
+							min: 0,
+							max: 100,
+						}
+					},
+					barThickness: 20,
+				}
+			};
+
+			const chart = new Chart(ctx, config);
+
+			const gradient1 = ctx.createLinearGradient(0, 0, chart.width, 0);
+			gradient1.addColorStop(0, "#1EB8CD");
+			gradient1.addColorStop(1, "#BEE2DB");
+
+			const gradient2 = ctx.createLinearGradient(0, 0, chart.width, 0);
+			gradient2.addColorStop(0, "#212F63");
+			gradient2.addColorStop(1, "#354D9B");
+
+			chart.data.datasets[0].backgroundColor = gradient1;
+			chart.data.datasets[1].backgroundColor = gradient2;
+			chart.update();
 		});
 	</script>
 @endsection

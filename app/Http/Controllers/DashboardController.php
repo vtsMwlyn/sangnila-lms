@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Activity;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Topic;
+use App\Models\Course;
+use App\Models\Activity;
 use App\Models\Progress;
 use App\Models\Assignment;
-use App\Models\Course;
+use App\Models\Attendance;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
-use App\Models\ImportedStudent;
 use App\Models\SelfAttendance;
+use App\Models\ImportedStudent;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
-use Google\Service\Classroom\Resource\Courses;
 use Illuminate\Support\Facades\Auth;
+use Google\Service\Classroom\Resource\Courses;
 
 class DashboardController extends Controller
 {
@@ -60,11 +61,38 @@ class DashboardController extends Controller
 			}
 		}
 
+		$nums_total = [];
+		$nums_learning = [];
+		$nums_complete = [];
+		$course_names = [];
+
+		$courses = Course::where('status', 'active')->with('course_students')->get();
+		foreach($courses as $c){
+			$cs = $c->course_students;
+			array_push($course_names, $c->course_name);
+			array_push($nums_total, $cs->count());
+			array_push($nums_learning, $cs->where('learning_status', 'learning')->count());
+			array_push($nums_complete, $cs->where('learning_status', 'complete')->count());
+		}
+
+		array_multisort($nums_total, SORT_DESC, $nums_learning, $nums_complete, $course_names);
+
+		$all_attendances = Attendance::whereBetween('created_at', [Carbon::today()->subDays(6), Carbon::today()->endOfDay()])->orderBy('created_at', 'desc')->with('posted_by')->get();
+		$all_self_attendances = SelfAttendance::whereBetween('created_at', [Carbon::today()->subDays(6), Carbon::today()->endOfDay()])->orderBy('created_at', 'desc')->with('user')->get();
+
 		return view("roles.admin.dashboard", [
 			'active_courses' => $n_active_courses,
 			'active_students' => $n_active_students,
 			'active_teachers' => $n_active_teachers,
 			'max_session_students' => $n_max_session_students,
+
+			'course_names' => $course_names,
+			'nums_total' => $nums_total,
+			'nums_learning' => $nums_learning,
+			'nums_complete' => $nums_complete,
+
+			'recent_attendances' => $all_attendances,
+			'recent_self_attendances' => $all_self_attendances,
 		]);
 	}
 
