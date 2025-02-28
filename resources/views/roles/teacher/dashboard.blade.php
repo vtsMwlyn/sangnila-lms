@@ -32,7 +32,7 @@
 			</div>
 
 			<!-- Progress -->
-			<div class="bg-white rounded-3xl p-5 shadow-lg">
+			<div class="bg-white rounded-3xl p-5 shadow-lg grow">
 				<div class="flex w-full justify-between">
 					<p class="font-bold text-dark-blue">My Attendances</p>
 					<p class="italic text-slate-600">Server time: <span id="server-time"></span> GMT+7</p>
@@ -127,29 +127,27 @@
 				<div class="swiper w-10/12">
 					<div class="swiper-wrapper">
 						@forelse (App\Models\Announcement::all() as $announcement)
-							@if($announcement->announce_from < now() && $announcement->announce_until > now())
+							@php
+								$target = json_decode($announcement->sent_to);
+							@endphp
+							@if($announcement->announce_from < now() && $announcement->announce_until > now() && $target[Auth::user()->role_id - 1] == "on")
 								<a class="card-img flex flex-col items-stretch swiper-slide" href="{{ route('view-announcement', $announcement->id) }}">
 									@php
-										$target = json_decode($announcement->sent_to);
+										$n_announcement++;
 									@endphp
-
-									@if($target[Auth::user()->role_id - 1] == "on")
-										@php
-											$n_announcement++;
-										@endphp
-										@if($announcement->image_path)
-											<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full rounded-3xl" style="object-fit: cover; object-position: center; height: 340px;">
-										@else
-											<div class="flex bg-slate-400 items-center justify-center text-white font-extrabold rounded-3xl grow" style="height: 340px;">
-												<i class="bi bi-megaphone-fill text-6xl"></i>
-											</div>
-										@endif
-										<div class="text-blue-900 text-center py-5 font-extrabold">{{ $announcement->title }}</div>
+									
+									@if($announcement->image_path)
+										<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full rounded-3xl" style="object-fit: cover; object-position: center; height: 340px;">
+									@else
+										<div class="flex bg-slate-400 items-center justify-center text-white font-extrabold rounded-3xl grow" style="height: 340px;">
+											<i class="bi bi-megaphone-fill text-6xl"></i>
+										</div>
 									@endif
+
+									<div class="text-blue-900 text-center py-5 font-extrabold">{{ $announcement->title }}</div>
 								</a>
 							@endif
 						@empty
-
 						@endforelse
 					</div>
 				</div>

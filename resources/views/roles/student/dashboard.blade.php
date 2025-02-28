@@ -32,7 +32,7 @@
 			</div>
 
 			<!-- Progress -->
-			<div class="bg-white rounded-3xl p-5 shadow-lg">
+			<div class="bg-white rounded-3xl p-5 shadow-lg grow">
 				<p class="font-bold text-dark-blue">Courses Progress</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
@@ -61,52 +61,17 @@
 
 				<div class="flex flex-col justify-between" style="height: 400px;">
 					<canvas id="myHorizontalBarChart"></canvas>
-					{{-- <div class="w-full flex flex-col overflow-y-auto py-3" style="height: 360px;">
-						@forelse ($course_students as $i => $cstudent)
-							<div class="w-full flex md:flex-row flex-col md:items-center gap-0">
-								<p class="w-full md:w-1/4"><a href="{{ route('student.mycourse.show', $cstudent->course->id) }}" class="hover:underline hover:text-indigo-600">{{ $cstudent->course->course_name }}</a></p>
-								<div class="grow flex flex-col border-l py-3">
-									@php
-										$mp_bar_percentage = 0;
-										$ap_bar_percentage = 0;
-
-										if($activity_progress[$i][1] != 0){
-											$mp_bar_percentage = ($activity_progress[$i][0] / $activity_progress[$i][1]) * 100;
-										}
-
-										if($attendance_progress[$i][1] != 0){
-											$ap_bar_percentage = ($attendance_progress[$i][0] / $attendance_progress[$i][1]) * 100;
-										}
-									@endphp
-									<div class="h-5" style="width: {{ $mp_bar_percentage }}%; background: linear-gradient(90deg, #1EB8CD 0%, #BEE2DB 100%);"></div>
-									<div class="h-5" style="width: {{ $ap_bar_percentage }}%; background: linear-gradient(90deg, #212F63 0%, #354D9B 100%);"></div>
-								</div>
-							</div>
-						@empty
-
-						@endforelse
-					</div>
-					<div class="flex md:flex-row flex-col gap-2 md:gap-5 w-full justify-end font-semibold">
-						<div class="flex items-center gap-3">
-							<div class="h-4 w-4" style="background: linear-gradient(90deg, #1EB8CD 0%, #BEE2DB 100%);"></div>
-							<p>Attendance</p>
-						</div>
-						<div class="flex items-center gap-3">
-							<div class="h-4 w-4" style="background: linear-gradient(90deg, #212F63 0%, #354D9B 100%);"></div>
-							<p>Activity</p>
-						</div>
-					</div> --}}
 				</div>
 			</div>
 		</div>
 
 		<!-- Todo list -->
-		<div class="w-full md:w-1/3 flex gap-5">
+		<div class="w-full md:w-1/3 flex flex-col gap-5">
 			<div class="w-full bg-white rounded-3xl p-5 shadow-lg">
-				<p class="font-bold text-dark-blue">To Do List</p>
+				<p class="font-bold text-dark-blue">Assignment Reminder</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-				<div class="w-full flex flex-col overflow-y-auto" style="height: 400px;">
+				<div class="w-full flex flex-col overflow-y-auto" style="height: 250px;">
 					<ul class="list-disc list-inside">
 						@forelse($undone_assignment as $todoasg)
 							<li class="mb-4" style="text-indent: -1.5rem; padding-left: 1.5rem;">
@@ -115,6 +80,28 @@
 						@empty
 							<div class="w-full h-full flex items-center justify-center">- There's nothing to do for now -</div>
 						@endforelse
+					</ul>
+				</div>
+			</div>
+
+			<div class="w-full bg-white rounded-3xl p-5 shadow-lg">
+				<p class="font-bold text-dark-blue">Self Attendance Reminder</p>
+				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
+
+				<div class="w-full flex flex-col overflow-y-auto" style="height: 250px;">
+					<ul class="list-disc list-inside">
+						@foreach(Auth::user()->enrolled_courses as $course)
+							@php
+								$selfAttendance = App\Models\SelfAttendance::where("user_id", Auth::user()->id)->where('course_id', $course->id)->where("self_attendance_date", Carbon\Carbon::today()->format('Y-m-d'))->latest()->first();
+							@endphp
+
+							@if(!$selfAttendance)
+								<li class="mb-4" style="text-indent: -1.2rem; padding-left: 1.5rem; line-spacing: 10px;">
+									Have you checked in to <strong>{{ $course->course_name }} - {{ ucwords($course->level) }}</strong> today?
+									<a href="{{ route('student.mycourse.check-in', $course->id) }}" class="bg-indigo-600 hover:bg-slate-700 py-0.5 px-1.5 rounded-lg font-bold text-white">Check In</a>
+								</li>
+							@endif
+						@endforeach
 					</ul>
 				</div>
 			</div>
@@ -138,25 +125,24 @@
 				<div class="swiper w-10/12">
 					<div class="swiper-wrapper">
 						@forelse (App\Models\Announcement::all() as $announcement)
-							@if($announcement->announce_from < now() && $announcement->announce_until > now())
+							@php
+								$target = json_decode($announcement->sent_to);
+							@endphp
+							@if($announcement->announce_from < now() && $announcement->announce_until > now() && $target[Auth::user()->role_id - 1] == "on")
 								<a class="card-img flex flex-col items-stretch swiper-slide" href="{{ route('view-announcement', $announcement->id) }}">
 									@php
-										$target = json_decode($announcement->sent_to);
+										$n_announcement++;
 									@endphp
-
-									@if($target[Auth::user()->role_id - 1] == "on")
-										@php
-											$n_announcement++;
-										@endphp
-										@if($announcement->image_path)
-											<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full rounded-3xl" style="object-fit: cover; object-position: center; height: 340px;">
-										@else
-											<div class="flex bg-slate-400 items-center justify-center text-white font-extrabold rounded-3xl grow" style="height: 340px;">
-												<i class="bi bi-megaphone-fill text-6xl"></i>
-											</div>
-										@endif
-										<div class="text-blue-900 text-center py-5 font-extrabold">{{ $announcement->title }}</div>
+									
+									@if($announcement->image_path)
+										<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full rounded-3xl" style="object-fit: cover; object-position: center; height: 340px;">
+									@else
+										<div class="flex bg-slate-400 items-center justify-center text-white font-extrabold rounded-3xl grow" style="height: 340px;">
+											<i class="bi bi-megaphone-fill text-6xl"></i>
+										</div>
 									@endif
+
+									<div class="text-blue-900 text-center py-5 font-extrabold">{{ $announcement->title }}</div>
 								</a>
 							@endif
 						@empty
