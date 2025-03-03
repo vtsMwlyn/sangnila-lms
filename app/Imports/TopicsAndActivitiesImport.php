@@ -29,7 +29,7 @@ class TopicsAndActivitiesImport implements ToModel, WithHeadingRow
 
 			$course = Course::findOrFail($this->course_id);
 
-			$topic = Topic::updateOrCreate([
+			$topic = Topic::create([
 				"user_id" => Auth::user()->id,
 				"course_id" => $course->id,
 				"title" => $row["topic"]
@@ -48,8 +48,6 @@ class TopicsAndActivitiesImport implements ToModel, WithHeadingRow
         }
 
 		catch (Exception $e) {
-			dd($e->getMessage());
-
             // Rollback the transaction if an exception occurs
             DB::rollBack();
 

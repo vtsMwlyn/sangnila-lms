@@ -1,4 +1,4 @@
-@extends("layouts.main-teacher")
+@extends("layouts.main-student")
 
 @section("title")
 	<h1>Forum Discussion</h1>
@@ -41,8 +41,8 @@
             </div>
 
             <!-- For large devices -->
-            @foreach (Auth::user()->teached_courses as $course)
-                <a href="{{ route('teacher.forum.index', ['course' => $course->id]) }}" class="px-4 py-3 block @if(request('course') != $course->id) hover:bg-slate-200 @endif" style="@if(request('course') == $course->id) border-right: solid #1DB9CF 4px; @endif">{{ $course->course_name }} - {{ ucwords($course->level) }}</a>
+            @foreach (Auth::user()->enrolled_courses as $course)
+                <a href="{{ route('student.forum.index', ['course' => $course->id]) }}" class="px-4 py-3 block @if(request('course') != $course->id) hover:bg-slate-200 @endif" style="@if(request('course') == $course->id) border-right: solid #1DB9CF 4px; @endif">{{ $course->course_name }} - {{ ucwords($course->level) }}</a>
             @endforeach
         </div>
 
@@ -51,8 +51,8 @@
             <div class="md:hidden sticky top-0 flex flex-col items-start w-full first-letter:0 dropdown-container bg-slate-50 p-2 h-[10%] md:h-[0px]">
                 <button type="button" class="border-slate-400 py-2 px-4 rounded-2xl font-bold text-dark-blue w-full bg-white flex justify-between items-center dropdown-toggler" style="border-width: 3px;">Pick a course <img src="{{ asset('img/dropdown-arrow.svg') }}" class="w-5 h-5" alt="icon"></button>
                 <div class="absolute bg-slate-100 top-16 w-full rounded-xl flex flex-col hidden overflow-hidden dropdown-menu" style="box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
-                    @foreach(Auth::user()->teached_courses as $c)
-                        <a href="{{ route('teacher.forum.index', ['course' => $course->id]) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">{{ $c->course_name }} - {{ ucwords($c->level) }}</div></a>
+                    @foreach(Auth::user()->enrolled_courses as $c)
+                        <a href="{{ route('student.forum.index', ['course' => $course->id]) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">{{ $c->course_name }} - {{ ucwords($c->level) }}</div></a>
                     @endforeach
                 </div>
             </div>
@@ -66,7 +66,7 @@
             @if(request('course'))
                 <div class="w-full bg-slate-300 p-4 overflow-y-auto flex flex-col align-items-start h-[75%] md:h-[85%]" id="message-container"></div>
                 <div class="absolute bottom-0 w-full p-4 hidden" id="extra-area" style="background-color: rgba(255, 255, 255, 0.6);"></div>
-                <form action="{{ route('teacher.forum.send', $course->id) }}" method="post" class="ajax-form w-full bg-slate-300 flex p-1.5 gap-2 items-center h-[15%]" id="send-message-input">
+                <form action="{{ route('student.forum.send', $course->id) }}" method="post" class="ajax-form w-full bg-slate-300 flex p-1.5 gap-2 items-center h-[15%]" id="send-message-input">
                     @csrf
                     <x-textarea rows="2" type="text" name="message" id="message" class="grow" placeholder="Enter message..." autofocus></x-textarea>
                     <x-button><i class="bi bi-send-fill"></i> Send</x-button>
@@ -115,7 +115,7 @@
             // Function to load posts
             function loadMessages() {
                 $.ajax({
-                    url: `${baseUrl}/teacher/forum/${courseId}/retrieve`,
+                    url: `${baseUrl}/student/forum/${courseId}/retrieve`,
                     type: 'GET',
                     dataType: 'json',
                     success: function(messages) {
@@ -188,7 +188,7 @@
                 let msg = $('#message').val();
 
                 $.ajax({
-                    url: `${baseUrl}/teacher/forum/${courseId}/send`,
+                    url: `${baseUrl}/student/forum/${courseId}/send`,
                     type: 'POST',
                     data: new FormData(this),
                     processData: false,  // Required for FormData

@@ -179,7 +179,7 @@ Route::prefix('/teacher')
 		);
 
 		// ===== FORUM DISCUSSION ===== //
-		Route::get('/forum', [ForumController::class, 'index'])->name('forum.index')->whereNumber('course_id');
+		Route::get('/forum', [ForumController::class, 'index_teacher'])->name('forum.index')->whereNumber('course_id');
 		Route::get('/forum/{course_id}/retrieve', [ForumController::class, 'retrieve_message'])->name('forum.retrieve')->whereNumber('course_id');
 		Route::post('/forum/{course_id}/send', [ForumController::class, 'send_message'])->name('forum.send')->whereNumber('course_id');
 

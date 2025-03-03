@@ -15,7 +15,7 @@
 					<p class="text-xl md:text-3xl font-extrabold">{{ $courses_assigned }}</p>
 				</div>
 				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5">
-					<img src="{{ asset('img/studentdashboard-courseenrolled.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
+					<img src="{{ asset('img/dashboard-studentsteached.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
 					<p class="font-bold text-black text-center">Students Teached</p>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $students_teached }}</p>
 				</div>

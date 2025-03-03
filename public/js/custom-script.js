@@ -74,6 +74,8 @@ $(document).ready(() => {
 		}
 
 		$("#screen").text(`(Resolution: ${window.innerWidth}x${window.innerHeight})`);
+
+		$('#content-wrapper').css('min-height', window.innerHeight - $("#navbar").outerHeight());
 	}
 
 	adjustLayouts();
@@ -81,7 +83,6 @@ $(document).ready(() => {
 	$(window).on("resize", function(){
 		adjustLayouts();
 	});
-
 
 	// Select2 initialization
 	$('.select-2').select2({
@@ -183,6 +184,20 @@ $(document).ready(() => {
 
 	const testus = $("#large-sidebar").clone();
 	$("#medsmallmenu-dropdown").empty().append(testus);
+
+	// Toggle dropdown on button click
+	$("#medsmallmenu-toggler").click(function (e) {
+		e.stopPropagation(); // Prevent the click event from bubbling up to the document
+
+		$("#medsmallmenu-dropdown").toggle();
+	});
+
+	// Close dropdown when clicking outside of it
+	$(document).click(function (e) {
+		if (!$(e.target).closest("#medsmallmenu-dropdown, #medsmallmenu-toggler").length) {
+			$("#medsmallmenu-dropdown").hide();
+		}
+	});
 });
 
 // Hide the loading popup once the page is fully loaded

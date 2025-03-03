@@ -2,6 +2,7 @@
 
 use App\Models\StudentAttendance;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ForumController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\StudentController;
@@ -79,5 +80,10 @@ Route::prefix('/student')
 				Route::get('/{course_id}', [AttendanceController::class, "student_show"])->name('show');
 			}
 		);
+
+		// ===== FORUM DISCUSSION ===== //
+		Route::get('/forum', [ForumController::class, 'index_student'])->name('forum.index')->whereNumber('course_id');
+		Route::get('/forum/{course_id}/retrieve', [ForumController::class, 'retrieve_message'])->name('forum.retrieve')->whereNumber('course_id');
+		Route::post('/forum/{course_id}/send', [ForumController::class, 'send_message'])->name('forum.send')->whereNumber('course_id');
 	}
 );
