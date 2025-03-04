@@ -178,12 +178,17 @@ class DashboardController extends Controller
 					]);
 
 					foreach ($events->getItems() as $event) {
-						$allEventData[] = [
-							'calendar' => $calendarName,
-							'summary' => $event->getSummary(),
-							'start' => $event->getStart()->getDateTime(),
-							'end' => $event->getEnd()->getDateTime(),
-						];
+						if($event->getSummary() != 'Happy birthday!'){
+							$start = $event->getStart()->getDateTime() ?: $event->getStart()->getDate(); // Handle all-day events
+							$end = $event->getEnd()->getDateTime() ?: $event->getEnd()->getDate();
+
+							$allEventData[] = [
+								'calendar' => $calendarName,
+								'summary' => $event->getSummary(),
+								'start' => $start,
+								'end' => $end,
+							];
+						}
 					}
 				}
 			}

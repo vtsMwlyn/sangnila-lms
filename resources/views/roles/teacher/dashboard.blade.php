@@ -210,9 +210,12 @@
 			</div>
 			<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-			{{-- <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FJakarta&bgcolor=%23ffffff&showTabs=0&showPrint=0&showTitle=0&showCalendars=0&src=YmQ3NzMyZWY2NjMwMjc5ZDRkYTM0YmZmZWRlOGUwMWFlOTAzNDVmZWVlM2MxNWNkMzk0NGU3NTk4OGJhYzBjY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZW4uaW5kb25lc2lhbiNob2xpZGF5QGdyb3VwLnYuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%23C0CA33&color=%230B8043" height="380" frameborder="0" scrolling="no" class="w-full mt-5"></iframe> --}}
-
-			<div id="calendar" class="w-full"  style="max-height: 450px;"></div>
+			@if(session('google_user_info.name'))
+				<div id="calendar" class="w-full"  style="max-height: 450px;"></div>
+				{{-- <iframe src="https://calendar.google.com/calendar/embed?src={{ session('google_user_info.email') }}&ctz=Asia%2FJakarta&bgcolor=%23ffffff&showTabs=0&showPrint=0&showTitle=0" style="border: 0" height="380" scrolling="no" class="w-full mt-5" frameborder="0" scrolling="no"></iframe> --}}
+			@else
+				<iframe src="https://calendar.google.com/calendar/embed?src=id.indonesian%23holiday%40group.v.calendar.google.com&ctz=Asia%2FJakarta&bgcolor=%23ffffff&showTabs=0&showPrint=0&showTitle=0&showCalendars=0" style="border: 0" height="380" scrolling="no" class="w-full mt-5" frameborder="0" scrolling="no"></iframe>
+			@endif
 		</div>
 	</div>
 
@@ -272,9 +275,9 @@
 				title: ev.summary,
 				start: ev.start,
 				end: ev.end,
-				backgroundColor: '#ff5733',  // Event background color
-				textColor: '#fff',  // Text color
-				borderColor: '#ff0000' // Border color
+				backgroundColor: ev.calendar != 'Holidays in Indonesia' ? '#16a34a' : '#ff5733',
+				textColor: '#fff',
+				borderColor: ev.calendar != 'Holidays in Indonesia' ? '#15803d' : '#ff0000'
 			}));
 
 			const tasuku = allTaskData.map(tsk => ({
