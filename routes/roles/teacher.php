@@ -190,6 +190,6 @@ Route::prefix('/teacher')
 		// ===== GOOGLE ===== //
 		Route::get('/google/redirect', [GoogleServiceController::class, 'redirectToGoogle'])->name('google.redirect');
 		Route::get('/google/callback', [GoogleServiceController::class, 'handleGoogleCallback']);
-		Route::get('google/logout', [GoogleServiceController::class, 'logout'])->name('google.logout');
+		Route::get('/google/logout', [GoogleServiceController::class, 'logout'])->name('google.logout');
 	}
 );
