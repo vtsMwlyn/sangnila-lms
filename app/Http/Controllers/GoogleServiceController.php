@@ -17,8 +17,8 @@ class GoogleServiceController extends Controller
 	private $google_service_scope = [
 		Google_Service_Oauth2::USERINFO_PROFILE,
 		Google_Service_Oauth2::USERINFO_EMAIL,
-		Google_Service_Calendar::CALENDAR,
-		Google_Service_Tasks::TASKS,
+		Google_Service_Calendar::CALENDAR_READONLY,
+		Google_Service_Tasks::TASKS_READONLY,
 	];
 
     // Redirect the user to Google's OAuth authorization page

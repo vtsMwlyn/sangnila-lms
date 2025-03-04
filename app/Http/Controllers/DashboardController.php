@@ -28,10 +28,10 @@ class DashboardController extends Controller
 	private $google_service_scope = [
 		Google_Service_Oauth2::USERINFO_PROFILE,
 		Google_Service_Oauth2::USERINFO_EMAIL,
-		Google_Service_Calendar::CALENDAR,
-		Google_Service_Tasks::TASKS,
+		Google_Service_Calendar::CALENDAR_READONLY,
+		Google_Service_Tasks::TASKS_READONLY,
 	];
-	
+
 	public function index(){
 		if(Auth::check()){
 			$role = Auth::user()->role->id;
@@ -132,7 +132,7 @@ class DashboardController extends Controller
 			$n_assignments_given += Assignment::where('course_id', $c->id)->where('teacher_id', Auth::user()->id)->count();
 		}
 
-		// Retrieve the access token from the session
+		// Google Calendar Syncing Mechanism
 		if(session('google_access_token')){
 			$accessToken = session('google_access_token');
 
@@ -161,7 +161,7 @@ class DashboardController extends Controller
 
 			// Initialize an array to hold all the event data
 			$allEventData = [];
-			$targetCalendarNames = [$userInfo->email]; // Specify the calendar names you want to retrieve events from
+			$targetCalendarNames = [$userInfo->email, 'Holidays in Indonesia'];
 
 			foreach ($calendarList->getItems() as $calendar) {
 				$calendarName = $calendar->getSummary();
@@ -172,7 +172,6 @@ class DashboardController extends Controller
 
 					// Retrieve events from this calendar
 					$events = $service->events->listEvents($calendarId, [
-						'maxResults' => 10,
 						'orderBy' => 'startTime',
 						'singleEvents' => true,
 						'timeMin' => date('c'), // Current time in ISO 8601 format
