@@ -5,6 +5,21 @@
 @endsection
 
 @section("content")
+	<style>
+		.fc-toolbar-title {
+			font-size: 16px !important;
+		}
+
+		.fc-button {
+			text-transform: capitalize !important;
+			padding: 2px 4px !important;
+		}
+
+		.fc-header-toolbar {
+			margin-bottom: 10px !important;
+		}
+	</style>
+
 	<div class="w-full flex flex-col md:flex-row gap-5">
 		<div class="flex flex-col gap-5 w-full md:w-2/3">
 			<!-- Main stats -->
@@ -122,7 +137,7 @@
 				$n_announcement = 0;
 			@endphp
 
-			<div class="relative flex sm:flex-row flex-col justify-center items-center">
+			<div class="relative flex sm:flex-row flex-col justify-center items-center mt-6"  style="max-height: 450px;">
 				<!-- Navigation and Sliders -->
 				<div class="swiper w-10/12">
 					<div class="swiper-wrapper">
@@ -173,14 +188,38 @@
 
 		<!-- Calendar -->
 		<div class="w-full md:w-1/2 bg-white rounded-3xl p-5 shadow-lg">
-			<p class="font-bold text-dark-blue">Calendar</p>
+			<div class="flex justify-between w-full items-center">
+				<p class="font-bold text-dark-blue">Calendar</p>
+				@if(!session('google_user_info.name'))
+					<a href="{{ route('teacher.google.redirect') }}" class="shadow-lg py-1 px-3 flex items-center justify-center">
+						<img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" style="width: 20px; margin-right: 10px;">
+						Sync with Google
+					</a>
+				@else
+					<div class="flex items-center gap-3">
+						<div>Logged in as {{ session('google_user_info.name') }}</div>
+						<form action="{{ route('teacher.google.logout') }}">
+							@csrf
+							<button class="shadow-lg py-1 px-3 flex items-center justify-center">
+								<img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" style="width: 20px; margin-right: 10px;">
+								Unsync from Google
+							</button>
+						</form>
+					</div>
+				@endif
+			</div>
 			<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-			<iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FJakarta&bgcolor=%23ffffff&showTabs=0&showPrint=0&showTitle=0&showCalendars=0&src=YmQ3NzMyZWY2NjMwMjc5ZDRkYTM0YmZmZWRlOGUwMWFlOTAzNDVmZWVlM2MxNWNkMzk0NGU3NTk4OGJhYzBjY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZW4uaW5kb25lc2lhbiNob2xpZGF5QGdyb3VwLnYuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%23C0CA33&color=%230B8043" height="380" frameborder="0" scrolling="no" class="w-full mt-5"></iframe>
+			{{-- <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=2&ctz=Asia%2FJakarta&bgcolor=%23ffffff&showTabs=0&showPrint=0&showTitle=0&showCalendars=0&src=YmQ3NzMyZWY2NjMwMjc5ZDRkYTM0YmZmZWRlOGUwMWFlOTAzNDVmZWVlM2MxNWNkMzk0NGU3NTk4OGJhYzBjY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=ZW4uaW5kb25lc2lhbiNob2xpZGF5QGdyb3VwLnYuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&color=%23C0CA33&color=%230B8043" height="380" frameborder="0" scrolling="no" class="w-full mt-5"></iframe> --}}
+
+			<div id="calendar" class="w-full"  style="max-height: 450px;"></div>
 		</div>
 	</div>
 
 	<script>
+		const allEventData = @json($allEventData ?? []);
+		const allTaskData = @json($allTaskData ?? []);
+
 		$(document).ready(() => {
 			// Initialize Swiper
 			const swiper = new Swiper('.swiper', {
@@ -227,6 +266,41 @@
 
 			updateTime();
             setInterval(updateTime, 1000);
+
+			// Handle calendar data
+			const ibento = allEventData.map(ev => ({
+				title: ev.summary,
+				start: ev.start,
+				end: ev.end,
+				backgroundColor: '#ff5733',  // Event background color
+				textColor: '#fff',  // Text color
+				borderColor: '#ff0000' // Border color
+			}));
+
+			const tasuku = allTaskData.map(tsk => ({
+				title: tsk.title,
+				start: tsk.due,
+				end: tsk.due,
+				backgroundColor: '#337ab7', // Different color for tasks
+				textColor: '#fff'
+			}));
+
+			const events = [...ibento, ...tasuku];
+
+			var calendarEl = document.getElementById('calendar');
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+				initialView: 'dayGridMonth',
+				events: events,
+				eventContent: function(info) {
+					return {
+						html: `<div style="background-color:${info.event.backgroundColor}; padding: 2px 1px; border-radius: 5px; color: white; font-size: 10px; text-wrap: wrap;">
+								${info.event.title}
+							</div>`
+					};
+				}
+			});
+
+			calendar.render();
 		});
 	</script>
 @endsection

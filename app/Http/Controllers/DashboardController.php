@@ -18,9 +18,20 @@ use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
 use Illuminate\Support\Facades\Auth;
 use Google\Service\Classroom\Resource\Courses;
+use Google_Client;
+use Google_Service_Tasks;
+use Google_Service_Oauth2;
+use Google_Service_Calendar;
 
 class DashboardController extends Controller
 {
+	private $google_service_scope = [
+		Google_Service_Oauth2::USERINFO_PROFILE,
+		Google_Service_Oauth2::USERINFO_EMAIL,
+		Google_Service_Calendar::CALENDAR,
+		Google_Service_Tasks::TASKS,
+	];
+	
 	public function index(){
 		if(Auth::check()){
 			$role = Auth::user()->role->id;
@@ -121,12 +132,116 @@ class DashboardController extends Controller
 			$n_assignments_given += Assignment::where('course_id', $c->id)->where('teacher_id', Auth::user()->id)->count();
 		}
 
-		return view("roles.teacher.dashboard", [
-			'courses_assigned' => $n_courses_assigned,
-			'students_teached' => $n_students_teached,
-			'activities_created' => $n_activities_created,
-			'assignments_given' => $n_assignments_given,
-		]);
+		// Retrieve the access token from the session
+		if(session('google_access_token')){
+			$accessToken = session('google_access_token');
+
+			// Set up the Google client with the stored access token
+			$client = new Google_Client();
+			$client->setClientId(env('GOOGLE_CALENDAR_CLIENT_ID'));
+			$client->setClientSecret(env('GOOGLE_CALENDAR_CLIENT_SECRET'));
+			$client->setRedirectUri(env('GOOGLE_CALENDAR_REDIRECT_URI'));
+
+			$client->setAccessToken($accessToken);
+
+			// Check if the access token is still valid
+			if ($client->isAccessTokenExpired()) {
+				$this->refreshGoogleAccessToken($client);
+			}
+
+			$oauthService = new Google_Service_Oauth2($client);
+			$userInfo = $oauthService->userinfo->get();
+
+			// Create a new Google Calendar service object
+			$service = new Google_Service_Calendar($client);
+
+			// ===== RETRIEVE ALL EVENTS FROM CALENDAR ===== //
+			// Get the list of calendars
+			$calendarList = $service->calendarList->listCalendarList();
+
+			// Initialize an array to hold all the event data
+			$allEventData = [];
+			$targetCalendarNames = [$userInfo->email]; // Specify the calendar names you want to retrieve events from
+
+			foreach ($calendarList->getItems() as $calendar) {
+				$calendarName = $calendar->getSummary();
+
+				// Check if this calendar is in your target calendars
+				if (in_array($calendarName, $targetCalendarNames)) {
+					$calendarId = $calendar->getId();
+
+					// Retrieve events from this calendar
+					$events = $service->events->listEvents($calendarId, [
+						'maxResults' => 10,
+						'orderBy' => 'startTime',
+						'singleEvents' => true,
+						'timeMin' => date('c'), // Current time in ISO 8601 format
+					]);
+
+					foreach ($events->getItems() as $event) {
+						$allEventData[] = [
+							'calendar' => $calendarName,
+							'summary' => $event->getSummary(),
+							'start' => $event->getStart()->getDateTime(),
+							'end' => $event->getEnd()->getDateTime(),
+						];
+					}
+				}
+			}
+
+			// ===== RETRIEVE ALL TASKS ===== //
+			// Google Tasks service
+			$tasksService = new Google_Service_Tasks($client);
+
+			// Get the list of task lists (you can filter by task list name if needed)
+			$taskLists = $tasksService->tasklists->listTasklists();
+
+			$allTaskData = [];
+
+			foreach ($taskLists->getItems() as $taskList) {
+				// For each task list, retrieve the tasks
+				$taskListId = $taskList->getId();
+
+				$tasks = $tasksService->tasks->listTasks($taskListId);
+
+				$tasksArray = $tasksArray = $tasks->getItems();
+				usort($tasksArray, function($a, $b) {
+					$dueA = $a->getDue() ? strtotime($a->getDue()) : 0;
+					$dueB = $b->getDue() ? strtotime($b->getDue()) : 0;
+					return $dueA - $dueB;
+				});
+
+				foreach ($tasksArray as $task) {
+					$allTaskData[] = [
+						'taskList' => $taskList->getTitle(),
+						'title' => $task->getTitle(),
+						'due' => $task->getDue(),
+					];
+				}
+			}
+
+			// Return the event data (you can pass this to a view or further process)
+			return view("roles.teacher.dashboard", [
+				'courses_assigned' => $n_courses_assigned,
+				'students_teached' => $n_students_teached,
+				'activities_created' => $n_activities_created,
+				'assignments_given' => $n_assignments_given,
+
+				'allEventData' => $allEventData,
+				'allTaskData' => $allTaskData,
+				'token_is_expired' => $client->isAccessTokenExpired()
+			]);
+		}
+		else {
+			return view("roles.teacher.dashboard", [
+				'courses_assigned' => $n_courses_assigned,
+				'students_teached' => $n_students_teached,
+				'activities_created' => $n_activities_created,
+				'assignments_given' => $n_assignments_given,
+			]);
+		}
+
+		
 	}
 
 	public function student_dashboard(){
@@ -243,5 +358,39 @@ class DashboardController extends Controller
 			"attendance_progress" => $atd_progress,
 			"course_students" =>  $course_students
 		]);
+	}
+
+	public function refreshGoogleAccessToken(Google_Client $client)
+	{
+		// Set up the Google client
+		$client->addScope($this->google_service_scope);
+
+		// Retrieve stored refresh token
+		$refreshToken = session('google_refresh_token') ?? Auth::user()->google_refresh_token;
+
+		if (!$refreshToken) {
+			return response()->json(['error' => 'No refresh token available. Please re-authenticate.'], 401);
+		}
+
+		// Check if the access token is expired
+		if ($client->isAccessTokenExpired()) {
+			// Refresh the access token
+			$newAccessToken = $client->fetchAccessTokenWithRefreshToken($refreshToken);
+
+			if (isset($newAccessToken['error'])) {
+				return response()->json(['error' => 'Failed to refresh token', 'details' => $newAccessToken], 400);
+			}
+
+			// Save the new access token in session
+			session(['google_access_token' => $newAccessToken['access_token']]);
+
+			// If a new refresh token is provided, update it in the database
+			if (isset($newAccessToken['refresh_token'])) {
+				User::findOrFail(Auth::user()->id)->update(['google_refresh_token' => $newAccessToken['refresh_token']]);
+				session(['google_refresh_token' => $newAccessToken['refresh_token']]);
+			}
+
+			session()->save();
+		}
 	}
 }

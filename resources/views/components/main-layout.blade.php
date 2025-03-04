@@ -59,6 +59,9 @@
 		<!-- Include cropper.js -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+
+		<!-- FullCalendar -->
+		<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
 	</head>
 
 	<body class="min-h-screen flex flex-col items-center text-xs sm:text-sm" data-tjzlptoheng="{{ csrf_token() }}">

@@ -2,9 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ForumController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\AssignmentController;
@@ -12,9 +14,8 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\ExcelImportController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\GoogleServiceController;
 use App\Http\Controllers\DownloadResourceController;
-use App\Http\Controllers\ForumController;
-use App\Http\Controllers\TeacherController;
 
 Route::prefix('/teacher')
 	->name('teacher.')
@@ -186,5 +187,9 @@ Route::prefix('/teacher')
 		// ===== VIEW ANNOUNCEMENT ===== //
 		Route::get("/announcement/{announcement_id}", [AnnouncementController::class, "all_view_announcement"])->name("view-announcement")->whereNumber("announcement_id");
 
+		// ===== GOOGLE ===== //
+		Route::get('/google/redirect', [GoogleServiceController::class, 'redirectToGoogle'])->name('google.redirect');
+		Route::get('/google/callback', [GoogleServiceController::class, 'handleGoogleCallback']);
+		Route::get('google/logout', [GoogleServiceController::class, 'logout'])->name('google.logout');
 	}
 );
