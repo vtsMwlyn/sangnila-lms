@@ -64,19 +64,19 @@
 							<td class="py-2 px-4">
 								<div class="flex gap-1 w-full">
 									<div class="relative">
-										<x-anchor-button
-											href="{{ route('admin.course.show', ['course_id' => $course->id]) }}">
-											<i class="bi bi-eye"></i>
-										</x-anchor-button>
+										<a href="{{ route('admin.course.show', ['course_id' => $course->id]) }}">
+											<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</a>
 										@if($course->teachers->count() == 0 || $course->students->count() == 0 || $course->learning_outcomes->count() == 0 || $course->curriculum_topics->count() == 0)
 											<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -4px; right: -4px;">!</div>
 										@endif
 									</div>
-									<x-anchor-button
-										href="{{ route('admin.course.edit', $course->id) }}">
-										<i class="bi bi-pencil-square"></i>
-									</x-anchor-button>
-									<x-button type="button" class="delete-course-btn" data-route="{{ route('admin.course.destroy', $course->id) }}" data-del_course_name="{{ $course->course_name }}"><i class="bi bi-trash3"></i></x-button>
+									<a href="{{ route('admin.course.edit', $course->id) }}">
+										<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+									</a>
+									<button type="button" class="delete-course-btn" data-route="{{ route('admin.course.destroy', $course->id) }}" data-del_course_name="{{ $course->course_name }}">
+										<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+									</button>
 								</div>
 							</td>
 						</tr>

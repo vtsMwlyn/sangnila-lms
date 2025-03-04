@@ -124,7 +124,7 @@
 						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Attended</th>
 						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Absent</th>
 						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Uploader</th>
-						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
+						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Actions</th>
 					</thead>
 					<tbody>
 						@php
@@ -160,11 +160,11 @@
 								<td class="py-2 px-4 text-center">{{ $atd->student_attendances->where("is_attend", 0)->count() }}</td>
 								<td class="py-2 px-4 text-center">{{ $atd->posted_by->id == Auth::user()->id? 'Me' : $atd->posted_by->full_name }}</td>
 								<td class="py-2 px-4">
-									<div class="flex gap-2">
+									<div class="flex gap-2 justify-center">
 										{{-- <x-anchor-button  href="{{ route('teacher.attendance.edit', $atd->id) }}">
 											<i class="bi bi-pencil-square"></i>
 										</x-anchor-button> --}}
-										<x-button type="button" class=" show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}" data-session_number="{{ json_encode($sessionNumberPerAttendance[$atd->id]) }}"><i class="bi bi-eye"></i></x-button>
+										<button type="button" class=" show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}" data-session_number="{{ json_encode($sessionNumberPerAttendance[$atd->id]) }}"><img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110"></button>
 									</div>
 								</td>
 							</tr>

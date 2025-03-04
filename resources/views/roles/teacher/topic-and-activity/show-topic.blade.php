@@ -33,9 +33,7 @@
 				</div>
 
 				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">
-					<x-button class=" w-full md:w-1/5">
-						{{ __('Submit') }}
-					</x-button>
+					<x-button class=" w-full md:w-1/5">Save</x-button>
 				</div>
 
 				<!-- Helper -->
@@ -133,14 +131,13 @@
 
 							<td class="py-2 px-4">
 								<div class="flex gap-1">
-									<x-anchor-button
-										href="{{ route('teacher.mycourse.activity.edit', $activity->id) }}">
-										<i class="bi bi-pencil-square"></i>
-									</x-anchor-button>
-									<x-button type="button" class="delete-activity-btn" data-del_a_name="{{ $activity->title }}"
+									<a href="{{ route('teacher.mycourse.activity.edit', $activity->id) }}">
+										<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+									</a>
+									<button type="button" class="delete-activity-btn" data-del_a_name="{{ $activity->title }}"
 										data-route="{{ route('teacher.mycourse.activity.destroy', $activity->id) }}">
-										<i class="bi bi-trash3"></i>
-									</x-button>
+										<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+									</button>
 								</div>
 							</td>
 						</tr>

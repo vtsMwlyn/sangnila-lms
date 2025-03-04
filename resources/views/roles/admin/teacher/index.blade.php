@@ -63,18 +63,16 @@
 							<td class="py-2 px-4">
 								<div class="flex gap-1 w-full">
 									<div class="relative">
-										<x-anchor-button
-											href="{{ route('admin.teacher.show', $teacher->id) }}">
-											<i class="bi bi-eye"></i>
-										</x-anchor-button>
+										<a href="{{ route('admin.teacher.show', $teacher->id) }}">
+											<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</a>
 										@if ($teacher->teached_courses->count() == 0)
 											<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -4px; right: -4px;">!</div>
 										@endif
 									</div>
-									<x-anchor-button
-										href="{{ route('admin.teacher.edit', $teacher->id) }}">
-										<i class="bi bi-pencil-square"></i>
-									</x-anchor-button>
+									<a href="{{ route('admin.teacher.edit', $teacher->id) }}">
+										<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+									</a>
 								</div>
 							</td>
 						</tr>

@@ -25,7 +25,7 @@
 					<p class="text-xl md:text-3xl font-extrabold">{{ $active_teachers }}</p>
 				</div>
 				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5">
-					<img src="{{ asset('img/studentdashboard-courseenrolled.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
+					<img src="{{ asset('img/studentdashboard-assignmentsdone.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
 					<p class="font-bold text-black text-center">Max Session Students</p>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $max_session_students }}</p>
 				</div>

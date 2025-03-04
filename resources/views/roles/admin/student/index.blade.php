@@ -104,14 +104,12 @@
 								@if($index2 == 0)
 									<td class="py-2 px-4" rowspan="{{ $courseStudents->count() }}">
 										<div class="flex w-full justify-start gap-1">
-											<x-anchor-button
-											href="{{ route('admin.student.show', $student->id) }}">
-												<i class="bi bi-eye"></i>
-											</x-anchor-button>
-											<x-anchor-button
-												href="{{ route('admin.student.edit', $student->id) }}">
-												<i class="bi bi-pencil-square"></i>
-											</x-anchor-button>
+											<a href="{{ route('admin.student.show', $student->id) }}">
+												<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+											</a>
+											<a href="{{ route('admin.student.edit', $student->id) }}">
+												<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+											</a>
 										</div>
 									</td>
 								@endif

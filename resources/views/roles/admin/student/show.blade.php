@@ -379,17 +379,17 @@
 							<td class="py-2 px-4 w-1/3">
 								<div class="flex items-center justify-between w-2/3">
 									{{ $current_progress[$i] }}/{{ $full_progress[$i] }} sessions
-									<x-button type="button" class="attendance-information-btn" data-student="{{ $student->id }}" data-std_attendances="{{ json_encode($attendance_data[$ec->id]) }}">
-										<i class="bi bi-eye"></i>
-									</x-button>
+									<button type="button" class="attendance-information-btn" data-student="{{ $student->id }}" data-std_attendances="{{ json_encode($attendance_data[$ec->id]) }}">
+										<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+									</button>
 								</div>
 							</td>
 							<td class="py-2 px-4 w-1/3">
 								<div class="flex items-center justify-between w-2/3">
 									{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done
-									<x-button type="button" class="assignment-information-btn" data-std_assignments="{{ json_encode($assignment_data[$ec->id]) }}">
-										<i class="bi bi-eye"></i>
-									</x-button>
+									<button type="button" class="assignment-information-btn" data-std_assignments="{{ json_encode($assignment_data[$ec->id]) }}">
+										<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+									</button>
 								</div>
 							</td>
 						</tr>
@@ -564,14 +564,14 @@
 					const colDetails = $("<td>").addClass("px-4 py-2").html(`${satd.activity_progress} [${satd.learning_status}]<br><br>${satd.attendance_detail}`);
 					const colUploader = $("<td>").addClass("px-4 py-2").text(satd.attendance.posted_by.full_name);
 					const colAction = $('<td>').addClass('px-4 py-2').append(
-						$('<div>').addClass('flex gap-2 w-full').append(
-							$('<a>').attr('href', `${baseUrl}/admin/student/attendance/${satd.id}/edit`).addClass('text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25').css({'box-shadow': '0 1px 2px rgba(0, 0, 0, 0.3)', 'background': 'linear-gradient(90deg, #1EB8CD 0%, #354D9B 100%)'}).html('<i class="bi bi-pencil-square"></i>')
+						$('<div>').addClass('flex gap-1 w-full').append(
+							$('<a>').attr('href', `${baseUrl}/admin/student/attendance/${satd.id}/edit`).html(`<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">`)
 						)
 						.append(
 							$('<form>').attr({'method': 'post', 'action': `${baseUrl}/admin/student/attendance/${satd.id}/delete`}).append(
 								$('<input>').attr('type', 'hidden').attr('name', '_token').val($('body').data('tjzlptoheng'))
 							).append(
-								$('<button>').attr('type', 'submit').addClass('text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25').css({'box-shadow': '0 1px 2px rgba(0, 0, 0, 0.3)', 'background': 'linear-gradient(90deg, #1EB8CD 0%, #354D9B 100%)'}).html('<i class="bi bi-trash3"></i>').on('click', () => {
+								$('<button>').attr('type', 'submit').html(`<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">`).on('click', () => {
 									return confirm('Are you sure want to delete this attendance data?');
 								})
 							)

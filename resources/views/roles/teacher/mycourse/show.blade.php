@@ -214,13 +214,16 @@
 								</td>
 
 								<td class="py-2 px-4">
-									<div class="flex w-full items-center gap-2">
-										<x-anchor-button class=""
-											href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}">
-											<i class="bi bi-eye"></i>
-										</x-anchor-button>
-										<x-button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.mycourse.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn"><i class="bi bi-pencil-square"></i></x-button>
-										<x-button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.mycourse.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn"><i class="bi bi-trash3"></i></x-button>
+									<div class="flex w-full items-center gap-1">
+										<a href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}">
+											<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</a>
+										<button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.mycourse.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn">
+											<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</button>
+										<button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.mycourse.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn">
+											<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</button>
 									</div>
 								</td>
 							</tr>

@@ -72,16 +72,16 @@
 						</p>
 						<p class="mt-2">Period: <span class="font-bold">{{ Carbon\Carbon::parse($announcement->announce_from)->format('D, d M Y H:i') }} GMT+7</span> until <span class="font-bold">{{ Carbon\Carbon::parse($announcement->announce_until)->format('D, d M Y H:i') }} GMT+7</span></p>
 					</div>
-					<div class="flex gap-2">
-						<x-anchor-button  href="{{ route('admin.announcement.edit', $announcement->id) }}">
-							<i class="bi bi-pencil-square"></i>
-						</x-anchor-button>
-						<x-button type="button" class="delete-announcement-btn" data-del_announcement_name="{{ $announcement->title }}" data-route="{{ route('admin.announcement.destroy', $announcement->id) }}">
-							<i class="bi bi-trash3"></i>
-						</x-button>
-						<x-button type="button" class=" toggleBtn">
-							<i class="bi bi-eye"></i>
-						</x-button>
+					<div class="flex gap-1">
+						<a  href="{{ route('admin.announcement.edit', $announcement->id) }}">
+							<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+						</a>
+						<button type="button" class="delete-announcement-btn" data-del_announcement_name="{{ $announcement->title }}" data-route="{{ route('admin.announcement.destroy', $announcement->id) }}">
+							<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+						</button>
+						<button type="button" class=" toggleBtn">
+							<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+						</button>
 					</div>
 				</div>
 
