@@ -66,6 +66,9 @@
             @if(request('course'))
                 <div class="w-full bg-slate-300 p-4 overflow-y-auto flex flex-col align-items-start h-[75%] md:h-[85%]" id="message-container"></div>
                 <div class="absolute bottom-0 w-full p-4 hidden" id="extra-area" style="background-color: rgba(255, 255, 255, 0.6);"></div>
+                <div class="absolute bottom-0 w-full p-4 flex justify-center" id="go-bottom-helper" style="display: none;">
+                    <button type="button" class="py-1 px-2 rounded-lg bg-indigo-600 text-white">Go to latest messages</button>
+                </div>
                 <form action="{{ route('teacher.forum.send', $course->id) }}" method="post" class="ajax-form w-full bg-slate-300 flex p-1.5 gap-2 items-center h-[15%]" id="send-message-input">
                     @csrf
                     <x-textarea rows="2" type="text" name="message" id="message" class="grow" placeholder="Enter message..." autofocus></x-textarea>
@@ -108,6 +111,20 @@
             container.animate({ scrollTop: container.prop("scrollHeight") }, 500);
         }
 
+        function displayGoToLatestMessages(){
+            const msgCont = $('#message-container');
+            let scrollTop = msgCont.scrollTop();
+            let scrollHeight = msgCont[0].scrollHeight;
+            let containerHeight = msgCont.innerHeight();
+
+            if (scrollTop + containerHeight < scrollHeight - 70) {
+                $('#go-bottom-helper').fadeIn();
+            }
+            else {
+                $('#go-bottom-helper').hide();
+            }
+        }
+
 
         let firstTimeLoad = true;
 
@@ -148,6 +165,8 @@
                             setTimeout(scrollToBottom, 100);
                             firstTimeLoad = false;
                         }
+
+                        displayGoToLatestMessages();
                     }
                 });
             }
@@ -158,6 +177,9 @@
             }
 
             $('#extra-area').css('bottom', $('#send-message-input').outerHeight());
+            $('#go-bottom-helper').css('bottom', $('#send-message-input').height());
+
+            $('#go-bottom-helper').on('click', scrollToBottom);
 
             // Shift enter and enter mechanism
             $('#message').on('keydown', function(event){
@@ -214,6 +236,9 @@
                     $('#send-msg-btn').prop('disabled', false);
                 }
             });
+
+            $('#message-container').on('scroll', displayGoToLatestMessages);
+
         });
 
         $(document).on('paste', function(event) {

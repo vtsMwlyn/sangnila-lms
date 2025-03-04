@@ -59,12 +59,7 @@ Route::prefix('/student')
 				Route::get("/{course_id}", [AssignmentController::class, "student_show"])->name("show");
 
 				// Upload assignment
-				// Route::get("/{course_id}/{assignment_id}/submit", [AssignmentController::class, "student_submit"])->name("submit");
 				Route::post("/{course_id}/{assignment_id}/submit", [AssignmentController::class, "student_store"])->name("store");
-
-				// Check submission history
-				// Route::get("/{course_id}/{student__id}/{assignment_id}/detail", [AssignmentController::class, "student_submission_detail"])->name("detail");
-
 			}
 		);
 
@@ -83,7 +78,7 @@ Route::prefix('/student')
 
 		// ===== FORUM DISCUSSION ===== //
 		Route::get('/forum', [ForumController::class, 'index_student'])->name('forum.index')->whereNumber('course_id');
-		Route::get('/forum/{course_id}/retrieve', [ForumController::class, 'retrieve_message'])->name('forum.retrieve')->whereNumber('course_id');
-		Route::post('/forum/{course_id}/send', [ForumController::class, 'send_message'])->name('forum.send')->whereNumber('course_id');
+		Route::get('/forum/{course_id}/retrieve', [ForumController::class, 'retrieve_message_student'])->name('forum.retrieve')->whereNumber('course_id');
+		Route::post('/forum/{course_id}/send', [ForumController::class, 'send_message_student'])->name('forum.send')->whereNumber('course_id');
 	}
 );
