@@ -81,6 +81,15 @@
 			</a>
 		</div>
 
+		<!-- For smaller screen -->
+		<div class="relative flex lg:hidden flex-col items-start w-96 first-letter:0 dropdown-container mt-4">
+			<button type="button" class="border-slate-400 py-2 px-4 rounded-2xl font-bold text-dark-blue w-full bg-white flex justify-between items-center dropdown-toggler" style="border-width: 3px;">{{ request('content') ? ucwords(request('content')) : 'Activity Access' }} <img src="{{ asset('img/dropdown-arrow.svg') }}" class="w-5 h-5" alt="icon"></button>
+			<div class="absolute bg-slate-100 top-12 w-full rounded-xl flex flex-col hidden overflow-hidden dropdown-menu" style="box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
+				<a href="{{ route('teacher.student.show', ['course_id' => $course->id, 'student_id' => $student->id, 'content' => 'activity access']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">Activity Access</div></a>
+				<a href="{{ route('teacher.student.show', ['course_id' => $course->id, 'student_id' => $student->id,'content' => 'meeting links']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">Meeting Links</div></a>
+				<a href="{{ route('teacher.student.show', ['course_id' => $course->id, 'student_id' => $student->id,'content' => 'portfolios']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">Portfolios</div></a>
+			</div>
+		</div>
 		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
 		@if(request('content') == 'activity access' || !request('content'))

@@ -60,7 +60,11 @@
 				@endphp
 
 				<div class="flex flex-col justify-between" style="height: 400px;">
-					<canvas id="myHorizontalBarChart"></canvas>
+					@if(Auth::user()->enrolled_courses->count() > 0)
+						<canvas id="myHorizontalBarChart"></canvas>
+					@else
+						<div class="text-center">- You are not enrolled in any courses -</div>
+					@endif
 				</div>
 			</div>
 		</div>
@@ -90,7 +94,7 @@
 
 				<div class="w-full flex flex-col overflow-y-auto" style="height: 250px;">
 					<ul class="list-disc list-inside">
-						@foreach(Auth::user()->enrolled_courses as $course)
+						@forelse(Auth::user()->enrolled_courses as $course)
 							@php
 								$selfAttendance = App\Models\SelfAttendance::where("user_id", Auth::user()->id)->where('course_id', $course->id)->where("self_attendance_date", Carbon\Carbon::today()->format('Y-m-d'))->latest()->first();
 							@endphp
@@ -101,7 +105,9 @@
 									<a href="{{ route('student.mycourse.check-in', $course->id) }}" class="bg-indigo-600 hover:bg-slate-700 py-0.5 px-1.5 rounded-lg font-bold text-white">Check In</a>
 								</li>
 							@endif
-						@endforeach
+						@empty
+							<div class="w-full h-full flex items-center justify-center">- There's nothing to do for now -</div>
+						@endforelse
 					</ul>
 				</div>
 			</div>
