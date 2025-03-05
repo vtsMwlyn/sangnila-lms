@@ -66,10 +66,10 @@ Route::middleware([])->group(function(){
 	require __DIR__ . '/roles/guest.php';
 
 	// Push notification (postponed, VAPID keys-nya mabok)
-	Route::post('/save-subscription', [PushNotificationController::class, "saveSubscription"])->name("pushnotification.savesubscription");
+	// Route::post('/save-subscription', [PushNotificationController::class, "saveSubscription"])->name("pushnotification.savesubscription");
 
-	Route::get("/test-notif", function(){
-		$pnc = new PushNotificationController();
-		$pnc->sendPushNotification();
-	});
+	// Route::get("/test-notif", function(){
+	// 	$pnc = new PushNotificationController();
+	// 	$pnc->sendPushNotification();
+	// });
 });

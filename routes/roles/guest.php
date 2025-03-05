@@ -13,5 +13,10 @@ Route::prefix('/guest')
 		// Course details and list of trial (guest-accessible/available or first) topic/activity
 		Route::get('/{course_id}', [GuestController::class, 'show'])->name('show')->whereNumber('course_id');
 
+		// Privacy policy
+		Route::get('/privacy-policy', function(){
+			return view('roles.guest.privacy-policy');
+		})->name('privacy-policy');
+
 	}
 );
