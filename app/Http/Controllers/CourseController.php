@@ -43,6 +43,8 @@ class CourseController extends Controller {
 			'delivery_mode' => 'required'
 		]);
 
+		$validatedData['course_description'] = e($validatedData['course_description']);
+
 		try {
 			Course::create($validatedData);
 		}
@@ -95,6 +97,8 @@ class CourseController extends Controller {
 			"level" => "required",
 			'delivery_mode' => 'required'
 		]);
+
+		$validatedData['course_description'] = e($validatedData['course_description']);
 
 		try {
 			Course::findOrFail($course_id)->update($validatedData);

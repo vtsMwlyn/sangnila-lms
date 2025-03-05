@@ -43,7 +43,7 @@ class ActivityController extends Controller {
 				"topic_id" => $topic->id,
 				"title" => $validatedData["title"],
 				"link" => $validatedData["link"],
-				"desc" => $validatedData["desc"],
+				"desc" => e($validatedData["desc"]),
 				"session" => $validatedData["session"]
 			]);
 
@@ -111,7 +111,7 @@ class ActivityController extends Controller {
 		try {
 			$activity->update([
 				"title" => $request->title,
-				"desc" => $request->desc,
+				"desc" => e($request->desc),
 				"link" => $request->link,
 				"session" => $request->session
 			]);

@@ -69,10 +69,13 @@
                 <div class="absolute bottom-0 w-full p-4 flex justify-center" id="go-bottom-helper" style="display: none;">
                     <button type="button" class="py-1 px-2 rounded-lg bg-indigo-600 text-white">Go to latest messages</button>
                 </div>
+                <div class="absolute bottom-0 w-full p-4 flex justify-center z-10" id="message-status" style="display: none;">
+                    <div class="py-2 px-4 rounded-lg text-white flex items-center gap-1" id="status-text"><div class="loader w-4 h-4 border-t-transparent border-white rounded-full animate-spin" style="border-width: 3px;"></div> Sending message...</div>
+                </div>
                 <form action="{{ route('student.forum.send', $course->id) }}" method="post" class="ajax-form w-full bg-slate-300 flex p-1.5 gap-2 items-center h-[15%]" id="send-message-input">
                     @csrf
                     <x-textarea rows="2" type="text" name="message" id="message" class="grow" placeholder="Enter message..." autofocus></x-textarea>
-                    <x-button><i class="bi bi-send-fill"></i> Send</x-button>
+                    <x-button type="button" id="send-msg-btn"><i class="bi bi-send-fill"></i> Send</x-button>
                 </form>
             @endif
         </div>
@@ -125,6 +128,7 @@
             }
         }
 
+
         let firstTimeLoad = true;
 
         $(document).ready(() => {
@@ -166,7 +170,14 @@
                         }
 
                         displayGoToLatestMessages();
-                    }
+
+                        $('#message-status').find('#status-text').removeClass('bg-light-blue bg-red').addClass('bg-green-500').html(`<i class="bi bi-check-lg"></i> Message sent!`);
+                        setTimeout(() => $('#message-status').fadeOut(), 1000);
+                    },
+                    error: function(xhr, status, error) {
+                        $('#message-status').find('#status-text').removeClass('bg-light-blue bg-green-500').addClass('bg-red').html(`<i class="bi bi-exclamation-triangle-fill"></i> Failed to send the message`);
+                        setTimeout(() => $('#message-status').fadeOut(), 1000);
+                    },
                 });
             }
 
@@ -177,6 +188,8 @@
 
             $('#extra-area').css('bottom', $('#send-message-input').outerHeight());
             $('#go-bottom-helper').css('bottom', $('#send-message-input').height());
+            $('#message-status').css('bottom', $('#send-message-input').height());
+
 
             $('#go-bottom-helper').on('click', scrollToBottom);
 
@@ -198,14 +211,25 @@
                         // Scroll the textarea down so the new line is visible
                         $(this).scrollTop(this.scrollHeight);
                     } else {
-                        $('#send-message-input').submit();
+                        if($('#message').val() && !isOnlyWhitespace($('#message').val())){
+                            $('#send-message-input').submit();
+                        }
                     }
+                }
+            });
+
+            $('#send-msg-btn').on('click', function(){
+                if($('#message').val() && !isOnlyWhitespace($('#message').val())){
+                    $('#send-message-input').submit();
                 }
             });
 
             // Handle form submission
             $('#send-message-input').submit(function(e) {
                 e.preventDefault();
+
+                $('#message-status').show().find('#status-text').removeClass('bg-red bg-green-500').addClass('bg-light-blue').html(`<div class="loader w-4 h-4 border-t-transparent border-white rounded-full animate-spin" style="border-width: 3px;"></div> Sending message...`);
+
                 let msg = $('#message').val();
 
                 $.ajax({
@@ -216,6 +240,7 @@
                     contentType: false,  // Required for FormData
                     success: function(message) {
                         $('#send-message-input')[0].reset();
+                        
                         loadMessages();
                         hideLoadingPopup();
                         scrollToBottom();
@@ -223,6 +248,7 @@
                         $('#extra-area').hide();
                         $('#pasted-img').remove();
                         $('#attachment').remove();
+                        $('#go-bottom-helper').hide();
                     },
                 });
             });
@@ -237,6 +263,7 @@
             });
 
             $('#message-container').on('scroll', displayGoToLatestMessages);
+
         });
 
         $(document).on('paste', function(event) {

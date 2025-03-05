@@ -90,7 +90,7 @@ class ForumController extends Controller
 
     public function send_message_teacher(Request $request, $course_id){
         $request->validate([
-            'message' => 'nullable|string',
+            'message' => 'required|string',
             'attachment' => 'file|nullable'
         ]);
 
@@ -107,7 +107,7 @@ class ForumController extends Controller
             $msg = Message::create([
                 'user_id' => Auth::user()->id,
                 'course_id' => $course_id,
-                'message' => $request->message ?? null,
+                'message' => e($request->message),
                 'attachment_path' => $path,
             ]);
 
@@ -126,7 +126,7 @@ class ForumController extends Controller
 
     public function send_message_student(Request $request, $course_id){
         $request->validate([
-            'message' => 'nullable|string',
+            'message' => 'required|string',
             'attachment' => 'file|nullable'
         ]);
 
@@ -143,7 +143,7 @@ class ForumController extends Controller
             $msg = Message::create([
                 'user_id' => Auth::user()->id,
                 'course_id' => $course_id,
-                'message' => $request->message ?? null,
+                'message' => e($request->message),
                 'attachment_path' => $path,
             ]);
 

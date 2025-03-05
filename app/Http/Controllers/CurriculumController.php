@@ -47,7 +47,7 @@ class CurriculumController extends Controller
 						$nyuu = Activity::create([
 							"topic_id" => $ntopic->id,
 							"title" => $activity->title,
-							"desc" => $activity->desc,
+							"desc" => e($activity->desc),
 							"link" => $activity->link,
 							"session" => $activity->session
 						]);
@@ -190,7 +190,7 @@ class CurriculumController extends Controller
 		try {
 			$new_ca = CurriculumActivity::create([
 				"title" => $request->title,
-				"desc" => $request->desc,
+				"desc" => e($request->desc),
 				"link" => $request->link,
 				"curriculum_topic_id" => $ctopic->id,
 				"session" => $request->session
@@ -267,7 +267,7 @@ class CurriculumController extends Controller
 
 			$cactivity->update([
 				"title" => $request->title,
-				"desc" => $request->desc,
+				"desc" => e($request->desc),
 				"link" => $request->link,
 				"session" => $request->session
 			]);
@@ -350,7 +350,7 @@ class CurriculumController extends Controller
 					$nyuu = CurriculumActivity::create([
 						"curriculum_topic_id" => $ntopic->id,
 						"title" => $cactivity->title,
-						"desc" => $cactivity->desc,
+						"desc" => e($cactivity->desc),
 						"link" => $cactivity->link,
 						"session" => $cactivity->session
 					]);
@@ -402,7 +402,7 @@ class CurriculumController extends Controller
 					$nyuu = Activity::create([
 						"topic_id" => $ntopic->id,
 						"title" => $activity->title,
-						"desc" => $activity->desc,
+						"desc" => e($activity->desc),
 						"link" => $activity->link,
 						"session" => $activity->session
 					]);
@@ -496,7 +496,7 @@ class CurriculumController extends Controller
 						$nyuu = Activity::create([
 							"topic_id" => $ntopic->id,
 							"title" => $cactivity->title,
-							"desc" => $cactivity->desc,
+							"desc" => e($cactivity->desc),
 							"link" => $cactivity->link,
 							"session" => $cactivity->session,
 						]);
