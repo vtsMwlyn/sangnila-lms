@@ -1,0 +1,131 @@
+html {
+	scroll-behavior: smooth;
+}
+
+/* Thin Scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #888;
+	border-radius: 10px;
+	border: 2px solid #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
+* {
+	scrollbar-width: thin;
+	scrollbar-color: #888 #f7f7f7;
+}
+
+/* Select2 */
+.select2-container .select2-selection {
+	display: flex !important;
+	align-items: center !important;
+	border: solid 3px rgb(148 163 184) !important;
+	height: 2.9rem !important;
+	border-radius: 1rem !important;
+	padding-left: 11px;
+	padding-right: 11px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: 0.75rem;
+	margin-top: 0.5rem;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+	/* color: rgb(30 64 175);
+	font-weight: 600; */
+	/* margin-left: 12px; */
+}
+
+body {
+	background: white;
+	font-family: "Geologica";
+}
+
+trix-toolbar [data-trix-button-group="file-tools"] {
+	display: none;
+}
+
+/* Targeting unordered lists specifically within Trix editor */
+trix-editor ul {
+	list-style-type: disc; /* Use the disc style for unordered lists */
+	padding-left: 1.5em; /* Adjust the padding for proper indentation */
+}
+
+/* Targeting ordered lists specifically within Trix editor */
+trix-editor ol {
+	list-style-type: decimal; /* Use decimal style for ordered lists */
+	padding-left: 1.5em; /* Adjust the padding for proper indentation */
+}
+
+/* Targeting list items within Trix editor */
+trix-editor ul li,
+trix-editor ol li {
+	margin-bottom: 0.5em; /* Adjust spacing between list items */
+}
+
+trix-editor a {
+	font-weight: bold;
+	color: rgb(30 58 138);
+}
+
+div.announcementContent ul {
+	list-style-type: disc; /* Use the disc style for unordered lists */
+	padding-left: 1.5em; /* Adjust the padding for proper indentation */
+}
+
+/* Targeting ordered lists specifically within Trix editor */
+div.announcementContent ol {
+	list-style-type: decimal; /* Use decimal style for ordered lists */
+	padding-left: 1.5em; /* Adjust the padding for proper indentation */
+}
+
+/* Targeting list items within Trix editor */
+div.announcementContent ul li,
+div.announcementContent ol li {
+	margin-bottom: 0.5em; /* Adjust spacing between list items */
+}
+
+div.announcementContent a {
+	font-weight: bold;
+	color: rgb(30 58 138);
+}
+
+div.announcementContent a:hover {
+	text-decoration: underline;
+}
+
+.oneperthree {
+	width: 32%;
+}
+
+@media screen and (max-width: 1024px){
+	#page-title {
+		z-index: 15;
+	}
+
+	.oneperthree {
+		width: 47%;
+	}
+}
+
+@media screen and (max-width: 768px){
+	.oneperthree {
+		width: 100%;
+	}
+}

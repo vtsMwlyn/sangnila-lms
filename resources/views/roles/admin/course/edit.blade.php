@@ -12,49 +12,91 @@
 @section("content")
 	<x-section-container>
 		<x-page-title>{{ __("Edit Course") }}</x-page-title>
+		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("systemFail"))
-			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('admin.course.update', $course->id) }}" method="post" class="w-full">
+		<form action="{{ route('admin.course.update', $course->id) }}" method="post" class="w-full flex flex-col gap-y-4">
 			@csrf
-			@method('PATCH')
-			<!-- Course Name -->
-			<div class="flex @error('course_name') items-start @else items-stretch @enderror gap-3">
-				<x-boxed-label for="course_name" :value="__('Course Name')" />
-				<div class="flex flex-col w-full items-stretch">
-					<x-input id="course_name" class="block w-full" type="text" placeholder="Course name" name="course_name" :value="$course->course_name"
-					autofocus />
+			@method('patch')
+			<div class="w-full flex gap-x-4">
+				<div class="flex flex-col w-1/2">
+					<p>Course Name<span class="text-red">*</span></p>
+					<x-input id="course_name" class="block w-full" type="text" name="course_name" placeholder="New course name"
+						:value="old('course_name', $course->course_name)" autofocus />
+				</div>
+
+				<div class="flex flex-col w-1/2">
+					<p>Status<span class="text-red">*</span></p>
+					<div class="flex flex-col w-full items-stretch">
+						<x-select name="status" id="status" class="w-full">
+							<option selected disabled>Course Status</option>
+							<option value="active" @if(old("status", $course->status) == "active") selected @endif>Active</option>
+							<option value="disabled" @if(old("status", $course->status) == "disabled") selected @endif>Hidden</option>
+						</x-select>
+					</div>
 				</div>
 			</div>
 
-			<!-- Course Description -->
-			<div class="mt-4 flex @error('course_description') items-start @else items-stretch @enderror gap-3">
-				<x-boxed-label for="course_description" :value="__('Course Description')" />
-				{{-- <x-input id="course_description" class="block w-full bg-blue-950" type="text" name="course_description" :value="$course->course_description" style="color: white"/> --}}
-				<div class="flex flex-col w-full items-stretch">
-					<x-input id="course_description" class="block w-full" type="text" name="course_description" placeholder="Course description" :value="$course->course_description"/>
+			<div class="w-full flex gap-x-4">
+				<div class="flex flex-col w-1/2">
+					<p>Level<span class="text-red">*</span></p>
+					<div class="flex flex-col w-full items-stretch">
+						<x-select name="level" id="level" class="w-full">
+							<option selected disabled>Course Level</option>
+							<option value="basic" @if(old("level", $course->level) == "basic") selected @endif>Basic</option>
+							<option value="intermediate" @if(old("level", $course->level) == "intermediate") selected @endif>Intermediate</option>
+							<option value="advanced" @if(old("level", $course->level) == "advanced") selected @endif>Advanced</option>
+						</x-select>
+					</div>
+				</div>
+
+				<div class="flex flex-col w-1/2">
+					<p>Format<span class="text-red">*</span></p>
+					<div class="flex flex-col w-full items-stretch">
+						<x-select name="format" id="format" class="w-full">
+							<option selected disabled>Course Format</option>
+							<option value="20" @if(old("format", $course->format) == 20) selected @endif>20 Sessions</option>
+							<option value="40" @if(old("format", $course->format) == 40) selected @endif>40 Sessions</option>
+						</x-select>
+					</div>
 				</div>
 			</div>
 
-			<!-- Course Visibility -->
-			<div class="mt-4 flex items-stretch gap-3">
-				<x-boxed-label for="visibility" :value="__('Course Visibility')" />
-				<x-select name="visibility" id="visibility" class="w-full">
-					<option value="public" @if($course->visibility == "public") selected @endif>Public</option>
-					<option value="private" @if($course->visibility == "private") selected @endif>Private</option>
-				</x-select>
+			<div class="w-full flex gap-x-4">
+				<div class="flex flex-col w-1/2">
+					<p>Delivery Mode<span class="text-red">*</span></p>
+					<div class="flex flex-col w-full items-stretch">
+						<x-select name="delivery_mode" id="delivery_mode" class="w-full">
+							<option value="onsite" @if(old("delivery_mode", $course->delivery_mode) == "onsite") selected @endif>Onsite</option>
+							<option value="online" @if(old("delivery_mode", $course->delivery_mode) == "online") selected @endif>Online</option>
+						</x-select>
+					</div>
+				</div>
+				<div class="flex flex-col w-1/2"></div>
 			</div>
 
-			<div class="flex items-stretch justify-center mt-20 mb-3 gap-3">
-				<x-button class="bg-orange-500 w-full md:w-1/5">
-					{{ __('Save') }}
-				</x-button>
-				<x-cancel-button msg="The changes will be discarded, are you sure want to cancel?" class="w-full md:w-1/5">
+			<div class="flex flex-col w-full">
+				<p>Course Description<span class="text-red">*</span></p>
+				<div class="flex flex-col w-full items-stretch">
+					<x-textarea name="course_description" rows="4" placeholder="Course Descriptions">
+						{{ old("course_description", $course->course_description) }}
+					</x-textarea>
+				</div>
+			</div>
+
+			<div class="flex items-stretch gap-3 justify-end mt-4 mb-3">
+				<x-cancel-button class="w-full md:w-1/6">
 					Cancel
 				</x-cancel-button>
+				<x-button class=" w-full md:w-1/6">
+					{{ __('Submit') }}
+				</x-button>
+
 			</div>
 		</form>
+
 	</x-section-container>
 @endsection

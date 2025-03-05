@@ -4,7 +4,7 @@ use App\Models\User;
 use App\Models\Topic;
 use App\Models\Course;
 use App\Models\Payment;
-use App\Models\Material;
+use App\Models\Activity;
 use App\Models\Progress;
 use App\Models\Assignment;
 use App\Models\Attendance;
@@ -16,7 +16,7 @@ use App\Models\CurriculumTopic;
 use App\Models\ImportedStudent;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
-use App\Models\CurriculumMaterial;
+use App\Models\CurriculumActivity;
 use Illuminate\Support\Facades\Hash;
 
 // Generator functions
@@ -55,10 +55,10 @@ function assignStudent($student_name, $teacher_name, $course_name, $max_session)
 	$topics = Topic::where("course_id", $course->id)->where("user_id", $teacher->id)->get();
 
 	foreach ($topics as $index1 => $topic) {
-		foreach($topic->materials as $index2 => $material) {
+		foreach($topic->activities as $index2 => $activity) {
 			$newData = [
 				'student_id' => $student->id,
-				'material_id' => $material->id,
+				'activity_id' => $activity->id,
 				'course_id' => $course->id,
 			];
 
@@ -86,32 +86,54 @@ function assignTeacher($teacher_name, $courses){
 	}
 }
 
-function addTopicAndMaterial($course_name, $topic_name, $materials, $teacher_name){
+function addTopicAndActivity($course_name, $topic_name, $activities, $teacher_name){
 	$course = Course::where("course_name", $course_name)->first();
 	$teacher = User::where("role_id", 2)->where("full_name", $teacher_name)->first();
 
 	$topic = Topic::create(["course_id" => $course->id, "title" => $topic_name, "user_id" => $teacher->id]);
 
-	foreach($materials as $material){
-		Material::create(["topic_id" => $topic->id, "title" => $material, "link" => "https://www.google.com/", "desc" => "This is the description of the material. It serves as a comprehensive overview, providing a clear explanation or summary of the content. By reading or watching this material, students will gain a solid understanding of the main concepts and topics covered. They can expect to learn key insights, practical applications, and theoretical foundations that are essential for mastering the subject matter. The description aims to orientate students, helping them to grasp the significance of the material and its relevance to their learning journey."]);
+	$n = 0;
+	$current_all_topics = $course->topics;
+
+	foreach($current_all_topics as $t){
+		foreach($t->activities as $a){
+			$n++;
+		}
+	}
+
+	foreach($activities as $activity){
+		Activity::create(["topic_id" => $topic->id, "session" => $n + 1, "title" => $activity, "link" => "https://www.google.com/", "desc" => "This is the description of the activity. It serves as a comprehensive overview, providing a clear explanation or summary of the content. By reading or watching this activity, students will gain a solid understanding of the main concepts and topics covered. They can expect to learn key insights, practical applications, and theoretical foundations that are essential for mastering the subject matter. The description aims to orientate students, helping them to grasp the significance of the activity and its relevance to their learning journey."]);
+
+		$n++;
 	}
 }
 
-function changeMaterialLink($course_name, $topic_name, $material_name, $new_link){
+function changeActivityLink($course_name, $topic_name, $activity_name, $new_link){
 	$course = Course::where("course_name", $course_name)->first();
 	$topic = Topic::where("course_id", $course->id)->where("title", $topic_name)->first();
-	$material = Material::where("topic_id", $topic->id)->where("title", $material_name);
+	$activity = Activity::where("topic_id", $topic->id)->where("title", $activity_name);
 
-	$material->update(["link" => $new_link]);
+	$activity->update(["link" => $new_link]);
 }
 
-function generateCurriculum($course_name, $topic_name, $materials){
+function generateCurriculum($course_name, $topic_name, $activities){
 	$course = Course::where("course_name", $course_name)->first();
 
 	$topic = CurriculumTopic::create(["course_id" => $course->id, "title" => $topic_name]);
 
-	foreach($materials as $material){
-		CurriculumMaterial::create(["curriculum_topic_id" => $topic->id, "title" => $material, "link" => "https://www.google.com/", "desc" => "This is the description of the material. It serves as a comprehensive overview, providing a clear explanation or summary of the content. By reading or watching this material, students will gain a solid understanding of the main concepts and topics covered. They can expect to learn key insights, practical applications, and theoretical foundations that are essential for mastering the subject matter. The description aims to orientate students, helping them to grasp the significance of the material and its relevance to their learning journey."]);
+	$n = 0;
+	$current_all_topics = $course->curriculum_topics;
+
+	foreach($current_all_topics as $t){
+		foreach($t->curriculum_activities as $a){
+			$n++;
+		}
+	}
+
+	foreach($activities as $index => $activity){
+		CurriculumActivity::create(["curriculum_topic_id" => $topic->id, "session" => $n + 1, "title" => $activity, "link" => "https://www.google.com/", "desc" => "This is the description of the activity. It serves as a comprehensive overview, providing a clear explanation or summary of the content. By reading or watching this activity, students will gain a solid understanding of the main concepts and topics covered. They can expect to learn key insights, practical applications, and theoretical foundations that are essential for mastering the subject matter. The description aims to orientate students, helping them to grasp the significance of the activity and its relevance to their learning journey."]);
+
+		$n++;
 	}
 }
 
@@ -179,7 +201,7 @@ function newAttendance($course_name, $teacher_name, $students_attended, $attenda
 		"teacher_id" => $teacher->id,
 		"course_id" =>  $course->id,
 		"attendance_date" => $attendance_date,
-		"attendance_identifier" => $course->id . "_" . $teacher->id . "/" . round(microtime(true) * 1000)
+		// "attendance_identifier" => $course->id . "_" . $teacher->id . "/" . round(microtime(true) * 1000)
 	]);
 
 	$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", $teacher->id)->get();
@@ -194,9 +216,9 @@ function newAttendance($course_name, $teacher_name, $students_attended, $attenda
 		}
 
 		$newData = [
-			"user_id" => $cs->student->id,
+			"student_id" => $cs->student->id,
 			"attendance_id" => $newAttendance->id,
-			"material_progress" => "Ceritanya ini suatu material"
+			"activity_progress" => "Ceritanya ini suatu activity"
 		];
 
 		if($is_attend){

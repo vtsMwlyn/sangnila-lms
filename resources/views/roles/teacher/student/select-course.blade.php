@@ -1,7 +1,7 @@
 @extends("layouts.main-teacher")
 
 @section("title")
-	<h1>Student Progress</h1>
+	<h1>Manage Students</h1>
 @endsection
 
 @section("breadcrumbs-extension")
@@ -9,40 +9,57 @@
 @endsection
 
 @section("content")
-	<x-section-container>
-		<x-page-title>Manage Students' Material Access</x-page-title>
-		<h1 class="text-2xl font-semibold text-blue-900 text-center mb-8">Pick a Course</h1>
-		<div class="overflow-x-auto rounded-md">
-			<x-table>
-				<x-slot name="head">
-					<th class="template-heads rounded-xl">Course Name</th>
-				</x-slot>
-				@if ($courses->isNotEmpty())
-					@foreach ($courses as $course)
-						<tr>
-							<td class="template-bodies rounded-xl selections transition ease-in-out duration-500" style="padding: 0;">
-								<div class="flex w-full h-full items-stretch p-5">
-									<a href="{{ route('teacher.student.select-student', $course->id) }}" class="font-bold h-full w-full">
-										{{ $course->course_name }}
-									</a>
-								</div>
-							</td>
-						</tr>
-					@endforeach
-				@else
-					<tr><td class="bg-white rounded-xl p-5 text-center font-semibold">- No courses assigned yet -</td></tr>
-				@endif
-			</x-table>
-		</div>
-		<script>
-			$(".selections").on({
-				"mouseover": function(){
-					$(this).css({"background-color": "rgb(250 204 21)"});
-				},
-				"mouseout": function(){
-					$(this).css({"background-color": "#283785"});
+	<div class="w-full flex flex-wrap gap-5">
+		@forelse (Auth::user()->teached_courses as $course)
+			<!-- Counting how many students has no access at all to any activities -->
+			@php
+				$course_students = App\Models\CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+
+				$n = 0;
+
+				foreach($course_students as $cs){
+					$progress_per_student = App\Models\Progress::where("course_id", $course->id)->where("student_id", $cs->student->id)->get();
+
+					if($progress_per_student->count() > 0){
+						$no_activities_unlocked_yet = true;
+
+						foreach($progress_per_student as $p){
+							if($p->status == "unlocked"){
+								$no_activities_unlocked_yet = false;
+								break;
+							}
+						}
+
+						if($no_activities_unlocked_yet){
+							$n++;
+						}
+					}
+					else {
+						$n++;
+					}
 				}
-			})
-		</script>
-	</x-section-container>
+			@endphp
+
+			<a href="{{ route('teacher.student.select-student', $course->id) }}"  class="oneperthree transition duration-300 hover:scale-105 relative">
+				<div class="bg-white rounded-3xl p-5 shadow-lg">
+					<!-- Course information -->
+					<p class="font-bold text-dark-blue">{{ $course->course_name }} - {{ ucwords($course->level) }}</p>
+					<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
+
+					<div class="flex gap-2 items-center">
+						<img src="{{ asset('img/lecturer.svg') }}" class="w-4 h-4" alt="icon">
+						{{ App\Models\CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get()->count() }} Students Teached
+					</div>
+					<div class="flex gap-2 items-center @if($n > 0) text-red @endif">
+						<i class="bi bi-book-half text-slate-400"></i>{{ $n }} Students Has No Access To Any Activities
+					</div>
+				</div>
+				@if($n > 0)
+					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -4px; right: -4px;">!</div>
+				@endif
+			</a>
+		@empty
+			<div class="bg-white rounded-xl text-center font-semibold w-full mt-5 p-5">- No courses assigned yet -</div>
+		@endforelse
+	</div>
 @endsection

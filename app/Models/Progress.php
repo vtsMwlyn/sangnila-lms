@@ -19,11 +19,11 @@ class Progress extends Model {
 	}
 
 	public function course() {
-		return $this->belongsTo(Course::class, 'course_id');
+		return $this->belongsTo(Course::class);
 	}
 
-	public function material() {
-		return $this->belongsTo(Material::class, 'material_id');
+	public function activity() {
+		return $this->belongsTo(Activity::class);
 	}
 
 }

@@ -12,7 +12,7 @@
 			<div class="w-0 border-blue my-2" style="border-width: 1.5px"></div>
 
 			<div class="flex items-start flex-col justify-center">
-				<div class="text-lg text-blue font-semibold ">LEARNING MANAGEMENT SYSTEM</div>
+				<div class="text-md md:text-lg text-blue font-semibold mb-1.5 md:mb-0">LEARNING MANAGEMENT SYSTEM</div>
 				<div class="flex gap-1 text-slate-400 font-light italic" style="font-size: 8pt; margin-top: -5px">{{ trans("strings.version") }}<h1 id="screen"></h1></div>
 			</div>
 		</div>
@@ -43,7 +43,7 @@
 
 				<div class="relative flex flex-col items-end dropdown-container">
 					@if($n > 0)
-						<div class="absolute h-3 w-3 bg-red rounded-full flex justify-center items-center text-white" style="top: -0.25rem; right: -0.25rem;"></div>
+						<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
 					@endif
 					<button type="button" class="dropdown-toggler"><img src="{{ asset('img/mail-icon.svg') }}" alt="mail-icon" class="h-6"></button>
 
@@ -70,7 +70,7 @@
 
 						<div class="flex flex-col items-center gap-3 grow w-full text-xs py-2 px-1 overflow-y-auto">
 							@forelse($inboxes as $i => $inbox)
-								<div class="@if($inbox->status == "unread") font-extrabold @endif rounded-3xl font-bold text-black px-4 py-5" style="background: linear-gradient(90deg, rgba(190, 226, 219, 0.49) 0%, rgba(104, 124, 120, 0) 100%);">
+								<div class="@if($inbox->status == "unread") font-extrabold @endif rounded-3xl text-black px-4 py-5" style="background: linear-gradient(90deg, rgba(190, 226, 219, 0.49) 0%, rgba(104, 124, 120, 0) 100%);">
 									<p>{{ $inbox->message }}</p>
 
 									@if($inbox->status == "unread")

@@ -13,6 +13,7 @@
 @section("content")
 	<x-section-container>
 		<x-page-title>Edit Attendance Data</x-page-title>
+		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("systemFail"))
 			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
@@ -24,133 +25,164 @@
 				<div class="w-1/3">
 					<x-label for="attendance_date">{{ __("Attendance Date") }}</x-label>
 					<div class="flex gap-3 mt-1 items-center" id="date-inp-cont">
-						<div class="flex flex-col items-start">
+						<div class="flex flex-col items-start grow">
 							<x-input type="date" class="date-input w-full" name="attendance_date" id="attendance_date" :value="$attendance->attendance_date"/>
 						</div>
-						<x-button type="button" id="todaybtn" class="bg-orange-500">Today</x-button>
+						<x-button type="button" id="todaybtn" >Today</x-button>
 					</div>
 				</div>
 				<div class="w-1/3">
 					<x-label for="student_add">{{ __("Add Student to Attendance") }}</x-label>
-					<div class="flex items-center gap-3 mt-1">
-						<x-select class="w-full" id="student_add">
-						</x-select>
-						<x-button type="button" id="add_student" class="bg-orange-500">Add</x-button>
+					<div class="flex items-center gap-3 mt-1 select-2_container">
+						<select class="w-full select-2 rounded-2xl shadow-sm focus:outline-none py-2 px-4 focus:ring-0" id="student_add" style="border-width: 3px;">
+						</select>
+						<x-button type="button" id="add_student" >Add</x-button>
 					</div>
 				</div>
 			</div>
 
-			<div class="overflow-x-auto mt-6">
-				<x-label>{{ __("Attendance Details") }}</x-label>
-				<table class="w-full" style="border-collapse: separate; border-spacing: 0 20px;">
+			<h2 class="mt-12 font-extrabold text-xl text-dark-blue">Attendance Report</h2>
+
+			<div class="w-full bg-slate-400 mt-6" style="height: 2px;"></div>
+				<div class="overflow-x-auto">
+					<table class="w-full">
+						<thead>
+							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Student's Attendance Data</th>
+							<th class="text-start py-3 border-b-2 border-slate-400">Attendance Detail</th>
+							<th class="text-start py-3 px-4 border-b-2 border-slate-400"></th>
+						</thead>
 					<tbody id="table-body">
 						@php
 							$exclude_from_dropdown = [];
 						@endphp
-						@foreach (App\Models\CourseStudent::where("course_id", $attendance->course_id)->where("teacher_id", Auth::user()->id)->get() as $course_student)
+
+						@forelse (old('checkbox_value', $attendanceData) as $i => $ad)
 							@php
-								$atd = $attendanceData->where("user_id", $course_student->student->id)->first();
+								$studentId = is_object($ad)? $ad->student->id : $ad;
+								$matProg = is_object($ad)? $ad->activity_progress : $ad;
+								$learStat = is_object($ad)? $ad->learning_status : $ad;
+								$attenDet = is_object($ad)? $ad->attendance_detail: $ad;
+								$isAtten = is_object($ad)? $ad->is_attend : $ad;
+								$isCustom = is_object($ad)? $ad->is_custom : $ad;
+
+								array_push($exclude_from_dropdown, old('students.' . $i, $studentId));
 							@endphp
 
-							@if($atd)
-								@php
-									array_push($exclude_from_dropdown, $course_student->student->id);
-								@endphp
-
-								<tr class="table-row" style="@if($atd->attendance_detail == "Account disabled") display: none; @endif background: rgba(256, 256, 256, 0.4);">
-									<td class="p-5 grow rounded-l-xl">
-										<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
-											<input type="checkbox" id="checkbox{{ $course_student->student->id }}"
-											class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @elseif($atd->is_attend == 1) checked @endif @if($atd->attendance_detail == "Account disabled") disabled @endif>
-											<label for="checkbox{{ $course_student->student->id }}">{{ $course_student->student->full_name }}</label>
-											<input type="hidden" name="students[]" value="{{ $course_student->student->id }}">
-										</div>
-										<div class="flex w-full gap-3 mt-2 material_progress_detail items-start justify-between">
-											<div class="flex flex-col w-2/3 container_select2">
-												<x-select class="material_progress select2">
-													<option selected disabled>Select Material Progress</option>
-													@foreach ($attendance->course->topics as $topic)
-														@foreach ($topic->materials as $material)
-															<option value="{{ $material->title }}" @if($atd->material_progress == $material->title) selected @endif>{{ $material->title }}</option>
-														@endforeach
+							<tr class="table-row @if($loop->index % 2 == 0) bg-white @endif">
+								<td class="grow p-5">
+									<div class="flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl">
+										<input type="checkbox" id="checkbox{{ old('students.' . $i, $studentId) }}"
+										class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $i, $studentId) == "on") checked @elseif($isAtten == 1) checked @endif>
+										<label for="checkbox{{ old('students.' . $i, $studentId) }}" class="flex gap-3 items-center">
+											@if(App\Models\User::find(old('students.' . $i, $studentId))->details->profpic)
+												<img src="{{ Storage::url("app/public/" . App\Models\User::find(old('students.' . $i, $studentId))->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+											@else
+												<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+											@endif
+											{{ App\Models\User::find(old('students.' . $i, $studentId))->full_name }}
+										</label>
+										<input type="hidden" name="students[]" value="{{ old('students.' . $i, $studentId) }}">
+									</div>
+									<div class="flex flex-col w-full gap-3 mt-2 activity_progress_detail items-start justify-between @error('activity_progress.' . $i) border-red rounded-2xl p-1 @enderror @error('learning_status.' . $i) border-red p-1 rounded-2xl @enderror">
+										<div class="flex flex-col w-full container-select2">
+											<x-select class="activity_progress select-2" name="fake_activity_progress[]">
+												<option selected disabled>Select Activity Progress</option>
+												@foreach ($attendance->course->topics as $topic)
+													@foreach ($topic->activities as $activity)
+														<option value="{{ $activity->title }}" @if(old('activity_progress.' . $i, $matProg) == $activity->title) selected @endif>{{ $activity->title }}</option>
 													@endforeach
-												</x-select>
-											</div>
-
-											<x-select class="learning_status w-1/3">
-												<option value="On Progress" @if($atd->learning_status == "On Progress") selected @endif>On Progress</option>
-												<option value="Done" @if($atd->learning_status == "Done") selected @endif>Done</option>
+												@endforeach
+												<option value="other" @if(old("activity_progress." . $i) == "other" || $isCustom == 1) selected @endif>Other</option>
 											</x-select>
 										</div>
-									</td>
-									<td class="p-5 w-1/2">
-										<div class="flex flex-col items-stretch">
-											@if($atd)
-												<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px;">{{ old("attendance_detail." . $loop->index, $atd->attendance_detail) }}</textarea>
-											@else
-												<textarea name="attendance_detail[]" rows="4" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $loop->index) border-red-500 focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50 @else border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px;"></textarea>
-											@endif
-											@error("attendance_detail." . $loop->index)
-												<span class="text-red-500 mt-2">{{ $message }}</span>
-											@enderror
-										</div>
-									</td>
-									<td class="p-5 rounded-r-xl shrink">
-										<div class="flex justify-center items-center w-full h-full">
-											<x-button class="bg-red-600 remove-row" type="button"><i class="bi bi-trash3"></i></x-button>
-										</div>
-									</td>
-								</tr>
-							@endif
-						@endforeach
+
+										<x-select class="learning_status w-full" name="fake_learning_status[]">
+											<option selected disabled>Select Status</option>
+											<option value="On Progress" @if(old('learning_status.' . $i, $learStat) == "On Progress") selected @endif>On Progress</option>
+											<option value="Done" @if(old('learning_status.' . $i, $learStat) == "Done") selected @endif>Done</option>
+										</x-select>
+									</div>
+
+									@error("learning_status." . $i)
+										<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
+									@enderror
+									@error("activity_progress." . $i)
+										<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
+									@enderror
+
+									<div class="mt-2 @error('other_activity.' . $i) border-red rounded-2xl p-1 @enderror">
+										<x-input name="other_activity[]" type="text" class="w-full hidden other-activity" placeholder="Input activity/activity" value="{{ old('other_activity.' . $i, ($isCustom == 1 ? $matProg : '')) }}"/>
+									</div>
+									@error("other_activity." . $i)
+										<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> {{ $message }}</p>
+									@enderror
+								</td>
+								<td class="w-1/2 py-5">
+									<div class="flex flex-col items-stretch">
+										<textarea name="attendance_detail[]" rows="8" class="rounded-xl border-2 font-semibold text-blue-900 @error("attendance_detail." . $i) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror" placeholder="Enter student in class progress" style="resize: none; box-sizing: border-box; padding: 10px; border-width: 3px;">{!! old("attendance_detail." . $i, $attenDet) !!}</textarea>
+										@error("attendance_detail." . $i)
+											<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> The attendance detail field is required.</p>
+										@enderror
+									</div>
+								</td>
+								<td class="rounded-r-xl shrink p-5">
+									<div class="flex justify-center items-center w-full h-full">
+										<x-button class="bg-red-600 remove-row" type="button"><i class="bi bi-trash3"></i></x-button>
+									</div>
+								</td>
+							</tr>
+						@empty
+						@endforelse
+
+						@php
+							$exclude_from_dropdown = array_map('intval', $exclude_from_dropdown);
+						@endphp
 					</tbody>
 				</table>
 			</div>
 
-			<div class="flex items-stretch gap-2 justify-center w-full mt-20 mb-3">
-				<x-button class="bg-orange-500 w-full md:w-1/6">
-					{{ __('Submit') }}
-				</x-button>
-				<x-cancel-button msg="The changes will be discarded, are you sure want to cancel?" class="w-full md:w-1/6">
+			<div class="flex items-stretch gap-2 justify-end w-full mt-10 mb-3">
+				<x-cancel-button class="w-full md:w-1/6">
 					Cancel
 				</x-cancel-button>
+				<x-button class=" w-full md:w-1/6">
+					{{ __('Submit') }}
+				</x-button>
 			</div>
 		</form>
 
 		@php
-			$all_students = [];
-			foreach(App\Models\CourseStudent::where("course_id", $attendance->course_id)->where("teacher_id", Auth::user()->id)->get() as $crsstd){
-				array_push($all_students, $crsstd->student);
-			}
-
-			$all_topics_and_materials = [];
+			$all_topics_and_activities = [];
 			foreach($attendance->course->topics as $topic){
 				$tm = [];
 				$m = [];
 
 				$tm["topic"] = $topic;
 
-				foreach($topic->materials as $material){
-					array_push($m, $material);
+				foreach($topic->activities as $activity){
+					array_push($m, $activity);
 				}
 
-				$tm["materials"] = $m;
+				$tm["activities"] = $m;
 
-				array_push($all_topics_and_materials, $tm);
+				array_push($all_topics_and_activities, $tm);
 			}
 		@endphp
 
 		<script>
+			@php
+				$counter = $attendanceData->count();
+			@endphp
+
 			const allStudents = @json($all_students);
-			console.log(allStudents);
-			let exclude_dropdown = {!! json_encode($exclude_from_dropdown) !!};
-			console.log(exclude_dropdown);
+			let exclude_dropdown = @json($exclude_from_dropdown);
 
 			$(document).ready(() => {
 				const itemListModifiedEvent = new Event("item_list_modified");
 				$(document).on("item_list_modified", () => {
 					refreshAddStudent();
 					reapplyEventListeners();
+					reinitializeselect2();
 				});
 
 				// Initialization
@@ -158,13 +190,37 @@
 				applyRemoveRowButton();
 				refreshAddStudent();
 
+				function reinitializeselect2(){
+					// select-2 initialization
+					$('.select-2').select2({
+						allowClear: false
+					});
+
+					// Apply resize observer to each container with class 'container-select2'
+					$('.container-select2').each(function () {
+						const container = this;
+						const resizeObserver = new ResizeObserver(() => {
+							$(container).find('.select-2').each(function () {
+								$(this).select2('destroy').select2({
+									allowClear: false
+								});
+							});
+						});
+
+						resizeObserver.observe(container);
+					});
+				}
+
 				function refreshAddStudent(){
 					$("#student_add").html("");
-					console.log(`To exclude length: ${exclude_dropdown.length}, all students count: ${allStudents.length}`);
 					if(exclude_dropdown.length < allStudents.length){
 						for(let std of allStudents){
-							if(!exclude_dropdown.includes(std.id)){
+							console.log(std.id);
+							if(!exclude_dropdown.includes(std.id) && std.status != "disabled"){
 								$("#student_add").append($("<option>").attr({"value": JSON.stringify(std)}).text(std.full_name));
+								console.log(`${std.full_name} will be included.`);
+							} else {
+								console.log(`${std.full_name} should be excluded.`);
 							}
 						}
 					}
@@ -186,14 +242,20 @@
 					applyRemoveRowButton();
 				}
 
-				// Mechanism to hide and unhide selects for material progress detail depending if the student name checkbox is checked or not
+				// Mechanism to hide and unhide selects for activity progress detail depending if the student name checkbox is checked or not
 				function toggleProgress(element) {
-					const correspondingDetail = $(element).closest('td').find('.material_progress_detail');
+					const correspondingDetail = $(element).closest('td').find('.activity_progress_detail');
+					const otherActivity = $(element).closest('td').find('.other-activity');
 
 					if ($(element).is(":checked")) {
 						correspondingDetail.css("display", "flex");
-					} else {
+						if(correspondingDetail.find('.activity_progress').val() == "other"){
+							otherActivity.css("display", "flex");
+						}
+					}
+					else {
 						correspondingDetail.css("display", "none");
+						otherActivity.css("display", "none");
 					}
 				}
 
@@ -211,6 +273,15 @@
 					allCheckBoxes.change(evlisToggleProgress);
 				}
 
+				$(".activity_progress").change(function(){
+					if($(this).val() == "other"){
+						$(this).closest(".activity_progress_detail").next().find(".other-activity").show();
+					}
+					else {
+						$(this).closest(".activity_progress_detail").next().find(".other-activity").hide();
+					}
+				});
+
 				// Remove row of data if a student doesnt want to be included in attendance data
 				function evlisRemoveRow(){
 					removeRow(this);
@@ -226,6 +297,10 @@
 						});
 
 						$(element).closest('.table-row').remove();
+
+						@php
+							$counter--;
+						@endphp
 
 						document.dispatchEvent(itemListModifiedEvent);
 					}
@@ -243,12 +318,12 @@
 
 					const trow = $("<tr>").addClass("table-row").css({"background": "rgba(256, 256, 256, 0.4)"});
 					const firstCol = $("<td>").addClass("p-5 grow rounded-l-xl");
-					const secondCol = $("<td>").addClass("p-5 w-1/2");
+					const secondCol = $("<td>").addClass("w-1/2");
 					const thirdCol = $("<td>").addClass("p-5 rounded-r-xl shrink");
 
 					// First column
 					const checkNameContainer = $("<div>").addClass("flex items-center gap-3 bg-white py-4 px-5 border-2 border-blue-900 rounded-xl");
-					const progressContainer = $("<div>").addClass("flex w-full gap-2 mt-2 material_progress_detail");
+					const progressContainer = $("<div>").addClass("flex flex-col w-full gap-2 mt-2 activity_progress_detail @error('activity_progress.' . $counter) border-red rounded-2xl p-1 @enderror @error('learning_status.' . $counter) border-red p-1 rounded-2xl @enderror");
 
 					const studentToAdd = JSON.parse($("#student_add").val());
 					const newCheckBox = $("<input>").attr({"type": "checkbox", "id": `checkbox${studentToAdd.id}`}).addClass("mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300");
@@ -256,36 +331,43 @@
 					const newHiddenInput = $("<input>").attr({"type": "hidden", "name": "students[]", "value": studentToAdd.id});
 					checkNameContainer.append(newCheckBox).append(newLabelCheckBox).append(newHiddenInput);
 
-					const newMaterialProgressDropdown = $("<select>").addClass("material_progress w-2/3 border-blue-900 focus:border-blue-700 focus:ring focus:ring-blue-700 focus:ring-opacity-50 rounded-xl shadow-sm border-2 font-semibold text-blue-800 py-3 px-5");
-					const materialProgressDropdownPlaceholder = $("<option>").attr({"disabled": true, "selected": true}).text("Select Material Progress");
-					newMaterialProgressDropdown.append(materialProgressDropdownPlaceholder);
-					const allTopicsAndMaterials = @json($all_topics_and_materials);
-					for(let tm of allTopicsAndMaterials){
-						for(let material of tm.materials){
-							const newMaterialProgressDropdownOption = $("<option>").attr({"value": material.title}).text(material.title);
-							newMaterialProgressDropdown.append(newMaterialProgressDropdownOption);
+					const selectContainer = $("<div>").addClass("flex flex-col w-full container-select2");
+					const newActivityProgressDropdown = $("<select>").addClass("select-2 activity_progress w-full rounded-2xl shadow-sm focus:outline-none py-2 px-4 border-slate-400 focus:border-slate-600 focus:ring-0").css("border-width", "3px");
+					const activityProgressDropdownPlaceholder = $("<option>").attr({"disabled": true, "selected": true}).text("Select Activity Progress");
+					newActivityProgressDropdown.append(activityProgressDropdownPlaceholder);
+					const allTopicsAndActivities = @json($all_topics_and_activities);
+					for(let tm of allTopicsAndActivities){
+						for(let activity of tm.activities){
+							const newActivityProgressDropdownOption = $("<option>").attr({"value": activity.title}).text(activity.title);
+							newActivityProgressDropdown.append(newActivityProgressDropdownOption);
 						}
 					}
+					newActivityProgressDropdown.append($("<option>").attr("value", "other").text("Other"));
 
-					const newLearningStatusDropdown = $("<select>").addClass("learning_status w-1/3 border-blue-900 focus:border-blue-700 focus:ring focus:ring-blue-700 focus:ring-opacity-50 rounded-xl shadow-sm border-2 font-semibold text-blue-800 py-3 px-5");
-					const materialProgressDropdownOption1 = $("<option>").attr({"selected": true, "value": "On Progress"}).text("On Progress");
-					const materialProgressDropdownOption2 = $("<option>").attr({"value": "Done"}).text("Done");
-					newLearningStatusDropdown.append(materialProgressDropdownOption1).append(materialProgressDropdownOption2);
+					const newLearningStatusDropdown = $("<select>").addClass("learning_status w-full rounded-2xl shadow-sm focus:outline-none py-2 px-4 border-slate-400 focus:border-slate-600 focus:ring-0").css("border-width", "3px");
+					const learningStatusPlaceholder = $("<option>").attr({"selected": true, "disabled": true}).text("Select Status");
+					const learningStatusDropdownOption1 = $("<option>").attr({"value": "On Progress"}).text("On Progress");
+					const learningStatusDropdownOption2 = $("<option>").attr({"value": "Done"}).text("Done");
+					newLearningStatusDropdown.append(learningStatusPlaceholder).append(learningStatusDropdownOption1).append(learningStatusDropdownOption2);
 
-					progressContainer.append(newMaterialProgressDropdown).append(newLearningStatusDropdown);
+					progressContainer.append(selectContainer.append(newActivityProgressDropdown)).append(newLearningStatusDropdown);
 
-					firstCol.append(checkNameContainer).append(progressContainer);
+					const otherActivityContainer = $("<div>").addClass("mt-2");
+					const otherActivityInput = $("<input>").attr({"type": "text", "placeholder": "Input activity/activity", "name": "other-activity[]"}).addClass("w-full hidden other-activity rounded-2xl shadow-sm focus:outline-none py-2 px-4 border-slate-400 focus:border-slate-600 focus:ring-0 ");
+					otherActivityContainer.append(otherActivityInput);
+
+					firstCol.append(checkNameContainer).append(progressContainer).append(otherActivityContainer);
 
 					// Second column
 					const attendanceDetailContainer = $("<div>").addClass("flex flex-col items-stretch");
-					const newTextArea = $("<textarea>").attr({"rows": 4, "name": "attendance_detail[]", "placeholder": "Enter student in class progress"}).addClass("rounded-xl border-2 font-semibold text-blue-900 border-blue-900 focus:border-blue-900 focus:ring focus:ring-blue-700 focus:ring-opacity-50").css({"resize": "none", "box-sizing": "border-box", "padding": "10px"});
+					const newTextArea = $("<textarea>").attr({"rows": 8, "name": "attendance_detail[]", "placeholder": "Enter student in class progress"}).addClass("rounded-xl border-2 font-semibold text-blue-900 @error('attendance_detail.' . $counter) border-red focus:border-red-700 focus:ring-0 @else border-slate-400 focus:border-slate-600 focus:ring-0 @enderror").css({"resize": "none", "box-sizing": "border-box", "padding": "10px", "border-width": "3px"});
 					attendanceDetailContainer.append(newTextArea);
 
 					secondCol.append(attendanceDetailContainer);
 
 					// Third column
 					const removeBtnContainer = $("<div>").addClass("flex justify-center items-center w-full h-full");
-					const newRemoveBtn = $("<button>").attr({"type": "button"}).addClass("bg-red-600 remove-row text-center px-5 py-2 border border-transparent rounded-xl text-white font-semibold hover:bg-slate-800 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 transition ease-in-out duration-150").css({"box-shadow": "0 1px 2px rgba(0, 0, 0, 0.3)"}).html("<i class='bi bi-trash3'></i>");
+					const newRemoveBtn = $("<button>").attr({"type": "button"}).addClass("remove-row text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25").css({"box-shadow": "0 1px 2px rgba(0, 0, 0, 0.3)", "background": "linear-gradient(90deg, #1EB8CD 0%, #354D9B 100%)"}).html("<i class='bi bi-trash3'></i>");
 					removeBtnContainer.append(newRemoveBtn);
 					thirdCol.append(removeBtnContainer);
 
@@ -296,6 +378,10 @@
 
 					applyHideAndUnhideProgress();
 					applyRemoveRowButton();
+
+					@php
+						$counter++;
+					@endphp
 
 					document.dispatchEvent(itemListModifiedEvent);
 				}
@@ -309,36 +395,36 @@
 				});
 
 				// Helper mechanism to send data to Laravel when form is submitted
-				const collectCheckboxValues = () => {
+				const collectValues = () => {
 					const checkboxes = $('input[type="checkbox"]');
 					const checkboxValues = [];
-					const materialProgressValues = [];
+					const activityProgressValues = [];
 					const learningStatusValues = [];
 
 					checkboxes.each(function(){
-						const correspondingDetail = $(this).closest('td').find('.material_progress_detail');
+						const correspondingDetail = $(this).closest('td').find('.activity_progress_detail');
 
 						if($(this).is(":disabled")){
 							checkboxValues.push('off');
-							materialProgressValues.push("Absent");
+							activityProgressValues.push("Absent");
 							learningStatusValues.push("Absent");
 						} else {
 							const cb = $(this).is(":checked") ? 'on' : 'off';
 							checkboxValues.push(cb);
 
 							if(cb == "on"){
-								materialProgressValues.push(correspondingDetail.find('.material_progress').val());
+								activityProgressValues.push(correspondingDetail.find('.activity_progress').val());
 								learningStatusValues.push(correspondingDetail.find('.learning_status').val());
 							}
 							else {
-								materialProgressValues.push("Absent");
+								activityProgressValues.push("Absent");
 								learningStatusValues.push("Absent");
 							}
 
 						}
 					});
 
-					return [checkboxValues, materialProgressValues, learningStatusValues];
+					return [checkboxValues, activityProgressValues, learningStatusValues];
 				}
 
 				const processDisabledTextAreas = () => {
@@ -360,54 +446,11 @@
 				form.addEventListener('submit', (event) => {
 					event.preventDefault();
 
-					const [checkboxValues, materialProgressValues, learningStatusValues] = collectCheckboxValues();
-
-					console.log(checkboxValues);
-					console.log(materialProgressValues);
-					console.log(learningStatusValues);
-
-					$invalid = false;
-
-					$("#attendance_date").css({"border": "rgb(30 58 138) solid 2px"});
-					$("#attendance_date").closest("div").find("p").remove();
-					$("#date-inp-cont").removeClass("items-start").addClass("items-center");
-					$("textarea").css({"border": "rgb(30 58 138) solid 2px"});
-					$("textarea").closest("div").find("p").remove();
-					$(".material_progress").each(function(){
-						$(this).css({"border": "rgb(30 58 138) solid 2px"});
-						$(this).closest("div").find("p").remove();
-					});
-
-					if(!$("#attendance_date").val()){
-						$("#attendance_date").css("border", "solid 2px rgb(185 28 28)");
-						$("#date-inp-cont").removeClass("items-center").addClass("items-start");
-						$("#attendance_date").after($("<p>").html('<i class="bi bi-exclamation-circle"></i> The attendance date field is required.').addClass("text-red-800 font-bold mt-1"));
-						$invalid = true;
-					}
-
-					$("textarea").each(function(){
-						if($(this).val() == ""){
-							$(this).after($("<p>").html('<i class="bi bi-exclamation-circle"></i> The attendance detail field is required.').addClass("text-red-800 font-bold mt-1"));
-							$(this).css("border", "solid 2px rgb(185 28 28)");
-							$invalid = true;
-						}
-					});
-
-					checkboxValues.forEach((value, index) => {
-						if(value === "on" && !materialProgressValues[index]){
-							$($(".material_progress")[index]).css({"border": "solid 2px rgb(185 28 28)"});
-							$($(".material_progress")[index]).after($("<p>").html('<i class="bi bi-exclamation-circle"></i> The material progress field is required.').addClass("text-red-800 font-bold mt-1"));
-							$invalid = true;
-						}
-					});
-
-					if($invalid){
-						return;
-					}
+					const [checkboxValues, activityProgressValues, learningStatusValues] = collectValues();
 
 					checkboxValues.forEach((value, index) => {
 						const hiddenInput1 = $("<input>").attr({"type": "hidden", "name": "checkbox_value[]", "value": value});
-						const hiddenInput2 = $("<input>").attr({"type": "hidden", "name": "material_progress[]", "value": materialProgressValues[index]});
+						const hiddenInput2 = $("<input>").attr({"type": "hidden", "name": "activity_progress[]", "value": activityProgressValues[index]});
 						const hiddenInput3 = $("<input>").attr({"type": "hidden", "name": "learning_status[]", "value": learningStatusValues[index]});
 
 						$(form).append(hiddenInput1, hiddenInput2, hiddenInput3);

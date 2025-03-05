@@ -25,7 +25,7 @@ class Course extends Model {
 	}
 
 	public function teachers() {
-		return $this->belongsToMany(User::class, "course_teachers");
+		return $this->belongsToMany(User::class, 'course_teachers');
 	}
 
 	public function students() {
@@ -56,6 +56,13 @@ class Course extends Model {
 		return $this->hasMany(CurriculumTopic::class);
 	}
 
+	public function learning_outcomes(){
+		return $this->hasMany(LearningOutcome::class);
+	}
+
+	public function messages(){
+		return $this->hasMany(Message::class);
+	}
 }
 
 

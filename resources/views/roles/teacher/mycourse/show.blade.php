@@ -1,138 +1,347 @@
 @extends("layouts.main-teacher")
 
 @section("title")
-	<h1>{{ $course->course_name }}</h1>
+	<h1>Manage Courses</h1>
 @endsection
 
 @section("breadcrumbs-extension")
 	> <span>{{ $course->course_name }}</span>
 @endsection
 
+@section("popup")
+	<!-- New topic -->
+	<x-popup popup_title="New Topic" class="w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="new-topic">
+		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
+			<form method="post" class="mt-4">
+				@csrf
+				<!-- Topic Title -->
+				<div class="flex flex-col">
+					<label for="title">Topic Title<span class="text-red">*</span></label>
+					<x-input id="title" class="w-full mt-1" type="text" name="title" style="border-width: 3px;" value="{{ old('title') }}" placeholder="Topic title" autofocus />
+				</div>
+
+				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">
+					<x-button class=" w-full md:w-1/5">
+						{{ __('Submit') }}
+					</x-button>
+				</div>
+
+				<!-- Helper -->
+				<input type="hidden" name="h-last-popup" class="h-last-popup">
+				<input type="hidden" name="h-route" class="h-route">
+			</form>
+		</div>
+	</x-popup>
+
+	<!-- Edit topic -->
+	<x-popup popup_title="Edit Topic" class="w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-topic">
+		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
+			<form method="post" class="mt-4">
+				@csrf
+				@method('patch')
+				<!-- Topic Title -->
+				<div class="flex flex-col">
+					<label for="title">Topic Title<span class="text-red">*</span></label>
+					<x-input id="title" class="w-full mt-1" type="text" name="title" style="border-width: 3px;" value="{{ old('title') }}" placeholder="Topic title" autofocus />
+				</div>
+
+				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">
+					<x-button class=" w-full md:w-1/5">
+						{{ __('Submit') }}
+					</x-button>
+				</div>
+
+				<!-- Helper -->
+				<input type="hidden" name="h-last-popup" class="h-last-popup">
+				<input type="hidden" name="h-route" class="h-route">
+				<input type="hidden" name="h-topic" class="h-topic">
+			</form>
+		</div>
+	</x-popup>
+
+	<!-- Delete topic -->
+	<x-confirmation method="delete" popup_title="Delete Topic" id="delete-topic">
+		Are you sure want to <span class="font-bold text-red">delete</span> the Topic <span class="font-bold text-light-blue" id="del-t-name"></span> from this course?
+	</x-confirmation>
+@endsection
+
 @section("content")
 	<x-section-container>
-		<x-page-title>{{ $course->course_name }}</x-page-title>
+		<x-back-button href="{{ route('teacher.mycourse.index') }}"></x-back-button>
+		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
+		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(session()->has("successAddTopic"))
-			<x-badge-success badge_text="{{ session('successAddTopic') }}"></x-badge-success>
-		@elseif(session()->has("successSynchronizeCurriculum"))
+		@if(session()->has("successSynchronizeCurriculum"))
 			<x-badge-success badge_text="{{ session('successSynchronizeCurriculum') }}"></x-badge-success>
-		@elseif(session()->has("successImportExcelTopicsAndMaterials"))
-			<x-badge-success badge_text="{{ session('successImportExcelTopicsAndMaterials') }}"></x-badge-success>
+		@elseif(session()->has("successPickFromCurriculum"))
+			<x-badge-success badge_text="{{ session('successPickFromCurriculum') }}"></x-badge-success>
+		@elseif(session()->has("successImportExcelTopicsAndActivities"))
+			<x-badge-success badge_text="{{ session('successImportExcelTopicsAndActivities') }}"></x-badge-success>
 		@elseif(session()->has("successDeleteTopic"))
 			<x-badge-warning badge_text="{{ session('successDeleteTopic') }}"></x-badge-warning>
 		@endif
 
-		<p class="text-blue-950 font-semibold my-8 text-center">{{ $course->course_description }}</p>
+		<p class="font-bold my-4">Description:</p>
+		<p class="text-blue-950 font-semibold">{{ $course->course_description }}</p>
 
-		<div class="w-full">
-			<div class="w-full py-6 rounded-xl text-white font-bold text-center" style="background: #000C48;">
-				Student List
-			</div>
-
-			@if($course_students->count())
-				<div class="flex flex-col gap-5 mt-5">
-					@foreach ($course_students as $index => $cs)
-						@if ($index % 3 == 0)
-							@if ($index != 0)
-								</div> <!-- Close previous row -->
-							@endif
-							<div class="flex w-full rounded-xl text-white py-6 items-center" style="background-color: #283785;">
-						@endif
-							<div class="w-1/3 text-center">{{ $cs->student->full_name }}</div>
-					@endforeach
-					</div> <!-- Close last row -->
+		<p class="font-bold mt-6">Learning Outcomes:</p>
+		<div class="flex flex-col gap-1 mt-2">
+			@forelse($learning_outcomes as $lo)
+				<div class="flex gap-2 items-center">
+					<img src="{{ asset('img/bullet.svg') }}" alt="icon" class="w-3 h-3">
+					<div>LO{{ $lo->number }}: {{ $lo->title }}</div>
 				</div>
-			@else
-				<div class="text-center p-5 bg-white rounded-xl mt-5 w-full font-semibold">- No students assigned yet -</div>
-			@endif
+			@empty
+				N/A
+			@endforelse
 		</div>
 
-		<h2 class="text-xl font-semibold mb-2 mt-10">Course Topic and Materials:</h2>
+		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
+		<h2 class="my-4 font-extrabold text-xl text-dark-blue">Student List</h2>
+		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
+
+		<div class="mt-8 flex flex-wrap">
+			@forelse ($course_students as $index => $cs)
+				<div class="flex flex-col items-center w-1/6 mb-6">
+					@if($cs->student->details->profpic)
+						<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;">
+					@else
+						<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+					@endif
+					<h1 class="text-lg font-bold text-center">{{-- explode(" ", $cs->student->full_name)[0] --}}{{ $cs->student->full_name }}</h1>
+				</div>
+			@empty
+			@endforelse
+		</div>
+
+		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
+		<h2 class="my-4 font-extrabold text-xl text-dark-blue">Course Topics and Activities</h2>
+		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
+
 		<div class="flex justify-between items-stretch w-full mt-5">
-			<x-anchor-button class="bg-orange-500"
-				href="{{ route('teacher.topic.create', $course->id) }}">
-				<i class="bi bi-plus-lg"></i> Add new topic
-			</x-anchor-button>
+			<div class="relative">
+				<x-button type="button"  data-route="{{ route('teacher.mycourse.topic.store', $course->id) }}" id="new-topic-btn"><i class="bi bi-plus-lg"></i> Add New Topic</x-button>
+				@if($topics->count() == 0)
+					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+				@endif
+			</div>
 
 			<div class="flex gap-5">
-				<x-anchor-button class="bg-orange-500"
-					href="{{ route('teacher.mycourse.import-excel-topicsandmaterials', $course->id) }}">
+				<x-anchor-button
+					href="{{ route('teacher.mycourse.import-excel-topicandactivities', $course->id) }}">
 					<i class="bi bi-file-earmark-arrow-up"></i> Import from Excel
 				</x-anchor-button>
 
 				@if($has_curriculum > 0)
-					<form action="{{ route('teacher.mycourse.synchronize', $course->id) }}" method="post">
-						@csrf
-						<x-button class="bg-orange-500" onclick="return confirm('Synchronizing with topics and material in curriculum will erase all of your posted topics and materials. Are your sure want to proceed?')"><i class="bi bi-arrow-repeat"></i> Sync with curriculum</x-button>
-					</form>
+					<div class="relative flex flex-col items-end dropdown-container">
+						<x-button  type="button" class="dropdown-toggler">
+							<i class="bi bi-arrow-repeat"></i> Generate from Syllabus
+						</x-button>
+						<div class="absolute z-10 overflow-hidden bg-white top-12 w-80 rounded-3xl text-sm font-semibold flex flex-col py-2 dropdown-menu" style="display: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
+							<a href="{{ route('teacher.mycourse.pick-course', $course->id) }}" class="hover:bg-slate-300">
+								<div class="w-full px-5 py-1 text-black flex items-center gap-1"><i class="bi bi-check2-square text-slate-400"></i> Pick from Syllabus</div>
+							</a>
+							<form method="POST" action="{{ route('teacher.mycourse.synchronize', $course->id) }}" class="hover:bg-slate-300 grow flex items-center gap-2">
+								@csrf
+								<button class="w-full px-5 py-1 text-black flex items-center gap-1" onclick="return confirm('Synchronizing with topics and activity in syllabus will erase all of your posted topics and activities. Are your sure want to proceed?');">
+									<i class="bi bi-arrow-repeat text-slate-400"></i> Sync with Syllabus
+								</button>
+							</form>
+						</div>
+					</div>
 				@endif
 			</div>
 		</div>
 
-		<div class="mt-5 mb-5 overflow-x-auto">
-			<x-table>
-				<x-slot name="head">
-					<th class="template-heads rounded-l-xl w-1/3">Topic Title</th>
-					<th class="template-heads w-1/3">List of Materials</th>
-					{{-- <th class="template-heads">Material Link</th> --}}
-					<th class="template-heads rounded-r-xl w-1/3">Action</th>
-				</x-slot>
+		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
 
-				@if ($topics->count())
-					@foreach ($topics as $topic)
-						@if($topic->materials->count())
-							<tr>
-								<td class="template-bodies rounded-l-xl w-1/3">
-									<a href="{{ route("teacher.topic.show", [$course->id, $topic->id]) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $topic->title }}</a>
+		<div class="w-full overflow-x-auto">
+			<table class="w-full">
+				<thead>
+					<th class="text-center py-3 px-4 border-b-2 border-slate-400">Session</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Topic</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activities</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Outcomes</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
+				</thead>
+				<tbody >
+					@php
+						$iterasus = 1;
+					@endphp
+
+					@forelse ($topics as $topic)
+						@if($topic->activities->count())
+							<tr class="@if($iterasus % 2 == 1) bg-white @endif">
+								<td class="py-2 px-4 text-center">
+									@php
+										if($topic->activities->count()){
+											echo $topic->activities->min('session') . '-' . $topic->activities->max('session');
+										} else {
+											echo 'N/A';
+										}
+									@endphp
 								</td>
 
-								<td class="template-bodies w-1/3">
-									<ul class="h-full w-full overflow-y-auto flex flex-col" style="max-height: 100px;">
-										@foreach ($topic->materials as $material)
-											<li>{{ $material->title }}</li>
+								<td class="py-2 px-4">{{ $topic->title }}</td>
+
+								<td class="py-2 px-4">
+									<ul class="h-full w-full flex flex-col">
+										@foreach ($topic->activities as $activity)
+											<li>{{ $activity->title }}</li>
 										@endforeach
 									</ul>
 								</td>
-								{{-- <td class="template-bodies"><a href="{{ $material->link }}" class="text-blue-600">{{ $material->link }}</a></td> --}}
 
-								<td class="template-bodies rounded-r-xl w-1/3">
-									<div class="flex flex-col w-full justify-center items-center gap-2">
-										<x-anchor-button class="bg-orange-500 w-1/2"
-											href="{{ route('teacher.topic.edit', [$topic->course->id, $topic->id]) }}">
-											<i class="bi bi-pencil-square"></i> Edit Topic
-										</x-anchor-button>
-										<x-anchor-button class="bg-orange-500 w-1/2"
-											href="{{ route('teacher.topic.delete', [$topic->course->id, $topic->id]) }}">
-											<i class="bi bi-trash3"></i> Delete Topic
-										</x-anchor-button>
-									</div>
+								<td class="py-2 px-4">
+									@php
+										$lolist = [];
+										foreach ($topic->activities as $activity) {
+											foreach ($activity->learning_outcomes as $leaout) {
+												if (!in_array($leaout->number, $lolist)) {
+													$lolist[] = $leaout->number;
+												}
+											}
+										}
+
+										sort($lolist);
+									@endphp
+
+									@forelse($lolist as $los)
+										LO{{ $los }}@if(count($lolist) > 1 && $loop->index != count($lolist) - 1), @endif
+									@empty
+										N/A
+									@endforelse
 								</td>
 
+								<td class="py-2 px-4">
+									<div class="flex w-full items-center gap-1">
+										<a href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}">
+											<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</a>
+										<button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.mycourse.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn">
+											<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</button>
+										<button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.mycourse.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn">
+											<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</button>
+									</div>
+								</td>
 							</tr>
+
+							@php
+								$iterasus++;
+							@endphp
 						@else
-							<tr>
-								<td class="template-bodies rounded-l-xl"><a href="{{ route("teacher.topic.show", [$course->id, $topic->id]) }}" class="font-bold text-blue-200 hover:text-blue-400 hover:underline">{{ $topic->title }}</a></td>
-								<td class="template-bodies">- No materials added yet to this topic -</td>
-								<td class="template-bodies rounded-r-xl">
-									<div class="flex w-full justify-center gap-1">
-										<x-anchor-button class="bg-orange-500"
-											href="{{ route('teacher.topic.edit', [$topic->course->id, $topic->id]) }}">
-											Edit Topic
-										</x-anchor-button>
-										<x-anchor-button class="bg-orange-500"
-											href="{{ route('teacher.topic.delete', [$topic->course->id, $topic->id]) }}">
-											Delete Topic
-										</x-anchor-button>
+							<tr class="@if($iterasus % 2 == 1) bg-white @endif">
+								<td class="py-2 px-4">N/A</td>
+								<td class="py-2 px-4">{{ $topic->title }}</td>
+								<td class="py-2 px-4">- No activities added yet to this topic -</td>
+								<td class="py-2 px-4">N/A</td>
+								<td class="py-2 px-4">
+									<div class="flex w-full items-center gap-2">
+										<div class="relative">
+											<x-anchor-button
+												href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}">
+												<i class="bi bi-eye"></i>
+											</x-anchor-button>
+											<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+										</div>
+										<x-button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.mycourse.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn"><i class="bi bi-pencil-square"></i></x-button>
+										<x-button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.mycourse.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn"><i class="bi bi-trash3"></i></x-button>
 									</div>
 								</td>
 							</tr>
-						@endif
-					@endforeach
-				@else
-					<tr><td colspan="4" class="text-center p-5 bg-white rounded-xl w-full font-semibold">- No topics and materials added yet to this course -</td></tr>
-				@endif
 
-			</x-table>
+							@php
+								$iterasus++;
+							@endphp
+						@endif
+					@empty
+						<tr>
+							<td colspan="5" class="text-center p-5 bg-white rounded-xl w-full font-semibold">- No topics and activities added yet to this course -</td>
+						</tr>
+					@endforelse
+				</tbody>
+			</table>
 		</div>
 	</x-section-container>
+
+	<script>
+		function initializeNewTopicPopup(route, whichpopup){
+			// Fill popups with data
+			$(".h-route").val(route);
+			$(".h-last-popup").val(whichpopup);
+			$(`#${whichpopup}`).find('form').attr("action", route);
+
+			// Display the popup
+			$(`#${whichpopup}`).parent().show();
+		}
+
+		function initializeEditTopicPopup(route, topic, whichpopup){
+			// Fill popups with data
+			$(".h-route").val(route);
+			$(".h-last-popup").val(whichpopup);
+			$(".h-topic").val(JSON.stringify(topic));
+
+			// Retrieve old values
+			const oldTitle = '{{ old('title') }}';
+
+			// If old values exist, fill them in
+			$('input[name="title"]').val(oldTitle ?  oldTitle : topic.title);
+
+			$(`#${whichpopup}`).find('form').attr("action", route);
+
+			// Display the popup
+			$(`#${whichpopup}`).parent().show();
+		}
+
+		$(document).ready(() => {
+			// Create new topic
+			$('#new-topic-btn').on('click', function(){
+				// Retrieve and save selected data
+				const route = $(this).data('route');
+				const whichpopup = "new-topic";
+
+				initializeNewTopicPopup(route, whichpopup);
+			});
+
+			// Edit topic
+			$('.edit-topic-btn').on('click', function(){
+				// Retrieve and save selected data
+				const route = $(this).data('route');
+				const whichpopup = "edit-topic";
+				const topic = $(this).data("topic");
+
+				initializeEditTopicPopup(route, topic, whichpopup);
+			});
+
+			// Delete topic
+			$('.delete-topic-btn').on('click', function() {
+				// Retrieve data and set the data to the popup
+				$("#delete-topic").find('form').attr("action", $(this).data('route'));
+				$("#del-t-name").text($(this).data('del_t_name'));
+
+				// Show the popup
+				$("#delete-topic").parent().show();
+			});
+
+			// Redisplay popup and fill with prev data (for invalidated data)
+			@if ($errors->any())
+				// Retrieve and re-save saved data
+				const old_popup = @json(old('h-last-popup'));
+
+				if(old_popup == "new-topic"){
+					const old_route = @json(old('h-route'));
+
+					initializeNewTopicPopup(old_route, old_popup);
+				}
+				else if(old_popup == "edit-topic"){
+					const old_route = @json(old('h-route'));
+					const old_topic = @json(old('h-topic'));
+
+					initializeEditTopicPopup(old_route, JSON.parse(old_topic), old_popup);
+				}
+			@endif
+		});
+	</script>
 @endsection

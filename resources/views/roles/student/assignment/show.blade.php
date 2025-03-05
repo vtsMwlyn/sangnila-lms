@@ -5,16 +5,7 @@
 @endsection
 
 @section("popup")
-	<x-popup class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submission-history">
-		<!-- Popup header -->
-		<div class="flex items-center w-full">
-			<div class="font-bold text-2xl grow text-center">History</div>
-			<button type="button" class="popup-dismiss">
-				<img src="{{ asset('img/close.svg') }}" alt="history-icon" class="w-6 h-6 hover:scale-110">
-			</button>
-		</div>
-		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
-
+	<x-popup popup_title="History" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submission-history">
 		<!-- Popup content -->
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<div class="w-full overflow-x-auto">
@@ -32,16 +23,7 @@
 		</div>
 	</x-popup>
 
-	<x-popup class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submit-assignment">
-		<!-- Popup header -->
-		<div class="flex items-center w-full">
-			<div class="font-bold text-2xl grow text-center" id="assignment-title"></div>
-			<button type="button" class="popup-dismiss">
-				<img src="{{ asset('img/close.svg') }}" alt="history-icon" class="w-6 h-6 hover:scale-110">
-			</button>
-		</div>
-		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
-
+	<x-popup popup_title="Assignment Submission" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submit-assignment">
 		<!-- Popup content -->
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<p class="mt-3 font-semibold">Assignment Description:</p>
@@ -52,12 +34,12 @@
 			<form action="#" method="post" class="mt-4" id="submit-form">
 				@csrf
 				<div class="flex flex-col">
-					<label for="title">Submission Title</label>
+					<label for="title">Submission Title<span class="text-red">*</span></label>
 					<x-input id="title" class="w-full mt-1" type="text" name="title" style="border-width: 3px;" value="{{ old('title') }}" placeholder="Submission Title" autofocus />
 				</div>
 
 				<div class="flex flex-col mt-4">
-					<label for="link">You Work Link</label>
+					<label for="link">Your Work Link<span class="text-red">*</span></label>
 					<x-input id="link" class="w-full mt-1" type="text" name="link" style="border-width: 3px;" value="{{ old('link') }}" placeholder="Your Work Link" autofocus />
 				</div>
 
@@ -83,7 +65,7 @@
 	<div class="rounded-3xl w-full py-5 px-8 mb-6 flex flex-col items-stretch sm:text-base text-sm" style="background: #FEFEFEB2;">
 		<div class="flex w-full justify-between items-end">
 			<div class="">
-				<button type="button" onclick="history.back();"><img src="{{ asset('img/back-button.svg') }}" class="h-8 w-8" alt="back"></button>
+				<x-back-button href="{{ route('student.assignment.index') }}"><img src="{{ asset('img/back-button.svg') }}" class="h-8 w-8" alt="back"></x-back-button>
 				<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
 			</div>
 			<div class="flex gap-8">
@@ -133,7 +115,15 @@
 				<tbody>
 					@forelse ($assignments as $index => $asg)
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-							<td class="py-2 px-4">{{ $asg->title }}</td>
+							<td class="py-2 px-4">
+								<strong>{{ $asg->title }}</strong><br>
+								@if(strlen($asg->desc) > 30)
+									<div class="">{!! nl2br(substr($asg->desc, 0, 30)) !!}... <button type="button" class="show-more-button text-blue font-semibold text-xs">[Show More]</button></div>
+									<div class="hidden">{!! nl2br($asg->desc) !!} <button type="button" class="show-less-button text-blue font-semibold text-xs">[Show Less]</button></div>
+								@else
+									{!! nl2br($asg->desc) !!}
+								@endif
+							</td>
 							<td class="py-2 px-4">
 								<div class="flex justify-center">
 									{{ date("d M Y", strtotime($asg->deadline_date)) }},<br>{{ substr($asg->deadline_time, 0, 5) }} GMT+7
@@ -151,16 +141,21 @@
 							</td>
 							<td class="py-2 px-4">
 								<div class="flex justify-center gap-2 w-full">
-									<a href="{{ $asg->link }}" target="blank">
-										<img src="{{ asset('img/view.svg') }}" alt="view-icon" class="w-8 h-8 hover:scale-110">
+									<a href="{{ $asg->link }}" target="_blank">
+										<img src="{{ asset('img/view.svg') }}" alt="view-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</a>
-									<a href="{{ $asg->link }}" target="blank">
-										<img src="{{ asset('img/download.svg') }}" alt="download-icon" class="w-8 h-8 hover:scale-110">
+									<a href="{{ $asg->link }}" target="_blank">
+										<img src="{{ asset('img/download.svg') }}" alt="download-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</a>
-									<button type="button" class="submitassignment-popuptrigger" data-route="{{ route('student.assignment.submit', [$course->id, $asg->id]) }}"
-										data-assignment="{{ $asg->toJSON() }}" data-submissions="{{ count($submissions_per_assignment[$index]) }}">
-										<img src="{{ asset('img/attach.svg') }}" alt="history-icon" class="w-8 h-8 hover:scale-110">
-									</button>
+									<div class="relative">
+										<button type="button" class="submitassignment-popuptrigger" data-route="{{ route('student.assignment.store', [$course->id, $asg->id]) }}"
+											data-assignment="{{ $asg->toJSON() }}" data-submissions="{{ count($submissions_per_assignment[$index]) }}">
+											<img src="{{ asset('img/attach.svg') }}" alt="history-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</button>
+										@if(count($submissions_per_assignment[$index]) == 0)
+											<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+										@endif
+									</div>
 								</div>
 							</td>
 							<td class="py-2 px-4">
@@ -265,6 +260,16 @@
 				}
 
 				$("#submission-history").parent().show();
+			});
+
+			$(".show-more-button").click(function(){
+				$(this).closest("div").next().removeClass("hidden");
+				$(this).closest("div").addClass("hidden");
+			});
+
+			$(".show-less-button").click(function(){
+				$(this).closest("div").prev().removeClass("hidden");
+				$(this).closest("div").addClass("hidden");
 			});
 		});
 	</script>

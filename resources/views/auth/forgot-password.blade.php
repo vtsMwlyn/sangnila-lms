@@ -1,7 +1,7 @@
 @extends("layouts.login-register")
 
 @section("content")
-	<div class="flex flex-col items-center justify-center rounded-2xl w-5/6 md:w-3/5 bg-orange-500 p-10">
+	<div class="flex flex-col items-center justify-center rounded-2xl w-5/6 md:w-3/5  p-10">
 		<div class="my-10 w-32 md:w-40">
 			<img src={{ asset("img/AR.W.png") }} alt="logo" width="100%">
 		</div>
@@ -24,7 +24,7 @@
 				</div>
 
 				<div class="flex items-center justify-center mt-8">
-					<x-button class="bg-orange-500">
+					<x-button >
 						{{ __('Email Password Reset Link') }}
 					</x-button>
 				</div>

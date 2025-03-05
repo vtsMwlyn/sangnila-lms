@@ -327,7 +327,7 @@ class AssignmentController extends Controller
 				if($sa->assignment->course_id == $cs->course_id){
 					$total_assignments++;
 
-					if($sa->assignment->deadline_date > now()){
+					if($sa->assignment->deadline_date >= Carbon::today()->format('Y-m-d')){
 						array_push($nd, $sa->assignment->deadline_date . " " . $sa->assignment->deadline_time);
 					}
 

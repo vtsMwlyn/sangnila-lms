@@ -8,9 +8,17 @@
 	> <span>Announcements</span>
 @endsection
 
+@section('popup')
+	<!-- Delete course -->
+	<x-confirmation popup_title="Delete Announcement" id="delete-announcement-popup">
+		Are you sure want to <span class="font-bold text-red">delete</span> the Announcement <span class="font-bold text-light-blue" id="del-announcement-name"></span> from Sangnila LMS? <strong></strong>
+	</x-confirmation>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-page-title>{{ __("All Announcements") }}</x-page-title>
+		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
 		@if(session()->has("successUploadAnnouncement"))
 			<x-badge-success badge_text="{{ session('successUploadAnnouncement') }}">
@@ -24,11 +32,11 @@
 		@endif
 
 		<div class="mb-4">
-			<x-anchor-button class="bg-orange-500 mt-8" href="{{ route('admin.announcement.create') }}"><i class="bi bi-plus-lg"></i> Add New Announcement</x-anchor-button>
+			<x-anchor-button class=" mt-8" href="{{ route('admin.announcement.create') }}"><i class="bi bi-plus-lg"></i> Add New Announcement</x-anchor-button>
 		</div>
 
 		@foreach($announcements as $announcement)
-			<div class="p-5 my-4 rounded-xl bg-white">
+			<div class="p-5 my-2 rounded-xl" style="background: @if($loop->iteration % 2 == 1) white @else linear-gradient(to right, rgba(190, 226, 219, 0.49) 0%, rgba(104, 124, 120, 0) 100%) @endif;">
 				<div class="flex w-full items-center justify-between">
 					<div class="">
 						<p class="text-blue-900 font-bold text-lg">
@@ -44,7 +52,7 @@
 								}
 							@endphp
 						</p>
-						<p>
+						<p class="mt-2">
 							Announced to
 							@php
 								$sent_to = json_decode($announcement->sent_to, true);
@@ -62,16 +70,18 @@
 								echo $formattedString . (empty($formattedString) ? '' : ', and ') . $lastItem;
 							@endphp
 						</p>
-						<p>Period: <span class="font-bold">{{ $announcement->announce_from }}</span> until <span class="font-bold">{{ $announcement->announce_until }}</span></p>
+						<p class="mt-2">Period: <span class="font-bold">{{ Carbon\Carbon::parse($announcement->announce_from)->format('D, d M Y H:i') }} GMT+7</span> until <span class="font-bold">{{ Carbon\Carbon::parse($announcement->announce_until)->format('D, d M Y H:i') }} GMT+7</span></p>
 					</div>
-					<div class="flex gap-3">
-						<x-anchor-button class="bg-orange-500" href="{{ route('admin.announcement.edit', $announcement->id) }}">
-							Edit
-						</x-anchor-button>
-						<x-anchor-button class="bg-orange-500" href="{{ route('admin.announcement.delete', $announcement->id) }}">
-							Delete
-						</x-anchor-button>
-						<x-button type="button" class="bg-orange-500 toggleBtn">Show Content</x-button>
+					<div class="flex gap-1">
+						<a  href="{{ route('admin.announcement.edit', $announcement->id) }}">
+							<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+						</a>
+						<button type="button" class="delete-announcement-btn" data-del_announcement_name="{{ $announcement->title }}" data-route="{{ route('admin.announcement.destroy', $announcement->id) }}">
+							<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+						</button>
+						<button type="button" class=" toggleBtn">
+							<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+						</button>
 					</div>
 				</div>
 
@@ -97,18 +107,22 @@
 
 			allToggleBtn.each(function(index, element) {
 				$(element).click(() => {
-					allContentTable.eq(index).slideToggle(() => {
-					if (allContentTable.eq(index).is(":visible")) {
-						$(element).text("Hide Content");
-					} else {
-						$(element).text("Show Content");
-					}
-				});
+					allContentTable.eq(index).slideToggle();
 				});
 			});
 
 			$(".announcementContent a").each((index, anchor) => {
 				$(anchor).attr("target", "blank");
+			});
+
+			// Delete LO
+			$('.delete-announcement-btn').on('click', function() {
+				// Retrieve data and set the data to the popup
+				$("#delete-announcement-popup").find('form').attr("action", $(this).data('route'));
+				$("#del-announcement-name").text($(this).data('del_announcement_name'));
+
+				// Show the popup
+				$("#delete-announcement-popup").parent().show();
 			});
 		});
 	</script>

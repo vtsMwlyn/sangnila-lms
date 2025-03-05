@@ -16,19 +16,25 @@ class Attendance extends Model {
 	}
 
 	public function posted_by(){
-		return $this->belongsTo(User::class, "teacher_id");
+		return $this->belongsTo(User::class, "uploader_id");
 	}
 
 	public function students(){
-		return $this->belongsToMany(User::class, "student_attendances");
+		return $this->belongsToMany(User::class, "student_attendances", "user_id");
 	}
 
 	public function schedule() {
 		return $this->belongsTo(CourseSchedule::class, 'schedule_id');
 	}
 
-	public function student_attendances(){
-		return $this->hasMany(StudentAttendance::class);
+	public function student_attendances()
+	{
+		return $this->hasMany(StudentAttendance::class)
+			->join('users', 'users.id', '=', 'student_attendances.student_id')
+			->orderBy('users.full_name')
+			->orderBy('student_attendances.start_time')
+			->select('student_attendances.*');
 	}
+
 
 }

@@ -2,17 +2,20 @@
 
 use App\Models\StudentAttendance;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ForumController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\MaterialController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\CourseStudentController;
 
 Route::prefix('/student')
 	->name('student.')
-	->middleware(['auth', 'role:Student', 'verified', "acc_not_disabled"])
+	->middleware(['auth', 'role:Student', 'verified', "acc_not_disabled", 'remind_user'])
 	->group(function() {
 
 		// Landing page
@@ -32,11 +35,15 @@ Route::prefix('/student')
 				// List of enrolled courses
 				Route::get('/', [CourseController::class, 'student_index'])->name('index');
 
-				// Course details and available topics and materials
+				// Course details and available topics and activities
 				Route::get('/{course_id}', [CourseController::class, 'student_show'])->name('show')->whereNumber('course_id');
 
-				Route::get("/{material_id}/preview", [MaterialController::class, "preview"])->name("preview")->whereNumber("material_id");
+				Route::get("/{activity_id}/preview", [ActivityController::class, "preview"])->name("preview")->whereNumber("activity_id");
 
+				// Self attendance (check in/out)
+				Route::get('/{course_id}/check-in', [StudentController::class, "student_check_in"])->name('check-in')->whereNumber('course_id');
+				Route::post('/{course_id}/check-in', [StudentController::class, "student_check_in_store"])->name('check-in.store')->whereNumber('course_id');
+				Route::post('/{course_id}/check-out', [StudentController::class, "student_check_out_store"])->name('check-out.store')->whereNumber('course_id');
 			}
 		);
 
@@ -52,12 +59,7 @@ Route::prefix('/student')
 				Route::get("/{course_id}", [AssignmentController::class, "student_show"])->name("show");
 
 				// Upload assignment
-				Route::get("/{course_id}/{assignment_id}/submit", [AssignmentController::class, "student_submit"])->name("submit");
 				Route::post("/{course_id}/{assignment_id}/submit", [AssignmentController::class, "student_store"])->name("store");
-
-				// Check submission history
-				Route::get("/{course_id}/{student__id}/{assignment_id}/detail", [AssignmentController::class, "student_submission_detail"])->name("detail");
-
 			}
 		);
 
@@ -73,5 +75,10 @@ Route::prefix('/student')
 				Route::get('/{course_id}', [AttendanceController::class, "student_show"])->name('show');
 			}
 		);
+
+		// ===== FORUM DISCUSSION ===== //
+		Route::get('/forum', [ForumController::class, 'index_student'])->name('forum.index')->whereNumber('course_id');
+		Route::get('/forum/{course_id}/retrieve', [ForumController::class, 'retrieve_message_student'])->name('forum.retrieve')->whereNumber('course_id');
+		Route::post('/forum/{course_id}/send', [ForumController::class, 'send_message_student'])->name('forum.send')->whereNumber('course_id');
 	}
 );

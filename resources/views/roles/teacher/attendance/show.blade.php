@@ -1,180 +1,259 @@
 @extends("layouts.main-teacher")
 
 @section("title")
-	<h1>Student Attendance</h1>
+	<h1>Attendance</h1>
 @endsection
 
 @section("breadcrumbs-extension")
 	> <span>{{ $course->course_name }}</span>
 @endsection
 
+@section("popup")
+	<x-popup popup_title="Attendance Details" class="w-5/6 flex flex-col items-stretch justify-center overflow-y-auto" id="attendance-details">
+		<!-- Popup content -->
+		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
+			<div class="w-full overflow-x-auto">
+				<table class="w-full">
+					<thead>
+						<th class="py-3 px-4 border-b-2 border-slate-400">No</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Student</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Session</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Time</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Attended</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">In Class Progress</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Notes</th>
+					</thead>
+					<tbody id="attendance-details-tbody">
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</x-popup>
+@endsection
+
 @section("content")
 	<x-section-container>
-		<x-page-title>Student Attendance for {{ $course->course_name }}</x-page-title>
+		<x-back-button href="{{ route('teacher.attendance.index') }}"></x-back-button>
+		<div class="flex items-start justify-between mt-3">
+			<h1 class="text-dark-blue text-3xl font-extrabold">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
+			<div class="flex gap-3">
+				@if(!$unfinishedSelfAttendance)
+					<x-anchor-button href="{{ route('teacher.attendance.check-in', $course->id) }}">
+						<i class="bi bi-stopwatch"></i> Check In
+					</x-anchor-button>
+				@else
+					<button disabled class="bg-gray-800 text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold disabled:opacity-50">
+						<i class="bi bi-stopwatch"></i> {{ $unfinishedSelfAttendance->check_in_time }}
+					</button>
+				@endif
+
+				<!-- Already checked in but haven't checked out -->
+				@if($unfinishedSelfAttendance && !$unfinishedSelfAttendance->check_out_time)
+					<form action="{{ route('teacher.attendance.check-out.store', $course->id) }}" method="post">
+						@csrf
+						<x-button onclick="return confirm('Are you sure want to check out now?');">
+							<i class="bi bi-stopwatch"></i> Check Out
+						</x-button>
+					</form>
+
+				<!-- Already checked in and checked out -->
+				@elseif($unfinishedSelfAttendance && $unfinishedSelfAttendance->check_out_time)
+					<button disabled class="bg-gray-800 text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold disabled:opacity-50">
+						<i class="bi bi-stopwatch"></i> {{ $unfinishedSelfAttendance->check_out_time }}
+					</button>
+
+				<!-- Haven't checked in and haven't checked out -->
+				@else
+					<button disabled class="bg-gray-800 text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold disabled:opacity-50">
+						<i class="bi bi-stopwatch"></i> Check Out
+					</button>
+				@endif
+			</div>
+		</div>
+
+		<!-- For larger screen -->
+		<div class="lg:flex mt-4 w-full flex-wrap hidden">
+			<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id, 'content' => 'student attendances']) }}"
+				class="py-2 w-1/6 sm:w-48 text-center hover:bg-slate-200"
+				style="@if(request('content') == 'student attendances' || !request('content')) border-bottom: 4px solid #1db9cf; @endif">
+				Student Attendances
+			</a>
+
+			<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances']) }}"
+				class="py-2 w-1/6 sm:w-48 text-center hover:bg-slate-200"
+				style="@if(request('content') == 'my attendances') border-bottom: 4px solid #1db9cf; @endif">
+				My Attendances
+			</a>
+		</div>
+
+		<!-- For smaller screen -->
+		<div class="relative flex lg:hidden flex-col items-start w-96 first-letter:0 dropdown-container mt-4">
+			<button type="button" class="border-slate-400 py-2 px-4 rounded-2xl font-bold text-dark-blue w-full bg-white flex justify-between items-center dropdown-toggler" style="border-width: 3px;">{{ request('content') ? ucwords(request('content')) : 'Student Attendances' }} <img src="{{ asset('img/dropdown-arrow.svg') }}" class="w-5 h-5" alt="icon"></button>
+			<div class="absolute bg-slate-100 top-12 w-full rounded-xl flex flex-col hidden overflow-hidden dropdown-menu" style="box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
+				<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id, 'content' => 'student attendances']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">Student Attendances</div></a>
+				<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">My Attendances</div></a>
+			</div>
+		</div>
+		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
 		@if(session()->has("successUploadAttendance"))
 			<x-badge-success badge_text="{{ session('successUploadAttendance') }}"></x-badge-success>
+		@elseif(session()->has("successCheckOut"))
+			<x-badge-success badge_text="{{ session('successCheckOut') }}"></x-badge-success>
+		@elseif(session()->has("failedCheckOut"))
+			<x-badge-danger badge_text="{{ session('failedCheckOut') }}"></x-badge-danger>
 		@elseif(session()->has("successEditAttendance"))
 			<x-badge-success badge_text="{{ session('successEditAttendance') }}"></x-badge-success>
+		@elseif(session()->has("successCheckIn"))
+			<x-badge-success badge_text="{{ session('successCheckIn') }}"></x-badge-success>
+		@elseif(session()->has("courseHasNoTopicsAndActivities"))
+			<x-badge-danger badge_text="{!! session('courseHasNoTopicsAndActivities') !!}"></x-badge-danger>
 		@endif
 
-		<div class="">
-			<x-anchor-button class="bg-orange-500 mt-5 mb-3" href="{{ route('teacher.attendance.upload', $course->id) }}">
-				<i class="bi bi-plus-lg"></i> Upload New Attendance
-			</x-anchor-button>
-		</div>
+		@if(request('content') == 'student attendances' || !request('content'))
+			<div class="mb-3 mt-5 flex w-full justify-between items-center">
+				<x-anchor-button href="{{ route('teacher.attendance.select-students', $course->id) }}">
+					<i class="bi bi-plus-lg"></i> New Student Attendance
+				</x-anchor-button>
+				<form action="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances']) }}" method="get">
+					<x-select class="w-80" name="show">
+						<option value="my students only" @if(!request('show') || request('show') == 'my students only') selected @endif>My Students Only</option>
+						<option value="all" @if(request('show') == 'all') selected @endif>All Students</option>
+					</x-select>
+					
+					<x-button type="submit">Filter</x-button>
+				</form>
+			</div>
 
-		@if($attendanceData->count())
-			@foreach($attendanceData as $atd)
-				<div class="p-5 my-4 rounded-xl" style="background-color: rgba(255, 255, 255, 0.3)">
-					<div class="flex w-full items-center justify-between">
-						<p class="text-blue-950 font-semibold">Attendance Date:<br><span class="font-bold text-blue-950">{{ $atd->attendance_date }}</span></p>
-						<div class="flex gap-3">
-							<x-anchor-button class="bg-orange-500" href="{{ route('teacher.attendance.edit', $atd->id) }}">
-								Edit Data
-							</x-anchor-button>
-							<x-button type="button" class="bg-orange-500 toggleBtn">Show Details</x-button>
-						</div>
-					</div>
+			<div class="w-full overflow-auto" style="height: 60vh;">
+				<table class="w-full">
+					<thead>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date</th>
+						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Students</th>
+						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Attended</th>
+						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Absent</th>
+						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Uploader</th>
+						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Actions</th>
+					</thead>
+					<tbody>
+						@php
+							$sessionCounter = [];  // Stores total session count per student
+							$sessionNumberPerAttendance = []; // Stores session number per attendance
 
-					{{-- <p>Uploaded by: {{ ($atd->posted_by->details->gender == 1)? "Mr." : "Ms." }} {{ $atd->posted_by->full_name }}</p> --}}
+							foreach($attendanceData2 as $atddat) {
+								$currentSessionNumbers = []; // Session count for this specific attendance
 
-					<div class="overflow-x-auto contentTable" style="display: none;">
-						<x-table>
-							<x-slot name="head">
-								<th class="template-heads rounded-l-xl">Students</th>
-								<th class="template-heads">Attendance status</th>
-								<th class="template-heads">In Class Progress</th>
-								<th class="template-heads rounded-r-xl">Material Progress</th>
-							</x-slot>
+								foreach($atddat->student_attendances as $sa) {
+									$studentId = $sa->student->id;
 
-							@foreach($atd->student_attendances as $sa)
-								@if($sa->attendance_detail != "Account disabled")
-									<tr>
-										<td class="template-bodies rounded-l-xl">{{ $sa->student->full_name }}</td>
-										<td class="template-bodies">
-											@if($sa->is_attend == 1)
-												Attended
-											@elseif($sa->is_attend == 0)
-												Absent
-											@endif
-										</td>
-										<td class="template-bodies">{{ $sa->attendance_detail }}</td>
-										<td class="template-bodies rounded-r-xl">{{ $sa->material_progress }} [{{ $sa->learning_status }}]</td>
-									</tr>
-								@endif
-							@endforeach
+									// Initialize session count if first time seeing this student
+									if (!isset($sessionCounter[$studentId])) {
+										$sessionCounter[$studentId] = 0;
+									}
 
-						</x-table>
-					</div>
+									// Increase session counter and store the current session number for this attendance
+									$sessionCounter[$studentId]++;
+									$currentSessionNumbers[$sa->id] = $sessionCounter[$studentId];
+								}
 
-					{{-- <div class="flex flex-col overflow-hidden rounded-xl mt-5 border border-blue-950 contentTable my-5" style="display: none;">
-						<!-- Header -->
-						<div class="flex w-full">
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-b border-blue-950 px-4 py-2 font-bold text-blue-950 text-center">Student Name</div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-l border-r border-b border-blue-950 px-4 py-2 font-bold text-blue-950 text-center">Attendance Status</div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-r border-b border-blue-950 px-4 py-2 font-bold text-blue-950 text-center">Attendance Details</div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-b border-blue-950 px-4 py-2 font-bold text-blue-950 text-center">Progress</div>
-							</div>
-						</div>
+								// Store the session numbers for this attendance
+								$sessionNumberPerAttendance[$atddat->id] = $currentSessionNumbers;
+							}
+						@endphp
 
-						<!-- Filler -->
-						<div class="flex w-full">
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-l border-r border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-r border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
-							</div>
-						</div>
-
-						<!-- Main attendance content -->
-						@foreach($atd->student_attendances as $sa)
-							@if($sa->attendance_detail != "Account disabled")
-								<div class="flex w-full items-stretch bg-slate-300">
-									<div class="w-1/4">
-										<div class="px-4 text-blue-950">
-											<li>{{ $sa->student->full_name }}</li>
-										</div>
+						@forelse ($attendanceData as $atd)
+							<tr class="@if($loop->index % 2 == 0) bg-white @endif">
+								<td class="py-2 px-4">{{ Carbon\Carbon::parse($atd->attendance_date)->format('l, d F Y') }}</td>
+								<td class="py-2 px-4 text-center">{{ $atd->student_attendances->count() }}</td>
+								<td class="py-2 px-4 text-center">{{ $atd->student_attendances->where("is_attend", 1)->count() }}</td>
+								<td class="py-2 px-4 text-center">{{ $atd->student_attendances->where("is_attend", 0)->count() }}</td>
+								<td class="py-2 px-4 text-center">{{ $atd->posted_by->id == Auth::user()->id? 'Me' : $atd->posted_by->full_name }}</td>
+								<td class="py-2 px-4">
+									<div class="flex gap-2 justify-center">
+										{{-- <x-anchor-button  href="{{ route('teacher.attendance.edit', $atd->id) }}">
+											<i class="bi bi-pencil-square"></i>
+										</x-anchor-button> --}}
+										<button type="button" class=" show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}" data-session_number="{{ json_encode($sessionNumberPerAttendance[$atd->id]) }}"><img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110"></button>
 									</div>
-									<div class="w-1/4 border-l border-r border-blue-950">
-										<div class="px-4 text-blue-950">
-											<li>
-												@if($sa->is_attend == 1)
-												Attended
-												@elseif($sa->is_attend == 0)
-													Absent
-												@endif
-											</li>
-										</div>
-									</div>
-									<div class="w-1/4 border-r border-blue-950">
-										<div class="px-4 text-blue-950">
-											<li>{{ $sa->attendance_detail }}</li>
-										</div>
-									</div>
-									<div class="w-1/4">
-										<div class="px-4 text-blue-950">
-											<li>{{ $sa->material_progress }} [{{ $sa->learning_status }}]</li>
-										</div>
-									</div>
-								</div>
-							@endif
-						@endforeach
+								</td>
+							</tr>
+						@empty
+							<tr><td class="p-5 bg-white font-semibold text-center" colspan="6">- No attendance data yet -</td></tr>
+						@endforelse
+					</tbody>
+				</table>
+			</div>
+		@endif
 
-						<!-- Filler -->
-						<div class="flex w-full">
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-l border-r border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-r border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
-							</div>
-							<div class="w-1/4 bg-slate-300">
-								<div class="border-blue-950 px-4 py-1 font-bold text-blue-950 text-center"></div>
-							</div>
-						</div>
-
-					</div> --}}
-				</div>
-			@endforeach
-
-			{{-- <div class="">
-				{{ $attendanceData->links() }}
-			</div> --}}
-		@else
-			<div class="mt-5 p-5 w-full flex justify-center rounded-xl bg-white font-semibold">- No attendance data yet -</div>
+		@if(request('content') == 'my attendances')
+			<div class="w-full overflow-auto" style="height: 60vh;">
+				<table class="w-full">
+					<thead>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Check In</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Check Out</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Photo</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Description</th>
+					</thead>
+					<tbody>
+						@forelse (App\Models\SelfAttendance::where('user_id', Auth::user()->id)->where('course_id', $course->id)->orderBy('self_attendance_date', 'desc')->get() as $self_atd)
+							<tr class="@if($loop->index % 2 == 0) bg-white @endif">
+								<td class="py-2 px-4">{{ Carbon\Carbon::parse($self_atd->self_attendance_date)->format('D, d M Y') }}</td>
+								<td class="py-2 px-4">{{ $self_atd->check_in_time }}<br>GMT+7</td>
+								<td class="py-2 px-4">
+									@if($self_atd->check_out_time)
+										{{ $self_atd->check_out_time }}<br>GMT+7
+									@else
+										N/A
+									@endif
+								</td>
+								<td class="py-2 px-4">
+									<img src="{{ Storage::url("app/public/" . $self_atd->attendance_evidence) }}" width="200px" alt="photo">
+								</td>
+								<td class="py-2 px-4">{{ $self_atd->description ?? 'N/A' }}</td>
+							</tr>
+						@empty
+							
+						@endforelse
+					</tbody>
+				</table>
+			</div>
 		@endif
 
 		<script>
-			const allToggleBtn = $(".toggleBtn");
-			const allContentTable = $(".contentTable");
+			$(document).ready(() => {
+				$(".show-attendance-details-button").click(function(){
+					$("#attendance-details-tbody").empty();
 
-			allToggleBtn.each(function(index, element) {
-				$(element).click(() => {
-					allContentTable.eq(index).slideToggle(() => {
-					if (allContentTable.eq(index).is(":visible")) {
-						$(element).text("Hide Details");
-					} else {
-						$(element).text("Show Details");
+					const attendance = $(this).data('attendance');
+					const sessionNumberPerStudent = $(this).data('session_number');
+					const student_attendances = $(this).data('student_attendances');
+
+					let i = 0;
+					for(let sa of student_attendances){
+						const col1 = $("<td>").addClass("py-2 px-4 text-center").text(i + 1);
+						const col2 = $("<td>").addClass("py-2 px-4").text(sa.student.full_name);
+						const col3 = $("<td>").addClass("py-2 px-4").text(sessionNumberPerStudent[sa.id]);
+						const col4 = $("<td>").addClass("py-2 px-4").text(sa.is_attend == 1 ? `${sa.start_time.slice(0, 5)}-${sa.end_time.slice(0, 5)}` : 'Absent');
+						const col5 = $("<td>").addClass("py-2 px-4").html(sa.is_attend == 1 ? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`);
+						const col6 = $("<td>").addClass("py-2 px-4").text(sa.is_attend == 1 ? `${sa.activity_progress} [${sa.learning_status}]` : 'Absent');
+						const col7 = $("<td>").addClass("py-2 px-4").text(sa.attendance_detail);
+
+						let rowBG;
+						if(i % 2 == 0){
+							rowBG = "rgb(237, 241, 247)";
+						}
+						else {
+							rowBG = "white";
+						}
+
+						$("#attendance-details-tbody").append(
+							$("<tr>").css("background-color", rowBG).append(col1).append(col2).append(col3).append(col4).append(col5).append(col6).append(col7)
+						);
+						i++;
 					}
-				});
+
+					$("#attendance-details").parent().show();
 				});
 			});
 		</script>

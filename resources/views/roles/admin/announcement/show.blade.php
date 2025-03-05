@@ -7,13 +7,13 @@
 		@if($announcement->image_path)
 			<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" class="w-3/4 rounded-3xl" alt="announcement_img">
 		@else
-			<div class="flex bg-slate-200 items-center justify-center text-white font-extrabold w-3/4">
+			<div class="flex bg-slate-200 items-center justify-center text-white font-extrabold w-3/4 h-[500px]">
 				<i class="bi bi-megaphone-fill text-6xl"></i>
 			</div>
 		@endif
 	</div>
 
-	<div class="w-full">
+	<div class="w-full announcementContent">
 		{!! $announcement->content !!}
 	</div>
 </div>

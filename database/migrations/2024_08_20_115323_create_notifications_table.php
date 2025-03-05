@@ -18,7 +18,7 @@ return new class extends Migration
 			$table->unsignedBigInteger("user_id");
 			$table->enum("status", ["read", "unread"]);
 			$table->longText("message");
-			$table->foreign("user_id")->references("id")->on("users");
+			$table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");
             $table->timestamps();
         });
     }

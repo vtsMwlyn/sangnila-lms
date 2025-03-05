@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\Auth\NewPasswordController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Auth\VerifyEmailController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Models\User;
 
 // Register
 Route::get('/register', [RegisteredUserController::class, 'create'])->middleware('guest')->name('register'); // TODO: Remove after sysadmin registered
@@ -22,6 +23,18 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store'])->middlew
 Route::get('/login', function() {
 	return redirect(route('home'));
 })->middleware('guest')->name('login');
+
+// Role swap
+Route::post('/change-role', function(){
+	if(Auth::user()->role_id == 2){
+		User::find(Auth::user()->id)->update(['role_id' => 1]);
+	}
+	else if(Auth::user()->role_id == 1) {
+		User::find(Auth::user()->id)->update(['role_id' => 2]);
+	}
+
+	return redirect(route('dashboard'));
+})->middleware('auth')->name('change-role');
 
 
 // Forgot Password

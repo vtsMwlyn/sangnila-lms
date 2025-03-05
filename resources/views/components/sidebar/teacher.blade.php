@@ -1,40 +1,35 @@
 <!-- Main sidebar -->
-<!-- Main sidebar -->
 <div class="text-white z-10 min-h-screen" style="width: 17%;" id="sidebar-container">
-	@php
-		// $student = Auth::user();
-		// $n_asg_subm = 0;
-		// $n_all_asg = 0;
+	{{-- @php
+		$all_course_has_topics = true;
 
-		// foreach($student->enrolled_courses as $crs){
-		// 	$student_assignments = App\Models\StudentAssignment::where("student_id", $student->id)->get();
+		foreach(Auth::user()->teached_courses as $c){
+			if($c->topics->count() == 0){
+				$all_course_has_topics = false;
+				break;
+			}
+		}
 
-		// 	$student_assignments_in_the_course = [];
-		// 	foreach($student_assignments as $asg){
-		// 		if($asg->assignment->course_id == $crs->id){
-		// 			array_push($student_assignments_in_the_course, $asg);
-		// 		}
-		// 	}
+		$there_is_student_with_no_progress_unlocked = false;
 
-		// 	foreach($student_assignments_in_the_course as $assg){
-		// 		foreach($assg->assignment->submissions as $submission){
-		// 			if($submission->student_id == $student->id){
-		// 				$n_asg_subm++;
-		// 				break;
-		// 			}
-		// 		}
-		// 	}
+		foreach (Auth::user()->teached_courses as $course) {
+			$students = App\Models\CourseStudent::where('teacher_id', Auth::user()->id)
+				->where('course_id', $course->id)
+				->get();
 
-		// 	$n_all_asg += count($student_assignments_in_the_course);
-		// }
+			foreach ($students as $student) {
+				$progress_statuses = App\Models\Progress::where("course_id", $course->id)
+					->where("student_id", $student->student_id)
+					->pluck("status");
 
-		// $n = $n_all_asg - $n_asg_subm;
-	@endphp
-
-	{{-- <!-- Sidebar toggler for mobile -->
-	<button id="mobileMenuButton" class="md:hidden bg-blue-950 text-white font-semibold text-xl transition duration-300 absolute m-2 px-4 py-3 z-10">
-		<span class="inline-block">&#9776;</span>
-	</button> --}}
+				// If no progress data exists OR no "unlocked" status exists at all
+				if ($progress_statuses->isEmpty() || !$progress_statuses->contains("unlocked")) {
+					$there_is_student_with_no_progress_unlocked = true;
+					break 2; // Exit both loops immediately
+				}
+			}
+		}
+	@endphp --}}
 
 	<div class="md:flex flex-col items-stretch sticky hidden z-0 m-0" style="top: 65px; background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center left; background-size: cover;" id="sidebar">
 		<div class="relative flex flex-col dropdown-container">
@@ -52,6 +47,12 @@
 				<div class="bg-slate-400 mx-5 mt-3 mb-1" style="height: 1.5px;"></div>
 				<a href="{{ route("profile.show") }}"><div class="w-full px-5 py-1 hover:bg-slate-300 text-black font-semibold flex items-center gap-1"><img src="{{ asset('img/sidebar-edit-profile.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Edit Profile</div></a>
 				<a href="{{ route("profile.show") }}"><div class="w-full px-5 py-1 hover:bg-slate-300 text-black font-semibold flex items-center gap-1"><img src="{{ asset('img/sidebar-change-password.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Change Password</div></a>
+				@can('can_swap_role')
+					<form action="{{ route('change-role') }}" method="post">
+						@csrf
+						<button type="submit" onclick="return confirm('Are you sure want to swap your role into admin?');" class="w-full"><div class="w-full px-5 py-1 hover:bg-slate-300 text-black font-semibold flex items-center gap-1"><i class="bi bi-arrow-left-right text-slate-400"></i> Change Role</div></button>
+					</form>
+				@endcan
 			</div>
 		</div>
 
@@ -65,16 +66,27 @@
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
 				href="{{ route('teacher.mycourse.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*my-course*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-courses.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Courses
+				@if(!session('all_course_has_topics'))
+					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: 0; right: 0;">!</div>
+				@endif
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
+			<x-anchor-button class="grow flex items-center text-start gap-4 py-2 px-6 hover:bg-cyan-500"
 				href="{{ route('teacher.student.select-course') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*student*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				<img src="{{ asset('img/sidebar-assignment.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Material Access
+				<i class="bi bi-person-fill text-2xl"></i> Students
+				@if(session('there_is_student_with_no_progress_unlocked'))
+					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: 0; right: 0;">!</div>
+				@endif
+			</x-anchor-button>
+
+			<x-anchor-button class="grow flex items-center text-start gap-4 py-2 px-6 hover:bg-cyan-500"
+				href="{{ route('teacher.forum.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*forum*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
+				<i class="bi bi-chat-left-text text-2xl"></i> Forum Discussion
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
 				href="{{ route('teacher.assignment.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*assignment*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				<i class="bi bi-clipboard text-2xl"></i> Assignment
+				<img src="{{ asset('img/sidebar-assignment.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Assignment
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
@@ -83,23 +95,9 @@
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
-				href="#" style="transform: scale(1); border-radius: 0; background: {{ Request::is('schedule*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				<img src="{{ asset('img/sidebar-schedule.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Schedule
-			</x-anchor-button>
-
-			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
 				href="{{ route('list-announcement') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('announcement*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-announcement.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Announcement
 			</x-anchor-button>
-
-			{{-- <!-- Logout Button -->
-			<form method="POST" action="{{ route('logout') }}" class="grow flex items-center gap-2">
-				@csrf
-				<x-button
-					class="font-semibold bg-red-600 w-full" onclick="return confirm('Are you sure want to logout from your account?');">
-						<i class="bi bi-box-arrow-left"></i> {{ __('Log Out') }}
-				</x-button>
-			</form> --}}
 		</div>
 	</div>
 

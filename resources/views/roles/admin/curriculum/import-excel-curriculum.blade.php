@@ -27,13 +27,13 @@
 			@csrf
 
 			<div>
-				<x-label for="file">{{ __('Your Excel File') }}</x-label>
+				<x-label for="file">Your Excel File<span class="text-red">*</span></x-label>
 				<x-input type="file" name="file" id="file" class="bg-white w-full block mt-1"/>
 			</div>
 
 			<div class="flex gap-5  mt-8">
-				<x-button class="bg-orange-500"><i class="bi bi-upload"></i> Import Data</x-button>
-				<x-anchor-button href="{{ route('admin.course.curriculum.import-excel.download', $course->id) }}" class="bg-orange-500"><i class="bi bi-download"></i> Download Template</x-anchor-button>
+				<x-button ><i class="bi bi-upload"></i> Import Data</x-button>
+				<x-anchor-button href="{{ route('admin.course.curriculum.import-excel.download', $course->id) }}" ><i class="bi bi-download"></i> Download Template</x-anchor-button>
 			</div>
 		</form>
 	</x-section-container>

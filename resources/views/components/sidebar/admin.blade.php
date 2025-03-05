@@ -1,42 +1,5 @@
 <!-- Main sidebar -->
-<!-- Main sidebar -->
-<!-- Main sidebar -->
 <div class="text-white z-10 min-h-screen" style="width: 17%;" id="sidebar-container">
-	@php
-		// $student = Auth::user();
-		// $n_asg_subm = 0;
-		// $n_all_asg = 0;
-
-		// foreach($student->enrolled_courses as $crs){
-		// 	$student_assignments = App\Models\StudentAssignment::where("student_id", $student->id)->get();
-
-		// 	$student_assignments_in_the_course = [];
-		// 	foreach($student_assignments as $asg){
-		// 		if($asg->assignment->course_id == $crs->id){
-		// 			array_push($student_assignments_in_the_course, $asg);
-		// 		}
-		// 	}
-
-		// 	foreach($student_assignments_in_the_course as $assg){
-		// 		foreach($assg->assignment->submissions as $submission){
-		// 			if($submission->student_id == $student->id){
-		// 				$n_asg_subm++;
-		// 				break;
-		// 			}
-		// 		}
-		// 	}
-
-		// 	$n_all_asg += count($student_assignments_in_the_course);
-		// }
-
-		// $n = $n_all_asg - $n_asg_subm;
-	@endphp
-
-	{{-- <!-- Sidebar toggler for mobile -->
-	<button id="mobileMenuButton" class="md:hidden bg-blue-950 text-white font-semibold text-xl transition duration-300 absolute m-2 px-4 py-3 z-10">
-		<span class="inline-block">&#9776;</span>
-	</button> --}}
-
 	<div class="md:flex flex-col items-stretch sticky hidden z-0 m-0" style="top: 65px; background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center left; background-size: cover;" id="sidebar">
 		<div class="relative flex flex-col dropdown-container">
 			<button type="button" class="flex flex-col items-center dropdown-toggler px-10 py-4 mb-6 hover:bg-slate-400" style="background: {{ Request::is('profile*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
@@ -53,6 +16,12 @@
 				<div class="bg-slate-400 mx-5 mt-3 mb-1" style="height: 1.5px;"></div>
 				<a href="{{ route("profile.show") }}"><div class="w-full px-5 py-1 hover:bg-slate-300 text-black font-semibold flex items-center gap-1"><img src="{{ asset('img/sidebar-edit-profile.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Edit Profile</div></a>
 				<a href="{{ route("profile.show") }}"><div class="w-full px-5 py-1 hover:bg-slate-300 text-black font-semibold flex items-center gap-1"><img src="{{ asset('img/sidebar-change-password.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Change Password</div></a>
+				@can('can_swap_role')
+					<form action="{{ route('change-role') }}" method="post">
+						@csrf
+						<button type="submit" onclick="return confirm('Are you sure want to swap your role into teacher?');" class="w-full"><div class="w-full px-5 py-1 hover:bg-slate-300 text-black font-semibold flex items-center gap-1"><i class="bi bi-arrow-left-right text-slate-400"></i> Change Role</div></button>
+					</form>
+				@endcan
 			</div>
 		</div>
 
@@ -66,16 +35,25 @@
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
 				href="{{ route('admin.course.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('admin*course*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-managecourses.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Courses
+				@if(session('uncomplete_course_data'))
+					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: 0; right: 0;">!</div>
+				@endif
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
-				href="{{ route('admin.teacher.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('admin*teacher*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
+				href="{{ route('admin.teacher.index') }}" style="transform: scale(1); border-radius: 0; background: {{ (Request::is('admin/teacher*') || Request::is('admin*lecturer-attendance*')) ? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-manageteacher.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Teachers
+				@if(session('some_teachers_not_assigned_to_course'))
+					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: 0; right: 0;">!</div>
+				@endif
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
-				href="{{ route('admin.student.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('admin*student*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
+				href="{{ route('admin.student.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('admin/student*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-managestudents.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Students
+				@if(session('some_students_not_assigned_to_course'))
+					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: 0; right: 0;">!</div>
+				@endif
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
@@ -84,31 +62,10 @@
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
-				href="#" style="transform: scale(1); border-radius: 0; background: {{ Request::is('schedule*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				<img src="{{ asset('img/sidebar-schedule.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Schedule
-			</x-anchor-button>
-
-			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
 				href="{{ route('admin.announcement.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('admin*announcement*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-manageannouncement.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Announcements
 			</x-anchor-button>
-
-			{{-- <!-- Logout Button -->
-			<form method="POST" action="{{ route('logout') }}" class="grow flex items-center gap-2">
-				@csrf
-				<x-button
-					class="font-semibold bg-red-600 w-full" onclick="return confirm('Are you sure want to logout from your account?');">
-						<i class="bi bi-box-arrow-left"></i> {{ __('Log Out') }}
-				</x-button>
-			</form> --}}
 		</div>
 	</div>
-
-	<script>
-		// Toggle mobile menu visibility
-		$("#mobileMenuButton").click(() => {
-			$("#navigation").slideToggle();
-		});
-	</script>
 </div>
 

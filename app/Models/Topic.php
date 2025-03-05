@@ -15,8 +15,8 @@ class Topic extends Model
 		return $this->belongsTo(Course::class, "course_id");
 	}
 
-	public function materials(){
-		return $this->hasMany(Material::class);
+	public function activities(){
+		return $this->hasMany(Activity::class);
 	}
 
 	public function uploader(){

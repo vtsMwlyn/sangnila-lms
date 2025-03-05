@@ -26,16 +26,26 @@ class User extends Authenticatable implements MustVerifyEmail{
 	// Query Scopes
 	public function scopeFilter($query, array $filters){
 		$query->when($filters["search"] ?? false, function($query, $search){
-			return $query->where(function($query) use($search){
-				$query->where("full_name", "like", "%" . $search . "%");
-			});
+			return $query->where("full_name", "like", "%" . $search . "%");
 		});
 
 		$query->when($filters["role"] ?? false, function($query, $role){
-			return $query->whereHas("role", function($query) use($role){
-				$query->where("role_id", $role);
-			});
+			if($role == 'Disabled'){
+				return $query->where("status", $role);
+			}
+			else {
+				return $query->whereHas("role", function($query) use($role){
+					$query->where("role_name", $role);
+				});
+			}
+
 		});
+
+		$query->when($filters['course'] ?? false, function ($query, $course) {
+            return $query->whereHas('enrolled_courses', function($query) use ($course){
+				return $query->where('course_id', $course);
+			});
+        });
 	}
 
 
@@ -56,6 +66,14 @@ class User extends Authenticatable implements MustVerifyEmail{
 		return $this->belongsToMany(Course::class, 'course_students', "student_id", "course_id");
 	}
 
+	public function course_students(){
+		return $this->hasMany(CourseStudent::class, 'student_id');
+	}
+
+	public function student_attendances(){
+		return $this->hasMany(StudentAttendance::class, 'student_id');
+	}
+
 	public function progress() {
 		return $this->hasMany(Progress::class, 'student_id');
 	}
@@ -65,11 +83,11 @@ class User extends Authenticatable implements MustVerifyEmail{
 	}
 
 	public function attendances(){
-		return $this->belongsToMany(Attendance::class, "student_attendances");
+		return $this->belongsToMany(Attendance::class, "student_attendances", "student_id");
 	}
 
 	public function assignments(){
-		return $this->hasMany(Assignment::class, "student_assignments");
+		return $this->hasMany(Assignment::class, "student_assignments", "student_id");
 	}
 
 	public function posted_attendances(){
@@ -90,5 +108,9 @@ class User extends Authenticatable implements MustVerifyEmail{
 
 	public function inboxes(){
 		return $this->hasMany(Notification::class);
+	}
+
+	public function portfolios(){
+		return $this->hasMany(Portfolio::class, 'student_id');
 	}
 }

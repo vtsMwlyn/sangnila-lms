@@ -7,44 +7,57 @@ A web based learning management system application designed for admins, teachers
 ## Roles
 There are 5 roles (types of account) in Sangnila LMS:
 - **Admins**: Those who are in charge in observing and managing the whole LMS system including `courses`, `teachers`, `students`, and `accounts`
-- **Teachers**: Those who are assigned to manage `topic and materials` also teaching and managing students' `progress`, `attendance`, and `assignment` in Sangnila courses
-- **Students**: Those who are enrolled and is currently in learning progress in Sangnila courses, they are able to access learning `materials`, `attendance` data, and upload `assignments`
+- **Teachers**: Those who are assigned to manage `topic and activities` also teaching and managing students' `progress`, `attendance`, and `assignment` in Sangnila courses
+- **Students**: Those who are enrolled and is currently in learning progress in Sangnila courses, they are able to access learning `activities`, `attendance` data, and upload `assignments`
 - **Parents**: Students' parents, those who are observing students' progress and learning results
 - **Guests**: Public user, those who are don't have any account to use, can only view few parts of Sangnila LMS
 
 ## Change Logs
-### v0.8.0-beta
-- Fixes in misplaced error messages
-- Error marking color and thickness improvement
-- Improvement in error handling mechanism
-- Removed dismiss option on notifications
-- Auto remove read notifications since 30 days ago
-- Fixes in excel import download template
+### v0.9.0-beta until v0.9.2-beta
+- Changed main layout to be navbar-sidebar-content from previously only navbar and content
+- Redesign all pages for students
+- Implemented popup submission forms
+- Improvement and bug fixes in displaying popups and announcements
+- Font and element sizing adjustments
+- Redesign all pages for teachers
+- Now teacher can select students to include in a new attendance report
+- Fix major bugs and mechanism of adding and editting attendance report when data is invalid
 
-### v0.8.1-beta
-- Fixes in announcements that can't display image from storage
-- Now announcement will have its display period and will not shown if outside of the period
-- Now material selection dropdown has search feature enabled to help admin and teacher
+### v0.9.3-beta until v0.9.5-beta
+- Changed the term `materials` into `activities`
+- Added other option for uploading attendance reports
+- Added learning outcomes into LMS where it can be uploaded by admins
+- Added session number system into for both normal activities and syllabus activities
+- Added learning outcomes - activities - sessions settings for both normal activities and syllabus activities
+- Changed the student progress based on attendance data count instead of unlocked activities
+- Adjustments in student's course details page where 1 topic can contains multiple activities and dynamically updated the learning outcome
+- Teacher now can pick items from syllabus as an alternative of copying the whole activity - sessions - learning outcomes settings
 
-### v0.8.2-beta
-- Added dashboard page for students
-- Added calendar and news and announcement slider in the dashboard
-- Added view page for announcements
-- Now students will not be able to access material preview page if they are reaching their max course session or accessing locked material via URL link
+### v0.9.6-beta until v0.9.8-beta
+- Fixed bugs encountered in displaying data or performing some actions
+- Now profile pictures will also be shown mostly next to student/teacher's name
+- Student attendance progress is now counting for both attended and absent attendance data
+- Admins now can input, edit, and delete attendance data and it will be merged with the attendance data uploaded by the teacher
+- Added details to course data such as delivery mode, price, and code; then now displayed courses level beside courses name
+- Improvements in some data displays sorting
+- Changed the attendance upload mechanism to suit multiple sessions in 1 day
+- Redesigned the attendance upload page
+- Auto session counting by system in displaying attendances data, so admins and teachers won't have to specify the nth-session when uploading attendances data
 
-## Clone Project
-Clone the repository in any desired directory. Web resources such as images, videos, scripts, and styles are included in `public` folder. To generate the database system and fill it will sample data, run this command in the terminal:
-```bash
-php artisan migrate
-```
-```bash
-php artisan db:seed
-```
-Then to run the web application, first make sure that MySQL is activated and the database is already set. Next you can either type this in the browser URL if you have installed XAMPP and already set symbol link from the `project folder` to `htdocs` folder:
-```bash
-localhost/project-folder/public/
-```
-or by run this command in the terminal:
-```bash
-php artisan serve
-```
+### v0.9.9-beta until v1.0.0-beta
+- Fixed bugs and errors encountered in displaying data or performing some actions, also optimized some data display such as datetime data reformatting, data placement and sorting, etc
+- Redesign batch assign and import old student page for admins
+- Added batch assign teacher page for admin
+- Added learning status to course-student data and now it's edittable along the teacher teaching the student
+- Fixed bugs in displaying some popup forms
+- Now the system will auto-unlock student progresses on attendance addition/deletion and when teacher re-sync or picking topics and activities from the syllabus
+- Added meeting link attachment for each students in an activity
+- Added self attendance checking page for teachers
+- Added link to book trial class in the login page
+- Added portfolio image/video/link uploads by teacher for student progress documentation
+- Now all accounts can edit the new profile picture when uploading it
+- Added red asterisk mark for required inputs
+- Bug fixes on multiple entry pages where the form can be submitted although the data is still empty
+- Added new dashboard page for admins and teachers
+- Bug fixes on displaying announcement images in dashboard pages, announcement popups, and announcement show page
+

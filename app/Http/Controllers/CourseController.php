@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attendance;
+use Exception;
+use Carbon\Carbon;
+use App\Models\Topic;
 use App\Models\Course;
+use App\Models\Progress;
+use App\Models\Attendance;
+use Illuminate\Http\Request;
 use App\Models\CourseStudent;
+use App\Models\SelfAttendance;
 use App\Models\CurriculumTopic;
 use App\Models\ImportedStudent;
-use App\Models\Progress;
+use App\Models\LearningOutcome;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
-use App\Models\Topic;
-use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller {
@@ -20,7 +23,7 @@ class CourseController extends Controller {
 	// Showing list of all available courses in Sangnila LMS
 	public function admin_index() {
 		return view('roles.admin.course.index', [
-			'courses' => Course::filter(request(["search"]))->get()
+			'courses' => Course::filter(request(["search"]))->with(['curriculum_topics', 'learning_outcomes', 'teachers', 'students'])->orderByRaw('CASE WHEN status = "active" THEN 0 ELSE 1 END')->orderBy('course_name')->get()
 		]);
 	}
 
@@ -34,7 +37,10 @@ class CourseController extends Controller {
 		$validatedData = $request->validate([
 			"course_name" => "required|min:3",
 			"course_description" => "required|min:3",
-			"visibility" => "required"
+			"status" => "required",
+			"format" => "required",
+			"level" => "required",
+			'delivery_mode' => 'required'
 		]);
 
 		try {
@@ -49,8 +55,26 @@ class CourseController extends Controller {
 
 	// Shows a course details
 	public function admin_show($course_id) {
+		$course = Course::findOrFail($course_id);
+
+		$learning_outcomes = $course->learning_outcomes->count();
+		$ctopics = $course->curriculum_topics->count();
+
+		$learning_outcomes_empty = $learning_outcomes == 0 ? true : false;
+		$syllabus_empty = $ctopics == 0 ? true : false;
+		$course_empty = ($ctopics == 0 && $learning_outcomes == 0) ? true : false;
+		$no_students_assigned = ($course->students->count() == 0) ? true : false;
+		$no_teachers_assigned = ($course->teachers->count() == 0) ? true : false;
+
 		return view('roles.admin.course.show', [
-			'course' => Course::findOrFail($course_id)
+			'course' => $course,
+			'learning_outcomes' => LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get(),
+			'course_empty' => $course_empty,
+			'syllabus_empty' => $syllabus_empty,
+			'learning_outcomes_empty' => $learning_outcomes_empty,
+			'no_students_assigned' => $no_students_assigned,
+			'no_teachers_assigned' => $no_teachers_assigned,
+			'all_courses' => Course::where('status', 'active')->orderBy('course_name', 'asc')->get(),
 		]);
 	}
 
@@ -66,7 +90,10 @@ class CourseController extends Controller {
 		$validatedData = $request->validate([
 			"course_name" => "required|min:3",
 			"course_description" => "required|min:3",
-			"visibility" => "required"
+			"status" => "required",
+			"format" => "required",
+			"level" => "required",
+			'delivery_mode' => 'required'
 		]);
 
 		try {
@@ -100,19 +127,21 @@ class CourseController extends Controller {
 		return view('roles.teacher.mycourse.index', []);
 	}
 
-	// Shows a course details also topics and materials
+	// Shows a course details also topics and activities
 	public function teacher_show($course_id) {
 		$course = Course::findOrFail($course_id);
 		$course_students = CourseStudent::where("teacher_id", Auth::user()->id)->where("course_id", $course_id)->get();
 		$curriculum = CurriculumTopic::where("course_id", $course->id)->get();
 
 		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
+		$learning_outcomes = LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get();
 
 		return view('roles.teacher.mycourse.show', [
 			'course_students' => $course_students,
 			"course" => $course,
 			"topics" => $topics,
-			"has_curriculum" => $curriculum->count()
+			"has_curriculum" => $curriculum->count(),
+			"learning_outcomes" => $learning_outcomes
 		]);
 	}
 
@@ -132,7 +161,7 @@ class CourseController extends Controller {
 				$count = 0;
 			}
 
-			$stdatd = StudentAttendance::where("user_id", Auth::user()->id)->get();
+			$stdatd = StudentAttendance::where("student_id", Auth::user()->id)->get();
 
 			foreach($stdatd as $atd){
 				if($atd->attendance->course_id == $c->id && $atd->is_attend == 1){
@@ -140,7 +169,7 @@ class CourseController extends Controller {
 				}
 			}
 
-			if((($count + 1) % $cs->max_course_session == 0) || $count >= $cs->max_course_session){
+			if(((($count + 1) % $cs->max_course_session == 0) || $count >= $cs->max_course_session) && $cs->learning_status != 'complete'){
 				$shouldPaySoon = true;
 			} else {
 				$shouldPaySoon = false;
@@ -153,11 +182,11 @@ class CourseController extends Controller {
 		// $pushNotif->sendPushNotification();
 
 		return view('roles.student.course.index', [
-			"payment_reminders" => $paymentReminders
+			"payment_reminders" => $paymentReminders,
 		]);
 	}
 
-	// Shows a course details with topics and materials
+	// Shows a course details with topics and activities
 	public function student_show($course_id) {
 		// Checking if total attendances near or reaching the course max session
 		$cs = CourseStudent::where("student_id", Auth::user()->id)->where("course_id", $course_id)->first();
@@ -168,7 +197,7 @@ class CourseController extends Controller {
 			$count = 0;
 		}
 
-		$stdatd = StudentAttendance::where("user_id", Auth::user()->id)->get();
+		$stdatd = StudentAttendance::where("student_id", Auth::user()->id)->get();
 
 		foreach($stdatd as $atd){
 			if($atd->attendance->course_id == $course_id && $atd->is_attend == 1){
@@ -180,40 +209,65 @@ class CourseController extends Controller {
 		$max_session_reached = false;
 		if(($count + 1) % $cs->max_course_session == 0){
 			$shouldPaySoon = true;
-		} else if($count >= $cs->max_course_session) {
+		} else if($count >= $cs->max_course_session && $cs->learning_status == 'learning') {
 			$shouldPaySoon = true;
 			$max_session_reached = true;
 		}
 
-		// Other data
-		$progresses = Progress::where('course_id', $course_id)->where('student_id', Auth::user()->id)->get();
+		$progressAndActivity = Progress::where('student_id', $cs->student_id)
+			->where('course_id', $cs->course_id)
+			->with([
+				'activity' => function ($query) {
+					$query->select('id', 'session', 'topic_id', 'desc', 'title');
+				},
+				'activity.topic' => function ($query) {
+					$query->select('id', 'title'); // Fetch only necessary columns
+				},
+				'activity.learning_outcomes' => function ($query) {
+					$query->select('learning_outcomes.id', 'number', 'title');
+				}
+			])
+			->join('activities', 'progress.activity_id', '=', 'activities.id')
+			->orderBy('activities.session', 'asc')
+			->orderBy('activities.created_at', 'asc')
+			->select('progress.*') // Select only columns from Progress
+			->get()
+			->groupBy('activity.session') // Group by activity's session
+			->map(function ($progresses, $session) {
+				return [
+					'session' => $session,
+					'progresses' => $progresses->map(function ($progress) {
+						return [
+							'progress' => $progress,
+							'activity' => $progress->activity,
+							'topic' => $progress->activity->topic,
+							'learning_outcomes' => $progress->activity->learning_outcomes,
+						];
+					}),
+				];
+			});
 
-		$progressAndMaterial = [];
-		foreach($progresses as $prgs){
-			$pam = [];
-			$pam["progress"] = $prgs;
-			$pam["material"] = $prgs->material;
-			$pam["topic"] = $prgs->material->topic;
-			array_push($progressAndMaterial, $pam);
-		}
+		$todaySelfAttendances = SelfAttendance::where("user_id", Auth::user()->id)->where("course_id", $course_id)->where("self_attendance_date", Carbon::today()->format('Y-m-d'))->get();
+		$unfinishedSelfAttendance = $todaySelfAttendances->filter(function($item){
+			return $item->check_out_time == null;
+		});
 
-		$student = CourseStudent::where('student_id', Auth::user()->id)->where('course_id', $course_id)->first();
-
-		if($max_session_reached){
+		// if($max_session_reached){
+		// 	return view('roles.student.course.show', [
+		// 		'course' => $cs->course,
+		// 		"should_pay_soon" => $shouldPaySoon,
+		// 		"max_session_reached" => $max_session_reached
+		// 	]);
+		// }
+		// else {
 			return view('roles.student.course.show', [
-				'course' => $student->course,
+				'course' => $cs->course,
+				'activityProgresses' => $progressAndActivity,
 				"should_pay_soon" => $shouldPaySoon,
-				"max_session_reached" => $max_session_reached
+				"max_session_reached" => $max_session_reached,
+				"unfinishedSelfAttendance" => $unfinishedSelfAttendance->first()
 			]);
-		}
-		else {
-			return view('roles.student.course.show', [
-				'course' => $student->course,
-				'materialProgresses' => $progressAndMaterial,
-				"should_pay_soon" => $shouldPaySoon,
-				"max_session_reached" => $max_session_reached
-			]);
-		}
+		// }
 	}
 
 
