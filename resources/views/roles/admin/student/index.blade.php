@@ -90,7 +90,7 @@
 									</div>
 								</td>
 								<td class="py-2 px-4 text-center">
-									{{ $cs->temp_periods_paid }}
+									{{ ($cs->temp_periods_paid ?? 0) + App\Models\Receipt::where('course_student_id', $cs->id)->get()->count() }}
 								</td>
 								<td class="py-2 px-4 text-center">
 									@if($cs->learning_status == 'learning')

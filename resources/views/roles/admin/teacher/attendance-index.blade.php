@@ -51,7 +51,7 @@
 				<tbody>
 					@forelse ($all_lecturer_attendances as $la)
 						@php
-							$checkInPhotoL = Storage::url('app/public/' . $la->attendance_evidence);
+							$checkInPhotoL = Storage::url("app/public/" . $la->attendance_evidence);
 
 							$courseStudents = App\Models\CourseStudent::where('teacher_id', $la->user->id)
 								->where('course_id', $la->course->id)->get();
@@ -68,7 +68,7 @@
 							foreach($filtered as $f){
 								$ss = [];
 
-								$ss['src'] = Storage::url('app/public/' . $f->attendance_evidence);
+								$ss['src'] = Storage::url("app/public/" . $f->attendance_evidence);
 								$ss['validator'] = $f->user->full_name . ' (' . $f->check_in_time . '-' . $f->check_out_time . ')';
 
 								array_push($sourceStudents, $ss);
@@ -111,7 +111,7 @@
 					@forelse ($all_student_attendances as $sa)
 						@php
 							$teacher = App\Models\CourseStudent::where('course_id', $sa->course->id)->where('student_id', $sa->user->id)->first()->teacher;
-							$checkInPhotoS = Storage::url('app/public/' . $sa->attendance_evidence);
+							$checkInPhotoS = Storage::url("app/public/" . $sa->attendance_evidence);
 						@endphp
 
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">

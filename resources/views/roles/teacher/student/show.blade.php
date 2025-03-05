@@ -183,14 +183,14 @@
 								<button type="submit" class="bg-red rounded-lg py-2 px-4 text-white" onclick="return confirm('Apakah anda yakin ingin menghapus foto ini dari pengembalian ini?')"><i class="bi bi-trash3"></i></button>
 							</form>
 
-							<a href="{{ $portfolio->type != 'link' ? Storage::url('app/public/' . $portfolio->path) : $portfolio->path }}" target="_blank" class="relative imeeji">
+							<a href="{{ $portfolio->type != 'link' ? Storage::url("app/public/" . $portfolio->path) : $portfolio->path }}" target="_blank" class="relative imeeji">
 								<div class="absolute flex w-full h-full items-center justify-center text-white hint-text" style="display: none; background: rgba(0, 0, 0, 0.7);">Click to view the full file</div>
 
 								@if($portfolio->type == 'image')
-									<img src="{{ Storage::url('app/public/' . $portfolio->path) }}" alt="img" style="object-fit: cover;" class="w-full h-full rounded-lg">
+									<img src="{{ Storage::url("app/public/" . $portfolio->path) }}" alt="img" style="object-fit: cover;" class="w-full h-full rounded-lg">
 								@elseif($portfolio->type == "video")
 									<video class="w-full h-full rounded-lg" style="object-fit: cover;" controls>
-										<source src="{{ Storage::url('app/public/' . $portfolio->path) }}" type="{{ Storage::mimeType('app/public/' . $portfolio->path) }}">
+										<source src="{{ Storage::url("app/public/" . $portfolio->path) }}" type="{{ Storage::mimeType('app/public/' . $portfolio->path) }}">
 									</video>
 								@else
 									<div class="w-full h-full flex items-center justify-center bg-slate-400 rounded-lg">
