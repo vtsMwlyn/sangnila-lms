@@ -151,6 +151,8 @@
 				<!-- Sidebar -->
 				{{ $slot }}
 
+				<button type="button" class="fixed bg-light-blue text-white px-1 h-12 rounded-r-full flex items-center hover:bg-slate-600" id="sidebar-toggler"><i class="bi bi-chevron-double-right"></i></button>
+
 				<!-- Content Section -->
 				<div class="flex flex-col" style="width: 83%;" id="content-container">
 					<div class="flex flex-col" id="content-wrapper">
@@ -183,5 +185,36 @@
 
 		<!-- Scripts -->
 		<script src="{{ asset('js/custom-script.js') }}"></script>
+
+		<script>
+			function resetSidebarToggler(){
+				if($(window).width() <= 2000 && $(window).width() >= 1024){
+					$('#sidebar-toggler').show();
+					$('#sidebar-toggler').css('left', $('#sidebar-container').outerWidth()).css('top', $(window).innerHeight() / 2);
+				}
+				else {
+					$('#sidebar-toggler').hide();
+				}
+			}
+
+			$(window).on('resize', resetSidebarToggler);
+
+			$(document).ready(() => {
+				resetSidebarToggler();
+
+				$('#sidebar-toggler').click(function(){
+					if($('#sidebar-container').is(':visible')){
+						$('#sidebar-toggler').css({'left': 0});
+						$('#sidebar-container').hide();
+						$('#content-container').css({'width': '100%'});
+					}
+					else {
+						$('#sidebar-toggler').css({'left': $('#sidebar-container').outerWidth()});
+						$('#sidebar-container').show();
+						$('#content-container').css({'width': '83%'});
+					}
+				});
+			});
+		</script>
 	</body>
 </html>
