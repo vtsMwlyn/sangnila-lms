@@ -13,7 +13,7 @@
 			<h5 class="mt-4 text-blue font-semibold text-base">Description from Lecturer</h5>
 			<p id="description-lecturer"></p>
 
-			<h5 class="mt-4 text-blue font-semibold text-base">Validation Photo from Students</h5>
+			<h5 class="mt-4 text-blue font-semibold text-base">Photo from Students</h5>
 			<div id="check-in-photo-students">
 			</div>
 		</div>
@@ -37,7 +37,7 @@
 
 		<div class="w-full bg-slate-400 mt-6" style="height: 2px;"></div>
 
-		<div class="w-full overflow-x-auto">
+		<div class="w-full overflow-x-auto" style="max-height: 500px;">
 			<table class="w-full">
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date</th>
