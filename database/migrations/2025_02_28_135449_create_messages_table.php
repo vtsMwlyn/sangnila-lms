@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('course_id'); // Course where the message was posted
             $table->unsignedBigInteger('user_id');   // Sender (Teacher/Student)
             $table->text('message');                 // message content
+            $table->text('attachment_path')->nullable();
             $table->timestamps();
         
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');

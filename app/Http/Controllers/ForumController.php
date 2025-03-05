@@ -34,43 +34,55 @@ class ForumController extends Controller
     public function retrieve_message_teacher($course_id) {
         $course = Course::findOrFail($course_id);
         
-        $studentIds = CourseStudent::where('course_id', $course->id)
+        try {
+            $studentIds = CourseStudent::where('course_id', $course->id)
             ->where('teacher_id', Auth::id())
             ->pluck('student_id');
     
-        $messages = Message::where(function ($query) use ($studentIds) {
-                $query->where('user_id', Auth::id())
-                    ->orWhereIn('user_id', $studentIds);
-            })
-            ->with('user.details')
-            ->orderBy('created_at')
-            ->get();
+            $messages = Message::where(function ($query) use ($studentIds) {
+                    $query->where('user_id', Auth::id())
+                        ->orWhereIn('user_id', $studentIds);
+                })->where('course_id', $course->id)
+                ->with('user.details')
+                ->orderBy('created_at')
+                ->get();
+        }
+        catch(Exception $e){
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
     
         return response()->json($messages);
     }
     
 
     public function retrieve_message_student($course_id) {
-        $currentClass = CourseStudent::where('course_id', $course_id)
-            ->where('student_id', Auth::id())
-            ->with('teacher') // Eager load teacher to avoid an extra query
-            ->firstOrFail();
-    
-        $teacher = $currentClass->teacher;
-    
-        // Get all student IDs directly
-        $studentIds = CourseStudent::where('course_id', $course_id)
-            ->where('teacher_id', $teacher->id)
-            ->pluck('student_id');
-    
-        $messages = Message::where(function ($query) use ($studentIds, $teacher) {
-                $query->where('user_id', Auth::id())
-                    ->orWhereIn('user_id', $studentIds)
-                    ->orWhere('user_id', $teacher->id);
-            })
-            ->with('user.details')
-            ->orderBy('created_at')
-            ->get();
+        $course = Course::findOrFail($course_id);
+
+        try {
+            $currentClass = CourseStudent::where('course_id', $course->id)
+                ->where('student_id', Auth::id())
+                ->with('teacher') // Eager load teacher to avoid an extra query
+                ->firstOrFail();
+        
+            $teacher = $currentClass->teacher;
+        
+            // Get all student IDs directly
+            $studentIds = CourseStudent::where('course_id', $course->id)
+                ->where('teacher_id', $teacher->id)
+                ->pluck('student_id');
+        
+            $messages = Message::where(function ($query) use ($studentIds, $teacher) {
+                    $query->where('user_id', Auth::id())
+                        ->orWhereIn('user_id', $studentIds)
+                        ->orWhere('user_id', $teacher->id);
+                })->where('course_id', $course->id)
+                ->with('user.details')
+                ->orderBy('created_at')
+                ->get();
+        }
+        catch(Exception $e){
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
     
         return response()->json($messages);
     }
@@ -94,6 +106,7 @@ class ForumController extends Controller
 
             $msg = Message::create([
                 'user_id' => Auth::user()->id,
+                'course_id' => $course_id,
                 'message' => $request->message ?? null,
                 'attachment_path' => $path,
             ]);
@@ -129,6 +142,7 @@ class ForumController extends Controller
 
             $msg = Message::create([
                 'user_id' => Auth::user()->id,
+                'course_id' => $course_id,
                 'message' => $request->message ?? null,
                 'attachment_path' => $path,
             ]);
