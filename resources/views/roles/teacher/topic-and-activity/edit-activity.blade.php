@@ -25,14 +25,14 @@
 			@csrf
 			@method('PATCH')
 			<!-- Activity Title -->
-			<div class="w-full flex gap-5">
-				<div class="w-1/2 flex flex-col">
+			<div class="w-full flex gap-5 flex-col md:flex-row">
+				<div class="w-full md:w-1/2 flex flex-col">
 					<x-label for="title">Activity Title<span class="text-red">*</span></x-label>
 					<x-input id="title" class="w-full" type="text" name="title" :value="old('title', $activity->title)" autofocus />
 				</div>
 
 				<!-- Session -->
-				<div class="w-1/2 flex flex-col">
+				<div class="w-full md:w-1/2 flex flex-col">
 					<x-label for="session">Session<span class="text-red">*</span></x-label>
 					<x-input id="session" class="w-full" type="text" name="session" placeholder="Enter activity session" :value="old('session', $activity->session)" />
 				</div>
@@ -76,10 +76,10 @@
 			@enderror
 
 			<div class="flex gap-2 items-stretch justify-end w-full mt-10 mb-3">
-				<x-cancel-button class="w-full md:w-1/6">
+				<x-cancel-button class="w-full md:w-40 lg:w-1/6">
 					Cancel
 				</x-cancel-button>
-				<x-button class=" w-full md:w-1/6">
+				<x-button class=" w-full md:w-40 lg:w-1/6">
 					{{ __('Save') }}
 				</x-button>
 			</div>

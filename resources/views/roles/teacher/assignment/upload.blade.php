@@ -21,29 +21,29 @@
 		@if($course_students->count())
 			<form action="{{ route('teacher.assignment.store', $course->id) }}" method="post" id="assignment_form">
 				@csrf
-				<div class="flex w-full gap-5">
+				<div class="flex w-full gap-2 md:gap-5 flex-col md:flex-row">
 					<!-- Assignment Title -->
-					<div class="flex flex-col w-1/2">
+					<div class="flex flex-col w-full md:w-1/2">
 						<x-label for="title">Assignment Title<span class="text-red">*</span></x-label>
 						<x-input id="title" class="block w-full" type="text" name="title" :value="old('title')" placeholder="Enter title" autofocus />
 					</div>
 
 					<!-- Deadline Time -->
-					<div class="flex flex-col w-1/2">
+					<div class="flex flex-col w-full md:w-1/2">
 						<x-label for="deadline_time">Deadline Time<span class="text-red">*</span></x-label>
-						<x-input id="deadline_time" class="block w-full" onblur="this.type = 'text';" onfocus="this.type = 'time';" name="deadline_time" :value="old('deadline_time')" placeholder="Enter deadline time"/>
+						<x-input id="deadline_time" class="block w-full" type="time" name="deadline_time" :value="old('deadline_time')" placeholder="Enter deadline time"/>
 					</div>
 				</div>
 
-				<div class="flex w-full gap-5 mt-4">
+				<div class="flex w-full gap-2 md:gap-5 flex-col md:flex-row mt-4">
 					<!-- Link -->
-					<div class="flex flex-col w-1/2">
+					<div class="flex flex-col w-full md:w-1/2">
 						<x-label for="link">Link<span class="text-red">*</span></x-label>
 						<x-input id="link" class="block w-full" type="text" name="link" :value="old('link')" placeholder="Enter link"/>
 					</div>
 
 					<!-- Deadline Date -->
-					<div class="flex flex-col w-1/2">
+					<div class="flex flex-col w-full md:w-1/2">
 						<x-label for="deadline_date">Deadline Date<span class="text-red">*</span></x-label>
 						<x-input id="deadline_date" class="block w-full date-input" type="date" name="deadline_date" placeholder="Enter deadline date" :value="old('deadline_date')"/>
 					</div>
@@ -71,7 +71,7 @@
 						@if($cs->student->status == "disabled")
 							@continue
 						@endif
-						<div class="flex items-center gap-3 checkbox-container" style="width: 23%;">
+						<div class="flex items-center gap-3 checkbox-container w-full md:w-[32%] lg:w-[23%]">
 							<input type="checkbox" id="checkbox{{ $loop->iteration }}"
 							class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif>
 							<label for="checkbox{{ $loop->iteration }}">{{ $cs->student->full_name }}</label>
@@ -84,10 +84,10 @@
 				@enderror
 
 				<div class="flex items-stretch gap-2 justify-end w-full mt-10 mb-3">
-					<x-cancel-button class="w-full md:w-1/6">
+					<x-cancel-button class="w-full md:w-40 lg:w-1/6">
 						Cancel
 					</x-cancel-button>
-					<x-button class=" w-full md:w-1/6">
+					<x-button class=" w-full md:w-40 lg:w-1/6">
 						{{ __('Submit') }}
 					</x-button>
 				</div>

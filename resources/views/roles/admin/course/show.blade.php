@@ -30,8 +30,8 @@
 				</div>
 
 				<div class="flex items-center justify-center w-full mt-8 mb-3 gap-3">
-					<x-button class="w-full md:w-1/6">Submit</x-button>
-					{{-- <x-button class="w-full md:w-1/6">Cancel</x-button> --}}
+					<x-button class="w-full md:w-40 lg:w-1/6">Submit</x-button>
+					{{-- <x-button class="w-full md:w-40 lg:w-1/6">Cancel</x-button> --}}
 				</div>
 
 				<!-- Helper -->
@@ -57,8 +57,8 @@
 				</div>
 
 				<div class="flex items-center justify-center w-full mt-8 mb-3 gap-3">
-					<x-button class="w-full md:w-1/6">Submit</x-button>
-					{{-- <x-button class="w-full md:w-1/6">Cancel</x-button> --}}
+					<x-button class="w-full md:w-40 lg:w-1/6">Submit</x-button>
+					{{-- <x-button class="w-full md:w-40 lg:w-1/6">Cancel</x-button> --}}
 				</div>
 
 				<!-- Helper -->
@@ -86,7 +86,7 @@
 				</div>
 
 				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">
-					<x-button class=" w-full md:w-1/5">
+					<x-button class=" w-full md:w-1/4">
 						{{ __('Submit') }}
 					</x-button>
 				</div>
@@ -110,7 +110,7 @@
 				</div>
 
 				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">
-					<x-button class=" w-full md:w-1/5">
+					<x-button class=" w-full md:w-1/4">
 						{{ __('Submit') }}
 					</x-button>
 				</div>
@@ -145,7 +145,7 @@
 				</div>
 
 				<div class="flex items-center justify-center w-full mt-8 mb-3 gap-3">
-					<x-button class="w-full md:w-1/6">Proceed</x-button>
+					<x-button class="w-full md:w-40 lg:w-1/6">Proceed</x-button>
 				</div>
 			</form>
 		</div>

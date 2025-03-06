@@ -1,36 +1,5 @@
 <!-- Main sidebar -->
 <div class="text-white z-10 min-h-screen" style="width: 17%;" id="sidebar-container">
-	{{-- @php
-		$all_course_has_topics = true;
-
-		foreach(Auth::user()->teached_courses as $c){
-			if($c->topics->count() == 0){
-				$all_course_has_topics = false;
-				break;
-			}
-		}
-
-		$there_is_student_with_no_progress_unlocked = false;
-
-		foreach (Auth::user()->teached_courses as $course) {
-			$students = App\Models\CourseStudent::where('teacher_id', Auth::user()->id)
-				->where('course_id', $course->id)
-				->get();
-
-			foreach ($students as $student) {
-				$progress_statuses = App\Models\Progress::where("course_id", $course->id)
-					->where("student_id", $student->student_id)
-					->pluck("status");
-
-				// If no progress data exists OR no "unlocked" status exists at all
-				if ($progress_statuses->isEmpty() || !$progress_statuses->contains("unlocked")) {
-					$there_is_student_with_no_progress_unlocked = true;
-					break 2; // Exit both loops immediately
-				}
-			}
-		}
-	@endphp --}}
-
 	<div class="md:flex flex-col items-stretch sticky hidden z-0 m-0" style="top: 65px; background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center left; background-size: cover;" id="sidebar">
 		<div class="relative flex flex-col dropdown-container">
 			<button type="button" class="flex flex-col items-center dropdown-toggler px-10 py-4 mb-6 hover:bg-slate-400" style="background: {{ Request::is('profile*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">

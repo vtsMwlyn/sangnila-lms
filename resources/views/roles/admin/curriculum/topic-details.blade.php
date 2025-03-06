@@ -23,7 +23,7 @@
 				</div>
 
 				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">
-					<x-button class=" w-full md:w-1/5">
+					<x-button class=" w-full md:w-1/4">
 						{{ __('Submit') }}
 					</x-button>
 				</div>
@@ -51,7 +51,7 @@
 @section("content")
 	<x-section-container>
 		<x-back-button href="{{ route('admin.course.show', $curriculum_topic->course->id) }}"></x-back-button>
-		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">Syllabus</h1>
+		<x-page-title>Syllabus</x-page-title>
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Topic and Activities Details</h1>
 		<div class="w-full bg-slate-400 mt-4" style="height: 2px;"></div>
 

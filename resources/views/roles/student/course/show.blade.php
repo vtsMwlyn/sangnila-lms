@@ -20,11 +20,11 @@
 			@endphp
 
 			<x-back-button href="{{ route('student.mycourse.index') }}"></x-back-button>
-			<div class="w-full flex flex-col md:flex-row justify-between items-center">
-				<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
+			<div class="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center">
+				<x-page-title>{{ $course->course_name }} - {{ ucwords($course->level) }}</x-page-title>
 
 				@if(!$max_session_reached)
-					<div class="flex items-center gap-3 my-4 md:my-0">
+					<div class="flex items-center gap-3 my-4 lg:my-0">
 						@if(!$unfinishedSelfAttendance)
 							<x-anchor-button href="{{ route('student.mycourse.check-in', $course->id) }}">
 								<i class="bi bi-stopwatch"></i> Check In
@@ -188,18 +188,18 @@
 						@if($ap['progress']->status == 'unlocked')
 							<div class="w-full bg-white px-8 py-3">
 								<div class="w-full flex items-center">
-									<div class="flex w-1/2 items-start">
+									<div class="flex w-3/4 md:w-1/2 items-start">
 										<h1 class="text-dark-blue font-bold text-xl">Course Activity #{{ $loop->iteration }}</h1>
 									</div>
-									<div class="flex w-1/2 items-start">
+									<div class="flex w-1/4 md:w-1/2 items-start justify-end md:justify-start">
 										<h1 class="text-dark-blue font-bold text-xl">Action</h1>
 									</div>
 								</div>
 								<div class="w-full flex items-center mt-1">
-									<div class="flex w-1/2 items-start">
+									<div class="flex w-3/4 md:w-1/2 items-start">
 										<h2>{{ $ap["activity"]->title }}</h2>
 									</div>
-									<div class="flex w-1/2 items-start ">
+									<div class="flex w-1/4 md:w-1/2 items-start justify-end md:justify-start">
 										<div class="flex gap-1">
 											<a href="{{ route('student.mycourse.preview', $ap["activity"]->id) }}"><img src="{{ asset('img/view.svg') }}" alt="icon" class="w-8 h-8 hover:scale-110"></a>
 											@if($ap["progress"]->meeting_link)

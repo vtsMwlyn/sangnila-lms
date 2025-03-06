@@ -44,8 +44,8 @@
 				</div>
 
 				<div class="flex items-center justify-center w-full mt-8 mb-3 gap-3">
-					<x-button class="w-full md:w-1/6">Submit</x-button>
-					{{-- <x-button class="w-full md:w-1/6">Cancel</x-button> --}}
+					<x-button class="w-full md:w-40 lg:w-1/6">Submit</x-button>
+					{{-- <x-button class="w-full md:w-40 lg:w-1/6">Cancel</x-button> --}}
 				</div>
 
 				<!-- Helper -->
@@ -66,9 +66,9 @@
 		<div class="flex w-full justify-between items-end">
 			<div class="">
 				<x-back-button href="{{ route('student.assignment.index') }}"><img src="{{ asset('img/back-button.svg') }}" class="h-8 w-8" alt="back"></x-back-button>
-				<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
+				<x-page-title>{{ $course->course_name }} - {{ ucwords($course->level) }}</x-page-title>
 			</div>
-			<div class="flex gap-8">
+			<div class="hidden md:flex gap-8">
 				<div class="flex flex-col gap-1 text-xs text-gray-500">
 					<div class="flex items-center gap-1">
 						<img src="{{ asset('img/view.svg') }}" class="h-6 w-6" alt="icon">

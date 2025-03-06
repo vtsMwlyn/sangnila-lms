@@ -21,7 +21,7 @@
 	</x-confirmation>
 
 	<!-- Edit topic -->
-	<x-popup popup_title="Edit Topic" class="w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-topic">
+	<x-popup popup_title="Edit Topic" class="w-11/12 lg:w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-topic">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" class="mt-4">
 				@csrf
@@ -33,7 +33,7 @@
 				</div>
 
 				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">
-					<x-button class=" w-full md:w-1/5">Save</x-button>
+					<x-button class=" w-full md:w-1/4">Save</x-button>
 				</div>
 
 				<!-- Helper -->
@@ -48,7 +48,7 @@
 @section("content")
 	<x-section-container>
 		<x-back-button href="{{ route('teacher.mycourse.show', $topic->course->id) }}"></x-back-button>
-		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $topic->course->course_name }}</h1>
+		<x-page-title>{{ $topic->course->course_name }}</x-page-title>
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Topic and Activities Details</h1>
 		<div class="w-full bg-slate-400 mt-4" style="height: 2px;"></div>
 

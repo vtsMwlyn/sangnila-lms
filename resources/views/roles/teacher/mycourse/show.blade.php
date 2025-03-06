@@ -10,7 +10,7 @@
 
 @section("popup")
 	<!-- New topic -->
-	<x-popup popup_title="New Topic" class="w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="new-topic">
+	<x-popup popup_title="New Topic" class="w-11/12 lg:w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="new-topic">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" class="mt-4">
 				@csrf
@@ -21,7 +21,7 @@
 				</div>
 
 				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">
-					<x-button class=" w-full md:w-1/5">
+					<x-button class="w-full md:w-1/4">
 						{{ __('Submit') }}
 					</x-button>
 				</div>
@@ -34,7 +34,7 @@
 	</x-popup>
 
 	<!-- Edit topic -->
-	<x-popup popup_title="Edit Topic" class="w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-topic">
+	<x-popup popup_title="Edit Topic" class="w-11/12 lg:w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-topic">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" class="mt-4">
 				@csrf
@@ -46,7 +46,7 @@
 				</div>
 
 				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">
-					<x-button class=" w-full md:w-1/5">
+					<x-button class=" w-full md:w-1/4">
 						{{ __('Submit') }}
 					</x-button>
 				</div>
@@ -68,7 +68,7 @@
 @section("content")
 	<x-section-container>
 		<x-back-button href="{{ route('teacher.mycourse.index') }}"></x-back-button>
-		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
+		<x-page-title>{{ $course->course_name }} - {{ ucwords($course->level) }}</x-page-title>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("successSynchronizeCurriculum"))
@@ -100,15 +100,15 @@
 		<h2 class="my-4 font-extrabold text-xl text-dark-blue">Student List</h2>
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
-		<div class="mt-8 flex flex-wrap">
+		<div class="mt-4 lg:mt-8 flex flex-wrap">
 			@forelse ($course_students as $index => $cs)
-				<div class="flex flex-col items-center w-1/6 mb-6">
+				<div class="flex flex-row lg:flex-col gap-2 lg:gap-0 items-center w-1/2 lg:w-1/6 mb-6">
 					@if($cs->student->details->profpic)
-						<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;">
+						<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-10 h-10 md:w-14 md:h-14 lg:w-28 lg:h-28 mt-0 mb-0 lg:mt-2 lg:mb-4" alt="profpic" style="object-fit: cover; object-position: center;">
 					@else
-						<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+						<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-10 h-10 md:w-14 md:h-14 lg:w-28 lg:h-28 mt-0 mb-0 lg:mt-2 lg:mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
 					@endif
-					<h1 class="text-lg font-bold text-center">{{-- explode(" ", $cs->student->full_name)[0] --}}{{ $cs->student->full_name }}</h1>
+					<h1 class="text-sm lg:text-lg font-bold text-start lg:text-center">{{-- explode(" ", $cs->student->full_name)[0] --}}{{ $cs->student->full_name }}</h1>
 				</div>
 			@empty
 			@endforelse
@@ -118,15 +118,15 @@
 		<h2 class="my-4 font-extrabold text-xl text-dark-blue">Course Topics and Activities</h2>
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
-		<div class="flex justify-between items-stretch w-full mt-5">
+		<div class="flex flex-col-reverse lg:flex-row gap-8 lg:gap-0 justify-between items-stretch w-full mt-5">
 			<div class="relative">
-				<x-button type="button"  data-route="{{ route('teacher.mycourse.topic.store', $course->id) }}" id="new-topic-btn"><i class="bi bi-plus-lg"></i> Add New Topic</x-button>
+				<x-button type="button" data-route="{{ route('teacher.mycourse.topic.store', $course->id) }}" id="new-topic-btn"><i class="bi bi-plus-lg"></i> Add New Topic</x-button>
 				@if($topics->count() == 0)
 					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
 				@endif
 			</div>
 
-			<div class="flex gap-5">
+			<div class="flex gap-2 lg:gap-5">
 				<x-anchor-button
 					href="{{ route('teacher.mycourse.import-excel-topicandactivities', $course->id) }}">
 					<i class="bi bi-file-earmark-arrow-up"></i> Import from Excel
@@ -153,7 +153,7 @@
 			</div>
 		</div>
 
-		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
+		<div class="w-full bg-slate-400 mt-4 lg:mt-8" style="height: 2px;"></div>
 
 		<div class="w-full overflow-x-auto">
 			<table class="w-full">

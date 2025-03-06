@@ -11,7 +11,7 @@
 @section("content")
 	<x-section-container>
 		<x-back-button href="{{ route('teacher.assignment.index') }}"></x-back-button>
-		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
+		<x-page-title>{{ $course->course_name }} - {{ ucwords($course->level) }}</x-page-title>
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Assignments List</h1>
 
 		@if(session()->has("successUploadAssignment"))

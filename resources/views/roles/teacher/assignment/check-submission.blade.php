@@ -13,7 +13,7 @@
 @section("content")
 	<x-section-container>
 		<x-back-button href="{{ route('teacher.assignment.show', $assignment->course->id) }}"></x-back-button>
-		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $assignment->title }}</h1>
+		<x-page-title>{{ $assignment->title }}</x-page-title>
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Students Submissions</h1>
 
 		<div class="w-full bg-slate-400 mt-6" style="height: 2px;"></div>

@@ -22,15 +22,15 @@
 
 		<form action="{{ route('teacher.mycourse.activity.store', $topic->id) }}" method="post" class="mt-3">
 			@csrf
-			<div class="flex gap-5 w-full">
+			<div class="flex gap-5 w-full flex-col md:flex-row">
 				<!-- Activity Title -->
-				<div class="flex flex-col w-1/2">
+				<div class="flex flex-col w-full md:w-1/2">
 					<x-label for="title">Activity Title<span class="text-red">*</span></x-label>
 					<x-input id="title" class="w-full" type="text" name="title" placeholder="Enter activity title" value="{{ old('title') }}" autofocus />
 				</div>
 
 				<!-- Session -->
-				<div class="flex flex-col w-1/2">
+				<div class="flex flex-col w-full md:w-1/2">
 					<x-label for="session">Session<span class="text-red">*</span></x-label>
 					<x-input id="session" class="w-full" type="text" name="session" placeholder="Enter activity session" value="{{ old('session') }}" />
 				</div>
@@ -74,10 +74,10 @@
 			@enderror
 
 			<div class="flex gap-2 items-stretch justify-end w-full mt-10 mb-3">
-				<x-cancel-button class="w-full md:w-1/6">
+				<x-cancel-button class="w-full md:w-40 lg:w-1/6">
 					Cancel
 				</x-cancel-button>
-				<x-button class=" w-full md:w-1/6">
+				<x-button class=" w-full md:w-40 lg:w-1/6">
 					{{ __('Save') }}
 				</x-button>
 			</div>

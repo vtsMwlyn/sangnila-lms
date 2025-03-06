@@ -20,10 +20,10 @@
 		}
 	</style>
 
-	<div class="w-full flex flex-col md:flex-row gap-5">
-		<div class="flex flex-col gap-5 w-full md:w-2/3">
+	<div class="w-full flex flex-col lg:flex-row gap-5">
+		<div class="flex flex-col gap-5 w-full lg:w-2/3">
 			<!-- Main stats -->
-			<div class="w-full flex flex-wrap md:flex-nowrap justify-center gap-5">
+			<div class="w-full flex flex-wrap lg:flex-nowrap justify-center gap-5">
 				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5">
 					<img src="{{ asset('img/studentdashboard-materialsunlocked.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
 					<p class="font-bold text-black text-center">Courses Assigned</p>
@@ -46,7 +46,7 @@
 				</div>
 			</div>
 
-			<!-- Progress -->
+			<!-- My Attendances -->
 			<div class="bg-white rounded-3xl p-5 shadow-lg grow">
 				<div class="flex w-full justify-between">
 					<p class="font-bold text-dark-blue">My Attendances</p>
@@ -54,14 +54,14 @@
 				</div>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-				<div class="flex flex-col justify-between overflow-y-auto" style="height: 400px;">
+				<div class="flex flex-col justify-between overflow-y-auto w-full" style="height: 400px;">
 					<ul class="list-disc list-inside">
 						@foreach(Auth::user()->teached_courses as $course)
 							@php
 								$selfAttendances = App\Models\SelfAttendance::where("user_id", Auth::user()->id)->where('course_id', $course->id)->where("self_attendance_date", Carbon\Carbon::today()->format('Y-m-d'))->latest()->first();
 							@endphp
 
-							<div class="flex items-center justify-between font-bold">
+							<div class="flex items-center justify-between font-bold w-full">
 								<div>
 									{{ $course->course_name }} - {{ ucwords($course->level) }}
 									@if($selfAttendances && $selfAttendances->check_in_time && $selfAttendances->check_out_time)
@@ -83,7 +83,7 @@
 								@endif
 							</div>
 
-							<div class="flex gap-5 w-full mb-4 mt-2">
+							<div class="flex gap-2 lg:gap-5 w-full mb-4 mt-2">
 								<div class="w-1/2 flex flex-col">
 									<x-label>Last check in time</x-label>
 									<x-input type="text" disabled value="{{ $selfAttendances->check_in_time ?? 'N/A' }}"></x-input>
@@ -100,7 +100,7 @@
 		</div>
 
 		<!-- Todo list -->
-		<div class="w-full md:w-1/3 flex gap-5">
+		<div class="w-full lg:w-1/3 flex gap-5">
 			<div class="w-full bg-white rounded-3xl p-5 shadow-lg">
 				<p class="font-bold text-dark-blue">To Do List</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
@@ -125,9 +125,9 @@
 		</div>
 	</div>
 
-	<div class="w-full flex md:flex-row flex-col gap-5 mt-5">
+	<div class="w-full flex lg:flex-row flex-col gap-5 mt-5">
 		<!-- News and announcement -->
-		<div class="w-full md:w-1/2 bg-white rounded-3xl py-5 shadow-lg">
+		<div class="w-full lg:w-1/2 bg-white rounded-3xl py-5 shadow-lg">
 			<div class="px-5">
 				<p class="font-bold text-dark-blue">News and Announcement</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
@@ -187,7 +187,7 @@
 		</div>
 
 		<!-- Calendar -->
-		<div class="w-full md:w-1/2 bg-white rounded-3xl p-5 shadow-lg">
+		<div class="w-full lg:w-1/2 bg-white rounded-3xl p-5 shadow-lg">
 			<div class="flex justify-between w-full items-center">
 				<p class="font-bold text-dark-blue">Calendar</p>
 				@if(!session('google_user_info.name'))
@@ -270,40 +270,42 @@
 			updateTime();
             setInterval(updateTime, 1000);
 
-			// Handle calendar data
-			const ibento = allEventData.map(ev => ({
-				title: ev.summary,
-				start: ev.start,
-				end: ev.end,
-				backgroundColor: ev.calendar != 'Holidays in Indonesia' ? '#16a34a' : '#ff5733',
-				textColor: '#fff',
-				borderColor: ev.calendar != 'Holidays in Indonesia' ? '#15803d' : '#ff0000'
-			}));
+			@if(session('google_user_info.name'))
+				// Handle calendar data
+				const ibento = allEventData.map(ev => ({
+					title: ev.summary,
+					start: ev.start,
+					end: ev.end,
+					backgroundColor: ev.calendar != 'Holidays in Indonesia' ? '#16a34a' : '#ff5733',
+					textColor: '#fff',
+					borderColor: ev.calendar != 'Holidays in Indonesia' ? '#15803d' : '#ff0000'
+				}));
 
-			const tasuku = allTaskData.map(tsk => ({
-				title: tsk.title,
-				start: tsk.due,
-				end: tsk.due,
-				backgroundColor: '#337ab7', // Different color for tasks
-				textColor: '#fff'
-			}));
+				const tasuku = allTaskData.map(tsk => ({
+					title: tsk.title,
+					start: tsk.due,
+					end: tsk.due,
+					backgroundColor: '#337ab7', // Different color for tasks
+					textColor: '#fff'
+				}));
 
-			const events = [...ibento, ...tasuku];
+				const events = [...ibento, ...tasuku];
 
-			var calendarEl = document.getElementById('calendar');
-			var calendar = new FullCalendar.Calendar(calendarEl, {
-				initialView: 'dayGridMonth',
-				events: events,
-				eventContent: function(info) {
-					return {
-						html: `<div style="background-color:${info.event.backgroundColor}; padding: 2px 1px; border-radius: 5px; color: white; font-size: 10px; text-wrap: wrap;">
-								${info.event.title}
-							</div>`
-					};
-				}
-			});
+				var calendarEl = document.getElementById('calendar');
+				var calendar = new FullCalendar.Calendar(calendarEl, {
+					initialView: 'dayGridMonth',
+					events: events,
+					eventContent: function(info) {
+						return {
+							html: `<div style="background-color:${info.event.backgroundColor}; padding: 2px 1px; border-radius: 5px; color: white; font-size: 10px; text-wrap: wrap;">
+									${info.event.title}
+								</div>`
+						};
+					}
+				});
 
-			calendar.render();
+				calendar.render();
+			@endif
 		});
 	</script>
 @endsection

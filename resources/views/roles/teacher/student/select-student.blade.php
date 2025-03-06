@@ -13,7 +13,7 @@
 @section("content")
 	<x-section-container>
 		<x-back-button href="{{ route('teacher.student.select-course') }}"></x-back-button>
-		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
+		<x-page-title>{{ $course->course_name }} - {{ ucwords($course->level) }}</x-page-title>
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Select a student to continue</h1>
 		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 

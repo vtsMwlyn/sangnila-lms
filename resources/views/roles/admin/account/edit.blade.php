@@ -77,10 +77,10 @@
 			</div>
 
 			<div class="flex items-stretch justify-center mt-20 mb-3 gap-3">
-				<x-button class=" w-full md:w-1/5">
+				<x-button class=" w-full md:w-1/4">
 					{{ __('Save') }}
 				</x-button>
-				<x-cancel-button class="w-full md:w-1/5">
+				<x-cancel-button class="w-full md:w-1/4">
 					Cancel
 				</x-cancel-button>
 			</div>

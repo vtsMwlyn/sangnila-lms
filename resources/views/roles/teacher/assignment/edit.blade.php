@@ -23,30 +23,30 @@
 			@csrf
 			@method("patch")
 
-			<div class="flex w-full gap-5">
+			<div class="flex w-full gap-2 md:gap-5 flex-col md:flex-row">
 				<!-- Assignment Title -->
-				<div class="flex flex-col w-1/2">
+				<div class="flex flex-col w-full md:w-1/2">
 					<x-label for="title">Assignment Title<span class="text-red">*</span></x-label>
 					<x-input id="title" class="block w-full" type="text" name="title" placeholder="Enter title"
 						:value="old('title', $assignment->title)" autofocus />
 				</div>
 
 				<!-- Deadline Time -->
-				<div class="flex flex-col w-1/2">
+				<div class="flex flex-col w-full md:w-1/2">
 					<x-label for="deadline_time">Deadline Time<span class="text-red">*</span></x-label>
 					<x-input id="deadline_time" class="block w-full" type="time" name="deadline_time" placeholder="Enter deadline time" :value="old('deadline_time', $assignment->deadline_time)" />
 				</div>
 			</div>
 
-			<div class="flex w-full gap-5 mt-4">
+			<div class="flex w-full gap-2 md:gap-5 flex-col md:flex-row mt-4">
 				<!-- Link -->
-				<div class="flex flex-col w-1/2">
+				<div class="flex flex-col w-full md:w-1/2">
 					<x-label for="link">Link<span class="text-red">*</span></x-label>
 					<x-input id="link" class="block w-full" type="text" name="link" placeholder="Enter link" :value="old('link', $assignment->link)" />
 				</div>
 
 				<!-- Deadline Date -->
-				<div class="flex flex-col w-1/2">
+				<div class="flex flex-col w-full md:w-1/2">
 					<x-label for="deadline_date">Deadline Date<span class="text-red">*</span></x-label>
 					<x-input id="deadline_date" class="block w-full date-input" type="date" name="deadline_date" placeholder="Enter deadline date" :value="old('deadline_date', $assignment->deadline_date)" />
 				</div>
@@ -75,7 +75,7 @@
 						@continue
 					@endif
 
-					<div class="flex items-center gap-3 checkbox-container" style="width: 23%;">
+					<div class="flex items-center gap-3 checkbox-container w-full md:w-[32%] lg:w-[23%]">
 						<input type="checkbox" id="checkbox{{ $i }}"
 						class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $i) == "on" ) checked @elseif($checkboxes_values[$i] == "on") checked @endif>
 						<label for="checkbox{{ $i }}">{{ $cs->student->full_name }}</label>
@@ -88,10 +88,10 @@
 			@enderror
 
 			<div class="flex items-stretch gap-2 justify-end w-full mt-10">
-				<x-cancel-button class="w-full md:w-1/6">
+				<x-cancel-button class="w-full md:w-40 lg:w-1/6">
 					Cancel
 				</x-cancel-button>
-				<x-button class=" w-full md:w-1/6">
+				<x-button class=" w-full md:w-40 lg:w-1/6">
 					{{ __('Submit') }}
 				</x-button>
 			</div>

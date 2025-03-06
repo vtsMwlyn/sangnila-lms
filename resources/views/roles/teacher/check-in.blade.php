@@ -7,7 +7,7 @@
 @section("content")
 	<x-section-container>
 		<x-back-button href="{{ route('teacher.attendance.show', $course->id) }}"></x-back-button>
-		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
+		<x-page-title>{{ $course->course_name }}</x-page-title>
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Lecturer Check In</h1>
 
 		@if(session()->has("failedCheckIn"))
@@ -26,16 +26,13 @@
 
 			<!-- Evidence -->
 			<div class="w-full flex flex-col mt-4 items-start">
-				<div class="w-full flex">
-					<div class="flex flex-col w-1/2 pr-2">
-						{{-- <div style="aspect-ratio: 19 / 6;">
-							<video id="video" class="w-full h-full" style="object-fit: cover;" autoplay playsinline></video>
-						</div> --}}
+				<div class="w-full flex flex-col md:flex-row">
+					<div class="flex flex-col w-full md:w-1/2 pr-0 md:pr-2">
 						<x-label>Photo Evidence<span class="text-red">*</span></x-label>
 						<video id="video" class="w-full" autoplay playsinline></video>
 					</div>
-					<div class="flex flex-col w-1/2 pl-2">
-						<x-label :value="__('Preview')" id="preview-label" style="display: none;" />
+					<div class="flex flex-col w-full md:w-1/2 pl-0 md:pl-2" id="preview-area" style="display: none;">
+						<x-label :value="__('Preview')"/>
 						<canvas id="canvas" class="w-full"></canvas>
 					</div>
 				</div>
@@ -51,10 +48,10 @@
 			</div>
 
 			<div class="flex items-stretch gap-2 justify-end w-full mt-10 mb-3">
-				<x-cancel-button class="w-full md:w-1/6">
+				<x-cancel-button class="w-full md:w-40 lg:w-1/6">
 					Cancel
 				</x-cancel-button>
-				<x-button class=" w-full md:w-1/6">
+				<x-button class=" w-full md:w-40 lg:w-1/6">
 					{{ __('Submit') }}
 				</x-button>
 			</div>
@@ -108,7 +105,7 @@
 				// Draw the current video frame onto the canvas
 				context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-				$('#preview-label').show();
+				$('#preview-area').show();
 
 				// Convert the canvas content to a Blob
 				canvas.toBlob(blob => {

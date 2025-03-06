@@ -24,8 +24,8 @@ Route::prefix('/student')
 		});
 
 		// Ceritanya bayar
-		Route::get("/payment", [PaymentController::class, "student_pay"])->name("pay");
-		Route::post("/payment", [PaymentController::class, "student_pay_proceed"])->name("pay.proceed");
+		// Route::get("/payment", [PaymentController::class, "student_pay"])->name("pay");
+		// Route::post("/payment", [PaymentController::class, "student_pay_proceed"])->name("pay.proceed");
 
 		// My courses
 		Route::prefix('/my-course')

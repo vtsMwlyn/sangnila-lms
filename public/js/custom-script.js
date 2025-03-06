@@ -13,6 +13,17 @@ function hideLoadingPopup() {
 	$('#loading-popup').parent().addClass('hidden');
 }
 
+// Toggle sidebar toggler visibility
+function resetSidebarToggler(){
+	if($(window).width() <= 2000 && $(window).width() >= 1024){
+		$('#sidebar-toggler').show();
+		$('#sidebar-toggler').css('left', $('#sidebar-container').outerWidth()).css('top', $(window).innerHeight() / 2);
+	}
+	else {
+		$('#sidebar-toggler').hide();
+	}
+}
+
 $(document).ready(() => {
     $(document).on('submit', '.ajax-form', function (e) {
         e.preventDefault();
@@ -79,9 +90,24 @@ $(document).ready(() => {
 	}
 
 	adjustLayouts();
+	resetSidebarToggler();
 
 	$(window).on("resize", function(){
 		adjustLayouts();
+		resetSidebarToggler();
+	});
+
+	$('#sidebar-toggler').click(function(){
+		if($('#sidebar-container').is(':visible')){
+			$('#sidebar-toggler').css({'left': 0});
+			$('#content-container').css({'width': '100%'});
+			$('#sidebar-container').css({'width': 0}).hide();
+		}
+		else {
+			$('#sidebar-container').css({'width': '17%'}).show();
+			$('#content-container').css({'width': '83%'});
+			$('#sidebar-toggler').css({'left': $('#sidebar-container').outerWidth()});
+		}
 	});
 
 	// Select2 initialization

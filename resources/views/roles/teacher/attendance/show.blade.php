@@ -34,9 +34,9 @@
 @section("content")
 	<x-section-container>
 		<x-back-button href="{{ route('teacher.attendance.index') }}"></x-back-button>
-		<div class="flex items-start justify-between mt-3">
-			<h1 class="text-dark-blue text-3xl font-extrabold">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
-			<div class="flex gap-3">
+		<div class="flex flex-col lg:flex-row items-start justify-between mt-3">
+			<x-page-title>{{ $course->course_name }} - {{ ucwords($course->level) }}</x-page-title>
+			<div class="flex gap-3 mt-4 lg:mt-0">
 				@if(!$unfinishedSelfAttendance)
 					<x-anchor-button href="{{ route('teacher.attendance.check-in', $course->id) }}">
 						<i class="bi bi-stopwatch"></i> Check In
@@ -72,28 +72,20 @@
 		</div>
 
 		<!-- For larger screen -->
-		<div class="lg:flex mt-4 w-full flex-wrap hidden">
+		<div class="flex mt-4 w-full flex-wrap">
 			<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id, 'content' => 'student attendances']) }}"
-				class="py-2 w-1/6 sm:w-48 text-center hover:bg-slate-200"
+				class="py-2 w-1/2 lg:w-1/6 sm:w-48 text-center hover:bg-slate-200"
 				style="@if(request('content') == 'student attendances' || !request('content')) border-bottom: 4px solid #1db9cf; @endif">
 				Student Attendances
 			</a>
 
 			<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances']) }}"
-				class="py-2 w-1/6 sm:w-48 text-center hover:bg-slate-200"
+				class="py-2 w-1/2 lg:w-1/6 sm:w-48 text-center hover:bg-slate-200"
 				style="@if(request('content') == 'my attendances') border-bottom: 4px solid #1db9cf; @endif">
 				My Attendances
 			</a>
 		</div>
 
-		<!-- For smaller screen -->
-		<div class="relative flex lg:hidden flex-col items-start w-96 first-letter:0 dropdown-container mt-4">
-			<button type="button" class="border-slate-400 py-2 px-4 rounded-2xl font-bold text-dark-blue w-full bg-white flex justify-between items-center dropdown-toggler" style="border-width: 3px;">{{ request('content') ? ucwords(request('content')) : 'Student Attendances' }} <img src="{{ asset('img/dropdown-arrow.svg') }}" class="w-5 h-5" alt="icon"></button>
-			<div class="absolute bg-slate-100 top-12 w-full rounded-xl flex flex-col hidden overflow-hidden dropdown-menu" style="box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
-				<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id, 'content' => 'student attendances']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">Student Attendances</div></a>
-				<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">My Attendances</div></a>
-			</div>
-		</div>
 		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
 		@if(session()->has("successUploadAttendance"))
@@ -111,12 +103,12 @@
 		@endif
 
 		@if(request('content') == 'student attendances' || !request('content'))
-			<div class="mb-3 mt-5 flex w-full justify-between items-center">
-				<x-anchor-button href="{{ route('teacher.attendance.select-students', $course->id) }}">
+			<div class="mb-3 mt-5 flex flex-col-reverse gap-8 lg:gap-0 lg:flex-row w-full justify-between items-center">
+				<x-anchor-button href="{{ route('teacher.attendance.select-students', $course->id) }}" class="self-start lg:self-center">
 					<i class="bi bi-plus-lg"></i> New Student Attendance
 				</x-anchor-button>
 				<form action="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances']) }}" method="get">
-					<x-select class="w-80" name="show">
+					<x-select class="w-48 md:w-80" name="show">
 						<option value="my students only" @if(!request('show') || request('show') == 'my students only') selected @endif>My Students Only</option>
 						<option value="all" @if(request('show') == 'all') selected @endif>All Students</option>
 					</x-select>

@@ -98,15 +98,16 @@
 
 			<div class="relative flex flex-col items-end dropdown-container">
 				<button type="button" class="dropdown-toggler"><img src="{{ asset('img/burger-icon-navbar-pc.svg') }}" alt="burger-icon" class="h-6"></button>
-				<div class="absolute z-10 bg-white top-16 w-80 rounded-3xl flex flex-col py-2 dropdown-menu" style="display: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
-					<a href="#"><div class="w-full px-5 py-1 text-black font-semibold flex items-center gap-1"><img src="{{ asset('img/navbar-help-and-support.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Help and Support</div></a>
-					<a href="#"><div class="w-full px-5 py-1 text-black font-semibold flex items-center gap-1"><img src="{{ asset('img/navbar-send-feedback.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Send Feedback</div></a>
+				<div class="absolute z-10 bg-white top-16 w-80 rounded-3xl flex flex-col py-2 dropdown-menu overflow-hidden" style="display: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
+					<a href="#"><div class="w-full px-5 py-1.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><img src="{{ asset('img/navbar-help-and-support.svg') }}" class="h-5 w-5" alt="sidebar-icon"> Help and Support</div></a>
+					<a href="#"><div class="w-full px-5 py-1.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><img src="{{ asset('img/navbar-send-feedback.svg') }}" class="h-5 w-5" alt="sidebar-icon"> Send Feedback</div></a>
+					<a href="{{ route("profile.show") }}" class="block lg:hidden"><div class="w-full px-5 py-0.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><i class="bi bi-person-fill text-slate-400 text-lg mr-0.5"></i> Profile</div></a>
 
 					@auth
 						<form method="POST" action="{{ route('logout') }}" class="grow flex items-center gap-2">
 							@csrf
 							<button
-								class="w-full px-5 py-1 text-black font-bold flex items-center gap-1" onclick="return confirm('Are you sure want to logout from your account?');">
+								class="w-full px-5 py-1 text-black font-bold flex items-center gap-1 hover:bg-slate-100" onclick="return confirm('Are you sure want to logout from your account?');">
 								<img src="{{ asset('img/navbar-logout.svg') }}" class="h-5 w-5" alt="sidebar-icon"> {{ __('Log Out') }}
 							</button>
 						</form>

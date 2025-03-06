@@ -13,7 +13,7 @@
 	<div class="rounded-3xl w-full py-5 px-8 flex flex-col items-stretch sm:text-base text-sm" style="background: #FEFEFEB2;">
 		<x-back-button href="{{ route('student.mycourse.show', $activity->topic->course->id) }}"></x-back-button>
 
-		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ __($activity->topic->title . ": " . $activity->title) }}</h1>
+		<x-page-title>{{ __($activity->topic->title . ": " . $activity->title) }}</x-page-title>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		<h2 class="">{{ $activity->desc }}</h2>

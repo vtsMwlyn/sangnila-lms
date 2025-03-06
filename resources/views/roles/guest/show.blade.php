@@ -7,7 +7,7 @@
 @section("content")
 	<x-section-container>
 		<button type="button" onclick="history.back();"><img src="{{ asset('img/back-button.svg') }}" class="h-8 w-8 hover:scale-110" alt="back"></button>
-		<h1 class="text-dark-blue text-3xl font-extrabold mt-3">{{ $course->course_name }}</h1>
+		<x-page-title>{{ $course->course_name }}</x-page-title>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 		<p class="font-semibold mb-8">{{ $course->course_description }}</p>
 

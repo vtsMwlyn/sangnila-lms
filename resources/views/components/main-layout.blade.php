@@ -70,7 +70,7 @@
 
 		<!-- Loading popup -->
 		<div class="popup-container w-full h-full fixed top-0 flex items-center justify-center" style="backdrop-filter: blur(5px); z-index: 100; background: rgba(0, 0, 0, 0.3);">
-			<div class="rounded-3xl bg-white py-5 px-6 popup w-11/12 md:w-1/3 h-1/4 flex gap-3 items-center justify-center" id="loading-popup">
+			<div class="rounded-3xl bg-white py-5 px-6 popup w-11/12 lg:w-1/3 h-1/4 flex gap-3 items-center justify-center" id="loading-popup">
 				<div class="loader w-12 h-12 border-8 border-t-transparent border-light-blue rounded-full animate-spin"></div>
 				<p class="font-extrabold text-xl animate-pulse">Please Wait...</p>
 			</div>
@@ -104,7 +104,7 @@
 					@if($announcement->announce_from < now() && $announcement->announce_until > now())
 						@php $n++; @endphp
 						<div class="h-screen w-screen flex items-center justify-center fixed top-0 announcement-popup-container" style="@if($n == 1) backdrop-filter: blur(5px) brightness(0.5);@endif z-index: 60;">
-							<div class="bg-white w-full md:w-1/2 h-4/5 flex flex-col gap-5 justify-between items-center p-8 rounded-3xl announcement-popup" >
+							<div class="bg-white w-11/12 lg:w-1/2 h-4/5 flex flex-col gap-5 justify-between items-center p-8 rounded-3xl announcement-popup" >
 								<h1 class="text-xl font-bold text-blue-900">{{ $announcement->title }}</h1>
 								<div class="grow overflow-y-auto">
 									@if($announcement->image_path)
@@ -185,36 +185,5 @@
 
 		<!-- Scripts -->
 		<script src="{{ asset('js/custom-script.js') }}"></script>
-
-		<script>
-			function resetSidebarToggler(){
-				if($(window).width() <= 2000 && $(window).width() >= 1024){
-					$('#sidebar-toggler').show();
-					$('#sidebar-toggler').css('left', $('#sidebar-container').outerWidth()).css('top', $(window).innerHeight() / 2);
-				}
-				else {
-					$('#sidebar-toggler').hide();
-				}
-			}
-
-			$(window).on('resize', resetSidebarToggler);
-
-			$(document).ready(() => {
-				resetSidebarToggler();
-
-				$('#sidebar-toggler').click(function(){
-					if($('#sidebar-container').is(':visible')){
-						$('#sidebar-toggler').css({'left': 0});
-						$('#sidebar-container').hide();
-						$('#content-container').css({'width': '100%'});
-					}
-					else {
-						$('#sidebar-toggler').css({'left': $('#sidebar-container').outerWidth()});
-						$('#sidebar-container').show();
-						$('#content-container').css({'width': '83%'});
-					}
-				});
-			});
-		</script>
 	</body>
 </html>

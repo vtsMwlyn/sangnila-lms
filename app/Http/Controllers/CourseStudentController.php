@@ -202,8 +202,8 @@ class CourseStudentController extends Controller {
 	// Remove the course from student's assigned course in the database
 	public function destroy($student_id, $course_id) {
 		try {
-			$CourseStudent = CourseStudent::where('student_id', $student_id)->where('course_id', $course_id)->first();
-			CourseStudent::destroy($CourseStudent->id);
+			Progress::where('student_id', $student_id)->where('course_id', $course_id)->delete();
+			CourseStudent::where('student_id', $student_id)->where('course_id', $course_id)->delete();
 		}
 		catch(Exception $e){
 			return back()->with("systemFail", "System failed to unassign the course from the student, please report the error to our IT team. Error detail: " . $e->getMessage());
