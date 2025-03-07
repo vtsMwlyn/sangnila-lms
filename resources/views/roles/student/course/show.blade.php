@@ -12,7 +12,7 @@
 	{{-- @dd($activityProgresses) --}}
 
 	<div class="rounded-3xl w-full py-5 flex flex-col items-stretch sm:text-base text-sm" style="background: #FEFEFEB2;">
-		<div class="flex flex-col w-full px-8">
+		<div class="flex flex-col w-full px-5 lg:px-8">
 			@php
 				$courseStudent = App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first();
 				$teacher = $courseStudent->teacher;

@@ -10,7 +10,7 @@
 @endsection
 
 @section("content")
-	<div class="rounded-3xl w-full py-5 px-8 flex flex-col items-stretch sm:text-base text-sm" style="background: #FEFEFEB2;">
+	<x-section-container>
 		<x-back-button href="{{ route('student.mycourse.show', $activity->topic->course->id) }}"></x-back-button>
 
 		<x-page-title>{{ __($activity->topic->title . ": " . $activity->title) }}</x-page-title>
@@ -25,18 +25,18 @@
 		</div>
 
 		<iframe src="{{ $preview_link }}" width="100%" style="height: 70vh;" class="my-5 border-2 rounded-3xl" id="contentpreview"></iframe>
+	</x-section-container>
 
-		<script>
-			function adjustIframeHeight() {
-				const iframe = document.querySelector('#contentpreview');
-				const width = iframe.offsetWidth;
-				// Example: Maintain a 16:9 aspect ratio
-				const height = (width * 9) / 16;
-				iframe.style.height = height + 'px';
-			}
+	<script>
+		function adjustIframeHeight() {
+			const iframe = document.querySelector('#contentpreview');
+			const width = iframe.offsetWidth;
+			// Example: Maintain a 16:9 aspect ratio
+			const height = (width * 9) / 16;
+			iframe.style.height = height + 'px';
+		}
 
-			window.addEventListener('load', adjustIframeHeight);
-			window.addEventListener('resize', adjustIframeHeight);
-		</script>
-	</div>
+		window.addEventListener('load', adjustIframeHeight);
+		window.addEventListener('resize', adjustIframeHeight);
+	</script>
 @endsection

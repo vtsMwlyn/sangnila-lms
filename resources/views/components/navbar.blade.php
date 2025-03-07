@@ -13,7 +13,7 @@
 
 			<div class="flex items-start flex-col justify-center">
 				<div class="text-md md:text-lg text-blue font-semibold mb-1.5 md:mb-0">LEARNING MANAGEMENT SYSTEM</div>
-				<div class="flex gap-1 text-slate-400 font-light italic" style="font-size: 8pt; margin-top: -5px">{{ trans("strings.version") }}<h1 id="screen"></h1></div>
+				<div class="flex gap-1 text-slate-400 font-light italic" style="font-size: 8pt; margin-top: -5px">{{ trans("strings.version") }}</div>
 			</div>
 		</div>
 
@@ -47,7 +47,7 @@
 					@endif
 					<button type="button" class="dropdown-toggler"><img src="{{ asset('img/mail-icon.svg') }}" alt="mail-icon" class="h-6"></button>
 
-					<div class="absolute z-10 bg-white top-16 w-96 rounded-3xl px-5 py-3 flex flex-col dropdown-menu" style="@if(!session()->has('successNotifAction')) display: none; @endif box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); height: 600px;">
+					<div class="absolute z-10 bg-white top-16 w-80 sm:w-96 rounded-3xl px-5 py-3 flex flex-col dropdown-menu" style="@if(!session()->has('successNotifAction')) display: none; @endif box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); height: 600px;">
 						<div class="w-full flex items-center justify-between">
 							<h1 class="font-extrabold text-dark-blue">Notifications</h1>
 							@if($inboxes->count())
@@ -59,10 +59,6 @@
 								@else
 									<div type="button" class="font-bold text-slate-600 text-xs">Mark All Read</div>
 								@endif
-								{{-- <form action="{{ route('notification.dismiss-all') }}" class="flex justify-center" method="post">
-									@csrf
-									<button type="submit" class="font-semibold hover:underline text-orange-400 text-sm" onclick="return confirm('All of your read inbox will be cleared, are you sure want to proceed?');">Dismiss all</button>
-								</form> --}}
 							@endif
 						</div>
 
@@ -79,10 +75,6 @@
 											<button type="submit" class="font-semibold hover:underline text-light-blue">Mark Read</button>
 										</form>
 									@else
-										{{-- <form action="{{ route('notification.dismiss', $inbox->id) }}" class="flex justify-end w-full mt-2" method="post">
-											@csrf
-											<button type="submit" class="font-semibold hover:underline text-orange-600">Dismiss</button>
-										</form> --}}
 									@endif
 								</div>
 							@empty

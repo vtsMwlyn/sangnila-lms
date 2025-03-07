@@ -5,7 +5,7 @@
 @endsection
 
 @section("popup")
-	<x-popup popup_title="History" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submission-history">
+	<x-popup popup_title="History" class="w-11/12 lg:w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submission-history">
 		<!-- Popup content -->
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<div class="w-full overflow-x-auto">
@@ -23,7 +23,7 @@
 		</div>
 	</x-popup>
 
-	<x-popup popup_title="Assignment Submission" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submit-assignment">
+	<x-popup popup_title="Assignment Submission" class="w-11/12 lg:w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submit-assignment">
 		<!-- Popup content -->
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<p class="mt-3 font-semibold">Assignment Description:</p>
@@ -62,7 +62,7 @@
 @endsection
 
 @section("content")
-	<div class="rounded-3xl w-full py-5 px-8 mb-6 flex flex-col items-stretch sm:text-base text-sm" style="background: #FEFEFEB2;">
+	<x-section-container>
 		<div class="flex w-full justify-between items-end">
 			<div class="">
 				<x-back-button href="{{ route('student.assignment.index') }}"><img src="{{ asset('img/back-button.svg') }}" class="h-8 w-8" alt="back"></x-back-button>
@@ -103,7 +103,8 @@
 
 		<x-badge-danger badge_text="This assignment's maximum submission is reached." class="mb-4" id="max-submission-badge" style="display: none;"></x-badge-danger>
 
-		<div class="w-full overflow-x-auto">
+		<!-- For desktop screen -->
+		<div class="w-full overflow-x-auto hidden lg:block">
 			<table class="w-full">
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Title</th>
@@ -161,7 +162,7 @@
 							<td class="py-2 px-4">
 								<div class="flex justify-center gap-2 w-full">
 									<button type="button" class="submissionhistory-popuptrigger" id="{{ $loop->iteration }}">
-										<img src="{{ asset('img/history.svg') }}" alt="history-icon" class="w-8 h-8 hover:scale-110">
+										<img src="{{ asset('img/history.svg') }}" alt="history-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</button>
 								</div>
 							</td>
@@ -174,7 +175,54 @@
 				</tbody>
 			</table>
 		</div>
-	</div>
+
+		<!-- For smaller screen -->
+		<div class="w-full flex flex-col gap-4 lg:hidden items-stretch mt-4">
+			@forelse ($assignments as $index => $asg)
+				<div class="bg-white rounded-xl p-4 flex flex-col gap-3 dropdown-container">
+					<button class="flex flex-col items-start dropdown-toggler w-full">
+						<div class="flex w-full justify-between items-center mb-2">
+							<strong class="text-base text-start">{{ $asg->title }}</strong>
+							<i class="bi bi-chevron-down"></i>
+						</div>
+						{{ date("d M Y", strtotime($asg->deadline_date)) }}, {{ substr($asg->deadline_time, 0, 5) }} GMT+7
+						@if(count($submissions_per_assignment[$index]) > 0)
+							<span class="font-bold text-light-blue">Submitted</span>
+						@else
+							<span class="font-bold text-red">Not Yet Submitted</span>
+						@endif
+					</button>
+					<div class="flex flex-col w-full dropdown-menu" style="display: none;">
+						{!! nl2br($asg->desc) !!}
+
+						<strong class="mt-5">Actions</strong>
+						<div class="flex gap-3 items-stretch my-3">
+							<a href="{{ $asg->link }}" target="_blank">
+								<img src="{{ asset('img/view.svg') }}" alt="view-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+							</a>
+							<a href="{{ $asg->link }}" target="_blank">
+								<img src="{{ asset('img/download.svg') }}" alt="download-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+							</a>
+							<div class="relative">
+								<button type="button" class="submitassignment-popuptrigger" data-route="{{ route('student.assignment.store', [$course->id, $asg->id]) }}"
+									data-assignment="{{ $asg->toJSON() }}" data-submissions="{{ count($submissions_per_assignment[$index]) }}">
+									<img src="{{ asset('img/attach.svg') }}" alt="history-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+								</button>
+								@if(count($submissions_per_assignment[$index]) == 0)
+									<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+								@endif
+							</div>
+							<button type="button" class="submissionhistory-popuptrigger" id="{{ $loop->iteration }}">
+								<img src="{{ asset('img/history.svg') }}" alt="history-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+							</button>
+						</div>
+					</div>
+				</div>
+			@empty
+				- No assignments given yet -
+			@endforelse
+		</div>
+	</x-section-container>
 
 	<script>
 		function initializeAssignmentSubmissionPopup(assignment, route, n){

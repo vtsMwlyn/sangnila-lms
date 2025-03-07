@@ -84,7 +84,7 @@ $(document).ready(() => {
 			$("#content-container").css("width", "83%");
 		}
 
-		$("#screen").text(`(Resolution: ${window.innerWidth}x${window.innerHeight})`);
+		// $("#screen").text(`(Resolution: ${window.innerWidth}x${window.innerHeight})`);
 
 		$('#content-wrapper').css('min-height', window.innerHeight - $("#navbar").outerHeight());
 	}

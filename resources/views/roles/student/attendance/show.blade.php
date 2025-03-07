@@ -9,7 +9,7 @@
 @endsection
 
 @section("content")
-	<div class="rounded-3xl w-full py-5 px-8 mb-6 flex flex-col sm:text-base text-sm" style="background: #FEFEFEB2;">
+	<x-section-container>
 
 		<div class="relative flex flex-col items-start w-full md:w-96 first-letter:0 dropdown-container">
 			<button type="button" class="border-slate-400 py-2 px-4 rounded-2xl font-bold text-dark-blue w-full bg-white flex justify-between items-center dropdown-toggler" style="border-width: 3px;">{{ $course_student->course->course_name }} <img src="{{ asset('img/dropdown-arrow.svg') }}" class="w-5 h-5" alt="icon"></button>
@@ -24,7 +24,7 @@
 		<div class="flex flex-col md:flex-row w-full my-4">
 			<div class="text-lg w-full md:w-1/4">Attendance Summary</div>
 
-			<div class="flex grow">
+			<div class="flex grow mt-4 lg:mt-0">
 				<div class="flex flex-col w-full md:w-1/4">
 					<h2>Total Session</h2>
 					<h1 class="font-extrabold text-xl">{{ $course_student->max_course_session }}</h1>
@@ -41,7 +41,8 @@
 		</div>
 		<div class="w-full bg-slate-400" style="height: 2px;"></div>
 
-		<div class="w-full overflow-x-auto">
+		<!-- Desktop screen -->
+		<div class="w-full overflow-x-auto hidden lg:block">
 			<table class="w-full">
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Session</th>
@@ -79,5 +80,36 @@
 				</tbody>
 			</table>
 		</div>
-	</div>
+
+		<!-- Smaller screen -->
+		<div class="w-full flex flex-col gap-4 lg:hidden items-stretch mt-4">
+			@forelse($attendances as $atd)
+				<div class="bg-white rounded-xl p-4 flex flex-col gap-3 dropdown-container">
+					<button class="flex items-center dropdown-toggler w-full justify-between">
+						<div class="flex gap-3 items-center">
+							@if($atd->is_attend == 1)
+								<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">
+							@else
+								<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">
+							@endif
+							<div class="flex flex-col items-start">
+								<div>Session {{ $loop->iteration }}</div>
+								<div>
+									{{ Carbon\Carbon::parse($atd->attendance->attendance_date)->format('d M Y') }},
+									{{ Carbon\Carbon::parse($atd->start_time)->format('H:i') }}-{{ Carbon\Carbon::parse($atd->end_time)->format('H:i') }}
+								</div>
+							</div>
+						</div>
+						<i class="bi bi-chevron-down"></i>
+					</button>
+					<div class="flex flex-col w-full dropdown-menu" style="display: none;">
+						<strong>Attendance Details</strong>
+						{{ $atd->attendance_detail }}
+					</div>
+				</div>
+			@empty
+				- No data found -
+			@endforelse
+		</div>
+	</x-section-container>
 @endsection
