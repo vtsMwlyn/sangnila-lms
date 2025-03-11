@@ -30,10 +30,10 @@
 				<i class="bi bi-person-check-fill text-2xl"></i> Register Now!
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6 hover:bg-cyan-500"
+			{{-- <x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6 hover:bg-cyan-500"
 				href="{{ route('guest.privacy-policy') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('guest/privacy-policy')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<i class="bi bi-file-earmark-text text-2xl"></i> Privacy Policy
-			</x-anchor-button>
+			</x-anchor-button> --}}
 		</div>
 	</div>
 

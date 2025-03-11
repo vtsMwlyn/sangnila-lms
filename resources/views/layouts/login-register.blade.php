@@ -50,7 +50,7 @@
 	<body class="bg-cover min-h-screen flex items-center justify-center"
 		style="background: url({{ asset('img/loginbg.png') }}) no-repeat right center; background-size: cover;">
 		<div class="fixed text-white bottom-0 left-0 m-2">
-			{{ trans("strings.version") }} <span id="screen"></span>
+			{{ trans("strings.version") }}
 		</div>
 
 		<!-- Loading popup -->
@@ -61,7 +61,11 @@
 			</div>
 		</div>
 
-		@yield("content")
+		<div class="w-full flex flex-col">
+			@yield("content")
+
+			<x-footer></x-footer>
+		</div>
 	</body>
 
 	<script>
@@ -97,12 +101,6 @@
 
 				showLoadingPopupWithDelay();
 			});
-		});
-
-		$("#screen").text(`(Resolution: ${window.innerWidth}x${window.innerHeight})`);
-
-		$(window).on("resize", function(){
-			$("#screen").text(`(Resolution: ${window.innerWidth}x${window.innerHeight})`);
 		});
 
 		// Hide the loading popup once the page is fully loaded

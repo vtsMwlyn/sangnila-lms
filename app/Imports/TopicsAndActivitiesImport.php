@@ -29,7 +29,7 @@ class TopicsAndActivitiesImport implements ToModel, WithHeadingRow
 
 			$course = Course::findOrFail($this->course_id);
 
-			$topic = Topic::create([
+			$topic = Topic::updateOrCreate([
 				"user_id" => Auth::user()->id,
 				"course_id" => $course->id,
 				"title" => $row["topic"]
