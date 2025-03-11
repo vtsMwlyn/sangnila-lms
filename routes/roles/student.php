@@ -76,9 +76,35 @@ Route::prefix('/student')
 			}
 		);
 
-		// ===== FORUM DISCUSSION ===== //
-		Route::get('/forum', [ForumController::class, 'index_student'])->name('forum.index')->whereNumber('course_id');
-		Route::get('/forum/{course_id}/retrieve', [ForumController::class, 'retrieve_message_student'])->name('forum.retrieve')->whereNumber('course_id');
-		Route::post('/forum/{course_id}/send', [ForumController::class, 'send_message_student'])->name('forum.send')->whereNumber('course_id');
+		// Learning Documentation
+		Route::prefix('/learning-documentation')
+			->name('learning-documentation.')
+			->group(function() {
+
+				// List of enrolled courses
+				Route::get('/', [StudentController::class, 'student_index'])->name('index');
+
+				// Show portfolio and certificate
+				Route::get('/{course_id}', [StudentController::class, 'student_show'])->name('show')->whereNumber('course_id');
+
+				// Upload portfolio
+				Route::post('{course_id}/upload-portfolio', [StudentController::class, 'student_store_portfolio'])->name('store.portfolio')->whereNumber('course_id');
+			}
+		);
+
+		// Forum Discussion
+		Route::prefix('/forum')
+			->name('forum.')
+			->group(function() {
+
+				// Show Messages
+				Route::get('/', [ForumController::class, 'index_student'])->name('index')->whereNumber('course_id');
+
+				// Get Latest Messages
+				Route::get('/{course_id}/retrieve', [ForumController::class, 'retrieve_message_student'])->name('retrieve')->whereNumber('course_id');
+
+				// Send Messages
+				Route::post('/{course_id}/send', [ForumController::class, 'send_message_student'])->name('send')->whereNumber('course_id');
+		});
 	}
 );

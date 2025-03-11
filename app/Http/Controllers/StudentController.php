@@ -243,7 +243,7 @@ class StudentController extends Controller {
 			return back()->with('errorUploadPortfolio', 'System failed to upload portfolio images for this student. Please report to our IT team, error detail: ' . $e->getMessage());
 		}
 
-		return back()->withQuery(['content' => request('content')])->with('successUploadPortfolio', 'Successfully uploaded portfolio images for this student!');
+		return back()->withQuery(['content' => request('content')])->with('successUploadPortfolio', 'Successfully uploaded portfolio files for this student!');
 	}
 
 	public function teacher_destroy_portfolio($portfolio_id){
@@ -599,5 +599,83 @@ class StudentController extends Controller {
 		}
 
 		return back()->with('successCheckOut', 'Successfully checked out from course ' . $course->course_name . ' at ' . $checkOutTime . ' (GMT+7)');
+	}
+
+	// Select a course before continue
+	public function student_index(){
+		return view('roles.student.learning-documentation.index');
+	}
+
+	// Show course documentations
+	public function student_show($course_id){
+		return view('roles.student.learning-documentation.show', [
+			'course' => Course::findOrFail($course_id),
+		]);
+	}
+
+	// Upload portfolio
+	public function student_store_portfolio(Request $request, $course_id){
+		$request->validate([
+			'file' => [
+				'nullable',
+				function ($attribute, $value, $fail) {
+					if (!$value->isValid()) {
+						$fail('Invalid file uploaded.');
+					}
+		
+					$mimeType = $value->getMimeType();
+					if (!str_starts_with($mimeType, 'image/') && !str_starts_with($mimeType, 'video/')) {
+						$fail('The file must be an image or video.');
+					}
+				},
+			],
+			'link' => 'nullable',
+		]);
+
+		$paths = [];
+		try {
+			DB::beginTransaction();
+
+			$course = Course::findOrFail($course_id);
+			$student = Auth::user();
+			
+			if ($request->file('files')) {
+				foreach ($request->file('files') as $req_file) {
+					$mimeType = $req_file->getMimeType();
+					$type = explode('/', $mimeType)[0];
+			
+					$path = $req_file->store('progress-portfolio');
+					$paths[] = $path;
+			
+					Portfolio::create([
+						'student_id' => $student->id,
+						'course_id' => $course->id,
+						'path' => $path,
+						'type' => $type,
+					]);
+				}
+			}
+			else if($request->link){
+				Portfolio::create([
+					'student_id' => $student->id,
+					'course_id' => $course->id,
+					'path' => $request->link,
+					'type' => 'link'
+				]);
+			}
+
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+
+			foreach($paths as $p){
+				Storage::delete($p);
+			}
+
+			return back()->with('errorUploadPortfolio', 'System failed to upload portfolio images for this student. Please report to our IT team, error detail: ' . $e->getMessage());
+		}
+
+		return back()->withQuery(['content' => request('content')])->with('successUploadPortfolio', 'Successfully uploaded the portfolio files!');
 	}
 }
