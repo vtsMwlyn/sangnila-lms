@@ -61,7 +61,7 @@
 			</div>
 		</div>
 
-		<div class="w-full flex flex-col">
+		<div class="w-full flex flex-col items-center">
 			@yield("content")
 
 			<x-footer></x-footer>
