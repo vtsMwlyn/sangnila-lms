@@ -15,10 +15,10 @@
 		<div class="flex items-center justify-between gap-5 mt-5 w-full">
 			<x-anchor-button class="w-56" href="{{ route('admin.student.import-excel') }}"><i class="bi bi-file-earmark-arrow-up"></i> Import From Excel</x-anchor-button>
 
-			<div class="flex w-1/2 items-stretch">
-				<x-input type="text" class="rounded-l-lg rounded-r-none w-full" placeholder="Search..." :value="request('search')" id="search-name"/>
-				<button class="rounded-l-none rounded-r-lg border-slate-400 border-t-2 border-r-2 border-b-2 py-2 px-4 bg-white text-slate-400 hover:bg-slate-400 hover:text-white" style="border-width: 3px 3px 3px 0;" id="search-btn"><i class="bi bi-search"></i></button>
-			</div>
+			<form class="flex w-1/2 justify-center" action="{{ route("admin.student.index") }}">
+				<x-input type="text" class="rounded-l-lg rounded-r-none w-full" name="search" placeholder="Search..." :value="request('search')"/>
+				<button class="rounded-l-none rounded-r-lg border-slate-400 border-t-2 border-r-2 border-b-2 py-2 px-4 bg-white text-slate-400 hover:bg-slate-400 hover:text-white" style="border-width: 3px 3px 3px 0;"><i class="bi bi-search"></i></button>
+			</form>
 
 			<x-select id="filter-course" class="w-56" value="{{ request('course_name') }}">
 				<option value="">All</option>

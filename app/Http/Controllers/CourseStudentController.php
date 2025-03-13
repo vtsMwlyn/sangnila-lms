@@ -3,27 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\Assessment;
 use Exception;
-use Carbon\Carbon;
-use App\Models\Role;
 use App\Models\User;
 use App\Models\Topic;
 use App\Models\Course;
-use App\Models\Payment;
 use App\Models\Progress;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
-use App\Models\CourseTeacher;
 use App\Models\ImportedStudent;
-use App\Rules\MinimumOneCheckbox;
-use App\Models\SelfAttendance;
 use App\Models\StudentAttendance;
-use Google\Service\ServiceUsage\Impact;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CourseStudentController extends Controller {
 	// ===== ADMIN ===== //
@@ -464,5 +458,19 @@ class CourseStudentController extends Controller {
 		}
 
 		return redirect(route("admin.student.show", $student->id))->with("successNormalize", "Successfully normalized the student");
+	}
+
+	public function generate_certificate($student_id, $course_id){
+		$student = User::findOrFail($student_id);
+		$course = Course::findOrFail($course_id);
+		$assessment = Assessment::where('student_id', $student->id)->where('course_id', $course->id)->first();
+
+		$pdf = Pdf::loadView('pdf.certificate', [
+			'student' => $student,
+			'course' => $course,
+			'assessment' => $assessment,
+		]);
+
+		return $pdf->stream('my-certificate.pdf');
 	}
 }

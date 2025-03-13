@@ -36,7 +36,7 @@
 		<x-back-button href="{{ route('teacher.attendance.index') }}"></x-back-button>
 		<div class="flex flex-col lg:flex-row items-start justify-between mt-3">
 			<x-page-title>{{ $course->course_name }} - {{ ucwords($course->level) }}</x-page-title>
-			<div class="flex gap-3 mt-4 lg:mt-0">
+			<div class="flex gap-2 mt-4 lg:mt-0">
 				@if(!$unfinishedSelfAttendance)
 					<x-anchor-button href="{{ route('teacher.attendance.check-in', $course->id) }}">
 						<i class="bi bi-stopwatch"></i> Check In
@@ -107,7 +107,7 @@
 				<x-anchor-button href="{{ route('teacher.attendance.select-students', $course->id) }}" class="self-start lg:self-center">
 					<i class="bi bi-plus-lg"></i> New Student Attendance
 				</x-anchor-button>
-				<form action="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances']) }}" method="get">
+				<form action="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances']) }}" method="get" class="flex items-center gap-2">
 					<x-select class="w-48 md:w-80" name="show">
 						<option value="my students only" @if(!request('show') || request('show') == 'my students only') selected @endif>My Students Only</option>
 						<option value="all" @if(request('show') == 'all') selected @endif>All Students</option>

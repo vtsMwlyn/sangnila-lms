@@ -11,7 +11,7 @@
 				<h1 class="text-xl font-bold">Hello {{ explode(" ", Auth::user()->full_name)[0] }}!</h1>
 			</button>
 
-			<div class="absolute py-4 bg-white top-6 w-80 rounded-3xl flex flex-col hidden overflow-hidden dropdown-menu" style="box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); left: 220px;">
+			<div class="absolute py-4 bg-white top-6 w-80 rounded-3xl flex flex-col hidden overflow-hidden dropdown-menu" style=" left: 220px;">
 				<div class="font-extrabold px-5 text-dark-blue">{{ Auth::user()->full_name }}</div>
 				<div class="bg-slate-400 mx-5 mt-3 mb-1" style="height: 1.5px;"></div>
 				<a href="{{ route("profile.show") }}"><div class="w-full px-5 py-1 hover:bg-slate-300 text-black font-semibold flex items-center gap-1"><img src="{{ asset('img/sidebar-edit-profile.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Edit Profile</div></a>
@@ -56,7 +56,7 @@
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-2 px-6 hover:bg-cyan-500"
 				href="{{ route('student.forum.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('student*forum*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				<i class="bi bi-chat-left-text-fill text-2xl"></i> Forum Discussion
+				<img src="{{ asset('img/sidebar-forum.svg') }}"> Forum Discussion
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6 hover:bg-cyan-500"

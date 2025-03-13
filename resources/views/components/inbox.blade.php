@@ -27,7 +27,7 @@
 		<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
 	@endif
 	<x-button class="bg-yellow-600" type="button" id="inbox-toggler">Inbox <i class="bi bi-chevron-compact-down"></i></x-button>
-	<div class="absolute z-10 bg-white top-11 h-96 w-80 rounded-xl p-2 flex flex-col" id="inbox-dropdown" style="@if(!session()->has('successNotifAction')) display: none; @endif box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
+	<div class="absolute z-10 bg-white top-11 h-96 w-80 rounded-xl p-2 flex flex-col" id="inbox-dropdown" style="@if(!session()->has('successNotifAction')) display: none; @endif ">
 		<div class="flex flex-col items-center gap-2 grow w-full text-xs py-2 px-1 overflow-y-auto">
 			@forelse($inboxes as $i => $inbox)
 				@if($i != 0)

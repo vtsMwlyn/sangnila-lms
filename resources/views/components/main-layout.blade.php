@@ -151,7 +151,7 @@
 				<!-- Sidebar -->
 				{{ $slot }}
 
-				<button type="button" class="fixed bg-light-blue text-white px-1 h-12 rounded-r-full flex items-center hover:bg-slate-600" id="sidebar-toggler"><i class="bi bi-chevron-double-right"></i></button>
+				<button type="button" class="fixed bg-light-blue text-white px-1 h-12 rounded-r-full flex items-center hover:bg-slate-600" id="sidebar-toggler"><i class="bi bi-caret-left-fill"></i></button>
 
 				<!-- Content Section -->
 				<div class="flex flex-col" style="width: 83%;" id="content-container">
@@ -168,7 +168,7 @@
 										<i class="bi bi-chevron-down"></i>
 									</div>
 								</button>
-								<div class="absolute z-10 text-white top-16 w-80 rounded-xl flex flex-col py-2" id="medsmallmenu-dropdown" style="display: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center; background-size: cover;">
+								<div class="absolute z-10 text-white top-16 w-80 rounded-xl flex flex-col py-2" id="medsmallmenu-dropdown" style="display: none;  background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center; background-size: cover;">
 								</div>
 							</div>
 						</div>

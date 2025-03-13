@@ -47,7 +47,7 @@
 					@endif
 					<button type="button" class="dropdown-toggler"><img src="{{ asset('img/mail-icon.svg') }}" alt="mail-icon" class="h-6"></button>
 
-					<div class="absolute z-10 bg-white top-16 w-80 sm:w-96 rounded-3xl px-5 py-3 flex flex-col dropdown-menu" style="@if(!session()->has('successNotifAction')) display: none; @endif box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); height: 600px;">
+					<div class="absolute z-10 bg-white top-16 w-80 sm:w-96 rounded-3xl px-5 py-3 flex flex-col dropdown-menu" style="@if(!session()->has('successNotifAction')) display: none; @endif  height: 600px;">
 						<div class="w-full flex items-center justify-between">
 							<h1 class="font-extrabold text-dark-blue">Notifications</h1>
 							@if($inboxes->count())
@@ -90,7 +90,7 @@
 
 			<div class="relative flex flex-col items-end dropdown-container">
 				<button type="button" class="dropdown-toggler"><img src="{{ asset('img/burger-icon-navbar-pc.svg') }}" alt="burger-icon" class="h-6"></button>
-				<div class="absolute z-10 bg-white top-16 w-80 rounded-3xl flex flex-col py-2 dropdown-menu overflow-hidden" style="display: none; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
+				<div class="absolute z-10 bg-white top-16 w-80 rounded-3xl flex flex-col py-2 dropdown-menu overflow-hidden" style="display: none; ">
 					<a href="#"><div class="w-full px-5 py-1.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><img src="{{ asset('img/navbar-help-and-support.svg') }}" class="h-5 w-5" alt="sidebar-icon"> Help and Support</div></a>
 					<a href="#"><div class="w-full px-5 py-1.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><img src="{{ asset('img/navbar-send-feedback.svg') }}" class="h-5 w-5" alt="sidebar-icon"> Send Feedback</div></a>
 					<a href="{{ route("profile.show") }}" class="block lg:hidden"><div class="w-full px-5 py-0.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><i class="bi bi-person-fill text-slate-400 text-lg mr-0.5"></i> Profile</div></a>

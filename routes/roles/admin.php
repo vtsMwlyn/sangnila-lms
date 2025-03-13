@@ -11,6 +11,7 @@ use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\ExcelImportController;
 use App\Http\Controllers\AdminAccountController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\CourseStudentController;
 use App\Http\Controllers\CourseTeacherController;
 use App\Http\Controllers\TeacherController;
@@ -172,6 +173,9 @@ Route::prefix('/admin')
 
 				// Delete attendances
 				Route::post('/attendance/{student_attendance_id}/delete', [AttendanceController::class, 'admin_destroy_student_attendance'])->name('destroy-student-attendance');
+
+				// Change certificate access
+				Route::post('/assessment/{assessment_id}/change-certificate-access', [AssessmentController::class, 'admin_change_certificate_access'])->name('change-certificate-access');
 
 				// Download import excel template
 				Route::get("/import-excel/download-template", [DownloadResourceController::class, "student_import_excel_template"])->name("import-excel.download");

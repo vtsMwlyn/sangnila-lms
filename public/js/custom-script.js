@@ -99,17 +99,17 @@ $(document).ready(() => {
 
 	$('#sidebar-toggler').click(function(){
 		if($('#sidebar-container').is(':visible')){
-			$('#sidebar-toggler').css({'left': 0});
+			$('#sidebar-toggler').css({'left': 0}).html('<i class="bi bi-caret-right-fill"></i>');
 			$('#content-container').css({'width': '100%'});
 			$('#sidebar-container').css({'width': 0}).hide();
 		}
 		else {
 			$('#sidebar-container').css({'width': '17%'}).show();
 			$('#content-container').css({'width': '83%'});
-			$('#sidebar-toggler').css({'left': $('#sidebar-container').outerWidth()});
+			$('#sidebar-toggler').css({'left': $('#sidebar-container').outerWidth()}).html('<i class="bi bi-caret-left-fill"></i>');
 		}
 	});
-
+	
 	// Select2 initialization
 	$('.select-2').select2({
 		allowClear: false

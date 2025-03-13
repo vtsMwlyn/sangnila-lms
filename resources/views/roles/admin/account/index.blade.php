@@ -30,7 +30,7 @@
 
 				<div class="flex flex-col mt-3">
 					<label for="disable_reason">Disable Reason<span class="text-red">*</span></label>
-					<x-input id="disable_reason" class="w-full mt-1" type="text" name="disable_reason" style="border-width: 3px;" value="{{ old('disable_reason') }}" placeholder="Enter the reason for disabling account" autofocus />
+					<x-input id="disable_reason" class="w-full mt-1" type="text" name="disable_reason" value="{{ old('disable_reason') }}" placeholder="Enter the reason for disabling account" autofocus />
 				</div>
 
 				<div class="flex items-center justify-center w-full mt-8 mb-3 gap-3">
@@ -106,8 +106,8 @@
 
 		<!-- For smaller screen -->
 		<div class="relative flex lg:hidden flex-col items-start w-96 first-letter:0 dropdown-container mt-4">
-			<button type="button" class="border-slate-400 py-2 px-4 rounded-2xl font-bold text-dark-blue w-full bg-white flex justify-between items-center dropdown-toggler" style="border-width: 3px;">{{ request('role') ? ucwords(request('role')) : 'Admin' }} <img src="{{ asset('img/dropdown-arrow.svg') }}" class="w-5 h-5" alt="icon"></button>
-			<div class="absolute bg-white top-12 w-full rounded-xl flex flex-col hidden overflow-hidden dropdown-menu" style="box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
+			<button type="button" class="border-slate-400 py-2 px-4 rounded-2xl font-bold text-dark-blue w-full bg-white flex justify-between items-center dropdown-toggler">{{ request('role') ? ucwords(request('role')) : 'Admin' }} <img src="{{ asset('img/dropdown-arrow.svg') }}" class="w-5 h-5" alt="icon"></button>
+			<div class="absolute bg-white top-12 w-full rounded-xl flex flex-col hidden overflow-hidden dropdown-menu" style="">
 				<a href="{{ route('admin.account.index', ['role' => 'admin']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">Admin</div></a>
 				<a href="{{ route('admin.account.index', ['role' => 'teacher']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">Teacher</div></a>
 				<a href="{{ route('admin.account.index', ['role' => 'student']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">Student</div></a>
@@ -148,8 +148,8 @@
 								<td class="py-2 px-4 font-semibold @if($admin_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($admin_acc->status) }}</td>
 								<td class="py-2 px-4">
 									<div class="flex w-full items-stretch gap-1 justify-start">
-										<button type="button" class="reset-password-btn h-8 w-8 border-slate-400 rounded-lg flex items-center justify-center hover:scale-110" style="border-width: 3px;" data-account_name="{{ $admin_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $admin_acc->id) }}">
-											<i class="bi bi-regex text-slate-400"></i>
+										<button type="button" class="reset-password-btn h-8 w-8 flex items-center justify-center hover:scale-110" data-account_name="{{ $admin_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $admin_acc->id) }}">
+											<img src="{{ asset('img/reset-password.svg') }}">
 										</button>
 										<a href="{{ route('admin.account.acc_edit', $admin_acc->id) }}">
 											<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
@@ -203,8 +203,8 @@
 								<td class="py-2 px-4 font-semibold @if($teacher_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($teacher_acc->status) }}</td>
 								<td class="py-2 px-4">
 									<div class="flex w-full items-stretch gap-1 justify-start">
-										<button type="button" class="reset-password-btn h-8 w-8 border-slate-400 rounded-lg flex items-center justify-center hover:scale-110" style="border-width: 3px;" data-account_name="{{ $teacher_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $teacher_acc->id) }}">
-											<i class="bi bi-regex text-slate-400"></i>
+										<button type="button" class="reset-password-btn h-8 w-8 flex items-center justify-center hover:scale-110" data-account_name="{{ $teacher_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $teacher_acc->id) }}">
+											<img src="{{ asset('img/reset-password.svg') }}">
 										</button>
 										<a href="{{ route('admin.account.acc_edit', $teacher_acc->id) }}">
 											<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
@@ -257,8 +257,8 @@
 								<td class="py-2 px-4 font-semibold @if($student_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($student_acc->status) }}</td>
 								<td class="py-2 px-4">
 									<div class="flex w-full items-stretch gap-1 justify-start">
-										<button type="button" class="reset-password-btn h-8 w-8 border-slate-400 rounded-lg flex items-center justify-center hover:scale-110" style="border-width: 3px;" data-account_name="{{ $student_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $student_acc->id) }}">
-											<i class="bi bi-regex text-slate-400"></i>
+										<button type="button" class="reset-password-btn h-8 w-8 flex items-center justify-center hover:scale-110" data-account_name="{{ $student_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $student_acc->id) }}">
+											<img src="{{ asset('img/reset-password.svg') }}">
 										</button>
 										<a href="{{ route('admin.account.acc_edit', $student_acc->id) }}">
 											<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
@@ -313,8 +313,8 @@
 								<td class="py-2 px-4">{{ $disabled_acc->disable_reason }}</td>
 								<td class="py-2 px-4">
 									<div class="flex w-full items-stretch gap-1 justify-start">
-										<button type="button" class="reset-password-btn h-8 w-8 border-slate-400 rounded-lg flex items-center justify-center hover:scale-110" style="border-width: 3px;" data-account_name="{{ $disabled_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $disabled_acc->id) }}">
-											<i class="bi bi-regex text-slate-400"></i>
+										<button type="button" class="reset-password-btn h-8 w-8 flex items-center justify-center hover:scale-110" data-account_name="{{ $disabled_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $disabled_acc->id) }}">
+											<img src="{{ asset('img/reset-password.svg') }}">
 										</button>
 										<a href="{{ route('admin.account.acc_edit', $disabled_acc->id) }}">
 											<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">

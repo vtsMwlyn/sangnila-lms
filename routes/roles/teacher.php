@@ -14,6 +14,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\ExcelImportController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\GoogleServiceController;
 use App\Http\Controllers\DownloadResourceController;
 
@@ -101,19 +102,27 @@ Route::prefix('/teacher')
 				Route::get('/{course_id}', [StudentController::class, 'teacher_select_student'])->name('select-student')->whereNumber('course_id');
 
 				// Student information (activity progress and meeting link)
-				Route::get('/{student_id}/progress/{course_id}', [StudentController::class, 'teacher_index'])->name('show')->whereNumber(['student_id', 'course_id']);
+				Route::get('/{student_id}/{course_id}/information', [StudentController::class, 'teacher_index'])->name('show')->whereNumber(['student_id', 'course_id']);
 
 				// Update student's activity progress
-				Route::patch('/progress/{course_id}/{student_id}/activity-access', [StudentController::class, 'teacher_update_activity_access'])->name('update.progress.activity-access')->whereNumber(['course_id', 'student_id']);
+				Route::patch('/{course_id}/{student_id}/activity-access', [StudentController::class, 'teacher_update_activity_access'])->name('update.progress.activity-access')->whereNumber(['course_id', 'student_id']);
 
 				// Update student's meeting link
-				Route::patch('/progress/{course_id}/{student_id}/meeting-link', [StudentController::class, 'teacher_update_meeting_link'])->name('update.progress.meeting-link')->whereNumber(['course_id', 'student_id']);
+				Route::patch('/{course_id}/{student_id}/meeting-link', [StudentController::class, 'teacher_update_meeting_link'])->name('update.progress.meeting-link')->whereNumber(['course_id', 'student_id']);
 
 				// Upload portfolio for student
 				Route::post('/{student_id}/{course_id}/upload-portfolio', [StudentController::class, 'teacher_store_portfolio'])->name('store.portfolio')->whereNumber(['course_id', 'student_id']);
 
 				// Delete a portfolio image of a student
 				Route::delete('/portfolio/{portfolio_id}/delete', [StudentController::class, 'teacher_destroy_portfolio'])->name('destroy.portfolio')->whereNumber('portfolio_id');
+
+				// Upload assessment for student
+				Route::get('/{student_id}/{course_id}/upload-assessment', [AssessmentController::class, 'create'])->name('create.assessment')->whereNumber(['course_id', 'student_id']);
+				Route::post('/{student_id}/{course_id}/upload-assessment', [AssessmentController::class, 'store'])->name('store.assessment')->whereNumber(['course_id', 'student_id']);
+				
+				// Edit assessment for student
+				Route::get('/assessment/{assessment_id}/edit', [AssessmentController::class, 'edit'])->name('edit.assessment')->whereNumber('assessment_id');
+				Route::post('/assessment/{assessment_id}/edit', [AssessmentController::class, 'update'])->name('update.assessment')->whereNumber('assessment_id');
 			}
 		);
 

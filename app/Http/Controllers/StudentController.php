@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Topic;
 use App\Models\Course;
 use App\Models\Activity;
+use App\Models\Assessment;
 use App\Models\Progress;
 use App\Models\Assignment;
 use App\Models\Attendance;
@@ -41,19 +42,21 @@ class StudentController extends Controller {
 	// Showing all students in the selected course to select before continue
 	public function teacher_select_student($course_id) {
 		$course = Course::findOrFail($course_id);
-		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+		$grouped_course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->orderByRaw('CASE WHEN learning_status = "learning" THEN 0 WHEN learning_status = "complete" THEN 2 ELSE 3 END')->get()->groupBy('learning_status');
 
 		return view('roles.teacher.student.select-student', [
-			'course_students' => $course_students,
+			'grouped_course_students' => $grouped_course_students,
 			"course" => $course
 		]);
 	}
 
-	// Showing list of student's course activities accessibility status (locked/unlocked) and create progress data for the student
+	// Showing list of student's course activities accessibility status (locked/unlocked) and related learning data of the student (portfolio, meeting link, assessment, etc)
 	public function teacher_index($student_id, $course_id) {
 		$course = Course::where('status', 'active')->where('id', $course_id)->first();
 		$role = Role::where('role_name', 'Student')->first();
 		$student = User::where('role_id', $role->id)->where('id', $student_id)->first();
+
+		// Student's activity access
 		$existingProgress = Progress::where('student_id', $student->id)
 			->where('course_id', $course->id)
 			->pluck('activity_id')
@@ -75,8 +78,6 @@ class StudentController extends Controller {
 		}
 
 		$topics = Topic::where('course_id', $course->id)->where('user_id', Auth::user()->id)->get();
-
-		// $newestProgress = Progress::where('student_id', $student->id)->where('course_id', $course->id)->get();
 		$newestProgress = Progress::where('student_id', $student->id)
 			->where('course_id', $course->id)
 			->with('activity') // Load the related activity
@@ -86,12 +87,15 @@ class StudentController extends Controller {
 			->select('progress.*') // Only select columns from Progress
 			->get();
 
+		// Student's assessment
+		$assessment = Assessment::where('course_id', $course->id)->where('student_id', $student->id)->where('teacher_id', Auth::user()->id)->first();
 
 		return view('roles.teacher.student.show', [
 			'student' => $student,
 			'course' => $course,
 			"topics" => $topics,
-			'newestprogress' => $newestProgress
+			'newestprogress' => $newestProgress,
+			'assessment' => $assessment
 		]);
 	}
 
@@ -384,9 +388,10 @@ class StudentController extends Controller {
 		$count_assignment_all = [];
 		$count_assignment_col = [];
 		$assignment_all = [];
+		$assessment_all = [];
 
 		foreach($student->enrolled_courses as $crs){
-			$student_assignments = StudentAssignment::where("student_id", $student_id)
+			$student_assignments = StudentAssignment::where("student_id", $student->id)
 				->with('assignment.posted_by', function($query){
 					return $query->select('id', 'full_name');
 				})
@@ -405,7 +410,7 @@ class StudentController extends Controller {
 			$n_asg_subm = 0;
 			foreach($student_assignments_in_the_course as $assg){
 				foreach($assg->assignment->submissions as $submission){
-					if($submission->student_id == $student_id){
+					if($submission->student_id == $student->id){
 						$n_asg_subm++;
 						break;
 					}
@@ -416,7 +421,12 @@ class StudentController extends Controller {
 			array_push($count_assignment_col, $n_asg_subm);
 
 			$assignment_all[$crs->id] = $student_assignments_in_the_course;
+
+			$assessment = Assessment::where('course_id', $crs->id)->where('student_id', $student->id)->first();
+			$assessment_all[] = $assessment;
 		}
+
+		// return $assessment;
 
 		//Counting attended sessions
 		$count_curr_progress = [];
@@ -470,6 +480,7 @@ class StudentController extends Controller {
 			"done_assignment" => $count_assignment_col,
 			'assignment_data' => $assignment_all,
 			'attendance_data' => $attendance_all,
+			'assessment_data' => $assessment_all,
 		]);
 	}
 
