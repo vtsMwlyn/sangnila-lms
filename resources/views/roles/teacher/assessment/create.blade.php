@@ -15,7 +15,7 @@
             @csrf
 
             <!-- Performance -->
-            <h3 class="text-blue-800 font-bold text-lg">Performance</h3>
+            <h3 class="text-blue-800 font-bold text-lg">Performance<span class="text-red">*</span></h3>
 
 			<div class="mt-2 flex flex-col w-full">
 				<x-label for="performance_score">Score</x-label>
@@ -33,7 +33,7 @@
 			</div>
 
             <!-- Technical Skill -->
-            <h3 class="text-blue-800 font-bold text-lg mt-8">Technical Skill</h3>
+            <h3 class="text-blue-800 font-bold text-lg mt-8">Technical Skill<span class="text-red">*</span></h3>
 
 			<div class="mt-2 flex flex-col w-full">
 				<x-label for="technical_skill_score">Score</x-label>
@@ -51,7 +51,7 @@
 			</div>
 
             <!-- Aesthetic Skill -->
-            <h3 class="text-blue-800 font-bold text-lg mt-8">Aesthetic Skill</h3>
+            <h3 class="text-blue-800 font-bold text-lg mt-8">Aesthetic Skill<span class="text-red">*</span></h3>
 
 			<div class="mt-2 flex flex-col w-full">
 				<x-label for="aesthetical_skill_score">Score</x-label>
@@ -69,7 +69,7 @@
 			</div>
 
             <!-- Overall -->
-            <h3 class="text-blue-800 font-bold text-lg mt-8">Overall</h3>
+            <h3 class="text-blue-800 font-bold text-lg mt-8">Overall<span class="text-red">*</span></h3>
 
 			<div class="mt-2 flex flex-col w-full">
 				<x-label for="overall_score">Score</x-label>

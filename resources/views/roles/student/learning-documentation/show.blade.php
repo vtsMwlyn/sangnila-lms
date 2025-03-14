@@ -96,9 +96,17 @@
         @endif
 
         @if(request('content') == 'certificates')
+			@php
+				$certificate_available = App\Models\Assessment::where('student_id', Auth::user()->id)->where('course_id', $course->id)->first()->certificate_accessible;
+			@endphp
             <div class="mt-4 flex flex-col items-center gap-10 py-10">
-                <img src="{{ asset('img/coming-soon.png') }}" class="w-1/6" alt="coming-soon">
-                <p class="font-semibold text-dark-blue">Feature will be available soon~</p>
+				@if($certificate_available)
+					<p class="font-semibold text-dark-blue">Your certificate is available to download!</p>
+					<x-anchor-button target="_blank" href="{{ route('student.learning-documentation.view-certificate', [$course->id, Auth::user()->id]) }}"><i class="bi bi-file-earmark-arrow-down"></i> View Certificate</x-anchor-button>
+				@else
+					<img src="{{ asset('img/certificate-not-available.png') }}" class="w-1/4" alt="certificate-not-available">
+					<p class="font-semibold text-dark-blue">Your certificate is not available yet</p>
+				@endif
             </div>
         @endif
     </x-section-container>

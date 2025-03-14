@@ -67,8 +67,8 @@
 			<x-badge-success badge_text="{{ session('successUpdateMeetingLink') }}" class="mb-4"></x-badge-success>
 		@elseif(session()->has("successUploadAssessment"))
 			<x-badge-success badge_text="{{ session('successUploadAssessment') }}" class="mb-4"></x-badge-success>
-		@elseif(session()->has("successEditAssessment"))
-			<x-badge-success badge_text="{{ session('successEditAssessment') }}" class="mb-4"></x-badge-success>
+		{{-- @elseif(session()->has("successEditAssessment"))
+			<x-badge-success badge_text="{{ session('successEditAssessment') }}" class="mb-4"></x-badge-success> --}}
 		@endif
 
 		<!-- For larger screen -->
@@ -236,14 +236,14 @@
 					<h3 class="text-xl font-bold">Aesthetical Skill: {{ ucwords($assessment->aesthetical_skill_score) }}</h3>
 					<div class="mt-2">{!! $assessment->aesthetical_skill_description !!}</div>
 				</div>
-				<div class="w-full flex flex-col items-stretch mt-4 p-5 rounded-2xl" style="background: linear-gradient(to right, rgba(190, 226, 219, 0.49) 0%, rgba(104, 124, 120, 0) 100%);">
+				<div class="w-full flex flex-col items-stretch my-4 p-5 rounded-2xl" style="background: linear-gradient(to right, rgba(190, 226, 219, 0.49) 0%, rgba(104, 124, 120, 0) 100%);">
 					<h3 class="text-xl font-bold">Overall: {{ ucwords($assessment->overall_score) }}</h3>
 					<div class="mt-2">{!! $assessment->overall_description !!}</div>
 				</div>
 
-				<div class="flex w-full justify-end mt-4">
+				{{-- <div class="flex w-full justify-end mt-4">
 					<x-anchor-button href="{{ route('teacher.student.edit.assessment', $assessment->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
-				</div>
+				</div> --}}
 			@else
 				<div class="mt-4 flex flex-col items-center py-10">
 					<img src="{{ asset('img/no-assessment.png') }}" class="w-1/6" alt="coming-soon">

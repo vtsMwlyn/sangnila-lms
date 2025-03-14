@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Dompdf\Options;
 
 class CourseStudentController extends Controller {
 	// ===== ADMIN ===== //
@@ -460,17 +461,19 @@ class CourseStudentController extends Controller {
 		return redirect(route("admin.student.show", $student->id))->with("successNormalize", "Successfully normalized the student");
 	}
 
-	public function generate_certificate($student_id, $course_id){
+	public function generate_certificate($course_id, $student_id){
 		$student = User::findOrFail($student_id);
 		$course = Course::findOrFail($course_id);
+		$teacher = CourseStudent::where('student_id', $student->id)->where('course_id', $course->id)->first()->teacher;
 		$assessment = Assessment::where('student_id', $student->id)->where('course_id', $course->id)->first();
 
 		$pdf = Pdf::loadView('pdf.certificate', [
 			'student' => $student,
 			'course' => $course,
+			'teacher' => $teacher,
 			'assessment' => $assessment,
-		]);
+		])->setPaper('a4', 'landscape');
 
-		return $pdf->stream('my-certificate.pdf');
+		return $pdf->stream('SangnilaArtsAcademy_'. $student->full_name . '_' . $course->course_name .'.pdf');
 	}
 }

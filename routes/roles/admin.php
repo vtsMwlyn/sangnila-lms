@@ -174,11 +174,15 @@ Route::prefix('/admin')
 				// Delete attendances
 				Route::post('/attendance/{student_attendance_id}/delete', [AttendanceController::class, 'admin_destroy_student_attendance'])->name('destroy-student-attendance');
 
-				// Change certificate access
-				Route::post('/assessment/{assessment_id}/change-certificate-access', [AssessmentController::class, 'admin_change_certificate_access'])->name('change-certificate-access');
+				// Edit assessment information
+				Route::get('/assessment/{assessment_id}/edit', [AssessmentController::class, 'admin_edit'])->name('edit.assessment');
+				Route::post('/assessment/{assessment_id}/edit', [AssessmentController::class, 'admin_update'])->name('update.assessment');
 
 				// Download import excel template
 				Route::get("/import-excel/download-template", [DownloadResourceController::class, "student_import_excel_template"])->name("import-excel.download");
+
+				// View certificate
+				Route::get('/certificate/{course_id}/{student_id}', [CourseStudentController::class, 'generate_certificate'])->name('view-certificate');
 			}
 		);
 

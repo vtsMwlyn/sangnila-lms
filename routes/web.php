@@ -1,16 +1,17 @@
 <?php
 
-use App\Http\Controllers\AnnouncementController;
-use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\CurriculumController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\ProgressController;
-use App\Http\Controllers\PushNotificationController;
-use App\Http\Controllers\SysAdminController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\ProgressController;
+use App\Http\Controllers\SysAdminController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\UserAccountController;
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\CourseStudentController;
+use App\Http\Controllers\PushNotificationController;
 
 // Verify email application (dont move this)
 Auth::routes(['verify' => true]);

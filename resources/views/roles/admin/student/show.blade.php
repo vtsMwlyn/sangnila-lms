@@ -183,19 +183,11 @@
 			</div>
 		</div>
 
-		<form method="post" class="mt-4" id="change-certificate-access-form">
-			@csrf
-			<label for="_certificate_access" class="flex items-center gap-1">
-				<input type="checkbox" id="_certificate_access" name="_certificate_access" class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300"/>
-				Student can access certificate
-			</label>
+		<div id="certificate_access_status" class="flex items-center gap-1 mt-4"></div>
 
-			<div class="flex gap-3 w-full justify-center">
-				<x-button type="submit" class=" w-1/6 mt-5">
-					Save
-				</x-button>
-			</div>
-		</form>
+		<div class="flex w-full justify-center mt-5">
+			<x-anchor-button class="w-1/6" id="edit-assessment-btn"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
+		</div>
 	</x-popup>
 @endsection
 
@@ -227,6 +219,8 @@
 			<x-badge-success badge_text="{{ session('successChangeCertificateAccess') }}"></x-badge-success>
 		@elseif(session()->has("errorEditCourseStudent"))
 			<x-badge-danger badge_text="{{ session('errorEditCourseStudent') }}"></x-badge-danger>
+		@elseif(session()->has("successEditAssessment"))
+			<x-badge-success badge_text="{{ session('successEditAssessment') }}" class="mb-4"></x-badge-success>
 		@endif
 
 		@php
@@ -431,7 +425,7 @@
 								@if($assessment_data[$i])
 									<div class="flex items-center justify-between w-2/3">
 										Uploaded
-										<button type="button" class="view-assessment-btn" data-std_assessment="{{ json_encode($assessment_data[$i]) }}" data-route="{{ route('admin.student.change-certificate-access', $assessment_data[$i]->id) }}">
+										<button type="button" class="view-assessment-btn" data-std_assessment="{{ json_encode($assessment_data[$i]) }}" data-route="{{ route('admin.student.edit.assessment', $assessment_data[$i]->id) }}">
 											<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</button>
 									</div>
@@ -747,18 +741,10 @@
 							)
 					);
 
-				$('#assessment-popup').find('input[type="checkbox"]').prop('checked', assessmentData.certificate_accessible == 1? true : false);
-				$('#assessment-popup').find('form').attr('action', $(this).data('route'));
+				$('#certificate_access_status').html(assessmentData.certificate_accessible == 1? '<i class="bi bi-check-circle-fill text-green-600"></i> Student can access certificate' : '<i class="bi bi-x-lg text-red"></i> Student has no access to certificate');
+				$('#edit-assessment-btn').attr('href', $(this).data('route'));
 
 				$('#assessment-popup').parent().show();
-			});
-
-			$('#change-certificate-access-form').on('submit', function(e){
-				e.preventDefault();
-
-				$(this).append($('<input>').attr({'type': 'hidden', 'name': 'certificate_access', 'value': ($(this).find('input[type="checkbox"]').is(':checked') ? 1 : 0)}));
-
-				this.submit();
 			});
 
 			// Redisplay popup and fill with prev data (for invalidated data)

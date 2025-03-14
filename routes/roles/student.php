@@ -11,7 +11,9 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\CourseStudentController;
+use App\Models\CourseStudent;
 
 Route::prefix('/student')
 	->name('student.')
@@ -89,6 +91,9 @@ Route::prefix('/student')
 
 				// Upload portfolio
 				Route::post('{course_id}/upload-portfolio', [StudentController::class, 'student_store_portfolio'])->name('store.portfolio')->whereNumber('course_id');
+
+				// View certificate
+				Route::get('/certificate/{course_id}/{student_id}', [CourseStudentController::class, 'generate_certificate'])->name('view-certificate');
 			}
 		);
 
