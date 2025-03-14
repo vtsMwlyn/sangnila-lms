@@ -97,10 +97,10 @@
 
         @if(request('content') == 'certificates')
 			@php
-				$certificate_available = App\Models\Assessment::where('student_id', Auth::user()->id)->where('course_id', $course->id)->first()->certificate_accessible;
+				$assessment = App\Models\Assessment::where('student_id', Auth::user()->id)->where('course_id', $course->id)->first();
 			@endphp
             <div class="mt-4 flex flex-col items-center gap-10 py-10">
-				@if($certificate_available)
+				@if($assessment && $assessment->certificate_available)
 					<p class="font-semibold text-dark-blue">Your certificate is available to download!</p>
 					<x-anchor-button target="_blank" href="{{ route('student.learning-documentation.view-certificate', [$course->id, Auth::user()->id]) }}"><i class="bi bi-file-earmark-arrow-down"></i> View Certificate</x-anchor-button>
 				@else

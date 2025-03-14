@@ -464,8 +464,15 @@ class CourseStudentController extends Controller {
 	public function generate_certificate($course_id, $student_id){
 		$student = User::findOrFail($student_id);
 		$course = Course::findOrFail($course_id);
-		$teacher = CourseStudent::where('student_id', $student->id)->where('course_id', $course->id)->first()->teacher;
+		
 		$assessment = Assessment::where('student_id', $student->id)->where('course_id', $course->id)->first();
+		
+		$cs = CourseStudent::where('student_id', $student->id)->where('course_id', $course->id)->first();
+		$teacher = $cs->teacher;
+		
+		if(!$assessment || !$assessment->certificate_accessible || $cs->learning_status != 'complete'){
+			abort(403);
+		}
 
 		$pdf = Pdf::loadView('pdf.certificate', [
 			'student' => $student,
