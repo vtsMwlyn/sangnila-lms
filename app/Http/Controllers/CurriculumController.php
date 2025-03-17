@@ -481,35 +481,46 @@ class CurriculumController extends Controller
 			$already_created_topics = [];
 
 			foreach($curriculum_topics as $ctopic){
-				if($request->selected[$i] == 'on' && !in_array($ctopic->id, $already_created_topics)){
-					$ntopic = Topic::create([
-						"title" => $ctopic->title,
-						"user_id" => Auth::user()->id,
-						"course_id" => $course->id
-					]);
-
-					array_push($already_created_topics, $ctopic->id);
-				}
-
-				foreach($ctopic->curriculum_activities as $cactivity){
-					if($request->selected[$i] == "on"){
-						$nyuu = Activity::create([
-							"topic_id" => $ntopic->id,
-							"title" => $cactivity->title,
-							"desc" => e($cactivity->desc),
-							"link" => $cactivity->link,
-							"session" => $cactivity->session,
+				if($request->selected[$i] == 'on'){
+					$topique_id = 0;
+					
+					if(!in_array($ctopic->id, $already_created_topics)){
+						$ntopic = Topic::create([
+							"title" => $ctopic->title,
+							"user_id" => Auth::user()->id,
+							"course_id" => $course->id
 						]);
 
-						foreach($cactivity->learning_outcomes as $ctlo){
-							LearningOutcomeActivity::create([
-								"learning_outcome_id" => $ctlo->id,
-								"activity_id" => $nyuu->id
-							]);
-						}
+						array_push($already_created_topics, $ctopic->id);
+						
+						$topique_id = $ntopic->id;
 					}
+					else {
+						$etopic = Topic::where('course_id', $course->id)->where('title', $ctopic->title)->where('user_id', Auth::user()->id)->first();
+						
+						$topique_id = $etopic->id;
+					}
+					
+					foreach($ctopic->curriculum_activities as $cactivity){
+						if($request->selected[$i] == "on"){
+							$nyuu = Activity::create([
+								"topic_id" => $topique_id,
+								"title" => $cactivity->title,
+								"desc" => e($cactivity->desc),
+								"link" => $cactivity->link,
+								"session" => $cactivity->session,
+							]);
 
-					$i++;
+							foreach($cactivity->learning_outcomes as $ctlo){
+								LearningOutcomeActivity::create([
+									"learning_outcome_id" => $ctlo->id,
+									"activity_id" => $nyuu->id
+								]);
+							}
+						}
+
+						$i++;
+					}
 				}
 			}
 
