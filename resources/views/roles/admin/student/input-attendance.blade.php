@@ -228,15 +228,15 @@
 						const rowCount = $('#tableBody').find('tr').length;
 
 						newRow.addClass(rowCount % 2 == 1? 'bg-white' : '').append(
-								$('<td>').addClass('py-2 px-4').text(inpCourse.course.course_name)
+								$('<td>').addClass('py-3 px-4').text(inpCourse.course.course_name)
 							).append(
-								$('<td>').addClass('py-2 px-4').html(inpIsAttended == 0? `${inpDate}<br>Absent` : `${inpDate}<br>${inpStartTime}-${inpEndTime}`)
+								$('<td>').addClass('py-3 px-4').html(inpIsAttended == 0? `${inpDate}<br>Absent` : `${inpDate}<br>${inpStartTime}-${inpEndTime}`)
 							).append(
-								$('<td>').addClass('py-2 px-4').html(atdIcon)
+								$('<td>').addClass('py-3 px-4').html(atdIcon)
 							).append(
-								$('<td>').addClass('py-2 px-4').html(inpIsAttended == 1? `${inpActivityProgress}<br><br>(${inpLearningStatus})<br>${inpAttendanceDetails}` : `Absent<br>${inpAttendanceDetails}`)
+								$('<td>').addClass('py-3 px-4').html(inpIsAttended == 1? `${inpActivityProgress}<br><br>(${inpLearningStatus})<br>${inpAttendanceDetails}` : `Absent<br>${inpAttendanceDetails}`)
 							).append(
-								$('<td>').addClass('py-2 px-4').append(removeBtn)
+								$('<td>').addClass('py-3 px-4').append(removeBtn)
 							);
 
 						const hidCourseId = $('<input>').attr({'type': 'hidden', 'name': 'course_id[]', 'value': inpCourse.course.id});

@@ -242,6 +242,25 @@
 						}
 					},
 					barThickness: 20,
+					plugins: {
+						legend: {
+							labels: {
+								generateLabels: function (chart) {
+									const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+									labels.forEach((label, i) => {
+										const dataset = chart.data.datasets[i];
+
+										if (dataset.backgroundColor instanceof CanvasGradient) {
+											// Set legend color to the first color stop manually
+											const firstStopColors = ["#212F63", "#1EB8CD", "rgb(22,163,74)"];
+											label.fillStyle = firstStopColors[i]; 
+										}
+									});
+									return labels;
+								}
+							}
+						}
+					}
 				}
 			};
 

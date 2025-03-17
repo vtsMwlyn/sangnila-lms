@@ -149,12 +149,12 @@
 
 						@forelse ($attendanceData as $atd)
 							<tr class="@if($loop->index % 2 == 0) bg-white @endif">
-								<td class="py-2 px-4">{{ Carbon\Carbon::parse($atd->attendance_date)->format('l, d F Y') }}</td>
-								<td class="py-2 px-4 text-center">{{ $atd->student_attendances->count() }}</td>
-								<td class="py-2 px-4 text-center">{{ $atd->student_attendances->where("is_attend", 1)->count() }}</td>
-								<td class="py-2 px-4 text-center">{{ $atd->student_attendances->where("is_attend", 0)->count() }}</td>
-								<td class="py-2 px-4 text-center">{{ $atd->posted_by->id == Auth::user()->id? 'Me' : $atd->posted_by->full_name }}</td>
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">{{ Carbon\Carbon::parse($atd->attendance_date)->format('l, d F Y') }}</td>
+								<td class="py-3 px-4 text-center">{{ $atd->student_attendances->count() }}</td>
+								<td class="py-3 px-4 text-center">{{ $atd->student_attendances->where("is_attend", 1)->count() }}</td>
+								<td class="py-3 px-4 text-center">{{ $atd->student_attendances->where("is_attend", 0)->count() }}</td>
+								<td class="py-3 px-4 text-center">{{ $atd->posted_by->id == Auth::user()->id? 'Me' : $atd->posted_by->full_name }}</td>
+								<td class="py-3 px-4">
 									<div class="flex gap-2 justify-center">
 										{{-- <x-anchor-button  href="{{ route('teacher.attendance.edit', $atd->id) }}">
 											<i class="bi bi-pencil-square"></i>
@@ -184,19 +184,19 @@
 					<tbody>
 						@forelse (App\Models\SelfAttendance::where('user_id', Auth::user()->id)->where('course_id', $course->id)->orderBy('self_attendance_date', 'desc')->get() as $self_atd)
 							<tr class="@if($loop->index % 2 == 0) bg-white @endif">
-								<td class="py-2 px-4">{{ Carbon\Carbon::parse($self_atd->self_attendance_date)->format('D, d M Y') }}</td>
-								<td class="py-2 px-4">{{ $self_atd->check_in_time }}<br>GMT+7</td>
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">{{ Carbon\Carbon::parse($self_atd->self_attendance_date)->format('D, d M Y') }}</td>
+								<td class="py-3 px-4">{{ $self_atd->check_in_time }}<br>GMT+7</td>
+								<td class="py-3 px-4">
 									@if($self_atd->check_out_time)
 										{{ $self_atd->check_out_time }}<br>GMT+7
 									@else
 										N/A
 									@endif
 								</td>
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">
 									<img src="{{ Storage::url("app/public/" . $self_atd->attendance_evidence) }}" width="200px" alt="photo">
 								</td>
-								<td class="py-2 px-4">{{ $self_atd->description ?? 'N/A' }}</td>
+								<td class="py-3 px-4">{{ $self_atd->description ?? 'N/A' }}</td>
 							</tr>
 						@empty
 							
@@ -217,13 +217,13 @@
 
 					let i = 0;
 					for(let sa of student_attendances){
-						const col1 = $("<td>").addClass("py-2 px-4 text-center").text(i + 1);
-						const col2 = $("<td>").addClass("py-2 px-4").text(sa.student.full_name);
-						const col3 = $("<td>").addClass("py-2 px-4").text(sessionNumberPerStudent[sa.id]);
-						const col4 = $("<td>").addClass("py-2 px-4").text(sa.is_attend == 1 ? `${sa.start_time.slice(0, 5)}-${sa.end_time.slice(0, 5)}` : 'Absent');
-						const col5 = $("<td>").addClass("py-2 px-4").html(sa.is_attend == 1 ? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`);
-						const col6 = $("<td>").addClass("py-2 px-4").text(sa.is_attend == 1 ? `${sa.activity_progress} [${sa.learning_status}]` : 'Absent');
-						const col7 = $("<td>").addClass("py-2 px-4").text(sa.attendance_detail);
+						const col1 = $('<td>').addClass('py-3 px-4 text-center").text(i + 1);
+						const col2 = $('<td>').addClass('py-3 px-4").text(sa.student.full_name);
+						const col3 = $('<td>').addClass('py-3 px-4").text(sessionNumberPerStudent[sa.id]);
+						const col4 = $('<td>').addClass('py-3 px-4").text(sa.is_attend == 1 ? `${sa.start_time.slice(0, 5)}-${sa.end_time.slice(0, 5)}` : 'Absent');
+						const col5 = $('<td>').addClass('py-3 px-4").html(sa.is_attend == 1 ? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`);
+						const col6 = $('<td>').addClass('py-3 px-4").text(sa.is_attend == 1 ? `${sa.activity_progress} [${sa.learning_status}]` : 'Absent');
+						const col7 = $('<td>').addClass('py-3 px-4").text(sa.attendance_detail);
 
 						let rowBG;
 						if(i % 2 == 0){

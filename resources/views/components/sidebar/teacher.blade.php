@@ -11,7 +11,7 @@
 				<h1 class="text-xl font-bold">Hello {{ (Auth::user()->details->gender == 1)? "Mr. " : "Ms. " }} {{ explode(" ", Auth::user()->full_name)[0] }}!</h1>
 			</button>
 
-			<div class="absolute py-4 bg-white top-6 w-80 rounded-3xl flex flex-col hidden overflow-hidden dropdown-menu" style=" left: 220px;">
+			<div class="absolute py-4 bg-white top-6 w-80 rounded-3xl flex flex-col hidden overflow-hidden dropdown-menu text-base" style=" left: 220px;">
 				<div class="font-extrabold px-5 text-dark-blue">{{ Auth::user()->full_name }}</div>
 				<div class="bg-slate-400 mx-5 mt-3 mb-1" style="height: 1.5px;"></div>
 				<a href="{{ route("profile.show") }}"><div class="w-full px-5 py-1 hover:bg-slate-300 text-black font-semibold flex items-center gap-1"><img src="{{ asset('img/sidebar-edit-profile.svg') }}" class="h-4 w-4" alt="sidebar-icon"> Edit Profile</div></a>

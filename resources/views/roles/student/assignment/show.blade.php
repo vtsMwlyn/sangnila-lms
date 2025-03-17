@@ -116,7 +116,7 @@
 				<tbody>
 					@forelse ($assignments as $index => $asg)
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">
 								<strong>{{ $asg->title }}</strong><br>
 								@if(strlen($asg->desc) > 30)
 									<div class="">{!! nl2br(substr($asg->desc, 0, 30)) !!}... <button type="button" class="show-more-button text-blue font-semibold text-xs">[Show More]</button></div>
@@ -125,12 +125,12 @@
 									{!! nl2br($asg->desc) !!}
 								@endif
 							</td>
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">
 								<div class="flex justify-center">
 									{{ date("d M Y", strtotime($asg->deadline_date)) }},<br>{{ substr($asg->deadline_time, 0, 5) }} GMT+7
 								</div>
 							</td>
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">
 								<div class="flex flex-col w-full items-center">
 									@if(count($submissions_per_assignment[$index]) > 0)
 										<span class="font-bold text-light-blue">Submitted</span>
@@ -140,7 +140,7 @@
 									@endif
 								</div>
 							</td>
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">
 								<div class="flex justify-center gap-2 w-full">
 									<a href="{{ $asg->link }}" target="_blank">
 										<img src="{{ asset('img/view.svg') }}" alt="view-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
@@ -159,7 +159,7 @@
 									</div>
 								</div>
 							</td>
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">
 								<div class="flex justify-center gap-2 w-full">
 									<button type="button" class="submissionhistory-popuptrigger" id="{{ $loop->iteration }}">
 										<img src="{{ asset('img/history.svg') }}" alt="history-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
@@ -169,7 +169,7 @@
 						</tr>
 					@empty
 						<tr class="bg-white">
-							<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+							<td class="py-3 px-4 text-center" colspan="5">- No data found -</td>
 						</tr>
 					@endforelse
 				</tbody>
@@ -281,8 +281,8 @@
 
 				let i = 0;
 				for(let submission of all_submission_data[parseInt($(this).attr("id")) - 1]){
-					const col1 = $("<td>").addClass("py-2 px-4 text-center").text(i + 1);
-					const col2 = $("<td>").addClass("py-2 px-4").text(new Date(submission.created_at).toLocaleString('en-GB', {
+					const col1 = $('<td>').addClass('py-3 px-4 text-center").text(i + 1);
+					const col2 = $('<td>').addClass('py-3 px-4").text(new Date(submission.created_at).toLocaleString('en-GB', {
 						day: '2-digit',
 						month: 'short',
 						year: 'numeric',
@@ -290,8 +290,8 @@
 						minute: '2-digit',
 						hour12: false
 					}));
-					const col3 = $("<td>").addClass("py-2 px-4").html(`<a href="${submission.link}" class="font-semibold hover:underline">${submission.title}</a>`);
-					const col4 = $("<td>").addClass("py-2 px-4").text(submission.feedback);
+					const col3 = $('<td>').addClass('py-3 px-4").html(`<a href="${submission.link}" class="font-semibold hover:underline">${submission.title}</a>`);
+					const col4 = $('<td>').addClass('py-3 px-4").text(submission.feedback);
 
 					let rowBg;
 					if(i % 2 == 0){

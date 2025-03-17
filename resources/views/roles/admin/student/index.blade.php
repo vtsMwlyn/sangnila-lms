@@ -57,7 +57,7 @@
 						@forelse($courseStudents as $index2 => $cs)
 							<tr class="@if($index1 % 2 == 0) bg-white @endif">
 								@if($index2 == 0)
-									<td class="py-2 px-4 w-1/4" rowspan="{{ $courseStudents->count() }}">
+									<td class="py-3 px-4 w-1/4" rowspan="{{ $courseStudents->count() }}">
 										<div class="flex w-full items-center gap-3">
 											@if($student->details->profpic)
 												<img src="{{ Storage::url("app/public/" . $student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
@@ -68,7 +68,7 @@
 										</div>
 									</td>
 								@endif
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">
 									<div class="flex justify-between gap-3 items-center">
 										<div class="w-2/3">
 											<span>{{ $cs->course->course_name }} - {{ ucwords($cs->course->level) }}</span>
@@ -93,10 +93,10 @@
 										</div>
 									</div>
 								</td>
-								<td class="py-2 px-4 text-center">
+								<td class="py-3 px-4 text-center">
 									{{ ($cs->temp_periods_paid ?? 0) + App\Models\Receipt::where('course_student_id', $cs->id)->get()->count() }}
 								</td>
-								<td class="py-2 px-4 text-center">
+								<td class="py-3 px-4 text-center">
 									@if($cs->learning_status == 'learning')
 										<span class="font-bold text-light-blue">Learning</span>
 									@elseif($cs->learning_status == 'complete')
@@ -106,7 +106,7 @@
 									@endif
 								</td>
 								@if($index2 == 0)
-									<td class="py-2 px-4" rowspan="{{ $courseStudents->count() }}">
+									<td class="py-3 px-4" rowspan="{{ $courseStudents->count() }}">
 										<div class="flex w-full justify-start gap-1">
 											<a href="{{ route('admin.student.show', $student->id) }}">
 												<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
@@ -120,7 +120,7 @@
 							</tr>
 						@empty
 							<tr class="@if($index1 % 2 == 0) bg-white @endif">
-								<td class="py-2 px-4 w-1/4">
+								<td class="py-3 px-4 w-1/4">
 									<div class="flex w-full items-center gap-3">
 										@if($student->details->profpic)
 											<img src="{{ Storage::url("app/public/" . $student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
@@ -130,8 +130,8 @@
 										{{ $student->full_name }}
 									</div>
 								</td>
-								<td class="py-2 px-4 text-center" colspan="3">- No courses enrolled -</td>
-								<td class="py-2 px-4">
+								<td class="py-3 px-4 text-center" colspan="3">- No courses enrolled -</td>
+								<td class="py-3 px-4">
 									<div class="flex w-full justify-start gap-1">
 										<div class="relative">
 											<x-anchor-button
@@ -150,7 +150,7 @@
 						@endforelse
 					@empty
 						<tr class="bg-white">
-							<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+							<td class="py-3 px-4 text-center" colspan="5">- No data found -</td>
 						</tr>
 					@endforelse
 				</tbody>

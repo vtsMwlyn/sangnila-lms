@@ -246,9 +246,9 @@
 				<tbody>
 					@forelse ($learning_outcomes as $index => $lo)
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-							<td class="py-2 px-4">{{ $lo->number }}</td>
-							<td class="py-2 px-4">{{ $lo->title }}</td>
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">{{ $lo->number }}</td>
+							<td class="py-3 px-4">{{ $lo->title }}</td>
+							<td class="py-3 px-4">
 								<div class="flex justify-start gap-1 w-full">
 									<button type="button" class="editlearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.update', [$course->id, $lo->id]) }}" data-learning_outcome="{{ $lo->toJSON() }}">
 										<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
@@ -358,7 +358,7 @@
 
 				@forelse ($course->curriculum_topics as $topic)
 					<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-						<td class="py-2 px-4 text-center">
+						<td class="py-3 px-4 text-center">
 							@php
 								if($topic->curriculum_activities->count()){
 									echo $topic->curriculum_activities->min('session') . '-' . $topic->curriculum_activities->max('session');
@@ -367,10 +367,10 @@
 								}
 							@endphp
 						</td>
-						<td class="py-2 px-4 w-1/4">
+						<td class="py-3 px-4 w-1/4">
 							{{ $topic->title }}
 						</td>
-						<td class="py-2 px-4" style="text-align: start">
+						<td class="py-3 px-4" style="text-align: start">
 							@if($topic->curriculum_activities->count())
 								<ul class="list-disc list-inside">
 									@foreach ($topic->curriculum_activities()->orderBy('session')->get() as $activity)
@@ -381,7 +381,7 @@
 								- No curriculum activities yet -
 							@endif
 						</td>
-						<td class="py-2 px-4">
+						<td class="py-3 px-4">
 							@php
 								$lolist = [];
 								foreach ($topic->curriculum_activities as $activity) {
@@ -401,7 +401,7 @@
 								<div class="w-full text-center">N/A</div>
 							@endforelse
 						</td>
-						<td class="py-2 px-4">
+						<td class="py-3 px-4">
 							<div class="w-full flex items-center gap-1">
 								<div class="relative">
 									<a href="{{ route('admin.course.curriculum.topic.details', [$course->id, $topic->id]) }}">

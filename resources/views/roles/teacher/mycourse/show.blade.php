@@ -170,7 +170,7 @@
 					@forelse ($topics as $topic)
 						@if($topic->activities->count())
 							<tr class="@if($iterasus % 2 == 1) bg-white @endif">
-								<td class="py-2 px-4 text-center">
+								<td class="py-3 px-4 text-center">
 									@php
 										if($topic->activities->count()){
 											echo $topic->activities->min('session') . '-' . $topic->activities->max('session');
@@ -180,9 +180,9 @@
 									@endphp
 								</td>
 
-								<td class="py-2 px-4">{{ $topic->title }}</td>
+								<td class="py-3 px-4">{{ $topic->title }}</td>
 
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">
 									<ul class="h-full w-full flex flex-col">
 										@foreach ($topic->activities as $activity)
 											<li>{{ $activity->title }}</li>
@@ -190,7 +190,7 @@
 									</ul>
 								</td>
 
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">
 									@php
 										$lolist = [];
 										foreach ($topic->activities as $activity) {
@@ -211,7 +211,7 @@
 									@endforelse
 								</td>
 
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">
 									<div class="flex w-full items-center gap-1">
 										<a href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}">
 											<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
@@ -231,11 +231,11 @@
 							@endphp
 						@else
 							<tr class="@if($iterasus % 2 == 1) bg-white @endif">
-								<td class="py-2 px-4">N/A</td>
-								<td class="py-2 px-4">{{ $topic->title }}</td>
-								<td class="py-2 px-4">- No activities added yet to this topic -</td>
-								<td class="py-2 px-4">N/A</td>
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">N/A</td>
+								<td class="py-3 px-4">{{ $topic->title }}</td>
+								<td class="py-3 px-4">- No activities added yet to this topic -</td>
+								<td class="py-3 px-4">N/A</td>
+								<td class="py-3 px-4">
 									<div class="flex w-full items-center gap-2">
 										<div class="relative">
 											<x-anchor-button

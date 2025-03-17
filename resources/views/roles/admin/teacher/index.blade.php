@@ -32,7 +32,7 @@
 				<tbody>
 					@forelse ($teachers as $teacher)
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">
 								<div class="flex w-full items-center gap-3">
 									@if($teacher->details->profpic)
 										<img src="{{ Storage::url("app/public/" . $teacher->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
@@ -42,7 +42,7 @@
 									{{ ($teacher->details->gender == 1)? "Mr." : "Ms." }} {{ $teacher->full_name }}
 								</div>
 							</td>
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">
 								@if($teacher->teached_courses->count())
 									<ul class="list-disc list-inside">
 										@foreach ($teacher->teached_courses as $course)
@@ -53,14 +53,14 @@
 									- No courses assigned yet -
 								@endif
 							</td>
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">
 								@if ($teacher->status == "enabled")
 									<span class="font-bold text-light-blue">Active</span>
 								@else
 									<span class="font-bold text-red">Inactive</span>
 								@endif
 							</td>
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">
 								<div class="flex gap-1 w-full">
 									<div class="relative">
 										<a href="{{ route('admin.teacher.show', $teacher->id) }}">
@@ -78,7 +78,7 @@
 						</tr>
 					@empty
 						<tr class="bg-white">
-							<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+							<td class="py-3 px-4 text-center" colspan="5">- No data found -</td>
 						</tr>
 					@endforelse
 				</tbody>

@@ -55,11 +55,11 @@
 				<tbody>
 					@forelse($attendances as $atd)
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-							<td class="py-2 px-4">Session {{ $loop->iteration }}</td>
-							{{-- <td class="py-2 px-4">Onsite/Online</td> --}}
-							<td class="py-2 px-4">{{ Carbon\Carbon::parse($atd->attendance->attendance_date)->format('d M Y') }}</td>
-							<td class="py-2 px-4">{{ Carbon\Carbon::parse($atd->start_time)->format('H:i') }}-{{ Carbon\Carbon::parse($atd->end_time)->format('H:i') }}</td>
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">Session {{ $loop->iteration }}</td>
+							{{-- <td class="py-3 px-4">Onsite/Online</td> --}}
+							<td class="py-3 px-4">{{ Carbon\Carbon::parse($atd->attendance->attendance_date)->format('d M Y') }}</td>
+							<td class="py-3 px-4">{{ Carbon\Carbon::parse($atd->start_time)->format('H:i') }}-{{ Carbon\Carbon::parse($atd->end_time)->format('H:i') }}</td>
+							<td class="py-3 px-4">
 								<div class="w-full flex justify-center">
 									@if($atd->is_attend == 1)
 										<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">
@@ -68,13 +68,13 @@
 									@endif
 								</div>
 							</td>
-							<td class="py-2 px-4" style="max-width: 300px;">
+							<td class="py-3 px-4" style="max-width: 300px;">
 								{{ $atd->attendance_detail }}
 							</td>
 						</tr>
 					@empty
 						<tr class="bg-white">
-							<td class="py-2 px-4 text-center" colspan="6">- No data found -</td>
+							<td class="py-3 px-4 text-center" colspan="6">- No data found -</td>
 						</tr>
 					@endforelse
 				</tbody>

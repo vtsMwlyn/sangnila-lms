@@ -7,7 +7,7 @@
 @section("content")
 	<div class="flex flex-wrap gap-5 w-full">
 		@forelse ($courses as $course)
-			<a href="{{ route('guest.show', ['course_id' => $course->id]) }}" style="width: 32%;" class="course-card transition duration-300 hover:scale-105" data-course-name="{{ $course->course_name }}">
+			<a href="{{ route('guest.show', ['course_id' => $course->id]) }}" class="oneperthree course-card transition duration-300 hover:scale-[102%]" data-course-name="{{ $course->course_name }}">
 				<div class="rounded-3xl shadow-lg overflow-hidden relative">
 					<div class="absolute h-full w-full course-bg" style="background-size: cover; background-position: center; filter: brightness(0.5) blur(2px);"></div>
 					<div class="relative p-5 w-full h-full">

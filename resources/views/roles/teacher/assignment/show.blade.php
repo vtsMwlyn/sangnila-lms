@@ -42,14 +42,14 @@
 				<tbody>
 					@forelse ($assignments as $asg)
 						<tr class="@if($loop->index % 2 == 0) bg-white @endif">
-							<td class="py-2 px-4 w-1/5">
+							<td class="py-3 px-4 w-1/5">
 								<a class="text-blue-600 hover:underline font-bold" href="{{ route('teacher.assignment.check', $asg->id) }}">{{ $asg->title }}</a>
 								<br><br>
 								{{ Carbon\Carbon::parse($asg->deadline_date)->format('d M Y') }}
 								<br>
 								{{ Carbon\Carbon::parse($asg->deadline_time)->format("H:i") }} GMT+7
 							</td>
-							<td class="py-2 px-4 w-1/5">
+							<td class="py-3 px-4 w-1/5">
 								<div class="flex w-full flex-col gap-3 overflow-y-auto" style="max-height: 100px;">
 									@foreach ($asg->student_assignments as $sasg)
 										<div class="flex items-center gap-3">
@@ -63,7 +63,7 @@
 									@endforeach
 								</div>
 							</td>
-							<td class="py-2 px-4" style="max-width: 350px; overflow-wrap: break-word;">
+							<td class="py-3 px-4" style="max-width: 350px; overflow-wrap: break-word;">
 								@if(strlen($asg->desc) > 60)
 									<div class="">{!! nl2br(substr($asg->desc, 0, 60)) !!}... <button type="button" class="show-more-button text-blue font-semibold text-xs">[Show More]</button></div>
 									<div class="hidden">{!! nl2br($asg->desc) !!} <button type="button" class="show-less-button text-blue font-semibold text-xs">[Show Less]</button></div>
@@ -72,7 +72,7 @@
 								@endif
 								<a href="{{ $asg->link }}" class="text-blue-600 hover:underline font-bold">{{ $asg->link }}</a>
 							</td>
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">
 								<div class="flex gap-1">
 									<a href="{{ route('teacher.assignment.edit', $asg->id) }}">
 										<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">

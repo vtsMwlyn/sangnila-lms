@@ -127,7 +127,7 @@
 								@continue
 							@endif
 							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">
 									<div class="flex w-full items-center gap-3">
 										@if($admin_acc->details->profpic)
 											<img src="{{ Storage::url("app/public/" . $admin_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
@@ -137,10 +137,10 @@
 										{{ $admin_acc->full_name }}
 									</div>
 								</td>
-								<td class="py-2 px-4">{{ $admin_acc->email }}</td>
-								<td class="py-2 px-4">{{ ucwords($admin_acc->role->role_name) }}</td>
-								<td class="py-2 px-4 font-semibold @if($admin_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($admin_acc->status) }}</td>
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">{{ $admin_acc->email }}</td>
+								<td class="py-3 px-4">{{ ucwords($admin_acc->role->role_name) }}</td>
+								<td class="py-3 px-4 font-semibold @if($admin_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($admin_acc->status) }}</td>
+								<td class="py-3 px-4">
 									<div class="flex w-full items-stretch gap-1 justify-start">
 										<button type="button" class="reset-password-btn h-8 w-8 flex items-center justify-center hover:scale-110" data-account_name="{{ $admin_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $admin_acc->id) }}">
 											<img src="{{ asset('img/reset-password.svg') }}">
@@ -159,7 +159,7 @@
 							</tr>
 						@empty
 							<tr class="bg-white">
-								<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+								<td class="py-3 px-4 text-center" colspan="5">- No data found -</td>
 							</tr>
 						@endforelse
 					</tbody>
@@ -181,7 +181,7 @@
 					<tbody>
 						@forelse ($teacher_accounts as $teacher_acc)
 							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">
 									<div class="flex w-full items-center gap-3">
 										@if($teacher_acc->details->profpic)
 											<img src="{{ Storage::url("app/public/" . $teacher_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
@@ -192,10 +192,10 @@
 									</div>
 
 								</td>
-								<td class="py-2 px-4">{{ $teacher_acc->email }}</td>
-								<td class="py-2 px-4">{{ ucwords($teacher_acc->role->role_name) }}</td>
-								<td class="py-2 px-4 font-semibold @if($teacher_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($teacher_acc->status) }}</td>
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">{{ $teacher_acc->email }}</td>
+								<td class="py-3 px-4">{{ ucwords($teacher_acc->role->role_name) }}</td>
+								<td class="py-3 px-4 font-semibold @if($teacher_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($teacher_acc->status) }}</td>
+								<td class="py-3 px-4">
 									<div class="flex w-full items-stretch gap-1 justify-start">
 										<button type="button" class="reset-password-btn h-8 w-8 flex items-center justify-center hover:scale-110" data-account_name="{{ $teacher_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $teacher_acc->id) }}">
 											<img src="{{ asset('img/reset-password.svg') }}">
@@ -214,7 +214,7 @@
 							</tr>
 						@empty
 							<tr class="bg-white">
-								<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+								<td class="py-3 px-4 text-center" colspan="5">- No data found -</td>
 							</tr>
 						@endforelse
 					</tbody>
@@ -236,7 +236,7 @@
 					<tbody>
 						@forelse ($student_accounts as $student_acc)
 							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">
 									<div class="flex w-full items-center gap-3">
 										@if($student_acc->details->profpic)
 											<img src="{{ Storage::url("app/public/" . $student_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
@@ -246,10 +246,10 @@
 										{{ $student_acc->full_name }}
 									</div>
 								</td>
-								<td class="py-2 px-4">{{ $student_acc->email }}</td>
-								<td class="py-2 px-4">{{ ucwords($student_acc->role->role_name) }}</td>
-								<td class="py-2 px-4 font-semibold @if($student_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($student_acc->status) }}</td>
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">{{ $student_acc->email }}</td>
+								<td class="py-3 px-4">{{ ucwords($student_acc->role->role_name) }}</td>
+								<td class="py-3 px-4 font-semibold @if($student_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($student_acc->status) }}</td>
+								<td class="py-3 px-4">
 									<div class="flex w-full items-stretch gap-1 justify-start">
 										<button type="button" class="reset-password-btn h-8 w-8 flex items-center justify-center hover:scale-110" data-account_name="{{ $student_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $student_acc->id) }}">
 											<img src="{{ asset('img/reset-password.svg') }}">
@@ -268,7 +268,7 @@
 							</tr>
 						@empty
 							<tr class="bg-white">
-								<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+								<td class="py-3 px-4 text-center" colspan="5">- No data found -</td>
 							</tr>
 						@endforelse
 					</tbody>
@@ -291,7 +291,7 @@
 					<tbody>
 						@forelse ($disabled as $disabled_acc)
 							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">
 									<div class="flex w-full items-center gap-3">
 										@if($disabled_acc->details->profpic)
 											<img src="{{ Storage::url("app/public/" . $disabled_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
@@ -301,11 +301,11 @@
 										{{ $disabled_acc->full_name }}
 									</div>
 								</td>
-								<td class="py-2 px-4">{{ $disabled_acc->email }}</td>
-								<td class="py-2 px-4">{{ ucwords($disabled_acc->role->role_name) }}</td>
-								<td class="py-2 px-4 font-semibold @if($disabled_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($disabled_acc->status) }}</td>
-								<td class="py-2 px-4">{{ $disabled_acc->disable_reason }}</td>
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">{{ $disabled_acc->email }}</td>
+								<td class="py-3 px-4">{{ ucwords($disabled_acc->role->role_name) }}</td>
+								<td class="py-3 px-4 font-semibold @if($disabled_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($disabled_acc->status) }}</td>
+								<td class="py-3 px-4">{{ $disabled_acc->disable_reason }}</td>
+								<td class="py-3 px-4">
 									<div class="flex w-full items-stretch gap-1 justify-start">
 										<button type="button" class="reset-password-btn h-8 w-8 flex items-center justify-center hover:scale-110" data-account_name="{{ $disabled_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $disabled_acc->id) }}">
 											<img src="{{ asset('img/reset-password.svg') }}">
@@ -324,7 +324,7 @@
 							</tr>
 						@empty
 							<tr class="bg-white">
-								<td class="py-2 px-4 text-center" colspan="6">- No data found -</td>
+								<td class="py-3 px-4 text-center" colspan="6">- No data found -</td>
 							</tr>
 						@endforelse
 					</tbody>

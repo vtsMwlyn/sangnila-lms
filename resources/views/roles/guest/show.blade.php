@@ -25,10 +25,10 @@
 							@foreach ($topics[0]->curriculum_activities as $index => $activity)
 								@if($index < 3)
 									<tr class="@if($index == 1) opacity-60 @elseif($index == 2) opacity-30 @endif @if($loop->iteration % 2 == 1) bg-white @endif">
-										<td class="py-2 px-4">
+										<td class="py-3 px-4">
 											{{ $topics[0]->title }}
 										</td>
-										<td class="py-2 px-4">
+										<td class="py-3 px-4">
 											@if($index < 1)
 												<a href="{{ $activity->link }}" class="font-bold hover:underline text-blue-600 hover:text-blue-800">
 													{{ $activity->title }}
@@ -44,10 +44,10 @@
 							@endforeach
 						@else
 							<tr class="hover:bg-gray-100 border-b border-blue-900">
-								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2">
+								<td class="py-3 px-4 bg-blue-100 border-b border-blue-300">
 									{{ $topics[0]->title }}
 								</td>
-								<td class="bg-blue-100 border-b border-blue-300 px-4 py-2 text-center">This topic doesn't have any activities yet.</td>
+								<td class="py-3 px-4 bg-blue-100 border-b border-blue-300 text-center">This topic doesn't have any activities yet.</td>
 							</tr>
 						@endif
 					@else

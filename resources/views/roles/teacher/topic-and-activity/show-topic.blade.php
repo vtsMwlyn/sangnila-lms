@@ -98,9 +98,9 @@
 				<tbody>
 					@forelse ($topic->activities()->orderBy('session', 'asc')->get() as $activity)
 						<tr class="@if($loop->index % 2 == 0) bg-white @endif">
-							<td class="py-2 px-4 text-center">{{ $activity->session }}</td>
-							<td class="py-2 px-4 w-1/4">{{ $activity->title }}</td>
-							<td class="py-2 px-4 w-1/2">
+							<td class="py-3 px-4 text-center">{{ $activity->session }}</td>
+							<td class="py-3 px-4 w-1/4">{{ $activity->title }}</td>
+							<td class="py-3 px-4 w-1/2">
 								@if(strlen($activity->desc) > 90)
 									<div class="">{!! nl2br(substr($activity->desc, 0, 90)) !!}... <button type="button" class="show-more-button text-blue font-semibold text-xs">[Show More]</button></div>
 									<div class="hidden">{!! nl2br($activity->desc) !!} <button type="button" class="show-less-button text-blue font-semibold text-xs">[Show Less]</button></div>
@@ -108,14 +108,14 @@
 									{!! nl2br($activity->desc) !!}
 								@endif
 							</td>
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">
 								@forelse ($activity->learning_outcomes as $leaout)
 									LO{{ $leaout->number }}@if($activity->learning_outcomes->count() > 1 && $loop->index != $activity->learning_outcomes->count() - 1), @endif
 								@empty
 									N/A
 								@endforelse
 							</td>
-							<td class="py-2 px-4" style="max-width: 18vw; word-wrap: break-word;">
+							<td class="py-3 px-4" style="max-width: 18vw; word-wrap: break-word;">
 								@if($activity->link)
 									<a href="{{ $activity->link }}" target="_blank" class="font-bold text-blue-600 hover:underline">{{ $activity->link }}</a>
 								@else
@@ -123,7 +123,7 @@
 								@endif
 							</td>
 
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">
 								<div class="flex gap-1">
 									<a href="{{ route('teacher.mycourse.activity.edit', $activity->id) }}">
 										<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">

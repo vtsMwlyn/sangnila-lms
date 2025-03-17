@@ -300,18 +300,18 @@
 
 				const newRow = $('<tr>').addClass(rowCount % 2 == 0? 'bg-slate-100' : '')
 					.append(
-						// $('<td>').addClass('py-2 px-4').text((_isAttended == 'on')? `${_nthSession} (${_start_time}-${_end_time})` : `${_nthSession}`)
-						$('<td>').addClass('py-2 px-4').text((_isAttended == 'on')? `${_start_time}-${_end_time}` : 'Absent')
+						// $('<td>').addClass('py-3 px-4').text((_isAttended == 'on')? `${_nthSession} (${_start_time}-${_end_time})` : `${_nthSession}`)
+						$('<td>').addClass('py-3 px-4').text((_isAttended == 'on')? `${_start_time}-${_end_time}` : 'Absent')
 					).append(
-						$('<td>').addClass('py-2 px-4').html(atdIcon)
+						$('<td>').addClass('py-3 px-4').html(atdIcon)
 					).append(
-						$('<td>').addClass('py-2 px-4').text(_isAttended == 'on'? _activity : 'Absent')
+						$('<td>').addClass('py-3 px-4').text(_isAttended == 'on'? _activity : 'Absent')
 					).append(
-						$('<td>').addClass('py-2 px-4').text((_isAttended == 'on')? _learning_status : 'Absent')
+						$('<td>').addClass('py-3 px-4').text((_isAttended == 'on')? _learning_status : 'Absent')
 					).append(
-						$('<td>').addClass('py-2 px-4').text(_details)
+						$('<td>').addClass('py-3 px-4').text(_details)
 					).append(
-						$('<td>').addClass('py-2 px-4').html(delRowBtn)
+						$('<td>').addClass('py-3 px-4').html(delRowBtn)
 					);
 
 				const student = $(this).data('student');

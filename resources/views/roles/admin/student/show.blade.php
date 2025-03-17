@@ -227,9 +227,9 @@
 					<tbody>
 						@foreach ($isImportedData as $impdat)
 							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-								<td class="py-2 px-4">{{ $impdat->course->course_name }} - {{ ucwords($impdat->course->level) }}</td>
-								<td class="py-2 px-4">{{ $impdat->last_attendance_count }}</td>
-								<td class="py-2 px-4">
+								<td class="py-3 px-4">{{ $impdat->course->course_name }} - {{ ucwords($impdat->course->level) }}</td>
+								<td class="py-3 px-4">{{ $impdat->last_attendance_count }}</td>
+								<td class="py-3 px-4">
 									<div class="w-full flex gap-3 justify-start">
 										<x-button type="button" class="edit-student-import-info-btn" data-route="{{ route('admin.student.imported-data.update', [$impdat->student->id, $impdat->course_id]) }}" data-uninserted_attendance_count="{{ $impdat->last_attendance_count }}"><i class="bi bi-pencil-square"></i> Edit</x-button>
 
@@ -385,10 +385,10 @@
 				<tbody>
 					@forelse ($student->enrolled_courses as $i => $ec)
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-							<td class="py-2 px-4 w-1/4">
+							<td class="py-3 px-4 w-1/4">
 								{{ $ec->course_name }} - {{ ucwords($ec->level) }}
 							</td>
-							<td class="py-2 px-4 w-1/4">
+							<td class="py-3 px-4 w-1/4">
 								<div class="flex items-center justify-between w-2/3">
 									{{ $current_progress[$i] }}/{{ $full_progress[$i] }} sessions
 									<button type="button" class="attendance-information-btn" data-student="{{ $student->id }}" data-std_attendances="{{ json_encode($attendance_data[$ec->id]) }}">
@@ -396,7 +396,7 @@
 									</button>
 								</div>
 							</td>
-							<td class="py-2 px-4 w-1/4">
+							<td class="py-3 px-4 w-1/4">
 								<div class="flex items-center justify-between w-2/3">
 									{{ $done_assignment[$i] }}/{{ $assignment_if_full[$i] }} done
 									<button type="button" class="assignment-information-btn" data-std_assignments="{{ json_encode($assignment_data[$ec->id]) }}">
@@ -404,7 +404,7 @@
 									</button>
 								</div>
 							</td>
-							<td class="py-2 px-4 w-1/4">
+							<td class="py-3 px-4 w-1/4">
 								@if($assessment_data[$i])
 									<div class="flex items-center justify-between w-2/3">
 										Uploaded
@@ -419,7 +419,7 @@
 						</tr>
 					@empty
 						<tr class="bg-white">
-							<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+							<td class="py-3 px-4 text-center" colspan="5">- No data found -</td>
 						</tr>
 					@endforelse
 				</tbody>
@@ -666,61 +666,61 @@
 					.append(
 						$('<tr>').css('background-color', 'rgb(237, 241, 247)')
 							.append(
-								$('<td>').addClass('py-2 px-4').text('1')
+								$('<td>').addClass('py-3 px-4').text('1')
 							)
 							.append(
-								$('<td>').addClass('py-2 px-4 whitespace-nowrap').text('Performance')
+								$('<td>').addClass('py-3 px-4 whitespace-nowrap').text('Performance')
 							)
 							.append(
-								$('<td>').addClass('py-2 px-4 whitespace-nowrap').text(assessmentData.performance_score.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
+								$('<td>').addClass('py-3 px-4 whitespace-nowrap').text(assessmentData.performance_score.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
 							)
 							.append(
-								$('<td>').addClass('py-2 px-4').text(assessmentData.performance_description)
+								$('<td>').addClass('py-3 px-4').text(assessmentData.performance_description)
 							)
 					)
 					.append(
 						$('<tr>').css('background-color', 'white')
 							.append(
-								$('<td>').addClass('py-2 px-4').text('2')
+								$('<td>').addClass('py-3 px-4').text('2')
 							)
 							.append(
-								$('<td>').addClass('py-2 px-4 whitespace-nowrap').text('Technical Skill')
+								$('<td>').addClass('py-3 px-4 whitespace-nowrap').text('Technical Skill')
 							)
 							.append(
-								$('<td>').addClass('py-2 px-4 whitespace-nowrap').text(assessmentData.technical_skill_score.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
+								$('<td>').addClass('py-3 px-4 whitespace-nowrap').text(assessmentData.technical_skill_score.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
 							)
 							.append(
-								$('<td>').addClass('py-2 px-4').text(assessmentData.technical_skill_description)
+								$('<td>').addClass('py-3 px-4').text(assessmentData.technical_skill_description)
 							)
 					)
 					.append(
 						$('<tr>').css('background-color', 'rgb(237, 241, 247)')
 							.append(
-								$('<td>').addClass('py-2 px-4').text('3')
+								$('<td>').addClass('py-3 px-4').text('3')
 							)
 							.append(
-								$('<td>').addClass('py-2 px-4 whitespace-nowrap').text('Aesthetical Skill')
+								$('<td>').addClass('py-3 px-4 whitespace-nowrap').text('Aesthetical Skill')
 							)
 							.append(
-								$('<td>').addClass('py-2 px-4 whitespace-nowrap').text(assessmentData.aesthetical_skill_score.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
+								$('<td>').addClass('py-3 px-4 whitespace-nowrap').text(assessmentData.aesthetical_skill_score.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
 							)
 							.append(
-								$('<td>').addClass('py-2 px-4').text(assessmentData.aesthetical_skill_description)
+								$('<td>').addClass('py-3 px-4').text(assessmentData.aesthetical_skill_description)
 							)
 					)
 					.append(
 						$('<tr>').css('background-color', 'white')
 							.append(
-								$('<td>').addClass('py-2 px-4').text('4')
+								$('<td>').addClass('py-3 px-4').text('4')
 							)
 							.append(
-								$('<td>').addClass('py-2 px-4 whitespace-nowrap').text('Overall')
+								$('<td>').addClass('py-3 px-4 whitespace-nowrap').text('Overall')
 							)
 							.append(
-								$('<td>').addClass('py-2 px-4 whitespace-nowrap').text(assessmentData.overall_score.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
+								$('<td>').addClass('py-3 px-4 whitespace-nowrap').text(assessmentData.overall_score.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
 							)
 							.append(
-								$('<td>').addClass('py-2 px-4').text(assessmentData.overall_description)
+								$('<td>').addClass('py-3 px-4').text(assessmentData.overall_description)
 							)
 					);
 

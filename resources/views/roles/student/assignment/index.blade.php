@@ -10,7 +10,7 @@
 
 @section("content")
 	@forelse ($assignments_data as $ad)
-		<a href="{{ route('student.assignment.show', $ad["course_student"]->course->id) }}" class="w-full transition duration-300 selectable-cards relative">
+		<a href="{{ route('student.assignment.show', $ad["course_student"]->course->id) }}" class="w-full transition duration-300 hover:scale-[101%] relative">
 			<div class="rounded-3xl w-full py-5 px-8 mb-6 flex flex-col items-stretch sm:text-base text-sm" style="background: #FEFEFEB2;">
 				<p class="font-bold text-dark-blue">{{ $ad["course_student"]->course->course_name }} - {{ ucwords($ad["course_student"]->course->level) }}</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
@@ -52,15 +52,4 @@
 		</a>
 	@empty
 	@endforelse
-
-	<script>
-		$(".selectable-cards").on({
-			"mouseover": function(){
-				$(this).css("transform", "scale(1.02)");
-			},
-			"mouseout": function(){
-				$(this).css("transform", "scale(1)");
-			}
-		});
-	</script>
 @endsection

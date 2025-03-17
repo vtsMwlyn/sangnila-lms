@@ -89,13 +89,13 @@
 						@endphp
 
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-							<td class="py-2 px-4">{{ Carbon\Carbon::parse($la->self_attendance_date)->format('d M Y') }}</td>
-							<td class="py-2 px-4">{{ ($la->user->details->gender == 1)? "Mr." : "Ms." }} {{ $la->user->full_name }}</td>
-							<td class="py-2 px-4">{{ $la->course->course_name }}</td>
-							<td class="py-2 px-4">{{ $la->check_in_time }}</td>
-							<td class="py-2 px-4">{{ $la->check_out_time ?? 'N/A' }}</td>
-							{{-- <td class="py-2 px-4">{{ $la->validation_status }}</td> --}}
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">{{ Carbon\Carbon::parse($la->self_attendance_date)->format('d M Y') }}</td>
+							<td class="py-3 px-4">{{ ($la->user->details->gender == 1)? "Mr." : "Ms." }} {{ $la->user->full_name }}</td>
+							<td class="py-3 px-4">{{ $la->course->course_name }}</td>
+							<td class="py-3 px-4">{{ $la->check_in_time }}</td>
+							<td class="py-3 px-4">{{ $la->check_out_time ?? 'N/A' }}</td>
+							{{-- <td class="py-3 px-4">{{ $la->validation_status }}</td> --}}
+							<td class="py-3 px-4">
 								<div class="flex gap-1 w-full">
 									<button type="button" class="lecturer-attendance-detail-btn" data-desc="{!! $la->description? nl2br($la->description) : 'N/A' !!}" data-source_teacher="{{ $checkInPhotoL }}" data-student_validations="{{ json_encode($sourceStudents) }}">
 										<img src="{{ asset('img/photo.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
@@ -108,7 +108,7 @@
 						</tr>
 					@empty
 						<tr class="bg-white">
-							<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
+							<td class="py-3 px-4 text-center" colspan="5">- No data found -</td>
 						</tr>
 					@endforelse
 				</tbody>

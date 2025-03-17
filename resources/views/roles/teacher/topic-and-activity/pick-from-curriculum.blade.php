@@ -37,9 +37,9 @@
 
 					@forelse ($curriculum_topics as $topic)
 						<tr class="@if($iterasus % 2 == 1) bg-white @endif">
-							<td class="py-2 px-4">{{ $topic->title }}</td>
+							<td class="py-3 px-4">{{ $topic->title }}</td>
 
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">
 								<div class="h-full w-full flex flex-col gap-2">
 									@foreach ($topic->curriculum_activities as $activity)
 										<div class="flex w-full justify-between">

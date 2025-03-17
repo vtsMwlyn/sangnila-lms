@@ -7,7 +7,7 @@
 @section("content")
 	<div class="w-full flex flex-wrap gap-5">
 		@forelse (Auth::user()->enrolled_courses->where('status', 'active') as $course)
-			<a href="{{ route('student.learning-documentation.show', $course->id) }}" class="w-full md:w-1/3 transition duration-300 hover:scale-105">
+			<a href="{{ route('student.learning-documentation.show', $course->id) }}" class="oneperthree transition duration-300 hover:scale-[102%]">
 				<div class="rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
 					{{-- Course information --}}
 					<p class="font-bold text-dark-blue">{{ $course->course_name }} - {{ ucwords($course->level) }}</p>

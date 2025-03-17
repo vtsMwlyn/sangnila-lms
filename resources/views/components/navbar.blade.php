@@ -49,7 +49,7 @@
 
 					<div class="absolute z-10 bg-white top-16 w-80 sm:w-96 rounded-3xl px-5 py-3 flex flex-col dropdown-menu" style="@if(!session()->has('successNotifAction')) display: none; @endif  height: 600px;">
 						<div class="w-full flex items-center justify-between">
-							<h1 class="font-extrabold text-dark-blue">Notifications</h1>
+							<h1 class="font-extrabold text-dark-blue text-base">Notifications</h1>
 							@if($inboxes->count())
 								@if($inboxes->where("status", "unread")->count())
 									<form action="{{ route('notification.mark-all-read') }}" class="flex justify-center" method="post">
@@ -62,7 +62,7 @@
 							@endif
 						</div>
 
-						<div class="w-full bg-slate-400 mt-1 mb-3" style="height: 2px;"></div>
+						<div class="w-full bg-slate-400 mt-1 mb-3" style="height: 3px;"></div>
 
 						<div class="flex flex-col items-center gap-3 grow w-full text-xs py-2 px-1 overflow-y-auto">
 							@forelse($inboxes as $i => $inbox)
@@ -90,7 +90,7 @@
 
 			<div class="relative flex flex-col items-end dropdown-container">
 				<button type="button" class="dropdown-toggler"><img src="{{ asset('img/burger-icon-navbar-pc.svg') }}" alt="burger-icon" class="h-6"></button>
-				<div class="absolute z-10 bg-white top-16 w-80 rounded-3xl flex flex-col py-2 dropdown-menu overflow-hidden" style="display: none; ">
+				<div class="text-base absolute z-10 bg-white top-16 w-80 rounded-3xl flex flex-col py-2 dropdown-menu overflow-hidden" style="display: none; ">
 					<a href="#"><div class="w-full px-5 py-1.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><img src="{{ asset('img/navbar-help-and-support.svg') }}" class="h-5 w-5" alt="sidebar-icon"> Help and Support</div></a>
 					<a href="#"><div class="w-full px-5 py-1.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><img src="{{ asset('img/navbar-send-feedback.svg') }}" class="h-5 w-5" alt="sidebar-icon"> Send Feedback</div></a>
 					<a href="{{ route("profile.show") }}" class="block lg:hidden"><div class="w-full px-5 py-0.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><i class="bi bi-person-fill text-slate-400 text-lg mr-0.5"></i> Profile</div></a>

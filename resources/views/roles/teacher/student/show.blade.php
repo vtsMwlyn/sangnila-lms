@@ -107,10 +107,10 @@
 						<tbody>
 							@forelse ($newestprogress as $progress)
 								<tr class="@if($loop->index % 2 == 0) bg-white @endif">
-									<td class="py-2 px-4 text-center">{{ $progress->activity->session }}</td>
-									<td class="py-2 px-4">{{ $progress->activity->topic->title }}</td>
-									<td class="py-2 px-4">{{ $progress->activity->title }}</td>
-									<td class="py-2 px-4">
+									<td class="py-3 px-4 text-center">{{ $progress->activity->session }}</td>
+									<td class="py-3 px-4">{{ $progress->activity->topic->title }}</td>
+									<td class="py-3 px-4">{{ $progress->activity->title }}</td>
+									<td class="py-3 px-4">
 										<div class="w-full flex justify-center">
 											<input type="checkbox" id="activity_progress_{{ $progress->id }}"
 											class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300"
@@ -152,10 +152,10 @@
 						<tbody>
 							@forelse ($newestprogress as $i => $progress)
 								<tr class="@if($loop->index % 2 == 0) bg-white @endif">
-									<td class="py-2 px-4 text-center">{{ $progress->activity->session }}</td>
-									<td class="py-2 px-4">{{ $progress->activity->topic->title }}</td>
-									<td class="py-2 px-4">{{ $progress->activity->title }}</td>
-									<td class="py-2 px-4 w-1/3">
+									<td class="py-3 px-4 text-center">{{ $progress->activity->session }}</td>
+									<td class="py-3 px-4">{{ $progress->activity->topic->title }}</td>
+									<td class="py-3 px-4">{{ $progress->activity->title }}</td>
+									<td class="py-3 px-4 w-1/3">
 										<x-input type="text" class="w-full" name="meeting_links[]" placeholder="Add meeting link" value="{{ old('meeting_links.' . $i, $progress->meeting_link) }}"/>
 										@error('meeting_links.' . $i)
 											<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> Please insert a valid URL.</p>

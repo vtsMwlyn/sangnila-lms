@@ -39,18 +39,18 @@
 				<tbody>
 					@forelse ($history as $submission)
 						<tr class="@if($loop->index % 2 == 0) bg-white @endif">
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">
 								<div class="whitespace-nowrap">{{ $submission->created_at->format('d M Y') }}</div>
 								<div class="whitespace-nowrap">{{ $submission->created_at->format('H:i') }} GMT+7</div>
 							</td>
-							<td class="py-2 px-4">{{ $submission->title }}</td>
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">{{ $submission->title }}</td>
+							<td class="py-3 px-4">
 								<a href="{{ $submission->link }}" target="_blank" class="text-blue-600 hover:underline font-bold">{{ $submission->link }}</a>
 							</td>
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">
 								<div class="font-bold whitespace-nowrap @if($submission->status == 'Late') text-red @else text-light-blue @endif">{{ $submission->status }}</div>
 							</td>
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">
 								<form action="{{ route("teacher.assignment.feedback", [$submission->id, $submission->student->id]) }}" method="post" class="flex gap-1 justify-center items-center w-full">
 									@csrf
 									{{-- Feedback --}}

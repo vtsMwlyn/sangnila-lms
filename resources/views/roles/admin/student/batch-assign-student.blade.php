@@ -197,10 +197,10 @@
 							row.addClass('bg-white');
 						}
 
-						const col1 = $("<td>").addClass("py-2 px-4");
-						const col2 = $("<td>").addClass("py-2 px-4");
-						const col3 = $("<td>").addClass("py-2 px-4");
-						const col4 = $("<td>").addClass("py-2 px-4");
+						const col1 = $('<td>').addClass('py-3 px-4");
+						const col2 = $('<td>').addClass('py-3 px-4");
+						const col3 = $('<td>').addClass('py-3 px-4");
+						const col4 = $('<td>').addClass('py-3 px-4");
 
 						const studentObj = JSON.parse(inpStudentName.val());
 

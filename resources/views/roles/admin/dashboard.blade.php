@@ -11,22 +11,22 @@
 			<div class="w-full flex flex-wrap lg:flex-nowrap justify-center gap-5">
 				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
 					<img src="{{ asset('img/studentdashboard-materialsunlocked.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
-					<p class="font-bold text-black text-center">Active Courses</p>
+					<p class="font-bold text-black text-center text-base">Active Courses</p>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $active_courses }}</p>
 				</div>
 				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
 					<img src="{{ asset('img/studentdashboard-courseenrolled.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
-					<p class="font-bold text-black text-center">Active Students</p>
+					<p class="font-bold text-black text-center text-base">Active Students</p>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $active_students }}</p>
 				</div>
 				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
 					<img src="{{ asset('img/dashboard-activeteachers.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
-					<p class="font-bold text-black text-center">Active Teachers</p>
+					<p class="font-bold text-black text-center text-base">Active Teachers</p>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $active_teachers }}</p>
 				</div>
 				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
 					<img src="{{ asset('img/studentdashboard-assignmentsdone.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
-					<p class="font-bold text-black text-center">Max Session Students</p>
+					<p class="font-bold text-black text-center text-base">Max Session Students</p>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $max_session_students }}</p>
 				</div>
 			</div>
@@ -34,7 +34,7 @@
 			{{-- Popular Courses --}}
 			<div class="rounded-3xl p-5 shadow-lg grow" style="background-color: #FEFEFEB2;">
 				<div class="flex w-full justify-between">
-					<p class="font-bold text-dark-blue">Popular Courses</p>
+					<p class="font-bold text-dark-blue text-base">Popular Courses</p>
 				</div>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
@@ -47,7 +47,7 @@
 		{{-- Recent Activities --}}
 		<div class="w-full lg:w-1/3 flex flex-col md:flex-row lg:flex-col gap-5">
 			<div class="w-full rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
-				<p class="font-bold text-dark-blue">Recent Teacher Activities</p>
+				<p class="font-bold text-dark-blue text-base">Recent Teacher Activities</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 				<div class="w-full flex flex-col overflow-y-auto" style="height: 250px;">
@@ -64,7 +64,7 @@
 			</div>
 
 			<div class="w-full rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
-				<p class="font-bold text-dark-blue">Recent Self Attendances</p>
+				<p class="font-bold text-dark-blue text-base">Recent Self Attendances</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 				<div class="w-full flex flex-col overflow-y-auto" style="height: 250px;">
@@ -86,7 +86,7 @@
 		{{-- News and announcement --}}
 		<div class="w-full lg:w-1/2 rounded-3xl py-5 shadow-lg" style="background-color: #FEFEFEB2;">
 			<div class="px-5">
-				<p class="font-bold text-dark-blue">News and Announcement</p>
+				<p class="font-bold text-dark-blue text-base">News and Announcement</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 			</div>
 
@@ -145,7 +145,7 @@
 
 		{{-- Calendar --}}
 		<div class="w-full lg:w-1/2 rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
-			<p class="font-bold text-dark-blue">Calendar</p>
+			<p class="font-bold text-dark-blue text-base">Calendar</p>
 			<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 			<iframe src="https://calendar.google.com/calendar/embed?src=id.indonesian%23holiday%40group.v.calendar.google.com&ctz=Asia%2FJakarta&bgcolor=%23ffffff&showTabs=0&showPrint=0&showTitle=0&showCalendars=0" style="border: 0" height="380" scrolling="no" class="w-full mt-5" frameborder="0" scrolling="no"></iframe>
@@ -189,17 +189,17 @@
 					{
 						label: 'Students Enrolled',
 						data: {!! json_encode($nums_total) !!}.slice(0, 10),
-						backgroundColor: '#344C9B',
+						backgroundColor: [],
 					},
 					{
 						label: 'Students Learning',
 						data: {!! json_encode($nums_learning) !!}.slice(0, 10),
-						backgroundColor: '#1DB9CF',
+						backgroundColor: [],
 					},
 					{
 						label: 'Students Completed',
 						data: {!! json_encode($nums_complete) !!}.slice(0, 10),
-						backgroundColor: 'rgb(22 163 74)',
+						backgroundColor: [],
 					},
 				]
 			};
@@ -214,24 +214,48 @@
 						y: {
 							beginAtZero: true // Ensure y-axis starts at 0
 						}
+					},
+					plugins: {
+						legend: {
+							labels: {
+								generateLabels: function (chart) {
+									const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+									labels.forEach((label, i) => {
+										const dataset = chart.data.datasets[i];
+
+										if (dataset.backgroundColor instanceof CanvasGradient) {
+											// Set legend color to the first color stop manually
+											const firstStopColors = ["#212F63", "#1EB8CD", "rgb(22,163,74)"];
+											label.fillStyle = firstStopColors[i]; 
+										}
+									});
+									return labels;
+								}
+							}
+						}
 					}
 				}
 			};
 
 			// Create the chart
-			new Chart(ctx, config);
+			const chart = new Chart(ctx, config);
 			
-			// const gradient1 = ctx.createLinearGradient(0, chart.height, 0, 0);
-			// gradient1.addColorStop(0, "#212F63");
-			// gradient1.addColorStop(1, "#354D9B");
+			const gradient1 = ctx.createLinearGradient(0, chart.height, 0, 0);
+			gradient1.addColorStop(0, "#212F63");
+			gradient1.addColorStop(1, "#354D9B");
 
-			// const gradient2 = ctx.createLinearGradient(0, chart.height, 0, 0);
-			// gradient2.addColorStop(0, "#1EB8CD");
-			// gradient2.addColorStop(1, "#BEE2DB");
+			const gradient2 = ctx.createLinearGradient(0, chart.height, 0, 0);
+			gradient2.addColorStop(0, "#1EB8CD");
+			gradient2.addColorStop(1, "#BEE2DB");
 
-			// const gradient3 = ctx.createLinearGradient(0, chart.height, 0, 0);
-			// gradient3.addColorStop(0, "rgb(22 163 74)");
-			// gradient3.addColorStop(1, "#FFFFFF");
+			const gradient3 = ctx.createLinearGradient(0, chart.height, 0, 0);
+			gradient3.addColorStop(0, "rgb(22 163 74)");
+			gradient3.addColorStop(1, "rgb(109, 218, 147)");
+
+			chart.data.datasets[0].backgroundColor = gradient1;
+			chart.data.datasets[1].backgroundColor = gradient2;
+			chart.data.datasets[2].backgroundColor = gradient3;
+			chart.update();
 		});
 	</script>
 

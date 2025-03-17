@@ -353,15 +353,15 @@
 
 						const newRow = $("<tr>")
 							.append(
-								$('<td>').addClass('py-2 px-4').html(`${inpFullName.val()} (${inpGender.val() == 1? 'Male' : 'Female'})<br>${inpEmail.val()}<br>(${cbv == 'Yes'? 'New Student' : ''})`)
+								$('<td>').addClass('py-3 px-4').html(`${inpFullName.val()} (${inpGender.val() == 1? 'Male' : 'Female'})<br>${inpEmail.val()}<br>(${cbv == 'Yes'? 'New Student' : ''})`)
 							).append(
-								$('<td>').addClass('py-2 px-4').text(JSON.parse(inpTeacherName.val()).full_name)
+								$('<td>').addClass('py-3 px-4').text(JSON.parse(inpTeacherName.val()).full_name)
 							).append(
-								$('<td>').addClass('py-2 px-4').text(`${inpLastAttendanceCount.val()}/${inpMaxCourseSession.val()}`)
+								$('<td>').addClass('py-3 px-4').text(`${inpLastAttendanceCount.val()}/${inpMaxCourseSession.val()}`)
 							).append(
-								$('<td>').addClass('py-2 px-4').text(JSON.parse(inpLastActivityUnlocked.val()).title)
+								$('<td>').addClass('py-3 px-4').text(JSON.parse(inpLastActivityUnlocked.val()).title)
 							).append(
-								$('<td>').addClass('py-2 px-4').append(
+								$('<td>').addClass('py-3 px-4').append(
 									$('<ol>')
 										.append(
 											$('<li>').text(`Phone number: ${inpPhoneNumber.val()}`)
@@ -386,7 +386,7 @@
 										)
 								)
 							).append(
-								$('<td>').addClass('py-2 px-4').append(delBtn)
+								$('<td>').addClass('py-3 px-4').append(delBtn)
 							);
 
 

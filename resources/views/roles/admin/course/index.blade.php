@@ -50,18 +50,18 @@
 				<tbody>
 					@forelse ($courses as $course)
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-							<td class="py-2 px-4">{{ $course->course_name }}</td>
-							<td class="py-2 px-4">{{ ucwords($course->level) }}</td>
-							<td class="py-2 px-4">{{ $course->format }} Sessions</td>
-							<td class="py-2 px-4">{{ ucwords($course->delivery_mode) }}</td>
-							<td class="py-2 px-4">
+							<td class="py-3 px-4">{{ $course->course_name }}</td>
+							<td class="py-3 px-4">{{ ucwords($course->level) }}</td>
+							<td class="py-3 px-4">{{ $course->format }} Sessions</td>
+							<td class="py-3 px-4">{{ ucwords($course->delivery_mode) }}</td>
+							<td class="py-3 px-4">
 								<div class="w-full flex flex-col">
 									<div class="">{{ $course->teachers->count() }} Teachers</div>
 									<div class="">{{ $course->students->count() }} Students</div>
 								</div>
 							</td>
-							<td class="py-2 px-4 font-semibold @if($course->status == "active") text-light-blue @else text-red @endif">{{ ucwords($course->status) }}</td>
-							<td class="py-2 px-4">
+							<td class="py-3 px-4 font-semibold @if($course->status == "active") text-light-blue @else text-red @endif">{{ ucwords($course->status) }}</td>
+							<td class="py-3 px-4">
 								<div class="flex gap-1 w-full">
 									<div class="relative">
 										<a href="{{ route('admin.course.show', ['course_id' => $course->id]) }}">
@@ -82,7 +82,7 @@
 						</tr>
 					@empty
 						<tr class="bg-white">
-							<td class="py-2 px-4 text-center" colspan="7">- No data found -</td>
+							<td class="py-3 px-4 text-center" colspan="7">- No data found -</td>
 						</tr>
 					@endforelse
 				</tbody>
