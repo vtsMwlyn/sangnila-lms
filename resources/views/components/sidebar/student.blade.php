@@ -21,12 +21,12 @@
 
 		{{-- Sidebar navigations --}}
 		<div class="flex flex-col items-stretch justify-center w-full text-base" id="large-sidebar">
-			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6 hover:bg-cyan-500"
+			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6"
 				href="{{ route('home') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('dashboard*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-dashboard.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Dashboard
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6 hover:bg-cyan-500"
+			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6"
 				href="{{ route('student.mycourse.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('student*my-course*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-courses.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Courses
 			</x-anchor-button>
@@ -35,7 +35,7 @@
 				{{-- @if($n > 0)
 					<div class="absolute h-6 w-7 bg-red-600 rounded-full flex justify-center items-center" style="top: -0.5rem; right: -0.5rem;">{{ $n }}</div>
 				@endif --}}
-				<x-anchor-button class="flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500 w-full"
+				<x-anchor-button class="flex items-center text-start gap-4 py-3 px-6 w-full"
 					href="{{ route('student.assignment.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('student*assignment*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 					<img src="{{ asset('img/sidebar-assignment.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Assignment
 				</x-anchor-button>
@@ -44,22 +44,22 @@
 				@endif
 			</div>
 
-			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6 hover:bg-cyan-500"
+			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6"
 				href="{{ route('student.attendance.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('student*attendance*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-attendance.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Attendance
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center text-start gap-4 py-2 px-6 hover:bg-cyan-500"
+			<x-anchor-button class="grow flex items-center text-start gap-4 py-2 px-6"
 				href="{{ route('student.learning-documentation.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('student*learning-documentation*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<i class="bi bi-file-earmark-text-fill text-2xl"></i> Learning Documentation
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center text-start gap-4 py-2 px-6 hover:bg-cyan-500"
+			<x-anchor-button class="grow flex items-center text-start gap-4 py-2 px-6"
 				href="{{ route('student.forum.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('student*forum*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-forum.svg') }}"> Forum Discussion
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6 hover:bg-cyan-500"
+			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6"
 				href="{{ route('list-announcement') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('announcement*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-announcement.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Announcement
 			</x-anchor-button>

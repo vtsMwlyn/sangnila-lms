@@ -57,8 +57,15 @@ body {
 	font-family: "Geologica";
 }
 
+/* Ngilangin file attachment */
 trix-toolbar [data-trix-button-group="file-tools"] {
-	display: none;
+	display: none !important;
+	border: none !important;
+}
+
+trix-toolbar [data-trix-action="attachFiles"] {
+    display: none !important;
+	border: none !important;
 }
 
 /* Targeting unordered lists specifically within Trix editor */

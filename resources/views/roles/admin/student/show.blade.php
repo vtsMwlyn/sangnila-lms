@@ -355,7 +355,7 @@
 						<div class="flex w-full justify-between items-center text-sm mt-4">
 							<div class="flex items-center gap-2">
 								<x-button type="button" data-route="{{ route('admin.student.assign.update', $cs->id) }}" data-cs="{{ $cs }}" class="text-white edit-assign-student-btn"><i class="bi bi-pencil-square"></i> Edit</x-button>
-								<button type="button" data-route="{{ route('admin.student.unassign.destroy', ['student_id' => $student->id, 'course_id' => $course->id]) }}" data-unassign_course_name="{{ $course->course_name }}" class="unassign-student-btn text-white bg-red flex items-center justify-center px-4 py-2 rounded-xl hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 text-xs" style="">
+								<button type="button" data-route="{{ route('admin.student.unassign.destroy', ['student_id' => $student->id, 'course_id' => $course->id]) }}" data-unassign_course_name="{{ $course->course_name }}" class="unassign-student-btn text-white bg-red flex items-center justify-center px-4 py-2 rounded-xl hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 font-bold" style="">
 									Unassign
 								</button>
 							</div>

@@ -10,7 +10,9 @@
 
 @section("content")
 	<x-section-container>
+		<x-back-button href="{{ route('admin.teacher.index') }}"></x-back-button>
 		<x-page-title>Import Student Data from Excel</x-page-title>
+		<div class="w-full bg-slate-400 mb-4 mt-2" style="height: 2px;"></div>
 
 		@if(session()->has("success"))
 			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
@@ -19,7 +21,7 @@
 		@elseif(session()->has("danger"))
 			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
-
+		
 		<p class="text-blue-950 font-semibold">Please make sure your excel file has <span class="font-extrabold">column position</span> like shown in this image below:</p>
 		<img src="{{ asset('img/import_excel_student_guide.png') }}" alt="Excel import guide" class="w-full mt-4">
 

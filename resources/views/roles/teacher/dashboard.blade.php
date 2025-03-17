@@ -24,22 +24,22 @@
 		<div class="flex flex-col gap-5 w-full lg:w-2/3">
 			{{-- Main stats --}}
 			<div class="w-full flex flex-wrap lg:flex-nowrap justify-center gap-5">
-				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5">
+				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
 					<img src="{{ asset('img/studentdashboard-materialsunlocked.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
 					<p class="font-bold text-black text-center">Courses Assigned</p>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $courses_assigned }}</p>
 				</div>
-				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5">
+				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
 					<img src="{{ asset('img/dashboard-studentsteached.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
 					<p class="font-bold text-black text-center">Students Teached</p>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $students_teached }}</p>
 				</div>
-				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5">
+				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
 					<img src="{{ asset('img/studentdashboard-sessionsattended.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
 					<p class="font-bold text-black text-center">Activities Created</p>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $activities_created }}</p>
 				</div>
-				<div class="bg-white rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5">
+				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
 					<img src="{{ asset('img/studentdashboard-assignmentsdone.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
 					<p class="font-bold text-black text-center">Assignments Given</p>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $assignments_given }}</p>
@@ -47,7 +47,7 @@
 			</div>
 
 			{{-- My Attendances --}}
-			<div class="bg-white rounded-3xl p-5 shadow-lg grow">
+			<div class="rounded-3xl p-5 shadow-lg grow" style="background-color: #FEFEFEB2;">
 				<div class="flex w-full justify-between">
 					<p class="font-bold text-dark-blue">My Attendances</p>
 					<p class="italic text-slate-600">Server time: <span id="server-time"></span> GMT+7</p>
@@ -101,7 +101,7 @@
 
 		{{-- Todo list --}}
 		<div class="w-full lg:w-1/3 flex gap-5">
-			<div class="w-full bg-white rounded-3xl p-5 shadow-lg">
+			<div class="w-full rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
 				<p class="font-bold text-dark-blue">To Do List</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
@@ -127,7 +127,7 @@
 
 	<div class="w-full flex lg:flex-row flex-col gap-5 mt-5">
 		{{-- News and announcement --}}
-		<div class="w-full lg:w-1/2 bg-white rounded-3xl py-5 shadow-lg">
+		<div class="w-full lg:w-1/2 rounded-3xl py-5 shadow-lg" style="background-color: #FEFEFEB2;">
 			<div class="px-5">
 				<p class="font-bold text-dark-blue">News and Announcement</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
@@ -187,11 +187,11 @@
 		</div>
 
 		{{-- Calendar --}}
-		<div class="w-full lg:w-1/2 bg-white rounded-3xl p-5 shadow-lg">
+		<div class="w-full lg:w-1/2 rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
 			<div class="flex justify-between w-full items-center">
 				<p class="font-bold text-dark-blue">Calendar</p>
 				@if(!session('google_user_info.name'))
-					<a href="{{ route('teacher.google.redirect') }}" class="shadow-lg py-1 px-3 flex items-center justify-center">
+					<a href="{{ route('teacher.google.redirect') }}" class="bg-white shadow-lg py-1 px-3 flex items-center justify-center">
 						<img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" style="width: 20px; margin-right: 10px;">
 						Sync with Google
 					</a>

@@ -99,7 +99,7 @@
 			<div class="flex flex-col w-full gap-4 p-5 @if($index % 2 == 0) bg-white @endif">
 				<div class="flex gap-4">
 					<a class="text-blue-950 font-bold text-xl hover:text-cyan-500" href="{{ route('admin.course.show', $course->id) }}">{{ $course->course_name }} - {{ ucwords($course->level) }}</a>
-					<button type="button" data-route="{{ route('admin.teacher.unassign.destroy', ['teacher_id' => $teacher->id, 'course_id' => $course->id]) }}" data-unassign_course_name="{{ $course->course_name }}" class="unassign-teacher-btn text-white bg-red flex items-center justify-center px-4 py-2 rounded-xl hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 text-xs" style="">
+					<button type="button" data-route="{{ route('admin.teacher.unassign.destroy', ['teacher_id' => $teacher->id, 'course_id' => $course->id]) }}" data-unassign_course_name="{{ $course->course_name }}" class="unassign-teacher-btn bg-red hover:bg-slate-700 py-0.5 px-1.5 rounded-lg font-bold text-white" style="">
 						Unassign
 					</button>
 				</div>

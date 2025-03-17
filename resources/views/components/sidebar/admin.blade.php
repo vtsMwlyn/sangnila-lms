@@ -27,12 +27,12 @@
 
 		{{-- Sidebar navigations --}}
 		<div class="flex flex-col items-stretch justify-center w-full text-base" id="large-sidebar">
-			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
+			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('home') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('dashboard*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-dashboard.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Dashboard
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
+			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('admin.course.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('admin*course*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-managecourses.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Courses
 				@if(session('uncomplete_course_data'))
@@ -40,7 +40,7 @@
 				@endif
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
+			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('admin.teacher.index') }}" style="transform: scale(1); border-radius: 0; background: {{ (Request::is('admin/teacher*') || Request::is('admin*lecturer-attendance*')) ? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-manageteacher.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Teachers
 				@if(session('some_teachers_not_assigned_to_course'))
@@ -48,7 +48,7 @@
 				@endif
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
+			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('admin.student.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('admin/student*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-managestudents.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Students
 				@if(session('some_students_not_assigned_to_course'))
@@ -56,12 +56,12 @@
 				@endif
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
+			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('admin.account.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('admin*account*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-manageaccounts.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Accounts
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
+			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('admin.announcement.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('admin*announcement*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-manageannouncement.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Announcements
 			</x-anchor-button>

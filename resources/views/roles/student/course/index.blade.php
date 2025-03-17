@@ -17,7 +17,7 @@
 
 		@forelse (Auth::user()->enrolled_courses->where('status', 'active') as $course)
 			<a href="{{ route('student.mycourse.show', $course->id) }}" class="w-full md:w-1/3 transition duration-300 hover:scale-105">
-				<div class="bg-white rounded-3xl p-5 shadow-lg">
+				<div class="rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
 					{{-- Course information --}}
 					<p class="font-bold text-dark-blue">{{ $course->course_name }} - {{ ucwords($course->level) }}</p>
 					<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>

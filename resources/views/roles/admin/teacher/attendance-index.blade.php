@@ -26,6 +26,7 @@
 
 @section("content")
 	<x-section-container>
+		<x-back-button href="{{ route('admin.teacher.index') }}"></x-back-button>
 		<x-page-title class="text-center">{{ __("List of Lecturer Attendances") }}</x-page-title>
 
 		@if(session()->has("success"))

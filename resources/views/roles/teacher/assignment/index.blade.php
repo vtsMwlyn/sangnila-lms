@@ -12,7 +12,7 @@
 	<div class="w-full flex flex-wrap gap-5">
 		@forelse (Auth::user()->teached_courses as $course)
 			<a href="{{ route('teacher.assignment.show', $course->id) }}" class="oneperthree transition duration-300 hover:scale-105">
-				<div class="bg-white rounded-3xl p-5 shadow-lg">
+				<div class="rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
 					{{-- Counting assignments posted and nearest deadline --}}
 					@php
 						$assignments = App\Models\Assignment::where("teacher_id", Auth::user()->id)->where("course_id", $course->id)->get();

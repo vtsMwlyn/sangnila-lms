@@ -8,20 +8,21 @@
 	<div class="w-full flex flex-wrap gap-5">
 		@forelse (Auth::user()->enrolled_courses->where('status', 'active') as $course)
 			<a href="{{ route('student.learning-documentation.show', $course->id) }}" class="w-full md:w-1/3 transition duration-300 hover:scale-105">
-				<div class="bg-white rounded-3xl p-5 shadow-lg">
+				<div class="rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
 					{{-- Course information --}}
 					<p class="font-bold text-dark-blue">{{ $course->course_name }} - {{ ucwords($course->level) }}</p>
 					<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 					@php
-						// $teacher = App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->teacher;
+						$n_portolios = App\Models\Portfolio::where('course_id', $course->id)->where('student_id', Auth::user()->id)->count();
+						$c_status = App\Models\Assessment::where('course_id', $course->id)->where('student_id', Auth::user()->id)->first()->certificate_accessible;
 					@endphp
 					<div class="flex gap-2 items-center">
-						<img src="{{ asset('img/lecturer.svg') }}" class="w-4 h-4" alt="icon">
-						N/A Portfolio Uploaded
+						<i class="bi bi-book-half text-slate-400"></i>
+						{{ $n_portolios }} Portfolio Uploaded
 					</div>
 					<div class="flex gap-2 items-center">
-						<img src="{{ asset('img/clock.svg') }}" class="w-4 h-4" alt="icon">
-                        N/A Unknown
+						<i class="bi bi-book-half text-slate-400"></i>
+                        Certificate @if($c_status == 1) Available @else Not Available Yet @endif
 					</div>
 				</div>
 			</a>

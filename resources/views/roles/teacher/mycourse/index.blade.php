@@ -11,7 +11,7 @@
 				$topics = $course->topics->where('user_id', Auth::user()->id);
 			@endphp
 			<a href="{{ route('teacher.mycourse.show', ['course_id' => $course->id]) }}"  class="oneperthree transition duration-300 hover:scale-105 relative">
-				<div class="bg-white rounded-3xl p-5 shadow-lg">
+				<div class="rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
 					{{-- Course information --}}
 					<p class="font-bold text-dark-blue">{{ $course->course_name }} - {{ ucwords($course->level) }}</p>
 					<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
