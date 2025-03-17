@@ -1,4 +1,4 @@
-<!-- Main sidebar -->
+{{-- Main sidebar --}}
 <div class="text-white z-10 min-h-screen" style="width: 17%;" id="sidebar-container">
 	<div class="md:flex flex-col items-stretch sticky hidden z-0 m-0" style="top: 65px; background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center left; background-size: cover;" id="sidebar">
 		<div class="relative flex flex-col dropdown-container">
@@ -25,7 +25,7 @@
 			</div>
 		</div>
 
-		<!-- Sidebar navigations -->
+		{{-- Sidebar navigations --}}
 		<div class="flex flex-col items-stretch justify-center w-full text-base" id="large-sidebar">
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6 hover:bg-cyan-500"
 				href="{{ route('home') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('dashboard*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">

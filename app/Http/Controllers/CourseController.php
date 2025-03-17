@@ -49,10 +49,10 @@ class CourseController extends Controller {
 			Course::create($validatedData);
 		}
 		catch(Exception $e){
-			return back()->with("systemFail", "System failed to create course, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to create course, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route('admin.course.index'))->with("successCreateNewCourse", "Successfully created new course!");
+		return redirect(route('admin.course.index'))->with("success", "Successfully created new course!");
 	}
 
 	// Shows a course details
@@ -104,10 +104,10 @@ class CourseController extends Controller {
 			Course::findOrFail($course_id)->update($validatedData);
 		}
 		catch(Exception $e){
-			return back()->with("systemFail", "System failed to edit course, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to edit course, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route('admin.course.show', $course_id))->with("successUpdateCourseData", "Successfully updated course data!");
+		return redirect(route('admin.course.show', $course_id))->with("success", "Successfully updated course data!");
 	}
 
 	// Course deletion confirmation
@@ -121,7 +121,7 @@ class CourseController extends Controller {
 	public function admin_destroy($course_id){
 		Course::findOrFail($course_id)->delete();
 
-		return redirect(route('admin.course.index'))->with("successDeleteCourse", "Successfully deleted course!");
+		return redirect(route('admin.course.index'))->with("warning", "Successfully deleted course!");
 	}
 
 

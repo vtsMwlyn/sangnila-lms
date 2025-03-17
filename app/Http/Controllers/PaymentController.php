@@ -21,6 +21,6 @@ class PaymentController extends Controller
 		$cs = CourseStudent::where("student_id", Auth::user()->id)->where("course_id", $request->course);
 		$cs->update(["max_course_session" => $cs->first()->max_course_session + $request->session_extend]);
 
-		return redirect(route("profile.show"))->with("successPay", "Your payment was success!");
+		return redirect(route("profile.show"))->with("success", "Your payment was success!");
 	}
 }

@@ -99,9 +99,9 @@ class UserAccountController extends Controller{
 
 			throw $e;
 
-			return back()->with("systemFail", "System failed to edit profile, please report the error to our IT team. Error detail: " . $e);
+			return back()->with("danger", "System failed to edit profile, please report the error to our IT team. Error detail: " . $e);
 		}
 
-		return back()->with("successUpdateProfile", "Account profile updated successfully!");
+		return back()->with("success", "Account profile updated successfully!");
 	}
 }

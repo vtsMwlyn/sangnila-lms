@@ -15,7 +15,7 @@
 		<form method="POST" action="{{ route('admin.student.unassign.destroy', ['student_id' => $student->id, 'course_id' => $course->id]) }}" class="bg-blue-800 rounded-2xl py-5 px-10 mt-8">
 			@csrf
 			@method('delete')
-			<!-- Confirmation Text -->
+			{{-- Confirmation Text --}}
 			<div class="mb-6">
 				<h1 class="text-xl font-semibold text-white">
 					Are you sure you want to unassign
@@ -25,7 +25,7 @@
 				</h1>
 			</div>
 
-			<!-- Yes/No Buttons -->
+			{{-- Yes/No Buttons --}}
 			<div class="flex gap-3 justify-center w-full">
 				<x-button type="submit" class=" w-full md:w-1/12">Yes</x-button>
 				<x-button type="button" onclick="history.back()" class="bg-slate-600 w-full md:w-1/12">No</x-button>

@@ -15,8 +15,12 @@
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">{{ $student->full_name }}</h1>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(session()->has("systemFail"))
-			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<x-badge-danger id="emptyDataNotif" badge_text="Please input minimum 1 data to proceed." style="display: none;"></x-badge-danger>
@@ -71,13 +75,13 @@
 						</div>
 
 						<div class="flex gap-5 w-full mt-6 attendance-detail-fields">
-							<!-- Start Time -->
+							{{-- Start Time --}}
 							<div class="flex flex-col w-1/2">
 								<x-label for="_start_time">Start Time<span class="text-red">*</span></x-label>
 								<x-input class="_start_time" type="time" id="_start_time" value="00:00"/>
 							</div>
 
-							<!-- End Time -->
+							{{-- End Time --}}
 							<div class="flex flex-col w-1/2">
 								<x-label for="_end_time">End Time<span class="text-red">*</span></x-label>
 								<x-input class="_end_time" type="time" id="_end_time" value="00:00"/>

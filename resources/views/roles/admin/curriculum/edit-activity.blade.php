@@ -19,39 +19,43 @@
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Topic: {{ $curriculum_activity->curriculum_topic->title }}</h1>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(session()->has("systemFail"))
-			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<form action="{{ route("admin.course.curriculum.activity.update", [$course->id, $curriculum_activity->curriculum_topic->id, $curriculum_activity->id]) }}" method="post" class="mt-3">
 			@csrf
 			<div class="flex w-full gap-4">
-				<!-- Activity Title -->
+				{{-- Activity Title --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="title" :value="__('Activity Title')" />
 					<x-input id="title" class="w-full mt-1" type="text" name="title" placeholder="Enter activity title" :value="old('title', $curriculum_activity->title)" autofocus />
 				</div>
 
-				<!-- Session -->
+				{{-- Session --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="session" :value="__('Session')" />
 					<x-input id="session" class="w-full mt-1" type="text" name="session" placeholder="Enter activity session" :value="old('session', $curriculum_activity->session)" autofocus />
 				</div>
 			</div>
 
-			<!-- Activity Description -->
+			{{-- Activity Description --}}
 			<div class="mt-4 flex flex-col w-full">
 				<x-label for="desc" :value="__('Activity Description')" />
 				<x-textarea rows="4" id="desc" class="w-full mt-1" type="text" name="desc" placeholder="Enter activity description">{!! old('desc', $curriculum_activity->desc) !!}</x-textarea>
 			</div>
 
-			<!-- Material Link -->
+			{{-- Material Link --}}
 			<div class="mt-4 flex flex-col w-full">
 				<x-label for="link" :value="__('Material Link')" />
 				<x-input id="link" class="w-full mt-1" type="text" name="link" placeholder="Enter activity link" :value="old('link', $curriculum_activity->link)" />
 			</div>
 
-			<!-- Learning Outcome -->
+			{{-- Learning Outcome --}}
 			<p class="font-bold mt-6">Learning Outcomes:</p>
 			@php
 				$iterasus = 1;

@@ -15,8 +15,12 @@
 		<x-page-title>Teacher Batch Assign</x-page-title>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(session()->has('errorBatchAssignTeacher'))
-			<x-badge-danger badge_text="{{ session('errorBatchAssignTeacher') }}"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		@error('selected_teachers')

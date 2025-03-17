@@ -117,11 +117,11 @@ class CourseStudentController extends Controller {
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to assign courses to the student, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to assign courses to the student, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 
-		return redirect(route('admin.student.show', $student_id))->with("successAssignToCourse", "Successfully assigned the student to the course!");
+		return redirect(route('admin.student.show', $student_id))->with("success", "Successfully assigned the student to the course!");
 	}
 
 	// Edit student assignment data
@@ -180,10 +180,10 @@ class CourseStudentController extends Controller {
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with('errorEditCourseStudent', 'System failed to edit the course student data. Please report to our IT team, error detail: ' . $e->getMessage());
+			return back()->with('danger', 'System failed to edit the course student data. Please report to our IT team, error detail: ' . $e->getMessage());
 		}
 
-		return redirect(route('admin.student.show', $course_student->student_id))->with("successEditAssignInfo", "Successfully edited the student assignment info!");
+		return redirect(route('admin.student.show', $course_student->student_id))->with("success", "Successfully edited the student assignment info!");
 	}
 
 	// Unassign student from a course confirmation
@@ -201,10 +201,10 @@ class CourseStudentController extends Controller {
 			CourseStudent::where('student_id', $student_id)->where('course_id', $course_id)->delete();
 		}
 		catch(Exception $e){
-			return back()->with("systemFail", "System failed to unassign the course from the student, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to unassign the course from the student, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route('admin.student.show', $student_id))->with("successUnassignFromCourse", "Successfully unassigned the student from the course!");;
+		return redirect(route('admin.student.show', $student_id))->with("warning", "Successfully unassigned the student from the course!");;
 	}
 
 	// Batch assign student to course
@@ -290,10 +290,10 @@ class CourseStudentController extends Controller {
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to batch assign these students to the course, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to batch assign these students to the course, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("admin.course.show", $course->id))->with("successBatchAssign", "Successfully batch-assigned students!");
+		return redirect(route("admin.course.show", $course->id))->with("success", "Successfully batch-assigned students!");
 
 	}
 
@@ -422,10 +422,10 @@ class CourseStudentController extends Controller {
 
 			throw $e;
 
-			return back()->with("systemFail", "System failed to import old student data, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to import old student data, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("admin.course.show", $course_id))->with("successImportStudent", "Students data imported successfully!");
+		return redirect(route("admin.course.show", $course_id))->with("success", "Students data imported successfully!");
 	}
 
 	public function imported_data_update(Request $request, $student_id, $course_id){
@@ -443,7 +443,7 @@ class CourseStudentController extends Controller {
 			]);
 		}
 
-		return redirect(route("admin.student.show", $student->id))->with("successNormalize", "Successfully normalized the student");
+		return redirect(route("admin.student.show", $student->id))->with("success", "Successfully normalized the student");
 	}
 
 	public function normalize_proceed(Request $request, $student_id, $course_id){
@@ -458,7 +458,7 @@ class CourseStudentController extends Controller {
 			$importedStudentData->delete();
 		}
 
-		return redirect(route("admin.student.show", $student->id))->with("successNormalize", "Successfully normalized the student");
+		return redirect(route("admin.student.show", $student->id))->with("success", "Successfully normalized the student");
 	}
 
 	public function generate_certificate($course_id, $student_id){
@@ -470,7 +470,7 @@ class CourseStudentController extends Controller {
 		$cs = CourseStudent::where('student_id', $student->id)->where('course_id', $course->id)->first();
 		$teacher = $cs->teacher;
 		
-		if(!$assessment || !$assessment->certificate_accessible || $cs->learning_status != 'complete'){
+		if((!$assessment || !$assessment->certificate_accessible || $cs->learning_status != 'complete') && Auth::user()->role->id != 1){
 			abort(403);
 		}
 

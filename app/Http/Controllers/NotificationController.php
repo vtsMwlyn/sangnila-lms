@@ -12,7 +12,7 @@ class NotificationController extends Controller
 		$notif = Notification::findOrFail($notification_id);
 		$notif->update(["status" => "read"]);
 
-		return back()->with("successNotifAction", "Action on notification is success");
+		return back()->with("success", "Action on notification is success");
 	}
 
 	public function mark_all_as_read(){
@@ -20,18 +20,18 @@ class NotificationController extends Controller
 			$notif->update(["status" => "read"]);
 		}
 
-		return back()->with("successNotifAction", "Action on notification is success");
+		return back()->with("success", "Action on notification is success");
 	}
 
 	public function dismiss($notification_id){
 		Notification::destroy($notification_id);
 
-		return back()->with("successNotifAction", "Action on notification is success");
+		return back()->with("success", "Action on notification is success");
 	}
 
 	public function dismiss_all(){
 		Notification::where('user_id', Auth::user()->id)->where('status', 'read')->delete();
 
-		return back()->with("successNotifAction", "Action on notification is success");
+		return back()->with("success", "Action on notification is success");
 	}
 }

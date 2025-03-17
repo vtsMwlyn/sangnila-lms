@@ -2,13 +2,12 @@
 	<x-page-title>{{ __("Account Profile") }}</x-page-title>
 	<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-	@if(session()->has("successUpdateProfile"))
-		<x-badge-success badge_text="{{ session('successUpdateProfile') }}">
-		</x-badge-success>
-	@elseif(session()->has("successPay"))
-		<x-badge-success badge_text="{{ session('successPay') }}"></x-badge-success>
-	@elseif(session()->has("systemFail"))
-		<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
+	@if(session()->has("success"))
+		<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+	@elseif(session()->has("warning"))
+		<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+	@elseif(session()->has("danger"))
+		<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 	@endif
 
 	<div>
@@ -37,25 +36,25 @@
 			</div>
 
 			<div class="flex flex-col grow">
-				<!-- Name -->
+				{{-- Name --}}
 				<div>
 					<x-label for="full_name">Full Name<span class="text-red">*</span></x-label>
 					<x-input id="full_name" class="w-full mt-1" type="text" name="full_name" :value="old('full_name', $account_data->full_name)" placeholder="Full Name" />
 				</div>
 
-				<!-- Email Address -->
+				{{-- Email Address --}}
 				<div class="mt-6">
 					<x-label for="email">Email Address<span class="text-red">*</span></x-label>
 					<x-input id="email" class="w-full mt-1" type="email" name="email" :value="$account_data->email" disabled  />
 				</div>
 
-				<!-- Phone Number -->
+				{{-- Phone Number --}}
 				<div class="mt-6">
 					<x-label for="phone_number">Phone Number</x-label>
 					<x-input id="phone_number" class="w-full mt-1" type="text" name="phone_number" placeholder="Phone Number" :value="old('phone_number', $account_data->details->phone_number)" autocomplete="tel"/>
 				</div>
 
-				<!-- Password -->
+				{{-- Password --}}
 				<div class="mt-6">
 					<x-label for="password">Change Password</x-label>
 					<div class="relative w-full flex items-center mt-1">
@@ -67,7 +66,7 @@
 					</div>
 				</div>
 
-				<!-- Password Confirmation -->
+				{{-- Password Confirmation --}}
 				<div class="mt-6">
 					<x-label for="password_confirmation">Confirm Password</x-label>
 					<div class="relative w-full flex items-center mt-1">

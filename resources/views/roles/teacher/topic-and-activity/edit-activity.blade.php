@@ -17,40 +17,44 @@
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Topic: {{ $activity->topic->title }}</h1>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(session()->has("systemFail"))
-			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<form action="{{ route('teacher.mycourse.activity.update', $activity->id) }}" method="post" class="mt-3">
 			@csrf
 			@method('PATCH')
-			<!-- Activity Title -->
+			{{-- Activity Title --}}
 			<div class="w-full flex gap-5 flex-col md:flex-row">
 				<div class="w-full md:w-1/2 flex flex-col">
 					<x-label for="title">Activity Title<span class="text-red">*</span></x-label>
 					<x-input id="title" class="w-full" type="text" name="title" :value="old('title', $activity->title)" autofocus />
 				</div>
 
-				<!-- Session -->
+				{{-- Session --}}
 				<div class="w-full md:w-1/2 flex flex-col">
 					<x-label for="session">Session<span class="text-red">*</span></x-label>
 					<x-input id="session" class="w-full" type="text" name="session" placeholder="Enter activity session" :value="old('session', $activity->session)" />
 				</div>
 			</div>
 
-			<!-- Material Link -->
+			{{-- Material Link --}}
 			<div class="mt-4 w-full flex flex-col">
 				<x-label for="link">Material Link</x-label>
 				<x-input id="link" class="w-full" type="text" name="link" placeholder="Enter material link" :value="old('link', $activity->link)" />
 			</div>
 
-			<!-- Activity Description -->
+			{{-- Activity Description --}}
 			<div class="mt-4 w-full flex flex-col">
 				<x-label for="desc">Activity Description<span class="text-red">*</span></x-label>
 				<x-textarea rows="4" id="desc" class="w-full" type="text" name="desc" placeholder="Enter activity description">{!! old('desc', $activity->desc) !!}</x-textarea>
 			</div>
 
-			<!-- Learning Outcome -->
+			{{-- Learning Outcome --}}
 			<p class="font-bold mt-6">Learning Outcomes:</p>
 			@php
 				$iterasus = 1;

@@ -15,24 +15,24 @@
 			</div>
 
 			<div class="w-4/5 flex flex-col items-stretch">
-				<!-- Name -->
+				{{-- Name --}}
 				<div class="mt-8">
 					<x-input id="name" class="w-full rounded-xl" type="text" name="name" :value="old('name')" placeholder="Full Name" style="height: 50px" autofocus />
 				</div>
 
-				<!-- Email Address -->
+				{{-- Email Address --}}
 				<div class="mt-4">
 					<x-input id="email" class="w-full rounded-xl" type="email" name="email" :value="old('email')" placeholder="Email Address" style="height: 50px" />
 				</div>
 
-				<!-- Password -->
+				{{-- Password --}}
 				<div class="mt-4 relative">
 					<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="togglePassword"></button>
 					<x-input id="password" class="w-full rounded-xl" type="password" name="password" style="height: 50px; padding-right: 60px;"
 						autocomplete="current-password" placeholder="Password" value="{{ trans('strings.default_password') }}"/>
 				</div>
 
-				<!-- Password Confirmation -->
+				{{-- Password Confirmation --}}
 				<div class="mt-4 relative">
 					<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="toggleConfPassword"></button>
 					<x-input id="password_confirmation" class="w-full rounded-xl" type="password" name="password_confirmation" style="height: 50px; padding-right: 60px;"
@@ -45,7 +45,7 @@
 				</div>
 
 				<div class="mt-4 flex flex-col md:flex-row gap-4 w-full">
-					<!-- Role Selection -->
+					{{-- Role Selection --}}
 					<div class="w-full md:w-1/2">
 						<x-label for="role" class="text-blue" :value="__('Select Role')" />
 						<x-select name="role" id="role"
@@ -61,7 +61,7 @@
 						</x-select>
 					</div>
 
-					<!-- Gender Selection -->
+					{{-- Gender Selection --}}
 					<div class="w-full md:w-1/2">
 						<x-label for="gender" class="text-blue" :value="__('Select Gender')" />
 						<x-select name="gender" id="gender"

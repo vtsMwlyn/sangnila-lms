@@ -2,73 +2,47 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 	<head>
-		<!-- Metas -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="csrf-token" content="{{ csrf_token() }}">
 
-		<!-- App title -->
 		<title>Sangnila Academy | LMS</title>
 
-		<!-- App icon -->
 		<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
 		<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
 		<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
 
-		<!-- Manifest -->
 		<link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
-		<!-- CSS -->
 		<link rel="stylesheet" href="{{ asset('css/app.css') }}">
 		<link rel="stylesheet" href="{{ asset('css/color-pallete.css') }}">
 		<link rel="stylesheet" href="{{ asset("css/custom-styles.css") }}">
 
-		<!--Font-->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
 
-
-		<!-- Bootstrap icons -->
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-		<!-- Tailwind CDN -->
 		<script src="https://cdn.tailwindcss.com"></script>
-		{{-- <script src="https://unpkg.com/@tailwindcss/browser@4"></script> --}}
 
-
-		<!-- Include select2 CSS -->
 		<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-
-		<!-- Swiper.js CDN Links -->
 		<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 		<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
-		<!-- Trix editor -->
 		<link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
 		<script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
-
-		<!-- Include jQuery  -->
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-		<!-- Include select2 JavaScript -->
 		<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-
-		<!-- Include chart.js -->
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-		<!-- Include cropper.js -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
-
-		<!-- FullCalendar -->
 		<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
 	</head>
 
-	<body class="min-h-screen flex flex-col items-center text-xs sm:text-sm" data-tjzlptoheng="{{ csrf_token() }}">
-		<!-- Other popups -->
+	<body class="min-h-screen flex flex-col items-center text-xs sm:text-sm">
+		{{-- Other popups --}}
 		@yield("popup")
 
-		<!-- Loading popup -->
+		{{-- Loading popup --}}
 		<div class="popup-container w-full h-full hidden fixed top-0 flex items-center justify-center" style="backdrop-filter: blur(5px); z-index: 100; background: rgba(0, 0, 0, 0.3);">
 			<div class="rounded-3xl bg-white py-5 px-6 popup w-11/12 lg:w-1/3 h-1/4 flex gap-3 items-center justify-center" id="loading-popup">
 				<div class="loader w-12 h-12 border-8 border-t-transparent border-light-blue rounded-full animate-spin"></div>
@@ -76,9 +50,8 @@
 			</div>
 		</div>
 
-		<!-- Announcements -->
+		{{-- Announcents popup --}}
 		@if(session()->pull('show_announcement'))
-		{{-- @if(true) --}}
 			@php
 				$n = 0;
 				$m = 0;
@@ -134,7 +107,7 @@
 		@endif
 
 		<div class="flex flex-col items-center w-full" style="max-width: 2000px;">
-			<!-- Back to top button and version -->
+			{{-- Back to top --}}
 			<div class="fixed bottom-0 right-0 m-2 opacity-0 transition-opacity duration-500 ease-in-out" id="back-to-top">
 				<a href="#">
 					<div class="bg-light-blue animate-bounce rounded-full w-full text-xl p-2.5 flex justify-center align-center font-bold" style="width: 50px; height: 50px;">
@@ -143,24 +116,24 @@
 				</a>
 			</div>
 
-			<!-- Navbar -->
+			{{-- Navbar --}}
 			<x-navbar></x-navbar>
 
-			<!-- Sidebar and content -->
+			{{-- Sidebar and content --}}
 			<div class="w-full flex">
-				<!-- Sidebar -->
+				{{-- Sidebar --}}
 				{{ $slot }}
 
 				<button type="button" class="fixed bg-light-blue text-white px-1 h-12 rounded-r-full flex items-center hover:bg-slate-600" id="sidebar-toggler"><i class="bi bi-caret-left-fill"></i></button>
 
-				<!-- Content Section -->
+				{{-- Content --}}
 				<div class="flex flex-col" style="width: 83%;" id="content-container">
 					<div class="flex flex-col" id="content-wrapper">
-						<!-- Page title -->
+						{{-- Page title --}}
 						<div class="py-3 px-6 w-full text-white font-bold flex items-center justify-between lg:static sticky top-16" style="background: linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%);" id="page-title">
 							<div class="md:text-3xl text-lg">@yield("title")</div>
 
-							<!-- "Sidebar" for mobile and tablet -->
+							{{-- Dropdown sidebar for smaller screen --}}
 							<div class="relative lg:hidden flex flex-col items-end">
 								<button type="button" id="medsmallmenu-toggler">
 									<div class="w-40 bg-blue py-1.5 px-3 rounded-xl flex items-center justify-between">
@@ -178,12 +151,13 @@
 						</div>
 					</div>
 
+					{{-- Footer --}}
 					<x-footer></x-footer>
 				</div>
 			</div>
 		</div>
 
-		<!-- Scripts -->
+		{{-- Scripts --}}
 		<script src="{{ asset('js/custom-script.js') }}"></script>
 	</body>
 </html>

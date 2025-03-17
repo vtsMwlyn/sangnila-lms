@@ -1,7 +1,7 @@
-<!-- Main navbar -->
+{{-- Main navbar --}}
 <div class="w-full text-white sticky top-0 z-20 transition duration-500" style="background-color: rgba(255, 255, 255, 1); backdrop-filter: blur(3px);" id="navbar-container">
 	<div class="flex items-center justify-between sticky top-0 px-5 w-full space-x-5" id="navbar">
-		<!-- Logo/Brand Image -->
+		{{-- Logo/Brand Image --}}
 		<div class="flex items-stretch gap-4">
 			<div class="flex justify-center">
 				<a href="{{ route('home') }}">
@@ -18,7 +18,7 @@
 		</div>
 
 		<div class="flex gap-4 items-center">
-			<!-- INBOX -->
+			{{-- INBOX --}}
 			@auth
 				@php
 					// Remove 30 days read inboxes

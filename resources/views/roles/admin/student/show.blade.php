@@ -9,7 +9,7 @@
 @endsection
 
 @section("popup")
-	<!-- Change imported student information -->
+	{{-- Change imported student information --}}
 	<x-popup popup_title="Edit Student Import Information" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-student-import-info-popup">
 		<form method="post" class="w-full flex flex-col mt-3">
 			@csrf
@@ -27,19 +27,19 @@
 				</div>
 			</div>
 
-			<!-- Helper -->
+			{{-- Helper --}}
 			<input type="hidden" name="h-last-popup" class="h-last-popup">
 			<input type="hidden" name="h-route" class="h-route">
 			<input type="hidden" name="h-imported-student" class="h-imported-student">
 		</form>
 	</x-popup>
 
-	<!-- Unassign Student -->
+	{{-- Unassign Student --}}
 	<x-confirmation method="delete" popup_title="Unassign Student" id="unassign-student-popup">
 		Are you sure want to <span class="font-bold text-red">unassign</span> this student from <span class="font-bold text-light-blue" id="unassign-course-name"></span>?
 	</x-confirmation>
 
-	<!-- Assign course to student -->
+	{{-- Assign course to student --}}
 	<x-popup popup_title="Assign Student to Course" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="assign-student-popup">
 		<form method="post" class="w-full flex flex-col mt-3">
 			@csrf
@@ -79,13 +79,13 @@
 				</div>
 			</div>
 
-			<!-- Helper -->
+			{{-- Helper --}}
 			<input type="hidden" name="h-last-popup" class="h-last-popup">
 			<input type="hidden" name="h-route" class="h-route">
 		</form>
 	</x-popup>
 
-	<!-- Edit student course assign information -->
+	{{-- Edit student course assign information --}}
 	<x-popup popup_title="Edit Course Assign Information" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-assign-info-popup">
 		<form method="post" class="w-full flex flex-col mt-3">
 			@csrf
@@ -118,14 +118,14 @@
 				</div>
 			</div>
 
-			<!-- Helper -->
+			{{-- Helper --}}
 			<input type="hidden" name="h-last-popup" class="h-last-popup">
 			<input type="hidden" name="h-route" class="h-route">
 			<input type="hidden" name="h-courseStudent" class="h-courseStudent">
 		</form>
 	</x-popup>
 
-	<!-- Student attendance information -->
+	{{-- Student attendance information --}}
 	<x-popup popup_title="Attendance Information" id="attendance-information-popup" class="w-5/6 flex flex-col items-stretch justify-center overflow-y-auto">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<div class="w-full overflow-x-auto">
@@ -146,7 +146,7 @@
 		</div>
 	</x-popup>
 
-	<!-- Student assignment information -->
+	{{-- Student assignment information --}}
 	<x-popup popup_title="Assignment Information" id="assignment-information-popup" class="w-4/5 flex flex-col items-stretch justify-center overflow-y-auto">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<div class="w-full overflow-x-auto">
@@ -166,7 +166,7 @@
 		</div>
 	</x-popup>
 
-	<!-- Student assessment information -->
+	{{-- Student assessment information --}}
 	<x-popup popup_title="Assessment from Lecturer" id="assessment-popup" class="w-4/5 flex flex-col items-stretch justify-center overflow-y-auto">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<div class="w-full overflow-x-auto">
@@ -185,7 +185,8 @@
 
 		<div id="certificate_access_status" class="flex items-center gap-1 mt-4"></div>
 
-		<div class="flex w-full justify-center mt-5">
+		<div class="flex w-full justify-center mt-5 gap-2">
+			<x-anchor-button class="w-1/6" id="preview-certificate-btn" target="_blank"><i class="bi bi-eye"></i> Preview Certificate</x-anchor-button>
 			<x-anchor-button class="w-1/6" id="edit-assessment-btn"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		</div>
 	</x-popup>
@@ -197,30 +198,12 @@
 		<x-page-title style="margin-bottom: 0;">{{ $student->full_name }}</x-page-title>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(session()->has("successAssignToCourse"))
-			<x-badge-success badge_text="{{ session('successAssignToCourse') }}"></x-badge-success>
-		@elseif(session()->has("successEditAssignInfo"))
-			<x-badge-success badge_text="{{ session('successEditAssignInfo') }}"></x-badge-success>
-		@elseif(session()->has("successNormalize"))
-			<x-badge-success badge_text="{{ session('successNormalize') }}"></x-badge-success>
-		@elseif(session()->has("successUnassignFromCourse"))
-			<x-badge-warning badge_text="{{ session('successUnassignFromCourse') }}"></x-badge-warning>
-		@elseif(session()->has("successUpdateStudentData"))
-			<x-badge-success badge_text="{{ session('successUpdateStudentData') }}"></x-badge-success>
-		@elseif(session()->has("successUpdateMaxSession"))
-			<x-badge-success badge_text="{{ session('successUpdateMaxSession') }}"></x-badge-success>
-		@elseif(session()->has("successInputAttendance"))
-			<x-badge-success badge_text="{{ session('successInputAttendance') }}"></x-badge-success>
-		@elseif(session()->has("successDeleteStudentAttendance"))
-			<x-badge-warning badge_text="{{ session('successDeleteStudentAttendance') }}"></x-badge-warning>
-		@elseif(session()->has("successEditAttendance"))
-			<x-badge-success badge_text="{{ session('successEditAttendance') }}"></x-badge-success>
-		@elseif(session()->has("successChangeCertificateAccess"))
-			<x-badge-success badge_text="{{ session('successChangeCertificateAccess') }}"></x-badge-success>
-		@elseif(session()->has("errorEditCourseStudent"))
-			<x-badge-danger badge_text="{{ session('errorEditCourseStudent') }}"></x-badge-danger>
-		@elseif(session()->has("successEditAssessment"))
-			<x-badge-success badge_text="{{ session('successEditAssessment') }}" class="mb-4"></x-badge-success>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		@php
@@ -263,7 +246,7 @@
 			</div>
 		@endif
 
-		<!-- Students Information -->
+		{{-- Students Information --}}
 		<h1 class="font-bold text-lg text-blue">Student Information</h1>
 
 		<div class="w-full flex flex-col gap-y-4 mt-2">
@@ -340,7 +323,7 @@
 		<div class="mt-4">
 			<div class="flex flex-wrap gap-4">
 				@forelse ($student->enrolled_courses as $course)
-					<!-- Card -->
+					{{-- Card --}}
 					<div class="flex flex-col bg-white rounded-xl p-5" style="width: 32%;">
 						@php
 							$cs = App\Models\CourseStudent::where("student_id", $student->id)->where("course_id", $course->id)->with(['course', 'teacher'])->first();
@@ -425,7 +408,7 @@
 								@if($assessment_data[$i])
 									<div class="flex items-center justify-between w-2/3">
 										Uploaded
-										<button type="button" class="view-assessment-btn" data-std_assessment="{{ json_encode($assessment_data[$i]) }}" data-route="{{ route('admin.student.edit.assessment', $assessment_data[$i]->id) }}">
+										<button type="button" class="view-assessment-btn" data-std_assessment="{{ json_encode($assessment_data[$i]) }}" data-route="{{ route('admin.student.edit.assessment', $assessment_data[$i]->id) }}" data-view_certificate="{{ route('admin.student.view-certificate', [$assessment_data[$i]->course->id, $assessment_data[$i]->student->id]) }}">
 											<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</button>
 									</div>
@@ -610,7 +593,7 @@
 						)
 						.append(
 							$('<form>').attr({'method': 'post', 'action': `${baseUrl}/admin/student/attendance/${satd.id}/delete`}).append(
-								$('<input>').attr('type', 'hidden').attr('name', '_token').val($('body').data('tjzlptoheng'))
+								$('<input>').attr('type', 'hidden').attr('name', '_token').val(document.querySelector('meta[name="csrf-token"]').getAttribute('content'))
 							).append(
 								$('<button>').attr('type', 'submit').html(`<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">`).on('click', () => {
 									return confirm('Are you sure want to delete this attendance data?');
@@ -743,6 +726,7 @@
 
 				$('#certificate_access_status').html(assessmentData.certificate_accessible == 1? '<i class="bi bi-check-circle-fill text-green-600"></i> Student can access certificate' : '<i class="bi bi-x-lg text-red"></i> Student has no access to certificate');
 				$('#edit-assessment-btn').attr('href', $(this).data('route'));
+				$('#preview-certificate-btn').attr('href', $(this).data('view_certificate'));
 
 				$('#assessment-popup').parent().show();
 			});

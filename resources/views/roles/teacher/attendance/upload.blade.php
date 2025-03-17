@@ -14,8 +14,12 @@
 		<x-page-title>New Attendance Report</x-page-title>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(session()->has("systemFail"))
-			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<form action="{{ route('teacher.attendance.store', $course->id) }}" method="post" id="attendance_form">
@@ -44,7 +48,7 @@
 			<h2 class="mt-12 font-extrabold text-xl text-dark-blue">Attendance Report</h2>
 			@foreach ($students as $student)
 				<div class="bg-white rounded-xl p-5 flex flex-col w-full my-6 student-card">
-					<!-- Accordion trigger -->
+					{{-- Accordion trigger --}}
 					<button type="button" class="flex justify-between attendance-detail-accordion-btn items-center">
 						<div class="flex items-center gap-3">
 							@if($student->details->profpic)
@@ -59,9 +63,9 @@
 
 					<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-					<!-- Accordion Area -->
+					{{-- Accordion Area --}}
 					<div class="w-full flex flex-col attendance-detail-accordion-area">
-						<!-- Is Attended -->
+						{{-- Is Attended --}}
 						<div class="w-full flex items-center justify-between">
 							<label for="_checkbox{{ $student->id }}" class="flex gap-3 items-center mt-2">
 								<input type="checkbox" id="_checkbox{{ $student->id }}" class="_checkbox form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" checked/>
@@ -71,39 +75,39 @@
 						</div>
 
 						<div class="flex gap-5 mt-4 w-full container-session-present">
-							<!-- Nth Session -->
+							{{-- Nth Session --}}
 							{{-- <div class="flex flex-col w-1/3 mt-4">
 								<x-label for="_session{{ $student->id }}">N-th Session</x-label>
 								<x-input class="_session" type="text" id="_session{{ $student->id }}" value="1"/>
 								<p class="text-red font-bold mt-2 error-session hidden"><i class="bi bi-exclamation-circle"></i> Please input the nth-session.</p>
 							</div> --}}
 
-							<!-- Start Time -->
+							{{-- Start Time --}}
 							<div class="flex flex-col w-1/2 mt-4 start_time-container-present">
 								<x-label for="_start_time{{ $student->id }}">Start Time<span class="text-red">*</span></x-label>
 								<x-input class="_start_time" type="time" id="_start_time{{ $student->id }}" value="00:00"/>
 							</div>
 
-							<!-- End Time -->
+							{{-- End Time --}}
 							<div class="flex flex-col w-1/2 mt-4 end_time-container-present">
 								<x-label for="_end_time{{ $student->id }}">End Time<span class="text-red">*</span></x-label>
 								<x-input class="_end_time" type="time" id="_end_time{{ $student->id }}" value="00:00"/>
 							</div>
 
-							<!-- Start Time (Absent) -->
+							{{-- Start Time (Absent) --}}
 							<div class="hidden flex-col w-1/2 mt-4 start_time-container-absent">
 								<x-label>Start Time<span class="text-red">*</span></x-label>
 								<x-input class="_start_time_absent" type="text" value="Absent" disabled/>
 							</div>
 
-							<!-- End Time (Absent) -->
+							{{-- End Time (Absent) --}}
 							<div class="hidden flex-col w-1/2 mt-4 end_time-container-absent">
 								<x-label>End Time<span class="text-red">*</span></x-label>
 								<x-input class="_end_time_absent" type="text" value="Absent" disabled/>
 							</div>
 						</div>
 
-						<!-- Activity (Present) -->
+						{{-- Activity (Present) --}}
 						<div class="flex gap-5 mt-4 w-full container-activity-present">
 							<div class="flex flex-col w-1/2 container-select2">
 								<x-label for="_activity{{ $student->id }}">Activity<span class="text-red">*</span></x-label>
@@ -126,7 +130,7 @@
 							</div>
 						</div>
 
-						<!-- Activity (Absent) -->
+						{{-- Activity (Absent) --}}
 						<div class="hidden gap-5 mt-4 w-full container-activity-absent">
 							<div class="flex flex-col w-1/2">
 								<x-label>Activity<span class="text-red">*</span></x-label>
@@ -139,19 +143,19 @@
 							</div>
 						</div>
 
-						<!-- Details -->
+						{{-- Details --}}
 						<div class="flex flex-col w-full mt-4">
 							<x-label for="_details{{ $student->id }}">Details<span class="text-red">*</span></x-label>
 							<x-textarea class="_details" rows="4" type="text" id="_details{{ $student->id }}" placeholder="Enter attendance details..."></x-textarea>
 							<p class="text-red font-bold mt-2 error-details hidden"><i class="bi bi-exclamation-circle"></i> Please input the attendance details for this session.</p>
 						</div>
 
-						<!-- Add data to table -->
+						{{-- Add data to table --}}
 						<div class="flex justify-end mt-4">
 							<x-button type="button" class="add-data-btn" data-student="{{ $student }}">Add Data</x-button>
 						</div>
 
-						<!-- Data summary table -->
+						{{-- Data summary table --}}
 						<div class="w-full overflow-x-auto mt-4">
 							<table class="w-full">
 								<thead>

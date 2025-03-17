@@ -54,11 +54,11 @@ class RegisteredUserController extends Controller {
 			]);
 		}
 		catch(Exception $e){
-			return back()->with("systemFail", "System failed to create account, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to create account, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 		UserDetail::create(["user_id" => $user->id, "gender" => $request->gender]);
 
-		return redirect(route('admin.account.index'))->with("successCreateNewAccount", "Successfully created new account!");
+		return redirect(route('admin.account.index'))->with("success", "Successfully created new account!");
 	}
 }

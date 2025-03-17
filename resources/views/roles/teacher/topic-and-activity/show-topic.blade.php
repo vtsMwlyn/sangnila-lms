@@ -10,23 +10,23 @@
 @endsection
 
 @section("popup")
-	<!-- Delete topic -->
+	{{-- Delete topic --}}
 	<x-confirmation method="delete" popup_title="Delete Topic" id="delete-topic">
 		Are you sure want to <span class="font-bold text-red">delete</span> the Topic <span class="font-bold text-light-blue" id="del-t-name"></span> from this course?
 	</x-confirmation>
 
-	<!-- Delete activity -->
+	{{-- Delete activity --}}
 	<x-confirmation method="delete" popup_title="Delete Activity" id="delete-activity">
 		Are you sure want to <span class="font-bold text-red">delete</span> the Activity <span class="font-bold text-light-blue" id="del-a-name"></span> from this topic?
 	</x-confirmation>
 
-	<!-- Edit topic -->
+	{{-- Edit topic --}}
 	<x-popup popup_title="Edit Topic" class="w-11/12 lg:w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-topic">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" class="mt-4">
 				@csrf
 				@method('patch')
-				<!-- Topic Title -->
+				{{-- Topic Title --}}
 				<div class="flex flex-col">
 					<label for="title">Topic Title<span class="text-red">*</span></label>
 					<x-input id="title" class="w-full mt-1" type="text" name="title" style="border-width: 3px;" value="{{ old('title') }}" placeholder="Topic title" autofocus />
@@ -36,7 +36,7 @@
 					<x-button class=" w-full md:w-1/4">Save</x-button>
 				</div>
 
-				<!-- Helper -->
+				{{-- Helper --}}
 				<input type="hidden" name="h-last-popup" class="h-last-popup">
 				<input type="hidden" name="h-route" class="h-route">
 				<input type="hidden" name="h-topic" class="h-topic">
@@ -52,18 +52,12 @@
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Topic and Activities Details</h1>
 		<div class="w-full bg-slate-400 mt-4" style="height: 2px;"></div>
 
-		@if(session()->has("successUpdateTopic"))
-			<x-badge-success badge_text="{{ session('successUpdateTopic') }}"></x-badge-success>
-		@elseif(session()->has("successAddTopic"))
-			<x-badge-success badge_text="{{ session('successAddTopic') }}"></x-badge-success>
-		@elseif(session()->has("successEditTopic"))
-			<x-badge-success badge_text="{{ session('successEditTopic') }}"></x-badge-success>
-		@elseif(session()->has('successUploadActivity'))
-			<x-badge-success badge_text="{{ session('successUploadActivity') }}"></x-badge-success>
-		@elseif(session()->has('successEditActivity'))
-			<x-badge-success badge_text="{{ session('successEditActivity') }}"></x-badge-success>
-		@elseif(session()->has("successDeleteActivity"))
-			<x-badge-warning badge_text="{{ session('successDeleteActivity') }}"></x-badge-warning>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<h2 class="mt-4 mb-2 font-extrabold text-xl text-dark-blue">Topic</h2>

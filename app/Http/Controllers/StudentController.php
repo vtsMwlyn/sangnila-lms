@@ -136,10 +136,10 @@ class StudentController extends Controller {
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to update activity access, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to update activity access, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return back()->with("successUpdateProgress", "Student's activity access updated successfully!");
+		return back()->with("success", "Student's activity access updated successfully!");
 	}
 
 	// Update meeting links
@@ -179,7 +179,7 @@ class StudentController extends Controller {
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to update meeting links, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to update meeting links, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 		return back()->withQuery(['content' => request('content')])->with("successUpdateMeetingLink", "Student's meeting links updated successfully!");
@@ -244,7 +244,7 @@ class StudentController extends Controller {
 				Storage::delete($p);
 			}
 
-			return back()->with('errorUploadPortfolio', 'System failed to upload portfolio images for this student. Please report to our IT team, error detail: ' . $e->getMessage());
+			return back()->with('danger', 'System failed to upload portfolio images for this student. Please report to our IT team, error detail: ' . $e->getMessage());
 		}
 
 		return back()->withQuery(['content' => request('content')])->with('successUploadPortfolio', 'Successfully uploaded portfolio files for this student!');
@@ -534,10 +534,10 @@ class StudentController extends Controller {
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to edit student, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to edit student, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("admin.student.show", $student_id))->with("successUpdateStudentData", "Successfully updated student data!");
+		return redirect(route("admin.student.show", $student_id))->with("success", "Successfully updated student data!");
 	}
 
 	// ===== STUDENT ===== //
@@ -566,7 +566,7 @@ class StudentController extends Controller {
 				$photoEvidence = $request->file("image")->store("student-checkin");
 			}
 			else {
-				return back()->with('failedCheckIn', 'Check in requires evidence image. Please allow the usage of the camera then try again, or if the problem persists, please kindly contact our IT team.');
+				return back()->with('danger', 'Check in requires evidence image. Please allow the usage of the camera then try again, or if the problem persists, please kindly contact our IT team.');
 			}
 
 			SelfAttendance::create([
@@ -582,10 +582,10 @@ class StudentController extends Controller {
 				Storage::delete($validatedData['attendance_evidence']);
 			}
 
-			return back()->with('failedCheckIn', 'Cannot sign in due to system error, please contact our IT team. Error detail: ' . $e->getMessage());
+			return back()->with('danger', 'Cannot sign in due to system error, please contact our IT team. Error detail: ' . $e->getMessage());
 		}
 
-		return redirect(route('student.mycourse.show', $course->id))->with('successCheckIn', 'Successfully checked in to course ' . $course->course_name . ' at ' . $validatedData['check_in_time'] . ' (GMT+7)');
+		return redirect(route('student.mycourse.show', $course->id))->with('success', 'Successfully checked in to course ' . $course->course_name . ' at ' . $validatedData['check_in_time'] . ' (GMT+7)');
 	}
 
 	// Check out
@@ -606,10 +606,10 @@ class StudentController extends Controller {
 			]);
 		}
 		else {
-			return back()->with('failedCheckOut', 'No attendance data found, probably because you have not checked in yet. If the problem persists please contact our IT team.');
+			return back()->with('danger', 'No attendance data found, probably because you have not checked in yet. If the problem persists please contact our IT team.');
 		}
 
-		return back()->with('successCheckOut', 'Successfully checked out from course ' . $course->course_name . ' at ' . $checkOutTime . ' (GMT+7)');
+		return back()->with('success', 'Successfully checked out from course ' . $course->course_name . ' at ' . $checkOutTime . ' (GMT+7)');
 	}
 
 	// Select a course before continue
@@ -684,7 +684,7 @@ class StudentController extends Controller {
 				Storage::delete($p);
 			}
 
-			return back()->with('errorUploadPortfolio', 'System failed to upload portfolio images for this student. Please report to our IT team, error detail: ' . $e->getMessage());
+			return back()->with('danger', 'System failed to upload portfolio images for this student. Please report to our IT team, error detail: ' . $e->getMessage());
 		}
 
 		return back()->withQuery(['content' => request('content')])->with('successUploadPortfolio', 'Successfully uploaded the portfolio files!');

@@ -14,12 +14,12 @@
 		<x-page-title>{{ $course->course_name }} - {{ ucwords($course->level) }}</x-page-title>
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Assignments List</h1>
 
-		@if(session()->has("successUploadAssignment"))
-			<x-badge-success badge_text="{{ session('successUploadAssignment') }}"></x-badge-success>
-		@elseif(session()->has("successEditAssignment"))
-			<x-badge-success badge_text="{{ session('successEditAssignment') }}"></x-badge-success>
-		@elseif(session()->has("successDeleteAssignment"))
-			<x-badge-warning badge_text="{{ session('successDeleteAssignment') }}"></x-badge-warning>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<div class="mt-6">

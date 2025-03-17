@@ -13,8 +13,12 @@
 	<x-section-container>
 		<x-page-title>Student Attendance for {{ $course->course_name }}</x-page-title>
 
-		@if(session()->has('failProceed'))
-			<x-badge-danger badge_text="{{ session('failProceed') }}"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		@php
@@ -28,7 +32,7 @@
 			<div class="bg-white border rounded-2xl p-5 flex flex-col">
 				<h1 class="text-blue font-semibold">Students Currently Teached in This Course</h1>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
-				@forelse ($course_students as $cs)
+				@forelse ($course_students->where('learning_status', 'learning') as $cs)
 					<div class="my-2 flex gap-3 items-center">
 						<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $cs->student_id }}"
 						class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300">
@@ -37,7 +41,7 @@
 						@else
 							<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
 						@endif
-						<label for="checkbox{{ $iterasus }}">{{ $cs->student->full_name }}</label>
+						<label for="checkbox{{ $iterasus }}">{{ $cs->student->full_name }} <span class="ml-2 bg-light-blue text-white text-base rounded-lg px-2 py-0.5 font-normal">{{ ucwords($cs->learning_status) }}</span></label>
 					</div>
 
 					@php
@@ -60,6 +64,25 @@
 					<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 				</div>
 				<div class="w-full overflow-y-auto px-5" style="max-height: 40vh;">
+					@forelse ($course_students->where('learning_status', '!=', 'learning') as $cs)
+						<div class="my-2 flex gap-3 items-center">
+							<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $cs->student_id }}"
+							class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300">
+							@if($cs->student->details->profpic)
+								<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+							@else
+								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+							@endif
+							<label for="checkbox{{ $iterasus }}">{{ $cs->student->full_name }} <span class="@if($cs->learning_status == 'undone') bg-red @elseif($cs->learning_status == 'complete') bg-green-600 @endif text-white text-base rounded-lg px-2 py-0.5 font-normal">{{ ucwords($cs->learning_status) }}</span></label>
+						</div>
+
+						@php
+							$iterasus++;
+						@endphp
+					@empty
+
+					@endforelse
+
 					@forelse ($remaining_students as $rs)
 						<div class="my-4 other-students flex gap-3 items-center">
 							<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $rs->id }}"

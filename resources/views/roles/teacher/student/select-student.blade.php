@@ -23,7 +23,7 @@
 
 			<div class="w-full flex flex-wrap gap-5">
 				@forelse($gcs as $cs)
-					<!-- Counting how many students has no access at all to any activities -->
+					{{-- Counting how many students has no access at all to any activities --}}
 					@php
 						$n_unlocked = 0;
 						$n_opened = 0;
@@ -53,7 +53,7 @@
 								@endif
 							</div>
 							<div class="grow">
-								<!-- Course information -->
+								{{-- Course information --}}
 								<p class="font-bold text-dark-blue">{{ $cs->student->full_name }}</p>
 								<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 

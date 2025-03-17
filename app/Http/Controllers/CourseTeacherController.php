@@ -33,7 +33,7 @@ class CourseTeacherController extends Controller {
 		$selectedCourse = Course::findOrFail($request->course_name);
 		CourseTeacher::create(["user_id" => $teacher_id, "course_id" => $selectedCourse->id]);
 
-		return redirect(route("admin.teacher.show", $teacher_id))->with("successAssignToCourse", "Successfully assigned the teacher to the course!");
+		return redirect(route("admin.teacher.show", $teacher_id))->with("success", "Successfully assigned the teacher to the course!");
 	}
 
 	// Unassign teacher from a course confirmation
@@ -76,10 +76,10 @@ class CourseTeacherController extends Controller {
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with('errorBatchAssignTeacher', 'System failed to batch assign teacher. Please report to our IT team, error detail: ' . $e->getMessage());
+			return back()->with('danger', 'System failed to batch assign teacher. Please report to our IT team, error detail: ' . $e->getMessage());
 		}
 
-		return redirect(route('admin.course.show', $course->id))->with('successBatchAssignTeacher', 'Successfully assigned the teachers into the course!');
+		return redirect(route('admin.course.show', $course->id))->with('success', 'Successfully assigned the teachers into the course!');
 	}
 
 	// Remove the course from teacher's assigned course in the database
@@ -90,10 +90,10 @@ class CourseTeacherController extends Controller {
 			CourseTeacher::destroy($targettedData->id);
 		}
 		catch(Exception $e){
-			return back()->with("systemFail", "System failed to assign the course from the teacher, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to assign the course from the teacher, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("admin.teacher.show", $teacher_id))->with("successUnassignFromCourse", "Successfully unassigned the teacher from the course!");
+		return redirect(route("admin.teacher.show", $teacher_id))->with("warning", "Successfully unassigned the teacher from the course!");
 
 	}
 

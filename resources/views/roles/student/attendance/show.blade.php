@@ -41,7 +41,7 @@
 		</div>
 		<div class="w-full bg-slate-400" style="height: 2px;"></div>
 
-		<!-- Desktop screen -->
+		{{-- Desktop screen --}}
 		<div class="w-full overflow-x-auto hidden lg:block">
 			<table class="w-full">
 				<thead>
@@ -81,7 +81,7 @@
 			</table>
 		</div>
 
-		<!-- Smaller screen -->
+		{{-- Smaller screen --}}
 		<div class="w-full flex flex-col gap-4 lg:hidden items-stretch mt-4">
 			@forelse($attendances as $atd)
 				<div class="bg-white rounded-xl p-4 flex flex-col gap-3 dropdown-container">

@@ -236,6 +236,7 @@ Route::prefix('/admin')
 		// View lecturer's attendance
 		Route::prefix('/lecturer-attendance')->name('lecturer-attendance.')->group(function(){
 			Route::get('/', [AttendanceController::class, 'admin_index_lecturer_attendance'])->name('index');
+			Route::delete('/{self_attendance_id}/delete', [AttendanceController::class, 'admin_destroy_lecturer_attendance'])->name('destroy');
 		});
 	}
 );

@@ -12,24 +12,24 @@
 @endsection
 
 @section('popup')
-	<!-- Upload portfolio  -->
+	{{-- Upload portfolio  --}}
 	<x-popup popup_title="Upload Portfolio" class="w-11/12 lg:w-2/3 flex flex-col items-stretch justify-center overflow-y-auto" id="upload-portfolio">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" action="{{ route('teacher.student.store.portfolio', [$student->id, $course->id]) }}" class="mt-4" enctype="multipart/form-data">
 				@csrf
-				<!-- File uploads -->
+				{{-- File uploads --}}
 				<div class="flex flex-col">
 					<label for="files">Select Images to Upload</label>
 					<x-input id="files" class="w-full mt-1" type="file" name="files[]" style="border-width: 3px;" multiple/>
 				</div>
 
-				<!-- Link upload -->
+				{{-- Link upload --}}
 				<div class="flex flex-col mt-4">
 					<label for="link">Or Add Work Link</label>
 					<x-input id="link" class="w-full mt-1" type="text" name="link" placeholder="Add work link here"/>
 				</div>
 
-				<!-- Preview -->
+				{{-- Preview --}}
 				<div id="file-preview" class="mt-4 flex flex-wrap w-full gap-3"></div>
 
 				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">
@@ -55,23 +55,15 @@
 			<span class="@if($status == 'learning') bg-light-blue @elseif($status == 'undone') bg-red @else bg-green-600 @endif text-white text-base rounded-lg px-2 py-0.5 font-normal">{{ ucwords($status) }}</span>
 		</div>
 
-		@if(session()->has("successUpdateProgress"))
-			<x-badge-success badge_text="{{ session('successUpdateProgress') }}" class="mb-4"></x-badge-success>
-		@elseif(session()->has("successUploadPortfolio"))
-			<x-badge-success badge_text="{{ session('successUploadPortfolio') }}" class="mb-4"></x-badge-success>
-		@elseif(session()->has("systemFail"))
-			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-4"></x-badge-danger>
-		@elseif(session()->has("successDeletePortfolio"))
-			<x-badge-warning badge_text="{{ session('successDeletePortfolio') }}" class="mb-4"></x-badge-warning>
-		@elseif(session()->has("successUpdateMeetingLink"))
-			<x-badge-success badge_text="{{ session('successUpdateMeetingLink') }}" class="mb-4"></x-badge-success>
-		@elseif(session()->has("successUploadAssessment"))
-			<x-badge-success badge_text="{{ session('successUploadAssessment') }}" class="mb-4"></x-badge-success>
-		{{-- @elseif(session()->has("successEditAssessment"))
-			<x-badge-success badge_text="{{ session('successEditAssessment') }}" class="mb-4"></x-badge-success> --}}
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
-		<!-- For larger screen -->
+		{{-- For larger screen --}}
 		<div class="mt-4 w-full flex">
 			<a href="{{ route('teacher.student.show', ['course_id' => $course->id, 'student_id' => $student->id, 'content' => 'activity access']) }}"
 				class="py-2 w-1/2 lg:w-1/6 sm:w-40 text-center hover:bg-slate-200"

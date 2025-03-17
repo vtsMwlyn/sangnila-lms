@@ -14,8 +14,12 @@
 		<x-page-title>{{ __("Edit Teacher's Data") }}</x-page-title>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(session()->has("systemFail"))
-			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<form action="{{ route('admin.teacher.update', $teacher->id) }}" method="post" class="mt-3">
@@ -23,14 +27,14 @@
 			@method('PATCH')
 
 			<div class="flex w-full gap-5">
-				<!-- Teacher Name -->
+				{{-- Teacher Name --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="full_name">Teacher Name<span class="text-red">*</span></x-label>
 					<x-input id="full_name" class="block w-full" type="text" name="full_name" :value="$teacher->full_name" placeholder="Teacher's name"
 						autofocus />
 				</div>
 
-				<!-- Phone Number -->
+				{{-- Phone Number --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="phone_number">Phone Number</x-label>
 					<x-input id="phone_number" class="block w-full" type="text" name="phone_number" :value="$teacher->details->phone_number" placeholder="Add phone number"  />
@@ -38,13 +42,13 @@
 			</div>
 
 			<div class="flex w-full gap-5 mt-3">
-				<!-- Teacher City of Birth -->
+				{{-- Teacher City of Birth --}}
 				<div class="flex w-1/2 flex-col">
 					<x-label for="city_of_birth">City of Birth</x-label>
 					<x-input id="city_of_birth" class="block w-full" type="text" name="city_of_birth" :value="$teacher->details->city_of_birth" placeholder="Add city of birth"  />
 				</div>
 
-				<!-- Teacher Date of Birth -->
+				{{-- Teacher Date of Birth --}}
 				<div class="flex w-1/2 flex-col">
 					<x-label for="date_of_birth">Date of Birth</x-label>
 					@if($teacher->details->date_of_birth)

@@ -14,21 +14,25 @@
 		<x-page-title>Upload New Assignment to {{ $course->course_name }}</x-page-title>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(session()->has("systemFail"))
-			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		@if($course_students->count())
 			<form action="{{ route('teacher.assignment.store', $course->id) }}" method="post" id="assignment_form">
 				@csrf
 				<div class="flex w-full gap-2 md:gap-5 flex-col md:flex-row">
-					<!-- Assignment Title -->
+					{{-- Assignment Title --}}
 					<div class="flex flex-col w-full md:w-1/2">
 						<x-label for="title">Assignment Title<span class="text-red">*</span></x-label>
 						<x-input id="title" class="block w-full" type="text" name="title" :value="old('title')" placeholder="Enter title" autofocus />
 					</div>
 
-					<!-- Deadline Time -->
+					{{-- Deadline Time --}}
 					<div class="flex flex-col w-full md:w-1/2">
 						<x-label for="deadline_time">Deadline Time<span class="text-red">*</span></x-label>
 						<x-input id="deadline_time" class="block w-full" type="time" name="deadline_time" :value="old('deadline_time')" placeholder="Enter deadline time"/>
@@ -36,26 +40,26 @@
 				</div>
 
 				<div class="flex w-full gap-2 md:gap-5 flex-col md:flex-row mt-4">
-					<!-- Link -->
+					{{-- Link --}}
 					<div class="flex flex-col w-full md:w-1/2">
 						<x-label for="link">Link<span class="text-red">*</span></x-label>
 						<x-input id="link" class="block w-full" type="text" name="link" :value="old('link')" placeholder="Enter link"/>
 					</div>
 
-					<!-- Deadline Date -->
+					{{-- Deadline Date --}}
 					<div class="flex flex-col w-full md:w-1/2">
 						<x-label for="deadline_date">Deadline Date<span class="text-red">*</span></x-label>
 						<x-input id="deadline_date" class="block w-full date-input" type="date" name="deadline_date" placeholder="Enter deadline date" :value="old('deadline_date')"/>
 					</div>
 				</div>
 
-				<!-- Description -->
+				{{-- Description --}}
 				<div class="flex flex-col w-full mt-4">
 					<x-label for="desc">Description<span class="text-red">*</span></x-label>
 					<x-textarea rows="4" id="desc" class="block w-full" type="text" name="desc" placeholder="Enter description">{!! old('desc') !!}</x-textarea>
 				</div>
 
-				<!-- Select Students to Assign -->
+				{{-- Select Students to Assign --}}
 				<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
 				<div class="w-full flex items-center justify-between">
 					<h2 class="my-4 font-extrabold text-xl text-dark-blue">Select students to assign<span class="text-red">*</span></h2>

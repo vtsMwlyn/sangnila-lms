@@ -17,10 +17,12 @@
 		<x-page-title>{{ $assignment->title }}</x-page-title>
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">{{ $student->full_name }}'s Submission History</h1>
 
-		@if(session()->has("successModifFeedback"))
-			<x-badge-success badge_text="{{ session('successModifFeedback') }}"></x-badge-success>
-		@elseif(session()->has("systemFail"))
-			<x-badge-danger badge_text="{{ session('systemFail') }}"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<div class="w-full bg-slate-400 mt-6" style="height: 2px;"></div>
@@ -51,7 +53,7 @@
 							<td class="py-2 px-4">
 								<form action="{{ route("teacher.assignment.feedback", [$submission->id, $submission->student->id]) }}" method="post" class="flex gap-1 justify-center items-center w-full">
 									@csrf
-									<!-- Feedback -->
+									{{-- Feedback --}}
 									<div>
 										<x-input id="feedback" style="min-width: 250px" type="text" name="feedback" placeholder="Your feedback"
 											:value="old('feedback', $submission->feedback)" />

@@ -55,13 +55,13 @@
 					</div>
 
 					<div class="flex gap-5 w-full mt-6 attendance-detail-fields" @if($student_attendance->is_attend == 0) style="display: none;" @endif>
-						<!-- Start Time -->
+						{{-- Start Time --}}
 						<div class="flex flex-col w-1/2">
 							<x-label for="start_time">Start Time</x-label>
 							<x-input type="time" name="start_time" id="start_time" value="{{ old('start_time', $student_attendance->start_time) }}"/>
 						</div>
 
-						<!-- End Time -->
+						{{-- End Time --}}
 						<div class="flex flex-col w-1/2">
 							<x-label for="end_time">End Time</x-label>
 							<x-input type="time" name="end_time" id="end_time" value="{{ old('end_time', $student_attendance->end_time) }}"/>

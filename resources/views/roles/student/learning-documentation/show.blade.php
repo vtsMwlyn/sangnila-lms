@@ -5,24 +5,24 @@
 @endsection
 
 @section('popup')
-	<!-- Upload portfolio  -->
+	{{-- Upload portfolio  --}}
 	<x-popup popup_title="Upload Portfolio" class="w-11/12 lg:w-2/3 flex flex-col items-stretch justify-center overflow-y-auto" id="upload-portfolio">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" action="{{ route('student.learning-documentation.store.portfolio', $course->id) }}" class="mt-4" enctype="multipart/form-data">
 				@csrf
-				<!-- File uploads -->
+				{{-- File uploads --}}
 				<div class="flex flex-col">
 					<label for="files">Select Images to Upload</label>
 					<x-input id="files" class="w-full mt-1" type="file" name="files[]" style="border-width: 3px;" multiple/>
 				</div>
 
-				<!-- Link upload -->
+				{{-- Link upload --}}
 				<div class="flex flex-col mt-4">
 					<label for="link">Or Add Work Link</label>
 					<x-input id="link" class="w-full mt-1" type="text" name="link" placeholder="Add work link here"/>
 				</div>
 
-				<!-- Preview -->
+				{{-- Preview --}}
 				<div id="file-preview" class="mt-4 flex flex-wrap w-full gap-3"></div>
 
 				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">
@@ -40,11 +40,15 @@
         <x-back-button href="{{ route('student.learning-documentation.index') }}"></x-back-button>
         <x-page-title>{{ $course->course_name }} - {{ ucwords($course->level) }}</x-page-title>
 
-        @if(session()->has("successUploadPortfolio"))
-			<x-badge-success badge_text="{{ session('successUploadPortfolio') }}" class="mb-4"></x-badge-success>
-        @endif
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
+		@endif
 
-        <!-- For larger screen -->
+        {{-- For larger screen --}}
 		<div class="mt-4 w-full flex">
 			<a href="{{ route('student.learning-documentation.show', ['course_id' => $course->id, 'content' => 'portfolios']) }}"
 				class="py-2 w-1/2 lg:w-1/6 sm:w-40 text-center hover:bg-slate-200"

@@ -14,21 +14,25 @@
 		<x-page-title>{{ __("Upload New Announcement") }}</x-page-title>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(session()->has("systemFail"))
-			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<form action="{{ route("admin.announcement.store") }}" method="post" id="foomu" enctype="multipart/form-data" class="mt-3">
 			@csrf
 
 			<div class="flex w-full gap-5">
-				<!-- Announcement Title -->
+				{{-- Announcement Title --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="title">Announcement Title<span class="text-red">*</span></x-label>
 					<x-input id="title" class="block w-full" type="text" name="title" placeholder="New announcement title" :value="old('title')" autofocus />
 				</div>
 
-				<!-- Announcement Image -->
+				{{-- Announcement Image --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="image">Announcement Image</x-label>
 					<x-input id="image" class="bg-white w-full block" type="file" name="image" placeholder="New announcement image" />
@@ -36,13 +40,13 @@
 			</div>
 
 			<div class="flex w-full gap-5 mt-3">
-				<!-- Announcement Start Date -->
+				{{-- Announcement Start Date --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="announce_from">Announce From<span class="text-red">*</span></x-label>
 					<x-input id="announce_from" class="block w-full" onfocus="this.type='date';" onblur="this.type='text';" name="announce_from" placeholder="New announcement start date" :value="old('announce_from')" autofocus />
 				</div>
 
-				<!-- Announcement End Date -->
+				{{-- Announcement End Date --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="announce_until">Announce Until<span class="text-red">*</span></x-label>
 					<x-input id="announce_until" class="block w-full" onfocus="this.type='date';" onblur="this.type='text';" name="announce_until" placeholder="New announcement end date" :value="old('announce_until')" autofocus />

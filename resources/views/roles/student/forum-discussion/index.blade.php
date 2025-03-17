@@ -40,14 +40,14 @@
                 My Courses
             </div>
 
-            <!-- For large devices -->
+            {{-- For large devices --}}
             @foreach (Auth::user()->enrolled_courses as $course)
                 <a href="{{ route('student.forum.index', ['course' => $course->id]) }}" class="px-4 py-3 block @if(request('course') != $course->id) hover:bg-slate-200 @endif" style="@if(request('course') == $course->id) border-right: solid #1DB9CF 4px; @endif">{{ $course->course_name }} - {{ ucwords($course->level) }}</a>
             @endforeach
         </div>
 
         <div class="w-full md:w-5/6 relative">
-            <!-- For mobiles and tablets -->
+            {{-- For mobiles and tablets --}}
             <div class="md:hidden sticky top-0 flex flex-col items-start w-full first-letter:0 dropdown-container bg-slate-50 p-2 h-[10%] md:h-[0px]" style="z-index: 11;">
                 <button type="button" class="border-slate-400 py-2 px-4 rounded-2xl font-bold text-dark-blue w-full bg-white flex justify-between items-center dropdown-toggler" style="border-width: 3px;">Pick a course <img src="{{ asset('img/dropdown-arrow.svg') }}" class="w-5 h-5" alt="icon"></button>
                 <div class="absolute bg-slate-100 top-16 w-full rounded-xl flex flex-col hidden overflow-hidden dropdown-menu" style="">

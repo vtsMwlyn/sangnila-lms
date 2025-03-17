@@ -28,11 +28,11 @@ class ExcelImportController extends Controller
 		try {
 			Excel::import(new UserAndDetailsImport, $request->file('file')->store('temp'));
 
-			return redirect(route("admin.student.index"))->with('successImportExcelStudent', 'Students data imported successfully!');
+			return redirect(route("admin.student.index"))->with('success', 'Students data imported successfully!');
 		}
 
 		catch (Exception $e){
-			return back()->with('failImportExcelStudent', "Data in your file is in invalid format or not fully filled. Please recheck your data, revise, make sure it fullfil the requirement, and then try to upload again.");
+			return back()->with('danger', "Data in your file is in invalid format or not fully filled. Please recheck your data, revise, make sure it fullfil the requirement, and then try to upload again.");
 		}
 	}
 
@@ -60,7 +60,7 @@ class ExcelImportController extends Controller
 
 			DB::commit();
 
-			return redirect(route("admin.course.show", $course_id))->with('successImportExcelCurriculum', 'Curriculum data imported successfully!');
+			return redirect(route("admin.course.show", $course_id))->with('success', 'Curriculum data imported successfully!');
 		}
 
 		catch (Exception $e){
@@ -68,7 +68,7 @@ class ExcelImportController extends Controller
 
 			DB::rollback();
 
-			return back()->with('failImportExcelCurriculum', "Data in your file is in invalid format or not fully filled. Please recheck your data, revise, make sure it fullfil the requirement, and then try to upload again.");
+			return back()->with('danger', "Data in your file is in invalid format or not fully filled. Please recheck your data, revise, make sure it fullfil the requirement, and then try to upload again.");
 		}
 	}
 
@@ -96,13 +96,13 @@ class ExcelImportController extends Controller
 
 			DB::commit();
 
-			return redirect(route("teacher.mycourse.show", $course_id))->with('successImportExcelTopicsAndActivities', 'Topics and Activities data imported successfully!');
+			return redirect(route("teacher.mycourse.show", $course_id))->with('success', 'Topics and Activities data imported successfully!');
 		}
 
 		catch (Exception $e){
 			DB::rollback();
 
-			return back()->with('failImportExcelTopicsAndActivities', "Data in your file is in invalid format or not fully filled. Please recheck your data, revise, make sure it fullfil the requirement, and then try to upload again.");
+			return back()->with('danger', "Data in your file is in invalid format or not fully filled. Please recheck your data, revise, make sure it fullfil the requirement, and then try to upload again.");
 		}
 	}
 }

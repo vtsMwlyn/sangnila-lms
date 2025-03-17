@@ -10,21 +10,25 @@
 		<x-page-title>{{ $course->course_name }}</x-page-title>
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Lecturer Check In</h1>
 
-		@if(session()->has("failedCheckIn"))
-			<x-badge-danger badge_text="{{ session('failedCheckIn') }}"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<form action="{{ route('teacher.attendance.check-in.store', $course->id) }}" method="post" enctype="multipart/form-data">
 			@csrf
 
-			<!-- Check In Time -->
+			{{-- Check In Time --}}
 			<div class="w-full flex flex-col mt-4">
 				<x-label for="_check_in_time">Check In Time<span class="text-red">*</span></x-label>
 				<x-input id="_check_in_time" name="_check_in_time" class="w-full cursor-not-allowed" type="text" disabled/>
 				<x-input id="check_in_time" name="check_in_time" type="hidden"/>
 			</div>
 
-			<!-- Evidence -->
+			{{-- Evidence --}}
 			<div class="w-full flex flex-col mt-4 items-start">
 				<div class="w-full flex flex-col md:flex-row">
 					<div class="flex flex-col w-full md:w-1/2 pr-0 md:pr-2">
@@ -41,7 +45,7 @@
 				<input type="file" name="image" id="image" style="display: none;">
 			</div>
 
-			<!-- Description -->
+			{{-- Description --}}
 			<div class="w-full flex flex-col mt-4">
 				<x-label for="description">Description<span class="text-red">*</span></x-label>
 				<x-textarea rows="4" id="description" name="description" class="w-full" placeholder="Enter description">{{ old('description') }}</x-textarea>

@@ -61,10 +61,10 @@ class AdminAccountController extends Controller {
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to edit account, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to edit account, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("admin.account.index"))->with("successUpdateAccountData", "Successfully updated account data!");
+		return redirect(route("admin.account.index"))->with("success", "Successfully updated account data!");
 	}
 
 	// Account disable confirmation page
@@ -80,7 +80,7 @@ class AdminAccountController extends Controller {
 
 		User::findOrFail($user_id)->update(["status" => "disabled", "disable_reason" => $request->disable_reason]);
 
-		return redirect(route("admin.account.index"))->with("successDisableAccount", "Successfully disabled account!");
+		return redirect(route("admin.account.index"))->with("warning", "Successfully disabled account!");
 	}
 
 	// Account enable confirmation page
@@ -94,7 +94,7 @@ class AdminAccountController extends Controller {
 	public function enable_acc($user_id){
 		User::findOrFail($user_id)->update(["status" => "enabled", "disable_reason" => null]);
 
-		return redirect(route("admin.account.index"))->with("successEnableAccount", "Successfully enabled account!");
+		return redirect(route("admin.account.index"))->with("success", "Successfully enabled account!");
 	}
 
 	// Account deletion confirmation page
@@ -108,7 +108,7 @@ class AdminAccountController extends Controller {
 	public function destroy($user_id) {
 		User::findOrFail($user_id)->delete();
 
-		return redirect(route("admin.account.index"))->with("successDeleteAccount", "Successfully deleted account!");
+		return redirect(route("admin.account.index"))->with("warning", "Successfully deleted account!");
 	}
 
 	// Reset password confirmation
@@ -122,6 +122,6 @@ class AdminAccountController extends Controller {
 	public function reset_password_proceed($user_id){
 		User::findOrFail($user_id)->update(["password" => Hash::make(trans("strings.default_password"))]);
 
-		return redirect(route("admin.account.index"))->with("successResetPassword", "Successfully reset this account's password");
+		return redirect(route("admin.account.index"))->with("warning", "Successfully reset this account's password");
 	}
 }

@@ -6,7 +6,7 @@
 
 @section("popup")
 	<x-popup popup_title="History" class="w-11/12 lg:w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submission-history">
-		<!-- Popup content -->
+		{{-- Popup content --}}
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<div class="w-full overflow-x-auto">
 				<table class="w-full">
@@ -24,7 +24,7 @@
 	</x-popup>
 
 	<x-popup popup_title="Assignment Submission" class="w-11/12 lg:w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submit-assignment">
-		<!-- Popup content -->
+		{{-- Popup content --}}
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<p class="mt-3 font-semibold">Assignment Description:</p>
 			<p class="mt-1" id="assignment-desc"></p>
@@ -48,7 +48,7 @@
 					{{-- <x-button class="w-full md:w-40 lg:w-1/6">Cancel</x-button> --}}
 				</div>
 
-				<!-- Helper -->
+				{{-- Helper --}}
 				<input type="hidden" name="h-asg" id="h-asg">
 				<input type="hidden" name="h-route" id="h-route">
 				<input type="hidden" name="h-n" id="h-n">
@@ -93,17 +93,17 @@
 		</div>
 		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
-		@if(session()->has("successSubmitAssignment"))
-			<x-badge-success badge_text="{{ session('successSubmitAssignment') }}" class="mb-4"></x-badge-success>
-		@elseif(session()->has("successEditSubmission"))
-			<x-badge-success badge_text="{{ session('successEditSubmission') }}" class="mb-4"></x-badge-success>
-		{{-- @elseif(session()->has("maximumSubmission"))
-			<x-badge-danger badge_text="{{ session('maximumSubmission') }}" class="mb-4" id="max-submission-badge"></x-badge-danger> --}}
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<x-badge-danger badge_text="This assignment's maximum submission is reached." class="mb-4" id="max-submission-badge" style="display: none;"></x-badge-danger>
 
-		<!-- For desktop screen -->
+		{{-- For desktop screen --}}
 		<div class="w-full overflow-x-auto hidden lg:block">
 			<table class="w-full">
 				<thead>
@@ -176,7 +176,7 @@
 			</table>
 		</div>
 
-		<!-- For smaller screen -->
+		{{-- For smaller screen --}}
 		<div class="w-full flex flex-col gap-4 lg:hidden items-stretch mt-4">
 			@forelse ($assignments as $index => $asg)
 				<div class="bg-white rounded-xl p-4 flex flex-col gap-3 dropdown-container">

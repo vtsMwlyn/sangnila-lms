@@ -18,11 +18,23 @@
 			</div>
 		</div>
 	</x-popup>
+
+	<x-confirmation method="delete" popup_title="Delete Lecturer Attendance" id="delete-lecturer-attendance-popup">
+		Are you sure want to <span class="font-bold text-red">delete</span> this lecturer attendance data?
+	</x-confirmation>
 @endsection
 
 @section("content")
 	<x-section-container>
 		<x-page-title class="text-center">{{ __("List of Lecturer Attendances") }}</x-page-title>
+
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
+		@endif
 
 		<div class="flex items-center justify-center mt-6">
 			{{-- <div class="w-1/4">
@@ -84,7 +96,12 @@
 							{{-- <td class="py-2 px-4">{{ $la->validation_status }}</td> --}}
 							<td class="py-2 px-4">
 								<div class="flex gap-1 w-full">
-									<x-button type="button" class="lecturer-attendance-detail-btn" data-desc="{!! $la->description? nl2br($la->description) : 'N/A' !!}" data-source_teacher="{{ $checkInPhotoL }}" data-student_validations="{{ json_encode($sourceStudents) }}"><i class="bi bi-image"></i></x-button>
+									<button type="button" class="lecturer-attendance-detail-btn" data-desc="{!! $la->description? nl2br($la->description) : 'N/A' !!}" data-source_teacher="{{ $checkInPhotoL }}" data-student_validations="{{ json_encode($sourceStudents) }}">
+										<img src="{{ asset('img/photo.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+									</button>
+									<button type="button" class="lecturer-attendance-delete-btn" data-route="{{ route('admin.lecturer-attendance.destroy', $la->id) }}">
+										<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+									</button>
 								</div>
 							</td>
 						</tr>
@@ -96,44 +113,6 @@
 				</tbody>
 			</table>
 		</div>
-
-		{{-- <div class="w-full overflow-x-auto">
-			<table class="w-full">
-				<thead>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Validator</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Class</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Check In</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Check Out</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
-				</thead>
-				<tbody>
-					@forelse ($all_student_attendances as $sa)
-						@php
-							$teacher = App\Models\CourseStudent::where('course_id', $sa->course->id)->where('student_id', $sa->user->id)->first()->teacher;
-							$checkInPhotoS = Storage::url("app/public/" . $sa->attendance_evidence);
-						@endphp
-
-						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-							<td class="py-2 px-4">{{ Carbon\Carbon::parse($sa->self_attendance_date)->format('d M Y') }}</td>
-							<td class="py-2 px-4">{{ $sa->user->full_name }}</td>
-							<td class="py-2 px-4">{{ $sa->course->course_name }} ({{ $teacher->full_name }})</td>
-							<td class="py-2 px-4">{{ $sa->check_in_time }}</td>
-							<td class="py-2 px-4">{{ $sa->check_out_time ?? 'N/A' }}</td>
-							<td class="py-2 px-4">
-								<div class="flex gap-1 w-full">
-									<x-button type="button" class="lecturer-attendance-detail-btn" data-source_teacher="{{ $checkInPhotoS }}"><i class="bi bi-image"></i></x-button>
-								</div>
-							</td>
-						</tr>
-					@empty
-						<tr class="bg-white">
-							<td class="py-2 px-4 text-center" colspan="5">- No data found -</td>
-						</tr>
-					@endforelse
-				</tbody>
-			</table>
-		</div> --}}
 	</x-section-container>
 
 	<script>
@@ -156,6 +135,11 @@
 				}
 
 				$('#lecturer-attendance-detail-popup').parent().show();
+			});
+
+			$('.lecturer-attendance-delete-btn').on('click', function(){
+				$('#delete-lecturer-attendance-popup').find('form').attr('action', $(this).data('route'));
+				$('#delete-lecturer-attendance-popup').parent().show();
 			});
 		});
 	</script>

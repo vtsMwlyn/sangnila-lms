@@ -14,8 +14,12 @@
 		<x-page-title>{{ __("Edit Student's Data") }}</x-page-title>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(session()->has("systemFail"))
-			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<form action="{{ route('admin.student.update', $student->id) }}" method="post" class="mt-3">
@@ -23,7 +27,7 @@
 			@method('PATCH')
 
 			<div class="flex w-full gap-5">
-				<!-- Student Name -->
+				{{-- Student Name --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="full_name">Full Name<span class="text-red">*</span></x-label>
 					<div class="flex flex-col w-full items-stretch">
@@ -32,7 +36,7 @@
 					</div>
 				</div>
 
-				<!-- Student Phone Number -->
+				{{-- Student Phone Number --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="phone_number" :value="__('Phone Number')"/>
 					<div class="flex flex-col w-full items-stretch">
@@ -42,7 +46,7 @@
 			</div>
 
 			<div class="flex w-full gap-5 mt-3">
-				<!-- Student City of Birth -->
+				{{-- Student City of Birth --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="city_of_birth" :value="__('City of Birth')"/>
 					<div class="flex flex-col w-full items-stretch">
@@ -50,7 +54,7 @@
 					</div>
 				</div>
 
-				<!-- Student Date of Birth -->
+				{{-- Student Date of Birth --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="date_of_birth" :value="__('Date of Birth')"/>
 					<div class="flex flex-col w-full items-stretch">
@@ -60,7 +64,7 @@
 			</div>
 
 			<div class="flex w-full gap-5 mt-3">
-				<!-- Student School Name -->
+				{{-- Student School Name --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="school_name" :value="__('School Name')"/>
 					<div class="flex flex-col w-full items-stretch">
@@ -68,7 +72,7 @@
 					</div>
 				</div>
 
-				<!-- Student Education Level -->
+				{{-- Student Education Level --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="student_level" :value="__('Education Level')" />
 					<div class="flex flex-col w-full items-stretch">
@@ -92,7 +96,7 @@
 			</div>
 
 			<div class="flex w-full gap-5 mt-3">
-				<!-- Student Parent's Name -->
+				{{-- Student Parent's Name --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="name_parent" :value="__('Parent\'s Name')"/>
 					<div class="flex flex-col w-full items-stretch">
@@ -100,7 +104,7 @@
 					</div>
 				</div>
 
-				<!-- Student Parent's Phone Number -->
+				{{-- Student Parent's Phone Number --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="phone_parent" :value="__('Parent\'s Phone Number')"/>
 					<div class="flex flex-col w-full items-stretch">

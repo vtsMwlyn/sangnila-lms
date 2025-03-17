@@ -5,22 +5,22 @@
 @endsection
 
 @section("popup")
-	<!-- Reset password -->
+	{{-- Reset password --}}
 	<x-confirmation popup_title="Reset Password" id="reset-password-popup">
 		Are you sure want to <span class="font-bold text-red">reset the password</span> for <span class="font-bold text-light-blue" id="reset-password-name"></span>'s account? <strong>This action will reset the account's password to the default password.</strong>
 	</x-confirmation>
 
-	<!-- Enable account -->
+	{{-- Enable account --}}
 	<x-confirmation popup_title="Enable Account" id="enable-account-popup">
 		Are you sure want to <span class="font-bold text-red">enable</span> <span class="font-bold text-light-blue" id="enable-account-name"></span>'s account? <strong>This action will make the account can be used again in Sangnila LMS.</strong>
 	</x-confirmation>
 
-	<!-- Delete account -->
+	{{-- Delete account --}}
 	<x-confirmation method="delete" popup_title="Delete Account" id="delete-account-popup">
 		Are you sure want to <span class="font-bold text-red">delete</span> <span class="font-bold text-light-blue" id="del-account-name"></span>'s account from Sangnila LMS? <strong>This action will erase all data related to the account and can't be undone! <i>(It's recommended to disable the account instead of deleting it!)</i></strong>
 	</x-confirmation>
 
-	<!-- Disable account -->
+	{{-- Disable account --}}
 	<x-popup popup_title="Disable Account" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="disable-account-popup">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" class="mt-4">
@@ -38,7 +38,7 @@
 					{{-- <x-button class="w-full md:w-40 lg:w-1/6">Cancel</x-button> --}}
 				</div>
 
-				<!-- Helper -->
+				{{-- Helper --}}
 				<input type="hidden" name="h-last-popup" class="h-last-popup">
 				<input type="hidden" name="h-route" class="h-route">
 				<input type="hidden" name="h-account-name" id="h-account-name">
@@ -63,21 +63,15 @@
 			</form>
 		</div>
 
-		@if(session()->has("successCreateNewAccount"))
-			<x-badge-success badge_text="{{ session('successCreateNewAccount') }}"></x-badge-success>
-		@elseif(session()->has("successDeleteAccount"))
-			<x-badge-warning badge_text="{{ session('successDeleteAccount') }}"></x-badge-warning>
-		@elseif(session()->has("successResetPassword"))
-			<x-badge-warning badge_text="{{ session('successResetPassword') }}"></x-badge-warning>
-		@elseif(session()->has("successEditAccount"))
-			<x-badge-warning badge_text="{{ session('successEditAccount') }}"></x-badge-warning>
-		@elseif(session()->has("successEnableAccount"))
-			<x-badge-success badge_text="{{ session('successEnableAccount') }}"></x-badge-success>
-		@elseif(session()->has("successDisableAccount"))
-			<x-badge-warning badge_text="{{ session('successDisableAccount') }}"></x-badge-warning>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
-		<!-- For larger screen -->
+		{{-- For larger screen --}}
 		<div class="lg:flex mt-4 w-full flex-wrap hidden">
 			<a href="{{ route('admin.account.index', ['role' => 'admin']) }}"
 				class="py-2 w-1/6 sm:w-40 text-center hover:bg-slate-200"
@@ -104,7 +98,7 @@
 			</a>
 		</div>
 
-		<!-- For smaller screen -->
+		{{-- For smaller screen --}}
 		<div class="relative flex lg:hidden flex-col items-start w-96 first-letter:0 dropdown-container mt-4">
 			<button type="button" class="border-slate-400 py-2 px-4 rounded-2xl font-bold text-dark-blue w-full bg-white flex justify-between items-center dropdown-toggler">{{ request('role') ? ucwords(request('role')) : 'Admin' }} <img src="{{ asset('img/dropdown-arrow.svg') }}" class="w-5 h-5" alt="icon"></button>
 			<div class="absolute bg-white top-12 w-full rounded-xl flex flex-col hidden overflow-hidden dropdown-menu" style="">
@@ -117,7 +111,7 @@
 		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
 		@if(request('role') == 'admin' || !request('role'))
-			<!-- Admin accounts -->
+			{{-- Admin accounts --}}
 			<div class="w-full overflow-x-auto" style="max-height: 500px;" id="admin-accounts">
 				<table class="w-full">
 					<thead>
@@ -174,7 +168,7 @@
 		@endif
 
 		@if(request('role') == 'teacher')
-			<!-- Teacher accounts -->
+			{{-- Teacher accounts --}}
 			<div class="w-full overflow-x-auto" style="max-height: 500px;" id="teacher-accounts">
 				<table class="w-full">
 					<thead>
@@ -229,7 +223,7 @@
 		@endif
 
 		@if(request('role') == 'student')
-			<!-- Student accounts -->
+			{{-- Student accounts --}}
 			<div class="w-full overflow-x-auto" style="max-height: 500px;" id="student-accounts">
 				<table class="w-full">
 					<thead>
@@ -283,7 +277,7 @@
 		@endif
 
 		@if(request('role') == 'disabled')
-			<!-- Disabled accounts -->
+			{{-- Disabled accounts --}}
 			<div class="w-full overflow-x-auto" style="max-height: 500px;" id="disabled-accounts">
 				<table class="w-full">
 					<thead>

@@ -9,12 +9,12 @@
 @endsection
 
 @section("popup")
-	<!-- Unassign Teacher -->
+	{{-- Unassign Teacher --}}
 	<x-confirmation method="delete" popup_title="Unassign Teacher" id="unassign-teacher-popup">
 		Are you sure want to <span class="font-bold text-red">unassign</span> this teacher from <span class="font-bold text-light-blue" id="unassign-course-name"></span>?
 	</x-confirmation>
 
-	<!-- Assign course to teacher -->
+	{{-- Assign course to teacher --}}
 	<x-popup popup_title="Assign Teacher to Course" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="assign-teacher-popup">
 		<form method="post" class="w-full flex flex-col mt-3">
 			@csrf
@@ -41,15 +41,15 @@
 		<x-page-title style="margin-bottom: 0;">{{ ($teacher->details->gender == 1)? "Mr. " : "Ms. " }} {{ $teacher->full_name }}</x-page-title>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(session()->has("successAssignToCourse"))
-			<x-badge-success badge_text="{{ session('successAssignToCourse') }}"></x-badge-success>
-		@elseif(session()->has("successUnassignFromCourse"))
-			<x-badge-warning badge_text="{{ session('successUnassignFromCourse') }}"></x-badge-warning>
-		@elseif(session()->has("successUpdateTeacherData"))
-			<x-badge-success badge_text="{{ session('successUpdateTeacherData') }}"></x-badge-success>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
-		<!-- Teacher informations -->
+		{{-- Teacher informations --}}
 		<div class="w-full flex flex-col gap-y-4">
 			<div class="w-full flex gap-x-4">
 				<div class="flex flex-col w-1/2">
@@ -80,7 +80,7 @@
 			<x-anchor-button  href="{{ route('admin.teacher.edit', $teacher->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		</div>
 
-		<!-- Courses and Students List -->
+		{{-- Courses and Students List --}}
 		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
 		<div class="flex my-4 w-full justify-between items-center">
 			<h2 class="font-extrabold text-xl text-dark-blue">List of Assigned Courses and Students</h2>

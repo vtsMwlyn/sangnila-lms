@@ -14,8 +14,12 @@
 	<x-section-container>
 		<x-page-title>Import Curriculum Data from Excel</x-page-title>
 
-		@if(session()->has("failImportExcelCurriculum"))
-			<x-badge-danger badge_text="{{ session('failImportExcelCurriculum') }}" class="mb-8"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<p class="text-blue-950 font-semibold">Please make sure your excel file has <span class="font-extrabold">column position</span> like shown in this image below:</p>

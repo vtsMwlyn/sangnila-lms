@@ -22,7 +22,7 @@ class LearningOutcomeController extends Controller
 			"number" => $request->number
 		]);
 
-		return back()->with("successAddLearningOutcome", "Learning Outcome has been successfully added to this course!");
+		return back()->with("success", "Learning Outcome has been successfully added to this course!");
 	}
 
 	public function admin_update_lo(Request $request, $course_id, $learning_outcome_id){
@@ -38,7 +38,7 @@ class LearningOutcomeController extends Controller
 			"number" => $request->number
 		]);
 
-		return back()->with("successEditLearningOutcome", "Learning Outcome has been successfully edited to this course!");
+		return back()->with("success", "Learning Outcome has been successfully edited to this course!");
 	}
 
 	public function admin_destroy_lo($course_id, $learning_outcome_id){
@@ -46,6 +46,6 @@ class LearningOutcomeController extends Controller
 
 		$del->delete();
 
-		return back()->with("successDeleteLearningOutcome", "Learning Outcome has been successfully deleted from this course!");
+		return back()->with("warning", "Learning Outcome has been successfully deleted from this course!");
 	}
 }

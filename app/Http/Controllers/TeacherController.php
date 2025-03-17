@@ -75,10 +75,10 @@ class TeacherController extends Controller {
 		} catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to edit teacher, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to edit teacher, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("admin.teacher.show", $teacher_id))->with("successUpdateTeacherData", "Successfully updated teacher data!");
+		return redirect(route("admin.teacher.show", $teacher_id))->with("success", "Successfully updated teacher data!");
 	}
 
 	// Teacher self attendance
@@ -101,7 +101,7 @@ class TeacherController extends Controller {
 				$validatedData['attendance_evidence'] = $request->file("image")->store("lecturer-checkin");
 			}
 			else {
-				return back()->with('failedCheckIn', 'Check in requires evidence image. Please allow the usage of the camera then try again, or if the problem persists, please kindly contact our IT team.');
+				return back()->with('danger', 'Check in requires evidence image. Please allow the usage of the camera then try again, or if the problem persists, please kindly contact our IT team.');
 			}
 
 			SelfAttendance::create([
@@ -118,10 +118,10 @@ class TeacherController extends Controller {
 				Storage::delete($validatedData['attendance_evidence']);
 			}
 
-			return back()->with('failedCheckIn', 'Cannot sign in due to system error, please contact our IT team. Error detail: ' . $e->getMessage());
+			return back()->with('danger', 'Cannot sign in due to system error, please contact our IT team. Error detail: ' . $e->getMessage());
 		}
 
-		return redirect(route('teacher.attendance.show', $course->id))->with('successCheckIn', 'Successfully checked in to course ' . $course->course_name . ' at ' . $validatedData['check_in_time'] . ' (GMT+7)');
+		return redirect(route('teacher.attendance.show', $course->id))->with('success', 'Successfully checked in to course ' . $course->course_name . ' at ' . $validatedData['check_in_time'] . ' (GMT+7)');
 	}
 
 	public function check_out_store($course_id){
@@ -141,9 +141,9 @@ class TeacherController extends Controller {
 			]);
 		}
 		else {
-			return back()->with('failedCheckOut', 'No attendance data found, probably because you have not checked in yet. If the problem persists please contact our IT team.');
+			return back()->with('danger', 'No attendance data found, probably because you have not checked in yet. If the problem persists please contact our IT team.');
 		}
 
-		return redirect(route('teacher.attendance.show', $course->id))->with('successCheckOut', 'Successfully checked out from course ' . $course->course_name . ' at ' . $checkOutTime . ' (GMT+7)');
+		return redirect(route('teacher.attendance.show', $course->id))->with('success', 'Successfully checked out from course ' . $course->course_name . ' at ' . $checkOutTime . ' (GMT+7)');
 	}
 }

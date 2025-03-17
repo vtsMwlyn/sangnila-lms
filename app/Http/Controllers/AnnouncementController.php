@@ -58,7 +58,7 @@ class AnnouncementController extends Controller
 
 		Announcement::create($data_to_create);
 
-		return redirect(route("admin.announcement.index"))->with("successUploadAnnouncement", "Announcement uploaded successfully!");
+		return redirect(route("admin.announcement.index"))->with("success", "Announcement uploaded successfully!");
 	}
 
 	public function edit($announcement_id){
@@ -123,10 +123,10 @@ class AnnouncementController extends Controller
 				Storage::delete($validatedData["image"]);
 			}
 
-			return back()->with("systemFail", "System failed to edit announcement, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to edit announcement, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("admin.announcement.index"))->with("successEditAnnouncement", "Announcement edited successfully!");
+		return redirect(route("admin.announcement.index"))->with("success", "Announcement edited successfully!");
 	}
 
 	public function delete($announcement_id){
@@ -144,7 +144,7 @@ class AnnouncementController extends Controller
 
 		Announcement::destroy($announcement_id);
 
-		return redirect(route("admin.announcement.index"))->with("successDeleteAnnouncement", "Announcement deleted successfully!");
+		return redirect(route("admin.announcement.index"))->with("warning", "Announcement deleted successfully!");
 	}
 
 	public function all_view_announcement($announcement_id){

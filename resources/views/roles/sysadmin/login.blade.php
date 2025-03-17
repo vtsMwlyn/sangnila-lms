@@ -9,21 +9,25 @@
 		<form method="POST" action="{{ route('sysadmin.login') }}" class="flex flex-col justify-center items-stretch w-full md:w-1/2 mt-3 md:mt-5 md:mb-5 md:m-0 p-5 md:p-10 bg-blue-950 rounded-2xl" id="login-form">
 			@csrf
 
-			<!-- Session Status -->
+			{{-- Session Status --}}
 			<x-auth-session-status class="mb-4" :status="session('status')" />
 
-			@if(session()->has("status"))
-				<x-badge-success badge_text="{{ session('status') }}"></x-badge-success>
+			@if(session()->has("success"))
+				<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+			@elseif(session()->has("warning"))
+				<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+			@elseif(session()->has("danger"))
+				<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 			@endif
 
 			<p class="text-xl font-extrabold text-center text-yellow-500">(FOR MAINTENANCE ONLY)</p>
 
-			<!-- Email Address -->
+			{{-- Email Address --}}
 			<div class="mt-5">
 				<x-input id="email" class="w-full rounded-xl" type="email" name="email" :value="old('email')" placeholder="Email Address" style="height: 50px" autofocus />
 			</div>
 
-			<!-- Password -->
+			{{-- Password --}}
 			<div class="mt-8 relative">
 				<button type="button" class="absolute right-2 h-full text-slate-500 font-bold w-12" id="togglePassword"></button>
 				<x-input id="password" class="w-full rounded-xl" type="password" name="password" style="height: 50px; padding-right: 60px;"

@@ -15,8 +15,12 @@
 			<x-page-title>Import Old Student Data</x-page-title>
 			<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-			@if(session()->has("systemFail"))
-				<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+			@if(session()->has("success"))
+				<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+			@elseif(session()->has("warning"))
+				<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+			@elseif(session()->has("danger"))
+				<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 			@endif
 
 			<x-badge-danger id="emptyDataNotif" badge_text="Please input minimum 1 data to proceed." style="display: none;"></x-badge-danger>
@@ -29,7 +33,7 @@
 					</div>
 
 					<div class="flex flex-col md:flex-row gap-3 mt-3">
-						<!-- Student Name -->
+						{{-- Student Name --}}
 						<div class="w-full md:w-1/2">
 							<x-label for="full_name">Student Name<span class="text-red">*</span></x-label>
 							<x-input id="full_name" class="block mt-1 w-full" type="text" name="full_name" placeholder="Full Name" :value="old('full_name')" autofocus />
@@ -37,14 +41,14 @@
 						</div>
 
 						<div class="w-full md:w-1/2 flex flex-col md:flex-row gap-3">
-							<!-- Student Email -->
+							{{-- Student Email --}}
 							<div class="w-full md:w-2/3">
 								<x-label for="email">Student Email<span class="text-red">*</span></x-label>
 								<x-input id="email" class="block mt-1 w-full" type="text" name="email" placeholder="Student's Email" :value="old('email')"
 									autofocus />
 								<p class="text-red font-bold mt-1" style="display: none" id="err_email"><i class="bi bi-exclamation-circle"></i> This field is required.</p>
 							</div>
-							<!-- Gender -->
+							{{-- Gender --}}
 							<div class="w-full md:w-1/3">
 								<x-label for="gender">Gender<span class="text-red">*</span></x-label>
 								<x-select name="gender" id="gender"
@@ -60,20 +64,20 @@
 
 					<div class="" id="form-details" style="display: none;">
 						<div class="flex flex-col md:flex-row gap-3 mt-3">
-							<!-- Phone Number -->
+							{{-- Phone Number --}}
 							<div class="w-full md:w-1/2">
 								<x-label for="phone_number" :value="__('Phone Number')"/>
 								<x-input id="phone_number" class="block mt-1 w-full" type="text" name="phone_number" :value="old('phone_number')" placeholder="Add phone number"  />
 							</div>
 
 							<div class="w-full md:w-1/2 flex flex-col md:flex-row gap-3">
-								<!-- City of Birth -->
+								{{-- City of Birth --}}
 								<div class="w-full md:w-1/2">
 									<x-label for="city_of_birth" :value="__('City of Birth')"/>
 									<x-input id="city_of_birth" class="block mt-1 w-full" type="text" name="city_of_birth" :value="old('city_of_birth')" placeholder="Add city of birth"  />
 								</div>
 
-								<!-- Date of Birth -->
+								{{-- Date of Birth --}}
 								<div class="w-full md:w-1/2">
 									<x-label for="date_of_birth" :value="__('Date of Birth')"/>
 									<x-input id="date_of_birth" class="block mt-1 w-full" onfocus="this.type = 'date';" onblur="this.type = 'text'" name="date_of_birth" :value="old('date_of_birth')" placeholder="Add date of birth"  />
@@ -82,13 +86,13 @@
 						</div>
 
 						<div class="flex flex-col md:flex-row gap-3 mt-6">
-							<!-- School Name -->
+							{{-- School Name --}}
 							<div class="w-full md:w-1/2">
 								<x-label for="school_name" :value="__('School Name')"/>
 								<x-input id="school_name" class="block mt-1 w-full" type="text" name="school_name" :value="old('school_name')" placeholder="Add school name"  />
 							</div>
 
-							<!-- Education Level -->
+							{{-- Education Level --}}
 							<div class="w-full md:w-1/2">
 								<x-label for="student_level" :value="__('Select Education Level')" />
 								<x-select name="student_level" id="student_level"
@@ -103,13 +107,13 @@
 						</div>
 
 						<div class="flex flex-col md:flex-row gap-3 mt-3">
-							<!-- Parent's Name -->
+							{{-- Parent's Name --}}
 							<div class="w-full md:w-1/2">
 								<x-label for="name_parent" :value="__('Parent\'s Name')"/>
 								<x-input id="name_parent" class="block mt-1 w-full" type="text" name="name_parent" :value="old('name_parent')" placeholder="Add parent's name"  />
 							</div>
 
-							<!-- Parent's Phone Number -->
+							{{-- Parent's Phone Number --}}
 							<div class="w-full md:w-1/2">
 								<x-label for="phone_parent" :value="__('Parent\'s Phone Number')"/>
 								<x-input id="phone_parent" class="block mt-1 w-full" type="text" name="phone_parent" :value="old('phone_parent')" placeholder="Add parent's phone number"  />
@@ -125,7 +129,7 @@
 					<h1 class="font-bold text-lg text-blue mt-12">Student's Course Data</h1>
 
 					<div class="mt-4 flex flex-col md:flex-row gap-3">
-						<!-- Student's Teacher -->
+						{{-- Student's Teacher --}}
 						<div class="w-full md:w-1/2">
 							<x-label for="teacher_name">Student's Teacher<span class="text-red">*</span></x-label>
 							<x-select name="teacher_name" id="teacher_name" class="mt-1 w-full">
@@ -138,14 +142,14 @@
 						</div>
 
 						<div class="w-full md:w-1/2 flex gap-3">
-							<!-- Last attendance count -->
+							{{-- Last attendance count --}}
 							<div class="w-1/2">
 								<x-label for="last_attendance_count">Last Attendance Count<span class="text-red">*</span></x-label>
 								<x-input id="last_attendance_count" class="block mt-1 w-full" type="number" name="last_attendance_count" placeholder="Last Attendance Count" value="0" />
 								<p class="text-red font-bold mt-1" style="display: none" id="err_last_attendance_count"><i class="bi bi-exclamation-circle"></i> Invalid input.</p>
 							</div>
 
-							<!-- Student's max course session -->
+							{{-- Student's max course session --}}
 							<div class="w-1/2">
 								<x-label for="max_course_session">Maximum Sessions<span class="text-red">*</span></x-label>
 								<x-input id="max_course_session" class="block mt-1 w-full" type="number" name="max_course_session" placeholder="Maximum sessions" value="8" />
@@ -154,7 +158,7 @@
 						</div>
 					</div>
 
-					<!-- Student's last activity unlocked -->
+					{{-- Student's last activity unlocked --}}
 					<div class="w-full mt-3 container-select2">
 						<x-label for="last_activity_unlocked" class="mb-1">Last Activity Unlock<span class="text-red">*</span></x-label>
 						<x-select name="last_activity_unlocked" id="last_activity_unlocked" class="mt-1 w-full select-2">

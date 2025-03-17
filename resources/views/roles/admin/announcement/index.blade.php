@@ -9,7 +9,7 @@
 @endsection
 
 @section('popup')
-	<!-- Delete course -->
+	{{-- Delete course --}}
 	<x-confirmation popup_title="Delete Announcement" id="delete-announcement-popup">
 		Are you sure want to <span class="font-bold text-red">delete</span> the Announcement <span class="font-bold text-light-blue" id="del-announcement-name"></span> from Sangnila LMS? <strong></strong>
 	</x-confirmation>
@@ -20,15 +20,12 @@
 		<x-page-title>{{ __("All Announcements") }}</x-page-title>
 		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
-		@if(session()->has("successUploadAnnouncement"))
-			<x-badge-success badge_text="{{ session('successUploadAnnouncement') }}">
-			</x-badge-success>
-		@elseif(session()->has("successEditAnnouncement"))
-			<x-badge-success badge_text="{{ session('successEditAnnouncement') }}">
-			</x-badge-success>
-		@elseif(session()->has("successDeleteAnnouncement"))
-			<x-badge-warning badge_text="{{ session('successDeleteAnnouncement') }}">
-			</x-badge-warning>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<div class="mb-4">

@@ -15,15 +15,19 @@
 		<x-page-title>{{ __("Edit Announcement") }}</x-page-title>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(session()->has("systemFail"))
-			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<form action="{{ route("admin.announcement.update", $announcement->id) }}" method="post" id="foomu" enctype="multipart/form-data" class="mt-3">
 			@csrf
 
 			<div class="flex w-full gap-5">
-				<!-- Announcement Title -->
+				{{-- Announcement Title --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="title">New title<span class="text-red">*</span></x-label>
 					<div class="flex w-full flex-col items-stretch">
@@ -31,7 +35,7 @@
 					</div>
 				</div>
 
-				<!-- Announcement Image -->
+				{{-- Announcement Image --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="image">New Image</x-label>
 					<div class="flex w-full flex-col items-stretch">
@@ -41,7 +45,7 @@
 			</div>
 
 			<div class="flex w-full gap-5 mt-3">
-				<!-- Announcement Start Date -->
+				{{-- Announcement Start Date --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="announce_from">New Start Date<span class="text-red">*</span></x-label>
 					<div class="flex w-full flex-col items-stretch">
@@ -49,7 +53,7 @@
 					</div>
 				</div>
 
-				<!-- Announcement End Date -->
+				{{-- Announcement End Date --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="announce_until">New End Date<span class="text-red">*</span></x-label>
 					<div class="flex w-full flex-col items-stretch">

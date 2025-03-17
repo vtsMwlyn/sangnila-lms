@@ -28,7 +28,7 @@ class SysAdminController extends Controller
 			return redirect()->intended(route('dashboard'));
 		}
 		else {
-			return back()->with("loginFailed", "Fail to login");
+			return back()->with("danger", "Fail to login");
 		}
 	}
 

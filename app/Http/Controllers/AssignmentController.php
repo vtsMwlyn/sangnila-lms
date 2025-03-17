@@ -99,10 +99,10 @@ class AssignmentController extends Controller
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to create assignment, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to create assignment, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("teacher.assignment.show", $course_id))->with("successUploadAssignment", "New assignment uploaded successfully!");
+		return redirect(route("teacher.assignment.show", $course_id))->with("success", "New assignment uploaded successfully!");
 	}
 
 	// Edit assignment data input form page
@@ -197,10 +197,10 @@ class AssignmentController extends Controller
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to edit assignment, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to edit assignment, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("teacher.assignment.show", $course->id))->with("successEditAssignment", "Assignment edited successfully!");
+		return redirect(route("teacher.assignment.show", $course->id))->with("success", "Assignment edited successfully!");
 
 	}
 
@@ -220,7 +220,7 @@ class AssignmentController extends Controller
 
 		$del->delete();
 
-		return redirect(route("teacher.assignment.show", $course->id))->with("successDeleteAssignment", "Assignment deleted successfully!");
+		return redirect(route("teacher.assignment.show", $course->id))->with("warning", "Assignment deleted successfully!");
 	}
 
 	// Check submissions from students in an assignment
@@ -301,10 +301,10 @@ class AssignmentController extends Controller
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to add/edit feedback, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to add/edit feedback, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("teacher.assignment.submission-history", [$asgsmt->assignment->id, $student_id]))->with("successModifFeedback", $msg);
+		return redirect(route("teacher.assignment.submission-history", [$asgsmt->assignment->id, $student_id]))->with("success", $msg);
 	}
 
 
@@ -400,7 +400,7 @@ class AssignmentController extends Controller
 		}
 
 		if($n == 10){
-			return back()->with("maximumSubmission", "Sorry, your assignment submission is already in its limit!");
+			return back()->with("danger", "Sorry, your assignment submission is already in its limit!");
 		}
 
 		return view("roles.student.assignment.submit", [
@@ -450,10 +450,10 @@ class AssignmentController extends Controller
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to upload your assignment submission, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to upload your assignment submission, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("student.assignment.show", $course_id))->with("successSubmitAssignment", "Assignment submitted successfully!");
+		return redirect(route("student.assignment.show", $course_id))->with("success", "Assignment submitted successfully!");
 	}
 
 	// Shows submission history in an assignment

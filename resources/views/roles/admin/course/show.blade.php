@@ -9,12 +9,12 @@
 @endsection
 
 @section("popup")
-	<!-- Delete course -->
+	{{-- Delete course --}}
 	<x-confirmation method="delete" popup_title="Delete Course" id="delete-course-popup">
 		Are you sure want to <span class="font-bold text-red">delete</span> the Course <span class="font-bold text-light-blue" id="del-course-name"></span> from Sangnila LMS? <strong>This action will erase all data related to the course and can't be undone!</strong>
 	</x-confirmation>
 
-	<!-- New LO -->
+	{{-- New LO --}}
 	<x-popup popup_title="New Learning Outcome" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="new-learning-outcome">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" class="mt-4" id="new-learning-outcome-form">
@@ -34,14 +34,14 @@
 					{{-- <x-button class="w-full md:w-40 lg:w-1/6">Cancel</x-button> --}}
 				</div>
 
-				<!-- Helper -->
+				{{-- Helper --}}
 				<input type="hidden" name="h-last-popup" class="h-last-popup">
 				<input type="hidden" name="h-route" class="h-route">
 			</form>
 		</div>
 	</x-popup>
 
-	<!-- Edit LO -->
+	{{-- Edit LO --}}
 	<x-popup popup_title="Edit Learning Outcome" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-learning-outcome">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" class="mt-4" id="edit-learning-outcome-form">
@@ -61,7 +61,7 @@
 					{{-- <x-button class="w-full md:w-40 lg:w-1/6">Cancel</x-button> --}}
 				</div>
 
-				<!-- Helper -->
+				{{-- Helper --}}
 				<input type="hidden" name="h-last-popup" class="h-last-popup">
 				<input type="hidden" name="h-route" class="h-route">
 				<input type="hidden" name="h-lo" class="h-lo">
@@ -69,17 +69,17 @@
 		</div>
 	</x-popup>
 
-	<!-- Delete LO -->
+	{{-- Delete LO --}}
 	<x-confirmation popup_title="Delete Learning Outcome" id="delete-learning-outcome">
 		Are you sure want to <span class="font-bold text-red">delete</span> the Learning Outcome <span class="font-bold text-light-blue" id="del-lo-name"></span> from this course?
 	</x-confirmation>
 
-	<!-- New topic -->
+	{{-- New topic --}}
 	<x-popup popup_title="New Curriculum Topic" class="w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="new-curriculum-topic">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" class="mt-4">
 				@csrf
-				<!-- Curriculum Topic Title -->
+				{{-- Curriculum Topic Title --}}
 				<div class="flex flex-col">
 					<label for="topic_title">Curriculum Topic Title<span class="text-red">*</span></label>
 					<x-input id="topic_title" class="w-full mt-1" type="text" name="topic_title" style="border-width: 3px;" value="{{ old('topic_title') }}" placeholder="Curriculum topic title" autofocus />
@@ -91,19 +91,19 @@
 					</x-button>
 				</div>
 
-				<!-- Helper -->
+				{{-- Helper --}}
 				<input type="hidden" name="h-last-popup" class="h-last-popup">
 				<input type="hidden" name="h-route" class="h-route">
 			</form>
 		</div>
 	</x-popup>
 
-	<!-- Edit topic -->
+	{{-- Edit topic --}}
 	<x-popup popup_title="Edit Curriculum Topic" class="w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-curriculum-topic">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" class="mt-4">
 				@csrf
-				<!-- Curriculum Topic Title -->
+				{{-- Curriculum Topic Title --}}
 				<div class="flex flex-col">
 					<label for="topic_title">Curriculum Topic Title<span class="text-red">*</span></label>
 					<x-input id="topic_title" class="w-full mt-1" type="text" name="topic_title" style="border-width: 3px;" value="{{ old('topic_title') }}" placeholder="Curriculum topic title" autofocus />
@@ -115,7 +115,7 @@
 					</x-button>
 				</div>
 
-				<!-- Helper -->
+				{{-- Helper --}}
 				<input type="hidden" name="h-last-popup" class="h-last-popup">
 				<input type="hidden" name="h-route" class="h-route">
 				<input type="hidden" name="h-ctopic" class="h-ctopic">
@@ -123,12 +123,12 @@
 		</div>
 	</x-popup>
 
-	<!-- Delete curriculum topic -->
+	{{-- Delete curriculum topic --}}
 	<x-confirmation popup_title="Delete Curriculum Topic" id="delete-curriculum-topic">
 		Are you sure want to <span class="font-bold text-red">delete</span> the Curriculum Topic <span class="font-bold text-light-blue" id="del-ct-name"></span> from this course?
 	</x-confirmation>
 
-	<!-- Copy syllabus -->
+	{{-- Copy syllabus --}}
 	<x-popup popup_title="Copy Syllabus Data" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="copy-syllabus-data">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<p class="mt-4"><strong class="text-red">Warning:</strong> You're about to copy topics, activities, sessions, and learning outcomes from the selected course below. This will <strong>erase current existing topics, activities, sessions, and learning outcomes from this course</strong> and replace with the data from the selected couse.</p>
@@ -154,7 +154,7 @@
 
 @section("content")
 	<x-section-container class="mb-10">
-		<!-- Page title -->
+		{{-- Page title --}}
 		<x-back-button href="{{ route('admin.course.index') }}"></x-back-button>
 		<div class="flex items-center justify-between">
 			<x-page-title style="margin-bottom: 0;">{{ $course->course_name }}</x-page-title>
@@ -167,32 +167,16 @@
 		</div>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		<!-- Flash messages -->
-		@if(session()->has("successUpdateCourseData"))
-			<x-badge-success badge_text="{{ session('successUpdateCourseData') }}"></x-badge-success>
-		@elseif(session()->has("successBatchAssign"))
-			<x-badge-success badge_text="{{ session('successBatchAssign') }}"></x-badge-success>
-		@elseif(session()->has("successAddLearningOutcome"))
-			<x-badge-success badge_text="{{ session('successAddLearningOutcome') }}"></x-badge-success>
-		@elseif(session()->has("successEditLearningOutcome"))
-			<x-badge-success badge_text="{{ session('successEditLearningOutcome') }}"></x-badge-success>
-		@elseif(session()->has("successDeleteLearningOutcome"))
-			<x-badge-warning badge_text="{{ session('successDeleteLearningOutcome') }}"></x-badge-warning>
-		@elseif(session()->has("successImportStudent"))
-			<x-badge-success badge_text="{{ session('successImportStudent') }}"></x-badge-success>
-		@elseif(session()->has("successImportExcelCurriculum"))
-			<x-badge-success badge_text="{{ session('successImportExcelCurriculum') }}"></x-badge-success>
-		@elseif(session()->has("successDeleteCurriculumTopic"))
-			<x-badge-warning badge_text="{{ session('successDeleteCurriculumTopic') }}"></x-badge-warning>
-		@elseif(session()->has("successBatchAssignTeacher"))
-			<x-badge-success badge_text="{{ session('successBatchAssignTeacher') }}"></x-badge-success>
-		@elseif(session()->has("successCopySyllabus"))
-			<x-badge-success badge_text="{{ session('successCopySyllabus') }}"></x-badge-success>
-		@elseif(session()->has("failCopySyllabus"))
-			<x-badge-danger badge_text="{{ session('failCopySyllabus') }}"></x-badge-danger>
+		{{-- Flash messages --}}
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
-		<!-- Course informations -->
+		{{-- Course informations --}}
 		<div class="w-full flex flex-col gap-y-4">
 			<div class="w-full flex gap-x-4">
 				<div class="flex flex-col w-1/2">
@@ -239,7 +223,7 @@
 			<x-button type="button" id="delete-course-btn"  data-route="{{ route('admin.course.destroy', $course->id) }}" data-del_course_name="{{ $course->course_name }}"><i class="bi bi-trash3"></i> Delete</x-button>
 		</div>
 
-		<!-- Learning Outcomes -->
+		{{-- Learning Outcomes --}}
 		<div class="w-full bg-slate-400 mt-12" style="height: 2px;"></div>
 		<div class="flex items-center justify-between">
 			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Learning Outcomes</h2>
@@ -284,7 +268,7 @@
 			</table>
 		</div>
 
-		<!-- Assigned teachers and students -->
+		{{-- Assigned teachers and students --}}
 		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
 		<div class="my-3 flex items-center justify-between">
 			<h2 class="font-extrabold text-xl text-dark-blue">List of Assigned Teachers</h2>
@@ -346,7 +330,7 @@
 			@endforelse
 		</div>
 
-		<!-- Curriculum -->
+		{{-- Curriculum --}}
 		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
 		<div class="flex w-full justify-between items-center">
 			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Syllabus/Curriculum</h2>

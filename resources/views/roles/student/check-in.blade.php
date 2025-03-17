@@ -11,14 +11,18 @@
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Self Attendance</h1>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(session()->has("failedValidating"))
-			<x-badge-danger badge_text="{{ session('failedValidating') }}"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<form action="{{ route('student.mycourse.check-in.store', $course->id) }}" method="post" enctype="multipart/form-data">
 			@csrf
 
-			<!-- Check In Time -->
+			{{-- Check In Time --}}
 			<div class="w-full flex flex-col mt-4">
 				<x-label for="check_in_time">Check In Time<span class="text-red">*</span></x-label>
 				<x-input id="_check_in_time" name="_check_in_time" class="w-full cursor-not-allowed" type="text" disabled/>

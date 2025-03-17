@@ -9,19 +9,19 @@
 
         <title>Sangnila LMS</title>
 
-        <!--Font-->
+        {{--Font--}}
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
 
-        <!--Styles-->
+        {{--Styles--}}
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
         <link rel="stylesheet" href={{ asset("css/admin.css") }}>
         <link rel="stylesheet" href={{ asset("css/color-pallete.css") }}>
 
-        <!-- Jquery -->
+        {{-- Jquery --}}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     </head>
 
@@ -30,7 +30,7 @@
 			{{ trans("strings.version") }} <span id="screen"></span>
 		</div>
 
-		<!-- Loading popup -->
+		{{-- Loading popup --}}
 		<div class="popup-container hidden w-full h-full fixed top-0 flex items-center justify-center" style="backdrop-filter: blur(5px); z-index: 100; background: rgba(0, 0, 0, 0.3);">
 			<div class="rounded-3xl bg-white py-5 px-6 popup w-1/3 h-1/4 flex gap-3 items-center justify-center" id="loading-popup">
 				<div class="loader w-12 h-12 border-8 border-t-transparent border-light-blue rounded-full animate-spin"></div>

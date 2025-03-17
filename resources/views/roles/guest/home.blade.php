@@ -15,19 +15,23 @@
 			</div>
 
 			<div class="w-4/5 flex flex-col items-stretch mt-8">
-				<!-- Session Status -->
+				{{-- Session Status --}}
 				<x-auth-session-status class="mb-4" :status="session('status')" />
 
-				@if(session()->has("status"))
-					<x-badge-success badge_text="{{ session('status') }}"></x-badge-success>
+				@if(session()->has("success"))
+					<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+				@elseif(session()->has("warning"))
+					<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+				@elseif(session()->has("danger"))
+					<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 				@endif
 
-				<!-- Email Address -->
+				{{-- Email Address --}}
 				<div class="mt-4">
 					<x-input id="email" class="w-full rounded-xl" type="email" name="email" :value="old('email')" placeholder="Email Address" style="height: 50px" autofocus />
 				</div>
 
-				<!-- Password -->
+				{{-- Password --}}
 				<div class="mt-6 relative">
 					<button type="button" class="absolute right-2 h-full text-slate-400 font-bold w-12" id="togglePassword"></button>
 					<x-input id="password" class="w-full rounded-xl" type="password" name="password" style="height: 50px; padding-right: 60px;"
@@ -35,7 +39,7 @@
 				</div>
 
 				<div class="w-full flex justify-between mt-0 md:mt-3 items-center">
-					<!-- Remember Me -->
+					{{-- Remember Me --}}
 					<div class="flex items-center">
 						<input type="checkbox" name="remember" id="remember_me" class="mr-2 form-checkbox h-5 w-5 border-2 rounded border-slate-400 text-blue-500 bg-white" />
 						<label for="remember_me" class="text-dark-blue">Remember me</label>

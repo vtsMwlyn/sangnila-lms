@@ -3,7 +3,7 @@
 
 	<a href="{{ route('home') }}" class="font-bold text-yellow-500">Home</a>
 
-	<!-- Admins -->
+	{{-- Admins --}}
 	@if(Auth::user()->role_id == 1)
 		@if(Request::is("*course*"))
 			> <a href="{{ route('admin.course.index') }}" class="font-bold text-yellow-500">All Courses</a>

@@ -12,7 +12,7 @@
 			@endphp
 			<a href="{{ route('teacher.mycourse.show', ['course_id' => $course->id]) }}"  class="oneperthree transition duration-300 hover:scale-105 relative">
 				<div class="bg-white rounded-3xl p-5 shadow-lg">
-					<!-- Course information -->
+					{{-- Course information --}}
 					<p class="font-bold text-dark-blue">{{ $course->course_name }} - {{ ucwords($course->level) }}</p>
 					<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 

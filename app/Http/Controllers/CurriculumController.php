@@ -117,10 +117,10 @@ class CurriculumController extends Controller
 			]);
 		}
 		catch(Exception $e){
-			return back()->with("systemFail", "System failed to create curriculum topic, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to create curriculum topic, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $new_curriculum_topic->id]))->with("successEditCurriculumTopic", "Successfully added new curriculum topic data!");
+		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $new_curriculum_topic->id]))->with("success", "Successfully added new curriculum topic data!");
 	}
 
 	public function admin_edit_topic($course_id, $curriculum_topic_id){
@@ -137,10 +137,10 @@ class CurriculumController extends Controller
 			CurriculumTopic::findOrFail($curriculum_topic_id)->update(["title" => $request->topic_title]);
 		}
 		catch(Exception $e){
-			return back()->with("systemFail", "System failed to edit curriculum topic, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to edit curriculum topic, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route('admin.course.curriculum.topic.details', [$course_id, CurriculumTopic::find($curriculum_topic_id)->id]))->with("successEditCurriculumTopic", "Successfully updated the curriculum topic data!");
+		return redirect(route('admin.course.curriculum.topic.details', [$course_id, CurriculumTopic::find($curriculum_topic_id)->id]))->with("success", "Successfully updated the curriculum topic data!");
 	}
 
 	public function admin_delete_topic($course_id, $curriculum_topic_id){
@@ -154,7 +154,7 @@ class CurriculumController extends Controller
 		$course = Course::findOrFail($course_id);
 		CurriculumTopic::destroy($curriculum_topic_id);
 
-		return redirect(route('admin.course.show', $course_id))->with("successDeleteCurriculumTopic", "Successfully removed the curriculum topic from " . $course->course_name . "!");
+		return redirect(route('admin.course.show', $course_id))->with("warning", "Successfully removed the curriculum topic from " . $course->course_name . "!");
 	}
 
 	public function admin_topic_details($course_id, $curriculum_topic_id){
@@ -210,11 +210,11 @@ class CurriculumController extends Controller
 
 		}
 		catch(Exception $e){
-			return back()->with("systemFail", "System failed to create curriculum activity, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to create curriculum activity, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 
-		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $ctopic->id]))->with("successAddCurriculumActivity", "Successfully added the curriculum activity data!");
+		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $ctopic->id]))->with("success", "Successfully added the curriculum activity data!");
 	}
 
 	public function admin_edit_activity($course_id, $curriculum_topic_id, $curriculum_activity_id){
@@ -299,10 +299,10 @@ class CurriculumController extends Controller
 		catch(Exception $e){
 			DB::rollBack();
 
-			return back()->with("systemFail", "System failed to edit curriculum activity, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to edit curriculum activity, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $cactivity->curriculum_topic->id]))->with("successEditCurriculumActivity", "Successfully updated the curriculum topic data!");
+		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $cactivity->curriculum_topic->id]))->with("success", "Successfully updated the curriculum topic data!");
 	}
 
 	public function admin_delete_activity($course_id, $curriculum_topic_id, $curriculum_activity_id){
@@ -318,7 +318,7 @@ class CurriculumController extends Controller
 
 		$activity->delete();
 
-		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $topic->id]))->with("successDeleteCurriculumActivity", "Successfully removed the curriculum activity from " . $topic->title . "!");
+		return redirect(route('admin.course.curriculum.topic.details', [$course_id, $topic->id]))->with("warning", "Successfully removed the curriculum activity from " . $topic->title . "!");
 	}
 
 
@@ -373,10 +373,10 @@ class CurriculumController extends Controller
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("failCopySyllabus", "System failed to copy syllabus data from the targetted course, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to copy syllabus data from the targetted course, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("admin.course.show", $current_course->id))->with("successCopySyllabus", "Successfully copied syllabus data from the targetted course!");
+		return redirect(route("admin.course.show", $current_course->id))->with("success", "Successfully copied syllabus data from the targetted course!");
 	}
 
 
@@ -449,10 +449,10 @@ class CurriculumController extends Controller
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to synchronize your course topics and activities with the curriculum, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to synchronize your course topics and activities with the curriculum, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("teacher.mycourse.show", $course_id))->with("successSynchronizeCurriculum", "Your class' topic and activities have been successfully synchronized with the curriculum!");
+		return redirect(route("teacher.mycourse.show", $course_id))->with("success", "Your class' topic and activities have been successfully synchronized with the curriculum!");
 	}
 
 	public function teacher_pick_course($course_id){
@@ -557,9 +557,9 @@ class CurriculumController extends Controller
 		catch(Exception $e){
 			DB::rollback();
 			throw $e;
-			// return back()->with("systemFail", "System failed to save selected syllabus topic and activities to your course's topics and activities. Please report this error to our IT team. Error detail: " . $e->getMessage());
+			// return back()->with("danger", "System failed to save selected syllabus topic and activities to your course's topics and activities. Please report this error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route('teacher.mycourse.show', $course->id))->with("successPickFromCurriculum", "Successfully picked topics and activities from the curriculum");
+		return redirect(route('teacher.mycourse.show', $course->id))->with("success", "Successfully picked topics and activities from the curriculum");
 	}
 }

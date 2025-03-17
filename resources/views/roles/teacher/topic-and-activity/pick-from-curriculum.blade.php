@@ -13,8 +13,12 @@
 	<x-section-container>
 		<x-page-title>{{ __("Pick from Syllabus") }}</x-page-title>
 
-		@if(session()->has("systemFail"))
-			<x-badge-danger badge_text="{{ session('systemFail') }}" style="margin-top: 0;" class="mb-8"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<h2 class="mb-4 font-extrabold text-xl text-dark-blue">Select topic and activities from syllabus:</h2>

@@ -10,7 +10,7 @@
 
 @section("popup")
 	<x-popup popup_title="Attendance Details" class="w-5/6 flex flex-col items-stretch justify-center overflow-y-auto" id="attendance-details">
-		<!-- Popup content -->
+		{{-- Popup content --}}
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<div class="w-full overflow-x-auto">
 				<table class="w-full">
@@ -47,7 +47,7 @@
 					</button>
 				@endif
 
-				<!-- Already checked in but haven't checked out -->
+				{{-- Already checked in but haven't checked out --}}
 				@if($unfinishedSelfAttendance && !$unfinishedSelfAttendance->check_out_time)
 					<form action="{{ route('teacher.attendance.check-out.store', $course->id) }}" method="post">
 						@csrf
@@ -56,13 +56,13 @@
 						</x-button>
 					</form>
 
-				<!-- Already checked in and checked out -->
+				{{-- Already checked in and checked out --}}
 				@elseif($unfinishedSelfAttendance && $unfinishedSelfAttendance->check_out_time)
 					<button disabled class="bg-gray-800 text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold disabled:opacity-50">
 						<i class="bi bi-stopwatch"></i> {{ $unfinishedSelfAttendance->check_out_time }}
 					</button>
 
-				<!-- Haven't checked in and haven't checked out -->
+				{{-- Haven't checked in and haven't checked out --}}
 				@else
 					<button disabled class="bg-gray-800 text-center px-5 py-2 border-transparent rounded-xl text-white font-semibold disabled:opacity-50">
 						<i class="bi bi-stopwatch"></i> Check Out
@@ -71,7 +71,7 @@
 			</div>
 		</div>
 
-		<!-- For larger screen -->
+		{{-- For larger screen --}}
 		<div class="flex mt-4 w-full flex-wrap">
 			<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id, 'content' => 'student attendances']) }}"
 				class="py-2 w-1/2 lg:w-1/6 sm:w-48 text-center hover:bg-slate-200"
@@ -88,18 +88,12 @@
 
 		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
-		@if(session()->has("successUploadAttendance"))
-			<x-badge-success badge_text="{{ session('successUploadAttendance') }}"></x-badge-success>
-		@elseif(session()->has("successCheckOut"))
-			<x-badge-success badge_text="{{ session('successCheckOut') }}"></x-badge-success>
-		@elseif(session()->has("failedCheckOut"))
-			<x-badge-danger badge_text="{{ session('failedCheckOut') }}"></x-badge-danger>
-		@elseif(session()->has("successEditAttendance"))
-			<x-badge-success badge_text="{{ session('successEditAttendance') }}"></x-badge-success>
-		@elseif(session()->has("successCheckIn"))
-			<x-badge-success badge_text="{{ session('successCheckIn') }}"></x-badge-success>
-		@elseif(session()->has("courseHasNoTopicsAndActivities"))
-			<x-badge-danger badge_text="{!! session('courseHasNoTopicsAndActivities') !!}"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		@if(request('content') == 'student attendances' || !request('content'))

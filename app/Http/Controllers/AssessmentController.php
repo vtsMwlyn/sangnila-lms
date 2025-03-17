@@ -47,7 +47,7 @@ class AssessmentController extends Controller
             'overall_description' => e($validatedData['overall_description']),
         ]);
 
-        return redirect(route('teacher.student.show', [$student->id, $course->id]))->with('successUploadAssessment', 'Successfully uploaded the assessment for this student!');
+        return redirect(route('teacher.student.show', [$student->id, $course->id]))->with('success', 'Successfully uploaded the assessment for this student!');
     }
 
     // public function update(Request $request, $assessment_id){
@@ -78,7 +78,7 @@ class AssessmentController extends Controller
     //         'overall_description' => e($validatedData['overall_description']),
     //     ]);
 
-    //     return redirect(route('admin.student.show', [$student->id, $course->id]))->with('successEditAssessment', 'Successfully edited the assessment for this student!');
+    //     return redirect(route('admin.student.show', [$student->id, $course->id]))->with('success', 'Successfully edited the assessment for this student!');
     // }
 
 
@@ -121,6 +121,6 @@ class AssessmentController extends Controller
             'custom_name' => $validatedData['custom_name'],
         ]);
 
-        return redirect(route('admin.student.show', [$student->id, $course->id]))->with('successEditAssessment', 'Successfully edited the assessment for this student!');
+        return redirect(route('admin.student.show', [$student->id, $course->id]))->with('success', 'Successfully edited the assessment for this student!');
     }
 }

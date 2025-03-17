@@ -18,8 +18,12 @@
 		<x-page-title>{{ __("Edit Account's Data") }}</x-page-title>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-		@if(session()->has("systemFail"))
-			<x-badge-danger badge_text="{{ session('systemFail') }}" class="mb-5"></x-badge-danger>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<form action="{{ route('admin.account.acc_edit.store', $account->id) }}" method="post" class="mt-3">
@@ -27,7 +31,7 @@
 			@method('PATCH')
 
 			<div class="flex w-full gap-5">
-				<!-- Account Name -->
+				{{-- Account Name --}}
 				<div class="flex w-1/2 flex-col">
 					<x-label for="full_name">New Account Name<span class="text-red">*</span></x-label>
 					<div class="flex flex-col w-full items-stretch">
@@ -36,7 +40,7 @@
 					</div>
 				</div>
 
-				<!-- Account Email -->
+				{{-- Account Email --}}
 				<div class="flex w-1/2 flex-col">
 					<x-label for="email">New Account Email<span class="text-red">*</span></x-label>
 					<div class="flex flex-col w-full items-stretch">
@@ -46,7 +50,7 @@
 			</div>
 
 			<div class="flex w-full gap-5 mt-3">
-				<!-- Role Selection -->
+				{{-- Role Selection --}}
 				<div class="flex w-1/2 flex-col">
 					<x-label for="role_id">Change Role<span class="text-red">*</span></x-label>
 					<div class="flex flex-col w-full items-stretch">
@@ -63,7 +67,7 @@
 					</div>
 				</div>
 
-				<!-- Gender Selection -->
+				{{-- Gender Selection --}}
 				<div class="flex w-1/2 flex-col">
 					<x-label for="gender">Change Gender<span class="text-red">*</span></x-label>
 					<div class="flex flex-col w-full items-stretch">

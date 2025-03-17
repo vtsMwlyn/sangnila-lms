@@ -11,7 +11,7 @@
 				<div class="rounded-3xl shadow-lg overflow-hidden relative">
 					<div class="absolute h-full w-full course-bg" style="background-size: cover; background-position: center; filter: brightness(0.5) blur(2px);"></div>
 					<div class="relative p-5 w-full h-full">
-						<!-- Course information -->
+						{{-- Course information --}}
 						<p class="font-bold text-white">{{ $course->course_name }}</p>
 						<div class="w-full bg-white mt-2 mb-3" style="height: 2px;"></div>
 						<div class="overflow-y-auto text-white" style="height: 100px;">{{ $course->course_description }}</div>

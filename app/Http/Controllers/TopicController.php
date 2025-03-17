@@ -40,11 +40,11 @@ class TopicController extends Controller
 			$newTopic = Topic::create(["course_id" => $course_id, "title" => $validatedData["title"], "user_id" => Auth::user()->id]);
 		}
 		catch(Exception $e){
-			return back()->with("systemFail", "System failed to create topic, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to create topic, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 
-		return redirect(route("teacher.mycourse.topic.show", [$course_id, $newTopic->id]))->with("successAddTopic", "Successfully added new topic to the course!");
+		return redirect(route("teacher.mycourse.topic.show", [$course_id, $newTopic->id]))->with("success", "Successfully added new topic to the course!");
 	}
 
 	// Edit topic input page
@@ -65,10 +65,10 @@ class TopicController extends Controller
 			Topic::findOrFail($topic_id)->update(["title" => $validatedData["title"]]);
 		}
 		catch(Exception $e){
-			return back()->with("systemFail", "System failed to edit topic, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to edit topic, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("teacher.mycourse.topic.show", [$course_id, $topic_id]))->with("successEditTopic", "Successfully updated topic data!");
+		return redirect(route("teacher.mycourse.topic.show", [$course_id, $topic_id]))->with("success", "Successfully updated topic data!");
 	}
 
 	// Topic deletion confirmation
@@ -82,6 +82,6 @@ class TopicController extends Controller
 	public function teacher_destroy($course_id, $topic_id){
 		Topic::findOrFail($topic_id)->delete();
 
-		return redirect(route("teacher.mycourse.show", $course_id))->with("successDeleteTopic", "Successfully deleted topic from the course!");
+		return redirect(route("teacher.mycourse.show", $course_id))->with("warning", "Successfully deleted topic from the course!");
 	}
 }

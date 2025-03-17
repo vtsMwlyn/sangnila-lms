@@ -14,7 +14,7 @@
         <form action="{{ route('teacher.student.store.assessment', [$student->id, $course->id]) }}" method="post">
             @csrf
 
-            <!-- Performance -->
+            {{-- Performance --}}
             <h3 class="text-blue-800 font-bold text-lg">Performance<span class="text-red">*</span></h3>
 
 			<div class="mt-2 flex flex-col w-full">
@@ -32,7 +32,7 @@
 				<x-textarea rows="4" id="performance_description" class="w-full mt-1" type="text" name="performance_description" placeholder="Enter student's performance evaluation">{!! old('performance_description') !!}</x-textarea>
 			</div>
 
-            <!-- Technical Skill -->
+            {{-- Technical Skill --}}
             <h3 class="text-blue-800 font-bold text-lg mt-8">Technical Skill<span class="text-red">*</span></h3>
 
 			<div class="mt-2 flex flex-col w-full">
@@ -50,7 +50,7 @@
 				<x-textarea rows="4" id="technical_skill_description" class="w-full mt-1" type="text" name="technical_skill_description" placeholder="Enter student's technical skill evaluation">{!! old('technical_skill_description') !!}</x-textarea>
 			</div>
 
-            <!-- Aesthetic Skill -->
+            {{-- Aesthetic Skill --}}
             <h3 class="text-blue-800 font-bold text-lg mt-8">Aesthetic Skill<span class="text-red">*</span></h3>
 
 			<div class="mt-2 flex flex-col w-full">
@@ -68,7 +68,7 @@
 				<x-textarea rows="4" id="aesthetical_skill_description" class="w-full mt-1" type="text" name="aesthetical_skill_description" placeholder="Enter student's aesthetical skill evaluation">{!! old('aesthetical_skill_description') !!}</x-textarea>
 			</div>
 
-            <!-- Overall -->
+            {{-- Overall --}}
             <h3 class="text-blue-800 font-bold text-lg mt-8">Overall<span class="text-red">*</span></h3>
 
 			<div class="mt-2 flex flex-col w-full">

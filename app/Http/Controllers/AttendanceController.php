@@ -103,17 +103,17 @@ class AttendanceController extends Controller {
 		$course = Course::findOrFail($course_id);
 
 		if($course->topics->count() == 0){
-			return back()->with('courseHasNoTopicsAndActivities', 'Please fill the topics and activities for this course first! <a href="' . route('teacher.mycourse.show', $course->id) . '" class="font-extrabold underline hover:text-yellow-500">Go to course</a>');
+			return back()->with('danger', 'Please fill the topics and activities for this course first! <a href="' . route('teacher.mycourse.show', $course->id) . '" class="font-extrabold underline hover:text-yellow-500">Go to course</a>');
 		}
 
 		$students = User::where("role_id", 3)->get();
-		$course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+		$all_course_students = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->orderByRaw('CASE WHEN learning_status = "learning" THEN 0 WHEN learning_status = "complete" THEN 1 ELSE 2 END')->get();
 
 		$remaining_students = [];
 
 		foreach($students as $s){
 			$student_is_not_teached = true;
-			foreach($course_students as $cs){
+			foreach($all_course_students as $cs){
 				if($cs->student->id == $s->id){
 					$student_is_not_teached = false;
 					break;
@@ -126,7 +126,7 @@ class AttendanceController extends Controller {
 		}
 
 		return view("roles.teacher.attendance.student-select", [
-			"course_students" => $course_students,
+			"course_students" => $all_course_students,
 			"remaining_students" => $remaining_students,
 			"course" => $course,
 		]);
@@ -134,7 +134,7 @@ class AttendanceController extends Controller {
 
 	public function submit_and_proceed(Request $request, $course_id){
 		if(!$request->selected_students){
-			return back()->with("failProceed", "Please select minimum one student!");
+			return back()->with("danger", "Please select minimum one student!");
 		}
 
 		$course = Course::findOrFail($course_id);
@@ -233,10 +233,10 @@ class AttendanceController extends Controller {
 		catch(Exception $e){
 			DB::rollback();
 
-			return back()->with("systemFail", "System failed to upload attendance, please report the error to our IT team. Error detail: " . $e->getMessage());
+			return back()->with("danger", "System failed to upload attendance, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("teacher.attendance.show", $course->id))->with("successUploadAttendance", "Attendance uploaded successfully!");
+		return redirect(route("teacher.attendance.show", $course->id))->with("success", "Attendance uploaded successfully!");
 	}
 
 	// ===== STUDENT ====== //
@@ -323,6 +323,13 @@ class AttendanceController extends Controller {
 			'all_lecturer_attendances' => $all_lecturer_attendances,
 			'all_student_attendances' => $all_student_attendances
 		]);
+	}
+
+	// Delete a lecturer attendance
+	public function admin_destroy_lecturer_attendance($self_attendance_id){
+		SelfAttendance::findOrFail($self_attendance_id)->delete();
+
+		return back()->with('warning', 'Successfully deleted the lecturer attendance data!');
 	}
 
 	// Input student attendance
@@ -423,7 +430,7 @@ class AttendanceController extends Controller {
 			DB::rollback();
 		}
 
-		return redirect(route('admin.student.show', $student->id))->with('successInputAttendance', 'Successfully inputed new attendance data for the student!');
+		return redirect(route('admin.student.show', $student->id))->with('success', 'Successfully inputed new attendance data for the student!');
 	}
 
 	public function admin_edit_student_attendance($student_attendance_id){
@@ -457,7 +464,7 @@ class AttendanceController extends Controller {
 
 		$sa->update($validatedData);
 
-		return redirect(route('admin.student.show', $sa->student->id))->with('successEditAttendance', 'The attendance data has been updated successfully!');
+		return redirect(route('admin.student.show', $sa->student->id))->with('success', 'The attendance data has been updated successfully!');
 	}
 
 	public function admin_destroy_student_attendance($student_attendance_id){
@@ -502,6 +509,6 @@ class AttendanceController extends Controller {
 			]);
 		}
 
-		return back()->with('successDeleteStudentAttendance', 'Successfully removed the attendance data!');
+		return back()->with('warning', 'Successfully removed the attendance data!');
 	}
 }

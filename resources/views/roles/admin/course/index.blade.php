@@ -5,7 +5,7 @@
 @endsection
 
 @section('popup')
-	<!-- Delete course -->
+	{{-- Delete course --}}
 	<x-confirmation method="delete" popup_title="Delete Course" id="delete-course-popup">
 		Are you sure want to <span class="font-bold text-red">delete</span> the Course <span class="font-bold text-light-blue" id="del-course-name"></span> from Sangnila LMS? <strong>This action will erase all data related to the course and can't be undone!</strong>
 	</x-confirmation>
@@ -28,12 +28,12 @@
 
 		<div class="w-full bg-slate-400 mt-6" style="height: 2px;"></div>
 
-		@if(session()->has("successCreateNewCourse"))
-			<x-badge-success badge_text="{{ session('successCreateNewCourse') }}">
-			</x-badge-success>
-		@elseif(session()->has("successDeleteCourse"))
-			<x-badge-warning badge_text="{{ session('successDeleteCourse') }}">
-			</x-badge-warning>
+		@if(session()->has("success"))
+			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
+		@elseif(session()->has("warning"))
+			<x-badge-warning badge_text="{{ session('warning') }}"></x-badge-warning>
+		@elseif(session()->has("danger"))
+			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
 		<div class="w-full overflow-x-auto" style="height: 60vh;">
