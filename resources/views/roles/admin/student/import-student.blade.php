@@ -122,7 +122,7 @@
 					</div>
 
 					<div class="mt-5 flex items-center">
-						<input type="checkbox" id="new_student" name="new_student" class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" checked>
+						<input type="checkbox" id="new_student" name="new_student" class="mr-2 h-5 w-5" checked>
 						<label for="new_student" class="font-semibold text-blue-950">Add as a new student</label>
 					</div>
 

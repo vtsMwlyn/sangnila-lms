@@ -24,24 +24,32 @@
 		<div class="flex flex-col gap-5 w-full lg:w-2/3">
 			{{-- Main stats --}}
 			<div class="w-full flex flex-wrap lg:flex-nowrap justify-center gap-5">
-				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
-					<img src="{{ asset('img/studentdashboard-materialsunlocked.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
-					<p class="font-bold text-black text-center">Courses Assigned</p>
+				<div class="rounded-3xl shadow-lg flex flex-col justify-between w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
+					<div class="flex flex-col items-center gap-2">
+						<img src="{{ asset('img/studentdashboard-materialsunlocked.svg') }}" class="h-8 md:h-10" alt="icon">
+						<p class="font-bold text-black text-center text-base">Courses Assigned</p>
+					</div>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $courses_assigned }}</p>
 				</div>
-				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
-					<img src="{{ asset('img/dashboard-studentsteached.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
-					<p class="font-bold text-black text-center">Students Teached</p>
+				<div class="rounded-3xl shadow-lg flex flex-col justify-between w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
+					<div class="flex flex-col items-center gap-2">
+						<img src="{{ asset('img/dashboard-studentsteached.svg') }}" class="h-8 md:h-10" alt="icon">
+						<p class="font-bold text-black text-center text-base">Students Teached</p>
+					</div>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $students_teached }}</p>
 				</div>
-				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
-					<img src="{{ asset('img/studentdashboard-sessionsattended.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
-					<p class="font-bold text-black text-center">Activities Created</p>
+				<div class="rounded-3xl shadow-lg flex flex-col justify-between w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
+					<div class="flex flex-col items-center gap-2">
+						<img src="{{ asset('img/studentdashboard-sessionsattended.svg') }}" class="h-8 md:h-10" alt="icon">
+						<p class="font-bold text-black text-center text-base">Activities Created</p>
+					</div>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $activities_created }}</p>
 				</div>
-				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
-					<img src="{{ asset('img/studentdashboard-assignmentsdone.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
-					<p class="font-bold text-black text-center">Assignments Given</p>
+				<div class="rounded-3xl shadow-lg flex flex-col justify-between w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
+					<div class="flex flex-col items-center gap-2">
+						<img src="{{ asset('img/studentdashboard-assignmentsdone.svg') }}" class="h-8 md:h-10" alt="icon">
+						<p class="font-bold text-black text-center text-base">Assignments Given</p>
+					</div>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $assignments_given }}</p>
 				</div>
 			</div>
@@ -49,7 +57,7 @@
 			{{-- My Attendances --}}
 			<div class="rounded-3xl p-5 shadow-lg grow" style="background-color: #FEFEFEB2;">
 				<div class="flex w-full justify-between">
-					<p class="font-bold text-dark-blue">My Attendances</p>
+					<p class="font-bold text-dark-blue text-base">My Attendances</p>
 					<p class="italic text-slate-600">Server time: <span id="server-time"></span> GMT+7</p>
 				</div>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
@@ -102,7 +110,7 @@
 		{{-- Todo list --}}
 		<div class="w-full lg:w-1/3 flex gap-5">
 			<div class="w-full rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
-				<p class="font-bold text-dark-blue">To Do List</p>
+				<p class="font-bold text-dark-blue text-base">To Do List</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 				<div class="w-full flex flex-col overflow-y-auto" style="height: 550px;">
@@ -129,7 +137,7 @@
 		{{-- News and announcement --}}
 		<div class="w-full lg:w-1/2 rounded-3xl py-5 shadow-lg" style="background-color: #FEFEFEB2;">
 			<div class="px-5">
-				<p class="font-bold text-dark-blue">News and Announcement</p>
+				<p class="font-bold text-dark-blue text-base">News and Announcement</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 			</div>
 
@@ -189,7 +197,7 @@
 		{{-- Calendar --}}
 		<div class="w-full lg:w-1/2 rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
 			<div class="flex justify-between w-full items-center">
-				<p class="font-bold text-dark-blue">Calendar</p>
+				<p class="font-bold text-dark-blue text-base">Calendar</p>
 				@if(!session('google_user_info.name'))
 					<a href="{{ route('teacher.google.redirect') }}" class="bg-white shadow-lg py-1 px-3 flex items-center justify-center">
 						<img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" style="width: 20px; margin-right: 10px;">
@@ -229,7 +237,7 @@
 				slidesPerView: 1,
 				spaceBetween: 0,
 				freeMode: true,
-				mousewheel: true, // Allow scrolling with mouse wheel
+				mousewheel: false, // Allow scrolling with mouse wheel
 				grabCursor: true, // Allow grabbing on desktop for dragging
 				loop: true,
 				autoplay: {

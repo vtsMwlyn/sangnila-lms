@@ -146,7 +146,7 @@
 
 								<div class="swiper-slide relative">
 									<button type="button" id="{{ $loop->iteration }}" data-session="{{ $groupedAP['session'] }}" data-is_unlocked="{{ $is_unlocked }}"
-										class="flex items-center justify-center session-buttons px-2 py-2.5 mb-8 mt-4 rounded-xl text-base font-extrabold
+										class="flex items-center justify-center session-buttons px-2 py-2.5 mb-8 mt-4 rounded-xl text-base font-extrabold hover:scale-105
 										@if($is_unlocked) unlocked-session @else locked-session @endif @if($loop->iteration == 1) selected-session @endif"
 										style="border-width: 3px; min-width: 110px;">
 										Session {{ $loop->iteration }}

@@ -40,7 +40,7 @@
 				</div>
 
 				<div class="mt-4 flex items-center">
-					<input type="checkbox" id="use_default_password" name="use_default_password" class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" checked>
+					<input type="checkbox" id="use_default_password" name="use_default_password" class="mr-2 h-5 w-5" checked>
 					<x-label for="user_default_password" class="text-blue font-semibold">Use default password</x-label>
 				</div>
 

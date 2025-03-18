@@ -9,24 +9,32 @@
 		<div class="flex flex-col gap-5 w-full lg:w-2/3">
 			{{-- Main stats --}}
 			<div class="w-full flex flex-wrap lg:flex-nowrap justify-center gap-5">
-				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
-					<img src="{{ asset('img/studentdashboard-materialsunlocked.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
-					<p class="font-bold text-black text-center text-base">Active Courses</p>
+				<div class="rounded-3xl shadow-lg flex flex-col justify-between w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
+					<div class="flex flex-col items-center gap-2">
+						<img src="{{ asset('img/studentdashboard-materialsunlocked.svg') }}" class="h-8 md:h-10" alt="icon">
+						<p class="font-bold text-black text-center text-base">Active Courses</p>
+					</div>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $active_courses }}</p>
 				</div>
-				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
-					<img src="{{ asset('img/studentdashboard-courseenrolled.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
-					<p class="font-bold text-black text-center text-base">Active Students</p>
+				<div class="rounded-3xl shadow-lg flex flex-col justify-between w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
+					<div class="flex flex-col items-center gap-2">
+						<img src="{{ asset('img/studentdashboard-courseenrolled.svg') }}" class="h-8 md:h-10" alt="icon">
+						<p class="font-bold text-black text-center text-base">Active Students</p>
+					</div>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $active_students }}</p>
 				</div>
-				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
-					<img src="{{ asset('img/dashboard-activeteachers.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
-					<p class="font-bold text-black text-center text-base">Active Teachers</p>
+				<div class="rounded-3xl shadow-lg flex flex-col justify-between w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
+					<div class="flex flex-col items-center gap-2">
+						<img src="{{ asset('img/dashboard-activeteachers.svg') }}" class="h-8 md:h-10" alt="icon">
+						<p class="font-bold text-black text-center text-base">Active Teachers</p>
+					</div>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $active_teachers }}</p>
 				</div>
-				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
-					<img src="{{ asset('img/studentdashboard-assignmentsdone.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
-					<p class="font-bold text-black text-center text-base">Max Session Students</p>
+				<div class="rounded-3xl shadow-lg flex flex-col justify-between w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
+					<div class="flex flex-col items-center gap-2">
+						<img src="{{ asset('img/studentdashboard-assignmentsdone.svg') }}" class="h-8 md:h-10" alt="icon">
+						<p class="font-bold text-black text-center text-base">Max Session Students</p>
+					</div>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $max_session_students }}</p>
 				</div>
 			</div>
@@ -159,7 +167,7 @@
 				slidesPerView: 1,
 				spaceBetween: 0,
 				freeMode: true,
-				mousewheel: true, // Allow scrolling with mouse wheel
+				mousewheel: false, // Allow scrolling with mouse wheel
 				grabCursor: true, // Allow grabbing on desktop for dragging
 				loop: true,
 				autoplay: {

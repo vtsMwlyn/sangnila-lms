@@ -281,8 +281,8 @@
 
 				let i = 0;
 				for(let submission of all_submission_data[parseInt($(this).attr("id")) - 1]){
-					const col1 = $('<td>').addClass('py-3 px-4 text-center").text(i + 1);
-					const col2 = $('<td>').addClass('py-3 px-4").text(new Date(submission.created_at).toLocaleString('en-GB', {
+					const col1 = $('<td>').addClass('py-3 px-4 text-center').text(i + 1);
+					const col2 = $('<td>').addClass('py-3 px-4').text(new Date(submission.created_at).toLocaleString('en-GB', {
 						day: '2-digit',
 						month: 'short',
 						year: 'numeric',
@@ -290,8 +290,8 @@
 						minute: '2-digit',
 						hour12: false
 					}));
-					const col3 = $('<td>').addClass('py-3 px-4").html(`<a href="${submission.link}" class="font-semibold hover:underline">${submission.title}</a>`);
-					const col4 = $('<td>').addClass('py-3 px-4").text(submission.feedback);
+					const col3 = $('<td>').addClass('py-3 px-4').html(`<a href="${submission.link}" class="font-semibold hover:underline">${submission.title}</a>`);
+					const col4 = $('<td>').addClass('py-3 px-4').text(submission.feedback);
 
 					let rowBg;
 					if(i % 2 == 0){

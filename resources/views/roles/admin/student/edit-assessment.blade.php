@@ -95,7 +95,7 @@
 			</div>
 
 			<label for="_certificate_access" class="flex items-center gap-1 mt-4">
-				<input type="checkbox" id="_certificate_access" name="_certificate_access" class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('certificate_access', $assessment->certificate_accessible) == 1) checked @endif/>
+				<input type="checkbox" id="_certificate_access" name="_certificate_access" class="mr-2 h-5 w-5" @if(old('certificate_access', $assessment->certificate_accessible) == 1) checked @endif/>
 				Student can access certificate
 			</label>
 

@@ -35,7 +35,7 @@
 				@forelse ($course_students->where('learning_status', 'learning') as $cs)
 					<div class="my-2 flex gap-3 items-center">
 						<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $cs->student_id }}"
-						class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300">
+						class="mr-2 h-5 w-5">
 						@if($cs->student->details->profpic)
 							<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
 						@else
@@ -67,7 +67,7 @@
 					@forelse ($course_students->where('learning_status', '!=', 'learning') as $cs)
 						<div class="my-2 flex gap-3 items-center">
 							<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $cs->student_id }}"
-							class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300">
+							class="mr-2 h-5 w-5">
 							@if($cs->student->details->profpic)
 								<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
 							@else
@@ -86,7 +86,7 @@
 					@forelse ($remaining_students as $rs)
 						<div class="my-4 other-students flex gap-3 items-center">
 							<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $rs->id }}"
-							class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300">
+							class="mr-2 h-5 w-5">
 							@if($rs->details->profpic)
 								<img src="{{ Storage::url("app/public/" . $rs->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
 							@else

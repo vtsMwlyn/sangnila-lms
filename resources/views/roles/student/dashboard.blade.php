@@ -9,31 +9,39 @@
 		<div class="flex flex-col gap-5 w-full lg:w-2/3">
 			{{-- Main stats --}}
 			<div class="w-full flex flex-wrap lg:flex-nowrap justify-center gap-5">
-				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
-					<img src="{{ asset('img/studentdashboard-courseenrolled.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
-					<p class="font-bold text-black text-center">Courses Enrolled</p>
+				<div class="rounded-3xl shadow-lg flex flex-col justify-between w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
+					<div class="flex flex-col items-center gap-2">
+						<img src="{{ asset('img/studentdashboard-courseenrolled.svg') }}" class="h-8 md:h-10" alt="icon">
+						<p class="font-bold text-black text-center text-base">Courses Enrolled</p>
+					</div>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $courses_enrolled }}</p>
 				</div>
-				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
-					<img src="{{ asset('img/studentdashboard-materialsunlocked.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
-					<p class="font-bold text-black text-center">Materials Unlocked</p>
+				<div class="rounded-3xl shadow-lg flex flex-col justify-between w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
+					<div class="flex flex-col items-center gap-2">
+						<img src="{{ asset('img/studentdashboard-materialsunlocked.svg') }}" class="h-8 md:h-10" alt="icon">
+						<p class="font-bold text-black text-center text-base">Materials Unlocked</p>
+					</div>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $activities_unlocked }}</p>
 				</div>
-				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
-					<img src="{{ asset('img/studentdashboard-sessionsattended.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
-					<p class="font-bold text-black text-center">Sessions Attended</p>
+				<div class="rounded-3xl shadow-lg flex flex-col justify-between w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
+					<div class="flex flex-col items-center gap-2">
+						<img src="{{ asset('img/studentdashboard-sessionsattended.svg') }}" class="h-8 md:h-10" alt="icon">
+						<p class="font-bold text-black text-center text-base">Sessions Attended</p>
+					</div>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $sessions_attended }}</p>
 				</div>
-				<div class="rounded-3xl shadow-lg flex flex-col w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
-					<img src="{{ asset('img/studentdashboard-assignmentsdone.svg') }}" class="w-8 h-8 md:w-12 md:h-12" alt="icon">
-					<p class="font-bold text-black text-center">Assignments Done</p>
+				<div class="rounded-3xl shadow-lg flex flex-col justify-between w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
+					<div class="flex flex-col items-center gap-2">
+						<img src="{{ asset('img/studentdashboard-assignmentsdone.svg') }}" class="h-8 md:h-10" alt="icon">
+						<p class="font-bold text-black text-center text-base">Assignments Done</p>
+					</div>
 					<p class="text-xl md:text-3xl font-extrabold">{{ $assignments_done }}</p>
 				</div>
 			</div>
 
 			{{-- Progress --}}
 			<div class="rounded-3xl p-5 shadow-lg grow" style="background-color: #FEFEFEB2;">
-				<p class="font-bold text-dark-blue">Courses Progress</p>
+				<p class="font-bold text-dark-blue text-base">Courses Progress</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 				@php
@@ -72,7 +80,7 @@
 		{{-- Todo list --}}
 		<div class="w-full lg:w-1/3 flex flex-col md:flex-row lg:flex-col gap-5">
 			<div class="w-full rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
-				<p class="font-bold text-dark-blue">Assignment Reminder</p>
+				<p class="font-bold text-dark-blue text-base">Assignment Reminder</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 				<div class="w-full flex flex-col overflow-y-auto" style="height: 250px;">
@@ -89,7 +97,7 @@
 			</div>
 
 			<div class="w-full rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
-				<p class="font-bold text-dark-blue">Self Attendance Reminder</p>
+				<p class="font-bold text-dark-blue text-base">Self Attendance Reminder</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 				<div class="w-full flex flex-col overflow-y-auto" style="height: 250px;">
@@ -118,7 +126,7 @@
 		{{-- News and announcement --}}
 		<div class="w-full lg:w-1/2 rounded-3xl py-5 shadow-lg" style="background-color: #FEFEFEB2;">
 			<div class="px-5">
-				<p class="font-bold text-dark-blue">News and Announcement</p>
+				<p class="font-bold text-dark-blue text-base">News and Announcement</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 			</div>
 
@@ -177,7 +185,7 @@
 
 		{{-- Calendar --}}
 		<div class="w-full lg:w-1/2 rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
-			<p class="font-bold text-dark-blue">Calendar</p>
+			<p class="font-bold text-dark-blue text-base">Calendar</p>
 			<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 			<iframe src="https://calendar.google.com/calendar/embed?src=id.indonesian%23holiday%40group.v.calendar.google.com&ctz=Asia%2FJakarta&bgcolor=%23ffffff&showTabs=0&showPrint=0&showTitle=0&showCalendars=0" style="border: 0" height="380" scrolling="no" class="w-full mt-5" frameborder="0" scrolling="no"></iframe>
@@ -191,7 +199,7 @@
 				slidesPerView: 1,
 				spaceBetween: 0,
 				freeMode: true,
-				mousewheel: true, // Allow scrolling with mouse wheel
+				mousewheel: false, // Allow scrolling with mouse wheel
 				grabCursor: true, // Allow grabbing on desktop for dragging
 				loop: true,
 				autoplay: {

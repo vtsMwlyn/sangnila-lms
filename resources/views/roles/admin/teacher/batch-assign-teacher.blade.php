@@ -50,7 +50,7 @@
 					@forelse ($teachers as $teacher)
 						<div class="my-4 teachers flex gap-3 items-center">
 							<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $teacher->id }}"
-							class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300">
+							class="mr-2 h-5 w-5">
 							@if($teacher->details->profpic)
 								<img src="{{ Storage::url("app/public/" . $teacher->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
 							@else

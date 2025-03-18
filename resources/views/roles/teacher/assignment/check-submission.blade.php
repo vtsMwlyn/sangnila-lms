@@ -10,6 +10,27 @@
 	> <span>Submissions</span>
 @endsection
 
+@section('popup')
+	<x-popup popup_title="Student's Submission History" class="w-5/6 flex flex-col items-stretch justify-center overflow-y-auto" id="student-submission-popup">
+		{{-- Popup content --}}
+		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
+			<div class="w-full overflow-x-auto">
+				<table class="w-full">
+					<thead>
+						<th class="py-3 px-4 border-b-2 border-slate-400">Time</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Title</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Link</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Status</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Feedback</th>
+					</thead>
+					<tbody id="student-submission-tbody">
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</x-popup>
+@endsection
+
 @section("content")
 	<x-section-container>
 		<x-back-button href="{{ route('teacher.assignment.show', $assignment->course->id) }}"></x-back-button>
@@ -26,6 +47,7 @@
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Submission title</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Status</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Submission link</th>
+					<th class="text-center py-3 px-4 border-b-2 border-slate-400">Action</th>
 				</thead>
 				<tbody>
 					@forelse ($latest_submissions as $submission)
@@ -44,6 +66,11 @@
 							<td class="py-3 px-4">
 								<a class="text-blue-600 hover:underline font-bold" href="{{ $submission->link }}" target="_blank">{{ $submission->link }}</a>
 							</td>
+							<td class="py-3 px-4">
+								<div class="flex w-full justify-center">
+									<button type="button" class="student-submission-btn" data-submissions="{{ $assignment->submissions->where('student_id', $submission->student_id) }}"><img src="{{ asset('img/history.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110"></button>
+								</div>
+							</td>
 						</tr>
 					@empty
 						<tr><td class="rounded-xl bg-white text-center font-semibold p-5" colspan="5">- No submissions yet -</td></tr>
@@ -52,4 +79,39 @@
 			</table>
 		</div>
 	</x-section-container>
+
+	<script>
+		$(document).ready(() => {
+			$('.student-submission-btn').on('click', function(){
+				const submissions = $(this).data('submissions');
+				$('#student-submission-tbody').html('');
+
+				let i = 0;
+				submissions.forEach(submission => {
+					$('#student-submission-tbody').append(
+						$('<tr>')
+							.append(
+								$('<td>').addClass('py-3 px-4').text(submission.created_at)
+							)
+							.append(
+								$('<td>').addClass('py-3 px-4').text(submission.title)
+							)
+							.append(
+								$('<td>').addClass('py-3 px-4').text(submission.link)
+							)
+							.append(
+								$('<td>').addClass('py-3 px-4').text(submission.status)
+							)
+							.append(
+								$('<td>').addClass('py-3 px-4').text(submission.feedback)
+							)
+					);
+
+					i++;
+				});
+
+				$('#student-submission-popup').parent().show();
+			});
+		});
+	</script>
 @endsection

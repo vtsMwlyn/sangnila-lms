@@ -1,5 +1,5 @@
 {{-- Main navbar --}}
-<div class="w-full text-white sticky top-0 z-20 transition duration-500" style="background-color: rgba(255, 255, 255, 1); backdrop-filter: blur(3px);" id="navbar-container">
+<div class="w-full text-white sticky top-0 z-20 transition duration-500" style="background-color: rgba(255, 255, 255, 1);" id="navbar-container">
 	<div class="flex items-center justify-between sticky top-0 px-5 w-full space-x-5" id="navbar">
 		{{-- Logo/Brand Image --}}
 		<div class="flex items-stretch gap-4">
@@ -47,7 +47,7 @@
 					@endif
 					<button type="button" class="dropdown-toggler"><img src="{{ asset('img/mail-icon.svg') }}" alt="mail-icon" class="h-6"></button>
 
-					<div class="absolute z-10 bg-white top-16 w-80 sm:w-96 rounded-3xl px-5 py-3 flex flex-col dropdown-menu" style="@if(!session()->has('successNotifAction')) display: none; @endif  height: 600px;">
+					<div class="absolute z-10 top-14 w-80 sm:w-96 rounded-3xl px-5 py-3 flex flex-col dropdown-menu" style="@if(!session()->has('successNotifAction')) display: none; @endif  height: 600px;">
 						<div class="w-full flex items-center justify-between">
 							<h1 class="font-extrabold text-dark-blue text-base">Notifications</h1>
 							@if($inboxes->count())
@@ -90,9 +90,9 @@
 
 			<div class="relative flex flex-col items-end dropdown-container">
 				<button type="button" class="dropdown-toggler"><img src="{{ asset('img/burger-icon-navbar-pc.svg') }}" alt="burger-icon" class="h-6"></button>
-				<div class="text-base absolute z-10 bg-white top-16 w-80 rounded-3xl flex flex-col py-2 dropdown-menu overflow-hidden" style="display: none; ">
-					<a href="#"><div class="w-full px-5 py-1.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><img src="{{ asset('img/navbar-help-and-support.svg') }}" class="h-5 w-5" alt="sidebar-icon"> Help and Support</div></a>
-					<a href="#"><div class="w-full px-5 py-1.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><img src="{{ asset('img/navbar-send-feedback.svg') }}" class="h-5 w-5" alt="sidebar-icon"> Send Feedback</div></a>
+				<div class="text-base absolute z-10 top-14 w-80 rounded-3xl flex flex-col py-2 dropdown-menu overflow-hidden" style="display: none; ">
+					<button type="button" id="help-and-support-menu"><div class="w-full px-5 py-1.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><img src="{{ asset('img/navbar-help-and-support.svg') }}" class="h-5 w-5" alt="sidebar-icon"> Help and Support</div></a>
+					<button type="button" id="send-feedback-menu"><div class="w-full px-5 py-1.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><img src="{{ asset('img/navbar-send-feedback.svg') }}" class="h-5 w-5" alt="sidebar-icon"> Send Feedback</div></a>
 					<a href="{{ route("profile.show") }}" class="block lg:hidden"><div class="w-full px-5 py-0.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><i class="bi bi-person-fill text-slate-400 text-lg mr-0.5"></i> Profile</div></a>
 
 					@auth
@@ -112,9 +112,18 @@
 	</div>
 
     <script>
-        // Toggle mobile menu visibility
-        $("#mobileMenuButton").click(() => {
-			$("#navbar").slideToggle();
+		$(document).ready(() => {
+			$('#help-and-support-menu').on('click', function(e){
+				e.preventDefault();
+
+				window.open('https://wa.me/6285693257411?text=Halo%20admin%20Sangnila!%0APerkenalkan%20nama%20saya%20{{ Auth::user()->full_name }}%20dan%20saya%20membutuhkan%20bantuan%20terkait%20hal-hal%20berikut%20yang%20saya%20jumpai%20dalam%20kegiatan%20belajar%20mengajar%20di%20Sangnila%20Arts%20Academy%3A', "_blank");
+			});
+
+			$('#send-feedback-menu').on('click', function(e){
+				e.preventDefault();
+
+				window.open('https://wa.me/6285693257411?text=Halo%20admin%20Sangnila!%0APerkenalkan%20nama%20saya%20{{ Auth::user()->full_name }}%20dan%20saya%20memiliki%20feedback%20untuk%20disampaikan%20terkait%20kegiatan%20belajar%20mengajar%20di%20Sangnila%20Arts%20Academy%3A', "_blank");
+			});
 		});
     </script>
 </div>

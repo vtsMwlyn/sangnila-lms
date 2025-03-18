@@ -121,6 +121,78 @@ div.announcementContent a:hover {
 	width: 32%;
 }
 
+/* Custom checkbox */
+input[type='checkbox'],[type='radio'] {
+	-webkit-appearance: none;
+		-moz-appearance: none;
+			appearance: none;
+	padding: 0;
+	-webkit-print-color-adjust: exact;
+			color-adjust: exact;
+	display: inline-block;
+	vertical-align: middle;
+	background-origin: border-box;
+	-webkit-user-select: none;
+		-moz-user-select: none;
+			user-select: none;
+	flex-shrink: 0;
+	color: #1DB9CF;
+	background-color: #fff;
+	border-color: rgb(148, 163, 184);
+	border-width: 2px;
+	--tw-shadow: 0 0 #0000;
+	cursor: pointer;
+}
+
+input[type='checkbox'] {
+	border-radius: 2px;
+}
+
+input[type='radio'] {
+	border-radius: 100%;
+}
+
+input[type='checkbox']:checked,input[type='radio']:checked {
+	border-color: transparent;
+	background-color: #1DB9CF;
+	background-size: 100% 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+input[type='checkbox']:checked {
+	background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+}
+
+input[type='radio']:checked {
+	background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+}
+
+input[type='checkbox']:checked:hover,[type='checkbox']:checked:focus,[type='radio']:checked:hover,[type='radio']:checked:focus {
+	border-color: transparent;
+	background-color: #1DB9CF;
+}
+
+input[type='checkbox']:indeterminate {
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 16'%3e%3cpath stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 8h8'/%3e%3c/svg%3e");
+	border-color: transparent;
+	background-color: currentColor;
+	background-size: 100% 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+input[type='checkbox']:indeterminate:hover,input[type='checkbox']:indeterminate:focus {
+	border-color: transparent;
+	background-color: currentColor;
+}
+
+.dropdown-menu {
+	/* box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3); */
+	backdrop-filter: blur(15px) !important;
+	background-color: rgb(255, 255, 255, 0.8) !important;
+}
+
 @media screen and (max-width: 1024px){
 	#page-title {
 		z-index: 15;

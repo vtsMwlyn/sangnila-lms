@@ -29,12 +29,12 @@
 		<div class="flex flex-col items-stretch justify-center w-full text-base" id="large-sidebar">
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('home') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('dashboard*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				<img src="{{ asset('img/sidebar-dashboard.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Dashboard
+				<img src="{{ asset('img/sidebar-dashboard.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Dashboard
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('teacher.mycourse.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*my-course*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				<img src="{{ asset('img/sidebar-courses.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Courses
+				<img src="{{ asset('img/sidebar-courses.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Courses
 				@if(!session('all_course_has_topics'))
 					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: 0; right: 0;">!</div>
 				@endif
@@ -42,30 +42,30 @@
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-2 px-6"
 				href="{{ route('teacher.student.select-course') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*student*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				<i class="bi bi-person-fill text-2xl"></i> Students
+				<i class="bi bi-person-fill text-3xl mr-0.5"></i> Students
 				@if(session('there_is_student_with_no_progress_unlocked'))
 					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: 0; right: 0;">!</div>
 				@endif
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center text-start gap-4 py-2 px-6"
+			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('teacher.forum.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*forum*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				<img src="{{ asset('img/sidebar-forum.svg') }}"> Forum Discussion
+				<img src="{{ asset('img/sidebar-forum.svg') }}" class="h-6 w-8"> Forum Discussion
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('teacher.assignment.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*assignment*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				<img src="{{ asset('img/sidebar-assignment.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Assignment
+				<img src="{{ asset('img/sidebar-assignment.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Assignment
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('teacher.attendance.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*attendance*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				<img src="{{ asset('img/sidebar-attendance.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Attendance
+				<img src="{{ asset('img/sidebar-attendance.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Attendance
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('list-announcement') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('announcement*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				<img src="{{ asset('img/sidebar-announcement.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Announcement
+				<img src="{{ asset('img/sidebar-announcement.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Announcement
 			</x-anchor-button>
 		</div>
 	</div>

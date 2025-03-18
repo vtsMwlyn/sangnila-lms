@@ -113,7 +113,7 @@
 									<td class="py-3 px-4">
 										<div class="w-full flex justify-center">
 											<input type="checkbox" id="activity_progress_{{ $progress->id }}"
-											class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300"
+											class="mr-2 h-5 w-5"
 											@if ($progress->status === 'unlocked') checked @endif>
 										</div>
 									</td>

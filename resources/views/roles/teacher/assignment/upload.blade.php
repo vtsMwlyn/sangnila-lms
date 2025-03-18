@@ -77,7 +77,12 @@
 						@endif
 						<div class="flex items-center gap-3 checkbox-container w-full md:w-[32%] lg:w-[23%]">
 							<input type="checkbox" id="checkbox{{ $loop->iteration }}"
-							class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif>
+							class="mr-2 h-5 w-5" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif>
+							@if($cs->student->details->profpic)
+								<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+							@else
+								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+							@endif
 							<label for="checkbox{{ $loop->iteration }}">{{ $cs->student->full_name }}</label>
 						</div>
 					@endforeach

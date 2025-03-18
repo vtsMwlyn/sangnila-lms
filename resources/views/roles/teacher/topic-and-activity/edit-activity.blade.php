@@ -64,7 +64,7 @@
 				@forelse ($learning_outcomes as $lo)
 					<div class="my-4 flex">
 						<input type="checkbox" id="checkbox{{ $iterasus }}"
-						class="mt-1 mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300" @if(old('learning_outcome.' . $loop->index) == "on") checked @elseif($checkbox_values[$loop->index] == "on") checked @endif >
+						class="mt-1 mr-2 h-5 w-5" @if(old('learning_outcome.' . $loop->index) == "on") checked @elseif($checkbox_values[$loop->index] == "on") checked @endif >
 						<label for="checkbox{{ $iterasus }}">LO {{ $lo->number }}: {{ $lo->title }}</label>
 					</div>
 

@@ -197,10 +197,16 @@ $(document).ready(() => {
 
 	// Dropdowns
 	$(".dropdown-toggler").click(function (e) {
-		e.stopPropagation();
+        e.stopPropagation(); // Prevent click from bubbling up
 
-		$(this).closest(".dropdown-container").find(".dropdown-menu").toggle();
-	});
+        let $dropdownMenu = $(this).closest(".dropdown-container").find(".dropdown-menu");
+
+        // Close all other dropdowns
+        $(".dropdown-menu").not($dropdownMenu).hide();
+
+        // Toggle the current one
+        $dropdownMenu.toggle();
+    });
 
 	$(document).click(function (e) {
 		if (!$(e.target).closest(".dropdown-menu, .dropdown-toggler").length) {
@@ -210,20 +216,6 @@ $(document).ready(() => {
 
 	const testus = $("#large-sidebar").clone();
 	$("#medsmallmenu-dropdown").empty().append(testus);
-
-	// Toggle dropdown on button click
-	$("#medsmallmenu-toggler").click(function (e) {
-		e.stopPropagation(); // Prevent the click event from bubbling up to the document
-
-		$("#medsmallmenu-dropdown").toggle();
-	});
-
-	// Close dropdown when clicking outside of it
-	$(document).click(function (e) {
-		if (!$(e.target).closest("#medsmallmenu-dropdown, #medsmallmenu-toggler").length) {
-			$("#medsmallmenu-dropdown").hide();
-		}
-	});
 });
 
 // Hide the loading popup once the page is fully loaded

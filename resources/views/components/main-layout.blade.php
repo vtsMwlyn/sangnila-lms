@@ -14,7 +14,7 @@
 
 		<link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
-		<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+		{{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}
 		<link rel="stylesheet" href="{{ asset('css/color-pallete.css') }}">
 		<link rel="stylesheet" href="{{ asset("css/custom-styles.css") }}">
 
@@ -76,7 +76,7 @@
 				@if($target[Auth::user()->role_id - 1] == "on")
 					@if($announcement->announce_from < now() && $announcement->announce_until > now())
 						@php $n++; @endphp
-						<div class="h-screen w-screen flex items-center justify-center fixed top-0 announcement-popup-container" style="@if($n == 1) backdrop-filter: blur(10px); background: rgba(0, 0, 0, 0.3); @endif z-index: 60;">
+						<div class="h-screen w-screen flex items-center justify-center fixed top-0 announcement-popup-container" style="@if($n == 1) backdrop-filter: blur(10px); -webskit-backdrop-filter: blur(10px); background: rgba(0, 0, 0, 0.3); @endif z-index: 60;">
 							<div class="bg-white w-11/12 lg:w-1/2 h-4/5 flex flex-col gap-5 justify-between items-center p-8 rounded-3xl announcement-popup" >
 								<h1 class="text-xl font-bold text-blue-900">{{ $announcement->title }}</h1>
 								<div class="grow overflow-y-auto">
@@ -134,14 +134,14 @@
 							<div class="md:text-3xl text-lg">@yield("title")</div>
 
 							{{-- Dropdown sidebar for smaller screen --}}
-							<div class="relative lg:hidden flex flex-col items-end">
-								<button type="button" id="medsmallmenu-toggler">
+							<div class="relative lg:hidden flex flex-col items-end dropdown-container">
+								<button type="button" class="dropdown-toggler" id="medsmallmenu-toggler">
 									<div class="w-40 bg-blue py-1.5 px-3 rounded-xl flex items-center justify-between">
 										Menu
 										<i class="bi bi-chevron-down"></i>
 									</div>
 								</button>
-								<div class="absolute z-10 text-white top-16 w-80 rounded-xl flex flex-col py-2" id="medsmallmenu-dropdown" style="display: none;  background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center; background-size: cover;">
+								<div class="absolute z-10 text-white top-16 w-80 rounded-xl flex flex-col py-2 dropdown-menu" id="medsmallmenu-dropdown" style="display: none;  background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center; background-size: cover;">
 								</div>
 							</div>
 						</div>

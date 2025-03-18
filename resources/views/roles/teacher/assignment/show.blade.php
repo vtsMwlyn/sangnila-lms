@@ -42,14 +42,14 @@
 				<tbody>
 					@forelse ($assignments as $asg)
 						<tr class="@if($loop->index % 2 == 0) bg-white @endif">
-							<td class="py-3 px-4 w-1/5">
-								<a class="text-blue-600 hover:underline font-bold" href="{{ route('teacher.assignment.check', $asg->id) }}">{{ $asg->title }}</a>
+							<td class="py-3 px-4 w-1/4">
+								<span class="font-semibold">{{ $asg->title }}</span>
 								<br><br>
 								{{ Carbon\Carbon::parse($asg->deadline_date)->format('d M Y') }}
 								<br>
 								{{ Carbon\Carbon::parse($asg->deadline_time)->format("H:i") }} GMT+7
 							</td>
-							<td class="py-3 px-4 w-1/5">
+							<td class="py-3 px-4 w-1/4">
 								<div class="flex w-full flex-col gap-3 overflow-y-auto" style="max-height: 100px;">
 									@foreach ($asg->student_assignments as $sasg)
 										<div class="flex items-center gap-3">
@@ -74,6 +74,9 @@
 							</td>
 							<td class="py-3 px-4">
 								<div class="flex gap-1">
+									<a href="{{ route('teacher.assignment.check', $asg->id) }}">
+										<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+									</a>
 									<a href="{{ route('teacher.assignment.edit', $asg->id) }}">
 										<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</a>

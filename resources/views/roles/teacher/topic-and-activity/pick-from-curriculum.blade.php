@@ -54,7 +54,7 @@
 													@endforelse
 												</div>
 												<input type="checkbox" id="activity_{{ $activity->id }}"
-												class="mr-2 form-checkbox h-5 w-5 border rounded border-gray-300 text-blue-500 bg-gray-300">
+												class="mr-2 h-5 w-5">
 											</div>
 
 										</div>

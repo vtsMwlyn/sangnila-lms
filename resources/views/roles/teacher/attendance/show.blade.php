@@ -159,7 +159,7 @@
 										{{-- <x-anchor-button  href="{{ route('teacher.attendance.edit', $atd->id) }}">
 											<i class="bi bi-pencil-square"></i>
 										</x-anchor-button> --}}
-										<button type="button" class=" show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}" data-session_number="{{ json_encode($sessionNumberPerAttendance[$atd->id]) }}"><img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110"></button>
+										<button type="button" class=" show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}" data-session_number="{{ json_encode($sessionNumberPerAttendance[$atd->id]) }}"><img src="{{ asset('img/history.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110"></button>
 									</div>
 								</td>
 							</tr>
@@ -217,13 +217,13 @@
 
 					let i = 0;
 					for(let sa of student_attendances){
-						const col1 = $('<td>').addClass('py-3 px-4 text-center").text(i + 1);
-						const col2 = $('<td>').addClass('py-3 px-4").text(sa.student.full_name);
-						const col3 = $('<td>').addClass('py-3 px-4").text(sessionNumberPerStudent[sa.id]);
-						const col4 = $('<td>').addClass('py-3 px-4").text(sa.is_attend == 1 ? `${sa.start_time.slice(0, 5)}-${sa.end_time.slice(0, 5)}` : 'Absent');
-						const col5 = $('<td>').addClass('py-3 px-4").html(sa.is_attend == 1 ? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`);
-						const col6 = $('<td>').addClass('py-3 px-4").text(sa.is_attend == 1 ? `${sa.activity_progress} [${sa.learning_status}]` : 'Absent');
-						const col7 = $('<td>').addClass('py-3 px-4").text(sa.attendance_detail);
+						const col1 = $('<td>').addClass('py-3 px-4 text-center').text(i + 1);
+						const col2 = $('<td>').addClass('py-3 px-4').text(sa.student.full_name);
+						const col3 = $('<td>').addClass('py-3 px-4').text(sessionNumberPerStudent[sa.id]);
+						const col4 = $('<td>').addClass('py-3 px-4').text(sa.is_attend == 1 ? `${sa.start_time.slice(0, 5)}-${sa.end_time.slice(0, 5)}` : 'Absent');
+						const col5 = $('<td>').addClass('py-3 px-4').html(sa.is_attend == 1 ? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`);
+						const col6 = $('<td>').addClass('py-3 px-4').text(sa.is_attend == 1 ? `${sa.activity_progress} [${sa.learning_status}]` : 'Absent');
+						const col7 = $('<td>').addClass('py-3 px-4').text(sa.attendance_detail);
 
 						let rowBG;
 						if(i % 2 == 0){
