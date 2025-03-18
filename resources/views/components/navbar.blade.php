@@ -1,15 +1,16 @@
 {{-- Main navbar --}}
 <div class="w-full text-white sticky top-0 z-20 transition duration-500" style="background-color: rgba(255, 255, 255, 1);" id="navbar-container">
-	<div class="flex items-center justify-between sticky top-0 px-5 w-full space-x-5" id="navbar">
+	<div class="flex items-center justify-between sticky top-0 px-5 w-full space-x-5 py-2 lg:py-0" id="navbar">
 		{{-- Logo/Brand Image --}}
 		<div class="flex items-stretch gap-4">
-			<div class="flex justify-center">
-				<a href="{{ route('home') }}">
-					<img src={{ asset("img/Sangnila_Arts.png") }} alt="logo" style="min-width: 65px; max-width: 65px;">
+			<div class="flex justify-center items-center">
+				<a href="{{ route('home') }}" class="hidden lg:block">
+					<img src={{ asset("img/Sangnila_Arts.png") }} alt="logo" style="width: 65px;">
 				</a>
+				<img src="{{ asset('img/sidebar-toggler.svg') }}" alt="sidebar-toggler" class="block lg:hidden h-6">
 			</div>
 
-			<div class="w-0 border-blue my-2" style="border-width: 1.5px"></div>
+			<div class="w-0 border-blue lg:my-2 my-0" style="border-width: 1.5px"></div>
 
 			<div class="flex items-start flex-col justify-center">
 				<div class="text-md md:text-lg text-blue font-semibold mb-1.5 md:mb-0">LEARNING MANAGEMENT SYSTEM</div>

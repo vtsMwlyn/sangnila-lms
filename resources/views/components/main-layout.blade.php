@@ -127,10 +127,10 @@
 				<button type="button" class="fixed bg-light-blue text-white px-1 h-12 rounded-r-full flex items-center hover:bg-slate-600" id="sidebar-toggler"><i class="bi bi-caret-left-fill"></i></button>
 
 				{{-- Content --}}
-				<div class="flex flex-col" style="width: 83%;" id="content-container">
+				<div class="flex flex-col w-[83%]" id="content-container">
 					<div class="flex flex-col" id="content-wrapper" style="background: radial-gradient(circle at left top, rgb(175, 193, 221) 0%, #FFFFFF 100%);">
 						{{-- Page title --}}
-						<div class="py-3 px-6 w-full text-white font-bold flex items-center justify-between lg:static sticky top-16" style="background: linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%);" id="page-title">
+						<div class="py-3 px-6 w-full text-white font-bold flex items-center justify-between" style="background: linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%);" id="page-title">
 							<div class="md:text-3xl text-lg">@yield("title")</div>
 
 							{{-- Dropdown sidebar for smaller screen --}}

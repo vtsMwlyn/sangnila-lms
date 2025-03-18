@@ -73,10 +73,11 @@ $(document).ready(() => {
 	function adjustLayouts(){
 		// Minimum height for sidebar
 		$("#sidebar").css("height", ($(this).height() - $("#navbar").outerHeight()));
+		$('#sidebar').css('top', $("#navbar").outerHeight())
 
 		// Set content and sidebar width
 		if($(this).width() < 1024){
-			$("#sidebar-container").css("display", "none");
+			$("#sidebar-container").css("display", "block");
 			$("#content-container").css("width", "100%");
 		}
 		else {

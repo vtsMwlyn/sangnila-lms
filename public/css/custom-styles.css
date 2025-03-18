@@ -194,10 +194,6 @@ input[type='checkbox']:indeterminate:hover,input[type='checkbox']:indeterminate:
 }
 
 @media screen and (max-width: 1024px){
-	#page-title {
-		z-index: 15;
-	}
-
 	.oneperthree {
 		width: 47%;
 	}

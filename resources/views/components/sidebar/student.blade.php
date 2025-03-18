@@ -1,6 +1,6 @@
 {{-- Main sidebar --}}
-<div class="text-white z-10 min-h-screen" style="width: 17%;" id="sidebar-container">
-	<div class="md:flex flex-col items-stretch sticky hidden z-0 m-0" style="top: 65px; background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center left; background-size: cover;" id="sidebar">
+<div class="text-white z-10 min-h-screen w-[100%] lg:w-[17%]" style="width: 17%;" id="sidebar-container">
+	<div class="flex flex-col items-stretch fixed lg:sticky z-0 m-0 w-[70%] md:w-[40%] lg:w-full" style="background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center left; background-size: cover;" id="sidebar">
 		<div class="relative flex flex-col dropdown-container">
 			<button type="button" class="flex flex-col items-center dropdown-toggler px-10 py-4 mb-6 hover:bg-slate-400" style="background: {{ Request::is('profile*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				@if(Auth::user()->details->profpic)
@@ -65,11 +65,4 @@
 			</x-anchor-button>
 		</div>
 	</div>
-
-	<script>
-		// Toggle mobile menu visibility
-		$("#mobileMenuButton").click(() => {
-			$("#navigation").slideToggle();
-		});
-	</script>
 </div>
