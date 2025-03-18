@@ -68,7 +68,7 @@
 							$iterasus++;
 						@endphp
 					@empty
-						<tr><td colspan="4" class="text-center p-5 bg-white rounded-xl w-full font-semibold">- No topics and activities added yet to this course -</td></tr>
+						<tr><td colspan="2" class="text-center p-5 bg-white w-full font-semibold">- No topics and activities added yet to this course -</td></tr>
 					@endforelse
 				</tbody>
 			</table>

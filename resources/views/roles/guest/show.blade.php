@@ -52,7 +52,7 @@
 						@endif
 					@else
 						<tr>
-							<td colspan="2" class="p-5 bg-white rounded-xl font-semibold text-center">This course doesn't have any topics and activities yet.</td>
+							<td colspan="2" class="p-5 bg-white font-semibold text-center">This course doesn't have any topics and activities yet.</td>
 						</tr>
 					@endif
 				</tbody>

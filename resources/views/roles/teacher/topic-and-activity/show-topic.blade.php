@@ -136,7 +136,7 @@
 							</td>
 						</tr>
 					@empty
-						<tr><td colspan="4" class="text-center p-5 bg-white rounded-xl w-full font-semibold">- No activities added yet to this course topic -</td></tr>
+						<tr><td colspan="6" class="text-center p-5 rounded-xl w-full font-semibold">- No activities added yet to this course topic -</td></tr>
 					@endforelse
 				</tbody>
 			</table>

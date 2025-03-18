@@ -182,7 +182,7 @@ Route::prefix('/teacher')
 				Route::get("/{assignment_id}/submission", [AssignmentController::class, "teacher_check_submission"])->name("check")->whereNumber('assignment_id');
 
 				// Check assignment submissions history for the selected students and add/check feedback to submissions
-				Route::get("/{assignment_id}/{student_id}/history", [AssignmentController::class, "teacher_check_history"])->name("submission-history")->whereNumber(['assignment_id', 'student_id']);
+				// Route::get("/{assignment_id}/{student_id}/history", [AssignmentController::class, "teacher_check_history"])->name("submission-history")->whereNumber(['assignment_id', 'student_id']);
 				Route::post("/{submission_id}/{student_id}/history", [AssignmentController::class, "teacher_feedback"])->name("feedback")->whereNumber(['submission_id', 'student_id']);
 
 			}

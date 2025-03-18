@@ -304,7 +304,7 @@ class AssignmentController extends Controller
 			return back()->with("danger", "System failed to add/edit feedback, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("teacher.assignment.submission-history", [$asgsmt->assignment->id, $student_id]))->with("success", $msg);
+		return redirect(route('teacher.assignment.check', [$asgsmt->assignment->id, $student_id]))->with("success", $msg);
 	}
 
 

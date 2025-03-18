@@ -87,7 +87,7 @@
 							</td>
 						</tr>
 					@empty
-						<tr><td colspan="5" class="bg-white rounded-xl p-5 font-semibold text-center">- No assignments yet -</td></tr>
+						<tr><td colspan="4" class="bg-white p-5 font-semibold text-center">- No assignments yet -</td></tr>
 					@endforelse
 				</tbody>
 			</table>

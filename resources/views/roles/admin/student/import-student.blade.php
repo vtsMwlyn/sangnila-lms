@@ -186,7 +186,7 @@
 						</thead>
 						<tbody id="table-body">
 							<tr class="bg-white" id="empty-placeholder">
-								<td colspan="8" class="p-4 text-center">- No data yet -</td>
+								<td colspan="6" class="p-4 text-center">- No data yet -</td>
 							</tr>
 						</tbody>
 					</table>

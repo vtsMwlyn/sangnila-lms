@@ -261,7 +261,7 @@
 						</tr>
 					@empty
 						<tr class="bg-white">
-							<td class="p-5 text-center" colspan="5">- No data found -</td>
+							<td class="p-5 text-center" colspan="3">- No data found -</td>
 						</tr>
 					@endforelse
 				</tbody>

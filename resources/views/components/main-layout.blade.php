@@ -76,7 +76,7 @@
 				@if($target[Auth::user()->role_id - 1] == "on")
 					@if($announcement->announce_from < now() && $announcement->announce_until > now())
 						@php $n++; @endphp
-						<div class="h-screen w-screen flex items-center justify-center fixed top-0 announcement-popup-container" style="@if($n == 1) backdrop-filter: blur(10px); -webskit-backdrop-filter: blur(10px); background: rgba(0, 0, 0, 0.3); @endif z-index: 60;">
+						<div class="h-screen w-screen flex items-center justify-center fixed top-0 announcement-popup-container" style="@if($n == 1) backdrop-filter: blur(10px); background: rgba(0, 0, 0, 0.3); @endif z-index: 60;">
 							<div class="bg-white w-11/12 lg:w-1/2 h-4/5 flex flex-col gap-5 justify-between items-center p-8 rounded-3xl announcement-popup" >
 								<h1 class="text-xl font-bold text-blue-900">{{ $announcement->title }}</h1>
 								<div class="grow overflow-y-auto">
@@ -128,7 +128,7 @@
 
 				{{-- Content --}}
 				<div class="flex flex-col" style="width: 83%;" id="content-container">
-					<div class="flex flex-col" id="content-wrapper">
+					<div class="flex flex-col" id="content-wrapper" style="background: radial-gradient(circle at left top, rgb(175, 193, 221) 0%, #FFFFFF 100%);">
 						{{-- Page title --}}
 						<div class="py-3 px-6 w-full text-white font-bold flex items-center justify-between lg:static sticky top-16" style="background: linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%);" id="page-title">
 							<div class="md:text-3xl text-lg">@yield("title")</div>
@@ -146,7 +146,7 @@
 							</div>
 						</div>
 
-						<div class="p-4 md:p-8 flex flex-col items-center grow" style="background: radial-gradient(circle at left top, rgb(175, 193, 221) 0%, #FFFFFF 100%);">
+						<div class="p-4 md:p-8 flex flex-col items-center grow">
 							@yield("content")
 						</div>
 					</div>

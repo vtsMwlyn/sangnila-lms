@@ -131,7 +131,7 @@
 						</thead>
 						<tbody id="tableBody">
 							<tr class="bg-white" id="empty-placeholder">
-								<td colspan="6" class="p-4 text-center" id="empty-table-placeholder">- No data yet -</td>
+								<td colspan="5" class="p-4 text-center" id="empty-table-placeholder">- No data yet -</td>
 							</tr>
 						</tbody>
 					</table>

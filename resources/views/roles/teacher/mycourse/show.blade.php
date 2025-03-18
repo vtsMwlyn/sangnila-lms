@@ -256,7 +256,7 @@
 						@endif
 					@empty
 						<tr>
-							<td colspan="5" class="text-center p-5 bg-white rounded-xl w-full font-semibold">- No topics and activities added yet to this course -</td>
+							<td colspan="5" class="text-center p-5 bg-white w-full font-semibold">- No topics and activities added yet to this course -</td>
 						</tr>
 					@endforelse
 				</tbody>
