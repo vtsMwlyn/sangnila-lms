@@ -35,7 +35,7 @@
     </style>
 
     <div class="w-full flex rounded-xl overflow-hidden h-[75vh]">
-        <div class="md:w-1/6 bg-slate-50 hidden md:block">
+        <div class="xl:w-1/6 bg-slate-50 hidden xl:block">
             <div class="p-4 font-bold">
                 My Courses
             </div>
@@ -46,11 +46,11 @@
             @endforeach
         </div>
 
-        <div class="w-full md:w-5/6 relative">
+        <div class="w-full xl:w-5/6 relative">
             {{-- For mobiles and tablets --}}
-            <div class="md:hidden sticky top-0 flex flex-col items-start w-full first-letter:0 dropdown-container bg-slate-50 p-2 h-[10%] md:h-[0px]" style="z-index: 11;">
+            <div class="xl:hidden sticky top-0 flex flex-col items-start w-full first-letter:0 dropdown-container bg-slate-50 p-2 h-[10%] xl:h-[0px]" style="z-index: 8;">
                 <button type="button" class="border-slate-400 py-2 px-4 rounded-2xl font-bold text-dark-blue w-full bg-white flex justify-between items-center dropdown-toggler" style="border-width: 3px;">Pick a course <img src="{{ asset('img/dropdown-arrow.svg') }}" class="w-5 h-5" alt="icon"></button>
-                <div class="absolute bg-slate-100 top-16 w-full rounded-xl flex flex-col hidden overflow-hidden dropdown-menu" style="">
+                <div class="absolute bg-slate-100 top-16 w-full rounded-xl flex flex-col hidden overflow-hidden dropdown-menu">
                     @foreach(Auth::user()->enrolled_courses as $c)
                         <a href="{{ route('student.forum.index', ['course' => $course->id]) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">{{ $c->course_name }} - {{ ucwords($c->level) }}</div></a>
                     @endforeach
@@ -64,7 +64,7 @@
             @endif
 
             @if(request('course'))
-                <div class="w-full bg-slate-300 p-4 overflow-y-auto flex flex-col align-items-start h-[75%] md:h-[85%]" id="message-container"></div>
+                <div class="w-full bg-slate-300 p-4 overflow-y-auto flex flex-col align-items-start h-[75%] xl:h-[85%]" id="message-container"></div>
                 <div class="absolute bottom-0 w-full p-4 hidden" id="extra-area" style="background-color: rgba(255, 255, 255, 0.6);"></div>
                 <div class="absolute bottom-0 w-full p-4 flex justify-center" id="go-bottom-helper" style="display: none;">
                     <button type="button" class="py-1 px-2 rounded-lg bg-indigo-600 text-white">Go to latest messages</button>

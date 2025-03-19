@@ -64,7 +64,7 @@
 		@endif
 
 		{{-- For larger screen --}}
-		<div class="mt-4 w-full flex">
+		<div class="mt-4 w-full flex flex-wrap">
 			<a href="{{ route('teacher.student.show', ['course_id' => $course->id, 'student_id' => $student->id, 'content' => 'activity access']) }}"
 				class="py-2 w-1/2 xl:w-1/6 sm:w-40 text-center hover:bg-slate-200"
 				style="@if(request('content') == 'activity access' || !request('content')) border-bottom: 4px solid #1db9cf; @endif">
@@ -92,7 +92,7 @@
 		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
 		@if(request('content') == 'activity access' || !request('content'))
-			<div class="w-full overflow-x-auto">
+			<div class="w-full overflow-x-auto hidden xl:block">
 				<form method="post" action="{{ route("teacher.student.update.progress.activity-access", [$course->id, $student->id]) }}" id="activity_access">
 					@csrf
 					@method('patch')
@@ -132,10 +132,35 @@
 					@endif
 				</form>
 			</div>
+
+			{{-- For smaller screen --}}
+			<div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-4">
+				@forelse ($newestprogress as $progress)
+					<div class="bg-white rounded-xl p-4 flex flex-col gap-3">
+						<div class="flex flex-col items-start w-full">
+							<div class="flex w-full justify-between items-center mb-2">
+								<span class="text-base text-start"><strong>[{{ $progress->activity->topic->title }}]</strong> {{ $progress->activity->title }}</span>
+							</div>
+							<i>Session {{ $progress->activity->session }}</i>
+						</div>
+						<div class="flex flex-col w-full">
+							<strong>Actions</strong>
+
+							<div class="w-full flex justify-start mt-2">
+								<input type="checkbox" id="activity_progress_{{ $progress->id }}"
+								class="mr-2 h-5 w-5"
+								@if ($progress->status === 'unlocked') checked @endif> Student is able to access this activity
+							</div>
+						</div>
+					</div>
+				@empty
+					- N/A -
+				@endforelse
+			</div>
 		@endif
 
 		@if(request('content') == 'meeting links')
-			<div class="w-full overflow-x-auto">
+			<div class="w-full overflow-x-auto hidden xl:block">
 				<form method="post" action="{{ route("teacher.student.update.progress.meeting-link", [$course->id, $student->id]) }}" id="meeting_link">
 					@csrf
 					@method('patch')
@@ -175,6 +200,33 @@
 						</div>
 					@endif
 				</form>
+			</div>
+
+			{{-- For smaller screen --}}
+			<div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-4">
+				@forelse ($newestprogress as $progress)
+					<div class="bg-white rounded-xl p-4 flex flex-col gap-3">
+						<div class="flex flex-col items-start w-full">
+							<div class="flex w-full justify-between items-center mb-2">
+								<span class="text-base text-start"><strong>[{{ $progress->activity->topic->title }}]</strong> {{ $progress->activity->title }}</span>
+							</div>
+							<i>Session {{ $progress->activity->session }}</i>
+						</div>
+						<div class="flex flex-col w-full">
+							<strong>Actions</strong>
+
+							<div class="w-full flex justify-start mt-2 flex-col items-start">
+								<label>Add Meeting Link</label>
+								<x-input type="text" class="w-full mt-1" name="meeting_links[]" placeholder="Add meeting link" value="{{ old('meeting_links.' . $i, $progress->meeting_link) }}"/>
+								@error('meeting_links.' . $i)
+									<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> Please insert a valid URL.</p>
+								@enderror
+							</div>
+						</div>
+					</div>
+				@empty
+					- N/A -
+				@endforelse
 			</div>
 		@endif
 

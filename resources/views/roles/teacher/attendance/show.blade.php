@@ -111,7 +111,7 @@
 				</form>
 			</div>
 
-			<div class="w-full overflow-auto" style="height: 60vh;">
+			<div class="w-full overflow-auto hidden xl:block" style="height: 60vh;">
 				<table class="w-full">
 					<thead>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date</th>
@@ -169,10 +169,42 @@
 					</tbody>
 				</table>
 			</div>
+
+			{{-- For smaller screen --}}
+			<div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-4">
+				@forelse ($attendanceData as $atd)
+					<div class="bg-white rounded-xl p-4 flex flex-col gap-3 dropdown-container">
+						<button class="flex flex-col items-start dropdown-toggler w-full">
+							<div class="flex w-full justify-between items-center mb-2">
+								<strong class="text-base text-start">{{ Carbon\Carbon::parse($atd->attendance_date)->format('l, d F Y') }}</strong>
+								<i class="bi bi-chevron-down"></i>
+							</div>
+						</button>
+						<div class="flex flex-col w-full dropdown-menu" style="display: none;">
+							{{ $atd->student_attendances->count() }} Students Reported:
+							<ol class="list-disc list-inside">
+								<li>{{ $atd->student_attendances->where("is_attend", 1)->count() }} Attended</li>
+								<li>{{ $atd->student_attendances->where("is_attend", 0)->count() }} Absent</li>
+							</ol>
+
+							<div class="mt-5">
+								<i>Posted by</i><br>{{ $atd->posted_by->id == Auth::user()->id? 'Me' : $atd->posted_by->full_name }}
+							</div>
+	
+							<strong class="mt-5">Actions</strong>
+							<div class="flex gap-3 items-start my-3">
+								<button type="button" class=" show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}" data-session_number="{{ json_encode($sessionNumberPerAttendance[$atd->id]) }}"><img src="{{ asset('img/history.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110"></button>
+							</div>
+						</div>
+					</div>
+				@empty
+					- N/A -
+				@endforelse
+			</div>
 		@endif
 
 		@if(request('content') == 'my attendances')
-			<div class="w-full overflow-auto" style="height: 60vh;">
+			<div class="w-full overflow-auto hidden xl:block" style="height: 60vh;">
 				<table class="w-full">
 					<thead>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date</th>
@@ -203,6 +235,32 @@
 						@endforelse
 					</tbody>
 				</table>
+			</div>
+
+			<div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-4">
+				@forelse (App\Models\SelfAttendance::where('user_id', Auth::user()->id)->where('course_id', $course->id)->orderBy('self_attendance_date', 'desc')->get() as $self_atd)
+					<div class="bg-white rounded-xl p-4 flex flex-col gap-3 dropdown-container">
+						<button class="flex flex-col items-start dropdown-toggler w-full">
+							<div class="flex w-full justify-between items-center mb-2">
+								<strong class="text-base text-start">{{ Carbon\Carbon::parse($self_atd->self_attendance_date)->format('D, d M Y') }}</strong>
+								<i class="bi bi-chevron-down"></i>
+							</div>
+						</button>
+						<div class="flex flex-col w-full dropdown-menu" style="display: none;">
+							<div class="flex flex-col">
+								<div>Check in: {{ $self_atd->check_in_time }} GMT+7</div>
+								<div>Check out: {{ $self_atd->check_out_time }} GMT+7</div>
+							</div>
+
+							<div class="mt-5">
+								<img src="{{ Storage::url("app/public/" . $self_atd->attendance_evidence) }}" width="200px" alt="photo">
+								<div class="mt-4">{{ $self_atd->description ?? 'N/A' }}</div>
+							</div>
+						</div>
+					</div>
+				@empty
+					- N/A -
+				@endforelse
 			</div>
 		@endif
 

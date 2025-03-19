@@ -153,7 +153,7 @@
 
 		<div class="w-full bg-slate-400 mt-4 xl:mt-8" style="height: 2px;"></div>
 
-		<div class="w-full overflow-x-auto">
+		<div class="w-full overflow-x-auto hidden xl:block">
 			<table class="w-full">
 				<thead>
 					<th class="text-center py-3 px-4 border-b-2 border-slate-400">Session</th>
@@ -183,7 +183,7 @@
 								<td class="py-3 px-4">{{ $topic->title }}</td>
 
 								<td class="py-3 px-4">
-									<ul class="h-full w-full flex flex-col">
+									<ul class="h-full w-full flex flex-col list-disc list-inside">
 										@foreach ($topic->activities as $activity)
 											<li>{{ $activity->title }}</li>
 										@endforeach
@@ -240,12 +240,16 @@
 										<div class="relative">
 											<x-anchor-button
 												href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}">
-												<i class="bi bi-eye"></i>
+												<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 											</x-anchor-button>
 											<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
 										</div>
-										<x-button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.mycourse.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn"><i class="bi bi-pencil-square"></i></x-button>
-										<x-button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.mycourse.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn"><i class="bi bi-trash3"></i></x-button>
+										<x-button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.mycourse.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn">
+											<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</x-button>
+										<x-button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.mycourse.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn">
+											<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</x-button>
 									</div>
 								</td>
 							</tr>
@@ -262,6 +266,52 @@
 				</tbody>
 			</table>
 		</div>
+
+		{{-- For smaller screen --}}
+		<div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-4">
+			@forelse ($topics as $topic)
+				<div class="bg-white rounded-xl p-4 flex flex-col gap-3 dropdown-container">
+					<button class="flex flex-col items-start dropdown-toggler w-full">
+						<div class="flex w-full justify-between items-center mb-2">
+							<strong class="text-base text-start">{{ $topic->title }}</strong>
+							<i class="bi bi-chevron-down"></i>
+						</div>
+					</button>
+					<div class="flex flex-col w-full dropdown-menu" style="display: none;">
+						<ul class="list-disc list-inside">
+							@foreach ($topic->activities as $activity)
+								<li>{{ $activity->title }}</li>
+							@endforeach
+						</ul>
+
+						<div class="mt-4">
+							Learning Outcomes: 
+							@forelse($lolist as $los)
+								LO{{ $los }}@if(count($lolist) > 1 && $loop->index != count($lolist) - 1), @endif
+							@empty
+								N/A
+							@endforelse
+						</div>
+
+						<strong class="mt-5">Actions</strong>
+						<div class="flex gap-3 items-start my-3">
+							<a href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}">
+								<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+							</a>
+							<button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.mycourse.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn">
+								<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+							</button>
+							<button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.mycourse.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn">
+								<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+							</button>
+						</div>
+					</div>
+				</div>
+			@empty
+				- N/A -
+			@endforelse
+		</div>
+		
 	</x-section-container>
 
 	<script>

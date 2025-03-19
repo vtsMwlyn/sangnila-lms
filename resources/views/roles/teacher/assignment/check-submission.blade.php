@@ -47,7 +47,7 @@
 			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
-		<div class="w-full overflow-x-auto">
+		<div class="w-full overflow-x-auto hidden xl:block">
 			<table class="w-full">
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Submission Time</th>
@@ -93,6 +93,44 @@
 				</tbody>
 			</table>
 		</div>
+
+		{{-- For smaller screen --}}
+        <div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-4">
+            @forelse ($latest_submissions as $submission)
+                <div class="bg-white rounded-xl p-4 flex flex-col gap-3 dropdown-container">
+                    <button class="flex flex-col items-start dropdown-toggler w-full">
+                        <div class="flex w-full justify-between items-center mb-2">
+                            <div class="text-base text-start">
+								<div class="flex gap-2 items-center">
+									@if($submission->student->details->profpic)
+										<img src="{{ Storage::url("app/public/" . $submission->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+									@else
+										<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+									@endif
+									<div class="flex flex-col">
+										<strong>{{ $submission->student->full_name }}</strong>
+										<span>{{ $submission->created_at->format('d M Y') }}, {{ $submission->created_at->format('H:i') }} GMT+7</span>
+									</div>
+								</div>
+							</div>
+							
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </button>
+                    <div class="flex flex-col w-full dropdown-menu" style="display: none;">
+						{{ $submission->title }}
+                        <a class="text-blue-600 hover:underline font-bold break-all mt-3" href="{{ $submission->link }}" target="_blank">{{ $submission->link }}</a>
+
+                        <strong class="mt-5">Actions</strong>
+                        <div class="flex gap-3 items-start my-3">
+							<button type="button" class="student-submission-btn" data-submissions="{{ $assignment->submissions->where('student_id', $submission->student_id) }}" data-feedback_route="{{ route("teacher.assignment.feedback", [$submission->id, $submission->student->id]) }}"><img src="{{ asset('img/history.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110"></button>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                - N/A -
+            @endforelse
+        </div>
 	</x-section-container>
 
 	<script>

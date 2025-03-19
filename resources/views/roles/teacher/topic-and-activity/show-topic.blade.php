@@ -85,7 +85,7 @@
 
 		<div class="w-full bg-slate-400 mt-4" style="height: 2px;"></div>
 
-		<div class="w-full overflow-x-auto">
+		<div class="w-full overflow-x-auto hidden xl:block">
 			<table class="w-full">
 				<thead>
 					<th class="text-center py-3 px-4 border-b-2 border-slate-400">Session</th>
@@ -141,6 +141,54 @@
 				</tbody>
 			</table>
 		</div>
+
+		{{-- For smaller screen --}}
+        <div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-4">
+            @forelse ($topic->activities()->orderBy('session', 'asc')->get() as $activity)
+                <div class="bg-white rounded-xl p-4 flex flex-col gap-3 dropdown-container">
+                    <button class="flex flex-col items-start dropdown-toggler w-full">
+                        <div class="flex w-full justify-between items-center mb-2">
+							<strong class="text-base text-start">{{ $activity->title }}</strong>
+							<i class="bi bi-chevron-down"></i>
+						</div>
+                    </button>
+                    <div class="flex flex-col w-full dropdown-menu" style="display: none;">
+                        {!! nl2br($activity->desc) !!}
+
+						<div class="mt-4">
+							Learning Outcomes:
+							@forelse ($activity->learning_outcomes as $leaout)
+								LO{{ $leaout->number }}@if($activity->learning_outcomes->count() > 1 && $loop->index != $activity->learning_outcomes->count() - 1), @endif
+							@empty
+								N/A
+							@endforelse
+						</div>
+
+						<div class="mt-1">
+							Material link: 
+							@if($activity->link)
+								<a href="{{ $activity->link }}" target="_blank" class="font-bold text-blue-600 hover:underline">{{ $activity->link }}</a>
+							@else
+								N/A
+							@endif
+						</div>
+
+                        <strong class="mt-5">Actions</strong>
+                        <div class="flex gap-3 items-start my-3">
+                            <a href="{{ route('teacher.mycourse.activity.edit', $activity->id) }}">
+								<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+							</a>
+							<button type="button" class="delete-activity-btn" data-del_a_name="{{ $activity->title }}"
+								data-route="{{ route('teacher.mycourse.activity.destroy', $activity->id) }}">
+								<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+							</button>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                - N/A -
+            @endforelse
+        </div>
 	</x-section-container>
 
 	<script>

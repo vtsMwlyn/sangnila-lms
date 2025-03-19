@@ -196,7 +196,7 @@
 						{!! nl2br($asg->desc) !!}
 
 						<strong class="mt-5">Actions</strong>
-						<div class="flex gap-3 items-stretch my-3">
+						<div class="flex gap-3 items-start my-3">
 							<a href="{{ $asg->link }}" target="_blank">
 								<img src="{{ asset('img/view.svg') }}" alt="view-icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 							</a>
