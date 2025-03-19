@@ -1,16 +1,16 @@
 {{-- Main navbar --}}
 <div class="w-full text-white sticky top-0 z-20 transition duration-500" style="background-color: rgba(255, 255, 255, 1);" id="navbar-container">
-	<div class="flex items-center justify-between sticky top-0 px-5 w-full space-x-5 py-2 lg:py-0" id="navbar">
+	<div class="flex items-center justify-between sticky top-0 px-5 w-full space-x-5 py-2 xl:py-0" id="navbar">
 		{{-- Logo/Brand Image --}}
 		<div class="flex items-stretch gap-4">
 			<div class="flex justify-center items-center">
-				<a href="{{ route('home') }}" class="hidden lg:block">
+				<a href="{{ route('home') }}" class="hidden xl:block">
 					<img src={{ asset("img/Sangnila_Arts.png") }} alt="logo" style="width: 65px;">
 				</a>
-				<img src="{{ asset('img/sidebar-toggler.svg') }}" alt="sidebar-toggler" class="block lg:hidden h-6">
+				<img src="{{ asset('img/sidebar-toggler.svg') }}" alt="sidebar-toggler" class="block xl:hidden h-6" id="sidebar-toggler-smaller">
 			</div>
 
-			<div class="w-0 border-blue lg:my-2 my-0" style="border-width: 1.5px"></div>
+			<div class="w-0 border-blue xl:my-2 my-0" style="border-width: 1.5px"></div>
 
 			<div class="flex items-start flex-col justify-center">
 				<div class="text-md md:text-lg text-blue font-semibold mb-1.5 md:mb-0">LEARNING MANAGEMENT SYSTEM</div>
@@ -94,7 +94,7 @@
 				<div class="text-base absolute z-10 top-14 w-80 rounded-3xl flex flex-col py-2 dropdown-menu overflow-hidden" style="display: none; ">
 					<button type="button" id="help-and-support-menu"><div class="w-full px-5 py-1.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><img src="{{ asset('img/navbar-help-and-support.svg') }}" class="h-5 w-5" alt="sidebar-icon"> Help and Support</div></a>
 					<button type="button" id="send-feedback-menu"><div class="w-full px-5 py-1.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><img src="{{ asset('img/navbar-send-feedback.svg') }}" class="h-5 w-5" alt="sidebar-icon"> Send Feedback</div></a>
-					<a href="{{ route("profile.show") }}" class="block lg:hidden"><div class="w-full px-5 py-0.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><i class="bi bi-person-fill text-slate-400 text-lg mr-0.5"></i> Profile</div></a>
+					<a href="{{ route("profile.show") }}" class="block xl:hidden"><div class="w-full px-5 py-0.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><i class="bi bi-person-fill text-slate-400 text-lg mr-0.5"></i> Profile</div></a>
 
 					@auth
 						<form method="POST" action="{{ route('logout') }}" class="grow flex items-center gap-2">

@@ -12,7 +12,7 @@
 	{{-- @dd($activityProgresses) --}}
 
 	<div class="rounded-3xl w-full py-5 flex flex-col items-stretch sm:text-base text-sm" style="background: #FEFEFEB2;">
-		<div class="flex flex-col w-full px-5 lg:px-8">
+		<div class="flex flex-col w-full px-5 xl:px-8">
 			@php
 				$courseStudent = App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first();
 				$teacher = $courseStudent->teacher;
@@ -20,11 +20,11 @@
 			@endphp
 
 			<x-back-button href="{{ route('student.mycourse.index') }}"></x-back-button>
-			<div class="w-full flex flex-col lg:flex-row justify-between items-start lg:items-center">
+			<div class="w-full flex flex-col xl:flex-row justify-between items-start xl:items-center">
 				<x-page-title>{{ $course->course_name }} - {{ ucwords($course->level) }}</x-page-title>
 
 				@if(!$max_session_reached)
-					<div class="flex items-center gap-3 my-4 lg:my-0">
+					<div class="flex items-center gap-3 my-4 xl:my-0">
 						@if(!$unfinishedSelfAttendance)
 							<x-anchor-button href="{{ route('student.mycourse.check-in', $course->id) }}">
 								<i class="bi bi-stopwatch"></i> Check In

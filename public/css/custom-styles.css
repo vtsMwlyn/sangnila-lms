@@ -193,7 +193,7 @@ input[type='checkbox']:indeterminate:hover,input[type='checkbox']:indeterminate:
 	background-color: rgb(255, 255, 255, 0.8) !important;
 }
 
-@media screen and (max-width: 1024px){
+@media screen and (max-width: 1280px){
 	.oneperthree {
 		width: 47%;
 	}

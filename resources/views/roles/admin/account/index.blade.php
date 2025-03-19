@@ -34,8 +34,8 @@
 				</div>
 
 				<div class="flex items-center justify-center w-full mt-8 mb-3 gap-3">
-					<x-button class="w-full md:w-40 lg:w-1/6">Submit</x-button>
-					{{-- <x-button class="w-full md:w-40 lg:w-1/6">Cancel</x-button> --}}
+					<x-button class="w-full md:w-40 xl:w-1/6">Submit</x-button>
+					{{-- <x-button class="w-full md:w-40 xl:w-1/6">Cancel</x-button> --}}
 				</div>
 
 				{{-- Helper --}}
@@ -72,7 +72,7 @@
 		@endif
 
 		{{-- For larger screen --}}
-		<div class="lg:flex mt-4 w-full flex-wrap hidden">
+		<div class="xl:flex mt-4 w-full flex-wrap hidden">
 			<a href="{{ route('admin.account.index', ['role' => 'admin']) }}"
 				class="py-2 w-1/6 sm:w-40 text-center hover:bg-slate-200"
 				style="@if(request('role') == 'admin' || !request('role')) border-bottom: 4px solid #1db9cf; @endif">
@@ -99,7 +99,7 @@
 		</div>
 
 		{{-- For smaller screen --}}
-		<div class="relative flex lg:hidden flex-col items-start w-96 first-letter:0 dropdown-container mt-4">
+		<div class="relative flex xl:hidden flex-col items-start w-96 first-letter:0 dropdown-container mt-4">
 			<button type="button" class="border-slate-400 py-2 px-4 rounded-2xl font-bold text-dark-blue w-full bg-white flex justify-between items-center dropdown-toggler">{{ request('role') ? ucwords(request('role')) : 'Admin' }} <img src="{{ asset('img/dropdown-arrow.svg') }}" class="w-5 h-5" alt="icon"></button>
 			<div class="absolute bg-white top-12 w-full rounded-xl flex flex-col hidden overflow-hidden dropdown-menu" style="">
 				<a href="{{ route('admin.account.index', ['role' => 'admin']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">Admin</div></a>

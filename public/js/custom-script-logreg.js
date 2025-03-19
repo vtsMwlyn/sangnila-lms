@@ -15,7 +15,7 @@ function hideLoadingPopup() {
 
 // Toggle sidebar toggler visibility
 function resetSidebarToggler(){
-	if($(window).width() <= 2000 && $(window).width() >= 1024){
+	if($(window).width() <= 2000 && $(window).width() >= 1280){
 		$('#sidebar-toggler').show();
 		$('#sidebar-toggler').css('left', $('#sidebar-container').outerWidth()).css('top', $(window).innerHeight() / 2);
 	}

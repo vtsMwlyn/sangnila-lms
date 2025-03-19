@@ -34,9 +34,9 @@
 @section("content")
 	<x-section-container>
 		<x-back-button href="{{ route('teacher.attendance.index') }}"></x-back-button>
-		<div class="flex flex-col lg:flex-row items-start justify-between mt-3">
+		<div class="flex flex-col xl:flex-row items-start justify-between mt-3">
 			<x-page-title>{{ $course->course_name }} - {{ ucwords($course->level) }}</x-page-title>
-			<div class="flex gap-2 mt-4 lg:mt-0">
+			<div class="flex gap-2 mt-4 xl:mt-0">
 				@if(!$unfinishedSelfAttendance)
 					<x-anchor-button href="{{ route('teacher.attendance.check-in', $course->id) }}">
 						<i class="bi bi-stopwatch"></i> Check In
@@ -74,13 +74,13 @@
 		{{-- For larger screen --}}
 		<div class="flex mt-4 w-full flex-wrap">
 			<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id, 'content' => 'student attendances']) }}"
-				class="py-2 w-1/2 lg:w-1/6 sm:w-48 text-center hover:bg-slate-200"
+				class="py-2 w-1/2 xl:w-1/6 sm:w-48 text-center hover:bg-slate-200"
 				style="@if(request('content') == 'student attendances' || !request('content')) border-bottom: 4px solid #1db9cf; @endif">
 				Student Attendances
 			</a>
 
 			<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances']) }}"
-				class="py-2 w-1/2 lg:w-1/6 sm:w-48 text-center hover:bg-slate-200"
+				class="py-2 w-1/2 xl:w-1/6 sm:w-48 text-center hover:bg-slate-200"
 				style="@if(request('content') == 'my attendances') border-bottom: 4px solid #1db9cf; @endif">
 				My Attendances
 			</a>
@@ -97,8 +97,8 @@
 		@endif
 
 		@if(request('content') == 'student attendances' || !request('content'))
-			<div class="mb-3 mt-5 flex flex-col-reverse gap-8 lg:gap-0 lg:flex-row w-full justify-between items-center">
-				<x-anchor-button href="{{ route('teacher.attendance.select-students', $course->id) }}" class="self-start lg:self-center">
+			<div class="mb-3 mt-5 flex flex-col-reverse gap-8 xl:gap-0 xl:flex-row w-full justify-between items-center">
+				<x-anchor-button href="{{ route('teacher.attendance.select-students', $course->id) }}" class="self-start xl:self-center">
 					<i class="bi bi-plus-lg"></i> New Student Attendance
 				</x-anchor-button>
 				<form action="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances']) }}" method="get" class="flex items-center gap-2">

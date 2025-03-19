@@ -5,9 +5,9 @@
 
 	<div class="flex w-full justify-center my-4 md:my-10">
 		@if($announcement->image_path)
-			<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" class="w-full md:w-3/4 rounded-lg lg:rounded-3xl" alt="announcement_img">
+			<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" class="w-full md:w-3/4 rounded-lg xl:rounded-3xl" alt="announcement_img">
 		@else
-			<div class="flex bg-slate-200 items-center justify-center text-white font-extrabold w-full md:w-3/4 h-[200px] lg:h-[500px] rounded-lg lg:rounded-3xl">
+			<div class="flex bg-slate-200 items-center justify-center text-white font-extrabold w-full md:w-3/4 h-[200px] xl:h-[500px] rounded-lg xl:rounded-3xl">
 				<i class="bi bi-megaphone-fill text-6xl"></i>
 			</div>
 		@endif

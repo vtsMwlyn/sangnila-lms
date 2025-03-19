@@ -24,7 +24,7 @@
 		<div class="flex flex-col md:flex-row w-full my-4">
 			<div class="text-lg w-full md:w-1/4">Attendance Summary</div>
 
-			<div class="flex grow mt-4 lg:mt-0">
+			<div class="flex grow mt-4 xl:mt-0">
 				<div class="flex flex-col w-full md:w-1/4">
 					<h2>Total Session</h2>
 					<h1 class="font-extrabold text-xl">{{ $course_student->max_course_session }}</h1>
@@ -42,7 +42,7 @@
 		<div class="w-full bg-slate-400" style="height: 2px;"></div>
 
 		{{-- Desktop screen --}}
-		<div class="w-full overflow-x-auto hidden lg:block">
+		<div class="w-full overflow-x-auto hidden xl:block">
 			<table class="w-full">
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Session</th>
@@ -82,7 +82,7 @@
 		</div>
 
 		{{-- Smaller screen --}}
-		<div class="w-full flex flex-col gap-4 lg:hidden items-stretch mt-4">
+		<div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-4">
 			@forelse($attendances as $atd)
 				<div class="bg-white rounded-xl p-4 flex flex-col gap-3 dropdown-container">
 					<button class="flex items-center dropdown-toggler w-full justify-between">

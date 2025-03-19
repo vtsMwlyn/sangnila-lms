@@ -15,12 +15,12 @@ function hideLoadingPopup() {
 
 // Toggle sidebar toggler visibility
 function resetSidebarToggler(){
-	if($(window).width() <= 2000 && $(window).width() >= 1024){
-		$('#sidebar-toggler').show();
-		$('#sidebar-toggler').css('left', $('#sidebar-container').outerWidth()).css('top', $(window).innerHeight() / 2);
+	if($(window).width() <= 2000 && $(window).width() >= 1280){
+		$('#sidebar-toggler-larger').show();
+		$('#sidebar-toggler-larger').css('left', $('#sidebar-container').outerWidth()).css('top', $(window).innerHeight() / 2);
 	}
 	else {
-		$('#sidebar-toggler').hide();
+		$('#sidebar-toggler-larger').hide();
 	}
 }
 
@@ -75,18 +75,6 @@ $(document).ready(() => {
 		$("#sidebar").css("height", ($(this).height() - $("#navbar").outerHeight()));
 		$('#sidebar').css('top', $("#navbar").outerHeight())
 
-		// Set content and sidebar width
-		if($(this).width() < 1024){
-			$("#sidebar-container").css("display", "block");
-			$("#content-container").css("width", "100%");
-		}
-		else {
-			$("#sidebar-container").css("display", "block");
-			$("#content-container").css("width", "83%");
-		}
-
-		// $("#screen").text(`(Resolution: ${window.innerWidth}x${window.innerHeight})`);
-
 		$('#content-wrapper').css('min-height', window.innerHeight - $("#navbar").outerHeight());
 	}
 
@@ -98,17 +86,21 @@ $(document).ready(() => {
 		resetSidebarToggler();
 	});
 
-	$('#sidebar-toggler').click(function(){
+	$('#sidebar-toggler-larger').click(function(){
 		if($('#sidebar-container').is(':visible')){
-			$('#sidebar-toggler').css({'left': 0}).html('<i class="bi bi-caret-right-fill"></i>');
+			$('#sidebar-toggler-larger').css({'left': 0}).html('<i class="bi bi-caret-right-fill"></i>');
 			$('#content-container').css({'width': '100%'});
 			$('#sidebar-container').css({'width': 0}).hide();
 		}
 		else {
 			$('#sidebar-container').css({'width': '17%'}).show();
 			$('#content-container').css({'width': '83%'});
-			$('#sidebar-toggler').css({'left': $('#sidebar-container').outerWidth()}).html('<i class="bi bi-caret-left-fill"></i>');
+			$('#sidebar-toggler-larger').css({'left': $('#sidebar-container').outerWidth()}).html('<i class="bi bi-caret-left-fill"></i>');
 		}
+	});
+
+	$('#sidebar-toggler-smaller').on('click', function(){
+		$('#sidebar-container').toggle();
 	});
 	
 	// Select2 initialization
@@ -125,8 +117,6 @@ $(document).ready(() => {
 					allowClear: false
 				});
 			});
-
-			// stylingSelect2();
 		});
 
 		resizeObserver.observe(container);
@@ -214,9 +204,6 @@ $(document).ready(() => {
 			$(".dropdown-menu").hide();
 		}
 	});
-
-	const testus = $("#large-sidebar").clone();
-	$("#medsmallmenu-dropdown").empty().append(testus);
 });
 
 // Hide the loading popup once the page is fully loaded

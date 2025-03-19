@@ -1,4 +1,4 @@
-<div class="rounded-3xl w-full lg:w-5/6 py-5 px-8 mb-6 flex flex-col sm:text-base text-sm self-start" style="background: #FEFEFEB2;">
+<div class="rounded-3xl w-full xl:w-5/6 py-5 px-8 mb-6 flex flex-col sm:text-base text-sm self-start" style="background: #FEFEFEB2;">
 	<x-page-title>{{ __("Account Profile") }}</x-page-title>
 	<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
@@ -79,10 +79,10 @@
 				</div>
 
 				<div class="flex items-stretch gap-2 justify-end mt-8 mb-3 w-full">
-					<x-cancel-button class="w-full md:w-40 lg:w-1/6">
+					<x-cancel-button class="w-full md:w-40 xl:w-1/6">
 						Return
 					</x-cancel-button>
-					<x-button class=" w-full md:w-40 lg:w-1/6">
+					<x-button class=" w-full md:w-40 xl:w-1/6">
 						{{ __('Save') }}
 					</x-button>
 				</div>

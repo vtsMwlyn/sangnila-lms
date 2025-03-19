@@ -21,7 +21,7 @@
 	</x-confirmation>
 
 	{{-- Edit topic --}}
-	<x-popup popup_title="Edit Topic" class="w-11/12 lg:w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-topic">
+	<x-popup popup_title="Edit Topic" class="w-11/12 xl:w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-topic">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" class="mt-4">
 				@csrf

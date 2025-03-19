@@ -5,10 +5,10 @@
 @endsection
 
 @section("content")
-	<div class="w-full flex flex-col lg:flex-row gap-5">
-		<div class="flex flex-col gap-5 w-full lg:w-2/3">
+	<div class="w-full flex flex-col xl:flex-row gap-5">
+		<div class="flex flex-col gap-5 w-full xl:w-2/3">
 			{{-- Main stats --}}
-			<div class="w-full flex flex-wrap lg:flex-nowrap justify-center gap-5">
+			<div class="w-full flex flex-wrap xl:flex-nowrap justify-center gap-5">
 				<div class="rounded-3xl shadow-lg flex flex-col justify-between w-1/3 grow items-center gap-2 p-5" style="background-color: #FEFEFEB2;">
 					<div class="flex flex-col items-center gap-2">
 						<img src="{{ asset('img/studentdashboard-materialsunlocked.svg') }}" class="h-8 md:h-10" alt="icon">
@@ -46,14 +46,14 @@
 				</div>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-				<div class="flex flex-col justify-between overflow-y-auto" style="height: 400px;">
-					<canvas id="myBarChart"></canvas>
+				<div class="overflow-y-auto h-[220px] md:h-[400px] w-full flex justify-center">
+					<canvas id="myBarChart" class="w-fit"></canvas>
 				</div>
 			</div>
 		</div>
 
 		{{-- Recent Activities --}}
-		<div class="w-full lg:w-1/3 flex flex-col md:flex-row lg:flex-col gap-5">
+		<div class="w-full xl:w-1/3 flex flex-col md:flex-row xl:flex-col gap-5">
 			<div class="w-full rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
 				<p class="font-bold text-dark-blue text-base">Recent Teacher Activities</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
@@ -90,9 +90,9 @@
 		</div>
 	</div>
 
-	<div class="w-full flex lg:flex-row flex-col gap-5 mt-5">
+	<div class="w-full flex xl:flex-row flex-col gap-5 mt-5">
 		{{-- News and announcement --}}
-		<div class="w-full lg:w-1/2 rounded-3xl py-5 shadow-lg" style="background-color: #FEFEFEB2;">
+		<div class="w-full xl:w-1/2 rounded-3xl py-5 shadow-lg" style="background-color: #FEFEFEB2;">
 			<div class="px-5">
 				<p class="font-bold text-dark-blue text-base">News and Announcement</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
@@ -152,7 +152,7 @@
 		</div>
 
 		{{-- Calendar --}}
-		<div class="w-full lg:w-1/2 rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
+		<div class="w-full xl:w-1/2 rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
 			<p class="font-bold text-dark-blue text-base">Calendar</p>
 			<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
@@ -220,7 +220,7 @@
 					responsive: true,
 					scales: {
 						y: {
-							beginAtZero: true // Ensure y-axis starts at 0
+							beginAtZero: true,
 						}
 					},
 					plugins: {

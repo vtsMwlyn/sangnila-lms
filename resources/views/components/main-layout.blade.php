@@ -44,7 +44,7 @@
 
 		{{-- Loading popup --}}
 		<div class="popup-container w-full h-full hidden fixed top-0 flex items-center justify-center" style="backdrop-filter: blur(10px); z-index: 100; background: rgba(0, 0, 0, 0.3);">
-			<div class="rounded-3xl bg-white py-5 px-6 popup w-11/12 lg:w-1/3 h-1/4 flex gap-3 items-center justify-center" id="loading-popup">
+			<div class="rounded-3xl bg-white py-5 px-6 popup w-11/12 xl:w-1/3 h-1/4 flex gap-3 items-center justify-center" id="loading-popup">
 				<div class="loader w-12 h-12 border-8 border-t-transparent border-light-blue rounded-full animate-spin"></div>
 				<p class="font-extrabold text-xl animate-pulse">Please Wait...</p>
 			</div>
@@ -77,7 +77,7 @@
 					@if($announcement->announce_from < now() && $announcement->announce_until > now())
 						@php $n++; @endphp
 						<div class="h-screen w-screen flex items-center justify-center fixed top-0 announcement-popup-container" style="@if($n == 1) backdrop-filter: blur(10px); background: rgba(0, 0, 0, 0.3); @endif z-index: 60;">
-							<div class="bg-white w-11/12 lg:w-1/2 h-4/5 flex flex-col gap-5 justify-between items-center p-8 rounded-3xl announcement-popup" >
+							<div class="bg-white w-11/12 xl:w-1/2 h-4/5 flex flex-col gap-5 justify-between items-center p-8 rounded-3xl announcement-popup" >
 								<h1 class="text-xl font-bold text-blue-900">{{ $announcement->title }}</h1>
 								<div class="grow overflow-y-auto">
 									@if($announcement->image_path)
@@ -124,26 +124,14 @@
 				{{-- Sidebar --}}
 				{{ $slot }}
 
-				<button type="button" class="fixed bg-light-blue text-white px-1 h-12 rounded-r-full flex items-center hover:bg-slate-600" id="sidebar-toggler"><i class="bi bi-caret-left-fill"></i></button>
+				<button type="button" class="fixed bg-light-blue text-white px-1 h-12 rounded-r-full flex items-center hover:bg-slate-600" id="sidebar-toggler-larger"><i class="bi bi-caret-left-fill"></i></button>
 
 				{{-- Content --}}
-				<div class="flex flex-col w-[83%]" id="content-container">
+				<div class="flex flex-col w-full xl:w-[83%]" id="content-container">
 					<div class="flex flex-col" id="content-wrapper" style="background: radial-gradient(circle at left top, rgb(175, 193, 221) 0%, #FFFFFF 100%);">
 						{{-- Page title --}}
 						<div class="py-3 px-6 w-full text-white font-bold flex items-center justify-between" style="background: linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%);" id="page-title">
 							<div class="md:text-3xl text-lg">@yield("title")</div>
-
-							{{-- Dropdown sidebar for smaller screen --}}
-							<div class="relative lg:hidden flex flex-col items-end dropdown-container">
-								<button type="button" class="dropdown-toggler" id="medsmallmenu-toggler">
-									<div class="w-40 bg-blue py-1.5 px-3 rounded-xl flex items-center justify-between">
-										Menu
-										<i class="bi bi-chevron-down"></i>
-									</div>
-								</button>
-								<div class="absolute z-10 text-white top-16 w-80 rounded-xl flex flex-col py-2 dropdown-menu" id="medsmallmenu-dropdown" style="display: none;  background: url({{ asset('img/sidebar-bg.png') }}) no-repeat center; background-size: cover;">
-								</div>
-							</div>
 						</div>
 
 						<div class="p-4 md:p-8 flex flex-col items-center grow">

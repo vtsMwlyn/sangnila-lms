@@ -13,7 +13,7 @@
 
 @section('popup')
 	{{-- Upload portfolio  --}}
-	<x-popup popup_title="Upload Portfolio" class="w-11/12 lg:w-2/3 flex flex-col items-stretch justify-center overflow-y-auto" id="upload-portfolio">
+	<x-popup popup_title="Upload Portfolio" class="w-11/12 xl:w-2/3 flex flex-col items-stretch justify-center overflow-y-auto" id="upload-portfolio">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" action="{{ route('teacher.student.store.portfolio', [$student->id, $course->id]) }}" class="mt-4" enctype="multipart/form-data">
 				@csrf
@@ -66,25 +66,25 @@
 		{{-- For larger screen --}}
 		<div class="mt-4 w-full flex">
 			<a href="{{ route('teacher.student.show', ['course_id' => $course->id, 'student_id' => $student->id, 'content' => 'activity access']) }}"
-				class="py-2 w-1/2 lg:w-1/6 sm:w-40 text-center hover:bg-slate-200"
+				class="py-2 w-1/2 xl:w-1/6 sm:w-40 text-center hover:bg-slate-200"
 				style="@if(request('content') == 'activity access' || !request('content')) border-bottom: 4px solid #1db9cf; @endif">
 				Activity Access
 			</a>
 
 			<a href="{{ route('teacher.student.show', ['course_id' => $course->id, 'student_id' => $student->id,'content' => 'meeting links']) }}"
-				class="py-2 w-1/2 lg:w-1/6 sm:w-40 text-center hover:bg-slate-200"
+				class="py-2 w-1/2 xl:w-1/6 sm:w-40 text-center hover:bg-slate-200"
 				style="@if(request('content') == 'meeting links') border-bottom: 4px solid #1db9cf; @endif">
 				Meeting Links
 			</a>
 
 			<a href="{{ route('teacher.student.show', ['course_id' => $course->id, 'student_id' => $student->id,'content' => 'portfolios']) }}"
-				class="py-2 w-1/2 lg:w-1/6 sm:w-40 text-center hover:bg-slate-200"
+				class="py-2 w-1/2 xl:w-1/6 sm:w-40 text-center hover:bg-slate-200"
 				style="@if(request('content') == 'portfolios') border-bottom: 4px solid #1db9cf; @endif">
 				Portfolios
 			</a>
 
 			<a href="{{ route('teacher.student.show', ['course_id' => $course->id, 'student_id' => $student->id,'content' => 'assessment']) }}"
-				class="py-2 w-1/2 lg:w-1/6 sm:w-40 text-center hover:bg-slate-200"
+				class="py-2 w-1/2 xl:w-1/6 sm:w-40 text-center hover:bg-slate-200"
 				style="@if(request('content') == 'assessment') border-bottom: 4px solid #1db9cf; @endif">
 				Assessment
 			</a>
@@ -126,8 +126,8 @@
 
 					@if($newestprogress->isNotEmpty())
 						<div class="flex gap-2 mt-10 mb-3 w-full justify-center">
-							<x-button class=" w-full md:w-40 lg:w-1/6">Save</x-button>
-							<x-cancel-button class="w-full md:w-40 lg:w-1/6" href="{{ route('teacher.student.select-student', $course->id) }}">Cancel</x-cancel-button>
+							<x-button class=" w-full md:w-40 xl:w-1/6">Save</x-button>
+							<x-cancel-button class="w-full md:w-40 xl:w-1/6" href="{{ route('teacher.student.select-student', $course->id) }}">Cancel</x-cancel-button>
 						</div>
 					@endif
 				</form>
@@ -170,8 +170,8 @@
 
 					@if($newestprogress->isNotEmpty())
 						<div class="flex gap-2 mt-10 mb-3 w-full justify-center">
-							<x-button class=" w-full md:w-40 lg:w-1/6">Save</x-button>
-							<x-cancel-button class="w-full md:w-40 lg:w-1/6" href="{{ route('teacher.student.select-student', $course->id) }}">Cancel</x-cancel-button>
+							<x-button class=" w-full md:w-40 xl:w-1/6">Save</x-button>
+							<x-cancel-button class="w-full md:w-40 xl:w-1/6" href="{{ route('teacher.student.select-student', $course->id) }}">Cancel</x-cancel-button>
 						</div>
 					@endif
 				</form>

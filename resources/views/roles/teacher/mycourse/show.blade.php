@@ -10,7 +10,7 @@
 
 @section("popup")
 	{{-- New topic --}}
-	<x-popup popup_title="New Topic" class="w-11/12 lg:w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="new-topic">
+	<x-popup popup_title="New Topic" class="w-11/12 xl:w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="new-topic">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" class="mt-4">
 				@csrf
@@ -34,7 +34,7 @@
 	</x-popup>
 
 	{{-- Edit topic --}}
-	<x-popup popup_title="Edit Topic" class="w-11/12 lg:w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-topic">
+	<x-popup popup_title="Edit Topic" class="w-11/12 xl:w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-topic">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" class="mt-4">
 				@csrf
@@ -98,15 +98,15 @@
 		<h2 class="my-4 font-extrabold text-xl text-dark-blue">Student List</h2>
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
-		<div class="mt-4 lg:mt-8 flex flex-wrap">
+		<div class="mt-4 xl:mt-8 flex flex-wrap">
 			@forelse ($course_students as $index => $cs)
-				<div class="flex flex-row lg:flex-col gap-2 lg:gap-0 items-center w-1/2 lg:w-1/6 mb-6">
+				<div class="flex flex-row xl:flex-col gap-2 xl:gap-0 items-center w-1/2 xl:w-1/6 mb-6">
 					@if($cs->student->details->profpic)
-						<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-10 h-10 md:w-14 md:h-14 lg:w-28 lg:h-28 mt-0 mb-0 lg:mt-2 lg:mb-4" alt="profpic" style="object-fit: cover; object-position: center;">
+						<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-10 h-10 md:w-14 md:h-14 xl:w-28 xl:h-28 mt-0 mb-0 xl:mt-2 xl:mb-4" alt="profpic" style="object-fit: cover; object-position: center;">
 					@else
-						<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-10 h-10 md:w-14 md:h-14 lg:w-28 lg:h-28 mt-0 mb-0 lg:mt-2 lg:mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+						<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-10 h-10 md:w-14 md:h-14 xl:w-28 xl:h-28 mt-0 mb-0 xl:mt-2 xl:mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
 					@endif
-					<h1 class="text-sm lg:text-lg font-bold text-start lg:text-center">{{-- explode(" ", $cs->student->full_name)[0] --}}{{ $cs->student->full_name }}</h1>
+					<h1 class="text-sm xl:text-lg font-bold text-start xl:text-center">{{-- explode(" ", $cs->student->full_name)[0] --}}{{ $cs->student->full_name }}</h1>
 				</div>
 			@empty
 			@endforelse
@@ -116,7 +116,7 @@
 		<h2 class="my-4 font-extrabold text-xl text-dark-blue">Course Topics and Activities</h2>
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
-		<div class="flex flex-col-reverse lg:flex-row gap-8 lg:gap-0 justify-between items-stretch w-full mt-5">
+		<div class="flex flex-col-reverse xl:flex-row gap-8 xl:gap-0 justify-between items-stretch w-full mt-5">
 			<div class="relative">
 				<x-button type="button" data-route="{{ route('teacher.mycourse.topic.store', $course->id) }}" id="new-topic-btn"><i class="bi bi-plus-lg"></i> Add New Topic</x-button>
 				@if($topics->count() == 0)
@@ -124,7 +124,7 @@
 				@endif
 			</div>
 
-			<div class="flex gap-2 lg:gap-5">
+			<div class="flex gap-2 xl:gap-5">
 				<x-anchor-button
 					href="{{ route('teacher.mycourse.import-excel-topicandactivities', $course->id) }}">
 					<i class="bi bi-file-earmark-arrow-up"></i> Import from Excel
@@ -151,7 +151,7 @@
 			</div>
 		</div>
 
-		<div class="w-full bg-slate-400 mt-4 lg:mt-8" style="height: 2px;"></div>
+		<div class="w-full bg-slate-400 mt-4 xl:mt-8" style="height: 2px;"></div>
 
 		<div class="w-full overflow-x-auto">
 			<table class="w-full">

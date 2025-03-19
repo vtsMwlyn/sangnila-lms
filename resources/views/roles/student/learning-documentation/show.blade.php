@@ -6,7 +6,7 @@
 
 @section('popup')
 	{{-- Upload portfolio  --}}
-	<x-popup popup_title="Upload Portfolio" class="w-11/12 lg:w-2/3 flex flex-col items-stretch justify-center overflow-y-auto" id="upload-portfolio">
+	<x-popup popup_title="Upload Portfolio" class="w-11/12 xl:w-2/3 flex flex-col items-stretch justify-center overflow-y-auto" id="upload-portfolio">
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<form method="post" action="{{ route('student.learning-documentation.store.portfolio', $course->id) }}" class="mt-4" enctype="multipart/form-data">
 				@csrf
@@ -51,12 +51,12 @@
         {{-- For larger screen --}}
 		<div class="mt-4 w-full flex">
 			<a href="{{ route('student.learning-documentation.show', ['course_id' => $course->id, 'content' => 'portfolios']) }}"
-				class="py-2 w-1/2 lg:w-1/6 sm:w-40 text-center hover:bg-slate-200"
+				class="py-2 w-1/2 xl:w-1/6 sm:w-40 text-center hover:bg-slate-200"
 				style="@if(!request('content') || request('content') == 'portfolios') border-bottom: 4px solid #1db9cf; @endif">
 				Portfolios
 			</a>
             <a href="{{ route('student.learning-documentation.show', ['course_id' => $course->id, 'content' => 'certificates']) }}"
-				class="py-2 w-1/2 lg:w-1/6 sm:w-40 text-center hover:bg-slate-200"
+				class="py-2 w-1/2 xl:w-1/6 sm:w-40 text-center hover:bg-slate-200"
 				style="@if(request('content') == 'certificates') border-bottom: 4px solid #1db9cf; @endif">
 				Certificate
 			</a>

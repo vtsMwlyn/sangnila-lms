@@ -5,7 +5,7 @@
 @endsection
 
 @section("popup")
-	<x-popup popup_title="History" class="w-11/12 lg:w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submission-history">
+	<x-popup popup_title="History" class="w-11/12 xl:w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submission-history">
 		{{-- Popup content --}}
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<div class="w-full overflow-x-auto">
@@ -23,7 +23,7 @@
 		</div>
 	</x-popup>
 
-	<x-popup popup_title="Assignment Submission" class="w-11/12 lg:w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submit-assignment">
+	<x-popup popup_title="Assignment Submission" class="w-11/12 xl:w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="submit-assignment">
 		{{-- Popup content --}}
 		<div class="overflow-y-auto w-full" style="max-height: 50vh;">
 			<p class="mt-3 font-semibold">Assignment Description:</p>
@@ -44,8 +44,8 @@
 				</div>
 
 				<div class="flex items-center justify-center w-full mt-8 mb-3 gap-3">
-					<x-button class="w-full md:w-40 lg:w-1/6">Submit</x-button>
-					{{-- <x-button class="w-full md:w-40 lg:w-1/6">Cancel</x-button> --}}
+					<x-button class="w-full md:w-40 xl:w-1/6">Submit</x-button>
+					{{-- <x-button class="w-full md:w-40 xl:w-1/6">Cancel</x-button> --}}
 				</div>
 
 				{{-- Helper --}}
@@ -104,7 +104,7 @@
 		<x-badge-danger badge_text="This assignment's maximum submission is reached." class="mb-4" id="max-submission-badge" style="display: none;"></x-badge-danger>
 
 		{{-- For desktop screen --}}
-		<div class="w-full overflow-x-auto hidden lg:block">
+		<div class="w-full overflow-x-auto hidden xl:block">
 			<table class="w-full">
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Title</th>
@@ -177,7 +177,7 @@
 		</div>
 
 		{{-- For smaller screen --}}
-		<div class="w-full flex flex-col gap-4 lg:hidden items-stretch mt-4">
+		<div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-4">
 			@forelse ($assignments as $index => $asg)
 				<div class="bg-white rounded-xl p-4 flex flex-col gap-3 dropdown-container">
 					<button class="flex flex-col items-start dropdown-toggler w-full">

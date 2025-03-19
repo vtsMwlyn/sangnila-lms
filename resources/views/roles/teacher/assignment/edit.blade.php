@@ -79,7 +79,7 @@
 						@continue
 					@endif
 
-					<div class="flex items-center gap-3 checkbox-container w-full md:w-[32%] lg:w-[23%]">
+					<div class="flex items-center gap-3 checkbox-container w-full md:w-[32%] xl:w-[23%]">
 						<input type="checkbox" id="checkbox{{ $i }}"
 						class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $i) == "on" ) checked @elseif($checkboxes_values[$i] == "on") checked @endif>
 						@if($cs->student->details->profpic)
@@ -97,10 +97,10 @@
 			@enderror
 
 			<div class="flex items-stretch gap-2 justify-end w-full mt-10">
-				<x-cancel-button class="w-full md:w-40 lg:w-1/6">
+				<x-cancel-button class="w-full md:w-40 xl:w-1/6">
 					Cancel
 				</x-cancel-button>
-				<x-button class=" w-full md:w-40 lg:w-1/6">
+				<x-button class=" w-full md:w-40 xl:w-1/6">
 					{{ __('Submit') }}
 				</x-button>
 			</div>

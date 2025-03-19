@@ -75,7 +75,7 @@
 						@if($cs->student->status == "disabled")
 							@continue
 						@endif
-						<div class="flex items-center gap-3 checkbox-container w-full md:w-[32%] lg:w-[23%]">
+						<div class="flex items-center gap-3 checkbox-container w-full md:w-[32%] xl:w-[23%]">
 							<input type="checkbox" id="checkbox{{ $loop->iteration }}"
 							class="mr-2 h-5 w-5" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif>
 							@if($cs->student->details->profpic)
@@ -93,10 +93,10 @@
 				@enderror
 
 				<div class="flex items-stretch gap-2 justify-end w-full mt-10 mb-3">
-					<x-cancel-button class="w-full md:w-40 lg:w-1/6">
+					<x-cancel-button class="w-full md:w-40 xl:w-1/6">
 						Cancel
 					</x-cancel-button>
-					<x-button class=" w-full md:w-40 lg:w-1/6">
+					<x-button class=" w-full md:w-40 xl:w-1/6">
 						{{ __('Submit') }}
 					</x-button>
 				</div>
