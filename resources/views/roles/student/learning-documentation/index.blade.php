@@ -14,7 +14,8 @@
 					<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 					@php
 						$n_portolios = App\Models\Portfolio::where('course_id', $course->id)->where('student_id', Auth::user()->id)->count();
-						$c_status = App\Models\Assessment::where('course_id', $course->id)->where('student_id', Auth::user()->id)->first()->certificate_accessible;
+						$assessment = App\Models\Assessment::where('course_id', $course->id)->where('student_id', Auth::user()->id)->first();
+						$c_status = $assessment? $assessment->certificate_accesible : 0;
 					@endphp
 					<div class="flex gap-2 items-center">
 						<i class="bi bi-book-half text-slate-400"></i>
