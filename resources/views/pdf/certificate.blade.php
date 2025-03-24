@@ -103,7 +103,11 @@
             </div>
 
             <div style="position: absolute; bottom: 40px; right: 50px;">
-                {{-- <img src="{{ asset('') }}" style="width: 150px; height: 150px;" alt="signature"> --}}
+                @if($signature_img_path)
+                    <center>
+                        <img src="{{ storage_path($signature_img_path) }}" style="width: 150px; height: 150px;" alt="signature">
+                    </center>
+                @endif
                 <div style="text-align: center; font-size: 15pt; color: #344b9b; margin-bottom: 5px;">{{ $teacher->full_name }}</div>
                 <div style="height: 1.5px; background-color: #344b9b; width: 95%; margin: auto;"></div>
                 <div style="text-align: center; font-size: 13pt; color: #344b9b; margin-top: -5px;">Lecturer</div>

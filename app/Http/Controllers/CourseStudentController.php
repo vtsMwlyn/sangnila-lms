@@ -13,12 +13,14 @@ use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
 use App\Models\ImportedStudent;
+use App\Models\Signature;
 use App\Models\StudentAttendance;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Dompdf\Options;
+use Illuminate\Support\Facades\Storage;
 
 class CourseStudentController extends Controller {
 	// ===== ADMIN ===== //
@@ -474,11 +476,19 @@ class CourseStudentController extends Controller {
 			abort(403);
 		}
 
+		$signature = Signature::where('user_id', $teacher->id)->first();
+		$signature_img_path = null;
+
+		if($signature){
+			$signature_img_path = $signature->path;
+		}
+
 		$pdf = Pdf::loadView('pdf.certificate', [
 			'student' => $student,
 			'course' => $course,
 			'teacher' => $teacher,
 			'assessment' => $assessment,
+			'signature_img_path' => $signature_img_path,
 		])->setPaper('a4', 'landscape');
 
 		return $pdf->stream('SangnilaArtsAcademy_'. $student->full_name . '_' . $course->course_name .'.pdf');
