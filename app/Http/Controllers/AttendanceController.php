@@ -92,7 +92,7 @@ class AttendanceController extends Controller {
 
 		// Counting total attendances per teached students
 		$total_student_attendances = [];
-		$courseStudents = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+		$courseStudents = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->orderByRaw('CASE WHEN learning_status = "learning" THEN 0 WHEN learning_status = "complete" THEN 1 ELSE 2 END')->get();
 
 		foreach($courseStudents as $cs){
 			$sa = StudentAttendance::where('student_id', $cs->student->id)
@@ -125,6 +125,7 @@ class AttendanceController extends Controller {
 	
 			$total_student_attendances[$cs->student->id] = [
 				'name' => $cs->student->full_name,
+				'status' => $cs->learning_status,
 				'curr' => $count,
 				'total' => $cs->max_course_session,
 				'latest' => $latest

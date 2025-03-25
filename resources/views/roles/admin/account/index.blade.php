@@ -63,6 +63,8 @@
 			</form>
 		</div>
 
+		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
+
 		@if(session()->has("success"))
 			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
 		@elseif(session()->has("warning"))
@@ -108,11 +110,10 @@
 				<a href="{{ route('admin.account.index', ['role' => 'disabled']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">Disabled</div></a>
 			</div>
 		</div>
-		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
 		@if(request('role') == 'admin' || !request('role'))
 			{{-- Admin accounts --}}
-			<div class="w-full overflow-x-auto" style="max-height: 500px;" id="admin-accounts">
+			<div class="w-full overflow-x-auto mt-3" style="max-height: 500px;" id="admin-accounts">
 				<table class="w-full">
 					<thead>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Full Name</th>
@@ -169,7 +170,7 @@
 
 		@if(request('role') == 'teacher')
 			{{-- Teacher accounts --}}
-			<div class="w-full overflow-x-auto" style="max-height: 500px;" id="teacher-accounts">
+			<div class="w-full overflow-x-auto mt-3" style="max-height: 500px;" id="teacher-accounts">
 				<table class="w-full">
 					<thead>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Full Name</th>
@@ -224,7 +225,7 @@
 
 		@if(request('role') == 'student')
 			{{-- Student accounts --}}
-			<div class="w-full overflow-x-auto" style="max-height: 500px;" id="student-accounts">
+			<div class="w-full overflow-x-auto mt-3" style="max-height: 500px;" id="student-accounts">
 				<table class="w-full">
 					<thead>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Full Name</th>
@@ -278,7 +279,7 @@
 
 		@if(request('role') == 'disabled')
 			{{-- Disabled accounts --}}
-			<div class="w-full overflow-x-auto" style="max-height: 500px;" id="disabled-accounts">
+			<div class="w-full overflow-x-auto mt-3" style="max-height: 500px;" id="disabled-accounts">
 				<table class="w-full">
 					<thead>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Full Name</th>

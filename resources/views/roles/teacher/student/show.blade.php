@@ -55,6 +55,8 @@
 			<span class="@if($status == 'learning') bg-light-blue @elseif($status == 'undone') bg-red @else bg-green-600 @endif text-white text-base rounded-lg px-2 py-0.5 font-normal">{{ ucwords($status) }}</span>
 		</div>
 
+		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
+
 		@if(session()->has("success"))
 			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
 		@elseif(session()->has("warning"))
@@ -89,10 +91,9 @@
 				Assessment
 			</a>
 		</div>
-		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
 		@if(request('content') == 'activity access' || !request('content'))
-			<div class="w-full overflow-x-auto hidden xl:block">
+			<div class="w-full overflow-x-auto hidden xl:block mt-3">
 				<form method="post" action="{{ route("teacher.student.update.progress.activity-access", [$course->id, $student->id]) }}" id="activity_access">
 					@csrf
 					@method('patch')
@@ -134,7 +135,7 @@
 			</div>
 
 			{{-- For smaller screen --}}
-			<div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-4">
+			<div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-3">
 				@forelse ($newestprogress as $progress)
 					<div class="bg-white rounded-xl p-4 flex flex-col gap-3">
 						<div class="flex flex-col items-start w-full">
@@ -160,7 +161,7 @@
 		@endif
 
 		@if(request('content') == 'meeting links')
-			<div class="w-full overflow-x-auto hidden xl:block">
+			<div class="w-full overflow-x-auto hidden xl:block mt-3">
 				<form method="post" action="{{ route("teacher.student.update.progress.meeting-link", [$course->id, $student->id]) }}" id="meeting_link">
 					@csrf
 					@method('patch')
@@ -203,7 +204,7 @@
 			</div>
 
 			{{-- For smaller screen --}}
-			<div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-4">
+			<div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-3">
 				@forelse ($newestprogress as $progress)
 					<div class="bg-white rounded-xl p-4 flex flex-col gap-3">
 						<div class="flex flex-col items-start w-full">

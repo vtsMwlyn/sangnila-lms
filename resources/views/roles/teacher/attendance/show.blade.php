@@ -36,6 +36,7 @@
 		<x-back-button href="{{ route('teacher.attendance.index') }}"></x-back-button>
 		<div class="flex flex-col xl:flex-row items-start justify-between mt-3">
 			<x-page-title>{{ $course->course_name }} - {{ ucwords($course->level) }}</x-page-title>
+		
 			<div class="flex gap-2 mt-4 xl:mt-0">
 				@if(!$unfinishedSelfAttendance)
 					<x-anchor-button href="{{ route('teacher.attendance.check-in', $course->id) }}">
@@ -71,6 +72,8 @@
 			</div>
 		</div>
 
+		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
+
 		{{-- For larger screen --}}
 		<div class="flex mt-4 w-full flex-wrap">
 			<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id, 'content' => 'attendance reports']) }}"
@@ -92,8 +95,6 @@
 			</a>
 		</div>
 
-		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
-
 		@if(session()->has("success"))
 			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
 		@elseif(session()->has("warning"))
@@ -107,14 +108,21 @@
 				<x-anchor-button href="{{ route('teacher.attendance.select-students', $course->id) }}" class="self-start xl:self-center">
 					<i class="bi bi-plus-lg"></i> New Attendance Report
 				</x-anchor-button>
-				<form action="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances']) }}" method="get" class="flex items-center gap-2">
+				<div class="relative flex flex-col items-start w-full md:w-96 first-letter:0 dropdown-container">
+					<button type="button" class="border-slate-400 py-2 px-4 rounded-2xl font-bold text-dark-blue w-full bg-white flex justify-between items-center dropdown-toggler" style="border-width: 3px;">{{ ucwords(request('show', 'My Attendances')) }} <img src="{{ asset('img/dropdown-arrow.svg') }}" class="w-5 h-5" alt="icon"></button>
+					<div class="absolute bg-white top-12 w-full rounded-xl flex flex-col hidden overflow-hidden dropdown-menu" style="">
+						<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances', 'content' => 'attendance reports', 'show' => 'my students only']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">My Students Only</div></a>
+						<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances', 'content' => 'attendance reports', 'show' => 'all']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">All</div></a>
+					</div>
+				</div>
+				{{-- <form action="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances']) }}" method="get" class="flex items-center gap-2">
 					<x-select class="w-48 md:w-80" name="show">
 						<option value="my students only" @if(!request('show') || request('show') == 'my students only') selected @endif>My Students Only</option>
 						<option value="all" @if(request('show') == 'all') selected @endif>All Students</option>
 					</x-select>
 					
 					<x-button type="submit">Filter</x-button>
-				</form>
+				</form> --}}
 			</div>
 
 			<div class="w-full overflow-auto hidden xl:block" style="height: 60vh;">
@@ -220,7 +228,7 @@
 					<tbody>
 						@foreach ($total_student_attendances as $tsa)
 							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-								<td class="py-3 px-4">{{ $tsa['name'] }}</td>
+								<td class="py-3 px-4">{{ $tsa['name'] }} <span class="ml-2 @if($tsa['status'] == 'learning') bg-light-blue @elseif($tsa['status'] == 'complete') bg-green-600 @else bg-red @endif text-white text-base rounded-lg px-2 py-0.5 font-normal">{{ ucwords($tsa['status']) }}</span></td>
 								<td class="py-3 px-4">{{ $tsa['latest'] ? Carbon\Carbon::parse($tsa['latest']->attendance->attendance_date)->format('l, d M Y') : 'N/A' }}</td>
 								<td class="py-3 px-4">{{ $tsa['curr'] }} of {{ $tsa['total'] }} sessions</td>
 							</tr>
