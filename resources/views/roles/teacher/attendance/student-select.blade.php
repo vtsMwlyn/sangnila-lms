@@ -11,7 +11,9 @@
 
 @section("content")
 	<x-section-container>
-		<x-page-title>Student Attendance for {{ $course->course_name }}</x-page-title>
+		<x-page-title>New Attendance Report</x-page-title>
+		<h1 class="font-bold text-lg text-blue mt-1">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
+		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("success"))
 			<x-badge-success badge_text="{{ session('success') }}"></x-badge-success>
@@ -104,13 +106,13 @@
 				</div>
 			</div>
 
-			<div class="flex items-stretch gap-2 justify-center w-full mt-10 mb-3">
-				<x-button class=" w-full md:w-40 xl:w-1/6">
-					{{ __('Continue') }}
-				</x-button>
+			<div class="flex items-stretch gap-2 justify-end w-full mt-10 mb-3">
 				<x-cancel-button class="w-full md:w-40 xl:w-1/6">
 					Cancel
 				</x-cancel-button>
+				<x-button class=" w-full md:w-40 xl:w-1/6">
+					{{ __('Continue') }}
+				</x-button>
 			</div>
 		</form>
 	</x-section-container>

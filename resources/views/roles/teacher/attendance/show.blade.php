@@ -73,9 +73,15 @@
 
 		{{-- For larger screen --}}
 		<div class="flex mt-4 w-full flex-wrap">
-			<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id, 'content' => 'student attendances']) }}"
+			<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id, 'content' => 'attendance reports']) }}"
 				class="py-2 w-1/2 xl:w-1/6 sm:w-48 text-center hover:bg-slate-200"
-				style="@if(request('content') == 'student attendances' || !request('content')) border-bottom: 4px solid #1db9cf; @endif">
+				style="@if(request('content') == 'attendance reports' || !request('content')) border-bottom: 4px solid #1db9cf; @endif">
+				Attendance Reports
+			</a>
+
+			<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'student attendances']) }}"
+				class="py-2 w-1/2 xl:w-1/6 sm:w-48 text-center hover:bg-slate-200"
+				style="@if(request('content') == 'student attendances') border-bottom: 4px solid #1db9cf; @endif">
 				Student Attendances
 			</a>
 
@@ -96,10 +102,10 @@
 			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
-		@if(request('content') == 'student attendances' || !request('content'))
+		@if(request('content') == 'attendance reports' || !request('content'))
 			<div class="mb-3 mt-5 flex flex-col-reverse gap-8 xl:gap-0 xl:flex-row w-full justify-between items-center">
 				<x-anchor-button href="{{ route('teacher.attendance.select-students', $course->id) }}" class="self-start xl:self-center">
-					<i class="bi bi-plus-lg"></i> New Student Attendance
+					<i class="bi bi-plus-lg"></i> New Attendance Report
 				</x-anchor-button>
 				<form action="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances']) }}" method="get" class="flex items-center gap-2">
 					<x-select class="w-48 md:w-80" name="show">
@@ -200,6 +206,27 @@
 				@empty
 					- N/A -
 				@endforelse
+			</div>
+		@endif
+
+		@if(request('content') == 'student attendances')
+			<div class="w-full overflow-auto hidden xl:block" style="height: 60vh;">
+				<table class="w-full">
+					<thead>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Student Name</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Last Date Attended</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Total Attendance</th>
+					</thead>
+					<tbody>
+						@foreach ($total_student_attendances as $tsa)
+							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
+								<td class="py-3 px-4">{{ $tsa['name'] }}</td>
+								<td class="py-3 px-4">{{ $tsa['latest'] ? Carbon\Carbon::parse($tsa['latest']->attendance->attendance_date)->format('l, d M Y') : 'N/A' }}</td>
+								<td class="py-3 px-4">{{ $tsa['curr'] }} of {{ $tsa['total'] }} sessions</td>
+							</tr>
+						@endforeach
+					</tbody>
+				</table>
 			</div>
 		@endif
 

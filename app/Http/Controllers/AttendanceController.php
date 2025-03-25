@@ -90,11 +90,53 @@ class AttendanceController extends Controller {
 			return $item->check_out_time == null;
 		});
 
+		// Counting total attendances per teached students
+		$total_student_attendances = [];
+		$courseStudents = CourseStudent::where("course_id", $course->id)->where("teacher_id", Auth::user()->id)->get();
+
+		foreach($courseStudents as $cs){
+			$sa = StudentAttendance::where('student_id', $cs->student->id)
+				->whereHas('attendance', function ($query) use ($course) {
+					$query->where('course_id', $course->id);
+				})
+				->with('attendance')
+				->orderByDesc(
+					Attendance::select('attendance_date') // Select latest attendance_date
+						->whereColumn('attendances.id', 'student_attendances.attendance_id') // Ensure correct join
+						->limit(1)
+				)
+				->get();
+
+			$latest = $sa->first() ?? null;
+
+			if($cs->is_imported){
+				$count = ImportedStudent::where("course_id", $course->id)->where("student_id", $cs->student->id)->first()->last_attendance_count;
+			} else {
+				$count = 0;
+			}
+	
+			$student_attendances_in_the_course = [];
+			foreach($sa as $atd){
+				if($atd->attendance->course_id == $course->id){
+					array_push($student_attendances_in_the_course, $atd);
+					$count++;
+				}
+			}
+	
+			$total_student_attendances[$cs->student->id] = [
+				'name' => $cs->student->full_name,
+				'curr' => $count,
+				'total' => $cs->max_course_session,
+				'latest' => $latest
+			];
+		}
+
 		return view('roles.teacher.attendance.show', [
 			'attendanceData' => $attendanceData,
 			'attendanceData2' => $attendanceData2,
 			"course" => $course,
-			"unfinishedSelfAttendance" => $unfinishedSelfAttendance->first()
+			"unfinishedSelfAttendance" => $unfinishedSelfAttendance->first(),
+			'total_student_attendances' => $total_student_attendances,
 		]);
 	}
 

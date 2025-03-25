@@ -12,6 +12,7 @@
 @section("content")
 	<x-section-container>
 		<x-page-title>New Attendance Report</x-page-title>
+		<h1 class="font-bold text-lg text-blue mt-1">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("success"))
