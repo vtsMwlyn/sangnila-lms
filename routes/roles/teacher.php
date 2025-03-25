@@ -17,6 +17,7 @@ use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\GoogleServiceController;
 use App\Http\Controllers\DownloadResourceController;
+use App\Http\Controllers\LecturerInvoiceController;
 
 Route::prefix('/teacher')
 	->name('teacher.')
@@ -151,6 +152,11 @@ Route::prefix('/teacher')
 				Route::get("/{course_id}/self/check-in", [TeacherController::class, "check_in"])->name("check-in")->whereNumber("course_id");
 				Route::post("/{course_id}/self/check-in", [TeacherController::class, "check_in_store"])->name("check-in.store")->whereNumber("course_id");
 				Route::post("/{course_id}/self/check-out", [TeacherController::class, "check_out_store"])->name("check-out.store")->whereNumber("course_id");
+
+				// Invoice
+				Route::get('/{course_id}/invoice/create', [LecturerInvoiceController::class, 'create'])->name('lecturer-invoice.create')->whereNumber("course_id");
+				Route::post('/{course_id}/invoice/create', [LecturerInvoiceController::class, 'store'])->name('lecturer-invoice.store')->whereNumber("course_id");
+				Route::get('/{invoice_id}/download', [LecturerInvoiceController::class, 'download'])->name('lecturer-invoice.download')->whereNumber('invoice_id');
 			}
 		);
 

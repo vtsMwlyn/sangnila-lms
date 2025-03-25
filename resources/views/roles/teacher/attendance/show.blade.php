@@ -93,6 +93,12 @@
 				style="@if(request('content') == 'my attendances') border-bottom: 4px solid #1db9cf; @endif">
 				My Attendances
 			</a>
+
+			<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my invoices']) }}"
+				class="py-2 w-1/2 xl:w-1/6 sm:w-48 text-center hover:bg-slate-200"
+				style="@if(request('content') == 'my invoices') border-bottom: 4px solid #1db9cf; @endif">
+				My Invoices
+			</a>
 		</div>
 
 		@if(session()->has("success"))
@@ -296,6 +302,41 @@
 				@empty
 					- N/A -
 				@endforelse
+			</div>
+		@endif
+
+		@if(request('content') == 'my invoices')
+			<div class="w-full flex flex-col mt-4">
+				<div>
+					<x-anchor-button href="{{ route('teacher.attendance.lecturer-invoice.create', $course->id) }}"><i class="bi bi-plus-lg"></i> New Invoice</x-anchor-button>
+				</div>
+
+				<div class="w-full overflow-auto hidden xl:block mt-3" style="height: 60vh;">
+					<table class="w-full">
+						<thead>
+							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Invoice Number</th>
+							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Invoice Date</th>
+							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
+						</thead>
+						<tbody>
+							@forelse(Auth::user()->lecturer_invoices as $invoice)
+								<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
+									<td class="py-3 px-4">Invoice {{ $invoice->number }}</td>
+									<td class="py-3 px-4">{{ Carbon\Carbon::parse($invoice->date)->format('D, d M Y') }}</td>
+									<td class="py-3 px-4">
+										<a href="{{ route('teacher.attendance.lecturer-invoice.download', $invoice->id) }}">
+											<img src="{{ asset('img/download.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</a>
+									</td>
+								</tr>
+							@empty
+								<tr>
+									<td classs="py-3 px-4" colspan="3">- No Invoices Data Yet -</td>
+								</tr>
+							@endforelse
+						</tbody>
+					</table>
+				</div>
 			</div>
 		@endif
 
