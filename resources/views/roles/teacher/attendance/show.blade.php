@@ -319,7 +319,7 @@
 							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 						</thead>
 						<tbody>
-							@forelse(Auth::user()->lecturer_invoices as $invoice)
+							@forelse(Auth::user()->lecturer_invoices->where('course_id', $course->id) as $invoice)
 								<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
 									<td class="py-3 px-4">Invoice {{ $invoice->number }}</td>
 									<td class="py-3 px-4">{{ Carbon\Carbon::parse($invoice->date)->format('D, d M Y') }}</td>
@@ -330,8 +330,8 @@
 									</td>
 								</tr>
 							@empty
-								<tr>
-									<td classs="py-3 px-4" colspan="3">- No Invoices Data Yet -</td>
+								<tr class="bg-white">
+									<td class="py-3 px-4 text-center" colspan="3">- No Invoices Data Yet In This Course -</td>
 								</tr>
 							@endforelse
 						</tbody>
