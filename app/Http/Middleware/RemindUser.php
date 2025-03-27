@@ -79,14 +79,14 @@ class RemindUser
 				$some_teachers_not_assigned_to_course = false;
 
 				foreach($allStudents as $student){
-					if($student->enrolled_courses->count() == 0){
+					if($student->enrolled_courses->count() == 0 && $student->status == 'enabled'){
 						$some_students_not_assigned_to_course = true;
 						break;
 					}
 				}
 
 				foreach($allTeachers as $teacher){
-					if($teacher->teached_courses->count() == 0){
+					if($teacher->teached_courses->count() == 0 && $teacher->status == 'enabled'){
 						$some_teachers_not_assigned_to_course = true;
 						break;
 					}

@@ -84,11 +84,12 @@
 													{{ __($current_attendances[$index1][$index2] . "/" . $max_attendances[$index1][$index2]) }}
 												</div>
 												<div class="h-full 
-													@if(($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2] && $cs->learning_status != 'complete')
+													@if((($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) && $cs->learning_status != 'complete')
 														bg-red
 													@else 
 														bg-green-600
-													@endif" style="width: {{ $percentages[$index1][$index2] }}%;"></div>
+													@endif" style="width: {{ $percentages[$index1][$index2] }}%;">
+												</div>
 											</div>
 										</div>
 									</div>
