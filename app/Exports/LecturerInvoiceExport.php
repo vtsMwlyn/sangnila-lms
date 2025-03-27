@@ -33,6 +33,7 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
 
         $count = 0;
         foreach($grouped_student_attendances_by_month as $grouped_by_month){
+            $count++;
             foreach($grouped_by_month as $grouped_by_student){
                 foreach($grouped_by_student as $sa){
                     $count++;
@@ -47,7 +48,7 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
             }
         }
 
-        $this->data_count = $count + 2;
+        $this->data_count = $count;
     }
 
     /**
@@ -73,8 +74,8 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
         foreach($this->grouped_student_attendances_by_month as $period => $grouped_by_month){
             $pos++;
 
-            if(($pos + 1) % 2 == 0){
-                $this->fill_gray_pos[] = $pos + 1;
+            if(($pos) % 2 == 0){
+                $this->fill_gray_pos[] = $pos;
             }
 
             $rows[] = ['', $period, '', '', '', '', ''];
@@ -85,8 +86,8 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
                 foreach($grouped_by_student as $sa){
                     $pos++;
                     
-                    if(($pos + 1) % 2 == 0){
-                        $this->fill_gray_pos[] = $pos + 1;
+                    if(($pos) % 2 == 0){
+                        $this->fill_gray_pos[] = $pos;
                     }
 
                     $start_time = Carbon::parse($sa->start_time);
@@ -249,10 +250,6 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
                 ]);
 
                 $sheet->getStyle('B9:G' . ($this->data_count + 7))->applyFromArray([
-                    // 'fill' => [
-                    //     'fillType' => Fill::FILL_SOLID,
-                    //     'startColor' => ['rgb' => 'FFFF00'], // Yellow background
-                    // ],
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
