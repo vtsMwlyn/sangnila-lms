@@ -103,7 +103,7 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
                         $start_time->format('H:i') . ' - ' . $end_time->format('H:i'),
                         $working_hours === 0? '0' : $working_hours,
                         $this->invoice->rate === 0? '0' : $this->invoice->rate,
-                        $subtotal === 0? '0' : $subtotal,
+                        $subtotal == 0? '0' : $subtotal,
                     ];
                 }
             }
@@ -111,9 +111,9 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
 
         $rows[] = [
             ['', '', '', '', '', '', ''],
-            ['', '', '', '', '', 'Subtotal   ', $this->total],
+            ['', '', '', '', '', 'Subtotal   ', $this->total === 0 ? '0' : $this->total],
             ['', '', '', '', '', 'Tax Rate   ', '0'],
-            ['', 'Please transfer to bank account below:', '', '', 'Total Cost   ', '', $this->total],
+            ['', 'Please transfer to bank account below:', '', '', 'Total Cost   ', '', $this->total === 0 ? '0' : $this->total],
             ['', $this->invoice->bank_data],
             ['', 'Thank you for your business!'],
         ];
