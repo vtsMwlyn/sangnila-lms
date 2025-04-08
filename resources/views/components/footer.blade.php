@@ -1,7 +1,7 @@
 <footer class="px-5 py-10 mt-auto text-white bg-slate-800 bottom-0 w-full" id="footer">
     <div class="flex flex-col md:flex-row items-start justify-center gap-3">
         <div class="w-full xl:w-1/3 self-center px-4">
-            <p class="font-extrabold text-start text-base">Sangnila LMS WebApp</p>
+            <p class="font-extrabold text-start text-base">Sangnila LMS WebApp {{ trans('strings.version') }}</p>
             <p class="text-start mt-2">Copyright &copy 2025 - Sangnila Interactive Media and Technology</p>
             <a href="{{ route('guest.privacy-policy') }}" class="hover:underline hover:font-semibold hover:bg-rounded-lg block mt-8">Privacy Policy</a>
         </div>

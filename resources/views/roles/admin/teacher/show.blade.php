@@ -19,10 +19,15 @@
 		<form method="post" class="w-full flex flex-col mt-3">
 			@csrf
 			<div class="flex flex-col gap-3 w-full">
-				<div class="flex flex-col w-full">
-					<x-label for="status">Course Name<span class="text-red">*</span></x-label>
-					<x-select name="course_name" id="course_name" class="w-full">
+				<div class="flex flex-col w-full select2-container">
+					<x-label for="course_name">Course Name<span class="text-red">*</span></x-label>
+					<x-select name="course_name" id="course_name" class="w-full select-2">
 					</x-select>
+				</div>
+
+				<div class="flex flex-col w-full">
+					<x-label for="rate">Rate<span class="text-red">*</span></x-label>
+					<x-input type="number" name="rate" id="rate" class="w-full"/>
 				</div>
 
 				<div class="flex gap-3 w-full justify-center">
@@ -31,6 +36,41 @@
 					</x-button>
 				</div>
 			</div>
+
+			{{-- Helper --}}
+			<input type="hidden" name="h-last-popup" class="h-last-popup">
+			<input type="hidden" name="h-route" class="h-route">
+			<input type="hidden" name="h-course-teacher" class="h-course-teacher">
+		</form>
+	</x-popup>
+
+	{{-- Edit assign course teacher info --}}
+	<x-popup popup_title="Edit Teacher Course-Assign Info" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-assign-teacher-popup">
+		<form method="post" class="w-full flex flex-col mt-3">
+			@csrf
+			<div class="flex flex-col gap-3 w-full">
+				<div class="flex flex-col w-full select2-container">
+					<x-label for="e_course_name">Course Name<span class="text-red">*</span></x-label>
+					<x-select name="course_name" id="e_course_name" class="w-full select-2">
+					</x-select>
+				</div>
+
+				<div class="flex flex-col w-full">
+					<x-label for="e_rate">Rate<span class="text-red">*</span></x-label>
+					<x-input type="number" name="rate" id="e_rate" class="w-full" value="75000"/>
+				</div>
+
+				<div class="flex gap-3 w-full justify-center">
+					<x-button type="submit" class=" w-1/6 mt-5">
+						Save Info
+					</x-button>
+				</div>
+			</div>
+
+			{{-- Helper --}}
+			<input type="hidden" name="h-last-popup" class="h-last-popup">
+			<input type="hidden" name="h-route" class="h-route">
+			<input type="hidden" name="h-course-teacher" class="h-course-teacher">
 		</form>
 	</x-popup>
 @endsection
@@ -97,9 +137,16 @@
 
 		@forelse($teacher->teached_courses as $index => $course)
 			<div class="flex flex-col w-full gap-4 p-5 @if($index % 2 == 0) bg-white @endif">
-				<div class="flex gap-4">
-					<a class="text-blue-950 font-bold text-xl hover:text-cyan-500" href="{{ route('admin.course.show', $course->id) }}">{{ $course->course_name }} - {{ ucwords($course->level) }}</a>
-					<button type="button" data-route="{{ route('admin.teacher.unassign.destroy', ['teacher_id' => $teacher->id, 'course_id' => $course->id]) }}" data-unassign_course_name="{{ $course->course_name }}" class="unassign-teacher-btn bg-red hover:bg-slate-700 py-0.5 px-1.5 rounded-lg font-bold text-white" style="">
+				@php
+					$ct = App\Models\CourseTeacher::where('user_id', $teacher->id)->where('course_id', $course->id)->first();
+				@endphp
+				<div class="flex gap-2 items-start">
+					<div class="flex flex-col">
+						<a class="text-blue-950 font-bold text-xl hover:text-cyan-500" href="{{ route('admin.course.show', $course->id) }}">{{ $course->course_name }} - {{ ucwords($course->level) }}</a>
+						<div>Rate: Rp {{ number_format($ct->rate, 2, ',', '.') }}/session</div>
+					</div>
+					<x-button class="edit-assign-teacher-btn ml-4" data-route="{{ route('admin.teacher.assign.update', $ct->id) }}" data-course_teacher="{{ $ct }}"><i class="bi bi-pencil-square"></i> Edit</x-button>
+					<button type="button" data-route="{{ route('admin.teacher.unassign.destroy', ['teacher_id' => $teacher->id, 'course_id' => $course->id]) }}" data-unassign_course_name="{{ $course->course_name }}" class="unassign-teacher-btn text-white bg-red flex items-center justify-center px-4 py-2 rounded-xl hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 font-bold" style="">
 						Unassign
 					</button>
 				</div>
@@ -131,6 +178,78 @@
 	<script>
 		const allCourses = @json(App\Models\Course::where('status', 'active')->get());
 
+		function initializeEditCourseTeacherPopup(route, whichpopup, courseTeacher){
+			// Get the list of courses already assigned to the teacher
+			const courseList = @json($teacher->teached_courses);
+
+			// Clear existing options in the dropdown (optional)
+			$("#e_course_name").empty();
+
+			// Old values
+			const oldCourse = '{{ old("course_name") }}';
+			const oldRate = '{{ old("rate") }}';
+
+			// Add the filtered courses to the dropdown
+			allCourses.forEach(element => {
+				const newOption = $("<option>")
+					.attr("value", element.id) // Use `id` as the value
+					.text(`${element.course_name} - ${element.level.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`);
+
+				newOption.prop('selected', element.id == (oldCourse ? oldCourse : courseTeacher.course_id) ? true : false);	
+				
+				$("#e_course_name").append(newOption);
+			});
+
+			$('#e_rate').val(oldRate ? oldRate : courseTeacher.rate);
+
+			$('.h-last-popup').val(whichpopup);
+			$('.h-route').val(route);
+			$('.h-course-teacher').val(courseTeacher);
+
+			// Show the popup
+			$(`#${whichpopup}`).find('form').attr('action', route);
+			$(`#${whichpopup}`).parent().show();
+		}
+
+		function initializeAssignCourseTeacherPopup(route, whichpopup){
+			// Get the list of courses already assigned to the teacher
+			const courseList = @json($teacher->teached_courses);
+
+			// Filter all courses to exclude those already assigned
+			const filtered = allCourses.filter(item =>
+				!courseList.some(course => course.id === item.id)
+			);
+
+			// Old values
+			const oldCourse = '{{ old("course_name") }}';
+			const oldRate = '{{ old("rate") }}';
+
+			// Clear existing options in the dropdown (optional)
+			$("#course_name").empty();
+
+			// Add the filtered courses to the dropdown
+			filtered.forEach(element => {
+				const newOption = $("<option>")
+					.attr("value", element.id) // Use `id` as the value
+					.text(`${element.course_name} - ${element.level.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`);
+
+				if(oldCourse){
+					newOption.prop('selected', element.id == oldCourse ? true : false);
+				}
+				
+				$("#course_name").append(newOption);
+			});
+
+			$('.h-last-popup').val(whichpopup);
+			$('.h-route').val(route);
+
+			$('#rate').val(oldRate ? oldRate : 75000);
+
+			// Show the popup
+			$(`#${whichpopup}`).find('form').attr('action', route);
+			$(`#${whichpopup}`).parent().show();
+		}
+
 		$(document).ready(() => {
 			// Unassign teacher
 			$('.unassign-teacher-btn').on('click', function() {
@@ -143,29 +262,32 @@
 			});
 
 			$("#assign-teacher-btn").on('click', function() {
-				// Get the list of courses already assigned to the teacher
-				const courseList = @json($teacher->teached_courses);
-
-				// Filter all courses to exclude those already assigned
-				const filtered = allCourses.filter(item =>
-					!courseList.some(course => course.id === item.id)
-				);
-
-				// Clear existing options in the dropdown (optional)
-				$("#course_name").empty();
-
-				// Add the filtered courses to the dropdown
-				filtered.forEach(element => {
-					const newOption = $("<option>")
-						.attr("value", element.id) // Use `id` as the value
-						.text(`${element.course_name} - ${element.level.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}`);
-					$("#course_name").append(newOption);
-				});
-
-				// Show the popup
-				$("#assign-teacher-popup").find('form').attr('action', $(this).data('route'));
-				$("#assign-teacher-popup").parent().show();
+				initializeAssignCourseTeacherPopup($(this).data('route'), 'assign-teacher-popup');
 			});
+
+			$(".edit-assign-teacher-btn").on('click', function() {
+				initializeEditCourseTeacherPopup($(this).data('route'), 'edit-assign-teacher-popup', $(this).data('course_teacher'));
+			});
+
+			// Redisplay popup and fill with prev data (for invalidated data)
+			@if ($errors->any())
+				// Retrieve and re-save saved data
+				const old_popup = @json(old('h-last-popup'));
+
+				if(old_popup == "edit-assign-teacher-popup"){
+					const old_route = @json(old('h-route'));
+					const old_popup = @json(old('h-last-popup'));
+					const old_course_teacher = @json(old('h-course-teacher'));
+
+					initializeEditCourseTeacherPopup(old_route, old_popup, old_course_teacher);
+				}
+				else if(old_popup == "assign-teacher-popup"){
+					const old_route = @json(old('h-route'));
+					const old_popup = @json(old('h-last-popup'));
+
+					initializeAssignCourseTeacherPopup(old_route, old_popup);
+				}
+			@endif
 		});
 
 	</script>

@@ -132,6 +132,8 @@ Route::prefix('/admin')
 				Route::get("/{teacher_id}/assign", [CourseTeacherController::class, "show"])->name("assign")->whereNumber('teacher_id');
 				Route::post("/{teacher_id}/assign", [CourseTeacherController::class, "assign"])->name("assign.store")->whereNumber('teacher_id');
 
+				Route::post("/{course_teacher_id}/edit", [CourseTeacherController::class, "update"])->name("assign.update")->whereNumber('course_teacher_id');
+
 				Route::get('{teacher_id}/unassign/{course_id}', [CourseTeacherController::class, 'delete'])->name('unassign.delete')->whereNumber(['teacher_id', 'course_id']);
 				Route::delete("/{teacher_id}/unassign/{course_id}", [CourseTeacherController::class, "unassign"])->name("unassign.destroy")->whereNumber(['teacher_id', 'course_id']);
 
