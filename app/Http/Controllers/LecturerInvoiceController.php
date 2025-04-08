@@ -15,9 +15,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class LecturerInvoiceController extends Controller
 {
     public function index(){
-        return view('roles.teacher.lecturer-invoice.index', [
-
-        ]);
+        return view('roles.teacher.lecturer-invoice.index');
     }
 
     public function create(){
@@ -36,6 +34,26 @@ class LecturerInvoiceController extends Controller
         LecturerInvoice::create($validatedData);
 
         return redirect(route('teacher.lecturer-invoice.index'))->with('success', 'Successfully stored the invoice data!');
+    }
+
+    public function edit($invoice_id){
+        return view('roles.teacher.lecturer-invoice.edit', [
+            'invoice' => LecturerInvoice::findOrFail($invoice_id)
+        ]);
+    }
+
+    public function update(Request $request, $invoice_id){
+        $validatedData = $request->validate([
+            'number' => 'required',
+            'date' => 'required',
+            'bank_data' => 'required',
+        ]);
+
+        $validatedData['user_id'] = Auth::user()->id;
+
+        LecturerInvoice::findOrFail($invoice_id)->update($validatedData);
+
+        return redirect(route('teacher.lecturer-invoice.index'))->with('success', 'Successfully edited the invoice data!');
     }
 
     public function download($invoice_id){

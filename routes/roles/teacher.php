@@ -195,10 +195,24 @@ Route::prefix('/teacher')
 		Route::post('/forum/{course_id}/send', [ForumController::class, 'send_message_teacher'])->name('forum.send')->whereNumber('course_id');
 
 		// ===== INVOICE ===== //
-		Route::get('/invoices', [LecturerInvoiceController::class, 'index'])->name('lecturer-invoice.index');
-		Route::get('/invoices/create', [LecturerInvoiceController::class, 'create'])->name('lecturer-invoice.create');
-		Route::post('/invoices/create', [LecturerInvoiceController::class, 'store'])->name('lecturer-invoice.store');
-		Route::get('/invoices/{invoice_id}/download', [LecturerInvoiceController::class, 'download'])->name('lecturer-invoice.download')->whereNumber('invoice_id');
+		Route::prefix('/invoices')
+			->name('lecturer-invoice.')
+			->group(function(){
+
+				// Invoices list
+				Route::get('/', [LecturerInvoiceController::class, 'index'])->name('index');
+
+				// Create Invoice Headers
+				Route::get('/create', [LecturerInvoiceController::class, 'create'])->name('create');
+				Route::post('/create', [LecturerInvoiceController::class, 'store'])->name('store');
+
+				// Edit Invoice Headers
+				Route::get('/{invoice_id}/edit', [LecturerInvoiceController::class, 'edit'])->name('edit');
+				Route::post('/{invoice_id}/edit', [LecturerInvoiceController::class, 'update'])->name('update');
+
+				// Download Excel
+				Route::get('/{invoice_id}/download', [LecturerInvoiceController::class, 'download'])->name('download')->whereNumber('invoice_id');
+			});
 
 		// ===== VIEW ANNOUNCEMENT ===== //
 		Route::get("/announcement/{announcement_id}", [AnnouncementController::class, "all_view_announcement"])->name("view-announcement")->whereNumber("announcement_id");

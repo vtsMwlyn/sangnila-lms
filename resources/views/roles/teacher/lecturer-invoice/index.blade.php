@@ -26,17 +26,30 @@
                 <thead>
                     <th class="text-start py-3 px-4 border-b-2 border-slate-400">Invoice Number</th>
                     <th class="text-start py-3 px-4 border-b-2 border-slate-400">Invoice Date</th>
+                    <th class="text-start py-3 px-4 border-b-2 border-slate-400">Invoice Period</th>
                     <th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
                 </thead>
                 <tbody>
                     @forelse(Auth::user()->lecturer_invoices as $invoice)
+                        @php
+                            $invoice_date = Carbon\Carbon::parse($invoice->date);
+                            $last_25th = $invoice_date->day >= 25 ? $invoice_date->day(25) : $invoice_date->subMonth()->day(25);
+                            $last_26th = $last_25th->copy()->subMonth()->day(26);
+                        @endphp
+
                         <tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
                             <td class="py-3 px-4">Invoice {{ $invoice->number }}</td>
                             <td class="py-3 px-4">{{ Carbon\Carbon::parse($invoice->date)->format('D, d M Y') }}</td>
+                            <td class="py-3 px-4">{{ $last_26th->format('d M Y') }} - {{ $last_25th->format('d M Y') }}</td>
                             <td class="py-3 px-4">
-                                <a href="{{ route('teacher.lecturer-invoice.download', $invoice->id) }}">
-                                    <img src="{{ asset('img/download.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
-                                </a>
+                                <div class="flex gap-1">
+                                    <a href="{{ route('teacher.lecturer-invoice.edit', $invoice->id) }}">
+                                        <img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+                                    </a>
+                                    <a href="{{ route('teacher.lecturer-invoice.download', $invoice->id) }}">
+                                        <img src="{{ asset('img/download.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @empty
