@@ -152,11 +152,6 @@ Route::prefix('/teacher')
 				Route::get("/{course_id}/self/check-in", [TeacherController::class, "check_in"])->name("check-in")->whereNumber("course_id");
 				Route::post("/{course_id}/self/check-in", [TeacherController::class, "check_in_store"])->name("check-in.store")->whereNumber("course_id");
 				Route::post("/{course_id}/self/check-out", [TeacherController::class, "check_out_store"])->name("check-out.store")->whereNumber("course_id");
-
-				// Invoice
-				Route::get('/{course_id}/invoice/create', [LecturerInvoiceController::class, 'create'])->name('lecturer-invoice.create')->whereNumber("course_id");
-				Route::post('/{course_id}/invoice/create', [LecturerInvoiceController::class, 'store'])->name('lecturer-invoice.store')->whereNumber("course_id");
-				Route::get('/{invoice_id}/download', [LecturerInvoiceController::class, 'download'])->name('lecturer-invoice.download')->whereNumber('invoice_id');
 			}
 		);
 
@@ -198,6 +193,12 @@ Route::prefix('/teacher')
 		Route::get('/forum', [ForumController::class, 'index_teacher'])->name('forum.index')->whereNumber('course_id');
 		Route::get('/forum/{course_id}/retrieve', [ForumController::class, 'retrieve_message_teacher'])->name('forum.retrieve')->whereNumber('course_id');
 		Route::post('/forum/{course_id}/send', [ForumController::class, 'send_message_teacher'])->name('forum.send')->whereNumber('course_id');
+
+		// ===== INVOICE ===== //
+		Route::get('/invoices', [LecturerInvoiceController::class, 'index'])->name('lecturer-invoice.index');
+		Route::get('/invoices/create', [LecturerInvoiceController::class, 'create'])->name('lecturer-invoice.create');
+		Route::post('/invoices/create', [LecturerInvoiceController::class, 'store'])->name('lecturer-invoice.store');
+		Route::get('/invoices/{invoice_id}/download', [LecturerInvoiceController::class, 'download'])->name('lecturer-invoice.download')->whereNumber('invoice_id');
 
 		// ===== VIEW ANNOUNCEMENT ===== //
 		Route::get("/announcement/{announcement_id}", [AnnouncementController::class, "all_view_announcement"])->name("view-announcement")->whereNumber("announcement_id");

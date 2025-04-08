@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\CourseTeacher;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -38,10 +39,11 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
                 foreach($grouped_by_student as $sa){
                     $count++;
 
+                    $rate = CourseTeacher::where('course_id', $sa->attendance->course->id)->where('user_id', Auth::user()->id)->first()->rate;
                     $start_time = Carbon::parse($sa->start_time);
                     $end_time = Carbon::parse($sa->end_time);
-                    $working_hours = number_format($start_time->diffInMinutes($end_time) / 60, 1);
-                    $subtotal = $working_hours * $this->invoice->rate;
+                    $working_hours = round($start_time->diffInMinutes($end_time) / 30) * 0.5;
+                    $subtotal = $working_hours * $rate;
 
                     $this->total += $subtotal;
                 }
@@ -90,19 +92,20 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
                         $this->fill_gray_pos[] = $pos;
                     }
 
+                    $rate = CourseTeacher::where('course_id', $sa->attendance->course->id)->where('user_id', Auth::user()->id)->first()->rate;
                     $start_time = Carbon::parse($sa->start_time);
                     $end_time = Carbon::parse($sa->end_time);
-                    $working_hours = number_format($start_time->diffInMinutes($end_time) / 60, 1);
-                    $subtotal = $working_hours * $this->invoice->rate;
+                    $working_hours = round($start_time->diffInMinutes($end_time) / 30) * 0.5;
+                    $subtotal = $working_hours * $rate;
 
                     $rows[] = [
                         '',
-                        $this->invoice->course->course_name . " " . $sa->student->full_name . 
+                        $sa->attendance->course->course_name . " " . $sa->student->full_name . 
                             " (" . Carbon::parse($sa->attendance->attendance_date)->format('l d M') . ")",
                         'Lecturer',
                         $start_time->format('H:i') . ' - ' . $end_time->format('H:i'),
-                        $working_hours === 0? '0' : $working_hours,
-                        $this->invoice->rate === 0? '0' : $this->invoice->rate,
+                        $working_hours == 0? '0' : $working_hours,
+                        $rate === 0? '0' : $rate,
                         $subtotal == 0? '0' : $subtotal,
                     ];
                 }
