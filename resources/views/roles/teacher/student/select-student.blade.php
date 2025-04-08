@@ -17,11 +17,9 @@
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Select a student to continue</h1>
 
 		@forelse ($grouped_course_students as $status => $gcs)
-			<div class="w-full bg-slate-400 @if($loop->iteration != 1) mt-6 @else mt-4 @endif" style="height: 2px;"></div>
-			<h3 class="my-4 font-bold text-lg @if($status == 'learning') text-light-blue @elseif($status == 'undone') text-red @else text-green-600 @endif">{{ ucwords($status) }} Students</h3>
-			<div class="w-full bg-slate-400 mb-4" style="height: 2px;"></div>
+			<span class="mb-4 mt-4 @if($status == 'learning') bg-light-blue @elseif($status == 'complete') bg-green-600 @else bg-red @endif text-white text-base rounded-lg px-4 py-3 font-normal">{{ ucwords($status) }} Students</span>
 
-			<div class="w-full flex flex-wrap gap-5">
+			<div class="w-full flex flex-wrap gap-5 mb-4">
 				@forelse($gcs as $cs)
 					{{-- Counting how many students has no access at all to any activities --}}
 					@php
