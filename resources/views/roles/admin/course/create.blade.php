@@ -93,7 +93,6 @@
 				<x-button class=" w-full md:w-40 xl:w-1/6">
 					{{ __('Submit') }}
 				</x-button>
-
 			</div>
 		</form>
 

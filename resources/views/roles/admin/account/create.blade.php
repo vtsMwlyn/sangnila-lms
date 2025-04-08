@@ -75,13 +75,13 @@
 					</div>
 				</div>
 
-				<div class="flex justify-center w-full gap-3 items-center mt-8">
-					<x-button class=" w-full md:w-1/3">
-						{{ __('Create') }}
-					</x-button>
-					<x-cancel-button class="w-full md:w-1/3">
+				<div class="flex items-stretch gap-3 justify-end mt-10 mb-3">
+					<x-cancel-button class="w-full md:w-40 xl:w-1/6">
 						Cancel
 					</x-cancel-button>
+					<x-button class=" w-full md:w-40 xl:w-1/6">
+						{{ __('Submit') }}
+					</x-button>
 				</div>
 			</div>
 

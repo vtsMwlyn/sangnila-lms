@@ -220,7 +220,7 @@
 
 		<div class="flex gap-3 mt-8 w-full justify-end">
 			<x-anchor-button  href="{{ route('admin.course.edit', $course->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
-			<x-button type="button" id="delete-course-btn"  data-route="{{ route('admin.course.destroy', $course->id) }}" data-del_course_name="{{ $course->course_name }}"><i class="bi bi-trash3"></i> Delete</x-button>
+			<x-button type="button" id="delete-course-btn" data-route="{{ route('admin.course.destroy', $course->id) }}" data-del_course_name="{{ $course->course_name }}"><i class="bi bi-trash3"></i> Delete</x-button>
 		</div>
 
 		{{-- Learning Outcomes --}}
@@ -250,10 +250,10 @@
 							<td class="py-3 px-4">{{ $lo->title }}</td>
 							<td class="py-3 px-4">
 								<div class="flex justify-start gap-1 w-full">
-									<button type="button" class="editlearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.update', [$course->id, $lo->id]) }}" data-learning_outcome="{{ $lo->toJSON() }}">
+									<button type="button" class="editlearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.update', [$course->id, $lo->id]) }}" data-learning_outcome="{{ $lo->toJSON() }}" title="Edit this learning outcome">
 										<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</button>
-									<button type="button" class="deletelearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.destroy', [$course->id, $lo->id]) }}" data-del_lo_name="{{ $lo->title }}">
+									<button type="button" class="deletelearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.destroy', [$course->id, $lo->id]) }}" data-del_lo_name="{{ $lo->title }}" title="Delete this learning outcome">
 										<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</button>
 								</div>
@@ -404,17 +404,17 @@
 						<td class="py-3 px-4">
 							<div class="w-full flex items-center gap-1">
 								<div class="relative">
-									<a href="{{ route('admin.course.curriculum.topic.details', [$course->id, $topic->id]) }}">
+									<a href="{{ route('admin.course.curriculum.topic.details', [$course->id, $topic->id]) }}" title="View this curriculum topic details">
 										<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</a>
 									@if($topic->curriculum_activities->count() == 0)
 										<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
 									@endif
 								</div>
-								<button type="button" data-curriculum_topic="{{ $topic }}" data-route="{{ route('admin.course.curriculum.topic.update', [$course->id, $topic->id]) }}" class="edit-curriculum-topic-btn">
+								<button type="button" data-curriculum_topic="{{ $topic }}" data-route="{{ route('admin.course.curriculum.topic.update', [$course->id, $topic->id]) }}" class="edit-curriculum-topic-btn" title="Edit this curriculum topic">
 									<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 								</button>
-								<button type="button" data-del_ct_name="{{ $topic->title }}" data-route="{{ route('admin.course.curriculum.topic.destroy', [$course->id, $topic->id]) }}" class="delete-curriculum-topic-btn">
+								<button type="button" data-del_ct_name="{{ $topic->title }}" data-route="{{ route('admin.course.curriculum.topic.destroy', [$course->id, $topic->id]) }}" class="delete-curriculum-topic-btn" title="Delete this curriculum topic">
 									<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 								</button>
 							</div>

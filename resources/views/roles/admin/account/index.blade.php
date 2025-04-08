@@ -143,16 +143,16 @@
 								<td class="py-3 px-4 font-semibold @if($admin_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($admin_acc->status) }}</td>
 								<td class="py-3 px-4">
 									<div class="flex w-full items-stretch gap-1 justify-start">
-										<button type="button" class="reset-password-btn h-8 w-8 flex items-center justify-center hover:scale-110" data-account_name="{{ $admin_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $admin_acc->id) }}">
+										<button type="button" class="reset-password-btn h-8 w-8 flex items-center justify-center hover:scale-110" data-account_name="{{ $admin_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $admin_acc->id) }}" title="Reset the password for this account">
 											<img src="{{ asset('img/reset-password.svg') }}">
 										</button>
-										<a href="{{ route('admin.account.acc_edit', $admin_acc->id) }}">
+										<a href="{{ route('admin.account.acc_edit', $admin_acc->id) }}" title="Edit this account data">
 											<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</a>
-										<button type="button" class="disable-account-btn" data-account_name="{{ $admin_acc->full_name }}" data-route="{{ route('admin.account.acc_disable', $admin_acc->id) }}">
+										<button type="button" class="disable-account-btn" data-account_name="{{ $admin_acc->full_name }}" data-route="{{ route('admin.account.acc_disable', $admin_acc->id) }}" title="Disable this account">
 											<img src="{{ asset('img/ban.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</button>
-										<button type="button" class="delete-account-btn" data-account_name="{{ $admin_acc->full_name }}" data-route="{{ route('admin.account.acc_delete', $admin_acc->id) }}">
+										<button type="button" class="delete-account-btn" data-account_name="{{ $admin_acc->full_name }}" data-route="{{ route('admin.account.acc_delete', $admin_acc->id) }}" title="Delete this account">
 											<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</button>
 									</div>
@@ -198,16 +198,16 @@
 								<td class="py-3 px-4 font-semibold @if($teacher_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($teacher_acc->status) }}</td>
 								<td class="py-3 px-4">
 									<div class="flex w-full items-stretch gap-1 justify-start">
-										<button type="button" class="reset-password-btn h-8 w-8 flex items-center justify-center hover:scale-110" data-account_name="{{ $teacher_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $teacher_acc->id) }}">
+										<button type="button" class="reset-password-btn h-8 w-8 flex items-center justify-center hover:scale-110" data-account_name="{{ $teacher_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $teacher_acc->id) }}" title="Reset the password for this account">
 											<img src="{{ asset('img/reset-password.svg') }}">
 										</button>
-										<a href="{{ route('admin.account.acc_edit', $teacher_acc->id) }}">
+										<a href="{{ route('admin.account.acc_edit', $teacher_acc->id) }}" title="Edit this account data">
 											<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</a>
-										<button type="button" class="disable-account-btn" data-account_name="{{ $teacher_acc->full_name }}" data-route="{{ route('admin.account.acc_disable', $teacher_acc->id) }}">
+										<button type="button" class="disable-account-btn" data-account_name="{{ $teacher_acc->full_name }}" data-route="{{ route('admin.account.acc_disable', $teacher_acc->id) }}" title="Disable this account">
 											<img src="{{ asset('img/ban.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</button>
-										<button type="button" class="delete-account-btn" data-account_name="{{ $teacher_acc->full_name }}" data-route="{{ route('admin.account.acc_delete', $teacher_acc->id) }}">
+										<button type="button" class="delete-account-btn" data-account_name="{{ $teacher_acc->full_name }}" data-route="{{ route('admin.account.acc_delete', $teacher_acc->id) }}" title="Delete this account">
 											<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</button>
 									</div>
@@ -252,16 +252,16 @@
 								<td class="py-3 px-4 font-semibold @if($student_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($student_acc->status) }}</td>
 								<td class="py-3 px-4">
 									<div class="flex w-full items-stretch gap-1 justify-start">
-										<button type="button" class="reset-password-btn h-8 w-8 flex items-center justify-center hover:scale-110" data-account_name="{{ $student_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $student_acc->id) }}">
+										<button type="button" class="reset-password-btn h-8 w-8 flex items-center justify-center hover:scale-110" data-account_name="{{ $student_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $student_acc->id) }}" title="Reset the password for this account">
 											<img src="{{ asset('img/reset-password.svg') }}">
 										</button>
-										<a href="{{ route('admin.account.acc_edit', $student_acc->id) }}">
+										<a href="{{ route('admin.account.acc_edit', $student_acc->id) }}" title="Edit this account data">
 											<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</a>
-										<button type="button" class="disable-account-btn" data-account_name="{{ $student_acc->full_name }}" data-route="{{ route('admin.account.acc_disable', $student_acc->id) }}">
+										<button type="button" class="disable-account-btn" data-account_name="{{ $student_acc->full_name }}" data-route="{{ route('admin.account.acc_disable', $student_acc->id) }}" title="Disable this account">
 											<img src="{{ asset('img/ban.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</button>
-										<button type="button" class="delete-account-btn" data-account_name="{{ $student_acc->full_name }}" data-route="{{ route('admin.account.acc_delete', $student_acc->id) }}">
+										<button type="button" class="delete-account-btn" data-account_name="{{ $student_acc->full_name }}" data-route="{{ route('admin.account.acc_delete', $student_acc->id) }}" title="Delete this account">
 											<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</button>
 									</div>
@@ -308,16 +308,16 @@
 								<td class="py-3 px-4">{{ $disabled_acc->disable_reason }}</td>
 								<td class="py-3 px-4">
 									<div class="flex w-full items-stretch gap-1 justify-start">
-										<button type="button" class="reset-password-btn h-8 w-8 flex items-center justify-center hover:scale-110" data-account_name="{{ $disabled_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $disabled_acc->id) }}">
+										<button type="button" class="reset-password-btn h-8 w-8 flex items-center justify-center hover:scale-110" data-account_name="{{ $disabled_acc->full_name }}" data-route="{{ route('admin.account.reset-password.proceed', $disabled_acc->id) }}" title="Reset the password for this account">
 											<img src="{{ asset('img/reset-password.svg') }}">
 										</button>
-										<a href="{{ route('admin.account.acc_edit', $disabled_acc->id) }}">
+										<a href="{{ route('admin.account.acc_edit', $disabled_acc->id) }}" title="Edit this account data">
 											<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</a>
-										<button type="button" class="enable-account-btn" data-account_name="{{ $disabled_acc->full_name }}" data-route="{{ route('admin.account.acc_enable.conf', $disabled_acc->id) }}">
+										<button type="button" class="enable-account-btn" data-account_name="{{ $disabled_acc->full_name }}" data-route="{{ route('admin.account.acc_enable.conf', $disabled_acc->id) }}" title="Enable this account">
 											<img src="{{ asset('img/unban.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</button>
-										<button type="button" class="delete-account-btn" data-account_name="{{ $disabled_acc->full_name }}" data-route="{{ route('admin.account.acc_delete', $disabled_acc->id) }}">
+										<button type="button" class="delete-account-btn" data-account_name="{{ $disabled_acc->full_name }}" data-route="{{ route('admin.account.acc_delete', $disabled_acc->id) }}" title="Delete this account">
 											<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</button>
 									</div>

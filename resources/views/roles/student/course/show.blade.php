@@ -203,11 +203,11 @@
 									</div>
 									<div class="flex w-1/4 md:w-1/2 items-start justify-end md:justify-start">
 										<div class="flex gap-1">
-											<a href="{{ route('student.mycourse.preview', $ap["activity"]->id) }}"><img src="{{ asset('img/view.svg') }}" alt="icon" class="w-8 h-8 hover:scale-110"></a>
+											<a href="{{ route('student.mycourse.preview', $ap["activity"]->id) }}"><img src="{{ asset('img/view.svg') }}" alt="icon" class="w-8 h-8 hover:scale-110" title="Open material link"></a>
 											@if($ap["progress"]->meeting_link)
-												<a href="{{ $ap["progress"]->meeting_link }}" target="_blank" class="h-8 w-8 flex items-center justify-center hover:scale-110"><img src="{{ asset('img/online-meeting.svg') }}"></a>
+												<a href="{{ $ap["progress"]->meeting_link }}" target="_blank" class="h-8 w-8 flex items-center justify-center hover:scale-110" title="Open online meeting link for this session"><img src="{{ asset('img/online-meeting.svg') }}"></a>
 											@else
-												<a href="#" class="h-8 w-8 flex items-center justify-center hover:scale-110"><img src="{{ asset('img/online-meeting.svg') }}"></a>
+												<a href="#" class="h-8 w-8 flex items-center justify-center hover:scale-110" title="Open online meeting link for this session"><img src="{{ asset('img/online-meeting.svg') }}"></a>
 											@endif
 										</div>
 									</div>

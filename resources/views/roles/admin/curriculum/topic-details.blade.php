@@ -127,14 +127,13 @@
 
 							<td class="py-3 px-4">
 								<div class="flex gap-1">
-									<x-anchor-button
-										href="{{ route('admin.course.curriculum.activity.edit', [$curriculum_topic->course->id, $curriculum_topic->id, $activity->id]) }}">
-										<i class="bi bi-pencil-square"></i>
-									</x-anchor-button>
-									<x-button type="button"
-										data-route="{{ route('admin.course.curriculum.activity.destroy', [$curriculum_topic->course->id, $curriculum_topic->id, $activity->id]) }}" data-del_ca_name="{{ $activity->title }}" class="delete-curriculum-activity-btn">
-										<i class="bi bi-trash3"></i>
-									</x-button>
+									<a href="{{ route('admin.course.curriculum.activity.edit', [$curriculum_topic->course->id, $curriculum_topic->id, $activity->id]) }}" title="Edit this curriculum activity">
+										<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+									</a>
+									<button type="button"
+										data-route="{{ route('admin.course.curriculum.activity.destroy', [$curriculum_topic->course->id, $curriculum_topic->id, $activity->id]) }}" data-del_ca_name="{{ $activity->title }}" class="delete-curriculum-activity-btn" title="Delete this curriculum activity">
+										<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+									</button>
 								</div>
 							</td>
 						</tr>

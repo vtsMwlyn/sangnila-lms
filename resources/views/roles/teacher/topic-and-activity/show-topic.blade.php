@@ -125,11 +125,11 @@
 
 							<td class="py-3 px-4">
 								<div class="flex gap-1">
-									<a href="{{ route('teacher.mycourse.activity.edit', $activity->id) }}">
+									<a href="{{ route('teacher.mycourse.activity.edit', $activity->id) }}" title="Edit this activity">
 										<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</a>
 									<button type="button" class="delete-activity-btn" data-del_a_name="{{ $activity->title }}"
-										data-route="{{ route('teacher.mycourse.activity.destroy', $activity->id) }}">
+										data-route="{{ route('teacher.mycourse.activity.destroy', $activity->id) }}" title="Delete this activity">
 										<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</button>
 								</div>

@@ -93,11 +93,11 @@
 		</div>
 
 		@if(request('content') == 'activity access' || !request('content'))
-			<div class="w-full overflow-x-auto hidden xl:block mt-3">
-				<form method="post" action="{{ route("teacher.student.update.progress.activity-access", [$course->id, $student->id]) }}" id="activity_access">
-					@csrf
-					@method('patch')
+			<form method="post" action="{{ route("teacher.student.update.progress.activity-access", [$course->id, $student->id]) }}" id="activity_access">
+				@csrf
+				@method('patch')
 
+				<div class="w-full overflow-x-auto hidden xl:block mt-3">
 					<table class="w-full">
 						<thead>
 							<th class="text-center py-3 px-4 border-b-2 border-slate-400">Session</th>
@@ -124,15 +124,20 @@
 							@endforelse
 						</tbody>
 					</table>
+				</div>
 
-					@if($newestprogress->isNotEmpty())
-						<div class="flex gap-2 mt-10 mb-3 w-full justify-center">
-							<x-button class=" w-full md:w-40 xl:w-1/6">Save</x-button>
-							<x-cancel-button class="w-full md:w-40 xl:w-1/6" href="{{ route('teacher.student.select-student', $course->id) }}">Cancel</x-cancel-button>
-						</div>
-					@endif
-				</form>
-			</div>
+				@if($newestprogress->isNotEmpty())
+					<div class="flex items-stretch gap-3 justify-end mt-10 mb-3">
+						<x-cancel-button class="w-full md:w-40 xl:w-1/6">
+							Cancel
+						</x-cancel-button>
+						<x-button class=" w-full md:w-40 xl:w-1/6">
+							{{ __('Save') }}
+						</x-button>
+					</div>
+				@endif
+			</form>
+			
 
 			{{-- For smaller screen --}}
 			<div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-3">
@@ -161,13 +166,13 @@
 		@endif
 
 		@if(request('content') == 'meeting links')
-			<div class="w-full overflow-x-auto hidden xl:block mt-3">
-				<form method="post" action="{{ route("teacher.student.update.progress.meeting-link", [$course->id, $student->id]) }}" id="meeting_link">
-					@csrf
-					@method('patch')
+			<form method="post" action="{{ route("teacher.student.update.progress.meeting-link", [$course->id, $student->id]) }}" id="meeting_link">
+				@csrf
+				@method('patch')
 
-					<input type="hidden" name="content" value="meeting links">
+				<input type="hidden" name="content" value="meeting links">
 
+				<div class="w-full overflow-x-auto hidden xl:block mt-3">
 					<table class="w-full">
 						<thead>
 							<th class="text-center py-3 px-4 border-b-2 border-slate-400">Session</th>
@@ -195,13 +200,17 @@
 					</table>
 
 					@if($newestprogress->isNotEmpty())
-						<div class="flex gap-2 mt-10 mb-3 w-full justify-center">
-							<x-button class=" w-full md:w-40 xl:w-1/6">Save</x-button>
-							<x-cancel-button class="w-full md:w-40 xl:w-1/6" href="{{ route('teacher.student.select-student', $course->id) }}">Cancel</x-cancel-button>
+						<div class="flex items-stretch gap-3 justify-end mt-10 mb-3">
+							<x-cancel-button class="w-full md:w-40 xl:w-1/6">
+								Cancel
+							</x-cancel-button>
+							<x-button class=" w-full md:w-40 xl:w-1/6">
+								{{ __('Save') }}
+							</x-button>
 						</div>
 					@endif
-				</form>
-			</div>
+				</div>
+			</form>
 
 			{{-- For smaller screen --}}
 			<div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-3">
@@ -241,7 +250,7 @@
 							<form action="{{ route('teacher.student.destroy.portfolio', $portfolio->id) }}" method="post" class="absolute" style="top: 10px; right: 10px; z-index: 5;">
 								@method('delete')
 								@csrf
-								<button type="submit" class="bg-red rounded-lg py-2 px-4 text-white" onclick="return confirm('Apakah anda yakin ingin menghapus foto ini dari pengembalian ini?')"><i class="bi bi-trash3"></i></button>
+								<button type="submit" class="bg-red rounded-lg py-2 px-4 text-white hover:bg-slate-700" onclick="return confirm('Apakah anda yakin ingin menghapus foto ini dari pengembalian ini?')" title="Remove this file from student's portfolio"><i class="bi bi-trash3"></i></button>
 							</form>
 
 							<a href="{{ $portfolio->type != 'link' ? Storage::url("app/public/" . $portfolio->path) : $portfolio->path }}" target="_blank" class="relative imeeji">
@@ -270,19 +279,19 @@
 		@if(request('content') == 'assessment')
 			@if($assessment)
 				<div class="w-full flex flex-col items-stretch mt-4 p-5 rounded-2xl" style="background: white;">
-					<h3 class="text-xl font-bold">Performance: {{ ucwords($assessment->performance_score) }}</h3>
+					<h3 class="text-xl font-bold text-blue">Performance: {{ ucwords($assessment->performance_score) }}</h3>
 					<div class="mt-2">{!! $assessment->performance_description !!}</div>
 				</div>
 				<div class="w-full flex flex-col items-stretch mt-4 p-5 rounded-2xl" style="background: linear-gradient(to right, rgba(190, 226, 219, 0.49) 0%, rgba(104, 124, 120, 0) 100%);">
-					<h3 class="text-xl font-bold">Technical Skill: {{ ucwords($assessment->technical_skill_score) }}</h3>
+					<h3 class="text-xl font-bold text-blue">Technical Skill: {{ ucwords($assessment->technical_skill_score) }}</h3>
 					<div class="mt-2">{!! $assessment->technical_skill_description !!}</div>
 				</div>
 				<div class="w-full flex flex-col items-stretch mt-4 p-5 rounded-2xl" style="background: white;">
-					<h3 class="text-xl font-bold">Aesthetical Skill: {{ ucwords($assessment->aesthetical_skill_score) }}</h3>
+					<h3 class="text-xl font-bold text-blue">Aesthetical Skill: {{ ucwords($assessment->aesthetical_skill_score) }}</h3>
 					<div class="mt-2">{!! $assessment->aesthetical_skill_description !!}</div>
 				</div>
 				<div class="w-full flex flex-col items-stretch my-4 p-5 rounded-2xl" style="background: linear-gradient(to right, rgba(190, 226, 219, 0.49) 0%, rgba(104, 124, 120, 0) 100%);">
-					<h3 class="text-xl font-bold">Overall: {{ ucwords($assessment->overall_score) }}</h3>
+					<h3 class="text-xl font-bold text-blue">Overall: {{ ucwords($assessment->overall_score) }}</h3>
 					<div class="mt-2">{!! $assessment->overall_description !!}</div>
 				</div>
 

@@ -80,13 +80,13 @@
 
 		<form action="{{ route('teacher.mycourse.save-picked-course', $course->id) }}" method="POST">
 			@csrf
-			<div class="flex items-stretch gap-3 justify-center mt-16 mb-3">
-				<x-button class=" w-full md:w-1/4">
-					{{ __('Confirm') }}
-				</x-button>
-				<x-cancel-button class="w-full md:w-1/4">
+			<div class="flex items-stretch gap-3 justify-end mt-10 mb-3">
+				<x-cancel-button class="w-full md:w-40 xl:w-1/6">
 					Cancel
 				</x-cancel-button>
+				<x-button class=" w-full md:w-40 xl:w-1/6">
+					{{ __('Submit') }}
+				</x-button>
 			</div>
 		</form>
 	</x-section-container>

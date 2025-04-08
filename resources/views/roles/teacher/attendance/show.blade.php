@@ -173,7 +173,7 @@
 										{{-- <x-anchor-button  href="{{ route('teacher.attendance.edit', $atd->id) }}">
 											<i class="bi bi-pencil-square"></i>
 										</x-anchor-button> --}}
-										<button type="button" class=" show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}" data-session_number="{{ json_encode($sessionNumberPerAttendance[$atd->id]) }}"><img src="{{ asset('img/history.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110"></button>
+										<button type="button" class=" show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}" data-session_number="{{ json_encode($sessionNumberPerAttendance[$atd->id]) }}" title="Check this attendance report details"><img src="{{ asset('img/history.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110"></button>
 									</div>
 								</td>
 							</tr>

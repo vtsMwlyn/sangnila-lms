@@ -74,13 +74,13 @@
 							</td>
 							<td class="py-3 px-4">
 								<div class="flex gap-1">
-									<a href="{{ route('teacher.assignment.check', $asg->id) }}">
+									<a href="{{ route('teacher.assignment.check', $asg->id) }}" title="Check this assignment's submission">
 										<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</a>
-									<a href="{{ route('teacher.assignment.edit', $asg->id) }}">
+									<a href="{{ route('teacher.assignment.edit', $asg->id) }}" title="Edit this assignment">
 										<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</a>
-									<a href="{{ route('teacher.assignment.delete', $asg->id) }}">
+									<a href="{{ route('teacher.assignment.delete', $asg->id) }}" title="Delete this assignment">
 										<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</a>
 								</div>

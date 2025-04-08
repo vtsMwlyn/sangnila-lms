@@ -213,13 +213,13 @@
 
 								<td class="py-3 px-4">
 									<div class="flex w-full items-center gap-1">
-										<a href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}">
+										<a href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}" title="View list of activities in this topic">
 											<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</a>
-										<button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.mycourse.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn">
+										<button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.mycourse.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn" title="Edit this topic">
 											<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</button>
-										<button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.mycourse.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn">
+										<button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.mycourse.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn" title="Delete this topic">
 											<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</button>
 									</div>
@@ -240,14 +240,14 @@
 										<div class="relative">
 											<x-anchor-button
 												href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}">
-												<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+												<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110" title="View list of activities in this topic">
 											</x-anchor-button>
 											<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
 										</div>
-										<x-button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.mycourse.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn">
+										<x-button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.mycourse.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn" title="Edit this topic">
 											<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</x-button>
-										<x-button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.mycourse.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn">
+										<x-button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.mycourse.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn" title="Delete this topic">
 											<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 										</x-button>
 									</div>

@@ -80,13 +80,13 @@
 				</div>
 			</div>
 
-			<div class="flex items-stretch justify-center mt-20 mb-3 gap-3">
-				<x-button class=" w-full md:w-1/4">
-					{{ __('Save') }}
-				</x-button>
-				<x-cancel-button class="w-full md:w-1/4">
+			<div class="flex items-stretch gap-3 justify-end mt-10 mb-3">
+				<x-cancel-button class="w-full md:w-40 xl:w-1/6">
 					Cancel
 				</x-cancel-button>
+				<x-button class=" w-full md:w-40 xl:w-1/6">
+					{{ __('Save') }}
+				</x-button>
 			</div>
 		</form>
 	</x-section-container>
