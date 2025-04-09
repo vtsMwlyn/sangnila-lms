@@ -56,9 +56,9 @@
 
 			<div class="bg-white border rounded-2xl py-5 flex flex-col mt-8">
 				<div class="px-5">
-					<div class="w-full flex justify-between items-center">
+					<div class="w-full flex xl:flex-row flex-col justify-between items-start xl:items-center gap-2 xl:gap-0">
 						<h1 class="text-blue font-semibold">Other Students</h1>
-						<div class="flex gap-3 w-1/3 items-center">
+						<div class="flex gap-3 w-full xl:w-1/3 items-center">
 							<x-input id="search-student" class="grow" placeholder="Search Student..."/>
 							<x-button type="button" id="clear-button">Clear</x-button>
 						</div>

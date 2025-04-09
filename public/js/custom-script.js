@@ -204,6 +204,27 @@ $(document).ready(() => {
 			$(".dropdown-menu").hide();
 		}
 	});
+
+	$('.status-notif').animate({
+		right: 0
+	});
+
+	setTimeout(() => {
+		$('.status-notif').find('.progress-bar').animate({
+			width: '100%'
+		}, {
+			duration: 3000,
+			easing: 'linear'
+		});
+	}, 200);
+
+	setTimeout(() => {
+		$('.status-notif').fadeOut(300);
+	}, 3200);
+
+	$('.dismiss-status-notif').on('click', function(){
+		$(this).closest('.status-notif').fadeOut(300);
+	})
 });
 
 // Hide the loading popup once the page is fully loaded

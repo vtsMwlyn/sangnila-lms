@@ -105,7 +105,7 @@
             <div style="position: absolute; bottom: 40px; right: 50px;">
                 @if($signature_img_path)
                     <center>
-                        <img src="{{ storage_path($signature_img_path) }}" style="width: 150px; height: 150px;" alt="signature">
+                        <img src="{{ storage_path($signature_img_path) }}" style="width: 150px; height: 120px;" alt="signature">
                     </center>
                 @endif
                 <div style="text-align: center; font-size: 15pt; color: #344b9b; margin-bottom: 5px;">{{ $teacher->full_name }}</div>

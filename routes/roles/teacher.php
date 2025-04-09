@@ -17,7 +17,7 @@ use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\GoogleServiceController;
 use App\Http\Controllers\DownloadResourceController;
-use App\Http\Controllers\LecturerInvoiceController;
+use App\Http\Controllers\LecturerInvoiceReimburseController;
 
 Route::prefix('/teacher')
 	->name('teacher.')
@@ -194,24 +194,40 @@ Route::prefix('/teacher')
 		Route::get('/forum/{course_id}/retrieve', [ForumController::class, 'retrieve_message_teacher'])->name('forum.retrieve')->whereNumber('course_id');
 		Route::post('/forum/{course_id}/send', [ForumController::class, 'send_message_teacher'])->name('forum.send')->whereNumber('course_id');
 
-		// ===== INVOICE ===== //
-		Route::prefix('/invoices')
-			->name('lecturer-invoice.')
+		// ===== INVOICE AND REIMBURSE ===== //
+		Route::prefix('/invoices-and-reimburse')
+			->name('lecturer-invoice-reimburse.')
 			->group(function(){
 
 				// Invoices list
-				Route::get('/', [LecturerInvoiceController::class, 'index'])->name('index');
+				Route::get('/', [LecturerInvoiceReimburseController::class, 'teacher_index'])->name('index');
 
-				// Create Invoice Headers
-				Route::get('/create', [LecturerInvoiceController::class, 'create'])->name('create');
-				Route::post('/create', [LecturerInvoiceController::class, 'store'])->name('store');
+				Route::prefix('/invoice')->name('invoice.')->group(function(){
+					// Create Invoice Headers
+					Route::get('/create', [LecturerInvoiceReimburseController::class, 'teacher_create_invoice'])->name('create');
+					Route::post('/create', [LecturerInvoiceReimburseController::class, 'teacher_store_invoice'])->name('store');
 
-				// Edit Invoice Headers
-				Route::get('/{invoice_id}/edit', [LecturerInvoiceController::class, 'edit'])->name('edit');
-				Route::post('/{invoice_id}/edit', [LecturerInvoiceController::class, 'update'])->name('update');
+					// Edit Invoice Headers
+					Route::get('/{invoice_id}/edit', [LecturerInvoiceReimburseController::class, 'teacher_edit_invoice'])->name('edit');
+					Route::post('/{invoice_id}/edit', [LecturerInvoiceReimburseController::class, 'teacher_update_invoice'])->name('update');
 
-				// Download Excel
-				Route::get('/{invoice_id}/download', [LecturerInvoiceController::class, 'download'])->name('download')->whereNumber('invoice_id');
+					// Download Excel
+					Route::get('/{invoice_id}/download', [LecturerInvoiceReimburseController::class, 'teacher_download_invoice'])->name('download')->whereNumber('invoice_id');
+				});
+
+				Route::prefix('/reimburse')->name('reimburse.')->group(function(){
+					// Create reimburse
+					Route::get('/create', [LecturerInvoiceReimburseController::class, 'teacher_create_reimburse'])->name('create');
+					Route::post('/create', [LecturerInvoiceReimburseController::class, 'teacher_store_reimburse'])->name('store');
+
+					// Edit reimburse
+					Route::get('/{reimburse_id}/edit', [LecturerInvoiceReimburseController::class, 'teacher_edit_reimburse'])->name('edit');
+					Route::post('/{reimburse_id}/edit', [LecturerInvoiceReimburseController::class, 'teacher_update_reimburse'])->name('update');
+
+					// // Delete reimburse
+					// Route::delete('/{reimburse_id}/delete', [LecturerInvoiceReimburseController::class, 'teacher_destroy_reimburse'])->name('destroy')->whereNumber('reimburse_id');
+				});
+				
 			});
 
 		// ===== VIEW ANNOUNCEMENT ===== //

@@ -236,6 +236,29 @@
 					</tbody>
 				</table>
 			</div>
+
+			<div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-4">
+				@forelse ($total_student_attendances as $tsa)
+					<div class="bg-white rounded-xl p-4 flex flex-col gap-3 dropdown-container">
+						<button class="flex flex-col items-start dropdown-toggler w-full">
+							<div class="flex w-full justify-between items-center mb-2">
+								<strong class="text-base text-start">{{ $tsa['name'] }} <span class="ml-2 @if($tsa['status'] == 'learning') bg-light-blue @elseif($tsa['status'] == 'complete') bg-green-600 @else bg-red @endif text-white text-base rounded-lg px-2 py-0.5 font-normal">{{ ucwords($tsa['status']) }}</span></strong>
+								<i class="bi bi-chevron-down"></i>
+							</div>
+						</button>
+						<div class="flex flex-col w-full dropdown-menu" style="display: none;">
+							<div class="flex flex-col">
+								<span>Last Date Attended:</span>
+								<span class="font-semibold">{{ $tsa['latest'] ? Carbon\Carbon::parse($tsa['latest']->attendance->attendance_date)->format('l, d M Y') : 'N/A' }}</span>
+								<span class="mt-3">Total Attendance:</span>
+								<span class="font-semibold">{{ $tsa['curr'] }} of {{ $tsa['total'] }} sessions</span>
+							</div>
+						</div>
+					</div>
+				@empty
+					- N/A -
+				@endforelse
+			</div>
 		@endif
 
 		@if(request('content') == 'my attendances')

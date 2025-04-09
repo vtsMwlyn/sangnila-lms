@@ -248,7 +248,7 @@ class StudentController extends Controller {
 			return back()->with('danger', 'System failed to upload portfolio images for this student. Please report to our IT team, error detail: ' . $e->getMessage());
 		}
 
-		return back()->withQuery(['content' => request('content')])->with('successUploadPortfolio', 'Successfully uploaded portfolio files for this student!');
+		return back()->withQuery(['content' => request('content')])->with('success', 'Successfully uploaded portfolio files for this student!');
 	}
 
 	public function teacher_destroy_portfolio($portfolio_id){
@@ -260,7 +260,7 @@ class StudentController extends Controller {
 
 		$portfolio->delete();
 
-		return back()->withQuery(['content' => request('content')])->with('successDeletePortfolio', 'Successfully deleted the portfolio image for this student!');
+		return back()->withQuery(['content' => request('content')])->with('success', 'Successfully deleted the portfolio image for this student!');
 	}
 
 	// ===== ADMIN ===== //
@@ -707,6 +707,6 @@ class StudentController extends Controller {
 			return back()->with('danger', 'System failed to upload portfolio images for this student. Please report to our IT team, error detail: ' . $e->getMessage());
 		}
 
-		return back()->withQuery(['content' => request('content')])->with('successUploadPortfolio', 'Successfully uploaded the portfolio files!');
+		return back()->withQuery(['content' => request('content')])->with('success', 'Successfully uploaded the portfolio files!');
 	}
 }

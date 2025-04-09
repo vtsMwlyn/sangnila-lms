@@ -64,8 +64,8 @@
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-2 px-6"
-				href="{{ route('teacher.lecturer-invoice.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*invoices*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				<i class="bi bi-receipt-cutoff text-2xl mx-1"></i> Invoices
+				href="{{ route('teacher.lecturer-invoice-reimburse.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*invoices*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
+				<i class="bi bi-receipt-cutoff text-2xl mx-1"></i> Invoice & Reimburse
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"

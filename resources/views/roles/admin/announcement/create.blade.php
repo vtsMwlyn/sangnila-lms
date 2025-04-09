@@ -35,7 +35,7 @@
 				{{-- Announcement Image --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="image">Announcement Image</x-label>
-					<x-input id="image" class="bg-white w-full block" type="file" name="image" placeholder="New announcement image" />
+					<x-input id="image" class="bg-white w-full block" type="file" name="image" accept="image/*" placeholder="New announcement image" />
 				</div>
 			</div>
 

@@ -39,7 +39,7 @@
 				<div class="flex flex-col w-1/2">
 					<x-label for="image">New Image</x-label>
 					<div class="flex w-full flex-col items-stretch">
-						<x-input id="image" class="bg-white w-full block" type="file" name="image" placeholder="New announcement image"/>
+						<x-input id="image" class="bg-white w-full block" type="file" name="image" accept="image/*" placeholder="New announcement image"/>
 					</div>
 				</div>
 			</div>

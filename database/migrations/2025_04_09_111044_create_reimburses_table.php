@@ -13,17 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('lecturer_invoices', function (Blueprint $table) {
+        Schema::create('reimburses', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-            $table->string('number');
             $table->date('date');
-            $table->string('bank_data');
-
-            $table->unsignedBigInteger('tax')->default(0);
+            $table->string('need');
+            $table->unsignedBigInteger('amount');
+            $table->string('evidence_path');
 
             $table->timestamps();
         });
@@ -36,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lecturer_invoices');
+        Schema::dropIfExists('reimburses');
     }
 };

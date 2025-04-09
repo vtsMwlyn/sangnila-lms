@@ -69,7 +69,7 @@
 						{{-- Is Attended --}}
 						<div class="w-full flex items-center justify-between">
 							<label for="_checkbox{{ $student->id }}" class="flex gap-3 items-center mt-2">
-								<input type="checkbox" id="_checkbox{{ $student->id }}" class="_checkbox form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" checked/>
+								<input type="checkbox" id="_checkbox{{ $student->id }}" class="_checkbox form-checkbox h-5 w-5" checked/>
 								Is Attended
 							</label>
 							<button type="button" class="bg-red text-white rounded-xl hover:bg-slate-600 py-2 px-4 remove-student-btn" onclick="return confirm('Are you sure want to remove this student from the new attendance report?');" data-sid="{{ $student->id }}"><i class="bi bi-trash3"></i></button>
