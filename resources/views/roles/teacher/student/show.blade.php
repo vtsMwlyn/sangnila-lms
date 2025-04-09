@@ -19,8 +19,8 @@
 				@csrf
 				{{-- File uploads --}}
 				<div class="flex flex-col">
-					<label for="files">Select Images to Upload</label>
-					<x-input id="files" class="w-full mt-1" type="file" name="files[]" style="border-width: 3px;" multiple/>
+					<label for="files">Select Images/Videos/PDFs to Upload</label>
+					<x-input id="files" class="w-full mt-1" type="file" name="files[]" style="border-width: 3px;" accept="video/*,image/*,.pdf" multiple/>
 				</div>
 
 				{{-- Link upload --}}
@@ -262,9 +262,13 @@
 									<video class="w-full h-full rounded-lg" style="object-fit: cover;" controls>
 										<source src="{{ Storage::url("app/public/" . $portfolio->path) }}" type="{{ Storage::mimeType('app/public/' . $portfolio->path) }}">
 									</video>
-								@else
+								@elseif($portfolio->type == "link")
 									<div class="w-full h-full flex items-center justify-center bg-slate-400 rounded-lg">
 										<i class="bi bi-paperclip text-white text-6xl"></i>
+									</div>
+								@else
+									<div class="w-full h-full flex items-center justify-center bg-slate-400 rounded-lg">
+										<i class="bi bi-filetype-pdf text-white text-6xl"></i>
 									</div>
 								@endif
 							</a>
@@ -348,6 +352,9 @@
 								mediaElement = $("<video>")
 									.attr("src", e.target.result).addClass('oneperthree').attr("controls", true)
 									.css({"height": "200px", "border-radius": "8px"});
+							}
+							else {
+								mediaElement = $('<div>').addClass('oneperthree bg-gray-400 flex items-center justify-center text-6xl text-white').css({"height": "200px", "border-radius": "8px"}).html('<i class="bi bi-filetype-pdf"></i>');
 							}
 
 							if (mediaElement) {

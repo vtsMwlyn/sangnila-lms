@@ -136,7 +136,7 @@
 		<div class="w-full bg-slate-400" style="height: 2px;"></div>
 
 		@forelse($teacher->teached_courses as $index => $course)
-			<div class="flex flex-col w-full gap-4 p-5 @if($index % 2 == 0) bg-white @endif">
+			<div class="flex flex-col w-full gap-4 p-5 rounded-xl my-6 bg-white">
 				@php
 					$ct = App\Models\CourseTeacher::where('user_id', $teacher->id)->where('course_id', $course->id)->first();
 				@endphp
@@ -153,22 +153,27 @@
 
 				<div class="flex w-full flex-col">
 					@forelse (App\Models\CourseStudent::where('course_id', $course->id)->where('teacher_id', $teacher->id)->orderByRaw('CASE WHEN learning_status = "learning" THEN 0 WHEN learning_status = "complete" THEN 1 ELSE 2 END')->get()->groupBy('learning_status') as $lstatus => $gcs)
-						<span class="mb-4 @if($lstatus == 'learning') bg-light-blue @elseif($lstatus == 'complete') bg-green-600 @else bg-red @endif text-white text-base rounded-lg px-4 py-3 font-normal">{{ ucwords($lstatus) }} Students</span>
+						<div class="w-full flex flex-col">
+							<button type="button" class="tuguraa flex items-center w-full justify-between mb-4 @if($lstatus == 'learning') bg-light-blue @elseif($lstatus == 'complete') bg-green-600 @else bg-red @endif text-white text-base rounded-lg px-4 py-3 font-normal">
+								<span>{{ ucwords($lstatus) }} Students</span>
+								<i class="bi @if($lstatus != 'learning') bi-chevron-down @else bi-chevron-up @endif"></i>
+							</button>
 
-						<div class="mt-2 flex flex-wrap">
-							@forelse($gcs as $cs)
-								<a href="{{ route('admin.student.show', $cs->student->id) }}" class="w-1/6 mb-6 hover:text-cyan-500">
-									<div class="flex flex-col items-center">
-										@if($cs->student->details->profpic)
-											<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;">
-										@else
-											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full hover:border-cyan-500 hover:border-4 border-slate-400 w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
-										@endif
-										<h1 class="text-lg font-bold text-center">{{-- explode(" ", $cs->student->full_name)[0] --}}{{ $cs->student->full_name }}</h1>
-									</div>
-								</a>
-							@empty
-							@endforelse
+							<div class="mt-2 flex flex-wrap menyu" style="@if($lstatus != 'learning')display: none;@endif">
+								@forelse($gcs as $cs)
+									<a href="{{ route('admin.student.show', $cs->student->id) }}" class="w-1/6 mb-6 hover:text-cyan-500">
+										<div class="flex flex-col items-center">
+											@if($cs->student->details->profpic)
+												<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;">
+											@else
+												<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full hover:border-cyan-500 hover:border-4 border-slate-400 w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+											@endif
+											<h1 class="text-lg font-bold text-center">{{-- explode(" ", $cs->student->full_name)[0] --}}{{ $cs->student->full_name }}</h1>
+										</div>
+									</a>
+								@empty
+								@endforelse
+							</div>
 						</div>
 					@empty
 						- No students assigned yet to this course -
@@ -295,6 +300,10 @@
 					initializeAssignCourseTeacherPopup(old_route, old_popup);
 				}
 			@endif
+
+			$('.tuguraa').on('click', function(){
+				$(this).closest('div').find('.menyu').slideToggle();
+			});
 		});
 
 	</script>

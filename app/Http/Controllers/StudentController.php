@@ -28,6 +28,7 @@ use App\Models\Portfolio;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Termwind\Components\BreakLine;
 
 class StudentController extends Controller {
 
@@ -195,8 +196,8 @@ class StudentController extends Controller {
 					}
 		
 					$mimeType = $value->getMimeType();
-					if (!str_starts_with($mimeType, 'image/') && !str_starts_with($mimeType, 'video/')) {
-						$fail('The file must be an image or video.');
+					if (!str_starts_with($mimeType, 'image/') && !str_starts_with($mimeType, 'video/') && $mimeType !== 'application/pdf') {
+						$fail('The file must be an image, video, or pdf.');
 					}
 				},
 			],
@@ -265,7 +266,7 @@ class StudentController extends Controller {
 	// ===== ADMIN ===== //
 	// Showing list of all active students in Sangnila LMS
 	public function admin_index() {
-		$students = User::where("role_id", 3)->filter(request(["search", "course"]))->orderBy('full_name', 'asc')->with(['course_students', 'student_attendances'])->get();
+		$students = User::filter(request(["search", "course"]))->where("role_id", 3)->orderBy('full_name', 'asc')->with(['course_students', 'student_attendances'])->get();
 
 		$max_attendances_learning = [];
 		$current_attendances_learning = [];
@@ -304,6 +305,9 @@ class StudentController extends Controller {
 			$prioritized = false;
 			$completed = 0;
 
+			$learning = false;
+			$undone = false;
+
 			$sa = StudentAttendance::where("student_id", $student->id)->with('attendance')->get();
 
 			foreach($student->course_students as $cs){
@@ -326,8 +330,10 @@ class StudentController extends Controller {
 					$prioritized = true;
 				}
 
-				if($cs->learning_status == 'complete'){
-					$completed++;
+				switch($cs->learning_status){
+					case 'complete': $completed++; break;
+					case 'learning': $learning = true; break;
+					case 'undone': $undone = true; break;
 				}
 
 				array_push($maiscec, $cs->max_course_session);
@@ -362,7 +368,7 @@ class StudentController extends Controller {
 					}
 
 					// Students still learning
-					else if($cs->learning_status == 'learning') {
+					else if($learning) {
 						array_push($max_attendances_learning, $maiscec);
 						array_push($current_attendances_learning, $caiscec);
 						array_push($percentages_learning, $piscec);
@@ -370,7 +376,7 @@ class StudentController extends Controller {
 					}
 
 					// Students undone
-					else if($cs->learning_status == 'undone') {
+					else if($undone) {
 						array_push($max_attendances_undone, $maiscec);
 						array_push($current_attendances_undone, $caiscec);
 						array_push($percentages_undone, $piscec);
