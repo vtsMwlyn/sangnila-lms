@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\SysAdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CurriculumController;
@@ -11,6 +10,7 @@ use App\Http\Controllers\UserAccountController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\CourseStudentController;
+use App\Http\Controllers\CustomOperationController;
 use App\Http\Controllers\PushNotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -23,9 +23,9 @@ Route::get("/sysadmin/login", [SysAdminController::class, "sysadmin_login"])->na
 Route::post("/sysadmin/login", [SysAdminController::class, "sysadmin_authenticate"])->name("sysadmin.authenticate");
 Route::post("/sysadmin/logout", [SysAdminController::class, "sysadmin_logout"])->name("sysadmin.logout");
 
-Route::get("/test-add-event", [CalendarController::class, "createEvent"]);
-// Route::get('/generate-progresses', [ProgressController::class, 'generate_progress_for_all_student']);
-// Route::get('/sync-syllabus-all', [CurriculumController::class, 'sync_syllabus_for_all_course']);
+// Route::get('/custom-operation', [CustomOperationController::class, 'generate_progress_for_all_student']);
+// Route::get('/custom-operation', [CustomOperationController::class, 'sync_syllabus_for_all_course']);
+// Route::get('/custom-operation', [CustomOperationController::class, 'custom_operation']);
 
 // Main routes
 Route::middleware([])->group(function(){
