@@ -4,9 +4,6 @@
 	<h1>Attendance</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <span>{{ $course->course_name }}</span>
-@endsection
 
 @section("popup")
 	<x-popup popup_title="Attendance Details" class="w-5/6 flex flex-col items-stretch justify-center overflow-y-auto" id="attendance-details">
@@ -115,14 +112,6 @@
 						<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances', 'content' => 'attendance reports', 'show' => 'all']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">All</div></a>
 					</div>
 				</div>
-				{{-- <form action="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances']) }}" method="get" class="flex items-center gap-2">
-					<x-select class="w-48 md:w-80" name="show">
-						<option value="my students only" @if(!request('show') || request('show') == 'my students only') selected @endif>My Students Only</option>
-						<option value="all" @if(request('show') == 'all') selected @endif>All Students</option>
-					</x-select>
-					
-					<x-button type="submit">Filter</x-button>
-				</form> --}}
 			</div>
 
 			<div class="w-full overflow-auto hidden xl:block" style="height: 60vh;">

@@ -4,9 +4,6 @@
 	<h1>Payment</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <span>Payment</span>
-@endsection
 
 @section("content")
 	<form action="{{ route("student.pay.proceed") }}" method="post">

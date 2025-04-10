@@ -4,8 +4,11 @@
 	<h1>Student Assignment</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <span>{{ $course->course_name }}</span>
+@section('popup')
+	{{-- Delete assignment --}}
+	<x-confirmation method="delete" popup_title="Delete Assignment" id="delete-assignment-popup">
+		Are you sure want to <span class="font-bold text-red">delete</span> the Assignment <span class="font-bold text-light-blue" id="del-a-name"></span> from this course?
+	</x-confirmation>
 @endsection
 
 @section("content")
@@ -80,9 +83,9 @@
 									<a href="{{ route('teacher.assignment.edit', $asg->id) }}" title="Edit this assignment">
 										<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</a>
-									<a href="{{ route('teacher.assignment.delete', $asg->id) }}" title="Delete this assignment">
+									<button type="button" data-route="{{ route('teacher.assignment.destroy', $asg->id) }}" title="Delete this assignment" class="delete-assignment-btn">
 										<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
-									</a>
+									</button>
 								</div>
 							</td>
 						</tr>
@@ -140,9 +143,9 @@
 							<a href="{{ route('teacher.assignment.edit', $asg->id) }}">
 								<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 							</a>
-							<a href="{{ route('teacher.assignment.delete', $asg->id) }}">
+							<button type="button" data-route="{{ route('teacher.assignment.destroy', $asg->id) }}" title="Delete this assignment" class="delete-assignment-btn">
 								<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
-							</a>
+							</button>
                         </div>
                     </div>
                 </div>
@@ -162,6 +165,11 @@
 			$(".show-less-button").click(function(){
 				$(this).closest("div").prev().removeClass("hidden");
 				$(this).closest("div").addClass("hidden");
+			});
+
+			$('.delete-assignment-btn').on('click', function(){
+				$('#delete-assignment-popup').find('form').attr('action', $(this).data('route'));
+				$('#delete-assignment-popup').parent().show();
 			});
 		});
 	</script>

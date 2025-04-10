@@ -4,10 +4,6 @@
 	<h1>Course Details</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <span>{{ $course->course_name }}</span>
-@endsection
-
 @section("popup")
 	{{-- Delete course --}}
 	<x-confirmation method="delete" popup_title="Delete Course" id="delete-course-popup">

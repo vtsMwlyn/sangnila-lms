@@ -4,10 +4,6 @@
 	<h1>Student Attendance</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <a href="{{ route('teacher.attendance.show', $course->id) }}" class="font-bold text-yellow-500">{{ $course->course_name }}</a>
-	> <span>Upload</span>
-@endsection
 
 @section("content")
 	<x-section-container>

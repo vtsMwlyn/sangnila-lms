@@ -4,9 +4,6 @@
 	<h1>Attendance</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <span>{{ $course_student->course->course_name }}</span>
-@endsection
 
 @section("content")
 	<x-section-container>

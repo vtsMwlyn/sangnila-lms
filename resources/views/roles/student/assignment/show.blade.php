@@ -57,9 +57,6 @@
 	</x-popup>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <span>{{ $course->course_name }}</span>
-@endsection
 
 @section("content")
 	<x-section-container>

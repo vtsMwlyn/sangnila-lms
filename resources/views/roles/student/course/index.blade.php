@@ -34,26 +34,17 @@
 
 					{{-- Course progress --}}
 					@php
-						$all_progress_in_current_course = [];
-						foreach(Auth::user()->progress as $pgr){
-							if($pgr->course_id == $course->id){
-								array_push($all_progress_in_current_course, $pgr);
-							}
-						}
+						$student_attendances = App\Models\StudentAttendance::where('student_id', Auth::user()->id)->whereHas('attendance', function($query) use ($course){
+							return $query->where('course_id', $course->id);
+						})->get();
 
-						$count = 0;
-						foreach($all_progress_in_current_course as $curr_pgr){
-							if($curr_pgr->status == "unlocked"){
-								$count++;
-							}
-						}
+						$cs = App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first();
+						$max_course_session = $cs->max_course_session;
 
-						$max_course_session = App\Models\CourseStudent::where("course_id", $course->id)->where("student_id", Auth::user()->id)->first()->max_course_session;
-
-						$progress_percentage = ceil(($count / $max_course_session) * 100);
+						$progress_percentage = ceil(($student_attendances->count() / $max_course_session) * 100);
 					@endphp
 
-					<div class="w-full flex justify-between mt-12 text-xs">
+					<div class="w-full flex justify-between mt-8 text-xs">
 						<div>Class Progress</div>
 						<div class="font-bold">{{ $progress_percentage }}%</div>
 					</div>

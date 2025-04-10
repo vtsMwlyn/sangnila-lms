@@ -4,9 +4,6 @@
 	<h1>Assignment</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <span>Select Course</span>
-@endsection
 
 @section("content")
 	@forelse ($assignments_data as $ad)

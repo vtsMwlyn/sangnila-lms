@@ -4,9 +4,6 @@
 	<h1>Import Student Data from Excel</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <span>Import Excel</span>
-@endsection
 
 @section("content")
 	<x-section-container>

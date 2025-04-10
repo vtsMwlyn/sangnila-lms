@@ -4,10 +4,6 @@
 	<h1>Courses</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <a href="{{ route('teacher.mycourse.show', $topic->course->id) }}" class="font-bold text-yellow-500">{{ $topic->course->course_name }}</a>
-	> <span>{{ $topic->title }}</span>
-@endsection
 
 @section("popup")
 	{{-- Delete topic --}}

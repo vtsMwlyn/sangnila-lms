@@ -4,9 +4,6 @@
 	<h1>Manage Courses</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <span>{{ $course->course_name }}</span>
-@endsection
 
 @section("popup")
 	{{-- New topic --}}

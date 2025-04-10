@@ -84,15 +84,17 @@
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 				<div class="w-full flex flex-col overflow-y-auto" style="height: 250px;">
-					<ul class="list-disc list-inside">
-						@forelse($undone_assignment as $todoasg)
-							<li class="mb-4" style="text-indent: -1.5rem; padding-left: 1.5rem;">
-								Do and submit your work for assignment <span class="font-bold">"{{ $todoasg->assignment->title }}"</span> before <span class="font-bold">{{ Carbon\Carbon::parse($todoasg->assignment->deadline_date)->format('D, d M Y') }} {{ Carbon\Carbon::parse($todoasg->assignment->deadline_time)->format('H:i') }} GMT+7</span>
-							</li>
-						@empty
-							<div class="w-full h-full flex items-center justify-center">- There's nothing to do for now -</div>
-						@endforelse
-					</ul>
+					@if(count($undone_assignment))
+						<ul class="list-disc list-inside">
+							@foreach($undone_assignment as $todoasg)
+								<li class="mb-4" style="text-indent: -1.5rem; padding-left: 1.5rem;">
+									Do and submit your work for assignment <span class="font-bold">"{{ $todoasg->assignment->title }}"</span> before <span class="font-bold">{{ Carbon\Carbon::parse($todoasg->assignment->deadline_date)->format('D, d M Y') }} {{ Carbon\Carbon::parse($todoasg->assignment->deadline_time)->format('H:i') }} GMT+7</span>
+								</li>
+							@endforeach
+						</ul>
+					@else
+						<div class="w-full h-full flex items-center justify-center">- There's nothing to do for now -</div>
+					@endif
 				</div>
 			</div>
 
@@ -101,22 +103,37 @@
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 				<div class="w-full flex flex-col overflow-y-auto" style="height: 250px;">
-					<ul class="list-disc list-inside">
-						@forelse(Auth::user()->enrolled_courses as $course)
-							@php
-								$selfAttendance = App\Models\SelfAttendance::where("user_id", Auth::user()->id)->where('course_id', $course->id)->where("self_attendance_date", Carbon\Carbon::today()->format('Y-m-d'))->latest()->first();
-							@endphp
+					@php
+						$there_is_course_unchecked_in = false;
+						foreach(Auth::user()->enrolled_courses as $course){
+							$selfAttendance = App\Models\SelfAttendance::where("user_id", Auth::user()->id)->where('course_id', $course->id)->where("self_attendance_date", Carbon\Carbon::today()->format('Y-m-d'))->latest()->first();
+							if(!$selfAttendance){
+								$there_is_course_unchecked_in = true;
+								break;
+							}
+						}
+					@endphp
 
-							@if(!$selfAttendance)
-								<li class="mb-4" style="text-indent: -1.2rem; padding-left: 1.5rem; line-spacing: 10px;">
-									Have you checked in to <strong>{{ $course->course_name }} - {{ ucwords($course->level) }}</strong> today?
-									<a href="{{ route('student.mycourse.check-in', $course->id) }}" class="bg-indigo-600 hover:bg-slate-700 py-0.5 px-1.5 rounded-lg font-bold text-white">Check In</a>
-								</li>
-							@endif
-						@empty
-							<div class="w-full h-full flex items-center justify-center">- There's nothing to do for now -</div>
-						@endforelse
-					</ul>
+					@if($there_is_course_unchecked_in)
+						<ul class="list-disc list-inside">
+							@forelse(Auth::user()->enrolled_courses as $course)
+								@php
+									$selfAttendance = App\Models\SelfAttendance::where("user_id", Auth::user()->id)->where('course_id', $course->id)->where("self_attendance_date", Carbon\Carbon::today()->format('Y-m-d'))->latest()->first();
+								@endphp
+
+								@if(!$selfAttendance)
+									<li class="mb-4" style="text-indent: -1.2rem; padding-left: 1.5rem; line-spacing: 10px;">
+										Have you checked in to <strong>{{ $course->course_name }} - {{ ucwords($course->level) }}</strong> today?
+										<a href="{{ route('student.mycourse.check-in', $course->id) }}" class="bg-indigo-600 hover:bg-slate-700 py-0.5 px-1.5 rounded-lg font-bold text-white">Check In</a>
+									</li>
+								@endif
+							@empty
+								<div class="w-full h-full flex items-center justify-center">- There's no course assigned yet -</div>
+							@endforelse
+						</ul>
+					@else
+						<div class="w-full h-full flex items-center justify-center">- There's nothing to do for now -</div>
+					@endif
 				</div>
 			</div>
 		</div>

@@ -4,12 +4,6 @@
 	<h1>Manage Students</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <a href="{{ route('teacher.student.select-course') }}" class="text-yellow-500 font-bold">Select Course</a>
-	> <span>{{ $course->course_name }}</span>
-	> <a href="{{ route('teacher.student.select-student', $course->id) }}" class="text-yellow-500 font-bold">Select Student</a>
-	> <span>{{ $student->full_name }}</span>
-@endsection
 
 @section('popup')
 	{{-- Upload portfolio  --}}
@@ -40,6 +34,11 @@
 			</form>
 		</div>
 	</x-popup>
+
+	{{-- Delete portfolio --}}
+	<x-confirmation method="delete" popup_title="Delete Portfolio" id="delete-portfolio-popup">
+		Are you sure want to <span class="font-bold text-red">remove</span> this file from the student's portfolio?
+	</x-confirmation>
 @endsection
 
 @section("content")
@@ -247,11 +246,9 @@
 				<div class="flex gap-3 flex-wrap mt-6 w-full overflow-y-auto items-start" style="height: 60vh;">
 					@forelse($student->portfolios()->orderBy('created_at', 'desc')->get() as $portfolio)
 						<div class="relative oneperthree" style="height: 300px;">
-							<form action="{{ route('teacher.student.destroy.portfolio', $portfolio->id) }}" method="post" class="absolute" style="top: 10px; right: 10px; z-index: 5;">
-								@method('delete')
-								@csrf
-								<button type="submit" class="bg-red rounded-lg py-2 px-4 text-white hover:bg-slate-700" onclick="return confirm('Apakah anda yakin ingin menghapus foto ini dari pengembalian ini?')" title="Remove this file from student's portfolio"><i class="bi bi-trash3"></i></button>
-							</form>
+							<div class="absolute" style="top: 10px; right: 10px; z-index: 5;">
+								<button type="button" data-route="{{ route('teacher.student.destroy.portfolio', $portfolio->id) }}" class="bg-red rounded-lg py-2 px-4 text-white hover:bg-slate-700 delete-portfolio-btn" title="Remove this file from student's portfolio"><i class="bi bi-trash3"></i></button>
+							</div>
 
 							<a href="{{ $portfolio->type != 'link' ? Storage::url("app/public/" . $portfolio->path) : $portfolio->path }}" target="_blank" class="relative imeeji">
 								<div class="absolute flex w-full h-full items-center justify-center text-white hint-text" style="display: none; background: rgba(0, 0, 0, 0.7);">Click to view the full file</div>
@@ -385,6 +382,11 @@
 				});
 
 				this.submit();
+			});
+
+			$('.delete-portfolio-btn').on('click', function(){
+				$('#delete-portfolio-popup').find('form').attr('action', $(this).data('route'));
+				$('#delete-portfolio-popup').parent().show();
 			});
 		});
 	</script>

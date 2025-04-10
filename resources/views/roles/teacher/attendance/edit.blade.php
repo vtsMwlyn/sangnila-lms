@@ -4,11 +4,6 @@
 	<h1>Student Attendance</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <a href="{{ route('teacher.attendance.show', $attendance->course->id) }}" class="font-bold text-yellow-500">{{ $attendance->course->course_name }}</a>
-	> <span>{{ $attendance->attendance_date }}</span>
-	> <span>Edit</span>
-@endsection
 
 @section("content")
 	<x-section-container>

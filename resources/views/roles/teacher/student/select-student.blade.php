@@ -4,11 +4,6 @@
 	<h1>Manage Students</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <a href="{{ route('teacher.student.select-course') }}" class="text-yellow-500 font-bold">Select Course</a>
-	> <span>{{ $course->course_name }}</span>
-	> <span>Select Student</span>
-@endsection
 
 @section("content")
 	<x-section-container>

@@ -4,12 +4,6 @@
 	<h1>{{ $course->course_name }}</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <a href="{{ route('admin.course.show', $course->id) }}" class="font-bold text-yellow-500">{{ $course->course_name }}</a>
-	> <a href="{{ route('admin.course.show', $course->id) }}#curriculum-section" class="font-bold text-yellow-500">Curriculum</a>
-	> <span>{{ $curriculum_topic->title }}</span>
-@endsection
-
 @section('popup')
 	{{-- Edit topic --}}
 	<x-popup popup_title="Edit Curriculum Topic" class="w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-curriculum-topic">

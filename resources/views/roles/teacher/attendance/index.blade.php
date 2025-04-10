@@ -4,9 +4,6 @@
 	<h1>Attendance</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <span>Select Course</span>
-@endsection
 
 @section("content")
 	<div class="w-full flex flex-wrap gap-5">

@@ -42,6 +42,11 @@
 		{{-- Other popups --}}
 		@yield("popup")
 
+		{{-- Cancel confirmation popup --}}
+		<x-confirmation popup_title="Confirmation" id="cancel-popup" type="cancel">
+			Are you sure want to <span class="font-bold text-red">cancel</span> this action? <strong>The changes you've made won't be saved.</strong>
+		</x-confirmation>
+
 		{{-- Loading popup --}}
 		<div class="popup-container w-full h-full hidden fixed top-0 flex items-center justify-center" style="backdrop-filter: blur(10px); z-index: 100; background: rgba(0, 0, 0, 0.3);">
 			<div class="rounded-3xl bg-white py-5 px-6 popup w-11/12 xl:w-1/3 h-1/4 flex gap-3 items-center justify-center" id="loading-popup">
@@ -108,23 +113,15 @@
 
 		<div class="flex flex-col items-center w-full" style="max-width: 2000px;">
 			{{-- Back to top --}}
-			<div class="fixed bottom-0 right-0 m-2 flex flex-col items-end">
+			<div class="fixed bottom-0 right-0 m-2 flex flex-col items-end z-50">
 				<a href="#" class="opacity-0 transition-opacity duration-500 ease-in-out mb-2" id="back-to-top">
 					<div class="bg-light-blue animate-bounce rounded-full w-full text-xl p-2.5 flex justify-center align-center font-bold" style="width: 50px; height: 50px;">
 						<i class="text-white text-center bi bi-arrow-up"></i>
 					</div>
 				</a>
-				{{-- <div class="w-[300px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl z-40 shadow-3xl status-notif relative right-[-300px] overflow-hidden" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
-					<div class="flex flex-col w-full items-start p-5">
-						<p>Tes notification, this is showing the status of the performed action</p>
-						<div class="flex justify-end w-full mt-3">
-							<button type="button" class="dismiss-status-notif font-bold text-light-blue">Dismiss</button>
-						</div>
-						<div class="w-0 h-1 bg-light-blue mt-4 progress-bar"></div>
-					</div>
-				</div> --}}
+
 				@if(session()->has("success"))
-					<div class="hidden xl:block w-[300px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl z-40 shadow-3xl status-notif relative right-[-300px] overflow-hidden" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
+					<div class="hidden xl:block w-[300px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl shadow-3xl status-notif relative right-[-300px] overflow-hidden" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
 						<div class="flex flex-col w-full items-start p-5">
 							<p>{{ session('success') }}</p>
 							<div class="flex justify-end w-full mt-3">
@@ -134,7 +131,7 @@
 						</div>
 					</div>
 				@elseif(session()->has("warning"))
-					<div class="hidden xl:block w-[300px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl z-40 shadow-3xl status-notif relative right-[-300px] overflow-hidden" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
+					<div class="hidden xl:block w-[300px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl shadow-3xl status-notif relative right-[-300px] overflow-hidden" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
 						<div class="flex flex-col w-full items-start p-5">
 							<p>{{ session('warning') }}</p>
 							<div class="flex justify-end w-full mt-3">
@@ -144,7 +141,7 @@
 						</div>
 					</div>
 				@elseif(session()->has("danger"))
-					<div class="hidden xl:block w-[300px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl z-40 shadow-3xl status-notif relative right-[-300px] overflow-hidden" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
+					<div class="hidden xl:block w-[300px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl shadow-3xl status-notif relative right-[-300px] overflow-hidden" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
 						<div class="flex flex-col w-full items-start p-5">
 							<p>{{ session('danger') }}</p>
 							<div class="flex justify-end w-full mt-3">

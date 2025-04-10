@@ -176,7 +176,7 @@ Route::prefix('/teacher')
 				Route::patch("/{assignment_id}/edit", [AssignmentController::class, "teacher_update"])->name("update")->whereNumber('assignment_id');
 
 				// Delete assignment
-				Route::get("/{assignment_id}/delete-confirm", [AssignmentController::class, "teacher_delete"])->name("delete")->whereNumber('assignment_id');
+				// Route::get("/{assignment_id}/delete-confirm", [AssignmentController::class, "teacher_delete"])->name("delete")->whereNumber('assignment_id');
 				Route::delete("/{assignment_id}/delete-confirm", [AssignmentController::class, "teacher_destroy"])->name("destroy")->whereNumber('assignment_id');
 
 				// Check assignment submissions
@@ -223,9 +223,6 @@ Route::prefix('/teacher')
 					// Edit reimburse
 					Route::get('/{reimburse_id}/edit', [LecturerInvoiceReimburseController::class, 'teacher_edit_reimburse'])->name('edit');
 					Route::post('/{reimburse_id}/edit', [LecturerInvoiceReimburseController::class, 'teacher_update_reimburse'])->name('update');
-
-					// // Delete reimburse
-					// Route::delete('/{reimburse_id}/delete', [LecturerInvoiceReimburseController::class, 'teacher_destroy_reimburse'])->name('destroy')->whereNumber('reimburse_id');
 				});
 				
 			});

@@ -4,11 +4,6 @@
 	<h1>{{ $course->course_name }}</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <a href="{{ route('admin.course.show', $course->id) }}" class="font-bold text-yellow-500">{{ $course->course_name }}</a>
-	> <span>Edit</span>
-@endsection
-
 @section("content")
 	<x-section-container>
 		<x-page-title>{{ __("Edit Course") }}</x-page-title>

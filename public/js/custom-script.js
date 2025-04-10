@@ -81,21 +81,49 @@ $(document).ready(() => {
 	adjustLayouts();
 	resetSidebarToggler();
 
+	let isAnimating = false;
+
 	$(window).on("resize", function(){
-		adjustLayouts();
-		resetSidebarToggler();
+		if(!isAnimating){
+			adjustLayouts();
+			resetSidebarToggler();
+		}
 	});
 
-	$('#sidebar-toggler-larger').click(function(){
-		if($('#sidebar-container').is(':visible')){
-			$('#sidebar-toggler-larger').css({'left': 0}).html('<i class="bi bi-caret-right-fill"></i>');
-			$('#content-container').css({'width': '100%'});
-			$('#sidebar-container').css({'width': 0}).hide();
-		}
-		else {
-			$('#sidebar-container').css({'width': '17%'}).show();
-			$('#content-container').css({'width': '83%'});
-			$('#sidebar-toggler-larger').css({'left': $('#sidebar-container').outerWidth()}).html('<i class="bi bi-caret-left-fill"></i>');
+	$('#sidebar-toggler-larger').click(function () {
+		isAnimating = true;
+
+		console.log(isAnimating);
+	
+		if ($('#sidebar-container').is(':visible')) {
+			$('#sidebar-container').animate({ width: '0', opacity: '0' }, 300, function () {
+				$(this).hide();
+				isAnimating = false;
+				adjustLayouts(); // Now safe to adjust
+
+				console.log(isAnimating);
+			});
+			$('#content-container').animate({ width: '100%' }, 300);
+			$('#sidebar-toggler-larger')
+				.animate({ left: 0 }, 300)
+				.html('<i class="bi bi-caret-right-fill"></i>');
+		} else {
+			$('#sidebar-container')
+				.css('opacity', '0')
+				.show()
+				.animate({ width: '17%', opacity: '1' }, 300, function () {
+					isAnimating = false;
+					adjustLayouts();
+
+					console.log(isAnimating);
+				});
+			$('#content-container').animate({ width: '83%' }, 300);
+	
+			setTimeout(function () {
+				$('#sidebar-toggler-larger')
+					.animate({ left: $('#sidebar-container').outerWidth() }, 100)
+					.html('<i class="bi bi-caret-left-fill"></i>');
+			}, 300);
 		}
 	});
 
@@ -122,6 +150,10 @@ $(document).ready(() => {
 		resizeObserver.observe(container);
 	});
 
+	// Cancel confirmation
+	$('.cancel-btn').on('click', function(){
+		$('#cancel-popup').parent().show();
+	});
 
 	// Datepicker mechanique
 	const testinput = document.createElement('input');
@@ -205,6 +237,7 @@ $(document).ready(() => {
 		}
 	});
 
+	// Action status bottom right notif
 	$('.status-notif').animate({
 		right: 0
 	});
@@ -213,14 +246,14 @@ $(document).ready(() => {
 		$('.status-notif').find('.progress-bar').animate({
 			width: '100%'
 		}, {
-			duration: 3000,
+			duration: 5000,
 			easing: 'linear'
 		});
 	}, 200);
 
 	setTimeout(() => {
 		$('.status-notif').fadeOut(300);
-	}, 3200);
+	}, 5200);
 
 	$('.dismiss-status-notif').on('click', function(){
 		$(this).closest('.status-notif').fadeOut(300);

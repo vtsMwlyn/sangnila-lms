@@ -4,10 +4,6 @@
 	<h1>{{ $course->course_name }}</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <a href="{{ route('teacher.mycourse.show', $course->id) }}" class="font-bold text-yellow-500">{{ $course->course_name }}</a>
-	> <span>Pick from Curriculum</span>
-@endsection
 
 @section("content")
 	<x-section-container>

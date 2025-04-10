@@ -4,10 +4,6 @@
 	<h1>Import Course Topics And Activities Data from Excel</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <a href="{{ route('teacher.mycourse.show', $course->id) }}" class="font-bold text-yellow-500">{{ $course->course_name }}</a>
-	> <span>Import Excel </span>
-@endsection
 
 @section("content")
 	<x-section-container>

@@ -4,9 +4,6 @@
 	<h1>Teacher's Details</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <span>{{ (($teacher->details->gender == 1)? "Mr. " : "Ms. ") . $teacher->full_name }}</span>
-@endsection
 
 @section("popup")
 	{{-- Unassign Teacher --}}

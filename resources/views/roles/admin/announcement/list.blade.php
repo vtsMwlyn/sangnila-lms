@@ -17,7 +17,7 @@
 <script>
 	$(".selectable-cards").on({
 		"mouseover": function(){
-			$(this).css("transform", "scale(1.02)");
+			$(this).css("transform", "scale(1.01)");
 		},
 		"mouseout": function(){
 			$(this).css("transform", "scale(1)");

@@ -4,10 +4,6 @@
 	<h1>{{ $course->course_name }}</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <a href="{{ route('admin.course.show', $course->id) }}" class="font-bold text-yellow-500">{{ $course->course_name }}</a>
-	> <span>Import Student</span>
-@endsection
 
 @section("content")
 	@if($course->teachers->count() && $course->topics->count() && $course->topics[0]->activities->count())

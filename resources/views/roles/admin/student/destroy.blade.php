@@ -4,10 +4,6 @@
 	<h1>{{ $student->full_name }}</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <a href="{{ route('admin.student.show', $student->id) }}" class="font-bold text-yellow-500">{{ $student->full_name }}</a>
-	> <span>Unassign</span>
-@endsection
 
 @section("content")
 	<x-section-container>

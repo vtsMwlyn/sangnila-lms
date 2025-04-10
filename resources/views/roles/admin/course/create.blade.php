@@ -4,10 +4,6 @@
 	<h1>Manage Courses</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <span>Add</span>
-@endsection
-
 @section("content")
 	<x-section-container>
 		<x-page-title>{{ __("Add New Course") }}</x-page-title>

@@ -4,9 +4,6 @@
 	<h1>Student's Details</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <span>{{ $student->full_name }}</span>
-@endsection
 
 @section("popup")
 	{{-- Change imported student information --}}

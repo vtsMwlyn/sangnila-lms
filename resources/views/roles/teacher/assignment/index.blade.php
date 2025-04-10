@@ -4,9 +4,6 @@
 	<h1>Student Assignment</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <span>Select Course</span>
-@endsection
 
 @section("content")
 	<div class="w-full flex flex-wrap gap-5">
@@ -45,4 +42,8 @@
 			<div class="bg-white rounded-xl text-center font-semibold w-full mt-5 p-5">- No courses assigned yet -</div>
 		@endforelse
 	</div>
+	
+	<script>
+
+	</script>
 @endsection

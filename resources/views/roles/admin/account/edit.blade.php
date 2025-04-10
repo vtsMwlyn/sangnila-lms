@@ -4,15 +4,6 @@
 	<h1>{{ $account->full_name }}</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	{{-- @if($account->role_id == 2)
-		> <a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-yellow-500">{{ (($account->details->gender == 1)? "Mr. " : "Ms. ") . $account->full_name }}</a>
-	@else
-		> <a href="{{ route('admin.account.show', $account->id) }}" class="font-bold text-yellow-500">{{ $account->full_name }}</a>
-	@endif --}}
-	> <span>Edit</span>
-@endsection
-
 @section("content")
 	<x-section-container>
 		<x-page-title>{{ __("Edit Account's Data") }}</x-page-title>

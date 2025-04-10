@@ -4,11 +4,6 @@
 	<h1>Student Assignment</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <a href="{{ route('teacher.assignment.show', $assignment->course->id) }}" class="font-bold text-yellow-500">{{ $assignment->course->course_name }}</a>
-	> <span>{{ $assignment->title }}</span>
-	> <span>Submissions</span>
-@endsection
 
 @section('popup')
 	<x-popup popup_title="Student's Submission History" class="w-5/6 flex flex-col items-stretch justify-center overflow-y-auto" id="student-submission-popup">

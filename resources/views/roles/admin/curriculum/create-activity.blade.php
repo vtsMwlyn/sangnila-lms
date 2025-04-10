@@ -4,13 +4,6 @@
 	<h1>{{ $course->course_name }}</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <a href="{{ route('admin.course.show', $course->id) }}" class="font-bold text-yellow-500">{{ $course->course_name }}</a>
-	> <a href="{{ route('admin.course.show', $course->id) }}#curriculum-section" class="font-bold text-yellow-500">Curriculum</a>
-	> <a href="{{ route('admin.course.curriculum.topic.details', [$course->id, $curriculum_topic->id]) }}" class="font-bold text-yellow-500">{{ $curriculum_topic->title }}</a>
-	> <span>Add Activity</span>
-@endsection
-
 @section("content")
 	<x-section-container>
 		<x-back-button href="{{ route('admin.course.curriculum.topic.details', [$course->id, $curriculum_topic->id]) }}"></x-back-button>

@@ -4,9 +4,6 @@
 	<h1>Courses</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <span>{{ $course->course_name }}</span>
-@endsection
 
 @section("content")
 	{{-- @dd($activityProgresses) --}}
@@ -315,7 +312,7 @@
 														$('<a>').attr('href', materialPreviewLink).html('<img src="{{ asset('img/view.svg') }}" alt="icon" class="w-8 h-8 hover:scale-110">')
 													)
 													.append(
-														$('<a>').attr({'href': meetingLink, 'target': anchorTarget}).addClass('h-8 w-8 border-slate-400 rounded-lg flex items-center justify-center hover:scale-110').css('border-width', '3px').html('<i class="bi bi-camera-video text-slate-400"></i>')
+														$('<a>').attr({'href': meetingLink, 'target': anchorTarget}).addClass('h-8 w-8 flex items-center justify-center hover:scale-110').html('<img src="{{ asset('img/online-meeting.svg') }}">')
 													)
 											)
 										)

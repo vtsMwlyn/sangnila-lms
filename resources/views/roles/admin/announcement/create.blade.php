@@ -4,11 +4,6 @@
 	<h1>Manage Announcement</h1>
 @endsection
 
-@section("breadcrumbs-extension")
-	> <a href="{{ route("admin.announcement.index") }}" class="font-bold text-yellow-500">Announcements</a>
-	> <span>Create</span>
-@endsection
-
 @section("content")
 	<x-section-container>
 		<x-page-title>{{ __("Upload New Announcement") }}</x-page-title>
