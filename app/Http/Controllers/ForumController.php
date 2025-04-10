@@ -116,7 +116,7 @@ class ForumController extends Controller
         catch(Exception $e){
             DB::rollback();
 
-            Storage::delete($path);
+            Storage::disk('public')->delete($path);
 
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
@@ -152,7 +152,7 @@ class ForumController extends Controller
         catch(Exception $e){
             DB::rollback();
 
-            Storage::delete($path);
+            Storage::disk('public')->delete($path);
 
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }

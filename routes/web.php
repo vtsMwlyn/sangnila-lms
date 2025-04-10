@@ -12,6 +12,8 @@ use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\CourseStudentController;
 use App\Http\Controllers\PushNotificationController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 // Verify email application (dont move this)
 Auth::routes(['verify' => true]);
@@ -73,4 +75,20 @@ Route::middleware([])->group(function(){
 	// 	$pnc = new PushNotificationController();
 	// 	$pnc->sendPushNotification();
 	// });
+
+	// Requests from Outside of LMS
+	Route::prefix('/api')->group(function(){
+		Route::post('/delete-image', function(Request $request){
+			// return response()->json(['success' => true, 'path' => $request->path]);
+
+			try {
+				$status = Storage::disk('public')->delete($request->path);
+
+				return response()->json(['success' => true, 'deletion_status' => $status, 'path' => $request->path], 200);
+			}
+			catch(Exception $e){
+				return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+			}
+		});
+	});
 });

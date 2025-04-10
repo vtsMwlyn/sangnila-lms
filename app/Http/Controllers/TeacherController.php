@@ -115,7 +115,7 @@ class TeacherController extends Controller {
 		}
 		catch(Exception $e){
 			if(isset($validatedData['attendance_evidence'])){
-				Storage::delete($validatedData['attendance_evidence']);
+				Storage::disk('public')->delete($validatedData['attendance_evidence']);
 			}
 
 			return back()->with('danger', 'Cannot sign in due to system error, please contact our IT team. Error detail: ' . $e->getMessage());

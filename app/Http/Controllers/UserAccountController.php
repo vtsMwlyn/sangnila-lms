@@ -85,7 +85,7 @@ class UserAccountController extends Controller{
 			]);
 
 			if($old_image_path != ""){
-				Storage::delete($old_image_path);
+				Storage::disk('public')->delete($old_image_path);
 			}
 
 			DB::commit();
@@ -94,7 +94,7 @@ class UserAccountController extends Controller{
 			DB::rollback();
 
 			if($request->file("cropped_image")){
-				Storage::delete($validatedData["cropped_image"]);
+				Storage::disk('public')->delete($validatedData["cropped_image"]);
 			}
 
 			throw $e;

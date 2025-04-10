@@ -242,7 +242,7 @@ class StudentController extends Controller {
 			DB::rollback();
 
 			foreach($paths as $p){
-				Storage::delete($p);
+				Storage::disk('public')->delete($p);
 			}
 
 			return back()->with('danger', 'System failed to upload portfolio images for this student. Please report to our IT team, error detail: ' . $e->getMessage());
@@ -255,7 +255,7 @@ class StudentController extends Controller {
 		$portfolio = Portfolio::findOrFail($portfolio_id);
 
 		if($portfolio->type != 'link'){
-			Storage::delete($portfolio->path);
+			Storage::disk('public')->delete($portfolio->path);
 		}
 
 		$portfolio->delete();
@@ -599,7 +599,7 @@ class StudentController extends Controller {
 		}
 		catch(Exception $e){
 			if(isset($validatedData['attendance_evidence'])){
-				Storage::delete($validatedData['attendance_evidence']);
+				Storage::disk('public')->delete($validatedData['attendance_evidence']);
 			}
 
 			return back()->with('danger', 'Cannot sign in due to system error, please contact our IT team. Error detail: ' . $e->getMessage());
@@ -701,7 +701,7 @@ class StudentController extends Controller {
 			DB::rollback();
 
 			foreach($paths as $p){
-				Storage::delete($p);
+				Storage::disk('public')->delete($p);
 			}
 
 			return back()->with('danger', 'System failed to upload portfolio images for this student. Please report to our IT team, error detail: ' . $e->getMessage());

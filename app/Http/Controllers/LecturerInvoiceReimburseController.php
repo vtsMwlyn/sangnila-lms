@@ -143,7 +143,7 @@ class LecturerInvoiceReimburseController extends Controller
 
         $evpath = $reimburse->evidence_path;
         if($request->file('image')){
-            Storage::delete($evpath);
+            Storage::disk('public')->delete($evpath);
 
             $evpath = $request->file('image')->store('reimburse');
         }
