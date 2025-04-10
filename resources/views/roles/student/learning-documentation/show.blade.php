@@ -83,7 +83,7 @@
                                     <img src="{{ Storage::url("app/public/" . $portfolio->path) }}" alt="img" style="object-fit: cover;" class="w-full h-full rounded-lg">
                                 @elseif($portfolio->type == "video")
                                     <video class="w-full h-full rounded-lg" style="object-fit: cover;" controls>
-                                        <source src="{{ Storage::url("app/public/" . $portfolio->path) }}" type="{{ Storage::mimeType('app/public/' . $portfolio->path) }}">
+                                        <source src="{{ Storage::url("app/public/" . $portfolio->path) }}" type="{{ Storage::mimeType("app/public/" . $portfolio->path) }}">
                                     </video>
 								@elseif($portfolio->type == "link")
 									<div class="w-full h-full flex items-center justify-center bg-slate-400 rounded-lg">

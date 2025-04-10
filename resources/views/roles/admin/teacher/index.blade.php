@@ -32,13 +32,13 @@
 				</thead>
 				<tbody>
 					@forelse ($teachers as $i => $teacher)
-						@foreach ($teacher->teached_courses as $j => $course)
+						@forelse ($teacher->teached_courses as $j => $course)
 							<tr class="@if($i % 2 == 0) bg-white @endif">
 								@if($j == 0)
 									<td class="py-3 px-4" rowspan="{{ $teacher->teached_courses->count() }}">
 										<div class="flex w-full items-center gap-3">
 											@if($teacher->details->profpic)
-												<img src="{{ Storage::url("app/public/" . $teacher->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+												<img src="{{ Storage::url( $teacher->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
 											@else
 												<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
 											@endif
@@ -77,7 +77,43 @@
 									</td>
 								@endif
 							</tr>
-						@endforeach
+						@empty
+							<tr class="@if($i % 2 == 0) bg-white @endif">
+								<td class="py-3 px-4">
+									<div class="flex w-full items-center gap-3">
+										@if($teacher->details->profpic)
+											<img src="{{ Storage::url( $teacher->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+										@else
+											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+										@endif
+										{{ ($teacher->details->gender == 1)? "Mr." : "Ms." }} {{ $teacher->full_name }}
+									</div>
+								</td>
+								<td class="py-3 px-4" colspan="2">- No courses assigned yet-</td>
+								<td class="py-3 px-4">
+									@if ($teacher->status == "enabled")
+										<span class="font-bold text-light-blue">Active</span>
+									@else
+										<span class="font-bold text-red">Inactive</span>
+									@endif
+								</td>
+								<td class="py-3 px-4">
+									<div class="flex gap-1 w-full">
+										<div class="relative">
+											<a href="{{ route('admin.teacher.show', $teacher->id) }}" title="View this teacher details">
+												<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+											</a>
+											@if ($teacher->teached_courses->count() == 0)
+												<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -4px; right: -4px;">!</div>
+											@endif
+										</div>
+										<a href="{{ route('admin.teacher.edit', $teacher->id) }}" title="Edit this teacher data">
+											<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</a>
+									</div>
+								</td>
+							</tr>
+						@endforelse
 					@empty
 						<tr class="bg-white">
 							<td class="py-3 px-4 text-center" colspan="4">- No data found -</td>
