@@ -76,7 +76,7 @@ class LecturerInvoiceReimburseController extends Controller
             ->orderBy('student_id')
             ->get()
             ->groupBy(function ($item) {
-                return Carbon::parse($item->attendance->attendance_date)->format('M-y'); // Group by Year-Month first
+                return Carbon::parse($item->attendance->attendance_date)->format('m-y'); // Group by Year-Month first
             })
             ->sortKeys()
             ->map(function ($groupedByMonth) {
@@ -91,7 +91,15 @@ class LecturerInvoiceReimburseController extends Controller
     
         // return $student_attendances;
 
-        return Excel::download(new LecturerInvoiceExport($invoice, $student_attendances), 'lecturer_invoice_' . Auth::user()->full_name . '_' . '.xlsx');
+        $reimburses = Reimburse::where('user_id', Auth::user()->id)->whereBetween('date', [$last_26th, $last_25th])->orderBy('date', 'asc')->get()
+            ->groupBy(function ($item) {
+                return Carbon::parse($item->date)->format('m-y'); // Group by Year-Month first
+            })
+            ->sortKeys();
+
+        // return $reimburses;
+
+        return Excel::download(new LecturerInvoiceExport($invoice, $student_attendances, $reimburses), 'lecturer_invoice_' . Auth::user()->full_name . '_' . '.xlsx');
     }
 
     public function teacher_create_reimburse(){
@@ -145,9 +153,5 @@ class LecturerInvoiceReimburseController extends Controller
         $reimburse->update($validatedData);
 
         return redirect(route('teacher.lecturer-invoice-reimburse.index', ['content' => request('content')]))->with('success', 'The reimburse data has been edited successfully!');
-    }
-
-    public function teacher_destroy_reimburse($reimburse_id){
-
     }
 }
