@@ -1,7 +1,10 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\SysAdminController;
 use App\Http\Controllers\DashboardController;
@@ -12,8 +15,6 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\CourseStudentController;
 use App\Http\Controllers\CustomOperationController;
 use App\Http\Controllers\PushNotificationController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 // Verify email application (dont move this)
 Auth::routes(['verify' => true]);
@@ -26,6 +27,7 @@ Route::post("/sysadmin/logout", [SysAdminController::class, "sysadmin_logout"])-
 // Route::get('/custom-operation', [CustomOperationController::class, 'generate_progress_for_all_student']);
 // Route::get('/custom-operation', [CustomOperationController::class, 'sync_syllabus_for_all_course']);
 // Route::get('/custom-operation', [CustomOperationController::class, 'custom_operation']);
+
 
 // Main routes
 Route::middleware([])->group(function(){

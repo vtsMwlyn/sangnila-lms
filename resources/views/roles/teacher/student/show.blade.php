@@ -243,9 +243,9 @@
 			<div class="flex flex-col w-full">
 				<x-button type="button" id="upload-portfolio-btn" class="w-fit mt-4"><i class="bi bi-plus-lg"></i> Upload Portfolios</x-button>
 
-				<div class="flex gap-3 flex-wrap mt-6 w-full overflow-y-auto items-start" style="height: 60vh;">
+				<div class="flex gap-3 flex-wrap mt-6 w-full overflow-y-auto items-start media-scroll" style="height: 60vh;">
 					@forelse($student->portfolios()->orderBy('created_at', 'desc')->get() as $portfolio)
-						<div class="relative oneperthree" style="height: 300px;">
+						<div class="relative oneperthree rounded-lg overflow-hidden" style="height: 300px;">
 							<div class="absolute" style="top: 10px; right: 10px; z-index: 5;">
 								<button type="button" data-route="{{ route('teacher.student.destroy.portfolio', $portfolio->id) }}" class="bg-red rounded-lg py-2 px-4 text-white hover:bg-slate-700 delete-portfolio-btn" title="Remove this file from student's portfolio"><i class="bi bi-trash3"></i></button>
 							</div>
@@ -254,10 +254,10 @@
 								<div class="absolute flex w-full h-full items-center justify-center text-white hint-text" style="display: none; background: rgba(0, 0, 0, 0.7);">Click to view the full file</div>
 
 								@if($portfolio->type == 'image')
-									<img src="{{ Storage::url("app/public/" . $portfolio->path) }}" alt="img" style="object-fit: cover;" class="w-full h-full rounded-lg">
+									<img src="{{ Storage::url("app/public/" . $portfolio->path) }}" alt="img" style="object-fit: cover;" loading="lazy" class="w-full h-full rounded-lg">
 								@elseif($portfolio->type == "video")
-									<video class="w-full h-full rounded-lg" style="object-fit: cover;" controls>
-										<source src="{{ Storage::url("app/public/" . $portfolio->path) }}" type="{{ Storage::mimeType("app/public/" . $portfolio->path) }}">
+									<video class="w-full h-full rounded-lg lazy-video" style="object-fit: cover;" controls preload="none">
+										<source src="{{ Storage::url("app/public/" . $portfolio->path) }}" type="{{ Storage::mimeType('app/public/' . $portfolio->path) }}">
 									</video>
 								@elseif($portfolio->type == "link")
 									<div class="w-full h-full flex items-center justify-center bg-slate-400 rounded-lg">
@@ -346,9 +346,11 @@
 							} 
 							else if (file.type.startsWith("video/")) {
 								// Create video element
+								const source = $('<source>').attr("src", e.target.result).attr("type", file.type);
 								mediaElement = $("<video>")
-									.attr("src", e.target.result).addClass('oneperthree').attr("controls", true)
-									.css({"height": "200px", "border-radius": "8px"});
+									.addClass('oneperthree').attr("controls", true)
+									.css({"height": "200px", "border-radius": "8px"})
+									.append(source);
 							}
 							else {
 								mediaElement = $('<div>').addClass('oneperthree bg-gray-400 flex items-center justify-center text-6xl text-white').css({"height": "200px", "border-radius": "8px"}).html('<i class="bi bi-filetype-pdf"></i>');
@@ -388,6 +390,36 @@
 				$('#delete-portfolio-popup').find('form').attr('action', $(this).data('route'));
 				$('#delete-portfolio-popup').parent().show();
 			});
+
+			// Handle lazy loading video
+			const $lazyVideos = $('video.lazy-video');
+			const $scrollContainer = $('.media-scroll').get(0); // raw DOM element
+
+			if ('IntersectionObserver' in window) {
+				const observer = new IntersectionObserver(function (entries, observer) {
+					entries.forEach(function (entry) {
+						if (entry.isIntersecting) {
+							const video = entry.target;
+							const $video = $(video);
+							const $source = $video.find('source');
+
+							const dataSrc = $source.attr('data-src');
+							if (dataSrc) {
+								$source.attr('src', dataSrc);
+								video.load();
+								observer.unobserve(video);
+							}
+						}
+					});
+				}, {
+					root: $scrollContainer,
+					threshold: 0.2
+				});
+
+				$lazyVideos.each(function () {
+					observer.observe(this);
+				});
+			}
 		});
 	</script>
 @endsection

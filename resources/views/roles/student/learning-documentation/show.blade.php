@@ -67,23 +67,17 @@
             <div class="flex flex-col w-full">
                 <x-button type="button" id="upload-portfolio-btn" class="w-fit mt-4"><i class="bi bi-plus-lg"></i> Upload Portfolios</x-button>
 
-                <div class="flex gap-3 flex-wrap mt-6 w-full overflow-y-auto items-start" style="height: 60vh;">
+                <div class="flex gap-3 flex-wrap mt-6 w-full overflow-y-auto items-start media-scroll" style="height: 60vh;">
                     @forelse(Auth::user()->portfolios()->orderBy('created_at', 'desc')->get() as $portfolio)
-                        <div class="relative oneperthree" style="height: 300px;">
-                            {{-- <form action="{{ route('teacher.student.destroy.portfolio', $portfolio->id) }}" method="post" class="absolute" style="top: 10px; right: 10px; z-index: 5;">
-                                @method('delete')
-                                @csrf
-                                <button type="submit" class="bg-red rounded-lg py-2 px-4 text-white" onclick="return confirm('Apakah anda yakin ingin menghapus foto ini dari pengembalian ini?')"><i class="bi bi-trash3"></i></button>
-                            </form> --}}
-
+                        <div class="relative oneperthree rounded-lg overflow-hidden" style="height: 300px;">
                             <a href="{{ $portfolio->type != 'link' ? Storage::url("app/public/" . $portfolio->path) : $portfolio->path }}" target="_blank" class="relative imeeji">
                                 <div class="absolute flex w-full h-full items-center justify-center text-white hint-text" style="display: none; background: rgba(0, 0, 0, 0.7);">Click to view the full file</div>
 
                                 @if($portfolio->type == 'image')
-                                    <img src="{{ Storage::url("app/public/" . $portfolio->path) }}" alt="img" style="object-fit: cover;" class="w-full h-full rounded-lg">
+                                    <img src="{{ Storage::url("app/public/" . $portfolio->path) }}" alt="img" style="object-fit: cover;" class="w-full h-full rounded-lg" loading="lazy">
                                 @elseif($portfolio->type == "video")
-                                    <video class="w-full h-full rounded-lg" style="object-fit: cover;" controls>
-                                        <source src="{{ Storage::url("app/public/" . $portfolio->path) }}" type="{{ Storage::mimeType("app/public/" . $portfolio->path) }}">
+                                    <video class="w-full h-full rounded-lg lazy-video" style="object-fit: cover;" controls preload="none">
+                                        <source src="{{ Storage::url("app/public/" . $portfolio->path) }}" type="{{ Storage::mimeType('app/public/' . $portfolio->path) }}">
                                     </video>
 								@elseif($portfolio->type == "link")
 									<div class="w-full h-full flex items-center justify-center bg-slate-400 rounded-lg">
@@ -122,69 +116,101 @@
 
     <script>
         $(document).ready(() => {
-				$('#upload-portfolio-btn').on('click', function(){
-					$('#upload-portfolio').parent().show();
-				});
-
-				$("#files").on("change", function(){
-					let files = this.files;
-					let previewContainer = $("#file-preview");
-
-					// Clear previous previews
-					previewContainer.empty();
-
-					if (files) {
-						$.each(files, function(index, file) {
-							let reader = new FileReader();
-
-							reader.onload = function(e) {
-								let mediaElement;
-
-								if (file.type.startsWith("image/")) {
-									// Create image element
-									mediaElement = $("<img>")
-										.attr("src", e.target.result).addClass('oneperthree')
-										.css({"height": "200px", "object-fit": "cover", "border-radius": "8px"});
-								} 
-								else if (file.type.startsWith("video/")) {
-									// Create video element
-									mediaElement = $("<video>")
-										.attr("src", e.target.result).addClass('oneperthree').attr("controls", true)
-										.css({"height": "200px", "border-radius": "8px"});
-								}
-								else {
-									mediaElement = $('<div>').addClass('oneperthree bg-gray-400 flex items-center justify-center text-6xl text-white').css({"height": "200px", "border-radius": "8px"}).html('<i class="bi bi-filetype-pdf"></i>');
-								}
-
-								if (mediaElement) {
-									previewContainer.append(mediaElement);
-								}
-							};
-
-							reader.readAsDataURL(file);
-						});
-					}
-				});
-
-				$('.imeeji').on({
-					'mouseover': function(){
-						$(this).find('.hint-text').show();
-					},
-					'mouseout': function(){
-						$(this).find('.hint-text').hide();
-					}
-				});
-
-				$('#activity_access').on('submit', function(event) {
-					event.preventDefault();
-					const checkboxValues = collectCheckboxValues();
-
-					checkboxValues.forEach((value, index) => {
-						$('#activity_access').append($('<input>').attr({'type': 'hidden', 'name': 'checkbox_value[]', 'value': value}));
-					});
-
-					this.submit();
-				});
+			$('#upload-portfolio-btn').on('click', function(){
+				$('#upload-portfolio').parent().show();
 			});
+
+			$("#files").on("change", function(){
+				let files = this.files;
+				let previewContainer = $("#file-preview");
+
+				// Clear previous previews
+				previewContainer.empty();
+
+				if (files) {
+					$.each(files, function(index, file) {
+						let reader = new FileReader();
+
+						reader.onload = function(e) {
+							let mediaElement;
+
+							if (file.type.startsWith("image/")) {
+								// Create image element
+								mediaElement = $("<img>")
+									.attr("src", e.target.result).addClass('oneperthree')
+									.css({"height": "200px", "object-fit": "cover", "border-radius": "8px"});
+							} 
+							else if (file.type.startsWith("video/")) {
+								// Create video element
+								const source = $('<source>').attr("src", e.target.result).attr("type", file.type);
+								mediaElement = $("<video>")
+									.addClass('oneperthree').attr("controls", true)
+									.css({"height": "200px", "border-radius": "8px"})
+									.append(source);
+							}
+							else {
+								mediaElement = $('<div>').addClass('oneperthree bg-gray-400 flex items-center justify-center text-6xl text-white').css({"height": "200px", "border-radius": "8px"}).html('<i class="bi bi-filetype-pdf"></i>');
+							}
+
+							if (mediaElement) {
+								previewContainer.append(mediaElement);
+							}
+						};
+
+						reader.readAsDataURL(file);
+					});
+				}
+			});
+
+			$('.imeeji').on({
+				'mouseover': function(){
+					$(this).find('.hint-text').show();
+				},
+				'mouseout': function(){
+					$(this).find('.hint-text').hide();
+				}
+			});
+
+			$('#activity_access').on('submit', function(event) {
+				event.preventDefault();
+				const checkboxValues = collectCheckboxValues();
+
+				checkboxValues.forEach((value, index) => {
+					$('#activity_access').append($('<input>').attr({'type': 'hidden', 'name': 'checkbox_value[]', 'value': value}));
+				});
+
+				this.submit();
+			});
+
+			// Handle lazy loading video
+			const $lazyVideos = $('video.lazy-video');
+			const $scrollContainer = $('.media-scroll').get(0); // raw DOM element
+
+			if ('IntersectionObserver' in window) {
+				const observer = new IntersectionObserver(function (entries, observer) {
+					entries.forEach(function (entry) {
+						if (entry.isIntersecting) {
+							const video = entry.target;
+							const $video = $(video);
+							const $source = $video.find('source');
+
+							const dataSrc = $source.attr('data-src');
+							if (dataSrc) {
+								$source.attr('src', dataSrc);
+								video.load();
+								observer.unobserve(video);
+							}
+						}
+					});
+				}, {
+					root: $scrollContainer,
+					threshold: 0.2
+				});
+
+				$lazyVideos.each(function () {
+					observer.observe(this);
+				});
+			}
+		});
     </script>
 @endsection
