@@ -23,6 +23,21 @@ use Google\Service\CloudTasks\Attempt;
 use Illuminate\Support\Facades\Validator;
 
 class AttendanceController extends Controller {
+	// ===== HEAD OF LECTURER ===== //
+	public function head_of_lecturer_index(){
+		return view('roles.head-of-lecturer.attendance.index', [
+            'courses' => Course::filter(request(['search']))->orderBy('course_name', 'asc')->orderByRaw('CASE WHEN status = "active" THEN 0 ELSE 1 END')->get()
+        ]);
+	}
+
+	public function head_of_lecturer_show($course_id){
+		$course = Course::findOrFail($course_id);
+
+		return view('roles.head-of-lecturer.attendance.show', [
+			'course' => $course
+		]);
+	}
+
 	// ===== TEACHER ===== //
 	// Showing all assigned course to select before continue
 	public function index(){

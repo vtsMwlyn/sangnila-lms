@@ -65,6 +65,10 @@ class Course extends Model {
 	public function portfolios(){
 		return $this->hasMany(Portfolio::class);
 	}
+
+	public function self_attendances(){
+		return $this->hasMany(SelfAttendance::class);
+	}
 }
 
 
