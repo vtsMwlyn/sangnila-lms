@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\CourseStudent;
 use App\Models\StudentAttendance;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ForumController;
@@ -8,16 +9,16 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AnnouncementController;
-use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\CourseStudentController;
-use App\Models\CourseStudent;
 
 Route::prefix('/student')
 	->name('student.')
-	->middleware(['auth', 'role:Student', 'verified', "acc_not_disabled", 'remind_user'])
+	->middleware(['auth', 'role:student', 'verified', "acc_not_disabled", 'remind_user'])
 	->group(function() {
 
 		// Landing page
@@ -90,7 +91,7 @@ Route::prefix('/student')
 				Route::get('/{course_id}', [StudentController::class, 'student_show'])->name('show')->whereNumber('course_id');
 
 				// Upload portfolio
-				Route::post('{course_id}/upload-portfolio', [StudentController::class, 'student_store_portfolio'])->name('store.portfolio')->whereNumber('course_id');
+				Route::post('{course_id}/upload-portfolio', [PortfolioController::class, 'student_store_portfolio'])->name('store.portfolio')->whereNumber('course_id');
 
 				// View certificate
 				Route::get('/certificate/{course_id}/{student_id}', [CourseStudentController::class, 'generate_certificate'])->name('view-certificate');

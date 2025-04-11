@@ -48,14 +48,20 @@
 						<p class="mt-2">
 							Announced to
 							@php
-								$sent_to = json_decode($announcement->sent_to, true);
-								$roles = App\Models\Role::all();
+								$sent_to = json_decode($announcement->sent_to);
+								$roleNames = [];
+								
+								if(in_array(1, $sent_to) || in_array(6, $sent_to)){
+									$roleNames[] = 'admins';
+								}
 
-								$roleNames = $roles->filter(function ($role, $i) use ($sent_to) {
-									return isset($sent_to[$i]) && $sent_to[$i] == "on";
-								})->map(function ($role) {
-									return $role->role_name . 's';
-								})->toArray();
+								if(in_array(2, $sent_to) || in_array(7, $sent_to)){
+									$roleNames[] = 'teachers';
+								}
+
+								if(in_array(3, $sent_to)){
+									$roleNames[] = 'students';
+								}
 
 								$lastItem = array_pop($roleNames);
 								$formattedString = implode(', ', $roleNames);

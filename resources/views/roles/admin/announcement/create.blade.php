@@ -38,13 +38,13 @@
 				{{-- Announcement Start Date --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="announce_from">Announce From<span class="text-red">*</span></x-label>
-					<x-input id="announce_from" class="block w-full" onfocus="this.type='date';" onblur="this.type='text';" name="announce_from" placeholder="New announcement start date" :value="old('announce_from')" autofocus />
+					<x-input id="announce_from" class="block w-full" type="date" name="announce_from" placeholder="New announcement start date" :value="old('announce_from')" autofocus />
 				</div>
 
 				{{-- Announcement End Date --}}
 				<div class="flex flex-col w-1/2">
 					<x-label for="announce_until">Announce Until<span class="text-red">*</span></x-label>
-					<x-input id="announce_until" class="block w-full" onfocus="this.type='date';" onblur="this.type='text';" name="announce_until" placeholder="New announcement end date" :value="old('announce_until')" autofocus />
+					<x-input id="announce_until" class="block w-full" type="date" name="announce_until" placeholder="New announcement end date" :value="old('announce_until')" autofocus />
 				</div>
 			</div>
 

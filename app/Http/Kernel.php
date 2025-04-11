@@ -69,5 +69,8 @@ class Kernel extends HttpKernel
 		"maintenance" => \App\Http\Middleware\Maintenance::class,
 
 		'remind_user' => \App\Http\Middleware\RemindUser::class,
+
+        'sysadmin' => \App\Http\Middleware\IsSysAdmin::class,
+        'head_of_lecturer' => \App\Http\Middleware\IsHeadOfLecturer::class,
     ];
 }

@@ -40,8 +40,18 @@ class AnnouncementController extends Controller
 
 		$receiver_array = [];
 
-		foreach ($validatedData["receiver"] as $receiver_role) {
-			array_push($receiver_array, $receiver_role);
+		if($validatedData['receiver'][0] == 'on'){
+			$receiver_array[] = 1;
+			$receiver_array[] = 6;
+		}
+
+		if($validatedData['receiver'][1] == 'on'){
+			$receiver_array[] = 2;
+			$receiver_array[] = 7;
+		}
+
+		if($validatedData['receiver'][2] == 'on'){
+			$receiver_array[] = 3;
 		}
 
 		$data_to_create = [
@@ -90,8 +100,18 @@ class AnnouncementController extends Controller
 
 		$receiver_array = [];
 
-		foreach ($validatedData["receiver"] as $receiver_role) {
-			array_push($receiver_array, $receiver_role);
+		if($validatedData['receiver'][0] == 'on'){
+			$receiver_array[] = 1;
+			$receiver_array[] = 6;
+		}
+
+		if($validatedData['receiver'][1] == 'on'){
+			$receiver_array[] = 2;
+			$receiver_array[] = 7;
+		}
+
+		if($validatedData['receiver'][2] == 'on'){
+			$receiver_array[] = 3;
 		}
 
 		$data_to_update = [
@@ -172,13 +192,15 @@ class AnnouncementController extends Controller
 			$view_name = "roles.teacher.list-announcement";
 		} else if(Auth::user()->role_id == 3){
 			$view_name = "roles.student.list-announcement";
+		} else if(Auth::user()->role_id == 7){
+			$view_name = "roles.head-of-lecturer.list-announcement";
 		}
 
 		$my_announcements = [];
 		$all_announcements = Announcement::all();
 
 		foreach($all_announcements as $ann){
-			if(json_decode($ann->sent_to)[Auth::user()->role_id - 1] == "on"){
+			if(in_array(Auth::user()->role_id, json_decode($ann->sent_to))){
 				array_push($my_announcements, $ann);
 			}
 		}

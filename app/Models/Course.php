@@ -13,9 +13,7 @@ class Course extends Model {
 	// Query scope
 	public function scopeFilter($query, array $filters){
 		$query->when($filters["search"] ?? false, function($query, $search){
-			return $query->where(function($query) use($search){
-				$query->where("course_name", "like", "%" . $search . "%");
-			});
+			return $query->where("course_name", "like", "%" . $search . "%");
 		});
 	}
 
@@ -62,6 +60,10 @@ class Course extends Model {
 
 	public function messages(){
 		return $this->hasMany(Message::class);
+	}
+	
+	public function portfolios(){
+		return $this->hasMany(Portfolio::class);
 	}
 }
 

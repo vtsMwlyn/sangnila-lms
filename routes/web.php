@@ -19,16 +19,6 @@ use App\Http\Controllers\PushNotificationController;
 // Verify email application (dont move this)
 Auth::routes(['verify' => true]);
 
-// For maintenance
-Route::get("/sysadmin/login", [SysAdminController::class, "sysadmin_login"])->name("sysadmin.login");
-Route::post("/sysadmin/login", [SysAdminController::class, "sysadmin_authenticate"])->name("sysadmin.authenticate");
-Route::post("/sysadmin/logout", [SysAdminController::class, "sysadmin_logout"])->name("sysadmin.logout");
-
-// Route::get('/custom-operation', [CustomOperationController::class, 'generate_progress_for_all_student']);
-// Route::get('/custom-operation', [CustomOperationController::class, 'sync_syllabus_for_all_course']);
-// Route::get('/custom-operation', [CustomOperationController::class, 'custom_operation']);
-
-
 // Main routes
 Route::middleware([])->group(function(){
 	// Home
@@ -65,7 +55,9 @@ Route::middleware([])->group(function(){
 	require __DIR__ . '/auth.php';
 
 	// Role based routes
+	require __DIR__ . '/roles/sysadmin.php';
 	require __DIR__ . '/roles/admin.php';
+	require __DIR__ . '/roles/head-of-lecturer.php';
 	require __DIR__ . '/roles/teacher.php';
 	require __DIR__ . '/roles/student.php';
 	require __DIR__ . '/roles/guest.php';

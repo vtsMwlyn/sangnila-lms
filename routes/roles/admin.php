@@ -22,7 +22,7 @@ use App\Models\LearningOutcome;
 
 Route::prefix('/admin')
 	->name('admin.')
-	->middleware(['auth', 'role:LMS Admin', 'verified', "acc_not_disabled", 'remind_user'])
+	->middleware(['auth', 'role:lms_admin,system_admin', 'verified', "acc_not_disabled", 'remind_user'])
 	->group(function () {
 
 		// Landing page

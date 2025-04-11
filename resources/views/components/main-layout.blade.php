@@ -65,7 +65,7 @@
 				foreach($all_announcements as $anc){
 					$target = json_decode($anc->sent_to);
 
-					if($target[Auth::user()->role_id - 1] == "on" && $anc->announce_from < now() && $anc->announce_until > now()){
+					if(in_array(Auth::user()->role_id, $target) && $anc->announce_from < now() && $anc->announce_until > now()){
 						$m++;
 					}
 				}
@@ -78,7 +78,7 @@
 			@forelse ($all_announcements as $announcement)
 				@php $target = json_decode($announcement->sent_to); @endphp
 
-				@if($target[Auth::user()->role_id - 1] == "on")
+				@if(in_array(Auth::user()->role_id, $target))
 					@if($announcement->announce_from < now() && $announcement->announce_until > now())
 						@php $n++; @endphp
 						<div class="h-screen w-screen flex items-center justify-center fixed top-0 announcement-popup-container" style="@if($n == 1) backdrop-filter: blur(10px); background: rgba(0, 0, 0, 0.3); @endif z-index: 60;">

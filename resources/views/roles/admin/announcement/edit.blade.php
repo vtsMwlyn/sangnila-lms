@@ -43,7 +43,7 @@
 				<div class="flex flex-col w-1/2">
 					<x-label for="announce_from">New Start Date<span class="text-red">*</span></x-label>
 					<div class="flex w-full flex-col items-stretch">
-						<x-input id="announce_from" class="block w-full" onfocus="this.type='date';" onblur="this.type='text';" name="announce_from" placeholder="New announcement start date" :value="old('announce_from', Carbon\Carbon::parse($announcement->announce_from)->format('Y-m-d'))" autofocus />
+						<x-input id="announce_from" class="block w-full" type="date" name="announce_from" placeholder="New announcement start date" :value="old('announce_from', Carbon\Carbon::parse($announcement->announce_from)->format('Y-m-d'))" autofocus />
 					</div>
 				</div>
 
@@ -51,7 +51,7 @@
 				<div class="flex flex-col w-1/2">
 					<x-label for="announce_until">New End Date<span class="text-red">*</span></x-label>
 					<div class="flex w-full flex-col items-stretch">
-						<x-input id="announce_until" class="block w-full" onfocus="this.type='date';" onblur="this.type='text';" name="announce_until" placeholder="New announcement end date" :value="old('announce_until', Carbon\Carbon::parse($announcement->announce_until)->format('Y-m-d'))" autofocus />
+						<x-input id="announce_until" class="block w-full" type="date" name="announce_until" placeholder="New announcement end date" :value="old('announce_until', Carbon\Carbon::parse($announcement->announce_until)->format('Y-m-d'))" autofocus />
 					</div>
 				</div>
 			</div>
@@ -78,17 +78,17 @@
 			<div class="flex flex-wrap gap-3 mt-5 rounded-xl @error("receiver") border-2 p-5 border-red @enderror">
 				<div class="flex items-center gap-3 p-5 checkbox-container" style="width: 23%;">
 					<input type="checkbox" id="checkbox1" name="checkbox1"
-					class="mr-2 h-5 w-5" @if(old("checkbox1", $cbvals[0]) == "on") checked @endif>
+					class="mr-2 h-5 w-5" @if(old("checkbox1") == "on" || in_array(1, $cbvals) || in_array(6, $cbvals)) checked @endif>
 					<label for="checkbox1">Admin</label>
 				</div>
 				<div class="flex items-center gap-3 p-5 checkbox-container" style="width: 23%;">
 					<input type="checkbox" id="checkbox2" name="checkbox2"
-					class="mr-2 h-5 w-5" @if(old("checkbox2", $cbvals[1]) == "on") checked @endif>
+					class="mr-2 h-5 w-5" @if(old("checkbox2") == "on" || in_array(2, $cbvals) || in_array(7, $cbvals)) checked @endif>
 					<label for="checkbox2">Teacher</label>
 				</div>
 				<div class="flex items-center gap-3 p-5 checkbox-container" style="width: 23%;">
 					<input type="checkbox" id="checkbox3" name="checkbox3"
-					class="mr-2 h-5 w-5" @if(old("checkbox3", $cbvals[2]) == "on") checked @endif>
+					class="mr-2 h-5 w-5" @if(old("checkbox3") == "on" || in_array(3, $cbvals)) checked @endif>
 					<label for="checkbox3">Student</label>
 				</div>
 			</div>

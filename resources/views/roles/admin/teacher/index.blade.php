@@ -38,7 +38,7 @@
 									<td class="py-3 px-4" rowspan="{{ $teacher->teached_courses->count() }}">
 										<div class="flex w-full items-center gap-3">
 											@if($teacher->details->profpic)
-												<img src="{{ Storage::url( $teacher->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+												<img src="{{ Storage::url("app/public/" .$teacher->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
 											@else
 												<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
 											@endif
@@ -82,7 +82,7 @@
 								<td class="py-3 px-4">
 									<div class="flex w-full items-center gap-3">
 										@if($teacher->details->profpic)
-											<img src="{{ Storage::url( $teacher->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+											<img src="{{ Storage::url("app/public/" . $teacher->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
 										@else
 											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
 										@endif

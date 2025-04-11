@@ -3,14 +3,19 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use App\Models\User;
+use App\Models\Topic;
 use App\Models\Activity;
 use App\Models\Progress;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
+use App\Models\CourseTeacher;
+use App\Models\CurriculumTopic;
 use App\Models\StudentAttendance;
 use Illuminate\Support\Facades\DB;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use App\Models\LearningOutcomeActivity;
 
 class CustomOperationController extends Controller
 {

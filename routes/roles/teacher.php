@@ -8,19 +8,20 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\ExcelImportController;
 use App\Http\Controllers\AnnouncementController;
-use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\GoogleServiceController;
 use App\Http\Controllers\DownloadResourceController;
 use App\Http\Controllers\LecturerInvoiceReimburseController;
 
 Route::prefix('/teacher')
 	->name('teacher.')
-	->middleware(['auth', 'role:Teacher', 'verified', "acc_not_disabled", 'remind_user'])
+	->middleware(['auth', 'role:teacher', 'verified', "acc_not_disabled", 'remind_user'])
 	->group(function () {
 
 		// ===== DASHBOARD ===== //
@@ -111,10 +112,10 @@ Route::prefix('/teacher')
 				Route::patch('/{course_id}/{student_id}/meeting-link', [StudentController::class, 'teacher_update_meeting_link'])->name('update.progress.meeting-link')->whereNumber(['course_id', 'student_id']);
 
 				// Upload portfolio for student
-				Route::post('/{student_id}/{course_id}/upload-portfolio', [StudentController::class, 'teacher_store_portfolio'])->name('store.portfolio')->whereNumber(['course_id', 'student_id']);
+				Route::post('/{student_id}/{course_id}/upload-portfolio', [PortfolioController::class, 'teacher_store_portfolio'])->name('store.portfolio')->whereNumber(['course_id', 'student_id']);
 
 				// Delete a portfolio image of a student
-				Route::delete('/portfolio/{portfolio_id}/delete', [StudentController::class, 'teacher_destroy_portfolio'])->name('destroy.portfolio')->whereNumber('portfolio_id');
+				Route::delete('/portfolio/{portfolio_id}/delete', [PortfolioController::class, 'teacher_destroy_portfolio'])->name('destroy.portfolio')->whereNumber('portfolio_id');
 
 				// Upload assessment for student
 				Route::get('/{student_id}/{course_id}/upload-assessment', [AssessmentController::class, 'create'])->name('create.assessment')->whereNumber(['course_id', 'student_id']);

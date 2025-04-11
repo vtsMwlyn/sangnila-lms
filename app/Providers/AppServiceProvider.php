@@ -33,6 +33,6 @@ class AppServiceProvider extends ServiceProvider
 			return $user && $user->can_swap_role == 1;
 		});
 
-        Paginator::defaultView('vendor.pagination.simple-tailwind');
+        Paginator::defaultView('vendor.pagination.tailwind');
     }
 }

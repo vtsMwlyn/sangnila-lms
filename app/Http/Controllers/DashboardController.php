@@ -36,8 +36,11 @@ class DashboardController extends Controller
 		if(Auth::check()){
 			$role = Auth::user()->role->id;
 
-			if($role == 1){
+			if($role == 1 || $role == 6){
 				return $this->admin_dashboard();
+			}
+			elseif($role == 7){
+				return $this->head_of_lecturer_dashboard();
 			}
 			elseif($role == 2) {
 				return $this->teacher_dashboard();
@@ -105,6 +108,10 @@ class DashboardController extends Controller
 			'recent_attendances' => $all_attendances,
 			'recent_self_attendances' => $all_self_attendances,
 		]);
+	}
+
+	public function head_of_lecturer_dashboard(){
+		return view('roles.head-of-lecturer.dashboard');
 	}
 
 	public function teacher_dashboard(){

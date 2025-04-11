@@ -18,4 +18,25 @@ class Portfolio extends Model
     public function course(){
         return $this->belongsTo(Course::class);
     }
+
+    // Query scope
+	public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['teacher'] ?? false, function ($query, $teacher) {
+            $query->whereHas('course.course_students', function ($q) use ($teacher) {
+                $q->whereHas('teacher', function ($q2) use ($teacher) {
+                    $q2->where('full_name', 'like', '%' . $teacher . '%');
+                });
+            });
+        });
+
+        $query->when($filters['student'] ?? false, function ($query, $student) {
+            $query->whereHas('student', function ($q) use ($student) {
+                $q->where('full_name', 'like', '%' . $student . '%');
+            });
+        });
+    }
+
+
+
 }

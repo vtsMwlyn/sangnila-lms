@@ -1,0 +1,114 @@
+@extends('layouts.main-head-of-lecturer')
+
+@section('title')
+    <h1>Portfolio</h1>
+@endsection
+
+@section('popup')
+    {{-- Delete portfolio --}}
+	<x-confirmation method="delete" popup_title="Delete Portfolio" id="delete-portfolio-popup">
+		Are you sure want to <span class="font-bold text-red">remove</span> this file from the student's portfolio?
+	</x-confirmation>
+@endsection
+
+@section('content')
+    <x-section-container>
+        <x-page-title>All Portfolio</x-page-title>
+        <div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
+
+        <div class="flex gap-3 flex-wrap mt-6 w-full overflow-y-auto items-start media-scroll" style="height: 90vh;">
+            @forelse($portfolios as $portfolio)
+                <div class="oneperthree rounded-lg bg-white p-5">
+                    <div class="relative rounded-lg overflow-hidden" style="height: 250px;">
+                        <div class="absolute" style="top: 10px; right: 10px; z-index: 5;">
+                            <button type="button" data-route="{{ route('head-of-lecturer.portfolio.destroy', $portfolio->id) }}" class="bg-red rounded-lg py-2 px-4 text-white hover:bg-slate-700 delete-portfolio-btn" title="Remove this file from student's portfolio"><i class="bi bi-trash3"></i></button>
+                        </div>
+
+                        <a href="{{ $portfolio->type != 'link' ? Storage::url("app/public/" . $portfolio->path) : $portfolio->path }}" target="_blank" class="relative imeeji">
+                            <div class="absolute flex w-full h-full items-center justify-center text-white hint-text" style="display: none; background: rgba(0, 0, 0, 0.7);">Click to view the full file</div>
+
+                            @if($portfolio->type == 'image')
+                                <img src="{{ Storage::url("app/public/" . $portfolio->path) }}" alt="img" style="object-fit: cover;" loading="lazy" class="w-full h-full rounded-lg">
+                            @elseif($portfolio->type == "video")
+                                <video class="w-full h-full rounded-lg lazy-video" style="object-fit: cover;" controls preload="none">
+                                    <source src="{{ Storage::url("app/public/" . $portfolio->path) }}" type="{{ Storage::mimeType('app/public/' . $portfolio->path) }}">
+                                </video>
+                            @elseif($portfolio->type == "link")
+                                <div class="w-full h-full flex items-center justify-center bg-slate-400 rounded-lg">
+                                    <i class="bi bi-paperclip text-white text-6xl"></i>
+                                </div>
+                            @else
+                                <div class="w-full h-full flex items-center justify-center bg-slate-400 rounded-lg">
+                                    <i class="bi bi-filetype-pdf text-white text-6xl"></i>
+                                </div>
+                            @endif
+                        </a>
+                    </div>
+
+                    <div class="mt-4">
+                        @php
+                            $cs = App\Models\CourseStudent::where('course_id', $portfolio->course_id)->where('student_id', $portfolio->student_id)->first();
+                        @endphp
+                        <div class="flex gap-2 items-center"><i class="bi bi-calendar2-date text-slate-400 text-xl"></i> {{ Carbon\Carbon::parse($portfolio->created_at)->format('D, d M Y') }}</div>
+                        <div class="flex gap-2 items-center"><img src="{{ asset('img/lecturer.svg') }}" alt="icon"> {{ $cs->student->full_name }}</div>
+                        <div class="flex gap-2 items-center"><img src="{{ asset('img/lecturer.svg') }}" alt="icon"> {{ $cs->teacher->details->gender == 1? 'Mr.' : 'Ms.' }} {{ $cs->teacher->full_name }}</div>
+                    </div>
+                </div>
+            @empty
+                <div class="text-center w-full bg-white rounded-xl py-2 px-4">- No data found -</div>
+            @endforelse
+        </div>
+
+        <div class="mt-4">
+            {{ $portfolios->links() }}
+        </div>
+    </x-section-container>
+
+    <script>
+        $(document).ready(() => {
+            $('.imeeji').on({
+				'mouseover': function(){
+					$(this).find('.hint-text').show();
+				},
+				'mouseout': function(){
+					$(this).find('.hint-text').hide();
+				}
+			});
+
+            $('.delete-portfolio-btn').on('click', function(){
+				$('#delete-portfolio-popup').find('form').attr('action', $(this).data('route'));
+				$('#delete-portfolio-popup').parent().show();
+			});
+
+            // Handle lazy loading video
+			const $lazyVideos = $('video.lazy-video');
+			const $scrollContainer = $('.media-scroll').get(0); // raw DOM element
+
+			if ('IntersectionObserver' in window) {
+				const observer = new IntersectionObserver(function (entries, observer) {
+					entries.forEach(function (entry) {
+						if (entry.isIntersecting) {
+							const video = entry.target;
+							const $video = $(video);
+							const $source = $video.find('source');
+
+							const dataSrc = $source.attr('data-src');
+							if (dataSrc) {
+								$source.attr('src', dataSrc);
+								video.load();
+								observer.unobserve(video);
+							}
+						}
+					});
+				}, {
+					root: $scrollContainer,
+					threshold: 0.2
+				});
+
+				$lazyVideos.each(function () {
+					observer.observe(this);
+				});
+			}
+        });
+    </script>
+@endsection

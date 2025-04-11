@@ -8,7 +8,7 @@
 				@else
 					<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full w-32 h-32 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;">
 				@endif
-				<h1 class="text-xl font-bold">Hello {{ explode(" ", Auth::user()->full_name)[0] }}!</h1>
+				<h1 class="text-xl font-bold">Hello @if(Auth::user()->role_id == 1){{ explode(" ", Auth::user()->full_name)[0] }}@else{{ __('System Admin') }}@endif!</h1>
 			</button>
 
 			<div class="absolute py-4 bg-white top-6 w-80 rounded-3xl flex flex-col hidden overflow-hidden dropdown-menu text-base" style=" left: 220px;">
