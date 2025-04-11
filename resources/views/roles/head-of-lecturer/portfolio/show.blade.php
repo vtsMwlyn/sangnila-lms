@@ -13,8 +13,17 @@
 
 @section('content')
     <x-section-container>
+        <x-back-button href="{{ route('head-of-lecturer.portfolio.index') }}"></x-back-button>
         <x-page-title>All Portfolio</x-page-title>
+        <h1 class="font-bold text-lg text-blue mt-1">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
+
         <div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
+
+        <form class="flex w-full justify-center mt-4 items-center gap-3" action="{{ route("head-of-lecturer.portfolio.show", $course->id) }}">
+            <x-input type="text" name="student" placeholder="Search by student..." :value="request('student')"/>
+            <x-input type="text" name="teacher" placeholder="Search by teacher..." :value="request('teacher')"/>
+            <x-button type="submit"><i class="bi bi-search"></i> Filter</x-button>
+        </form>
 
         <div class="flex gap-3 flex-wrap mt-6 w-full overflow-y-auto items-start media-scroll" style="height: 90vh;">
             @forelse($portfolios as $portfolio)
