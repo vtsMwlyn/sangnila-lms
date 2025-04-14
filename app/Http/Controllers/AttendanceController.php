@@ -32,9 +32,13 @@ class AttendanceController extends Controller {
 
 	public function head_of_lecturer_show($course_id){
 		$course = Course::findOrFail($course_id);
+		$self_attendances = SelfAttendance::filter(request(['search']))->where('course_id', $course->id)->whereHas('user', function($query){
+			return $query->where('role_id', 2);
+		})->orderBy('self_attendance_date', 'desc')->get();
 
 		return view('roles.head-of-lecturer.attendance.show', [
-			'course' => $course
+			'course' => $course,
+			'self_attendances' => $self_attendances
 		]);
 	}
 

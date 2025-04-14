@@ -23,8 +23,16 @@
 @section('content')
     <x-section-container>
         <x-back-button href="{{ route('head-of-lecturer.portfolio.index') }}"></x-back-button>
-        <x-page-title>Lecturer Attendances</x-page-title>
-        <h1 class="font-bold text-lg text-blue mt-1">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
+		<div class="flex w-full justify-between items-center">
+			<div class="flex flex-col">
+				<x-page-title>Lecturer Attendances</x-page-title>
+				<h1 class="font-bold text-lg text-blue mt-1">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
+			</div>
+			<form class="flex justify-center" action="{{ route("head-of-lecturer.attendance.show", $course->id) }}">
+				<x-input type="text" class="rounded-l-lg rounded-r-none w-full" name="search" placeholder="Search lecturer..." :value="request('search')"/>
+				<button class="rounded-l-none rounded-r-lg border-slate-400 border-t-2 border-r-2 border-b-2 py-2 px-4 bg-white text-slate-400 hover:bg-slate-400 hover:text-white" style="border-width: 3px 3px 3px 0;"><i class="bi bi-search"></i></button>
+			</form>
+		</div>
 
         <div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
@@ -45,9 +53,7 @@
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 				</thead>
 				<tbody>
-					@forelse ($course->self_attendances()->whereHas('user', function($query){
-                        return $query->where('role_id', 2);
-                    })->orderBy('self_attendance_date', 'desc')->get() as $la)
+					@forelse ($self_attendances as $la)
 						@php
 							$checkInPhotoL = Storage::url("app/public/" . $la->attendance_evidence);
 
