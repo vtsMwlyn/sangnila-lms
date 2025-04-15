@@ -131,9 +131,9 @@
 								<td class="py-3 px-4">
 									<div class="flex w-full items-center gap-3">
 										@if($admin_acc->details->profpic)
-											<img src="{{ Storage::url("app/public/" . $admin_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+											<img src="{{ Storage::url("app/public/" . $admin_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 										@else
-											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 										@endif
 										{{ $admin_acc->full_name }}
 									</div>
@@ -185,9 +185,9 @@
 								<td class="py-3 px-4">
 									<div class="flex w-full items-center gap-3">
 										@if($teacher_acc->details->profpic)
-											<img src="{{ Storage::url("app/public/" . $teacher_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+											<img src="{{ Storage::url("app/public/" . $teacher_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 										@else
-											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 										@endif
 										{{ $teacher_acc->details->gender == 1? 'Mr. ' : 'Ms. ' }} {{ $teacher_acc->full_name }}
 									</div>
@@ -240,9 +240,9 @@
 								<td class="py-3 px-4">
 									<div class="flex w-full items-center gap-3">
 										@if($student_acc->details->profpic)
-											<img src="{{ Storage::url("app/public/" . $student_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+											<img src="{{ Storage::url("app/public/" . $student_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 										@else
-											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 										@endif
 										{{ $student_acc->full_name }}
 									</div>
@@ -295,9 +295,9 @@
 								<td class="py-3 px-4">
 									<div class="flex w-full items-center gap-3">
 										@if($disabled_acc->details->profpic)
-											<img src="{{ Storage::url("app/public/" . $disabled_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+											<img src="{{ Storage::url("app/public/" . $disabled_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 										@else
-											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 										@endif
 										{{ $disabled_acc->full_name }}
 									</div>

@@ -161,9 +161,9 @@
 									<a href="{{ route('admin.student.show', $cs->student->id) }}" class="w-1/6 mb-6 hover:text-cyan-500">
 										<div class="flex flex-col items-center">
 											@if($cs->student->details->profpic)
-												<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;">
+												<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 											@else
-												<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full hover:border-cyan-500 hover:border-4 border-slate-400 w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+												<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full hover:border-cyan-500 hover:border-4 border-slate-400 w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 											@endif
 											<h1 class="text-lg font-bold text-center">{{-- explode(" ", $cs->student->full_name)[0] --}}{{ $cs->student->full_name }}</h1>
 										</div>

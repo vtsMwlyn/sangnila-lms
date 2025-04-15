@@ -22,7 +22,7 @@
             <div class="flex gap-5">
                 <div class="mt-3 w-full md:w-1/2">
                     <x-label for="date" class="mb-1">Reimburse Date<span class="text-red">*</span></x-label>
-                    <x-input type="date" name="date" id="date" class="w-full" value="{{ Carbon\Carbon::parse(old('date', $reimburse->date))->format('Y-m-d') }}"/>
+                    <x-input type="date" name="date" id="date" class="w-full date-input" value="{{ Carbon\Carbon::parse(old('date', $reimburse->date))->format('Y-m-d') }}"/>
                 </div>
                 <div class="mt-3 w-full md:w-1/2">
                     <x-label for="amount" class="mb-1">Amount<span class="text-red">*</span></x-label>

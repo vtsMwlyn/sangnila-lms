@@ -266,6 +266,5 @@
 			chart.update();
 		});
 	</script>
-
 @endsection
 

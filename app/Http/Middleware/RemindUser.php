@@ -60,7 +60,7 @@ class RemindUser
 				Session::put('there_is_student_with_no_progress_unlocked', $there_is_student_with_no_progress_unlocked);
 			}
 
-			else if(Auth::user()->role_id == 1){
+			else if(Auth::user()->role_id == 1 || Auth::user()->role_id == 6){
 				$allCourses = Course::where('status', 'active')->with(['teachers', 'students', 'learning_outcomes', 'curriculum_topics'])->get();
 
 				$uncomplete_course_data = false;

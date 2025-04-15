@@ -35,9 +35,9 @@
 						<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $cs->student_id }}"
 						class="mr-2 h-5 w-5">
 						@if($cs->student->details->profpic)
-							<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+							<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 						@else
-							<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+							<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 						@endif
 						<label for="checkbox{{ $iterasus }}">{{ $cs->student->full_name }} <span class="ml-2 bg-light-blue text-white text-base rounded-lg px-2 py-0.5 font-normal">{{ ucwords($cs->learning_status) }}</span></label>
 					</div>
@@ -67,9 +67,9 @@
 							<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $cs->student_id }}"
 							class="mr-2 h-5 w-5">
 							@if($cs->student->details->profpic)
-								<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+								<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 							@else
-								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 							@endif
 							<label for="checkbox{{ $iterasus }}">{{ $cs->student->full_name }} <span class="@if($cs->learning_status == 'undone') bg-red @elseif($cs->learning_status == 'complete') bg-green-600 @endif text-white text-base rounded-lg px-2 py-0.5 font-normal">{{ ucwords($cs->learning_status) }}</span></label>
 						</div>
@@ -86,9 +86,9 @@
 							<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $rs->id }}"
 							class="mr-2 h-5 w-5">
 							@if($rs->details->profpic)
-								<img src="{{ Storage::url("app/public/" . $rs->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+								<img src="{{ Storage::url("app/public/" . $rs->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 							@else
-								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 							@endif
 							<label for="checkbox{{ $iterasus }}">{{ $rs->full_name }}</label>
 						</div>

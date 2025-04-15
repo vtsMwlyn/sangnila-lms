@@ -49,9 +49,9 @@
 					<button type="button" class="flex justify-between attendance-detail-accordion-btn items-center">
 						<div class="flex items-center gap-3">
 							@if($student->details->profpic)
-								<img src="{{ Storage::url("app/public/" . $student->details->profpic) }}" class="rounded-full w-12 h-12 card_profpic" alt="profpic" style="object-fit: cover; object-position: center;">
+								<img src="{{ Storage::url("app/public/" . $student->details->profpic) }}" class="rounded-full w-12 h-12 card_profpic" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 							@else
-								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12 card_profpic" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12 card_profpic" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 							@endif
 							<span class="card_student_name">{{ $student->full_name }}</span>
 						</div>

@@ -24,9 +24,9 @@
 			<div class="flex flex-col items-center relative">
 				<div class="relative w-40 h-40 rounded-full overflow-hidden shadow-lg">
 					@if(Auth::user()->details->profpic)
-						<img id="img-preview" src="{{ Storage::url("app/public/" . Auth::user()->details->profpic) }}" alt="Image Preview" class="w-full h-full object-cover rounded-full">
+						<img src="{{ Storage::url("app/public/" . Auth::user()->details->profpic) }}" alt="Image Preview" class="w-full h-full object-cover rounded-full" loading="lazy">
 					@else
-						<img id="img-preview" src="{{ asset('img/tempblankprofpic.png') }}" alt="Image Preview" class="w-full h-full object-cover rounded-full">
+						<img src="{{ asset('img/tempblankprofpic.png') }}" alt="Image Preview" class="w-full h-full object-cover rounded-full" loading="lazy">
 					@endif
 					<label for="image" class="text-3xl absolute bottom-0 w-full h-10 bg-black bg-opacity-50 text-white flex justify-center items-center cursor-pointer">
 						<i class="bi bi-camera-fill"></i>

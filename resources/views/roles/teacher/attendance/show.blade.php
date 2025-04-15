@@ -273,7 +273,7 @@
 									@endif
 								</td>
 								<td class="py-3 px-4">
-									<img src="{{ Storage::url("app/public/" . $self_atd->attendance_evidence) }}" width="200px" alt="photo">
+									<img src="{{ Storage::url("app/public/" . $self_atd->attendance_evidence) }}" width="200px" alt="photo" loading="lazy">
 								</td>
 								<td class="py-3 px-4">{{ $self_atd->description ?? 'N/A' }}</td>
 							</tr>

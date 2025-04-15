@@ -2,23 +2,24 @@
 
 namespace App\Exports;
 
-use App\Models\CourseTeacher;
-use App\Models\Reimburse;
-use Maatwebsite\Excel\Concerns\FromArray;
-use Maatwebsite\Excel\Concerns\WithStyles;
-use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Events\AfterSheet;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use Maatwebsite\Excel\Concerns\WithColumnWidths;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithDrawings;
-use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
-use PhpOffice\PhpSpreadsheet\Style\Border;
 use Carbon\Carbon;
+use App\Models\Course;
+use App\Models\Reimburse;
+use App\Models\CourseTeacher;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths, FromArray, WithDrawings
 {
@@ -42,18 +43,28 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
                 array_push($this->months, $period);
             }
 
-            foreach($grouped_by_month as $grouped_by_student){
-                foreach($grouped_by_student as $sa){
-                    $count++;
+            foreach($grouped_by_month as $grouped_by_course){
+                foreach($grouped_by_course as $datetime => $grouped_by_datetime){
+                    // $rate = CourseTeacher::where('course_id', $sa->attendance->course->id)->where('user_id', Auth::user()->id)->first()->rate;
+                    $rate = count($grouped_by_datetime) > 4 ? 125000 : 75000;
+    
+                    [$dateUnformatted, $startTime, $endTime] = explode('-', $datetime);
 
-                    $rate = CourseTeacher::where('course_id', $sa->attendance->course->id)->where('user_id', Auth::user()->id)->first()->rate;
-                    $start_time = Carbon::parse($sa->start_time);
-                    $end_time = Carbon::parse($sa->end_time);
+                    $start_time = Carbon::createFromTimeString($startTime);
+                    $end_time = Carbon::createFromTimeString($endTime);
+
                     $working_hours = round($start_time->diffInMinutes($end_time) / 30) * 0.5;
                     $subtotal = $working_hours * $rate;
 
                     $this->total += $subtotal;
+
+                    // foreach($grouped_by_datetime as $sa){
+                        
+                    // }
+
+                    $count++;
                 }
+                
             }
         }
 
@@ -105,24 +116,31 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
             $this->month_separation_pos[] = $pos;
 
             if(isset($this->grouped_student_attendances_by_month[$period])){
-                foreach($this->grouped_student_attendances_by_month[$period] as $grouped_by_student){
-                    foreach($grouped_by_student as $sa){
+                foreach($this->grouped_student_attendances_by_month[$period] as $course_id => $grouped_by_course){
+                    foreach($grouped_by_course as $datetime => $grouped_by_datetime){
                         $pos++;
                         
                         if(($pos) % 2 == 0){
                             $this->fill_gray_pos[] = $pos;
                         }
 
-                        $rate = CourseTeacher::where('course_id', $sa->attendance->course->id)->where('user_id', Auth::user()->id)->first()->rate;
-                        $start_time = Carbon::parse($sa->start_time);
-                        $end_time = Carbon::parse($sa->end_time);
+                        $rate = count($grouped_by_datetime) > 4 ? 125000 : 75000;
+
+                        [$dateUnformatted, $startTime, $endTime] = explode('-', $datetime);
+                        $date = Carbon::createFromFormat('Y/m/d', $dateUnformatted);
+                        $start_time = Carbon::createFromTimeString($startTime);
+                        $end_time = Carbon::createFromTimeString($endTime);
+
                         $working_hours = round($start_time->diffInMinutes($end_time) / 30) * 0.5;
                         $subtotal = $working_hours * $rate;
 
+                        $course = Course::findOrFail($course_id);
+                        $student_names = $grouped_by_datetime->pluck('student.full_name')->implode(', ');
+
                         $rows[] = [
                             '',
-                            $sa->attendance->course->course_name . " " . $sa->student->full_name . 
-                                " (" . Carbon::parse($sa->attendance->attendance_date)->format('l d M') . ")",
+                            $course->course_name . " " . $student_names . 
+                                " (" . Carbon::parse($date)->format('l d M') . ")",
                             'Lecturer',
                             $start_time->format('H:i') . ' - ' . $end_time->format('H:i'),
                             $working_hours == 0? '0' : $working_hours,
@@ -130,6 +148,7 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
                             $subtotal == 0? '0' : $subtotal,
                         ];
                     }
+
                 }
             }
 

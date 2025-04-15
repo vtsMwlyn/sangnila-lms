@@ -48,7 +48,7 @@
 	</head>
 
 	<body class="bg-cover min-h-screen flex items-center justify-center"
-		style="background: url({{ asset('img/loginbg.png') }}) no-repeat right center; background-size: cover;">
+		style="background: url({{ asset('img/loginbg.webp') }}) no-repeat right center; background-size: cover;">
 		<div class="fixed text-white bottom-0 left-0 m-2">
 			{{ trans("strings.version") }}
 		</div>

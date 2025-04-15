@@ -40,9 +40,9 @@
 						<div class="rounded-3xl p-5 shadow-lg flex gap-4 items-start" style="background-color: #FEFEFEB2;">
 							<div class="">
 								@if($cs->student->details->profpic)
-									<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-20 h-20 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;">
+									<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-20 h-20 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 								@else
-									<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-20 h-20 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+									<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-20 h-20 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 								@endif
 							</div>
 							<div class="grow">

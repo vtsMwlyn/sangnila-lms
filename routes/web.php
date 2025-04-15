@@ -70,6 +70,11 @@ Route::middleware([])->group(function(){
 	// 	$pnc->sendPushNotification();
 	// });
 
+	// Refresh CSRF
+	Route::get('/refresh-csrf', function () {
+		return response()->json(['csrf_token' => csrf_token()]);
+	});
+
 	// Requests from Outside of LMS
 	Route::prefix('/api')->group(function(){
 		Route::post('/delete-image', function(Request $request){

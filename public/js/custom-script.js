@@ -24,6 +24,23 @@ function resetSidebarToggler(){
 	}
 }
 
+// Auto-refresh CSRF token
+function refreshCsrfToken() {
+	fetch(`http://localhost/sangnila-lms/public/refresh-csrf`)
+		.then(response => response.json())
+		.then(data => {
+			const newToken = data.csrf_token;
+			
+			// Update <meta> tag
+			document.querySelector('meta[name="csrf-token"]').setAttribute('content', newToken);
+	
+			// Update all hidden CSRF inputs in forms
+			document.querySelectorAll('input[name="_token"]').forEach(input => {
+			input.value = newToken;
+			});
+		});
+}
+
 $(document).ready(() => {
     $(document).on('submit', '.ajax-form', function (e) {
         e.preventDefault();
@@ -155,6 +172,10 @@ $(document).ready(() => {
 		$('#cancel-popup').parent().show();
 	});
 
+	$('#logout-btn').on('click', function(){
+		$('#logout-popup').parent().show();
+	});
+
 	// Datepicker mechanique
 	const testinput = document.createElement('input');
 	testinput.setAttribute('type', 'date');
@@ -257,7 +278,11 @@ $(document).ready(() => {
 
 	$('.dismiss-status-notif').on('click', function(){
 		$(this).closest('.status-notif').fadeOut(300);
-	})
+	});
+		
+	// Refresh every 10 minutes (600000 ms)
+	setInterval(refreshCsrfToken, 600000);
+	refreshCsrfToken();
 });
 
 // Hide the loading popup once the page is fully loaded

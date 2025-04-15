@@ -99,9 +99,9 @@
 			@forelse ($course_students as $index => $cs)
 				<div class="flex flex-row xl:flex-col gap-2 xl:gap-0 items-center w-1/2 xl:w-1/6 mb-6">
 					@if($cs->student->details->profpic)
-						<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-10 h-10 md:w-14 md:h-14 xl:w-28 xl:h-28 mt-0 mb-0 xl:mt-2 xl:mb-4" alt="profpic" style="object-fit: cover; object-position: center;">
+						<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-10 h-10 md:w-14 md:h-14 xl:w-28 xl:h-28 mt-0 mb-0 xl:mt-2 xl:mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 					@else
-						<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-10 h-10 md:w-14 md:h-14 xl:w-28 xl:h-28 mt-0 mb-0 xl:mt-2 xl:mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+						<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-10 h-10 md:w-14 md:h-14 xl:w-28 xl:h-28 mt-0 mb-0 xl:mt-2 xl:mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 					@endif
 					<h1 class="text-sm xl:text-lg font-bold text-start xl:text-center">{{-- explode(" ", $cs->student->full_name)[0] --}}{{ $cs->student->full_name }}</h1>
 				</div>

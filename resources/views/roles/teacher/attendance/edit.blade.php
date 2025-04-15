@@ -74,9 +74,9 @@
 										class="mr-2 form-checkbox h-5 w-5 text-blue-500 border border-gray-300 bg-gray-300" @if(old('checkbox_value.' . $i, $studentId) == "on") checked @elseif($isAtten == 1) checked @endif>
 										<label for="checkbox{{ old('students.' . $i, $studentId) }}" class="flex gap-3 items-center">
 											@if(App\Models\User::find(old('students.' . $i, $studentId))->details->profpic)
-												<img src="{{ Storage::url("app/public/" . App\Models\User::find(old('students.' . $i, $studentId))->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+												<img src="{{ Storage::url("app/public/" . App\Models\User::find(old('students.' . $i, $studentId))->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 											@else
-												<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+												<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 											@endif
 											{{ App\Models\User::find(old('students.' . $i, $studentId))->full_name }}
 										</label>

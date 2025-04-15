@@ -13,7 +13,7 @@
 			<div class="w-0 border-blue xl:my-2 my-0" style="border-width: 1.5px"></div>
 
 			<div class="flex items-start flex-col justify-center">
-				<div class="text-md md:text-lg text-blue mb-1.5 md:mb-0">LEARNING MANAGEMENT SYSTEM</div>
+				<div class="text-md md:text-lg text-blue">LEARNING MANAGEMENT SYSTEM</div>
 			</div>
 		</div>
 
@@ -96,13 +96,10 @@
 					<a href="{{ route("profile.show") }}" class="block xl:hidden"><div class="w-full px-5 py-0.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><i class="bi bi-person-fill text-slate-400 text-lg mr-0.5"></i> Profile</div></a>
 
 					@auth
-						<form method="POST" action="{{ route('logout') }}" class="grow flex items-center gap-2">
-							@csrf
-							<button
-								class="w-full px-5 py-1 text-black font-bold flex items-center gap-1 hover:bg-slate-100" onclick="return confirm('Are you sure want to logout from your account?');">
-								<img src="{{ asset('img/navbar-logout.svg') }}" class="h-5 w-5" alt="sidebar-icon"> {{ __('Log Out') }}
-							</button>
-						</form>
+						<button type="button" id="logout-btn"
+							class="w-full px-5 py-1 text-black font-bold flex items-center gap-1 hover:bg-slate-100">
+							<img src="{{ asset('img/navbar-logout.svg') }}" class="h-5 w-5" alt="sidebar-icon"> {{ __('Log Out') }}
+						</button>
 					@else
 						<a href="{{ route("home") }}"><div class="w-full px-5 py-1 text-black font-semibold flex items-center gap-1"><img src="{{ asset('img/navbar-logout.svg') }}" class="h-5 w-5" alt="sidebar-icon"> {{ __('Log Out') }}</div></a>
 					@endauth

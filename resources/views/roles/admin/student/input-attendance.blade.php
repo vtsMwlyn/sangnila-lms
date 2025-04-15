@@ -38,9 +38,14 @@
 							<x-select name="_course_name" id="_course_name" class="w-full">
 								<option disabled selected>Pick a course</option>
 								@foreach ($student->enrolled_courses as $c)
-									<option value="{{ App\Models\CourseStudent::where('course_id', $c->id)->where('student_id', $student->id)->where('learning_status', 'learning')->with(['teacher'])->with('course', function($query){
-										return $query->select('id', 'course_name');
-									})->first() }}">{{ $c->course_name }} - {{ ucwords($c->level) }}</option>
+									@php
+										$cs = App\Models\CourseStudent::where('course_id', $c->id)->where('student_id', $student->id)->where('learning_status', 'learning')->with(['teacher'])->with('course', function($query){
+											return $query->select('id', 'course_name');
+										})->first();
+									@endphp
+									@if($cs)
+										<option value="{{ $cs }}">{{ $c->course_name }} - {{ ucwords($c->level) }}</option>
+									@endif
 								@endforeach
 							</x-select>
 							<p class="text-red font-bold mt-2 hidden" id="error-course"><i class="bi bi-exclamation-circle"></i> Please pick a course.</p>

@@ -4,6 +4,14 @@
 	<h1>Invoice & Reimburse</h1>
 @endsection
 
+@section('popup')
+    <x-popup popup_title="Reimburse Evidence Photo" class="flex flex-col items-stretch justify-center w-11/12 xl:w-1/2" id="show-evidence-photo-popup">
+        <div class="overflow-y-auto" style="max-height: 600px;">
+            <img alt="N/A" class="w-full mt-2" id="reimburse-evidence-photo-src" style="object-fit: cover; object-position: center;">
+        </div>
+    </x-popup>
+@endsection
+
 @section("content")
     <x-section-container>
         <x-page-title>My Invoices and Reimburse</x-page-title>
@@ -140,6 +148,9 @@
                                         <a href="{{ route('teacher.lecturer-invoice-reimburse.reimburse.edit', $reimburse->id) }}" title="Edit this reimburse data">
                                             <img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
                                         </a>
+                                        <button type="button" data-src="{{ Storage::url("app/public/" . $reimburse->evidence_path) }}" class="show-evidence-photo-btn" title="Preview reimburse photo evidence">
+                                            <img src="{{ asset('img/photo.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -172,6 +183,9 @@
                                     <a href="{{ route('teacher.lecturer-invoice-reimburse.reimburse.edit', $reimburse->id) }}" title="Edit this reimburse data">
                                         <img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
                                     </a>
+                                    <button type="button" data-src="{{ Storage::url("app/public/" . $reimburse->evidence_path) }}" class="show-evidence-photo-btn" title="Preview reimburse photo evidence">
+                                        <img src="{{ asset('img/photo.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+                                    </button>
                                 </div>
 							</div>
 						</div>
@@ -183,4 +197,12 @@
         @endif
     </x-section-container>
 
+    <script>
+        $(document).ready(() => {
+            $('.show-evidence-photo-btn').on('click', function(){
+                $('#reimburse-evidence-photo-src').attr('src', $(this).data('src'));
+                $('#show-evidence-photo-popup').parent().show();
+            });
+        });
+    </script>
 @endsection

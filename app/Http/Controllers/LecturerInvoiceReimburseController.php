@@ -81,9 +81,14 @@ class LecturerInvoiceReimburseController extends Controller
             ->sortKeys()
             ->map(function ($groupedByMonth) {
                 return $groupedByMonth->groupBy(function ($item) {
-                    return $item->student_id; // Then group by Student ID
+                    return $item->attendance->course->id; // Group by course name
+                })->map(function ($groupedByCourse) {
+                    return $groupedByCourse->groupBy(function ($item) {
+                        return Carbon::parse($item->attendance->attendance_date)->format('Y/m/d') . '-' . Carbon::parse($item->start_time)->format('H:i:s') . '-' . Carbon::parse($item->end_time)->format('H:i:s'); // Group by time range
+                    });
                 });
             });
+
 
         if(count($student_attendances) == 0){
             return back()->with('danger', 'There are no student attendance data between ' . $last_26th->format('l, d M Y') . ' and ' . $last_25th->format('l, d M Y') . ', cannot generate invoice!');

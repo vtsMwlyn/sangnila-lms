@@ -42,8 +42,28 @@
 		{{-- Other popups --}}
 		@yield("popup")
 
+		{{-- Logout confirmation popup --}}
+		<x-popup popup_title="Logout Confirmation" id="logout-popup" class="w-11/12 xl:w-1/2 flex flex-col items-stretch justify-center overflow-y-auto">
+			<form method="post" action="{{ route('logout') }}" class="mt-4">
+				@csrf
+
+				<p class="text-center">
+					Are you sure want to <span class="font-bold text-red">logout</span> from your account? <strong>You have to login again to access Sangnila LMS.</strong>
+				</p>
+
+				<div class="flex items-stretch gap-3 justify-center mt-6 mb-3">
+					<x-button class="w-full md:w-1/4">
+						Yes
+					</x-button>
+					<x-button type="button" class="popup-no w-full md:w-1/4" style="background: rgb(148 163 184) !important;">
+						No
+					</x-button>
+				</div>
+			</form>
+		</x-popup>
+
 		{{-- Cancel confirmation popup --}}
-		<x-confirmation popup_title="Confirmation" id="cancel-popup" type="cancel">
+		<x-confirmation popup_title="Cancel Confirmation" id="cancel-popup" type="cancel">
 			Are you sure want to <span class="font-bold text-red">cancel</span> this action? <strong>The changes you've made won't be saved.</strong>
 		</x-confirmation>
 
@@ -120,6 +140,18 @@
 					</div>
 				</a>
 
+				@if(session()->pull('loginSuccess'))
+					<div class="hidden xl:block w-[300px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl shadow-3xl status-notif relative right-[-300px] overflow-hidden" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
+						<div class="flex flex-col w-full items-start p-5">
+							<p>Login attempt successful 🎉🎉 Welcome back to Sangnila LMS, @if(Auth::user()->role_id == 2){{ (Auth::user()->details->gender == 1 ? 'Mr.' : 'Ms.') }}@endif {{ explode(" ", Auth::user()->full_name)[0] }}!</p>
+							<div class="flex justify-end w-full mt-3">
+								<button type="button" class="dismiss-status-notif font-bold text-light-blue">Dismiss</button>
+							</div>
+							<div class="w-0 h-1 bg-light-blue mt-4 progress-bar"></div>
+						</div>
+					</div>
+				@endif
+
 				@if(session()->has("success"))
 					<div class="hidden xl:block w-[300px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl shadow-3xl status-notif relative right-[-300px] overflow-hidden" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
 						<div class="flex flex-col w-full items-start p-5">
@@ -168,7 +200,7 @@
 					<div class="flex flex-col" id="content-wrapper" style="background: radial-gradient(circle at left top, rgb(175, 193, 221) 0%, #FFFFFF 100%);">
 						{{-- Page title --}}
 						<div class="py-3 px-6 w-full text-white font-bold flex items-center justify-between" style="background: linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%);" id="page-title">
-							<div class="md:text-3xl text-lg">@yield("title")</div>
+							<div class="xl:text-3xl md:text-2xl text-lg">@yield("title")</div>
 						</div>
 
 						<div class="p-4 md:p-8 flex flex-col items-center grow">

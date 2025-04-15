@@ -47,9 +47,9 @@
 							<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $teacher->id }}"
 							class="mr-2 h-5 w-5">
 							@if($teacher->details->profpic)
-								<img src="{{ Storage::url("app/public/" . $teacher->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+								<img src="{{ Storage::url("app/public/" . $teacher->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 							@else
-								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 							@endif
 							<label for="checkbox{{ $iterasus }}">{{ $teacher->full_name }}</label>
 						</div>

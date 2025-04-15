@@ -75,9 +75,9 @@
 							<input type="checkbox" id="checkbox{{ $loop->iteration }}"
 							class="mr-2 h-5 w-5" @if(old('checkbox_value.' . $loop->index) == "on") checked @endif>
 							@if($cs->student->details->profpic)
-								<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+								<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 							@else
-								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 							@endif
 							<label for="checkbox{{ $loop->iteration }}">{{ $cs->student->full_name }}</label>
 						</div>

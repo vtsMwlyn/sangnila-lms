@@ -62,9 +62,9 @@
 							<td class="py-3 px-4 w-1/4">
 								<div class="flex items-center gap-3">
 									@if($submission->student->details->profpic)
-										<img src="{{ Storage::url("app/public/" . $submission->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+										<img src="{{ Storage::url("app/public/" . $submission->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 									@else
-										<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+										<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 									@endif
 									{{ $submission->student->full_name }}
 								</div>
@@ -98,9 +98,9 @@
                             <div class="text-base text-start">
 								<div class="flex gap-2 items-center">
 									@if($submission->student->details->profpic)
-										<img src="{{ Storage::url("app/public/" . $submission->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+										<img src="{{ Storage::url("app/public/" . $submission->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 									@else
-										<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+										<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 									@endif
 									<div class="flex flex-col">
 										<strong>{{ $submission->student->full_name }}</strong>

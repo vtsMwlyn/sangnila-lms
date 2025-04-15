@@ -57,9 +57,9 @@
 									@foreach ($asg->student_assignments as $sasg)
 										<div class="flex items-center gap-3">
 											@if($sasg->student->details->profpic)
-												<img src="{{ Storage::url("app/public/" . $sasg->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+												<img src="{{ Storage::url("app/public/" . $sasg->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 											@else
-												<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+												<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 											@endif
 											{{ $sasg->student->full_name }}
 										</div>
@@ -126,9 +126,9 @@
 							@foreach ($asg->student_assignments as $sasg)
 								<div class="flex items-center gap-3 my-3">
 									@if($sasg->student->details->profpic)
-										<img src="{{ Storage::url("app/public/" . $sasg->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;">
+										<img src="{{ Storage::url("app/public/" . $sasg->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 									@else
-										<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;">
+										<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 									@endif
 									{{ $sasg->student->full_name }}
 								</div>
