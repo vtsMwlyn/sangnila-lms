@@ -176,6 +176,8 @@ class AnnouncementController extends Controller
 			$view_name = "roles.teacher.view-announcement";
 		} else if(Auth::user()->role_id == 3){
 			$view_name = "roles.student.view-announcement";
+		} else if(Auth::user()->role_id == 7){
+			$view_name = "roles.head-of-lecturer.view-announcement";
 		}
 
 		return view($view_name, [
