@@ -100,8 +100,6 @@
 							class="w-full px-5 py-1 text-black font-bold flex items-center gap-1 hover:bg-slate-100">
 							<img src="{{ asset('img/navbar-logout.svg') }}" class="h-5 w-5" alt="sidebar-icon"> {{ __('Log Out') }}
 						</button>
-					@else
-						<a href="{{ route("home") }}"><div class="w-full px-5 py-1 text-black font-semibold flex items-center gap-1"><img src="{{ asset('img/navbar-logout.svg') }}" class="h-5 w-5" alt="sidebar-icon"> {{ __('Log Out') }}</div></a>
 					@endauth
 				</div>
 			</div>
@@ -113,13 +111,13 @@
 			$('#help-and-support-menu').on('click', function(e){
 				e.preventDefault();
 
-				window.open('https://wa.me/6285693257411?text=Halo%20admin%20Sangnila!%0APerkenalkan%20nama%20saya%20{{ Auth::user()->full_name }}%20dan%20saya%20membutuhkan%20bantuan%20terkait%20hal-hal%20berikut%20yang%20saya%20jumpai%20dalam%20kegiatan%20belajar%20mengajar%20di%20Sangnila%20Arts%20Academy%3A', "_blank");
+				window.open('https://wa.me/6285693257411?text=Halo%20admin%20Sangnila!%0APerkenalkan%20nama%20saya%20{{ Auth::check() ? Auth::user()->full_name : '...' }}%20dan%20saya%20membutuhkan%20bantuan%20terkait%20hal-hal%20berikut%20yang%20saya%20jumpai%20dalam%20kegiatan%20belajar%20mengajar%20di%20Sangnila%20Arts%20Academy%3A', "_blank");
 			});
 
 			$('#send-feedback-menu').on('click', function(e){
 				e.preventDefault();
 
-				window.open('https://wa.me/6285693257411?text=Halo%20admin%20Sangnila!%0APerkenalkan%20nama%20saya%20{{ Auth::user()->full_name }}%20dan%20saya%20memiliki%20feedback%20untuk%20disampaikan%20terkait%20kegiatan%20belajar%20mengajar%20di%20Sangnila%20Arts%20Academy%3A', "_blank");
+				window.open('https://wa.me/6285693257411?text=Halo%20admin%20Sangnila!%0APerkenalkan%20nama%20saya%20{{ Auth::check() ? Auth::user()->full_name : '...' }}%20dan%20saya%20memiliki%20feedback%20untuk%20disampaikan%20terkait%20kegiatan%20belajar%20mengajar%20di%20Sangnila%20Arts%20Academy%3A', "_blank");
 			});
 		});
     </script>

@@ -153,7 +153,7 @@
 							@php
 								$target = json_decode($announcement->sent_to);
 							@endphp
-							@if($announcement->announce_from < now() && $announcement->announce_until > now() && $target[Auth::user()->role_id - 1] == "on")
+							@if($announcement->announce_from < now() && $announcement->announce_until > now() && in_array(Auth::user()->id, $target))
 								<a class="card-img flex flex-col items-stretch swiper-slide" href="{{ route('view-announcement', $announcement->id) }}">
 									@php
 										$n_announcement++;

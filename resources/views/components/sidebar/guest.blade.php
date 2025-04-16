@@ -10,23 +10,23 @@
 
 		{{-- Sidebar navigations --}}
 		<div class="flex flex-col items-stretch justify-center w-full text-base" id="large-sidebar">
-			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6 hover:bg-cyan-500"
+			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6"
 				href="{{ route('guest.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('guest*') && !Request::is('guest/privacy-policy')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-courses.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Our Courses
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6 hover:bg-cyan-500"
-				href="https://academy.sangnilaindonesia.com" style="transform: scale(1); border-radius: 0;">
+			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6"
+				href="https://academy.sangnilaindonesia.com" target="_blank" style="transform: scale(1); border-radius: 0;">
 				<i class="bi bi-info-circle text-2xl"></i> About Us
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6 hover:bg-cyan-500"
-				href="https://sangnilaindonesia.com" style="transform: scale(1); border-radius: 0;">
+			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6"
+				href="https://sangnilaindonesia.com" target="_blank" style="transform: scale(1); border-radius: 0;">
 				<i class="bi bi-globe2 text-2xl"></i> Our Website
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center text-start gap-4 py-2 px-6 hover:bg-cyan-500"
-				href="https://register.sangnilaindonesia.com" style="transform: scale(1); border-radius: 0;">
+			<x-anchor-button class="grow flex items-center text-start gap-4 py-2 px-6"
+				href="https://register.sangnilaindonesia.com" target="_blank" style="transform: scale(1); border-radius: 0;">
 				<i class="bi bi-person-check-fill text-2xl"></i> Register Now!
 			</x-anchor-button>
 

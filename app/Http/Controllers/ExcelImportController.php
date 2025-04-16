@@ -96,7 +96,7 @@ class ExcelImportController extends Controller
 
 			DB::commit();
 
-			return redirect(route("teacher.mycourse.show", $course_id))->with('success', 'Topics and Activities data imported successfully!');
+			return redirect(route("teacher.mycourse.show", ['course_id' => $course_id, 'content' => 'topics and activities']))->with('success', 'Topics and Activities data imported successfully!');
 		}
 
 		catch (Exception $e){
