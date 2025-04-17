@@ -69,6 +69,10 @@ class Course extends Model {
 	public function self_attendances(){
 		return $this->hasMany(SelfAttendance::class);
 	}
+
+	public function trial_class_resources(){
+		return $this->hasMany(TrialClassResource::class);
+	}
 }
 
 

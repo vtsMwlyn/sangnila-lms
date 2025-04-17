@@ -30,7 +30,7 @@ Route::prefix('/teacher')
 		});
 
 
-		Route::prefix('/my-course')->name('mycourse.')->group(function () {
+		Route::prefix('/course')->name('course.')->group(function () {
 			// ===== MANAGE COURSES ===== //
 			// List of assigned courses
 			Route::get('/', [CourseController::class, 'teacher_index'])->name('index');
@@ -52,142 +52,134 @@ Route::prefix('/teacher')
 			Route::get("/{course_id}/pick-course", [CurriculumController::class, "teacher_pick_course"])->name("pick-course")->whereNumber("course_id");
 			Route::post("/{course_id}/pick-course", [CurriculumController::class, "teacher_save_picked_course"])->name("save-picked-course")->whereNumber("course_id");
 
-
+			// ===== TRIAL CLASS ===== //
+			Route::prefix('trial-class')->name('trial-class.')->group(function(){
+				Route::get('/{course_id}/add-resource', [CourseController::class, 'teacher_add_trial_class_resource'])->name('add-resource')->whereNumber('course_id');
+				Route::post('/{course_id}/add-resource', [CourseController::class, 'teacher_store_trial_class_resource'])->name('store-resource')->whereNumber('course_id');
+				Route::get('/{course_id}/{trial_class_resource_id}/edit-resource', [CourseController::class, 'teacher_edit_trial_class_resource'])->name('edit-resource')->whereNumber('course_id')->whereNumber('trial_class_resource_id');
+				Route::post('/{course_id}/{trial_class_resource_id}/edit-resource', [CourseController::class, 'teacher_update_trial_class_resource'])->name('update-resource')->whereNumber('course_id')->whereNumber('trial_class_resource_id');
+				Route::delete('/{course_id}/{trial_class_resource_id}/delete', [CourseController::class, 'teacher_destroy_trial_class_resource'])->name('destroy-resource')->whereNumber('course_id')->whereNumber('trial_class_resource_id');
+			});
+			
 			// ===== TOPICS ===== //
-			Route::prefix("/topic")
-				->name("topic.")
-				->group(function(){
-					// Add new topic
-					Route::post("/{course_id}", [TopicController::class, "teacher_store"])->name("store")->whereNumber('course_id');
+			Route::prefix("/topic")->name("topic.")->group(function(){
+				// Add new topic
+				Route::post("/{course_id}", [TopicController::class, "teacher_store"])->name("store")->whereNumber('course_id');
 
-					// Topic details
-					Route::get("/{course_id}/{topic_id}/detail", [TopicController::class, "teacher_show"])->name("show")->whereNumber(['course_id', 'topic_id']);
+				// Topic details
+				Route::get("/{course_id}/{topic_id}/detail", [TopicController::class, "teacher_show"])->name("show")->whereNumber(['course_id', 'topic_id']);
 
-					// Edit topic
-					Route::patch("/{course_id}/{topic_id}/edit", [TopicController::class, "teacher_update"])->name("update")->whereNumber(['course_id', 'topic_id']);
+				// Edit topic
+				Route::patch("/{course_id}/{topic_id}/edit", [TopicController::class, "teacher_update"])->name("update")->whereNumber(['course_id', 'topic_id']);
 
-					// Delete topic
-					Route::delete("/{course_id}/{topic_id}/delete", [TopicController::class, "teacher_destroy"])->name("destroy")->whereNumber(['course_id', 'topic_id']);
-				}
-			);
+				// Delete topic
+				Route::delete("/{course_id}/{topic_id}/delete", [TopicController::class, "teacher_destroy"])->name("destroy")->whereNumber(['course_id', 'topic_id']);
+			});
 
 			// ===== ACTIVITIES ===== //
-			Route::prefix('/activity')
-				->name('activity.')
-				->group(function () {
-					// Add new activity
-					Route::get('/upload/{topic_id}', [ActivityController::class, 'teacher_create'])->name('upload')->whereNumber('topic_id');
-					Route::post('/upload/{topic_id}', [ActivityController::class, 'teacher_store'])->name('store')->whereNumber('topic_id');
+			Route::prefix('/activity')->name('activity.')->group(function () {
+				// Add new activity
+				Route::get('/upload/{topic_id}', [ActivityController::class, 'teacher_create'])->name('upload')->whereNumber('topic_id');
+				Route::post('/upload/{topic_id}', [ActivityController::class, 'teacher_store'])->name('store')->whereNumber('topic_id');
 
-					// Edit activity
-					Route::get('/{activity_id}/edit', [ActivityController::class, 'teacher_edit'])->name('edit')->whereNumber('activity_id');
-					Route::patch('/{activity_id}', [ActivityController::class, 'teacher_update'])->name('update')->whereNumber('activity_id');
+				// Edit activity
+				Route::get('/{activity_id}/edit', [ActivityController::class, 'teacher_edit'])->name('edit')->whereNumber('activity_id');
+				Route::patch('/{activity_id}', [ActivityController::class, 'teacher_update'])->name('update')->whereNumber('activity_id');
 
-					// Delete activity
-					Route::delete('/{activity_id}', [ActivityController::class, 'teacher_destroy'])->name('destroy')->whereNumber('activity_id');
-
-				}
-			);
+				// Delete activity
+				Route::delete('/{activity_id}', [ActivityController::class, 'teacher_destroy'])->name('destroy')->whereNumber('activity_id');
+			});
 		});
 
 
 		// ===== MANAGE STUDENTS ===== //
-		Route::prefix('/student')
-			->name('student.')
-			->group(function () {
+		Route::prefix('/student')->name('student.')->group(function () {
 
-				// Pick an intended course where the intended student is enrolled
-				Route::get('/', [StudentController::class, 'teacher_select_course'])->name('select-course');
+			// Pick an intended course where the intended student is enrolled
+			Route::get('/', [StudentController::class, 'teacher_select_course'])->name('select-course');
 
-				// Pick an intended student to manage
-				Route::get('/{course_id}', [StudentController::class, 'teacher_select_student'])->name('select-student')->whereNumber('course_id');
+			// Pick an intended student to manage
+			Route::get('/{course_id}', [StudentController::class, 'teacher_select_student'])->name('select-student')->whereNumber('course_id');
 
-				// Student information (activity progress and meeting link)
-				Route::get('/{student_id}/{course_id}/information', [StudentController::class, 'teacher_index'])->name('show')->whereNumber(['student_id', 'course_id']);
+			// Student information (activity progress and meeting link)
+			Route::get('/{student_id}/{course_id}/information', [StudentController::class, 'teacher_index'])->name('show')->whereNumber(['student_id', 'course_id']);
 
-				// Update student's activity progress
-				Route::patch('/{course_id}/{student_id}/activity-access', [StudentController::class, 'teacher_update_activity_access'])->name('update.progress.activity-access')->whereNumber(['course_id', 'student_id']);
+			// Update student's activity progress
+			Route::patch('/{course_id}/{student_id}/activity-access', [StudentController::class, 'teacher_update_activity_access'])->name('update.progress.activity-access')->whereNumber(['course_id', 'student_id']);
 
-				// Update student's meeting link
-				Route::patch('/{course_id}/{student_id}/meeting-link', [StudentController::class, 'teacher_update_meeting_link'])->name('update.progress.meeting-link')->whereNumber(['course_id', 'student_id']);
+			// Update student's meeting link
+			Route::patch('/{course_id}/{student_id}/meeting-link', [StudentController::class, 'teacher_update_meeting_link'])->name('update.progress.meeting-link')->whereNumber(['course_id', 'student_id']);
 
-				// Upload portfolio for student
-				Route::post('/{student_id}/{course_id}/upload-portfolio', [PortfolioController::class, 'teacher_store_portfolio'])->name('store.portfolio')->whereNumber(['course_id', 'student_id']);
+			// Upload portfolio for student
+			Route::post('/{student_id}/{course_id}/upload-portfolio', [PortfolioController::class, 'teacher_store_portfolio'])->name('store.portfolio')->whereNumber(['course_id', 'student_id']);
 
-				// Delete a portfolio image of a student
-				Route::delete('/portfolio/{portfolio_id}/delete', [PortfolioController::class, 'teacher_destroy_portfolio'])->name('destroy.portfolio')->whereNumber('portfolio_id');
+			// Delete a portfolio image of a student
+			Route::delete('/portfolio/{portfolio_id}/delete', [PortfolioController::class, 'teacher_destroy_portfolio'])->name('destroy.portfolio')->whereNumber('portfolio_id');
 
-				// Upload assessment for student
-				Route::get('/{student_id}/{course_id}/upload-assessment', [AssessmentController::class, 'create'])->name('create.assessment')->whereNumber(['course_id', 'student_id']);
-				Route::post('/{student_id}/{course_id}/upload-assessment', [AssessmentController::class, 'store'])->name('store.assessment')->whereNumber(['course_id', 'student_id']);
-				
-				// Edit assessment for student
-				Route::get('/assessment/{assessment_id}/edit', [AssessmentController::class, 'edit'])->name('edit.assessment')->whereNumber('assessment_id');
-				Route::post('/assessment/{assessment_id}/edit', [AssessmentController::class, 'update'])->name('update.assessment')->whereNumber('assessment_id');
-			}
-		);
+			// Upload assessment for student
+			Route::get('/{student_id}/{course_id}/upload-assessment', [AssessmentController::class, 'create'])->name('create.assessment')->whereNumber(['course_id', 'student_id']);
+			Route::post('/{student_id}/{course_id}/upload-assessment', [AssessmentController::class, 'store'])->name('store.assessment')->whereNumber(['course_id', 'student_id']);
+			
+			// Edit assessment for student
+			Route::get('/assessment/{assessment_id}/edit', [AssessmentController::class, 'edit'])->name('edit.assessment')->whereNumber('assessment_id');
+			Route::post('/assessment/{assessment_id}/edit', [AssessmentController::class, 'update'])->name('update.assessment')->whereNumber('assessment_id');
+		});
 
 
 		// ===== ATTENDANCE ===== //
-		Route::prefix('/attendance')
-			->name('attendance.')
-			->group(function () {
-				// Pick an intended course to manage attendance
-				Route::get("/", [AttendanceController::class, "index"])->name("index");
+		Route::prefix('/attendance')->name('attendance.')->group(function () {
 
-				// List of attendance data in the selected course
-				Route::get('/{course_id}', [AttendanceController::class, 'show'])->name('show')->whereNumber('course_id');
+			// Pick an intended course to manage attendance
+			Route::get("/", [AttendanceController::class, "index"])->name("index");
 
-				// Upload new attendance data
-				Route::get("/{course_id}/preupload", [AttendanceController::class, "select_students"])->name("select-students")->whereNumber("course_id");
-				Route::post("/{course_id}/preupload", [AttendanceController::class, "submit_and_proceed"])->name("submit-and-proceed")->whereNumber("course_id");
-				Route::get('/{course_id}/upload', [AttendanceController::class, 'create'])->name('upload')->whereNumber('course_id');
-				Route::post('/{course_id}/upload', [AttendanceController::class, 'store'])->name('store')->whereNumber('course_id');
+			// List of attendance data in the selected course
+			Route::get('/{course_id}', [AttendanceController::class, 'show'])->name('show')->whereNumber('course_id');
 
-				// Edit attendance data
-				// Route::get("/{attendance_data_id}/edit", [AttendanceController::class, "edit"])->name("edit")->whereNumber('attendance_data_id');
-				// Route::post("/{attendance_data_id}/edit", [AttendanceController::class, "update"])->name("update")->whereNumber('attendance_data_id');
+			// Upload new attendance data
+			Route::get("/{course_id}/preupload", [AttendanceController::class, "select_students"])->name("select-students")->whereNumber("course_id");
+			Route::post("/{course_id}/preupload", [AttendanceController::class, "submit_and_proceed"])->name("submit-and-proceed")->whereNumber("course_id");
+			Route::get('/{course_id}/upload', [AttendanceController::class, 'create'])->name('upload')->whereNumber('course_id');
+			Route::post('/{course_id}/upload', [AttendanceController::class, 'store'])->name('store')->whereNumber('course_id');
 
-				// Self attendance
-				Route::get("/{course_id}/self/check-in", [TeacherController::class, "check_in"])->name("check-in")->whereNumber("course_id");
-				Route::post("/{course_id}/self/check-in", [TeacherController::class, "check_in_store"])->name("check-in.store")->whereNumber("course_id");
-				Route::post("/{course_id}/self/check-out", [TeacherController::class, "check_out_store"])->name("check-out.store")->whereNumber("course_id");
-			}
-		);
+			// Edit attendance data
+			// Route::get("/{attendance_data_id}/edit", [AttendanceController::class, "edit"])->name("edit")->whereNumber('attendance_data_id');
+			// Route::post("/{attendance_data_id}/edit", [AttendanceController::class, "update"])->name("update")->whereNumber('attendance_data_id');
+
+			// Self attendance
+			Route::get("/{course_id}/self/check-in", [TeacherController::class, "check_in"])->name("check-in")->whereNumber("course_id");
+			Route::post("/{course_id}/self/check-in", [TeacherController::class, "check_in_store"])->name("check-in.store")->whereNumber("course_id");
+			Route::post("/{course_id}/self/check-out", [TeacherController::class, "check_out_store"])->name("check-out.store")->whereNumber("course_id");
+		});
 
 
 		// ===== ASSIGNMENT ===== //
-		Route::prefix("/assignment")
-			->name("assignment.")
-			->group(function(){
+		Route::prefix("/assignment")->name("assignment.")->group(function(){
 
-				// Pick an intended course to manage assignment
-				Route::get("/", [AssignmentController::class, "teacher_index"])->name("index");
+			// Pick an intended course to manage assignment
+			Route::get("/", [AssignmentController::class, "teacher_index"])->name("index");
 
-				// List of assignment data in the selected course
-				Route::get("/{course_id}", [AssignmentController::class, "teacher_show"])->name("show")->whereNumber('course_id');
+			// List of assignment data in the selected course
+			Route::get("/{course_id}", [AssignmentController::class, "teacher_show"])->name("show")->whereNumber('course_id');
 
-				// Upload new assignment
-				Route::get("/upload/{course_id}", [AssignmentController::class, "teacher_upload"])->name("upload")->whereNumber('course_id');
-				Route::post("/upload/{course_id}", [AssignmentController::class, "teacher_store"])->name("store")->whereNumber('course_id');
+			// Upload new assignment
+			Route::get("/upload/{course_id}", [AssignmentController::class, "teacher_upload"])->name("upload")->whereNumber('course_id');
+			Route::post("/upload/{course_id}", [AssignmentController::class, "teacher_store"])->name("store")->whereNumber('course_id');
 
-				// Edit assignment
-				Route::get("/{assignment_id}/edit", [AssignmentController::class, "teacher_edit"])->name("edit")->whereNumber('assignment_id');
-				Route::patch("/{assignment_id}/edit", [AssignmentController::class, "teacher_update"])->name("update")->whereNumber('assignment_id');
+			// Edit assignment
+			Route::get("/{assignment_id}/edit", [AssignmentController::class, "teacher_edit"])->name("edit")->whereNumber('assignment_id');
+			Route::patch("/{assignment_id}/edit", [AssignmentController::class, "teacher_update"])->name("update")->whereNumber('assignment_id');
 
-				// Delete assignment
-				// Route::get("/{assignment_id}/delete-confirm", [AssignmentController::class, "teacher_delete"])->name("delete")->whereNumber('assignment_id');
-				Route::delete("/{assignment_id}/delete-confirm", [AssignmentController::class, "teacher_destroy"])->name("destroy")->whereNumber('assignment_id');
+			// Delete assignment
+			// Route::get("/{assignment_id}/delete-confirm", [AssignmentController::class, "teacher_delete"])->name("delete")->whereNumber('assignment_id');
+			Route::delete("/{assignment_id}/delete-confirm", [AssignmentController::class, "teacher_destroy"])->name("destroy")->whereNumber('assignment_id');
 
-				// Check assignment submissions
-				Route::get("/{assignment_id}/submission", [AssignmentController::class, "teacher_check_submission"])->name("check")->whereNumber('assignment_id');
+			// Check assignment submissions
+			Route::get("/{assignment_id}/submission", [AssignmentController::class, "teacher_check_submission"])->name("check")->whereNumber('assignment_id');
 
-				// Check assignment submissions history for the selected students and add/check feedback to submissions
-				// Route::get("/{assignment_id}/{student_id}/history", [AssignmentController::class, "teacher_check_history"])->name("submission-history")->whereNumber(['assignment_id', 'student_id']);
-				Route::post("/{submission_id}/{student_id}/history", [AssignmentController::class, "teacher_feedback"])->name("feedback")->whereNumber(['submission_id', 'student_id']);
-
-			}
-		);
+			// Check assignment submissions history for the selected students and add/check feedback to submissions
+			// Route::get("/{assignment_id}/{student_id}/history", [AssignmentController::class, "teacher_check_history"])->name("submission-history")->whereNumber(['assignment_id', 'student_id']);
+			Route::post("/{submission_id}/{student_id}/history", [AssignmentController::class, "teacher_feedback"])->name("feedback")->whereNumber(['submission_id', 'student_id']);
+		});
 
 		// ===== FORUM DISCUSSION ===== //
 		Route::get('/forum', [ForumController::class, 'index_teacher'])->name('forum.index')->whereNumber('course_id');
@@ -195,37 +187,35 @@ Route::prefix('/teacher')
 		Route::post('/forum/{course_id}/send', [ForumController::class, 'send_message_teacher'])->name('forum.send')->whereNumber('course_id');
 
 		// ===== INVOICE AND REIMBURSE ===== //
-		Route::prefix('/invoices-and-reimburse')
-			->name('lecturer-invoice-reimburse.')
-			->group(function(){
+		Route::prefix('/invoices-and-reimburse')->name('lecturer-invoice-reimburse.')->group(function(){
 
-				// Invoices list
-				Route::get('/', [LecturerInvoiceReimburseController::class, 'teacher_index'])->name('index');
+			// Invoices list
+			Route::get('/', [LecturerInvoiceReimburseController::class, 'teacher_index'])->name('index');
 
-				Route::prefix('/invoice')->name('invoice.')->group(function(){
-					// Create Invoice Headers
-					Route::get('/create', [LecturerInvoiceReimburseController::class, 'teacher_create_invoice'])->name('create');
-					Route::post('/create', [LecturerInvoiceReimburseController::class, 'teacher_store_invoice'])->name('store');
+			Route::prefix('/invoice')->name('invoice.')->group(function(){
+				// Create Invoice Headers
+				Route::get('/create', [LecturerInvoiceReimburseController::class, 'teacher_create_invoice'])->name('create');
+				Route::post('/create', [LecturerInvoiceReimburseController::class, 'teacher_store_invoice'])->name('store');
 
-					// Edit Invoice Headers
-					Route::get('/{invoice_id}/edit', [LecturerInvoiceReimburseController::class, 'teacher_edit_invoice'])->name('edit');
-					Route::post('/{invoice_id}/edit', [LecturerInvoiceReimburseController::class, 'teacher_update_invoice'])->name('update');
+				// Edit Invoice Headers
+				Route::get('/{invoice_id}/edit', [LecturerInvoiceReimburseController::class, 'teacher_edit_invoice'])->name('edit');
+				Route::post('/{invoice_id}/edit', [LecturerInvoiceReimburseController::class, 'teacher_update_invoice'])->name('update');
 
-					// Download Excel
-					Route::get('/{invoice_id}/download', [LecturerInvoiceReimburseController::class, 'teacher_download_invoice'])->name('download')->whereNumber('invoice_id');
-				});
-
-				Route::prefix('/reimburse')->name('reimburse.')->group(function(){
-					// Create reimburse
-					Route::get('/create', [LecturerInvoiceReimburseController::class, 'teacher_create_reimburse'])->name('create');
-					Route::post('/create', [LecturerInvoiceReimburseController::class, 'teacher_store_reimburse'])->name('store');
-
-					// Edit reimburse
-					Route::get('/{reimburse_id}/edit', [LecturerInvoiceReimburseController::class, 'teacher_edit_reimburse'])->name('edit');
-					Route::post('/{reimburse_id}/edit', [LecturerInvoiceReimburseController::class, 'teacher_update_reimburse'])->name('update');
-				});
-				
+				// Download Excel
+				Route::get('/{invoice_id}/download', [LecturerInvoiceReimburseController::class, 'teacher_download_invoice'])->name('download')->whereNumber('invoice_id');
 			});
+
+			Route::prefix('/reimburse')->name('reimburse.')->group(function(){
+				// Create reimburse
+				Route::get('/create', [LecturerInvoiceReimburseController::class, 'teacher_create_reimburse'])->name('create');
+				Route::post('/create', [LecturerInvoiceReimburseController::class, 'teacher_store_reimburse'])->name('store');
+
+				// Edit reimburse
+				Route::get('/{reimburse_id}/edit', [LecturerInvoiceReimburseController::class, 'teacher_edit_reimburse'])->name('edit');
+				Route::post('/{reimburse_id}/edit', [LecturerInvoiceReimburseController::class, 'teacher_update_reimburse'])->name('update');
+			});
+			
+		});
 
 		// ===== VIEW ANNOUNCEMENT ===== //
 		Route::get("/announcement/{announcement_id}", [AnnouncementController::class, "all_view_announcement"])->name("view-announcement")->whereNumber("announcement_id");

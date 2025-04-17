@@ -19,7 +19,7 @@
 			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('teacher.mycourse.activity.store', $topic->id) }}" method="post" class="mt-3">
+		<form action="{{ route('teacher.course.activity.store', $topic->id) }}" method="post" class="mt-3">
 			@csrf
 			<div class="flex gap-5 w-full flex-col md:flex-row">
 				{{-- Activity Title --}}

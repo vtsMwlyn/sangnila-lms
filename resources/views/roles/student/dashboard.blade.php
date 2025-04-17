@@ -124,7 +124,7 @@
 								@if(!$selfAttendance)
 									<li class="mb-4" style="text-indent: -1.2rem; padding-left: 1.5rem; line-spacing: 10px;">
 										Have you checked in to <strong>{{ $course->course_name }} - {{ ucwords($course->level) }}</strong> today?
-										<a href="{{ route('student.mycourse.check-in', $course->id) }}" class="bg-indigo-600 hover:bg-slate-700 py-0.5 px-1.5 rounded-lg font-bold text-white">Check In</a>
+										<a href="{{ route('student.course.check-in', $course->id) }}" class="bg-indigo-600 hover:bg-slate-700 py-0.5 px-1.5 rounded-lg font-bold text-white">Check In</a>
 									</li>
 								@endif
 							@empty

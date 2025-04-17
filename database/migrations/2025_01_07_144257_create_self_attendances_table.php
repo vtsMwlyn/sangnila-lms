@@ -28,7 +28,7 @@ return new class extends Migration
 
 			$table->enum('validation_status', ['awaiting', 'valid', 'invalid'])->default('awaiting');
 			$table->string('attendance_evidence');
-			$table->string('description')->nullable();
+			$table->longText('description')->nullable();
 
             $table->timestamps();
         });

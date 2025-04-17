@@ -19,7 +19,7 @@
 			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('teacher.mycourse.activity.update', $activity->id) }}" method="post" class="mt-3">
+		<form action="{{ route('teacher.course.activity.update', $activity->id) }}" method="post" class="mt-3">
 			@csrf
 			@method('PATCH')
 			{{-- Activity Title --}}

@@ -73,7 +73,7 @@ class ExcelImportController extends Controller
 	}
 
 	public function import_excel_topics_and_activities_index($course_id){
-		return view("roles.teacher.mycourse.import-excel-topics-and-activities", [
+		return view("roles.teacher.course.import-excel-topics-and-activities", [
 			"course" => Course::findOrFail($course_id)
 		]);
 	}
@@ -96,7 +96,7 @@ class ExcelImportController extends Controller
 
 			DB::commit();
 
-			return redirect(route("teacher.mycourse.show", ['course_id' => $course_id, 'content' => 'topics and activities']))->with('success', 'Topics and Activities data imported successfully!');
+			return redirect(route("teacher.course.show", ['course_id' => $course_id, 'content' => 'topics and activities']))->with('success', 'Topics and Activities data imported successfully!');
 		}
 
 		catch (Exception $e){

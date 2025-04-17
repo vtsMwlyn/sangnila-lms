@@ -26,7 +26,7 @@
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-2 px-6"
-				href="https://register.sangnilaindonesia.com" target="_blank" style="transform: scale(1); border-radius: 0;">
+				href="https://register.sangnilaindonesia.com" target="_blank" style="transform: scale(1); border-radius: 0;" id="register-now-btn">
 				<i class="bi bi-person-check-fill text-2xl"></i> Register Now!
 			</x-anchor-button>
 

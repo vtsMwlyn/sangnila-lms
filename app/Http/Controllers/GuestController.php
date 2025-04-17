@@ -7,6 +7,7 @@ use App\Models\Activity;
 use Illuminate\Http\Request;
 use App\Models\CurriculumTopic;
 use App\Models\CurriculumActivity;
+use App\Models\TrialClassResource;
 
 class GuestController extends Controller {
 	// ===== GUEST ===== //
@@ -44,10 +45,10 @@ class GuestController extends Controller {
 		]);
 	}
 
-	public function preview($course_id, $curriculum_activity_id){
-		$curriculum_activity = CurriculumActivity::findOrFail($curriculum_activity_id);
+	public function preview($course_id, $trial_class_resource_id){
+		$trial_class_resource = TrialClassResource::findOrFail($trial_class_resource_id);
 
-		$original_link = $curriculum_activity->link;
+		$original_link = $trial_class_resource->material_link;
 
 		// return $original_link;
 
@@ -80,7 +81,7 @@ class GuestController extends Controller {
 		}
 
 		return view('roles.guest.preview', [
-			'curriculum_activity' => $curriculum_activity,
+			'trial_class_resource' => $trial_class_resource,
 			"preview_link" => $preview_link
 		]);
 	}

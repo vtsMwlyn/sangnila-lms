@@ -16,8 +16,8 @@
 		@endif
 
 	@elseif(Auth::user()->role_id == 2)
-		@if(Request::is("*my-course*") || Request::is("*topic*") || Request::is("*activity*"))
-			> <a href="{{ route('teacher.mycourse.index') }}" class="font-bold text-yellow-500">My Courses</a>
+		@if(Request::is("*course*") || Request::is("*topic*") || Request::is("*activity*"))
+			> <a href="{{ route('teacher.course.index') }}" class="font-bold text-yellow-500">My Courses</a>
 		@elseif(Request::is("*student*"))
 			> <a href="{{ route('teacher.student.select-course') }}" class="font-bold text-yellow-500">Material Access</a>
 		@elseif(Request::is("*assignment*"))
@@ -27,8 +27,8 @@
 		@endif
 
 	@elseif(Auth::user()->role_id == 3)
-		@if(Request::is("*my-course*"))
-			> <a href="{{ route('student.mycourse.index') }}" class="font-bold text-yellow-500">My Courses</a>
+		@if(Request::is("*course*"))
+			> <a href="{{ route('student.course.index') }}" class="font-bold text-yellow-500">My Courses</a>
 		@elseif(Request::is("*assignment*"))
 			> <a href="{{ route('student.assignment.index') }}" class="font-bold text-yellow-500">Assignment</a>
 		@elseif(Request::is("*attendance*"))

@@ -167,9 +167,9 @@
 						<div class="flex flex-col w-full items-start p-5">
 							<p>{{ session('warning') }}</p>
 							<div class="flex justify-end w-full mt-3">
-								<button type="button" class="dismiss-status-notif font-bold text-light-blue">Dismiss</button>
+								<button type="button" class="dismiss-status-notif font-bold text-yellow-500">Dismiss</button>
 							</div>
-							<div class="w-0 h-1 bg-light-blue mt-4 progress-bar"></div>
+							<div class="w-0 h-1 bg-yellow-500 mt-4 progress-bar"></div>
 						</div>
 					</div>
 				@elseif(session()->has("danger"))

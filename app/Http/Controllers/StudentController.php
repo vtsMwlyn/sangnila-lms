@@ -11,8 +11,6 @@ use App\Models\Course;
 use App\Models\Activity;
 use App\Models\Assessment;
 use App\Models\Progress;
-use App\Models\Assignment;
-use App\Models\Attendance;
 use App\Models\UserDetail;
 use App\Models\Notification;
 use Illuminate\Http\Request;
@@ -22,13 +20,12 @@ use App\Models\ImportedStudent;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use App\Models\AssignmentSubmission;
-use App\Models\Portfolio;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Termwind\Components\BreakLine;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
+use Illuminate\Support\Str;
 
 class StudentController extends Controller {
 
@@ -506,7 +503,16 @@ class StudentController extends Controller {
 			$photoEvidence = '';
 
 			if($request->file('image')){
-				$photoEvidence = $request->file("image")->store("student-checkin");
+				$imageFile = $request->file('image');
+				$randomName = Str::random(40) . '.webp';
+				$relativePath = 'student-checkin/' . $randomName;
+				$fullPath = storage_path('app/public/' . $relativePath);
+			
+				$manager = new ImageManager(new Driver());
+				$image = $manager->read($imageFile->getRealPath());
+				$image->toWebp(80)->save($fullPath);
+
+				$photoEvidence = $relativePath;
 			}
 			else {
 				return back()->with('danger', 'Check in requires evidence image. Please allow the usage of the camera then try again, or if the problem persists, please kindly contact our IT team.');
@@ -528,7 +534,7 @@ class StudentController extends Controller {
 			return back()->with('danger', 'Cannot sign in due to system error, please contact our IT team. Error detail: ' . $e->getMessage());
 		}
 
-		return redirect(route('student.mycourse.show', $course->id))->with('success', 'Successfully checked in to course ' . $course->course_name . ' at ' . $validatedData['check_in_time'] . ' (GMT+7)');
+		return redirect(route('student.course.show', $course->id))->with('success', 'Successfully checked in to course ' . $course->course_name . ' at ' . $validatedData['check_in_time'] . ' (GMT+7)');
 	}
 
 	// Check out

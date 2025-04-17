@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
+use Illuminate\Support\Str;
 
 class PortfolioController extends Controller
 {
@@ -72,7 +75,22 @@ class PortfolioController extends Controller
 					$mimeType = $req_file->getMimeType();
 					$type = explode('/', $mimeType)[0];
 			
-					$path = $req_file->store('progress-portfolio');
+					if($type == 'image'){
+						$imageFile = $req_file;
+						$randomName = Str::random(40) . '.webp';
+						$relativePath = 'progress-portfolio/' . $randomName;
+						$fullPath = storage_path('app/public/' . $relativePath);
+					
+						$manager = new ImageManager(new Driver());
+						$image = $manager->read($imageFile->getRealPath());
+						$image->toWebp(80)->save($fullPath);
+
+						$path = $relativePath;
+					}
+					else {
+						$path = $req_file->store('progress-portfolio');
+					}
+
 					$paths[] = $path;
 			
 					Portfolio::create([
@@ -151,7 +169,22 @@ class PortfolioController extends Controller
 					$mimeType = $req_file->getMimeType();
 					$type = explode('/', $mimeType)[0];
 			
-					$path = $req_file->store('progress-portfolio');
+					if($type == 'image'){
+						$imageFile = $req_file;
+						$randomName = Str::random(40) . '.webp';
+						$relativePath = 'progress-portfolio/' . $randomName;
+						$fullPath = storage_path('app/public/' . $relativePath);
+					
+						$manager = new ImageManager(new Driver());
+						$image = $manager->read($imageFile->getRealPath());
+						$image->toWebp(80)->save($fullPath);
+
+						$path = $relativePath;
+					}
+					else {
+						$path = $req_file->store('progress-portfolio');
+					}
+					
 					$paths[] = $path;
 			
 					Portfolio::create([

@@ -18,15 +18,15 @@ class ConvertImagesToWebp extends Command
     protected $signature = 'images:convert-webp';
     protected $description = 'Convert all images in storage/app/public to webp and delete original files';
 
-    private $extensions = ['jpg', 'jpeg', 'png'];
+    private $extensions = ['jpg', 'jpeg', 'png', 'jfif'];
     private $converted = 0;
 
-    private function convertAndDelete($curr_path){
+    private function convertAndDelete($file_path){
         // Use the absolute path directly without prepending storage_path
         $basePath = storage_path('app/public/');
     
         // $curr_path is already relative, so no need to prepend anything
-        $curr_path = $basePath . $curr_path;
+        $curr_path = $basePath . $file_path;
     
         $manager = new ImageManager(new Driver());
     
@@ -42,20 +42,18 @@ class ConvertImagesToWebp extends Command
                 $this->info("Converted and deleted: " . $curr_path);
                 $this->converted++;
     
-                return $new_path;
+                return str_replace($basePath, '', $new_path);
             }
             catch (\Exception $e) {
                 $this->error("Failed to convert: " . $curr_path . " - " . $e->getMessage());
             }
         } else {
-            $this->error("File not found or invalid extension: " . $curr_path);
+            $this->info("File not found or not a webp image: " . $curr_path);
         }
     
         return null;
     }
     
-    
-
     public function handle()
     {
         foreach (Announcement::all() as $announcement) {

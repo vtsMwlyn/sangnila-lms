@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+$(document).ready(() => {
     const accessKey = 'W_A5i7O9MjRE54Q4l9KA4onU-zZjNbNYowSd8UccBLY';
 
     // Loop through each card and fetch background image based on course name

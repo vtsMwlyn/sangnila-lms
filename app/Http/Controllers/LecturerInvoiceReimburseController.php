@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\LecturerInvoiceExport;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
+use Illuminate\Support\Str;
 
 class LecturerInvoiceReimburseController extends Controller
 {
@@ -112,7 +115,6 @@ class LecturerInvoiceReimburseController extends Controller
     }
 
     public function teacher_store_reimburse(Request $request){
-        // return $request;
         $validatedData = $request->validate([
             'date' => 'required|date',
             'amount' => 'required|numeric|min:0',
@@ -120,9 +122,16 @@ class LecturerInvoiceReimburseController extends Controller
             'need' => 'required',
         ]);
 
-        $evidence_path = $request->file('image')->store('reimburse');
-        $validatedData['evidence_path'] = $evidence_path;
+        $imageFile = $request->file('image');
+        $randomName = Str::random(40) . '.webp';
+        $relativePath = 'reimburse/' . $randomName;
+        $fullPath = storage_path('app/public/' . $relativePath);
+    
+        $manager = new ImageManager(new Driver());
+        $image = $manager->read($imageFile->getRealPath());
+        $image->toWebp(80)->save($fullPath);
 
+        $validatedData['evidence_path'] = $relativePath;
         $validatedData['user_id'] = Auth::user()->id;
 
         Reimburse::create($validatedData);
@@ -150,7 +159,16 @@ class LecturerInvoiceReimburseController extends Controller
         if($request->file('image')){
             Storage::disk('public')->delete($evpath);
 
-            $evpath = $request->file('image')->store('reimburse');
+            $imageFile = $request->file('image');
+            $randomName = Str::random(40) . '.webp';
+            $relativePath = 'reimburse/' . $randomName;
+            $fullPath = storage_path('app/public/' . $relativePath);
+        
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($imageFile->getRealPath());
+            $image->toWebp(80)->save($fullPath);
+
+            $evpath = $relativePath;
         }
 
         $validatedData['evidence_path'] = $evpath;

@@ -16,6 +16,7 @@ use App\Models\ImportedStudent;
 use App\Models\LearningOutcome;
 use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
+use App\Models\TrialClassResource;
 use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller {
@@ -128,7 +129,7 @@ class CourseController extends Controller {
 	// ===== TEACHER ====== //
 	// List of assigned courses
 	public function teacher_index() {
-		return view('roles.teacher.mycourse.index', []);
+		return view('roles.teacher.course.index', []);
 	}
 
 	// Shows a course details also topics and activities
@@ -139,14 +140,73 @@ class CourseController extends Controller {
 
 		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->get();
 		$learning_outcomes = LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get();
+		$trial_class_resources = TrialClassResource::where('course_id', $course->id)->where('user_id', Auth::user()->id)->get();
 
-		return view('roles.teacher.mycourse.show', [
+		return view('roles.teacher.course.show', [
 			'course_students' => $course_students,
 			"course" => $course,
 			"topics" => $topics,
 			"has_curriculum" => $curriculum->count(),
-			"learning_outcomes" => $learning_outcomes
+			"learning_outcomes" => $learning_outcomes,
+			'trial_class_resources' => $trial_class_resources,
 		]);
+	}
+
+	public function teacher_add_trial_class_resource($course_id){
+		return view('roles.teacher.course.create-trial-class-resource', [
+			'course' => Course::findOrFail($course_id),
+		]);
+	}
+
+	public function teacher_store_trial_class_resource(Request $request, $course_id){
+		$course = Course::findOrFail($course_id);
+
+		$validatedData = $request->validate([
+			'topic_title' => 'required',
+			'activity_title' => 'required',
+			'material_link' => 'required|url',
+			'description' => 'required'
+		]);
+
+		$validatedData['description'] = e($validatedData['description']);
+		$validatedData['user_id'] = Auth::user()->id;
+		$validatedData['course_id'] = $course->id;
+
+		TrialClassResource::create($validatedData);
+
+		return redirect(route('teacher.course.show', ['course_id' => $course->id, 'content' => 'trial class']))->with('success', 'Successfully added the trial class resource to this course!');
+	}
+
+	public function teacher_edit_trial_class_resource($course_id, $trial_class_resource_id){
+		return view('roles.teacher.course.edit-trial-class-resource', [
+			'course' => Course::findOrFail($course_id),
+			'trial_class_resource' => TrialClassResource::findOrFail($trial_class_resource_id),
+		]);
+	}
+
+	public function teacher_update_trial_class_resource(Request $request, $course_id, $trial_class_resource_id){
+		$course = Course::findOrFail($course_id);
+		$trial_class_resource = TrialClassResource::findOrFail($trial_class_resource_id);
+
+		$validatedData = $request->validate([
+			'topic_title' => 'required',
+			'activity_title' => 'required',
+			'material_link' => 'required|url',
+			'description' => 'required'
+		]);
+
+		$validatedData['description'] = e($validatedData['description']);
+
+		$trial_class_resource->update($validatedData);
+
+		return redirect(route('teacher.course.show', ['course_id' => $course->id, 'content' => 'trial class']))->with('success', 'Successfully edited the trial class resource!');
+	}
+
+	public function teacher_destroy_trial_class_resource($course_id, $trial_class_resource_id){
+		$course = Course::findOrFail($course_id);
+		TrialClassResource::findOrFail($trial_class_resource_id)->delete();
+
+		return redirect(route('teacher.course.show', ['course_id' => $course->id, 'content' => 'trial class']))->with('warning', 'Successfully deleted the trial class resource!');
 	}
 
 	// ===== STUDENT ===== //

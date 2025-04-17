@@ -12,6 +12,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
+use Illuminate\Support\Str;
 
 class ForumController extends Controller
 {
@@ -101,7 +104,16 @@ class ForumController extends Controller
 
             $path = null;
             if($request->file('attachment')){
-                $path = $request->file('attachment')->store('message-attachment');
+                $imageFile = $request->file('attachment');
+                $randomName = Str::random(40) . '.webp';
+                $relativePath = 'message-attachment/' . $randomName;
+                $fullPath = storage_path('app/public/' . $relativePath);
+            
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($imageFile->getRealPath());
+                $image->toWebp(80)->save($fullPath);
+
+                $path = $relativePath;
             }
 
             $msg = Message::create([
@@ -137,7 +149,16 @@ class ForumController extends Controller
 
             $path = null;
             if($request->file('attachment')){
-                $path = $request->file('attachment')->store('message-attachment');
+                $imageFile = $request->file('attachment');
+                $randomName = Str::random(40) . '.webp';
+                $relativePath = 'message-attachment/' . $randomName;
+                $fullPath = storage_path('app/public/' . $relativePath);
+            
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($imageFile->getRealPath());
+                $image->toWebp(80)->save($fullPath);
+
+                $path = $relativePath;
             }
 
             $msg = Message::create([

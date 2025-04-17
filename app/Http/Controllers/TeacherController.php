@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
+use Illuminate\Support\Str;
 
 class TeacherController extends Controller {
 	// ===== ADMIN ===== //
@@ -91,14 +94,23 @@ class TeacherController extends Controller {
 	public function check_in_store(Request $request, $course_id){
 		$validatedData = $request->validate([
 			'check_in_time' => 'required',
-			'description' => 'required'
+			'description' => 'required',
 		]);
 
 		try {
-			$course = Course::findOrFail($course_id);
+			$course = Course::findOrFail($course_id);	
 
 			if($request->file('image')){
-				$validatedData['attendance_evidence'] = $request->file("image")->store("lecturer-checkin");
+				$imageFile = $request->file('image');
+				$randomName = Str::random(40) . '.webp';
+				$relativePath = 'lecturer-checkin/' . $randomName;
+				$fullPath = storage_path('app/public/' . $relativePath);
+			
+				$manager = new ImageManager(new Driver());
+				$image = $manager->read($imageFile->getRealPath());
+				$image->toWebp(80)->save($fullPath);
+				
+				$validatedData['attendance_evidence'] = $relativePath;
 			}
 			else {
 				return back()->with('danger', 'Check in requires evidence image. Please allow the usage of the camera then try again, or if the problem persists, please kindly contact our IT team.');

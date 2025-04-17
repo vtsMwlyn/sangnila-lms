@@ -44,7 +44,7 @@ class TopicController extends Controller
 		}
 
 
-		return redirect(route("teacher.mycourse.topic.show", [$course_id, $newTopic->id]))->with("success", "Successfully added new topic to the course!");
+		return redirect(route("teacher.course.topic.show", [$course_id, $newTopic->id]))->with("success", "Successfully added new topic to the course!");
 	}
 
 	// Edit topic input page
@@ -68,7 +68,7 @@ class TopicController extends Controller
 			return back()->with("danger", "System failed to edit topic, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("teacher.mycourse.topic.show", [$course_id, $topic_id]))->with("success", "Successfully updated topic data!");
+		return redirect(route("teacher.course.topic.show", [$course_id, $topic_id]))->with("success", "Successfully updated topic data!");
 	}
 
 	// Topic deletion confirmation
@@ -82,6 +82,6 @@ class TopicController extends Controller
 	public function teacher_destroy($course_id, $topic_id){
 		Topic::findOrFail($topic_id)->delete();
 
-		return redirect(route("teacher.mycourse.show", $course_id))->with("warning", "Successfully deleted topic from the course!");
+		return redirect(route("teacher.course.show", $course_id))->with("warning", "Successfully deleted topic from the course!");
 	}
 }

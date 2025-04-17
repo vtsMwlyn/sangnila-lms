@@ -60,11 +60,16 @@
 	<x-confirmation method="delete" popup_title="Delete Topic" id="delete-topic">
 		Are you sure want to <span class="font-bold text-red">delete</span> the Topic <span class="font-bold text-light-blue" id="del-t-name"></span> from this course?
 	</x-confirmation>
+
+	{{-- Delete trial class resource --}}
+	<x-confirmation method="delete" popup_title="Delete Trial Class Resource" id="delete-tc-resource">
+		Are you sure want to <span class="font-bold text-red">delete</span> the Trial Class Resource <span class="font-bold text-light-blue" id="del-tc-resource-name"></span> from this course?
+	</x-confirmation>
 @endsection
 
 @section("content")
 	<x-section-container>
-		<x-back-button href="{{ route('teacher.mycourse.index') }}"></x-back-button>
+		<x-back-button href="{{ route('teacher.course.index') }}"></x-back-button>
 		<x-page-title>{{ $course->course_name }} - {{ ucwords($course->level) }}</x-page-title>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
@@ -77,19 +82,19 @@
 		@endif
 
 		<div class="flex w-full flex-wrap">
-			<a href="{{ route('teacher.mycourse.show', ['course_id' => $course->id, 'content' => 'general information']) }}"
+			<a href="{{ route('teacher.course.show', ['course_id' => $course->id, 'content' => 'general information']) }}"
 				class="py-2 w-1/2 xl:w-1/6 sm:w-48 text-center hover:bg-slate-200"
 				style="@if(request('content') == 'general information' || !request('content')) border-bottom: 4px solid #1db9cf; @endif">
 				General Information
 			</a>
 
-			<a href="{{ route('teacher.mycourse.show', ['course_id' => $course->id ,'content' => 'topics and activities']) }}"
+			<a href="{{ route('teacher.course.show', ['course_id' => $course->id ,'content' => 'topics and activities']) }}"
 				class="py-2 w-1/2 xl:w-1/6 sm:w-48 text-center hover:bg-slate-200"
 				style="@if(request('content') == 'topics and activities') border-bottom: 4px solid #1db9cf; @endif">
 				Topics & Activities
 			</a>
 
-			<a href="{{ route('teacher.mycourse.show', ['course_id' => $course->id ,'content' => 'trial class']) }}"
+			<a href="{{ route('teacher.course.show', ['course_id' => $course->id ,'content' => 'trial class']) }}"
 				class="py-2 w-1/2 xl:w-1/6 sm:w-48 text-center hover:bg-slate-200"
 				style="@if(request('content') == 'trial class') border-bottom: 4px solid #1db9cf; @endif">
 				Trial Class
@@ -134,7 +139,7 @@
 		@if(request('content') == 'topics and activities')
 			<div class="flex flex-col-reverse xl:flex-row gap-8 xl:gap-0 justify-between items-stretch w-full mt-6">
 				<div class="relative">
-					<x-button type="button" data-route="{{ route('teacher.mycourse.topic.store', $course->id) }}" id="new-topic-btn"><i class="bi bi-plus-lg"></i> Add New Topic</x-button>
+					<x-button type="button" data-route="{{ route('teacher.course.topic.store', $course->id) }}" id="new-topic-btn"><i class="bi bi-plus-lg"></i> Add New Topic</x-button>
 					@if($topics->count() == 0)
 						<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
 					@endif
@@ -142,7 +147,7 @@
 
 				<div class="flex gap-2 xl:gap-5">
 					<x-anchor-button
-						href="{{ route('teacher.mycourse.import-excel-topicandactivities', $course->id) }}">
+						href="{{ route('teacher.course.import-excel-topicandactivities', $course->id) }}">
 						<i class="bi bi-file-earmark-arrow-up"></i> Import from Excel
 					</x-anchor-button>
 
@@ -152,10 +157,10 @@
 								<i class="bi bi-arrow-repeat"></i> Generate from Syllabus
 							</x-button>
 							<div class="absolute z-10 overflow-hidden bg-white top-12 w-80 rounded-3xl text-sm font-semibold flex flex-col py-2 dropdown-menu" style="display: none; ">
-								<a href="{{ route('teacher.mycourse.pick-course', $course->id) }}" class="hover:bg-slate-300">
+								<a href="{{ route('teacher.course.pick-course', $course->id) }}" class="hover:bg-slate-300">
 									<div class="w-full px-5 py-1 text-black flex items-center gap-1"><i class="bi bi-check2-square text-slate-400"></i> Pick from Syllabus</div>
 								</a>
-								<form method="POST" action="{{ route('teacher.mycourse.synchronize', $course->id) }}" class="hover:bg-slate-300 grow flex items-center gap-2">
+								<form method="POST" action="{{ route('teacher.course.synchronize', $course->id) }}" class="hover:bg-slate-300 grow flex items-center gap-2">
 									@csrf
 									<button class="w-full px-5 py-1 text-black flex items-center gap-1" onclick="return confirm('Synchronizing with topics and activity in syllabus will erase all of your posted topics and activities. Are your sure want to proceed?');">
 										<i class="bi bi-arrow-repeat text-slate-400"></i> Sync with Syllabus
@@ -227,13 +232,13 @@
 
 									<td class="py-3 px-4">
 										<div class="flex w-full items-center gap-1">
-											<a href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}" title="View list of activities in this topic">
+											<a href="{{ route('teacher.course.topic.show', [$course->id, $topic->id]) }}" title="View list of activities in this topic">
 												<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 											</a>
-											<button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.mycourse.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn" title="Edit this topic">
+											<button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.course.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn" title="Edit this topic">
 												<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 											</button>
-											<button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.mycourse.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn" title="Delete this topic">
+											<button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.course.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn" title="Delete this topic">
 												<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 											</button>
 										</div>
@@ -253,15 +258,15 @@
 										<div class="flex w-full items-center gap-2">
 											<div class="relative">
 												<x-anchor-button
-													href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}">
+													href="{{ route('teacher.course.topic.show', [$course->id, $topic->id]) }}">
 													<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110" title="View list of activities in this topic">
 												</x-anchor-button>
 												<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
 											</div>
-											<x-button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.mycourse.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn" title="Edit this topic">
+											<x-button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.course.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn" title="Edit this topic">
 												<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 											</x-button>
-											<x-button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.mycourse.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn" title="Delete this topic">
+											<x-button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.course.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn" title="Delete this topic">
 												<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 											</x-button>
 										</div>
@@ -309,13 +314,13 @@
 
 							<strong class="mt-5">Actions</strong>
 							<div class="flex gap-3 items-start my-3">
-								<a href="{{ route('teacher.mycourse.topic.show', [$course->id, $topic->id]) }}">
+								<a href="{{ route('teacher.course.topic.show', [$course->id, $topic->id]) }}">
 									<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 								</a>
-								<button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.mycourse.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn">
+								<button type="button" data-topic="{{ $topic }}" data-route="{{ route('teacher.course.topic.update', [$course->id, $topic->id]) }}" class="edit-topic-btn">
 									<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 								</button>
-								<button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.mycourse.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn">
+								<button type="button" data-del_t_name="{{ $topic->title }}" data-route="{{ route('teacher.course.topic.destroy', [$course->id, $topic->id]) }}" class="delete-topic-btn">
 									<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 								</button>
 							</div>
@@ -328,7 +333,78 @@
 		@endif
 
 		@if(request('content') == 'trial class')
+			<div class="mt-6">
+				<x-anchor-button href="{{ route('teacher.course.trial-class.add-resource', $course->id) }}"><i class="bi bi-plus-lg"></i> Add New Resource</x-anchor-button>
+			</div>
 
+			<div class="w-full overflow-x-auto hidden xl:block mt-4">
+				<table class="w-full">
+					<thead>
+						<th class="text-center py-3 px-4 border-b-2 border-slate-400">No</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Title</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Description</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Material Link</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
+					</thead>
+					<tbody>
+						@forelse ($trial_class_resources as $tc_resource)
+							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
+								<td class="py-3 px-4">{{ $loop->iteration }}</td>
+								<td class="py-3 px-4">{{ $tc_resource->topic_title }} - {{ $tc_resource->activity_title }}</td>
+								<td class="py-3 px-4">{!! nl2br($tc_resource->description) !!}</td>
+								<td class="py-3 px-4" style="max-width: 18vw; word-wrap: break-word;">
+									<a href="{{ $tc_resource->material_link }}" target="_blank" class="font-bold text-blue-600 hover:underline">{{ $tc_resource->material_link }}</a>
+								</td>
+								<td class="py-3 px-4">
+									<div class="flex w-full items-center gap-1">
+										<a type="button" href="{{ route('teacher.course.trial-class.update-resource', [$course->id, $tc_resource->id]) }}" title="Edit this trial class resource">
+											<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</a>
+										<button type="button" data-del_tc_resource_name="{{ $tc_resource->activity_title }}" data-route="{{ route('teacher.course.trial-class.destroy-resource', [$course->id, $tc_resource->id]) }}" class="delete-tc-resource-btn" title="Delete this trial class resource">
+											<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</button>
+									</div>
+								</td>
+							</tr>
+						@empty
+							<tr>
+								<td colspan="5" class="text-center p-5 bg-white w-full font-semibold">- No trial class resources added yet to this course -</td>
+							</tr>
+						@endforelse
+					</tbody>
+				</table>
+			</div>
+
+			{{-- For smaller screen --}}
+			<div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-4">
+				@forelse ($trial_class_resources as $tc_resource)
+					<div class="bg-white rounded-xl p-4 flex flex-col gap-3 dropdown-container">
+						<button class="flex flex-col items-start dropdown-toggler w-full">
+							<div class="flex w-full justify-between items-center mb-2">
+								<strong class="text-base text-start">{{ $tc_resource->topic_title }} - {{ $tc_resource->activity_title }}</strong>
+								<i class="bi bi-chevron-down"></i>
+							</div>
+						</button>
+						<div class="flex flex-col w-full dropdown-menu" style="display: none;">
+							{!! nl2br($tc_resource->description) !!}
+
+							<a href="{{ $tc_resource->material_link }}" target="_blank" class="font-bold text-blue-600 hover:underline mt-4">{{ $tc_resource->material_link }}</a>
+
+							<strong class="mt-5">Actions</strong>
+							<div class="flex gap-3 items-start my-3">
+								<a type="button" href="{{ route('teacher.course.trial-class.update-resource', [$course->id, $tc_resource->id]) }}" title="Edit this trial class resource">
+									<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+								</a>
+								<button type="button" data-del_tc_resource_name="{{ $tc_resource->activity_title }}" data-route="{{ route('teacher.course.trial-class.destroy-resource', [$course->id, $tc_resource->id]) }}" class="delete-tc-resource-btn" title="Delete this trial class resource">
+									<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+								</button>
+							</div>
+						</div>
+					</div>
+				@empty
+					- N/A -
+				@endforelse
+			</div>
 		@endif
 	</x-section-container>
 
@@ -390,6 +466,16 @@
 				// Show the popup
 				$("#delete-topic").parent().show();
 			});
+
+			// Delete trial class resource
+			$('.delete-tc-resource-btn').on('click', function(){
+				// Retrieve data and set the data to the popup
+				$("#delete-tc-resource").find('form').attr("action", $(this).data('route'));
+				$("#del-tc-resource-name").text($(this).data('del_tc_resource_name'));
+
+				// Show the popup
+				$("#delete-tc-resource").parent().show();
+			})
 
 			// Redisplay popup and fill with prev data (for invalidated data)
 			@if ($errors->any())

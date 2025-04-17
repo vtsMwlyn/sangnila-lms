@@ -165,7 +165,7 @@ class AttendanceController extends Controller {
 		$course = Course::findOrFail($course_id);
 
 		if($course->topics->count() == 0){
-			return back()->with('danger', 'Please fill the topics and activities for this course first! <a href="' . route('teacher.mycourse.show', $course->id) . '" class="font-extrabold underline hover:text-yellow-500">Go to course</a>');
+			return back()->with('danger', 'Please fill the topics and activities for this course first! <a href="' . route('teacher.course.show', $course->id) . '" class="font-extrabold underline hover:text-yellow-500">Go to course</a>');
 		}
 
 		$students = User::where("role_id", 3)->get();

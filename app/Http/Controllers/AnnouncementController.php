@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use App\Models\Role;
 use App\Models\Announcement;
 use Illuminate\Http\Request;
-use App\Models\AnnouncementUser;
 use App\Rules\MinimumOneCheckbox;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
+use Illuminate\Support\Str;
 
 class AnnouncementController extends Controller
 {
@@ -35,7 +36,16 @@ class AnnouncementController extends Controller
 		]);
 
 		if($request->file("image")){
-			$validatedData["image"] = $request->file("image")->store("announcement-images");
+			$imageFile = $request->file('image');
+			$randomName = Str::random(40) . '.webp';
+			$relativePath = 'announcement-images/' . $randomName;
+			$fullPath = storage_path('app/public/' . $relativePath);
+		
+			$manager = new ImageManager(new Driver());
+			$image = $manager->read($imageFile->getRealPath());
+			$image->toWebp(80)->save($fullPath);
+
+			$validatedData["image"] = $relativePath;
 		}
 
 		$receiver_array = [];
@@ -94,8 +104,19 @@ class AnnouncementController extends Controller
 		if($request->file("image")){
 			if($announcement->image_path){
 				$old_image_path = $announcement->image_path;
+				Storage::disk('public')->delete($old_image_path);
 			}
-			$validatedData["image"] = $request->file("image")->store("announcement-images");
+
+			$imageFile = $request->file('image');
+			$randomName = Str::random(40) . '.webp';
+			$relativePath = 'announcement-images/' . $randomName;
+			$fullPath = storage_path('app/public/' . $relativePath);
+		
+			$manager = new ImageManager(new Driver());
+			$image = $manager->read($imageFile->getRealPath());
+			$image->toWebp(80)->save($fullPath);
+
+			$validatedData["image"] = $relativePath;
 		}
 
 		$receiver_array = [];

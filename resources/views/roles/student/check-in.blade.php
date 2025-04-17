@@ -6,7 +6,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-back-button href="{{ route('student.mycourse.show', $course->id) }}"></x-back-button>
+		<x-back-button href="{{ route('student.course.show', $course->id) }}"></x-back-button>
 		<x-page-title>{{ $course->course_name }}</x-page-title>
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Self Attendance</h1>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
@@ -19,7 +19,7 @@
 			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('student.mycourse.check-in.store', $course->id) }}" method="post" enctype="multipart/form-data">
+		<form action="{{ route('student.course.check-in.store', $course->id) }}" method="post" enctype="multipart/form-data">
 			@csrf
 
 			{{-- Check In Time --}}

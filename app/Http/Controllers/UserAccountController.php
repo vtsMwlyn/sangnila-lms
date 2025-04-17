@@ -11,8 +11,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rules\Password;
-use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Exp;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
+use Illuminate\Support\Str;
 
 class UserAccountController extends Controller{
     public function show(){
@@ -35,6 +36,17 @@ class UserAccountController extends Controller{
 				]);
 				break;
 
+			case 6:
+				return view("roles.admin.profile", [
+					"account_data" => User::findOrFail(Auth::user()->id)
+				]);
+				break;
+
+			case 7:
+				return view("roles.teacher.profile", [
+					"account_data" => User::findOrFail(Auth::user()->id)
+				]);
+				break;
 		}
 	}
 
@@ -65,8 +77,19 @@ class UserAccountController extends Controller{
 			if($request->file("cropped_image")){
 				if($user_detail->profpic){
 					$old_image_path = $user_detail->profpic;
+					Storage::disk('public')->delete($old_image_path);
 				}
-				$new_profpic_path = $request->file("cropped_image")->store("profpic-images");
+
+				$imageFile = $request->file('cropped_image');
+				$randomName = Str::random(40) . '.webp';
+				$relativePath = 'profpic-images/' . $randomName;
+				$fullPath = storage_path('app/public/' . $relativePath);
+			
+				$manager = new ImageManager(new Driver());
+				$image = $manager->read($imageFile->getRealPath());
+				$image->toWebp(80)->save($fullPath);
+
+				$new_profpic_path = $relativePath;
 
 				UserDetail::where("user_id", Auth::user()->id)->update([
 					"profpic" => $new_profpic_path

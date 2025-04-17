@@ -375,7 +375,7 @@ class CurriculumController extends Controller
 			return back()->with("danger", "System failed to synchronize your course topics and activities with the curriculum, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("teacher.mycourse.show", ['course_id' => $course_id, 'content' => 'topics and activities']))->with("success", "Your class' topic and activities have been successfully synchronized with the curriculum!");
+		return redirect(route("teacher.course.show", ['course_id' => $course_id, 'content' => 'topics and activities']))->with("success", "Your class' topic and activities have been successfully synchronized with the curriculum!");
 	}
 
 	public function teacher_pick_course($course_id){
@@ -483,6 +483,6 @@ class CurriculumController extends Controller
 			// return back()->with("danger", "System failed to save selected syllabus topic and activities to your course's topics and activities. Please report this error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route('teacher.mycourse.show', ['course_id' => $course_id, 'content' => 'topics and activities']))->with("success", "Successfully picked topics and activities from the curriculum");
+		return redirect(route('teacher.course.show', ['course_id' => $course_id, 'content' => 'topics and activities']))->with("success", "Successfully picked topics and activities from the curriculum");
 	}
 }

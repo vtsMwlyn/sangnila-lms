@@ -27,7 +27,7 @@
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center gap-4 text-start py-3 px-6"
-				href="{{ route('student.mycourse.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('student*my-course*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
+				href="{{ route('student.course.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('student*course*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-courses.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Courses
 			</x-anchor-button>
 

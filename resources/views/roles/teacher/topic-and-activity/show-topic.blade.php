@@ -43,7 +43,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-back-button href="{{ route('teacher.mycourse.show', ['course_id' => $topic->course->id, 'content' => 'topics and activities']) }}"></x-back-button>
+		<x-back-button href="{{ route('teacher.course.show', ['course_id' => $topic->course->id, 'content' => 'topics and activities']) }}"></x-back-button>
 		<x-page-title>{{ $topic->course->course_name }}</x-page-title>
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Topic and Activities Details</h1>
 		<div class="w-full bg-slate-400 mt-4" style="height: 2px;"></div>
@@ -64,8 +64,8 @@
 			</div>
 
 			<div class="flex gap-2 w-full justify-end">
-				<x-button type="button" id="edit-topic-btn" data-route="{{ route('teacher.mycourse.topic.update', [$topic->course->id, $topic->id]) }}" data-topic="{{ $topic }}"><i class="bi bi-pencil-square"></i> Edit</x-button>
-				<x-button type="button" id="delete-topic-btn" data-route="{{ route('teacher.mycourse.topic.destroy', [$topic->course->id, $topic->id]) }}" data-del_t_name="{{ $topic->title }}"><i class="bi bi-trash3"></i> Delete</x-button>
+				<x-button type="button" id="edit-topic-btn" data-route="{{ route('teacher.course.topic.update', [$topic->course->id, $topic->id]) }}" data-topic="{{ $topic }}"><i class="bi bi-pencil-square"></i> Edit</x-button>
+				<x-button type="button" id="delete-topic-btn" data-route="{{ route('teacher.course.topic.destroy', [$topic->course->id, $topic->id]) }}" data-del_t_name="{{ $topic->title }}"><i class="bi bi-trash3"></i> Delete</x-button>
 			</div>
 		</div>
 
@@ -73,7 +73,7 @@
 		<h2 class="my-4 font-extrabold text-xl text-dark-blue">List of Activities</h2>
 
 		<div class="relative w-fit">
-			<x-anchor-button href="{{ route('teacher.mycourse.activity.upload', $topic->id) }}"><i class="bi bi-plus-lg"></i> Add New Activity</x-anchor-button>
+			<x-anchor-button href="{{ route('teacher.course.activity.upload', $topic->id) }}"><i class="bi bi-plus-lg"></i> Add New Activity</x-anchor-button>
 			@if($topic->activities->count() == 0)
 				<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
 			@endif
@@ -121,11 +121,11 @@
 
 							<td class="py-3 px-4">
 								<div class="flex gap-1">
-									<a href="{{ route('teacher.mycourse.activity.edit', $activity->id) }}" title="Edit this activity">
+									<a href="{{ route('teacher.course.activity.edit', $activity->id) }}" title="Edit this activity">
 										<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</a>
 									<button type="button" class="delete-activity-btn" data-del_a_name="{{ $activity->title }}"
-										data-route="{{ route('teacher.mycourse.activity.destroy', $activity->id) }}" title="Delete this activity">
+										data-route="{{ route('teacher.course.activity.destroy', $activity->id) }}" title="Delete this activity">
 										<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</button>
 								</div>
@@ -171,11 +171,11 @@
 
                         <strong class="mt-5">Actions</strong>
                         <div class="flex gap-3 items-start my-3">
-                            <a href="{{ route('teacher.mycourse.activity.edit', $activity->id) }}">
+                            <a href="{{ route('teacher.course.activity.edit', $activity->id) }}">
 								<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 							</a>
 							<button type="button" class="delete-activity-btn" data-del_a_name="{{ $activity->title }}"
-								data-route="{{ route('teacher.mycourse.activity.destroy', $activity->id) }}">
+								data-route="{{ route('teacher.course.activity.destroy', $activity->id) }}">
 								<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 							</button>
                         </div>

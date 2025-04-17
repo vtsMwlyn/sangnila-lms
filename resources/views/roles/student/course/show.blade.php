@@ -16,14 +16,14 @@
 				$progress_data_exists = count($activityProgresses) > 0 && count($activityProgresses->first()["progresses"]) > 0;
 			@endphp
 
-			<x-back-button href="{{ route('student.mycourse.index') }}"></x-back-button>
+			<x-back-button href="{{ route('student.course.index') }}"></x-back-button>
 			<div class="w-full flex flex-col xl:flex-row justify-between items-start xl:items-center">
 				<x-page-title>{{ $course->course_name }} - {{ ucwords($course->level) }}</x-page-title>
 
 				@if(!$max_session_reached)
 					<div class="flex items-center gap-3 my-4 xl:my-0">
 						@if(!$unfinishedSelfAttendance)
-							<x-anchor-button href="{{ route('student.mycourse.check-in', $course->id) }}">
+							<x-anchor-button href="{{ route('student.course.check-in', $course->id) }}">
 								<i class="bi bi-stopwatch"></i> Check In
 							</x-anchor-button>
 						@else
@@ -34,7 +34,7 @@
 
 						{{-- Already checked in but haven't checked out --}}
 						@if($unfinishedSelfAttendance && !$unfinishedSelfAttendance->check_out_time)
-							<form action="{{ route('student.mycourse.check-out.store', $course->id) }}" method="post">
+							<form action="{{ route('student.course.check-out.store', $course->id) }}" method="post">
 								@csrf
 								<x-button onclick="return confirm('Are you sure want to check out now?');">
 									<i class="bi bi-stopwatch"></i> Check Out
@@ -200,7 +200,7 @@
 									</div>
 									<div class="flex w-1/4 md:w-1/2 items-start justify-end md:justify-start">
 										<div class="flex gap-1">
-											<a href="{{ route('student.mycourse.preview', $ap["activity"]->id) }}"><img src="{{ asset('img/view.svg') }}" alt="icon" class="w-8 h-8 hover:scale-110" title="Open material link"></a>
+											<a href="{{ route('student.course.preview', $ap["activity"]->id) }}"><img src="{{ asset('img/view.svg') }}" alt="icon" class="w-8 h-8 hover:scale-110" title="Open material link"></a>
 											@if($ap["progress"]->meeting_link)
 												<a href="{{ $ap["progress"]->meeting_link }}" target="_blank" class="h-8 w-8 flex items-center justify-center hover:scale-110" title="Open online meeting link for this session"><img src="{{ asset('img/online-meeting.svg') }}"></a>
 											@else
@@ -277,7 +277,7 @@
 							const activityNumber = i;
 							const activityTitle = ap.activity.title;
 							const activityDesc = ap.activity.desc;
-							const materialPreviewLink = `{{ route('student.mycourse.preview', ':id') }}`.replace(':id', ap.activity.id);
+							const materialPreviewLink = `{{ route('student.course.preview', ':id') }}`.replace(':id', ap.activity.id);
 							const meetingLink = ap.progress.meeting_link ? ap.progress.meeting_link : '#';
 							const anchorTarget = ap.progress.meeting_link ? '_blank' : '_self';
 							const topicTitle = ap.topic.title;

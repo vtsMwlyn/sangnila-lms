@@ -23,7 +23,7 @@
 						@else
 							<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
 						@endif
-						<h1 class="text-lg font-bold text-center">{{-- explode(" ", $teacher->full_name)[0] --}}{{ $teacher->full_name }}</h1>
+						<h1 class="text-lg font-bold text-center">{{ $teacher->details->gender == 1 ? 'Mr.' : 'Ms.' }} {{ $teacher->full_name }}</h1>
 					</div>
 				</a>
 			@empty
@@ -81,54 +81,36 @@
 		<div class="overflow-x-auto mb-5">
 			<table class="w-full">
 				<thead>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Course Topic</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activity Name</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">No</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Title</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Description</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 				</thead>
 
 				<tbody>
-					@if ($topics->count())
-						@if($topics[0]->curriculum_activities->count())
-							@foreach ($topics[0]->curriculum_activities as $index => $activity)
-								@if($index < 3)
-									<tr class="@if($index == 1) opacity-60 @elseif($index == 2) opacity-30 @endif @if($loop->iteration % 2 == 1) bg-white @endif">
-										<td class="py-3 px-4">
-											{{ $topics[0]->title }}
-										</td>
-										<td class="py-3 px-4">{{ $activity->title }}</td>
-										<td class="py-3 px-4">
-											<a href="{{ $index == 0 ? route('guest.preview', [$course->id, $activity->id]) : '#' }}">
-												<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
-											</a>
-										</td>
-									</tr>
-								@else
-									@break
-								@endif
-							@endforeach
-						@else
-							<tr class="@if($index == 1) opacity-60 @elseif($index == 2) opacity-30 @endif @if($loop->iteration % 2 == 1) bg-white @endif">
+					@if ($course->trial_class_resources->count())
+						@foreach ($course->trial_class_resources as $index => $tc_resource)
+							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
+								<td class="py-3 px-4">{{ $loop->iteration }}</td>
+								<td class="py-3 px-4">{{ $tc_resource->topic_title }} - {{ $tc_resource->activity_title }}</td>
+								<td class="py-3 px-4">{!! nl2br($tc_resource->description) !!}</td>
 								<td class="py-3 px-4">
-									{{ $topics[0]->title }}
-								</td>
-								<td class="py-3 px-4 text-center">This topic doesn't have any activities yet.</td>
-								<td class="py-3 px-4 text-center">
-									<a href="{{ $index == 0 ? route('guest.preview', [$course->id, $activity->id]) : '#' }}">
+									<a href="{{ route('guest.preview', [$course->id, $tc_resource->id]) }}">
 										<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</a>
 								</td>
 							</tr>
-						@endif
+						@endforeach
 					@else
 						<tr>
-							<td colspan="2" class="p-5 bg-white font-semibold text-center">This course doesn't have any topics and activities yet.</td>
+							<td colspan="4" class="p-5 bg-white font-semibold text-center">This course doesn't have any public resource available yet.</td>
 						</tr>
 					@endif
 				</tbody>
 			</table>
 
 			<div class="mt-10 flex justify-center">
-				<div class="border-4 border-light-blue p-5 text-light-blue font-extrabold">~ Want to find out more? Come join us now! ~</div>
+				<div class="border-4 border-cyan-400 p-5 text-cyan-400 font-extrabold">~ Want to find out more? Come join us now! ~</div>
 			</div>
 		</div>
 	</x-section-container>

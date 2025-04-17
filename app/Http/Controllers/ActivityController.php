@@ -60,7 +60,7 @@ class ActivityController extends Controller {
 			return back()->with("danger", "System failed to create activity, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route('teacher.mycourse.topic.show', [$topic->course->id, $topic->id]))->with("success", "Successfully uploaded new activity to the topic!");
+		return redirect(route('teacher.course.topic.show', [$topic->course->id, $topic->id]))->with("success", "Successfully uploaded new activity to the topic!");
 	}
 
 	// Edit activity input page
@@ -142,7 +142,7 @@ class ActivityController extends Controller {
 		}
 
 
-		return redirect(route('teacher.mycourse.topic.show', [$activity->topic->course->id, $activity->topic->id]))->with("success", "Successfully update activity data!");
+		return redirect(route('teacher.course.topic.show', [$activity->topic->course->id, $activity->topic->id]))->with("success", "Successfully update activity data!");
 	}
 
 	// Activity deletion confirmation
@@ -160,7 +160,7 @@ class ActivityController extends Controller {
 
 		$activity->delete();
 
-		return redirect(route("teacher.mycourse.topic.show", [$cid, $tid]))->with("warning", "Successfully deleted activity from the topic!");
+		return redirect(route("teacher.course.topic.show", [$cid, $tid]))->with("warning", "Successfully deleted activity from the topic!");
 	}
 
 	// ===== STUDENT ===== //

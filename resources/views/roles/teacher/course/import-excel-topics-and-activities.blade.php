@@ -22,7 +22,7 @@
 
 		<p class="text-blue-950 font-semibold mt-8">Make sure <span class="font-extrabold">all columns</span> should be filled with values.</p>
 
-		<form action="{{ route('teacher.mycourse.import-excel-topicandactivities.store', $course->id) }}" method="POST" enctype="multipart/form-data" class="mt-8">
+		<form action="{{ route('teacher.course.import-excel-topicandactivities.store', $course->id) }}" method="POST" enctype="multipart/form-data" class="mt-8">
 			@csrf
 
 			<div>
@@ -32,7 +32,7 @@
 
 			<div class="flex gap-5  mt-8">
 				<x-button ><i class="bi bi-upload"></i> Import Data</x-button>
-				<x-anchor-button href="{{ route('teacher.mycourse.import-excel.download', $course->id) }}" ><i class="bi bi-download"></i> Download Template</x-anchor-button>
+				<x-anchor-button href="{{ route('teacher.course.import-excel.download', $course->id) }}" ><i class="bi bi-download"></i> Download Template</x-anchor-button>
 			</div>
 		</form>
 	</x-section-container>
