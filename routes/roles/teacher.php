@@ -149,6 +149,10 @@ Route::prefix('/teacher')
 			Route::get("/{course_id}/self/check-in", [TeacherController::class, "check_in"])->name("check-in")->whereNumber("course_id");
 			Route::post("/{course_id}/self/check-in", [TeacherController::class, "check_in_store"])->name("check-in.store")->whereNumber("course_id");
 			Route::post("/{course_id}/self/check-out", [TeacherController::class, "check_out_store"])->name("check-out.store")->whereNumber("course_id");
+
+			// Trial class attendance
+			Route::get('/{course_id}/trial-class/create', [AttendanceController::class, 'teacher_create_trial_class_attendance'])->name('trial-class.create')->whereNumber('course_id');
+			Route::post('/{course_id}/trial-class/create', [AttendanceController::class, 'teacher_store_trial_class_attendance'])->name('trial-class.store')->whereNumber('course_id');
 		});
 
 

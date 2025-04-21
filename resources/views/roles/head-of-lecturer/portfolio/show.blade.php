@@ -9,6 +9,16 @@
 	<x-confirmation method="delete" popup_title="Delete Portfolio" id="delete-portfolio-popup">
 		Are you sure want to <span class="font-bold text-red">remove</span> this file from the student's portfolio?
 	</x-confirmation>
+
+    {{-- Highlight portfolio --}}
+	<x-confirmation popup_title="Highlight Portfolio" id="highlight-portfolio-popup">
+		Are you sure want to <span class="font-bold text-light-blue">highlight</span> this student's portfolio? <strong>The portfolio will be publicly visible.</strong>
+	</x-confirmation>
+
+    {{-- Unhighlight portfolio --}}
+	<x-confirmation popup_title="Unhighlight Portfolio" id="unhighlight-portfolio-popup">
+		Are you sure want to <span class="font-bold text-light-blue">unhighlight</span> this student's portfolio? <strong>The portfolio will be hidden from public.</strong>
+	</x-confirmation>
 @endsection
 
 @section('content')
@@ -27,10 +37,23 @@
 
         <div class="flex gap-3 flex-wrap mt-6 w-full overflow-y-auto items-start media-scroll" style="height: 90vh;">
             @forelse($portfolios as $portfolio)
-                <div class="oneperthree rounded-lg bg-white p-5">
+                <div class="relative oneperthree rounded-lg bg-white p-5 overflow-hidden">
+                    @if($portfolio->is_highlighted)
+                        <div class="absolute py-2 px-20 text-white" style="top: 20px; left: -50px; z-index: 5; background-color: rgb(29, 185, 207, 0.9); transform: rotate(-30deg);">
+                            {{ $portfolio->is_highlighted == 1 ? 'Highlighted' : 'Unhighlighted' }}
+                        </div>
+                    @endif
+
                     <div class="relative rounded-lg overflow-hidden" style="height: 250px;">
-                        <div class="absolute" style="top: 10px; right: 10px; z-index: 5;">
+                        <div class="absolute flex items-center gap-1" style="top: 10px; right: 10px; z-index: 5;">
                             <button type="button" data-route="{{ route('head-of-lecturer.portfolio.destroy', $portfolio->id) }}" class="bg-red rounded-lg py-2 px-4 text-white hover:bg-slate-700 delete-portfolio-btn" title="Remove this file from student's portfolio"><i class="bi bi-trash3"></i></button>
+                            <button type="button" data-route="{{ $portfolio->is_highlighted == 0 ? route('head-of-lecturer.portfolio.highlight', $portfolio->id) : route('head-of-lecturer.portfolio.unhighlight', $portfolio->id) }}" class="bg-indigo-600 rounded-lg py-2 px-4 text-white hover:bg-slate-700 {{ $portfolio->is_highlighted == 1 ? 'unhighlight-portfolio-btn' : 'highlight-portfolio-btn' }}" title="{{ $portfolio->is_highlighted == 1 ? 'Unhighlight' : 'Highlight' }} this portfolio">
+                                @if($portfolio->is_highlighted == 1)
+                                    <i class="bi bi-star-fill"></i>
+                                @else
+                                    <i class="bi bi-star"></i>
+                                @endif
+                            </button>
                         </div>
 
                         <a href="{{ $portfolio->type != 'link' ? Storage::url("app/public/" . $portfolio->path) : $portfolio->path }}" target="_blank" class="relative imeeji">
@@ -87,6 +110,16 @@
             $('.delete-portfolio-btn').on('click', function(){
 				$('#delete-portfolio-popup').find('form').attr('action', $(this).data('route'));
 				$('#delete-portfolio-popup').parent().show();
+			});
+
+            $('.highlight-portfolio-btn').on('click', function(){
+				$('#highlight-portfolio-popup').find('form').attr('action', $(this).data('route'));
+				$('#highlight-portfolio-popup').parent().show();
+			});
+
+            $('.unhighlight-portfolio-btn').on('click', function(){
+				$('#unhighlight-portfolio-popup').find('form').attr('action', $(this).data('route'));
+				$('#unhighlight-portfolio-popup').parent().show();
 			});
 
             // Handle lazy loading video

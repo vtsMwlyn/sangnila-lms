@@ -367,7 +367,7 @@
 		<div class="w-full bg-slate-400 mt-16" style="height: 2px;"></div>
 		<div class="w-full flex items-center justify-between">
 			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Learning Information</h2>
-			<x-anchor-button href="{{ route('admin.student.input-attendance', $student->id) }}"><i class="bi bi-database-add"></i> Input Attendances Data</x-anchor-button>
+			<x-anchor-button href="{{ route('admin.attendance.input-student-attendance', $student->id) }}"><i class="bi bi-database-add"></i> Input Attendances Data</x-anchor-button>
 		</div>
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
@@ -507,10 +507,10 @@
 			$('#show_more_less_button').click(() => {
 				$('#more_details').slideToggle(function(){
 					if($(this).is(":visible")){
-						$('#show_more_less_button').text('Hide Details');
+						$('#show_more_less_button').html('<i class="bi bi-eye-slash"></i> Hide Details');
 					}
 					else {
-						$('#show_more_less_button').text('Show Details');
+						$('#show_more_less_button').html('<i class="bi bi-eye"></i> Show Details');
 					}
 				});
 			});
@@ -586,11 +586,15 @@
 					const colUploader = $("<td>").addClass("px-4 py-2").text(satd.attendance.posted_by.full_name);
 					const colAction = $('<td>').addClass('px-4 py-2').append(
 						$('<div>').addClass('flex gap-1 w-full').append(
-							$('<a>').attr('href', `${baseUrl}/admin/student/attendance/${satd.id}/edit`).html(`<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">`)
+							$('<a>').attr('href', `${baseUrl}/admin/attendances/student/${satd.id}/edit`).html(`<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">`)
 						)
 						.append(
-							$('<form>').attr({'method': 'post', 'action': `${baseUrl}/admin/student/attendance/${satd.id}/delete`}).append(
+							$('<form>').attr({'method': 'post', 'action': `${baseUrl}/admin/attendances/student/${satd.id}/delete`})
+							.append(
 								$('<input>').attr('type', 'hidden').attr('name', '_token').val(document.querySelector('meta[name="csrf-token"]').getAttribute('content'))
+							.append(
+								$('<input>').attr({'type': 'hidden', 'name': '_method', 'value': 'DELETE'})
+							)
 							).append(
 								$('<button>').attr('type', 'submit').html(`<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">`).on('click', () => {
 									return confirm('Are you sure want to delete this attendance data?');

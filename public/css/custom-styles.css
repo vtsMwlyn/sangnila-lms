@@ -134,7 +134,7 @@ div.announcementContent a:hover {
 	width: 32%;
 }
 
-input[type='text'],input[type='number'],input[type='date'],input[type='file'],select {
+input[type='text'],input[type='number'],input[type='date'],input[type="time"],input[type='file'],select {
 	height: 48px !important;
 }
 

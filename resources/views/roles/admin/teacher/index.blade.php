@@ -8,11 +8,7 @@
 	<x-section-container>
 		<x-page-title class="text-center">{{ __("List of Active Teachers") }}</x-page-title>
 
-		<div class="flex items-center justify-start mt-6">
-			<div class="w-1/4">
-				<x-anchor-button href="{{ route('admin.lecturer-attendance.index') }}"><i class="bi bi-clipboard-check"></i> Lecturer Attendances</x-anchor-button>
-			</div>
-
+		<div class="flex items-center justify-center mt-6">
 			<form class="flex w-1/2 justify-center" action="{{ route("admin.teacher.index") }}">
 				<x-input type="text" class="rounded-l-lg rounded-r-none w-full" name="search" placeholder="Search..." :value="request('search')"/>
 				<button class="rounded-l-none rounded-r-lg border-slate-400 border-t-2 border-r-2 border-b-2 py-2 px-4 bg-white text-slate-400 hover:bg-slate-400 hover:text-white" style="border-width: 3px 3px 3px 0;"><i class="bi bi-search"></i></button>
@@ -26,7 +22,7 @@
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Full Name</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Assigned Courses</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Rate</th>
+					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Price</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Status</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 				</thead>
@@ -50,7 +46,7 @@
 									{{ $course->course_name }} - {{ ucwords($course->level) }}
 								</td>
 								<td class="py-3 px-4">
-									Rp {{ number_format(App\Models\CourseTeacher::where('user_id', $teacher->id)->where('course_id', $course->id)->first()->rate, 2, ',', '.') }}
+									Rp {{ number_format(App\Models\CourseTeacher::where('user_id', $teacher->id)->where('course_id', $course->id)->first()->price, 2, ',', '.') }}
 								</td>
 								@if($j == 0)
 									<td class="py-3 px-4" rowspan="{{ $teacher->teached_courses->count() }}">

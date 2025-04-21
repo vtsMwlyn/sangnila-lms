@@ -62,6 +62,11 @@
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
+				href="{{ route('admin.attendance.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('admin*attendance*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
+				<img src="{{ asset('img/sidebar-attendance.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Attendances
+			</x-anchor-button>
+
+			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('admin.announcement.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('admin*announcement*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-manageannouncement.svg') }}" class="h-6 w-6" alt="sidebar-icon"> Manage Announcements
 			</x-anchor-button>

@@ -120,8 +120,6 @@ class UserAccountController extends Controller{
 				Storage::disk('public')->delete($validatedData["cropped_image"]);
 			}
 
-			throw $e;
-
 			return back()->with("danger", "System failed to edit profile, please report the error to our IT team. Error detail: " . $e);
 		}
 

@@ -50,7 +50,7 @@ class CurriculumsImport implements ToModel, WithHeadingRow
             DB::rollBack();
 
 			// Optionally rethrow the exception to let higher-level handlers deal with it
-			throw $e;
+			return back()->with("danger", "System failed to import old student data, please report the error to our IT team. Error detail: " . $e->getMessage());
         }
     }
 }

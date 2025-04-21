@@ -72,7 +72,7 @@
 		<div class="w-full bg-slate-400 mt-2" style="height: 2px;"></div>
 
 		{{-- For larger screen --}}
-		<div class="flex mt-4 w-full flex-wrap">
+		<div class="flex mt-4 w-full flex-wrap mb-4">
 			<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id, 'content' => 'attendance reports']) }}"
 				class="py-2 w-1/2 xl:w-1/6 sm:w-48 text-center hover:bg-slate-200"
 				style="@if(request('content') == 'attendance reports' || !request('content')) border-bottom: 4px solid #1db9cf; @endif">
@@ -89,6 +89,12 @@
 				class="py-2 w-1/2 xl:w-1/6 sm:w-48 text-center hover:bg-slate-200"
 				style="@if(request('content') == 'my attendances') border-bottom: 4px solid #1db9cf; @endif">
 				My Attendances
+			</a>
+
+			<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'trial class']) }}"
+				class="py-2 w-1/2 xl:w-1/6 sm:w-48 text-center hover:bg-slate-200"
+				style="@if(request('content') == 'trial class') border-bottom: 4px solid #1db9cf; @endif">
+				Trial Class
 			</a>
 		</div>
 
@@ -278,7 +284,7 @@
 								<td class="py-3 px-4">{{ $self_atd->description ?? 'N/A' }}</td>
 							</tr>
 						@empty
-							
+							<tr><td class="p-5 bg-white font-semibold text-center" colspan="5">- No self attendance data yet -</td></tr>
 						@endforelse
 					</tbody>
 				</table>
@@ -308,6 +314,37 @@
 				@empty
 					- N/A -
 				@endforelse
+			</div>
+		@endif
+
+		@if(request('content') == 'trial class')
+			<div>
+				<x-anchor-button href="{{ route('teacher.attendance.trial-class.create', $course->id) }}" class="self-start xl:self-center">
+					<i class="bi bi-plus-lg"></i> New Trial Class Attendance
+				</x-anchor-button>
+			</div>
+
+			<div class="w-full overflow-auto hidden xl:block mt-4" style="height: 60vh;">
+				<table class="w-full">
+					<thead>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Time</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Candidate Name</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Details</th>
+					</thead>
+					<tbody>
+						@forelse ($course->trial_class_attendances()->orderBy('attendance_date', 'desc')->orderBy('candidate_name', 'asc')->get() as $tc_attendance)
+							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
+								<td class="py-3 px-4">{{ Carbon\Carbon::parse($tc_attendance->attendance_date)->format('l, d M Y') }}</td>
+								<td class="py-3 px-4">{{ Carbon\Carbon::parse($tc_attendance->start_time)->format('H:i') }}-{{ Carbon\Carbon::parse($tc_attendance->end_time)->format('H:i') }} GMT+7</td>
+								<td class="py-3 px-4">{{ $tc_attendance->candidate_name }}</td>
+								<td class="py-3 px-4">{{ $tc_attendance->attendance_detail }}</td>
+							</tr>
+						@empty
+							<tr><td class="p-5 bg-white font-semibold text-center" colspan="5">- No trial class attendance data yet -</td></tr>
+						@endforelse
+					</tbody>
+				</table>
 			</div>
 		@endif
 

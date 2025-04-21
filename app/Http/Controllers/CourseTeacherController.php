@@ -32,14 +32,14 @@ class CourseTeacherController extends Controller {
 	public function assign(Request $request, $teacher_id){
 		$request->validate([
 			'course_name' => 'required',
-			'rate' => 'required|numeric|min:0'
+			// 'rate' => 'required|numeric|min:0'
 		]);
 
 		$selectedCourse = Course::findOrFail($request->course_name);
 		CourseTeacher::create([
 			"user_id" => $teacher_id,
 			"course_id" => $selectedCourse->id,
-			'rate' => $request->rate
+			// 'rate' => $request->rate
 		]);
 
 		return redirect(route("admin.teacher.show", $teacher_id))->with("success", "Successfully assigned the teacher to the course!");
@@ -91,20 +91,20 @@ class CourseTeacherController extends Controller {
 		return redirect(route('admin.course.show', $course->id))->with('success', 'Successfully assigned the teachers into the course!');
 	}
 
-	public function update(Request $request, $course_teacher_id){
-		$request->validate([
-			'course_name' => 'required',
-			'rate' => 'required|numeric|min:0'
-		]);
+	// public function update(Request $request, $course_teacher_id){
+	// 	$request->validate([
+	// 		'course_name' => 'required',
+	// 		'rate' => 'required|numeric|min:0'
+	// 	]);
 
-		$newCourse = Course::findOrFail($request->course_name);
-		CourseTeacher::findOrFail($course_teacher_id)->update([
-			'course_id' => $newCourse->id,
-			'rate' => $request->rate,
-		]);
+	// 	$newCourse = Course::findOrFail($request->course_name);
+	// 	CourseTeacher::findOrFail($course_teacher_id)->update([
+	// 		'course_id' => $newCourse->id,
+	// 		'rate' => $request->rate,
+	// 	]);
 
-		return back()->with('success', 'Successfully edited the course teacher information!');
-	}
+	// 	return back()->with('success', 'Successfully edited the course teacher information!');
+	// }
 
 	// Remove the course from teacher's assigned course in the database
 	public function unassign($teacher_id, $course_id) {

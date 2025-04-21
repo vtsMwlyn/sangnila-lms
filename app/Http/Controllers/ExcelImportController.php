@@ -64,8 +64,6 @@ class ExcelImportController extends Controller
 		}
 
 		catch (Exception $e){
-			// throw $e;
-
 			DB::rollback();
 
 			return back()->with('danger', "Data in your file is in invalid format or not fully filled. Please recheck your data, revise, make sure it fullfil the requirement, and then try to upload again.");

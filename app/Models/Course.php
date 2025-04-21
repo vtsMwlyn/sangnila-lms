@@ -73,6 +73,10 @@ class Course extends Model {
 	public function trial_class_resources(){
 		return $this->hasMany(TrialClassResource::class);
 	}
+
+	public function trial_class_attendances(){
+		return $this->hasMany(TrialClassAttendance::class);
+	}
 }
 
 

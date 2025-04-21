@@ -23,4 +23,20 @@ class StudentAttendance extends Model
 	public function attendance(){
 		return $this->belongsTo(Attendance::class);
 	}
+
+	public function scopeFilter($query, array $filters){
+		$query->when($filters["student"] ?? false, function($query, $student){
+			return $query->whereHas("student", function($query) use ($student){
+				return $query->where("full_name", "like", "%" . $student . "%");
+			});
+		});
+
+		$query->when($filters["course"] ?? false, function($query, $course){
+			return $query->whereHas('attendance', function($query) use ($course){
+				return $query->whereHas("course", function($query) use ($course){
+					return $query->where("course_name", "like", "%" . $course . "%");
+				});
+			});
+		});
+	}
 }

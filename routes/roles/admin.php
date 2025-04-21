@@ -165,17 +165,6 @@ Route::prefix('/admin')
 				Route::get("/import-excel", [ExcelImportController::class, "import_excel_student_index"])->name("import-excel");
 				Route::post("/import-excel", [ExcelImportController::class, "import_excel_student_store"])->name("import-excel.store");
 
-				// Input attendances
-				Route::get('/attendance/{student_id}/attendance-input', [AttendanceController::class, 'admin_input'])->name('input-attendance');
-				Route::post('/attendance/{student_id}/attendance-input', [AttendanceController::class, 'admin_store'])->name('store-attendance');
-
-				// Edit attendances
-				Route::get('/attendance/{student_attendance_id}/edit', [AttendanceController::class, 'admin_edit_student_attendance'])->name('edit-student-attendance');
-				Route::post('/attendance/{student_attendance_id}/edit', [AttendanceController::class, 'admin_update_student_attendance'])->name('update-student-attendance');
-
-				// Delete attendances
-				Route::post('/attendance/{student_attendance_id}/delete', [AttendanceController::class, 'admin_destroy_student_attendance'])->name('destroy-student-attendance');
-
 				// Edit assessment information
 				Route::get('/assessment/{assessment_id}/edit', [AssessmentController::class, 'admin_edit'])->name('edit.assessment');
 				Route::post('/assessment/{assessment_id}/edit', [AssessmentController::class, 'admin_update'])->name('update.assessment');
@@ -220,6 +209,25 @@ Route::prefix('/admin')
 			}
 		);
 
+		// Manage attendances
+		Route::prefix('/attendances')->name('attendance.')->group(function(){
+			Route::get('/', [AttendanceController::class, 'admin_index'])->name('index');
+
+			// Lecturer attendance
+			Route::delete('/teacher/{self_attendance_id}/delete', [AttendanceController::class, 'admin_destroy_lecturer_attendance'])->name('destroy');
+
+			// Student attendance
+			Route::get('/student/{student_id}/attendance-input', [AttendanceController::class, 'admin_input'])->name('input-student-attendance');
+			Route::post('/student/{student_id}/attendance-input', [AttendanceController::class, 'admin_store'])->name('store-student-attendance');
+
+			Route::get('/student/{student_attendance_id}/edit', [AttendanceController::class, 'admin_edit_student_attendance'])->name('edit-student-attendance');
+			Route::post('/student/{student_attendance_id}/edit', [AttendanceController::class, 'admin_update_student_attendance'])->name('update-student-attendance');
+
+			Route::delete('/student/{student_attendance_id}/delete', [AttendanceController::class, 'admin_destroy_student_attendance'])->name('destroy-student-attendance');
+
+			// Trial class attendance
+		});
+
 		// Manage announcement
 		Route::prefix("/announcement")->name("announcement.")->group(function(){
 			Route::get("/", [AnnouncementController::class, "index"])->name("index");
@@ -233,12 +241,6 @@ Route::prefix('/admin')
 			Route::post("/{announcement_id}/destroy", [AnnouncementController::class, "destroy"])->name("destroy");
 
 			Route::get("/{announcement_id}", [AnnouncementController::class, "all_view_announcement"])->name("view-announcement")->whereNumber("announcement_id");
-		});
-
-		// View lecturer's attendance
-		Route::prefix('/lecturer-attendance')->name('lecturer-attendance.')->group(function(){
-			Route::get('/', [AttendanceController::class, 'admin_index_lecturer_attendance'])->name('index');
-			Route::delete('/{self_attendance_id}/delete', [AttendanceController::class, 'admin_destroy_lecturer_attendance'])->name('destroy');
 		});
 	}
 );

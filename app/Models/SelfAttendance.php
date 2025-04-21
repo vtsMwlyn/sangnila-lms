@@ -20,9 +20,15 @@ class SelfAttendance extends Model
 	}
 
 	public function scopeFilter($query, array $filters){
-		$query->when($filters["search"] ?? false, function($query, $search){
-			return $query->whereHas("user", function($query) use ($search){
-				return $query->where('role_id', 2)->where("full_name", "like", "%" . $search . "%");
+		$query->when($filters["teacher"] ?? false, function($query, $teacher){
+			return $query->whereHas("user", function($query) use ($teacher){
+				return $query->where('role_id', 2)->where("full_name", "like", "%" . $teacher . "%");
+			});
+		});
+
+		$query->when($filters["course"] ?? false, function($query, $course){
+			return $query->whereHas("course", function($query) use ($course){
+				return $query->where("course_name", "like", "%" . $course . "%");
 			});
 		});
 	}

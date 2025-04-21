@@ -55,6 +55,14 @@
 				</div>
 			</div>
 
+			<div class="mt-3">
+				<label class="mb-1">Biography</label>
+				<div class="bg-white p-5 border-2 @error("biography") border-red @else border-slate-400 @endif rounded-xl">
+					<input type="hidden" id="biography" name="biography">
+					<trix-editor class="overflow-y-auto" style="height: 300px;" input="biography">{!! old("biography", $teacher->details->biography) !!}</trix-editor>
+				</div>
+			</div>
+
 			<div class="flex items-stretch justify-end mt-8 mb-3 gap-3">
 				<x-cancel-button class="w-full md:w-40 xl:w-1/6">
 					Cancel

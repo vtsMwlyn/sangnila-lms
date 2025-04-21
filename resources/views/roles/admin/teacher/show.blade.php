@@ -22,10 +22,10 @@
 					</x-select>
 				</div>
 
-				<div class="flex flex-col w-full">
+				{{-- <div class="flex flex-col w-full">
 					<x-label for="rate">Rate<span class="text-red">*</span></x-label>
 					<x-input type="number" name="rate" id="rate" class="w-full"/>
-				</div>
+				</div> --}}
 
 				<div class="flex gap-3 w-full justify-center">
 					<x-button type="submit" class=" w-1/6 mt-5">
@@ -42,7 +42,7 @@
 	</x-popup>
 
 	{{-- Edit assign course teacher info --}}
-	<x-popup popup_title="Edit Teacher Course-Assign Info" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-assign-teacher-popup">
+	{{-- <x-popup popup_title="Edit Teacher Course-Assign Info" class="w-3/5 flex flex-col items-stretch justify-center overflow-y-auto" id="edit-assign-teacher-popup">
 		<form method="post" class="w-full flex flex-col mt-3">
 			@csrf
 			<div class="flex flex-col gap-3 w-full">
@@ -64,12 +64,11 @@
 				</div>
 			</div>
 
-			{{-- Helper --}}
 			<input type="hidden" name="h-last-popup" class="h-last-popup">
 			<input type="hidden" name="h-route" class="h-route">
 			<input type="hidden" name="h-course-teacher" class="h-course-teacher">
 		</form>
-	</x-popup>
+	</x-popup> --}}
 @endsection
 
 @section("content")
@@ -111,10 +110,16 @@
 					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ $teacher->details->date_of_birth ? Carbon\Carbon::parse($teacher->details->date_of_birth)->format('d F Y') : 'N/A' }}</div>
 				</div>
 			</div>
+
+			<div class="w-full flex flex-col" id="more_details" style="display: none;">
+				<p>Biography</p>
+				<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{!! $teacher->details->biography ? nl2br($teacher->details->biography) : 'N/A' !!}</div>
+			</div>
 		</div>
 
-		<div class="my-4 w-full flex justify-end">
-			<x-anchor-button  href="{{ route('admin.teacher.edit', $teacher->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
+		<div class="my-4 w-full flex justify-end gap-3">
+			<x-button type="button" id="show_more_less_button"><i class="bi bi-eye"></i> View Biography</x-button>
+			<x-anchor-button href="{{ route('admin.teacher.edit', $teacher->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
 		</div>
 
 		{{-- Courses and Students List --}}
@@ -137,12 +142,12 @@
 				@php
 					$ct = App\Models\CourseTeacher::where('user_id', $teacher->id)->where('course_id', $course->id)->first();
 				@endphp
-				<div class="flex gap-2 items-start">
+				<div class="flex gap-3 items-start">
 					<div class="flex flex-col">
 						<a class="text-blue-950 font-bold text-xl hover:text-cyan-500" href="{{ route('admin.course.show', $course->id) }}">{{ $course->course_name }} - {{ ucwords($course->level) }}</a>
-						<div>Rate: Rp {{ number_format($ct->rate, 2, ',', '.') }}/session</div>
+						<div>Price: Rp {{ number_format($ct->price, 2, ',', '.') }}/period</div>
 					</div>
-					<x-button class="edit-assign-teacher-btn ml-4" data-route="{{ route('admin.teacher.assign.update', $ct->id) }}" data-course_teacher="{{ $ct }}"><i class="bi bi-pencil-square"></i> Edit</x-button>
+					{{-- <x-button class="edit-assign-teacher-btn ml-4" data-route="{{ route('admin.teacher.assign.update', $ct->id) }}" data-course_teacher="{{ $ct }}"><i class="bi bi-pencil-square"></i> Edit</x-button> --}}
 					<button type="button" data-route="{{ route('admin.teacher.unassign.destroy', ['teacher_id' => $teacher->id, 'course_id' => $course->id]) }}" data-unassign_course_name="{{ $course->course_name }}" class="unassign-teacher-btn text-white bg-red flex items-center justify-center px-4 py-2 rounded-xl hover:bg-slate-800 hover:scale-105 active:bg-slate-900 focus:scale-95 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 font-bold" style="">
 						Unassign
 					</button>
@@ -260,6 +265,17 @@
 		}
 
 		$(document).ready(() => {
+			$('#show_more_less_button').click(() => {
+				$('#more_details').slideToggle(function(){
+					if($(this).is(":visible")){
+						$('#show_more_less_button').html('<i class="bi bi-eye-slash"></i> Hide Biography');
+					}
+					else {
+						$('#show_more_less_button').html('<i class="bi bi-eye"></i> View Biography');
+					}
+				});
+			});
+
 			// Unassign teacher
 			$('.unassign-teacher-btn').on('click', function() {
 				// Retrieve data and set the data to the popup
@@ -274,23 +290,24 @@
 				initializeAssignCourseTeacherPopup($(this).data('route'), 'assign-teacher-popup');
 			});
 
-			$(".edit-assign-teacher-btn").on('click', function() {
-				initializeEditCourseTeacherPopup($(this).data('route'), 'edit-assign-teacher-popup', $(this).data('course_teacher'));
-			});
+			// $(".edit-assign-teacher-btn").on('click', function() {
+			// 	initializeEditCourseTeacherPopup($(this).data('route'), 'edit-assign-teacher-popup', $(this).data('course_teacher'));
+			// });
 
 			// Redisplay popup and fill with prev data (for invalidated data)
 			@if ($errors->any())
 				// Retrieve and re-save saved data
 				const old_popup = @json(old('h-last-popup'));
 
-				if(old_popup == "edit-assign-teacher-popup"){
-					const old_route = @json(old('h-route'));
-					const old_popup = @json(old('h-last-popup'));
-					const old_course_teacher = @json(old('h-course-teacher'));
+				// if(old_popup == "edit-assign-teacher-popup"){
+				// 	const old_route = @json(old('h-route'));
+				// 	const old_popup = @json(old('h-last-popup'));
+				// 	const old_course_teacher = @json(old('h-course-teacher'));
 
-					initializeEditCourseTeacherPopup(old_route, old_popup, old_course_teacher);
-				}
-				else if(old_popup == "assign-teacher-popup"){
+				// 	initializeEditCourseTeacherPopup(old_route, old_popup, old_course_teacher);
+				// }
+				// else
+				if(old_popup == "assign-teacher-popup"){
 					const old_route = @json(old('h-route'));
 					const old_popup = @json(old('h-last-popup'));
 

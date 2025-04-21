@@ -56,6 +56,7 @@ class TeacherController extends Controller {
 			"phone_number" => "nullable",
 			"city_of_birth" => "nullable|min:3",
 			"date_of_birth" => "nullable",
+			'biography' => 'nullable'
 		];
 
 		$validator = Validator::make($request->all(), $validationRule);
@@ -71,6 +72,8 @@ class TeacherController extends Controller {
 
 			$teacher->update(["full_name" => $dataToUpdate["full_name"]]);
 			unset($dataToUpdate["full_name"]);
+			$dataToUpdate['biography'] = e($dataToUpdate['biography']);
+
 			UserDetail::where("user_id", $teacher->id)->update($dataToUpdate);
 
 			DB::commit();

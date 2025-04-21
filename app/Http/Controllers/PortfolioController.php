@@ -27,7 +27,7 @@ class PortfolioController extends Controller
         $course = Course::findOrFail($course_id);
 
         return view('roles.head-of-lecturer.portfolio.show', [
-            'portfolios' => Portfolio::filter(request(['student', 'teacher']))->where('course_id', $course->id)->orderBy('created_at', 'desc')->paginate(30),
+            'portfolios' => Portfolio::filter(request(['student', 'teacher']))->where('course_id', $course->id)->orderByRaw('CASE WHEN is_highlighted = 1 THEN 0 ELSE 1 END')->orderBy('created_at', 'desc')->paginate(30),
             'course' => $course
         ]);
     }
@@ -217,5 +217,17 @@ class PortfolioController extends Controller
 		}
 
 		return back()->withQuery(['content' => request('content')])->with('success', 'Successfully uploaded the portfolio files!');
+	}
+
+	public function head_of_lecturer_highlight($portfolio_id){
+		Portfolio::find($portfolio_id)->update(['is_highlighted' => 1]);
+
+		return back()->with('success', 'Successfully highlighted the portfolio, it is now will appear publicly!');
+	}
+
+	public function head_of_lecturer_unhighlight($portfolio_id){
+		Portfolio::find($portfolio_id)->update(['is_highlighted' => 0]);
+
+		return back()->with('success', 'Successfully unhighlighted the portfolio, it is now will be hidden from public.');
 	}
 }

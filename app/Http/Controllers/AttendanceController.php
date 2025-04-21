@@ -16,6 +16,7 @@ use App\Models\CourseStudent;
 use App\Models\SelfAttendance;
 use App\Models\ImportedStudent;
 use App\Models\StudentAttendance;
+use App\Models\TrialClassAttendance;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Google\Service\Classroom\Student;
@@ -301,6 +302,51 @@ class AttendanceController extends Controller {
 		return redirect(route("teacher.attendance.show", $course->id))->with("success", "Attendance uploaded successfully!");
 	}
 
+	// Upload trial class attendance
+	public function teacher_create_trial_class_attendance($course_id){
+		return view('roles.teacher.attendance.upload-trial-class', [
+			'course' => Course::findOrFail($course_id)
+		]);
+	}
+
+	// Store trial class attendance
+	public function teacher_store_trial_class_attendance(Request $request, $course_id){
+		$course = Course::findOrFail($course_id);
+
+		$request->validate([
+			'attendance_date.*' => 'required',
+			'candidate_name.*' => 'required',
+			'start_time.*' => 'required',
+			'end_time.*' => 'required',
+			'attendance_detail.*' => 'required',
+		]);
+
+		try {
+			DB::beginTransaction();
+
+			foreach($request->candidate_name as $i => $candidate_name){
+				TrialClassAttendance::create([
+					'course_id' => $course->id,
+					'uploader_id' => Auth::user()->id,
+					'attendance_date' => $request->attendance_date[$i],
+					'candidate_name' => $candidate_name,
+					'start_time' => $request->start_time[$i],
+					'end_time' => $request->end_time[$i],
+					'attendance_detail' => $request->attendance_detail[$i],
+				]);
+			}
+
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+
+			return back()->with('danger', 'System failed to store the trial class attendances data. Please contact our IT team to fix this issue. Error detail: ' . $e->getMessage());
+		}
+
+		return redirect(route('teacher.attendance.show', ['course_id' => $course_id, 'content' => 'trial class']))->with('success', 'Successfully added the trial class attendance data!');
+	}
+
 	// ===== STUDENT ====== //
 	// Showing all enrolled course to pick before continue
 	public function student_index(){
@@ -339,6 +385,32 @@ class AttendanceController extends Controller {
 
 
 	// ===== ADMIN ===== //
+	public function admin_index(){
+		$all_lecturer_self_attendances = SelfAttendance::filter(request(['teacher', 'course']))->whereHas('user', function($query){
+			return $query->where('role_id', 2);
+		})->orderBy('self_attendance_date', 'desc')->orderBy('user_id')->paginate(30)->appends(request()->query());
+
+		$all_student_self_attendances = SelfAttendance::filter(request(['teacher', 'course']))->whereHas('user', function($query){
+			return $query->where('role_id', 3);
+		})->orderBy('self_attendance_date')->orderBy('user_id')->get();
+
+		$all_student_attendances = StudentAttendance::filter(request(['course', 'student']))->select('student_attendances.*')
+			->join('attendances', 'student_attendances.attendance_id', '=', 'attendances.id')
+			->orderBy('attendances.attendance_date', 'desc')
+			->orderBy('student_attendances.start_time', 'desc')
+			->with('attendance')
+			->paginate(30)->appends(request()->query());
+
+		$all_trial_class_attendances = TrialClassAttendance::filter(request(['course', 'candidate']))->orderBy('attendance_date', 'desc')->paginate(30)->appends(request()->query());
+
+		return view('roles.admin.attendance.index', [
+			'all_lecturer_self_attendances' => $all_lecturer_self_attendances,
+			'all_student_self_attendances' => $all_student_self_attendances,
+			'all_student_attendances' => $all_student_attendances,
+			'all_trial_class_attendances' => $all_trial_class_attendances,
+		]);
+	}
+
 	// Showing attendance data of a student in all enrolled course
 	public function admin_show($student_id, $course_id){
 		// Eager load the 'attendance' relationship and order by 'attendance_date'
@@ -372,20 +444,20 @@ class AttendanceController extends Controller {
 	}
 
 	// View all lecturer attendances
-	public function admin_index_lecturer_attendance(){
-		$all_lecturer_attendances = SelfAttendance::filter(request(['search']))->whereHas('user', function($query){
-			return $query->where('role_id', 2)->orWhere('role_id', 1);
-		})->orderBy('self_attendance_date', 'desc')->orderBy('user_id')->get();
+	// public function admin_index_lecturer_attendance(){
+	// 	$all_lecturer_attendances = SelfAttendance::filter(request(['search']))->whereHas('user', function($query){
+	// 		return $query->where('role_id', 2)->orWhere('role_id', 1);
+	// 	})->orderBy('self_attendance_date', 'desc')->orderBy('user_id')->get();
 
-		$all_student_attendances = SelfAttendance::filter(request(['search']))->whereHas('user', function($query){
-			return $query->where('role_id', 3);
-		})->orderBy('self_attendance_date')->orderBy('user_id')->get();
+	// 	$all_student_attendances = SelfAttendance::filter(request(['search']))->whereHas('user', function($query){
+	// 		return $query->where('role_id', 3);
+	// 	})->orderBy('self_attendance_date')->orderBy('user_id')->get();
 
-		return view('roles.admin.teacher.attendance-index', [
-			'all_lecturer_attendances' => $all_lecturer_attendances,
-			'all_student_attendances' => $all_student_attendances
-		]);
-	}
+	// 	return view('roles.admin.teacher.attendance-index', [
+	// 		'all_lecturer_attendances' => $all_lecturer_attendances,
+	// 		'all_student_attendances' => $all_student_attendances
+	// 	]);
+	// }
 
 	// Delete a lecturer attendance
 	public function admin_destroy_lecturer_attendance($self_attendance_id){
@@ -487,7 +559,7 @@ class AttendanceController extends Controller {
 			DB::commit();
 		}
 		catch(Exception $e){
-			throw $e;
+			return back()->with("danger", "System failed to import old student data, please report the error to our IT team. Error detail: " . $e->getMessage());
 
 			DB::rollback();
 		}
@@ -496,7 +568,7 @@ class AttendanceController extends Controller {
 	}
 
 	public function admin_edit_student_attendance($student_attendance_id){
-		return view('roles.admin.student.edit-attendance', [
+		return view('roles.admin.attendance.student-edit', [
 			'student_attendance' => StudentAttendance::findOrFail($student_attendance_id)
 		]);
 	}
@@ -535,7 +607,14 @@ class AttendanceController extends Controller {
 		$attendance = $studentAttendance->attendance;
 		$student = $studentAttendance->student;
 		$course = $attendance->course;
-		$teacher = CourseStudent::where('course_id', $course->id)->where('student_id', $student->id)->first()->teacher;
+		$cs = CourseStudent::where('course_id', $course->id)->where('student_id', $student->id)->first();
+
+		$teacher = null;
+
+		if($cs){
+			$teacher = $cs->teacher;
+		}
+		
 
 		if($attendance->student_attendances->count() == 1){
 			$studentAttendance->delete();
@@ -545,30 +624,32 @@ class AttendanceController extends Controller {
 			$studentAttendance->delete();
 		}
 
-		// Auto update progress student
-		$activities = Activity::whereHas('topic', function($query) use ($course, $teacher){
-			return $query->where('course_id', $course->id)->where('user_id', $teacher->id);
-		})->orderBy('session', 'asc')->get();
+		if($teacher){
+			// Auto update progress student
+			$activities = Activity::whereHas('topic', function($query) use ($course, $teacher){
+				return $query->where('course_id', $course->id)->where('user_id', $teacher->id);
+			})->orderBy('session', 'asc')->get();
 
-		$student_attendances = StudentAttendance::where('student_id', $student->id)->whereHas('attendance', function($query) use ($course){
-			return $query->where('course_id', $course->id);
-		})->get();
+			$student_attendances = StudentAttendance::where('student_id', $student->id)->whereHas('attendance', function($query) use ($course){
+				return $query->where('course_id', $course->id);
+			})->get();
 
-		$session_counter = 1;
+			$session_counter = 1;
 
-		foreach($activities as $index => $activity){
-			if($activity->session != $session_counter){
-				$session_counter++;
+			foreach($activities as $index => $activity){
+				if($activity->session != $session_counter){
+					$session_counter++;
+				}
+
+				Progress::updateOrCreate([
+					"student_id" => $student->id,
+					"course_id" => $course->id,
+					"activity_id" => $activity->id,
+				],
+				[
+					"status" => $session_counter <= $student_attendances->count() + 1 || $index == 0? 'unlocked' : 'locked',
+				]);
 			}
-
-			Progress::updateOrCreate([
-				"student_id" => $student->id,
-				"course_id" => $course->id,
-				"activity_id" => $activity->id,
-			],
-			[
-				"status" => $session_counter <= $student_attendances->count() + 1 || $index == 0? 'unlocked' : 'locked',
-			]);
 		}
 
 		return back()->with('warning', 'Successfully removed the attendance data!');

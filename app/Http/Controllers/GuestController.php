@@ -7,7 +7,9 @@ use App\Models\Activity;
 use Illuminate\Http\Request;
 use App\Models\CurriculumTopic;
 use App\Models\CurriculumActivity;
+use App\Models\Portfolio;
 use App\Models\TrialClassResource;
+use App\Models\User;
 
 class GuestController extends Controller {
 	// ===== GUEST ===== //
@@ -41,7 +43,7 @@ class GuestController extends Controller {
 
 		return view('roles.guest.show', [
 			'course' => $course,
-			'topics' => CurriculumTopic::where("course_id", $course->id)->get()
+			'topics' => CurriculumTopic::where("course_id", $course->id)->get(),
 		]);
 	}
 
@@ -83,6 +85,12 @@ class GuestController extends Controller {
 		return view('roles.guest.preview', [
 			'trial_class_resource' => $trial_class_resource,
 			"preview_link" => $preview_link
+		]);
+	}
+
+	public function lecturer_biography($teacher_id){
+		return view('roles.guest.teacher-biography', [
+			'teacher' => User::findOrFail($teacher_id)
 		]);
 	}
 }

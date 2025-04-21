@@ -21,5 +21,8 @@ Route::prefix('/head-of-lecturer')->name('head-of-lecturer.')->middleware('auth'
         Route::get('/', [PortfolioController::class, 'head_of_lecturer_index'])->name('index');
         Route::get('/{course_id}', [PortfolioController::class, 'head_of_lecturer_show'])->name('show')->whereNumber('course_id');
         Route::delete('/{portfolio_id}/delete', [PortfolioController::class, 'head_of_lecturer_destroy'])->name('destroy')->whereNumber('portfolio_id');
+
+        Route::post('/{portfolio_id}/highlight', [PortfolioController::class, 'head_of_lecturer_highlight'])->name('highlight')->whereNumber('portfolio_id');
+        Route::post('/{portfolio_id}/unhighlight', [PortfolioController::class, 'head_of_lecturer_unhighlight'])->name('unhighlight')->whereNumber('portfolio_id');
     });
 });

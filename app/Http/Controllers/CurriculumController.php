@@ -479,8 +479,8 @@ class CurriculumController extends Controller
 		}
 		catch(Exception $e){
 			DB::rollback();
-			throw $e;
-			// return back()->with("danger", "System failed to save selected syllabus topic and activities to your course's topics and activities. Please report this error to our IT team. Error detail: " . $e->getMessage());
+			
+			return back()->with("danger", "System failed to save selected syllabus topic and activities to your course's topics and activities. Please report this error to our IT team. Error detail: " . $e->getMessage());
 		}
 
 		return redirect(route('teacher.course.show', ['course_id' => $course_id, 'content' => 'topics and activities']))->with("success", "Successfully picked topics and activities from the curriculum");
