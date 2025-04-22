@@ -470,7 +470,7 @@ class CourseStudentController extends Controller {
 		$cs = CourseStudent::where('student_id', $student->id)->where('course_id', $course->id)->first();
 		$teacher = $cs->teacher;
 		
-		if((!$assessment || !$assessment->certificate_accessible || $cs->learning_status != 'complete') && Auth::user()->role->id != 1){
+		if((!$assessment || !$assessment->certificate_accessible || $cs->learning_status != 'complete') && !in_array(Auth::user()->role->id, [1, 6])){
 			abort(403);
 		}
 

@@ -19,7 +19,7 @@ use App\Models\StudentAttendance;
 use App\Models\TrialClassAttendance;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Google\Service\Classroom\Student;
+use App\Models\Student;
 use Google\Service\CloudTasks\Attempt;
 use Illuminate\Support\Facades\Validator;
 
@@ -394,12 +394,39 @@ class AttendanceController extends Controller {
 			return $query->where('role_id', 3);
 		})->orderBy('self_attendance_date')->orderBy('user_id')->get();
 
-		$all_student_attendances = StudentAttendance::filter(request(['course', 'student']))->select('student_attendances.*')
+		$all_student_attendances = StudentAttendance::filter(request(['course', 'student']))
+			->select('student_attendances.*')
 			->join('attendances', 'student_attendances.attendance_id', '=', 'attendances.id')
 			->orderBy('attendances.attendance_date', 'desc')
 			->orderBy('student_attendances.start_time', 'desc')
-			->with('attendance')
-			->paginate(30)->appends(request()->query());
+			->with(['attendance', 'student']) // make sure student is loaded
+			->paginate(30)
+			->appends(request()->query());
+
+		$all_student_attendances_asc = StudentAttendance::filter(request(['course', 'student']))
+			->select('student_attendances.*')
+			->join('attendances', 'student_attendances.attendance_id', '=', 'attendances.id')
+			->orderBy('attendances.attendance_date', 'asc')
+			->orderBy('student_attendances.start_time', 'asc')
+			->with(['attendance', 'student'])
+			->get();
+
+		$studentCourseCounts = [];
+		$sessionCounter = [];
+
+		foreach ($all_student_attendances_asc as $sa) {
+			$studentId = strval($sa->student_id);
+			$courseId = strval($sa->attendance->course_id);
+
+			// Initialize if not set, then increment
+			if (!isset($studentCourseCounts[$studentId][$courseId])) {
+				$studentCourseCounts[$studentId][$courseId] = 0;
+			}
+
+			$studentCourseCounts[$studentId][$courseId]++;
+			$sessionCounter[strval($sa->id)] = $studentCourseCounts[$studentId][$courseId];
+		}
+
 
 		$all_trial_class_attendances = TrialClassAttendance::filter(request(['course', 'candidate']))->orderBy('attendance_date', 'desc')->paginate(30)->appends(request()->query());
 
@@ -408,6 +435,7 @@ class AttendanceController extends Controller {
 			'all_student_self_attendances' => $all_student_self_attendances,
 			'all_student_attendances' => $all_student_attendances,
 			'all_trial_class_attendances' => $all_trial_class_attendances,
+			'session_counter' => $sessionCounter
 		]);
 	}
 
@@ -653,5 +681,33 @@ class AttendanceController extends Controller {
 		}
 
 		return back()->with('warning', 'Successfully removed the attendance data!');
+	}
+
+	public function admin_edit_trial_class_attendance($trial_class_attendance_id){
+		return view('roles.admin.attendance.trial-class-edit', [
+			'trial_class_attendance' => TrialClassAttendance::findOrFail($trial_class_attendance_id),
+		]);
+	}
+
+	public function admin_update_trial_class_attendance(Request $request, $trial_class_attendance_id){
+		$validatedData = $request->validate([
+			'attendance_date' => 'required',
+			'candidate_name' => 'required',
+			'start_time' => 'required',
+			'end_time' => 'required',
+			'attendance_detail' => 'required',
+		]);
+
+		$validatedData['attendance_detail'] = e($validatedData['attendance_detail']);
+
+		TrialClassAttendance::findOrFail($trial_class_attendance_id)->update($validatedData);
+
+		return redirect(route('admin.attendance.index', ['content' => 'trial class']))->with('success', 'Successfully edited the trial class attendance data!');
+	}
+
+	public function admin_destroy_trial_class_attendance($trial_class_attendance_id){
+		TrialClassAttendance::findOrFail($trial_class_attendance_id)->delete();
+
+		return back()->with('warning', 'Successfully deleted the trial class attendance data!');
 	}
 }

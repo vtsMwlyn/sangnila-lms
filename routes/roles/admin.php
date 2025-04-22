@@ -222,10 +222,12 @@ Route::prefix('/admin')
 
 			Route::get('/student/{student_attendance_id}/edit', [AttendanceController::class, 'admin_edit_student_attendance'])->name('edit-student-attendance');
 			Route::post('/student/{student_attendance_id}/edit', [AttendanceController::class, 'admin_update_student_attendance'])->name('update-student-attendance');
-
 			Route::delete('/student/{student_attendance_id}/delete', [AttendanceController::class, 'admin_destroy_student_attendance'])->name('destroy-student-attendance');
 
 			// Trial class attendance
+			Route::get('/trial-class/{trial_class_attendance_id}/edit', [AttendanceController::class, 'admin_edit_trial_class_attendance'])->name('edit-trial-class-attendance');
+			Route::post('/trial-class/{trial_class_attendance_id}/edit', [AttendanceController::class, 'admin_update_trial_class_attendance'])->name('update-trial-class-attendance');
+			Route::delete('/trial-class/{trial_class_attendance_id}/delete', [AttendanceController::class, 'admin_destroy_trial_class_attendance'])->name('destroy-trial-class-attendance');
 		});
 
 		// Manage announcement
