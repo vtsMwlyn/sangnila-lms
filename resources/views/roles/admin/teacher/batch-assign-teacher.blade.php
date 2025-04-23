@@ -27,7 +27,7 @@
 		@endphp
 
 		<h1>Select Teachers to Assign to Course <strong>{{ $course->course_name }} - {{ ucwords($course->level) }}</strong>:</h1>
-		<form action="{{ route('admin.course.batch-assign-teacher.store', $course->id) }}" method="post" class="flex flex-col py-6">
+		<form action="{{ route('admin.course.batch-assign-teacher.store', $course->id) }}" method="post" class="flex flex-col py-6" id="batch-assign-form">
 			@csrf
 
 			<div class="bg-white border rounded-2xl py-5 flex flex-col">
@@ -95,12 +95,12 @@
 				});
 			});
 
-			$("form").on("submit", function(e){
+			$("#batch-assign-form").on("submit", function(e){
 				e.preventDefault();
 
 				$('input[type="checkbox"]').each(function(){
 					if($(this).is(":checked")){
-						$("form").append($("<input>").attr({"type": "hidden", "name": "selected_teachers[]", "value": $(this).data("sid")}));
+						$("#batch-assign-form").append($("<input>").attr({"type": "hidden", "name": "selected_teachers[]", "value": $(this).data("sid")}));
 						n++;
 					}
 				});

@@ -74,7 +74,7 @@
 			<p class="text-red font-bold mt-2 error-messages"><i class="bi bi-exclamation-circle"></i> Please select at least one item.</p>
 		@enderror
 
-		<form action="{{ route('teacher.course.save-picked-course', $course->id) }}" method="POST">
+		<form action="{{ route('teacher.course.save-picked-course', $course->id) }}" method="POST" id="pick-curriculum-form">
 			@csrf
 			<div class="flex items-stretch gap-3 justify-end mt-10 mb-3">
 				<x-cancel-button class="w-full md:w-40 xl:w-1/6">
@@ -89,7 +89,7 @@
 
 	<script>
 		$(document).ready(() => {
-			$("form").on("submit", function(e){
+			$("#pick-curriculum-form").on("submit", function(e){
 				e.preventDefault();
 
 				checkbox_values = [];

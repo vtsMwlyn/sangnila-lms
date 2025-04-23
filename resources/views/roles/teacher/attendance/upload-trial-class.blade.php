@@ -19,7 +19,7 @@
 			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('teacher.attendance.trial-class.store', $course->id) }}" method="post">
+		<form action="{{ route('teacher.attendance.trial-class.store', $course->id) }}" method="post" id="store-trialclass-form">
 			@csrf
 
             <div class="flex gap-5">
@@ -230,7 +230,7 @@
                     alert('You need to input minimum 1 entry to proceed.');
                 }
                 else {
-                    $('form').submit();
+                    $('#store-trialclass-form').submit();
                 }
             });
         });

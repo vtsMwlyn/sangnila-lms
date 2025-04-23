@@ -12,6 +12,7 @@ use App\Models\StudentAttendance;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\LecturerInvoiceExport;
+use App\Models\TrialClassAttendance;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
@@ -107,7 +108,24 @@ class LecturerInvoiceReimburseController extends Controller
 
         // return $reimburses;
 
-        return Excel::download(new LecturerInvoiceExport($invoice, $student_attendances, $reimburses), 'lecturer_invoice_' . Auth::user()->full_name . '_' . '.xlsx');
+        $trial_class_attendances = TrialClassAttendance::where('uploader_id', Auth::user()->id)->whereBetween('attendance_date', [$last_26th, $last_25th])->orderBy('attendance_date', 'asc')->get()
+            ->groupBy(function ($item) {
+                return Carbon::parse($item->attendance_date)->format('m-y'); // Group by Year-Month first
+            })
+            ->sortKeys()
+            ->map(function ($groupedByMonth) {
+                return $groupedByMonth->groupBy(function ($item) {
+                    return $item->course->id; // Group by course name
+                })->map(function ($groupedByCourse) {
+                    return $groupedByCourse->groupBy(function ($item) {
+                        return Carbon::parse($item->attendance_date)->format('Y/m/d') . '-' . Carbon::parse($item->start_time)->format('H:i:s') . '-' . Carbon::parse($item->end_time)->format('H:i:s'); // Group by time range
+                    });
+                });
+            });
+
+        // return $trial_class_attendances;
+
+        return Excel::download(new LecturerInvoiceExport($invoice, $student_attendances, $reimburses, $trial_class_attendances), 'lecturer_invoice_' . Auth::user()->full_name . '_' . '.xlsx');
     }
 
     public function teacher_create_reimburse(){

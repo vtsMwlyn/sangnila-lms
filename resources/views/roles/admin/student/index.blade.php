@@ -8,10 +8,6 @@
 	<x-section-container>
 		<x-page-title class="text-center">{{ __("List of Active Students") }}</x-page-title>
 
-		{{-- Filter --}}
-		<form action="{{ route("admin.student.index") }}" id="filter-form">
-		</form>
-
 		<div class="flex items-center justify-between gap-5 mt-5 w-full">
 			<x-anchor-button class="w-56" href="{{ route('admin.student.import-excel') }}"><i class="bi bi-file-earmark-arrow-up"></i> Import From Excel</x-anchor-button>
 
@@ -49,8 +45,9 @@
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 				</thead>
 				<tbody>
-					@forelse ($students as $index1 => $student)
+					@forelse ($all_students_data as $index1 => $student_data)
 						@php
+							$student = $student_data['student'];
 							$courseStudents = $student->course_students;
 						@endphp
 
@@ -76,19 +73,19 @@
 										<div class="w-1/3">
 											<div class="w-full bg-gray-200 rounded-lg h-4 overflow-hidden relative">
 												<div class="absolute w-full h-full
-													@if((($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) && $current_attendances[$index1][$index2] != 0 && $cs->learning_status != 'complete') 
+													@if((($student_data['current_attendance'][$index2] + 1) % $student_data['max_attendance'][$index2] == 0 || $student_data['current_attendance'][$index2] >= $student_data['max_attendance'][$index2]) && $student_data['current_attendance'][$index2] != 0 && $cs->learning_status != 'complete') 
 														text-red-100
 													@else 
 														text-green-950
 													@endif flex justify-center items-center font-semibold">
-													{{ __($current_attendances[$index1][$index2] . "/" . $max_attendances[$index1][$index2]) }}
+													{{ __($student_data['current_attendance'][$index2] . "/" . $student_data['max_attendance'][$index2]) }}
 												</div>
 												<div class="h-full 
-													@if((($current_attendances[$index1][$index2] + 1) % $max_attendances[$index1][$index2] == 0 || $current_attendances[$index1][$index2] >= $max_attendances[$index1][$index2]) && $cs->learning_status != 'complete')
+													@if((($student_data['current_attendance'][$index2] + 1) % $student_data['max_attendance'][$index2] == 0 || $student_data['current_attendance'][$index2] >= $student_data['max_attendance'][$index2]) && $cs->learning_status != 'complete')
 														bg-red
 													@else 
 														bg-green-600
-													@endif" style="width: {{ $percentages[$index1][$index2] }}%;">
+													@endif" style="width: {{ $student_data['percentage'][$index2] }}%;">
 												</div>
 											</div>
 										</div>
@@ -156,6 +153,10 @@
 					@endforelse
 				</tbody>
 			</table>
+		</div>
+
+		<div class="mt-4">
+			{{ $all_students_data->links() }}
 		</div>
 	</x-section-container>
 

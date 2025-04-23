@@ -5,6 +5,7 @@
 @endsection
 
 @section('popup')
+    {{-- Lecturer attendance detail --}}
 	<x-popup popup_title="Lecturer Attendance Detail" class="w-1/2 flex flex-col items-stretch justify-center" id="lecturer-attendance-detail-popup">
 		<div class="overflow-y-auto" style="max-height: 600px;">
 			<h5 class="mt-4 text-blue font-semibold text-base">Check In Photo from Lecturer</h5>
@@ -19,6 +20,7 @@
 		</div>
 	</x-popup>
 
+    {{-- Student attendance detail --}}
     <x-popup popup_title="Student Attendance Detail" class="w-1/2 flex flex-col items-stretch justify-center" id="student-attendance-detail-popup">
 		<div class="overflow-y-auto" style="max-height: 600px;">
 			<h5 class="mt-4 text-blue font-semibold text-base">Activity Learned</h5>
@@ -29,6 +31,7 @@
 		</div>
 	</x-popup>
 
+    {{-- Delete lecturer attendance --}}
 	<x-confirmation method="delete" popup_title="Delete Lecturer Attendance" id="delete-lecturer-attendance-popup">
 		Are you sure want to <span class="font-bold text-red">delete</span> the lecturer attendance data <span class="font-bold remark"></span>?
 	</x-confirmation>
@@ -42,6 +45,26 @@
 	<x-confirmation method="delete" popup_title="Delete Trial Class Attendance" id="delete-trial-class-attendance-popup">
 		Are you sure want to <span class="font-bold text-red">delete</span> the trial class attendance data <span class="font-bold remark"></span>?
 	</x-confirmation>
+
+    {{-- Input student attendance --}}
+    <x-popup popup_title="Input Student Attendance" class="w-1/2 flex flex-col items-stretch justify-center" id="input-student-attendance-popup">
+		<form action="#" id="pick-student-form">
+            <div class="select2-container w-full flex flex-col mt-4">
+                <p>Please pick a student</p>
+                <x-select class="w-full mt-1 select-2">
+                    @foreach(App\Models\User::where('role_id', 3)->where('status', 'enabled')->orderBy('full_name')->get() as $student)
+                        <option value="{{ route('admin.attendance.input-student-attendance', $student->id) }}">{{ $student->full_name }}</option>
+                    @endforeach
+                </x-select>
+            </div>
+
+            <div class="flex gap-3 justify-center mt-6 mb-3">
+                <x-button class="w-full md:w-1/4">
+                    Continue
+                </x-button>
+            </div>
+		</form>
+	</x-popup>
 @endsection
 
 @section("content")
@@ -180,7 +203,11 @@
         @endif
 
         @if(request('content') == 'student')
-            <div class="w-full overflow-x-auto" style="max-height: 500px;">
+            <div class="mt-2">
+                <x-button type="button" id="input-attendance-btn"><i class="bi bi-database-add"></i> Input Attendances Data</x-button>
+            </div>
+
+            <div class="w-full overflow-x-auto mt-4" style="max-height: 500px;">
                 <table class="w-full">
                     <thead>
                         <th class="text-start py-3 px-4 border-b-2 border-slate-400">Date</th>
@@ -228,7 +255,7 @@
                             </tr>
                         @empty
                             <tr class="bg-white">
-                                <td class="py-3 px-4" colspan="6">- No data found -</td>
+                                <td class="py-3 px-4 text-center" colspan="6">- No data found -</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -272,7 +299,7 @@
                             </tr>
                         @empty
                             <tr class="bg-white">
-                                <td class="py-3 px-4" colspan="6">- No data found -</td>
+                                <td class="py-3 px-4 text-center" colspan="6">- No data found -</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -330,6 +357,20 @@
                 $('#delete-trial-class-attendance-popup').find('form').attr('action', $(this).data('route'));
                 $('#delete-trial-class-attendance-popup').find('.remark').text($(this).data('remark'));
 				$('#delete-trial-class-attendance-popup').parent().show();
+            });
+
+            $('#input-attendance-btn').on('click', function(){
+                $('#input-student-attendance-popup').parent().show();
+            });
+
+            $('#pick-student-form').on('submit', function (e) {
+                e.preventDefault(); // Stop the form from submitting normally
+
+                const selectedUrl = $(this).find('select').val(); // Get selected option's value
+
+                if (selectedUrl) {
+                    window.location.href = selectedUrl; // Redirect to the selected URL
+                }
             });
 		});
 	</script>

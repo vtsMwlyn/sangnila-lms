@@ -13,7 +13,7 @@
 				{{-- Curriculum Topic Title --}}
 				<div class="flex flex-col">
 					<label for="topic_title">Curriculum Topic Title</label>
-					<x-input id="topic_title" class="w-full mt-1" type="text" name="topic_title" style="border-width: 3px;" value="{{ old('topic_title') }}" placeholder="Curriculum topic title" autofocus />
+					<x-input id="topic_title" class="w-full mt-1" type="text" name="topic_title" style="border-width: 3px;" value="{{ old('topic_title', $curriculum_topic->title) }}" placeholder="Curriculum topic title" autofocus />
 				</div>
 
 				<div class="flex items-stretch gap-3 justify-center mt-10 mb-3">

@@ -19,7 +19,7 @@
 			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route("admin.course.curriculum.activity.store", [$course->id, $curriculum_topic->id]) }}" method="post" class="mt-3">
+		<form action="{{ route("admin.course.curriculum.activity.store", [$course->id, $curriculum_topic->id]) }}" method="post" class="mt-3" id="store-cactivity-form">
 			@csrf
 			<div class="flex w-full gap-4">
 				{{-- Activity Title --}}
@@ -84,13 +84,13 @@
 	</x-section-container>
 
 	<script>
-		$("form").on("submit", function(){
+		$("#store-cactivity-form").on("submit", function(){
 			$('input[type="checkbox"]').each(function(){
 				if($(this).is(":checked")){
-					$("form").append($("<input>").attr({"type": "hidden", "name": "learning_outcome[]", "value": "on"}));
+					$("#store-cactivity-form").append($("<input>").attr({"type": "hidden", "name": "learning_outcome[]", "value": "on"}));
 				}
 				else {
-					$("form").append($("<input>").attr({"type": "hidden", "name": "learning_outcome[]", "value": "off"}));
+					$("#store-cactivity-form").append($("<input>").attr({"type": "hidden", "name": "learning_outcome[]", "value": "off"}));
 				}
 			});
 

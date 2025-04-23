@@ -91,10 +91,10 @@
 			@enderror
 
 			<div class="flex items-stretch gap-3 justify-end mt-10 mb-3">
-				<x-cancel-button class="w-full md:w-1/4">
+				<x-cancel-button class="w-full md:w-40 xl:w-1/6">
 					Cancel
 				</x-cancel-button>
-				<x-button class=" w-full md:w-1/4">
+				<x-button class=" w-full md:w-40 xl:w-1/6">
 					{{ __('Submit') }}
 				</x-button>
 			</div>

@@ -498,7 +498,7 @@ class AttendanceController extends Controller {
 	public function admin_input($student_id){
 		$studentOnly = User::with('enrolled_courses.topics.activities')->findOrFail($student_id);
 
-		return view('roles.admin.student.input-attendance', [
+		return view('roles.admin.attendance.student-create', [
 			'student' => $studentOnly,
 			'allCoursesWithTopicsAndActivities' => $studentOnly->enrolled_courses,
 		]);
@@ -592,7 +592,7 @@ class AttendanceController extends Controller {
 			DB::rollback();
 		}
 
-		return redirect(route('admin.student.show', $student->id))->with('success', 'Successfully inputed new attendance data for the student!');
+		return redirect(route('admin.attendance.index', ['content' => 'student']))->with('success', 'Successfully inputed new attendance data for the student!');
 	}
 
 	public function admin_edit_student_attendance($student_attendance_id){
@@ -626,7 +626,7 @@ class AttendanceController extends Controller {
 
 		$sa->update($validatedData);
 
-		return redirect(route('admin.student.show', $sa->student->id))->with('success', 'The attendance data has been updated successfully!');
+		return redirect(route('admin.attendance.index', ['content' => 'student']))->with('success', 'The attendance data has been updated successfully!');
 	}
 
 	public function admin_destroy_student_attendance($student_attendance_id){

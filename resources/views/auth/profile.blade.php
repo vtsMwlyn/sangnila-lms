@@ -19,7 +19,7 @@
 		</div>
 
 		<h1 class="font-bold text-lg text-blue">My Profile Data</h1>
-		<form action="{{ route("profile.update") }}" method="post" class="flex flex-col md:flex-row gap-10 mt-4" enctype="multipart/form-data">
+		<form action="{{ route("profile.update") }}" method="post" class="flex flex-col md:flex-row gap-10 mt-4" enctype="multipart/form-data" id="profile-form">
 			@csrf
 			<div class="flex flex-col items-center relative">
 				<div class="relative w-40 h-40 rounded-full overflow-hidden shadow-lg">
@@ -147,7 +147,7 @@
 			}
 		});
 
-		$("form").on("submit", function (e) {
+		$("#profile-form").on("submit", function (e) {
 			if (cropper) {
 				e.preventDefault(); // Prevent immediate submission
 

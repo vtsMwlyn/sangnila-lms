@@ -16,8 +16,8 @@ class AdminAccountController extends Controller {
 	public function index() {
 		$admin_accounts = User::filter(request(['search']))->where("status", "enabled")->where("role_id", 1)->whereNot("id", Auth::user()->id)->orderBy('full_name')->get();
 		$teacher_accounts = User::filter(request(['search']))->where("status", "enabled")->where("role_id", 2)->orderBy('full_name')->get();
-		$student_accounts = User::filter(request(['search']))->where("status", "enabled")->where("role_id", 3)->orderBy('full_name')->get();
-		$disabled = User::filter(request(['search']))->where("status", "disabled")->orderBy('full_name')->get();
+		$student_accounts = User::filter(request(['search']))->where("status", "enabled")->where("role_id", 3)->orderBy('full_name')->paginate(30)->appends(request()->query());
+		$disabled = User::filter(request(['search']))->where("status", "disabled")->orderBy('full_name')->paginate(30)->appends(request()->query());
 
 		return view('roles.admin.account.index', [
 			'admin_accounts' => $admin_accounts,

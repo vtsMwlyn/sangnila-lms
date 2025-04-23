@@ -61,6 +61,11 @@
 			</div>
 		</div>
 
+		{{-- Cancel confirmation popup --}}
+		<x-confirmation popup_title="Cancel Confirmation" id="cancel-popup" type="cancel">
+			Are you sure want to <span class="font-bold text-red">cancel</span> this action? <strong>The changes you've made won't be saved.</strong>
+		</x-confirmation>
+
 		<div class="w-full flex flex-col items-center">
 			@yield("content")
 

@@ -52,7 +52,7 @@
 				</p>
 
 				<div class="flex items-stretch gap-3 justify-center mt-6 mb-3">
-					<x-button class="w-full md:w-1/4">
+					<x-button type="submit" class="w-full md:w-1/4">
 						Yes
 					</x-button>
 					<x-button type="button" class="popup-no w-full md:w-1/4" style="background: rgb(148 163 184) !important;">
@@ -141,9 +141,13 @@
 				</a>
 
 				@if(session()->pull('loginSuccess'))
-					<div class="hidden xl:block w-[300px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl shadow-3xl status-notif relative right-[-300px] overflow-hidden" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
+					@php
+						$emojis = ['🎉🎉', '🔥🔥🔥', '👌', '😁', '✨✨', '😎😎', '🤩', '📈📈', '⭐⭐⭐⭐⭐', '🥳'];
+					@endphp
+
+					<div class="hidden xl:block w-[350px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl shadow-3xl status-notif relative right-[-300px] overflow-hidden text-base" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
 						<div class="flex flex-col w-full items-start p-5">
-							<p>Login attempt successful 🎉🎉 Welcome back to Sangnila LMS, @if(Auth::user()->role_id == 2){{ (Auth::user()->details->gender == 1 ? 'Mr.' : 'Ms.') }}@endif {{ explode(" ", Auth::user()->full_name)[0] }}!</p>
+							<p>Login attempt successful, welcome back to Sangnila LMS, @if(Auth::user()->role_id == 2){{ (Auth::user()->details->gender == 1 ? 'Mr.' : 'Ms.') }}@endif {{ explode(" ", Auth::user()->full_name)[0] }}! {{ $emojis[mt_rand(0, count($emojis) - 1)] }}</p>
 							<div class="flex justify-end w-full mt-3">
 								<button type="button" class="dismiss-status-notif font-bold text-light-blue">Dismiss</button>
 							</div>
@@ -153,29 +157,43 @@
 				@endif
 
 				@if(session()->has("success"))
-					<div class="hidden xl:block w-[300px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl shadow-3xl status-notif relative right-[-300px] overflow-hidden" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
+					@php
+						$emojis = ['🎉🎉', '🔥🔥🔥', '👌', '😁', '✨✨', '😎😎', '🤩', '📈📈', '⭐⭐⭐⭐⭐', '🥳'];
+					@endphp
+
+					<div class="hidden xl:block w-[350px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl shadow-3xl status-notif relative right-[-300px] overflow-hidden text-base" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
 						<div class="flex flex-col w-full items-start p-5">
-							<p>{{ session('success') }}</p>
+							<p>{{ session('success') }} {{ $emojis[mt_rand(0, count($emojis) - 1)] }}</p>
 							<div class="flex justify-end w-full mt-3">
 								<button type="button" class="dismiss-status-notif font-bold text-light-blue">Dismiss</button>
 							</div>
 							<div class="w-0 h-1 bg-light-blue mt-4 progress-bar"></div>
 						</div>
 					</div>
+
 				@elseif(session()->has("warning"))
-					<div class="hidden xl:block w-[300px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl shadow-3xl status-notif relative right-[-300px] overflow-hidden" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
+					@php
+						$emojis = ['😶', '😮', '🙂', '🙄'];
+					@endphp
+
+					<div class="hidden xl:block w-[350px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl shadow-3xl status-notif relative right-[-300px] overflow-hidden text-base" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
 						<div class="flex flex-col w-full items-start p-5">
-							<p>{{ session('warning') }}</p>
+							<p>{{ session('warning') }} {{ $emojis[mt_rand(0, count($emojis) - 1)] }}</p>
 							<div class="flex justify-end w-full mt-3">
 								<button type="button" class="dismiss-status-notif font-bold text-yellow-500">Dismiss</button>
 							</div>
 							<div class="w-0 h-1 bg-yellow-500 mt-4 progress-bar"></div>
 						</div>
 					</div>
+
 				@elseif(session()->has("danger"))
-					<div class="hidden xl:block w-[300px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl shadow-3xl status-notif relative right-[-300px] overflow-hidden" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
+					@php
+						$emojis = ['❌', '💀', '😭', '❗', '😕', '😱'];
+					@endphp
+
+					<div class="hidden xl:block w-[350px] min-h-[100px] border-2 border-slate-400 bg-white rounded-xl shadow-3xl status-notif relative right-[-300px] overflow-hidden text-base" style="backdrop-filter: blur(10px); background-color: rgb(255, 255, 255, 0.8)">
 						<div class="flex flex-col w-full items-start p-5">
-							<p>{{ session('danger') }}</p>
+							<p>{{ $emojis[mt_rand(0, count($emojis) - 1)] }} {{ session('danger') }}</p>
 							<div class="flex justify-end w-full mt-3">
 								<button type="button" class="dismiss-status-notif font-bold text-red">Dismiss</button>
 							</div>

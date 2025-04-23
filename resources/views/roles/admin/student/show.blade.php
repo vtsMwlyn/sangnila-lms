@@ -134,7 +134,7 @@
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Time</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Details</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Uploader</th>
-						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Action</th>
+						{{-- <th class="text-start py-3 px-4 border-b-2 border-slate-400">Action</th> --}}
 					</thead>
 					<tbody id="attendance-information-tbody">
 					</tbody>
@@ -367,7 +367,7 @@
 		<div class="w-full bg-slate-400 mt-16" style="height: 2px;"></div>
 		<div class="w-full flex items-center justify-between">
 			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Learning Information</h2>
-			<x-anchor-button href="{{ route('admin.attendance.input-student-attendance', $student->id) }}"><i class="bi bi-database-add"></i> Input Attendances Data</x-anchor-button>
+			{{-- <x-anchor-button href="{{ route('admin.attendance.input-student-attendance', $student->id) }}"><i class="bi bi-database-add"></i> Input Attendances Data</x-anchor-button> --}}
 		</div>
 		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
@@ -584,24 +584,24 @@
 					const colLearningTime = $("<td>").addClass("px-4 py-2").text((satd.is_attend == 1)? `${satd.start_time.slice(0, 5)}-${satd.end_time.slice(0, 5)}` : 'Absent');
 					const colDetails = $("<td>").addClass("px-4 py-2").html(`${satd.activity_progress} [${satd.learning_status}]<br><br>${satd.attendance_detail}`);
 					const colUploader = $("<td>").addClass("px-4 py-2").text(satd.attendance.posted_by.full_name);
-					const colAction = $('<td>').addClass('px-4 py-2').append(
-						$('<div>').addClass('flex gap-1 w-full').append(
-							$('<a>').attr('href', `${baseUrl}/admin/attendances/student/${satd.id}/edit`).html(`<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">`)
-						)
-						.append(
-							$('<form>').attr({'method': 'post', 'action': `${baseUrl}/admin/attendances/student/${satd.id}/delete`})
-							.append(
-								$('<input>').attr('type', 'hidden').attr('name', '_token').val(document.querySelector('meta[name="csrf-token"]').getAttribute('content'))
-							.append(
-								$('<input>').attr({'type': 'hidden', 'name': '_method', 'value': 'DELETE'})
-							)
-							).append(
-								$('<button>').attr('type', 'submit').html(`<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">`).on('click', () => {
-									return confirm('Are you sure want to delete this attendance data?');
-								})
-							)
-						)
-					);
+					// const colAction = $('<td>').addClass('px-4 py-2').append(
+					// 	$('<div>').addClass('flex gap-1 w-full').append(
+					// 		$('<a>').attr('href', `${baseUrl}/admin/attendances/student/${satd.id}/edit`).html(`<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">`)
+					// 	)
+					// 	.append(
+					// 		$('<form>').attr({'method': 'post', 'action': `${baseUrl}/admin/attendances/student/${satd.id}/delete`})
+					// 		.append(
+					// 			$('<input>').attr('type', 'hidden').attr('name', '_token').val(document.querySelector('meta[name="csrf-token"]').getAttribute('content'))
+					// 		.append(
+					// 			$('<input>').attr({'type': 'hidden', 'name': '_method', 'value': 'DELETE'})
+					// 		)
+					// 		).append(
+					// 			$('<button>').attr('type', 'submit').html(`<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">`).on('click', () => {
+					// 				return confirm('Are you sure want to delete this attendance data?');
+					// 			})
+					// 		)
+					// 	)
+					// );
 
 					let rowBg;
 					if(i % 2 == 0){
@@ -611,7 +611,7 @@
 						rowBG = "white";
 					}
 
-					$('#attendance-information-tbody').append($("<tr>").css("background-color", rowBG).append(colSession).append(colDate).append(colAttended).append(colLearningTime).append(colDetails).append(colUploader).append(colAction));
+					$('#attendance-information-tbody').append($("<tr>").css("background-color", rowBG).append(colSession).append(colDate).append(colAttended).append(colLearningTime).append(colDetails).append(colUploader)/*.append(colAction)*/);
 
 					i++;
 				}

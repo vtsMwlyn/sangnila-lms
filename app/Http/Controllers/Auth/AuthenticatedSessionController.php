@@ -71,10 +71,10 @@ class AuthenticatedSessionController extends Controller {
         if ($accessToken) {
             $client->setAccessToken($accessToken);
             $client->revokeToken();  // This will revoke the token
-        }
 
-        // Clear the Google-related session data
-        session()->forget(['google_access_token', 'google_refresh_token', 'google_user_info']);
+			// Clear the Google-related session data
+			session()->forget(['google_access_token', 'google_refresh_token', 'google_user_info']);
+        }
 
 		Auth::guard('web')->logout();
 

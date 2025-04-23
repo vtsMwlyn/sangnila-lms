@@ -99,54 +99,61 @@
 			</div>
 
 			@php
+				$announcements = App\Models\Announcement::all();
 				$n_announcement = 0;
+
+				foreach ($announcements as $announcement){
+					$target = json_decode($announcement->sent_to);
+					
+					if($announcement->announce_from < now() && $announcement->announce_until > now() && in_array(Auth::user()->role_id, $target)){
+						$n_announcement++;
+					}
+				}
 			@endphp
 
-			<div class="relative flex sm:flex-row flex-col justify-center items-center">
-				{{-- Navigation and Sliders --}}
-				<div class="swiper w-10/12">
-					<div class="swiper-wrapper">
-						@forelse (App\Models\Announcement::all() as $announcement)
-							@php
-								$target = json_decode($announcement->sent_to);
-							@endphp
-							@if($announcement->announce_from < now() && $announcement->announce_until > now() && in_array(Auth::user()->id, $target))
-								<a class="card-img flex flex-col items-stretch swiper-slide" href="{{ route('view-announcement', $announcement->id) }}">
-									@php
-										$n_announcement++;
-									@endphp
+			@if($n_announcement > 0)
+				<div class="relative flex sm:flex-row flex-col justify-center items-center" style="height: 400px;">
+					{{-- Navigation and Sliders --}}
+					<div class="swiper w-10/12">
+						<div class="swiper-wrapper">
+							@forelse ($announcements as $announcement)
+								@php
+									$target = json_decode($announcement->sent_to);
+								@endphp
 
-									@if($announcement->image_path)
-										<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full rounded-3xl" style="object-fit: cover; object-position: center; height: 340px;">
-									@else
-										<div class="flex bg-slate-400 items-center justify-center text-white font-extrabold rounded-3xl grow" style="height: 340px;">
-											<i class="bi bi-megaphone-fill text-6xl"></i>
-										</div>
-									@endif
+								@if($announcement->announce_from < now() && $announcement->announce_until > now() && in_array(Auth::user()->role_id, $target))
+									<a class="card-img flex flex-col items-stretch swiper-slide" href="{{ route('view-announcement', $announcement->id) }}">
+										@if($announcement->image_path)
+											<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full rounded-3xl" style="object-fit: cover; object-position: center; height: 340px;">
+										@else
+											<div class="flex bg-slate-400 items-center justify-center text-white font-extrabold rounded-3xl grow" style="height: 340px;">
+												<i class="bi bi-megaphone-fill text-6xl"></i>
+											</div>
+										@endif
 
-									<div class="text-blue-900 text-center py-5 font-extrabold">{{ $announcement->title }}</div>
-								</a>
-							@endif
-						@empty
-						@endforelse
+										<div class="text-blue-900 text-center py-5 font-extrabold">{{ $announcement->title }}</div>
+									</a>
+								@endif
+							@empty
+							@endforelse
+						</div>
 					</div>
+
+					@if($n_announcement > 1)
+						<div class="slider-controls flex gap-2 sm:justify-between justify-center absolute w-full px-2" style="top: 36%;">
+							<button id="prevBtn" class="absolute left-3">
+								<img src="{{ asset('img/arrow-left.svg') }}" class="w-6" alt="icon">
+							</button>
+							<button id="nextBtn" class="absolute right-3">
+								<img src="{{ asset('img/arrow-right.svg') }}" class="w-6" alt="icon">
+							</button>
+						</div>
+					@endif
 				</div>
-
-				@if($n_announcement > 1)
-					<div class="slider-controls flex gap-2 sm:justify-between justify-center absolute w-full px-2" style="top: 36%;">
-						<button id="prevBtn" class="absolute left-3">
-							<img src="{{ asset('img/arrow-left.svg') }}" class="w-6" alt="icon">
-						</button>
-						<button id="nextBtn" class="absolute right-3">
-							<img src="{{ asset('img/arrow-right.svg') }}" class="w-6" alt="icon">
-						</button>
-					</div>
-				@endif
-			</div>
-
-			@if($n_announcement < 1)
-				<div class="h-full w-full justify-center items-center flex">
-					- There are no announcements -
+			@else
+				<div class="flex flex-col items-center justify-center" style="height: 400px;">
+					<img src="{{ asset('img/megaphone.png')}}" alt="pict" width="300">
+					<div class="text-blue font-semibold text-lg">There are no announcements</div>
 				</div>
 			@endif
 		</div>
@@ -156,7 +163,7 @@
 			<p class="font-bold text-dark-blue text-base">Calendar</p>
 			<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-			<iframe src="https://calendar.google.com/calendar/embed?src=id.indonesian%23holiday%40group.v.calendar.google.com&ctz=Asia%2FJakarta&bgcolor=%23ffffff&showTabs=0&showPrint=0&showTitle=0&showCalendars=0" style="border: 0" height="380" scrolling="no" class="w-full mt-5" frameborder="0" scrolling="no"></iframe>
+			<iframe src="https://calendar.google.com/calendar/embed?src=id.indonesian%23holiday%40group.v.calendar.google.com&ctz=Asia%2FJakarta&bgcolor=%23ffffff&showTabs=0&showPrint=0&showTitle=0&showCalendars=0" style="border: 0" height="400" scrolling="no" class="w-full mt-5" frameborder="0" scrolling="no"></iframe>
 		</div>
 	</div>
 

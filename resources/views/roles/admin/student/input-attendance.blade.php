@@ -26,7 +26,7 @@
 		<x-badge-danger id="emptyDataNotif" badge_text="Please input minimum 1 data to proceed." style="display: none;"></x-badge-danger>
 
 		{{-- @if($allStudents->count() && $course->teachers->count()) --}}
-			<form action="{{ route('admin.student.store-attendance', $student->id) }}" method="post" class="my-4">
+			<form action="{{ route('admin.attendance.store-student-attendance', $student->id) }}" method="post" class="my-4" id="store-attendance-form">
 				@csrf
 
 				<div id="form-area">
@@ -254,7 +254,7 @@
 						const hidLearningStatus = $('<input>').attr({'type': 'hidden', 'name': 'learning_status[]', 'value': inpIsAttended == 1? inpLearningStatus : 'Absent'});
 						const hidAttendanceDetails = $('<input>').attr({'type': 'hidden', 'name': 'attendance_details[]', 'value': inpAttendanceDetails});
 
-						$('form').append(hidCourseId).append(hidDate).append(hidStartTime).append(hidEndTime).append(hidIsAttended).append(hidActivityProgress).append(hidLearningStatus).append(hidAttendanceDetails);
+						$('#store-attendance-form').append(hidCourseId).append(hidDate).append(hidStartTime).append(hidEndTime).append(hidIsAttended).append(hidActivityProgress).append(hidLearningStatus).append(hidAttendanceDetails);
 
 						removeBtn.click(() => {
 							if(confirm('Are you sure want to remove this student from the list?')){

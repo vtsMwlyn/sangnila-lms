@@ -1,10 +1,10 @@
 @extends("layouts.login-register")
 
 @section("content")
-<div class="w-11/12 h-screen flex justify-evenly items-center" style="max-width: 2000px;">
+<div class="w-11/12 my-8 min-h-screen flex justify-evenly items-center" style="max-width: 2000px;">
 	<img src="{{ asset('img/loginwords.svg') }}" class="md:block hidden w-2/5" alt="login-words">
 
-	<form method="POST" action="{{ route('admin.account.store') }}" class="flex flex-col overflow-y-auto items-center w-full md:w-1/2 h-5/6 py-6 rounded-2xl shadow-xl" style="background: rgba(254, 254, 254, 0.7); max-width: 36vw;">
+	<form method="POST" action="{{ route('admin.account.store') }}" class="flex flex-col overflow-y-auto items-center w-full py-6 rounded-2xl shadow-xl" style="background: rgba(254, 254, 254, 0.7); max-width: 36vw;">
 		@csrf
 			<div class="w-full flex justify-center">
 				<img src="{{ asset('img/Sangnila_Arts.png') }}" class="h-24 w-24" alt="logo">
@@ -55,7 +55,7 @@
 								@if($role->role_name == 'Finance Admin')
 									@continue
 								@endif
-								<option value="{{ $role->role_name }}" @if(old("role") == $role->role_name) selected @endif>{{ $role->role_name }}</option>
+								<option value="{{ $role->role_name }}" @if(old("role") == $role->role_name) selected @endif>{{ $role->id == 1 ? 'LMS Admin' : ucwords($role->role_name) }}</option>
 							@empty
 							@endforelse
 						</x-select>
@@ -76,10 +76,10 @@
 				</div>
 
 				<div class="flex items-stretch gap-3 justify-end mt-10 mb-3">
-					<x-cancel-button class="w-full md:w-40 xl:w-1/6">
+					<x-cancel-button class="w-full md:w-40 xl:w-1/2">
 						Cancel
 					</x-cancel-button>
-					<x-button class=" w-full md:w-40 xl:w-1/6">
+					<x-button class=" w-full md:w-40 xl:w-1/2">
 						{{ __('Submit') }}
 					</x-button>
 				</div>

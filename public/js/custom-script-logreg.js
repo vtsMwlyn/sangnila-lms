@@ -59,4 +59,9 @@ $(document).ready(() => {
 	});
 
     $(window).on('load', hideLoadingPopup);
+
+	// Cancel confirmation
+	$('.cancel-btn').on('click', function(){
+		$('#cancel-popup').parent().show();
+	});
 });

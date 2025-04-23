@@ -108,34 +108,24 @@ $(document).ready(() => {
 	});
 
 	$('#sidebar-toggler-larger').click(function () {
-		isAnimating = true;
-
-		console.log(isAnimating);
-	
 		if ($('#sidebar-container').is(':visible')) {
-			$('#sidebar-container').animate({ width: '0', opacity: '0' }, 300, function () {
+			$('#sidebar-container').css({opacity: '0'});
+			$('#sidebar-container').animate({ width: '0' }, 300, function () {
 				$(this).hide();
-				isAnimating = false;
 				adjustLayouts(); // Now safe to adjust
-
-				console.log(isAnimating);
 			});
 			$('#content-container').animate({ width: '100%' }, 300);
 			$('#sidebar-toggler-larger')
 				.animate({ left: 0 }, 300)
 				.html('<i class="bi bi-caret-right-fill"></i>');
 		} else {
-			$('#sidebar-container')
-				.css('opacity', '0')
-				.show()
-				.animate({ width: '17%', opacity: '1' }, 300, function () {
-					isAnimating = false;
-					adjustLayouts();
-
-					console.log(isAnimating);
-				});
+			$('#sidebar-container').show();
 			$('#content-container').animate({ width: '83%' }, 300);
-	
+			$('#sidebar-container').animate({ width: '17%' }, 300, function () {
+				$('#sidebar-container').css({opacity: '1'});
+				adjustLayouts();
+			});
+		
 			setTimeout(function () {
 				$('#sidebar-toggler-larger')
 					.animate({ left: $('#sidebar-container').outerWidth() }, 100)

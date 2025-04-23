@@ -9,9 +9,10 @@ use App\Models\User;
 use App\Models\Topic;
 use App\Models\Course;
 use App\Models\Activity;
-use App\Models\Assessment;
 use App\Models\Progress;
+use App\Models\Assessment;
 use App\Models\UserDetail;
+use Illuminate\Support\Str;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\CourseStudent;
@@ -21,11 +22,11 @@ use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\ImageManager;
-use Illuminate\Support\Str;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class StudentController extends Controller {
 
@@ -306,17 +307,44 @@ class StudentController extends Controller {
 			}
 		}
 
-		$students = collect(array_merge($studentList_prioritized, $studentList_learning, $studentList_complete, $studentList_undone, $studentList_unassigned));
+		$students = array_merge($studentList_prioritized, $studentList_learning, $studentList_complete, $studentList_undone, $studentList_unassigned);
 		$current_attendances = array_merge($current_attendances_prioritized, $current_attendances_learning, $current_attendances_complete, $current_attendances_undone, $current_attendances_unassigned);
 		$max_attendances = array_merge($max_attendances_prioritized, $max_attendances_learning, $max_attendances_complete, $max_attendances_undone, $max_attendances_unassigned);
 		$percentages = array_merge($percentages_prioritized, $percentages_learning, $percentages_complete, $percentages_undone, $percentages_unassigned);
 
+		// Wrap all data into a single array so we can paginate as one unit
+		$combined = [];
+
+		foreach ($students as $index => $student) {
+			$combined[] = [
+				'student' => $student,
+				'current_attendance' => $current_attendances[$index] ?? null,
+				'max_attendance' => $max_attendances[$index] ?? null,
+				'percentage' => $percentages[$index] ?? null,
+			];
+		}
+		
+		// Paginate the combined collection
+		$currentPage = LengthAwarePaginator::resolveCurrentPage();
+		$perPage = 30;
+		$collection = collect($combined);
+		$currentPageItems = $collection->slice(($currentPage - 1) * $perPage, $perPage)->values();
+		
+		$paginator = new \Illuminate\Pagination\LengthAwarePaginator(
+			$currentPageItems,
+			$collection->count(),
+			$perPage,
+			$currentPage,
+			['path' => request()->url(), 'query' => request()->query()]
+		);
+
 		// Return view with data
 		return view('roles.admin.student.index', [
-			'students' => $students,
-			"max_attendances" => $max_attendances,
-			"current_attendances" => $current_attendances,
-			"percentages" => $percentages
+			'all_students_data' => $paginator,
+			// 'students' => $students,
+			// "max_attendances" => $max_attendances,
+			// "current_attendances" => $current_attendances,
+			// "percentages" => $percentages
 		]);
 	}
 

@@ -45,7 +45,7 @@
 					@if($n > 0)
 						<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
 					@endif
-					<button type="button" class="dropdown-toggler"><img src="{{ asset('img/mail-icon.svg') }}" alt="mail-icon" class="h-6"></button>
+					<button type="button" class="dropdown-toggler"><img src="{{ asset('img/mail-icon.svg') }}" alt="mail-icon" class="h-6 hover:scale-110"></button>
 
 					<div class="absolute z-10 top-14 w-80 sm:w-96 rounded-3xl px-5 py-3 flex flex-col dropdown-menu" style="@if(!session()->has('successNotifAction')) display: none; @endif  height: 600px;">
 						<div class="w-full flex items-center justify-between">
@@ -89,7 +89,7 @@
 			@endauth
 
 			<div class="relative flex flex-col items-end dropdown-container">
-				<button type="button" class="dropdown-toggler"><img src="{{ asset('img/burger-icon-navbar-pc.svg') }}" alt="burger-icon" class="h-6"></button>
+				<button type="button" class="dropdown-toggler"><img src="{{ asset('img/burger-icon-navbar-pc.svg') }}" alt="burger-icon" class="h-6 hover:scale-110"></button>
 				<div class="text-base absolute z-10 top-14 w-80 rounded-3xl flex flex-col py-2 dropdown-menu overflow-hidden" style="display: none; ">
 					<button type="button" id="help-and-support-menu"><div class="w-full px-5 py-1.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><img src="{{ asset('img/navbar-help-and-support.svg') }}" class="h-5 w-5" alt="sidebar-icon"> Help and Support</div></a>
 					<button type="button" id="send-feedback-menu"><div class="w-full px-5 py-1.5 text-black font-semibold flex items-center gap-1 hover:bg-slate-100"><img src="{{ asset('img/navbar-send-feedback.svg') }}" class="h-5 w-5" alt="sidebar-icon"> Send Feedback</div></a>

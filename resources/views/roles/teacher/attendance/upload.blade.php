@@ -473,7 +473,7 @@
 					return;
 				}
 				else {
-					$('form').submit();
+					$('#attendance_form').submit();
 				}
 
 			});

@@ -1,10 +1,10 @@
 @extends("layouts.login-register")
 
 @section("content")
-	<div class="w-11/12 h-screen flex justify-evenly items-center" style="max-width: 2000px;">
+	<div class="w-11/12 min-h-screen flex justify-evenly items-center" style="max-width: 2000px;">
 		<img src="{{ asset('img/loginwords.svg') }}" class="xl:block hidden w-2/5" alt="login-words">
 
-		<form method="POST" action="{{ route('login') }}" class="flex flex-col overflow-y-auto justify-center items-center w-full md:w-3/5 xl:w-2/5 xl:h-5/6 py-6 rounded-2xl shadow-xl" style="background: rgba(254, 254, 254, 0.7);" id="login-form">
+		<form method="POST" action="{{ route('login') }}" class="flex flex-col overflow-y-auto justify-center items-center w-full md:w-3/5 xl:w-2/5 py-6 md:py-8 xl:py-16 rounded-2xl shadow-xl" style="background: rgba(254, 254, 254, 0.7);" id="login-form">
 			@csrf
 
 			<img src="{{ asset('img/Sangnila_Arts.png') }}" class="h-24 w-24" alt="logo">

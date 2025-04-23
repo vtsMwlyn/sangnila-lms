@@ -275,6 +275,10 @@
 					</tbody>
 				</table>
 			</div>
+
+			<div class="mt-4">
+				{{ $student_accounts->links() }}
+			</div>
 		@endif
 
 		@if(request('role') == 'disabled')
@@ -303,7 +307,7 @@
 									</div>
 								</td>
 								<td class="py-3 px-4">{{ $disabled_acc->email }}</td>
-								<td class="py-3 px-4">{{ ucwords($disabled_acc->role->role_name) }}</td>
+								<td class="py-3 px-4">{{ $role->id == 1 ? 'LMS Admin' : ucwords($role->role_name) }}</td>
 								<td class="py-3 px-4 font-semibold @if($disabled_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($disabled_acc->status) }}</td>
 								<td class="py-3 px-4">{{ $disabled_acc->disable_reason }}</td>
 								<td class="py-3 px-4">
@@ -330,6 +334,10 @@
 						@endforelse
 					</tbody>
 				</table>
+			</div>
+
+			<div class="mt-4">
+				{{ $disabled->links() }}
 			</div>
 		@endif
 	</x-section-container>

@@ -19,7 +19,7 @@
 			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('teacher.course.activity.update', $activity->id) }}" method="post" class="mt-3">
+		<form action="{{ route('teacher.course.activity.update', $activity->id) }}" method="post" class="mt-3" id="edit-activity-form">
 			@csrf
 			@method('PATCH')
 			{{-- Activity Title --}}
@@ -85,13 +85,13 @@
 	</x-section-container>
 
 	<script>
-		$("form").on("submit", function(){
+		$("#edit-activity-form").on("submit", function(){
 			$('input[type="checkbox"]').each(function(){
 				if($(this).is(":checked")){
-					$("form").append($("<input>").attr({"type": "hidden", "name": "learning_outcome[]", "value": "on"}));
+					$("#edit-activity-form").append($("<input>").attr({"type": "hidden", "name": "learning_outcome[]", "value": "on"}));
 				}
 				else {
-					$("form").append($("<input>").attr({"type": "hidden", "name": "learning_outcome[]", "value": "off"}));
+					$("#edit-activity-form").append($("<input>").attr({"type": "hidden", "name": "learning_outcome[]", "value": "off"}));
 				}
 			});
 

@@ -24,7 +24,7 @@
 		@endphp
 
 		<h1>Select Students to Include in New Attendance Report:</h1>
-		<form action="{{ route('teacher.attendance.submit-and-proceed', $course->id) }}" method="post" class="flex flex-col py-6">
+		<form action="{{ route('teacher.attendance.submit-and-proceed', $course->id) }}" method="post" class="flex flex-col py-6" id="pick-students-form">
 			@csrf
 
 			<div class="bg-white border rounded-2xl p-5 flex flex-col">
@@ -134,12 +134,12 @@
 				});
 			});
 
-			$("form").on("submit", function(e){
+			$("#pick-students-form").on("submit", function(e){
 				e.preventDefault();
 
 				$('input[type="checkbox"]').each(function(){
 					if($(this).is(":checked")){
-						$("form").append($("<input>").addClass('selected_student').attr({"type": "hidden", "name": "selected_students[]", "value": $(this).data("sid")}));
+						$("#pick-students-form").append($("<input>").addClass('selected_student').attr({"type": "hidden", "name": "selected_students[]", "value": $(this).data("sid")}));
 					}
 				});
 

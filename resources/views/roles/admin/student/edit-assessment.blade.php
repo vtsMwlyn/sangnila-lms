@@ -11,7 +11,7 @@
         <span class="text-xl font-semibold text-blue-900 mt-2">{{ ucwords($assessment->student->full_name) }} in {{ $assessment->course->course_name }} - {{ ucwords($assessment->course->level) }}</span>
         <div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-        <form action="{{ route('admin.student.update.assessment', $assessment->id) }}" method="post">
+        <form action="{{ route('admin.student.update.assessment', $assessment->id) }}" method="post" id="edit-assessment-form">
             @csrf
 
             {{-- Performance --}}
@@ -112,7 +112,7 @@
 
 	<script>
 		$(document).ready(() => {
-			$('form').on('submit', function(e){
+			$('#edit-assessment-form').on('submit', function(e){
 				e.preventDefault();
 
 				$(this).append($('<input>').attr({'type': 'hidden', 'name': 'certificate_access', 'value': ($(this).find('input[type="checkbox"]').is(':checked') ? 1 : 0)}));
