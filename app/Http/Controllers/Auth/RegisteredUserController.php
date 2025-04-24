@@ -38,7 +38,7 @@ class RegisteredUserController extends Controller {
 			'email' => ['required', 'email', 'max:255', 'unique:users'],
 			'password' => ['required', 'confirmed', 'min:8', Rules\Password::defaults()],
 			'password_confirmation' => ['required', 'min:8'],
-			'role' => ['required', 'in:LMS Admin,Teacher,Student'],
+			'role' => ['required', 'in:lms_admin,teacher,student'],
 			"gender" => "required"
 		]);
 
