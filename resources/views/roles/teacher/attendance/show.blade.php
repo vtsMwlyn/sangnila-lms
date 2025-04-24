@@ -338,13 +338,38 @@
 								<td class="py-3 px-4">{{ Carbon\Carbon::parse($tc_attendance->attendance_date)->format('l, d M Y') }}</td>
 								<td class="py-3 px-4">{{ Carbon\Carbon::parse($tc_attendance->start_time)->format('H:i') }}-{{ Carbon\Carbon::parse($tc_attendance->end_time)->format('H:i') }} GMT+7</td>
 								<td class="py-3 px-4">{{ $tc_attendance->candidate_name }}</td>
-								<td class="py-3 px-4">{{ $tc_attendance->attendance_detail }}</td>
+								<td class="py-3 px-4">{!! nl2br($tc_attendance->attendance_detail) !!}</td>
 							</tr>
 						@empty
 							<tr><td class="p-5 bg-white font-semibold text-center" colspan="5">- No trial class attendance data yet -</td></tr>
 						@endforelse
 					</tbody>
 				</table>
+			</div>
+
+			<div class="w-full flex flex-col gap-4 xl:hidden items-stretch mt-4">
+				@forelse ($course->trial_class_attendances()->orderBy('attendance_date', 'desc')->orderBy('candidate_name', 'asc')->get() as $tc_attendance)
+					<div class="bg-white rounded-xl p-4 flex flex-col gap-3 dropdown-container">
+						<button class="flex flex-col items-start dropdown-toggler w-full">
+							<div class="flex w-full justify-between items-center mb-2">
+								<strong class="text-base text-start">{{ Carbon\Carbon::parse($tc_attendance->attendance_date)->format('l, d M Y') }} - {{ $tc_attendance->candidate_name }}</strong>
+								<i class="bi bi-chevron-down"></i>
+							</div>
+						</button>
+						<div class="flex flex-col w-full dropdown-menu" style="display: none;">
+							<div class="flex flex-col">
+								<div>Start Time: {{ Carbon\Carbon::parse($tc_attendance->start_time)->format('H:i') }} GMT+7</div>
+								<div>End Time: {{ Carbon\Carbon::parse($tc_attendance->end_time)->format('H:i') }} GMT+7</div>
+							</div>
+
+							<div class="mt-5">
+								{!! nl2br($tc_attendance->attendance_detail) !!}
+							</div>
+						</div>
+					</div>
+				@empty
+					- N/A -
+				@endforelse
 			</div>
 		@endif
 

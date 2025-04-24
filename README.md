@@ -13,51 +13,53 @@ There are 5 roles (types of account) in Sangnila LMS:
 - **Guests**: Public user, those who are don't have any account to use, can only view few parts of Sangnila LMS
 
 ## Change Logs
-### v0.9.0-beta until v0.9.2-beta
-- Changed main layout to be navbar-sidebar-content from previously only navbar and content
-- Redesign all pages for students
-- Implemented popup submission forms
-- Improvement and bug fixes in displaying popups and announcements
-- Font and element sizing adjustments
-- Redesign all pages for teachers
-- Now teacher can select students to include in a new attendance report
-- Fix major bugs and mechanism of adding and editting attendance report when data is invalid
+### v1.1.x
+- Added Google Calendar and Google Task synchronization feature for teachers
+- Added forum discussion feature for teachers and students
+- Error and bug fixes on forum discussion layout on smaller screens
+- Implementation of the new footer
+- Added sidebar toggler for larger screens
 
-### v0.9.3-beta until v0.9.5-beta
-- Changed the term `materials` into `activities`
-- Added other option for uploading attendance reports
-- Added learning outcomes into LMS where it can be uploaded by admins
-- Added session number system into for both normal activities and syllabus activities
-- Added learning outcomes - activities - sessions settings for both normal activities and syllabus activities
-- Changed the student progress based on attendance data count instead of unlocked activities
-- Adjustments in student's course details page where 1 topic can contains multiple activities and dynamically updated the learning outcome
-- Teacher now can pick items from syllabus as an alternative of copying the whole activity - sessions - learning outcomes settings
+### v1.2.x
+- Now students can upload portfolios for themself
+- Responsive layout implementation for student pages
+- Error and bug fixes during teacher attendance search feature and fix the issue where forms cannot be submitted on the enter key press
+- Admins can now delete teacher's attendance
+- Student lists separation based on their learning status for teachers
 
-### v0.9.6-beta until v0.9.8-beta
-- Fixed bugs encountered in displaying data or performing some actions
-- Now profile pictures will also be shown mostly next to student/teacher's name
-- Student attendance progress is now counting for both attended and absent attendance data
-- Admins now can input, edit, and delete attendance data and it will be merged with the attendance data uploaded by the teacher
-- Added details to course data such as delivery mode, price, and code; then now displayed courses level beside courses name
-- Improvements in some data displays sorting
-- Changed the attendance upload mechanism to suit multiple sessions in 1 day
-- Redesigned the attendance upload page
-- Auto session counting by system in displaying attendances data, so admins and teachers won't have to specify the nth-session when uploading attendances data
+### v1.3.x
+- Added system-generated certificate for completed students
+- UI/UX improvements and several pages
+- Implemented responsive sidebars to replace the dropdown sidebar menu
+- Implemented responsive layout for teacher pages
 
-### v0.9.9-beta until v1.0.0-beta
-- Fixed bugs and errors encountered in displaying data or performing some actions, also optimized some data display such as datetime data reformatting, data placement and sorting, etc
-- Redesign batch assign and import old student page for admins
-- Added batch assign teacher page for admin
-- Added learning status to course-student data and now it's edittable along the teacher teaching the student
-- Fixed bugs in displaying some popup forms
-- Now the system will auto-unlock student progresses on attendance addition/deletion and when teacher re-sync or picking topics and activities from the syllabus
-- Added meeting link attachment for each students in an activity
-- Added self attendance checking page for teachers
-- Added link to book trial class in the login page
-- Added portfolio image/video/link uploads by teacher for student progress documentation
-- Now all accounts can edit the new profile picture when uploading it
-- Added red asterisk mark for required inputs
-- Bug fixes on multiple entry pages where the form can be submitted although the data is still empty
-- Added new dashboard page for admins and teachers
-- Bug fixes on displaying announcement images in dashboard pages, announcement popups, and announcement show page
+### v1.4.x
+- Added lecturer signatures to be included in system-generated certificates
+- Added student attendance summary for teacher to help them tracking the students attendances
+- Added monthly lecturer invoice generation feature
+- Changed the lecturer invoice generation to include all student attendances from all teached courses
+- Student selection separation based on their learning status for teacher and admin
+- Portfolio uploads now support PDF files
+- Fix on portfolio page to show and load .mov video files
 
+### v1.5.x
+- Added action status notifications for larger screens to replace action status badges
+- Added lecturer reimburse upload feature and integrate it to lecturer invoice generation
+- Added support to auto-refresh token so it will make form duration longer and API for other webapp to access Sangnila LMS and perform some action
+- Implementation of lazy loading to all images and auto-convert uploaded images into .webp format
+- Added new role `head of lecturer` and its functionality to see all portfolios and lecturer self attendances
+- Adjustment into role mechanism and announcement showing mechanism
+- Now input attendance page for admin will only show learning students
+
+### v1.6.x
+- Reworked guest pages for better display and data display
+- Added learning outcomes, lecturer list, and mini statistic in guest course information
+- Added material preview and portfolio showcase for guest
+- Added portfolio highlighting feature for head of lecturer
+- Added trial class functionality into Sangnila LMS including trial class resources where they can be uploaded by lecturers and will appear in guest pages and trial class attendances
+- Integrate trial class attendance to lecturer invoice
+- Added manage attendance feature to admin and removal of old lecturer attendance and show student attendance CRUD
+- Page content separation into few tabs in few pages
+- Added lecturer biography and it can be seen in guest page
+- Converted all images into .webp and all accounts with old default password into the new one
+- Bug fixes where mostly in filtering issue and some UI/UX improvements
