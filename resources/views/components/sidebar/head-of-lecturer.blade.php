@@ -1,17 +1,22 @@
 {{-- Main sidebar --}}
 <div class="text-white z-10 min-h-screen w-[75%] md:w-[40%] xl:w-[17%] fixed xl:static hidden xl:block" id="sidebar-container">
-	<div class="flex flex-col items-stretch sticky z-0 m-0 w-full h-screen overflow-y-auto" style="background: url({{ asset('img/sidebar-bg.webp') }}) no-repeat center left; background-size: cover;" id="sidebar">
+	<div class="flex flex-col items-stretch sticky z-0 m-0 w-full" style="background: url({{ asset('img/sidebar-bg.webp') }}) no-repeat center left; background-size: cover;" id="sidebar">
 		<div class="relative flex flex-col dropdown-container">
 			<button type="button" class="flex flex-col items-center dropdown-toggler px-10 py-4 mb-6 hover:bg-slate-400" style="background: {{ Request::is('profile*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				@if(Auth::user()->details->profpic)
-					<img src="{{ Storage::url("app/public/" . Auth::user()->details->profpic) }}" class="rounded-full w-32 h-32 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
-				@else
-					@if(Auth::user()->details->gender == 1)
-						<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-32 h-32" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+				<div class="relative">
+					@if(Auth::user()->details->profpic)
+						<img src="{{ Storage::url("app/public/" . Auth::user()->details->profpic) }}" class="rounded-full w-32 h-32 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 					@else
-						<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-32 h-32" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+						@if(Auth::user()->details->gender == 1)
+							<img src="{{ asset('img/tempblankprofpicmale.png') }}" alt="Image Preview" class="rounded-full w-32 h-32 mt-2 mb-4" style="object-fit: cover; object-position: center;" loading="lazy">
+						@else
+							<img src="{{ asset('img/tempblankprofpicfemale.png') }}" alt="Image Preview" class="rounded-full w-32 h-32 mt-2 mb-4" style="object-fit: cover; object-position: center;" loading="lazy">
+						@endif
 					@endif
-				@endif
+
+					{{-- Special events only --}}
+					<img src="{{ asset('img/special-events/birthdayhat.png') }}" class="absolute top-[-20px] right-[-20px] w-14 rotate-[38deg]">
+				</div>
 				<h1 class="text-xl font-bold">Hello Head of Lecturer!</h1>
 			</button>
 
@@ -23,7 +28,7 @@
 				@can('can_swap_role')
 					<form action="{{ route('change-role') }}" method="post">
 						@csrf
-						<button type="submit" onclick="return confirm('Are you sure want to swap your role into admin?');" class="w-full"><div class="w-full px-5 py-1 hover:bg-slate-300 text-black font-semibold flex items-center gap-1"><i class="bi bi-arrow-left-right text-slate-400"></i> Change Role</div></button>
+						<button type="submit" onclick="return confirm('Are you sure want to swap your role into teacher?');" class="w-full"><div class="w-full px-5 py-1 hover:bg-slate-300 text-black font-semibold flex items-center gap-1"><i class="bi bi-arrow-left-right text-slate-400"></i> Change Role</div></button>
 					</form>
 				@endcan
 			</div>
@@ -53,3 +58,4 @@
 		</div>
 	</div>
 </div>
+

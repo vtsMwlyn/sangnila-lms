@@ -15,6 +15,7 @@
 
 			<div class="flex items-start flex-col justify-center">
 				<div class="text-md md:text-lg text-blue">LEARNING MANAGEMENT SYSTEM</div>
+				<p class="font-extrabold text-indigo-500 text-base">1st Anniversary Edition 🥳</p>
 			</div>
 		</div>
 

@@ -51,8 +51,8 @@
 	</div>
 
 	{{-- Special Events Only --}}
-	<img class="absolute bottom-0 right-0 w-80" src="{{ asset('img/special-events/cakeandgift.png') }}"/>
-	<img class="absolute bottom-0 left-0 w-56" src="{{ asset('img/special-events/decobundle.png') }}"/>
+	<img class="absolute bottom-0 right-0 w-40 xl:w-80" src="{{ asset('img/special-events/cakeandgift.png') }}"/>
+	<img class="absolute bottom-0 left-0 w-28 xl:w-56" src="{{ asset('img/special-events/decobundle.png') }}"/>
 
 	<script>
 		$('.popup-no').on('click', function(){
