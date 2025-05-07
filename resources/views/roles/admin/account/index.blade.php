@@ -133,7 +133,11 @@
 										@if($admin_acc->details->profpic)
 											<img src="{{ Storage::url("app/public/" . $admin_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 										@else
-											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
+											@if($admin_acc->details->gender == 1)
+												<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+											@else
+												<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+											@endif
 										@endif
 										{{ $admin_acc->full_name }}
 									</div>
@@ -187,7 +191,11 @@
 										@if($teacher_acc->details->profpic)
 											<img src="{{ Storage::url("app/public/" . $teacher_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 										@else
-											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
+											@if($teacher_acc->details->gender == 1)
+												<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+											@else
+												<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+											@endif
 										@endif
 										{{ $teacher_acc->details->gender == 1? 'Mr. ' : 'Ms. ' }} {{ $teacher_acc->full_name }}
 									</div>
@@ -242,7 +250,11 @@
 										@if($student_acc->details->profpic)
 											<img src="{{ Storage::url("app/public/" . $student_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 										@else
-											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
+											@if($student_acc->details->gender == 1)
+												<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+											@else
+												<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+											@endif
 										@endif
 										{{ $student_acc->full_name }}
 									</div>
@@ -301,13 +313,17 @@
 										@if($disabled_acc->details->profpic)
 											<img src="{{ Storage::url("app/public/" . $disabled_acc->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 										@else
-											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
+											@if($disabled_acc->details->gender == 1)
+												<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+											@else
+												<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+											@endif
 										@endif
 										{{ $disabled_acc->full_name }}
 									</div>
 								</td>
 								<td class="py-3 px-4">{{ $disabled_acc->email }}</td>
-								<td class="py-3 px-4">{{ $role->id == 1 ? 'LMS Admin' : ucwords($role->role_name) }}</td>
+								<td class="py-3 px-4">{{ $disabled_acc->role->id == 1 ? 'LMS Admin' : ucwords($disabled_acc->role->role_name) }}</td>
 								<td class="py-3 px-4 font-semibold @if($disabled_acc->status == "enabled") text-light-blue @else text-red @endif">{{ ucwords($disabled_acc->status) }}</td>
 								<td class="py-3 px-4">{{ $disabled_acc->disable_reason }}</td>
 								<td class="py-3 px-4">

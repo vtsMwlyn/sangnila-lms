@@ -36,7 +36,11 @@
 											@if($teacher->details->profpic)
 												<img src="{{ Storage::url("app/public/" .$teacher->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 											@else
-												<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
+												@if($teacher->details->gender == 1)
+													<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+												@else
+													<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+												@endif
 											@endif
 											{{ ($teacher->details->gender == 1)? "Mr." : "Ms." }} {{ $teacher->full_name }}
 										</div>
@@ -80,7 +84,11 @@
 										@if($teacher->details->profpic)
 											<img src="{{ Storage::url("app/public/" . $teacher->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 										@else
-											<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
+											@if($teacher->details->gender == 1)
+												<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+											@else
+												<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+											@endif
 										@endif
 										{{ ($teacher->details->gender == 1)? "Mr." : "Ms." }} {{ $teacher->full_name }}
 									</div>

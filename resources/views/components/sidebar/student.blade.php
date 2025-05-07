@@ -6,7 +6,11 @@
 				@if(Auth::user()->details->profpic)
 					<img src="{{ Storage::url("app/public/" . Auth::user()->details->profpic) }}" class="rounded-full w-32 h-32 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 				@else
-					<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full w-32 h-32 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+					@if(Auth::user()->details->gender == 1)
+						<img src="{{ asset('img/tempblankprofpicmale.png') }}" alt="Image Preview" class="rounded-full w-32 h-32 mt-2 mb-4" style="object-fit: cover; object-position: center;" loading="lazy">
+					@else
+						<img src="{{ asset('img/tempblankprofpicfemale.png') }}" alt="Image Preview" class="rounded-full w-32 h-32 mt-2 mb-4" style="object-fit: cover; object-position: center;" loading="lazy">
+					@endif
 				@endif
 				<h1 class="text-xl font-bold">Hello {{ explode(" ", Auth::user()->full_name)[0] }}!</h1>
 			</button>

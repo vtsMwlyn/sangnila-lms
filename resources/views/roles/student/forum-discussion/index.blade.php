@@ -140,7 +140,8 @@
                     dataType: 'json',
                     success: function(messages) {
                         let messageList = '';
-                        const blankProfpic = "{{ asset('img/tempblankprofpic.png') }}";
+                        const userGender = {{ Auth::user()->details->gender }};
+                        const blankProfpic = userGender == 1? "{{ asset('img/tempblankprofpicmale.png') }}" : "{{ asset('img/tempblankprofpicfemale.png') }}";
                         const currUser = '{{ Auth::user()->id }}';
 
                         messages.forEach(msg => {
@@ -159,7 +160,7 @@
                                                     </div>
                                                 </div>
                                                 ${msg.attachment_path ? '<img src="' + baseUrl + '/storage/' + msg.attachment_path + '" class="max-h-[250px] mt-2">' : ''}
-                                                <p class="mt-2">${preprocessedMsg}</p>
+                                                <p class="mt-2 break-words">${preprocessedMsg}</p>
                                             </div>`;
                         });
                         $('#message-container').html(messageList);

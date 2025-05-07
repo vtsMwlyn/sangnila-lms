@@ -26,7 +26,11 @@
 					@if(Auth::user()->details->profpic)
 						<img src="{{ Storage::url("app/public/" . Auth::user()->details->profpic) }}" alt="Image Preview" class="w-full h-full object-cover rounded-full" loading="lazy">
 					@else
-						<img src="{{ asset('img/tempblankprofpic.png') }}" alt="Image Preview" class="w-full h-full object-cover rounded-full" loading="lazy">
+						@if(Auth::user()->details->gender == 1)
+							<img src="{{ asset('img/tempblankprofpicmale.png') }}" alt="Image Preview" class="w-full h-full object-cover rounded-full" loading="lazy">
+						@else
+							<img src="{{ asset('img/tempblankprofpicfemale.png') }}" alt="Image Preview" class="w-full h-full object-cover rounded-full" loading="lazy">
+						@endif
 					@endif
 					<label for="image" class="text-3xl absolute bottom-0 w-full h-10 bg-black bg-opacity-50 text-white flex justify-center items-center cursor-pointer">
 						<i class="bi bi-camera-fill"></i>

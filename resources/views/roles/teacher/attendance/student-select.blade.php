@@ -37,7 +37,11 @@
 						@if($cs->student->details->profpic)
 							<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 						@else
-							<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
+							@if($cs->student->details->gender == 1)
+								<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+							@else
+								<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+							@endif
 						@endif
 						<label for="checkbox{{ $iterasus }}">{{ $cs->student->full_name }} <span class="ml-2 bg-light-blue text-white text-base rounded-lg px-2 py-0.5 font-normal">{{ ucwords($cs->learning_status) }}</span></label>
 					</div>
@@ -69,7 +73,11 @@
 							@if($cs->student->details->profpic)
 								<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 							@else
-								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
+								@if($cs->student->details->gender == 1)
+									<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+								@else
+									<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+								@endif
 							@endif
 							<label for="checkbox{{ $iterasus }}">{{ $cs->student->full_name }} <span class="@if($cs->learning_status == 'undone') bg-red @elseif($cs->learning_status == 'complete') bg-green-600 @endif text-white text-base rounded-lg px-2 py-0.5 font-normal">{{ ucwords($cs->learning_status) }}</span></label>
 						</div>
@@ -88,7 +96,11 @@
 							@if($rs->details->profpic)
 								<img src="{{ Storage::url("app/public/" . $rs->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 							@else
-								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
+								@if($rs->details->gender == 1)
+									<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+								@else
+									<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+								@endif
 							@endif
 							<label for="checkbox{{ $iterasus }}">{{ $rs->full_name }}</label>
 						</div>

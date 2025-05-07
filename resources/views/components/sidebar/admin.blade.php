@@ -2,13 +2,20 @@
 <div class="text-white z-10 min-h-screen w-[75%] md:w-[40%] xl:w-[17%] fixed xl:static hidden xl:block" id="sidebar-container">
 	<div class="flex flex-col items-stretch sticky z-0 m-0 w-full" style="background: url({{ asset('img/sidebar-bg.webp') }}) no-repeat center left; background-size: cover;" id="sidebar">
 		<div class="relative flex flex-col dropdown-container">
-			<button type="button" class="flex flex-col items-center dropdown-toggler px-10 py-4 mb-6 hover:bg-slate-400" style="background: {{ Request::is('profile*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
+			<button type="button" class="flex flex-col items-center dropdown-toggler px-10 py-4 mb-6 hover:bg-slate-400 relative" style="background: {{ Request::is('profile*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				@if(Auth::user()->details->profpic)
 					<img src="{{ Storage::url("app/public/" . Auth::user()->details->profpic) }}" class="rounded-full w-32 h-32 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 				@else
-					<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full w-32 h-32 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+					@if(Auth::user()->details->gender == 1)
+						<img src="{{ asset('img/tempblankprofpicmale.png') }}" alt="Image Preview" class="rounded-full w-32 h-32 mt-2 mb-4" style="object-fit: cover; object-position: center;" loading="lazy">
+					@else
+						<img src="{{ asset('img/tempblankprofpicfemale.png') }}" alt="Image Preview" class="rounded-full w-32 h-32 mt-2 mb-4" style="object-fit: cover; object-position: center;" loading="lazy">
+					@endif
 				@endif
 				<h1 class="text-xl font-bold">Hello @if(Auth::user()->role_id == 1){{ explode(" ", Auth::user()->full_name)[0] }}@else{{ __('System Admin') }}@endif!</h1>
+
+				{{-- Special events only --}}
+				<img src="{{ asset('img/special-events/birthdayhat.png') }}" class="absolute top-[-5px] right-[45px] w-14 rotate-[38deg]">
 			</button>
 
 			<div class="absolute py-4 bg-white top-6 w-80 rounded-3xl flex flex-col hidden overflow-hidden dropdown-menu text-base" style=" left: 220px;">

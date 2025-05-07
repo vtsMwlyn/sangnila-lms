@@ -67,6 +67,11 @@
 			Are you sure want to <span class="font-bold text-red">cancel</span> this action? <strong>The changes you've made won't be saved.</strong>
 		</x-confirmation>
 
+		{{-- Decorations (Special Events only) --}}
+		<img src="{{ asset('img/special-events/partyflag.png') }}" class="fixed top-[-20px] left-[-50px] z-50 w-56 xl:w-80 rotate-[-10deg] hidden lg:block">
+		<img src="{{ asset('img/special-events/partyflag.png') }}" class="fixed top-[-50px] left-[-70px] z-50 w-56 xl:w-80 rotate-[-20deg] hidden lg:block">
+		<img src="{{ asset('img/special-events/balloon.png') }}" class="fixed top-[0px] right-[0px] w-40 xl:w-56 z-50 rotate-[0deg] hidden lg:block">
+
 		{{-- Loading popup --}}
 		<div class="popup-container w-full h-full hidden fixed top-0 flex items-center justify-center" style="backdrop-filter: blur(10px); z-index: 100; background: rgba(0, 0, 0, 0.3);">
 			<div class="rounded-3xl bg-white py-5 px-6 popup w-11/12 xl:w-1/3 h-1/4 flex gap-3 items-center justify-center" id="loading-popup">

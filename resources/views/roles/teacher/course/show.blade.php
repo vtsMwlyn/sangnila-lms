@@ -127,7 +127,11 @@
 						@if($cs->student->details->profpic)
 							<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-10 h-10 md:w-14 md:h-14 xl:w-28 xl:h-28 mt-0 mb-0 xl:mt-2 xl:mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 						@else
-							<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-10 h-10 md:w-14 md:h-14 xl:w-28 xl:h-28 mt-0 mb-0 xl:mt-2 xl:mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
+							@if($cs->student->details->gender == 1)
+								<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-10 h-10 md:w-14 md:h-14 xl:w-28 xl:h-28 mt-0 mb-0 xl:mt-2 xl:mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+							@else
+								<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-10 h-10 md:w-14 md:h-14 xl:w-28 xl:h-28 mt-0 mb-0 xl:mt-2 xl:mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+							@endif
 						@endif
 						<h1 class="text-sm xl:text-lg font-bold text-start xl:text-center">{{-- explode(" ", $cs->student->full_name)[0] --}}{{ $cs->student->full_name }}</h1>
 					</div>

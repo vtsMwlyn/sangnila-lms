@@ -51,7 +51,11 @@
 							@if($student->details->profpic)
 								<img src="{{ Storage::url("app/public/" . $student->details->profpic) }}" class="rounded-full w-12 h-12 card_profpic" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 							@else
-								<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full border-slate-400 w-12 h-12 card_profpic" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
+								@if($student->details->gender == 1)
+									<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+								@else
+									<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+								@endif
 							@endif
 							<span class="card_student_name">{{ $student->full_name }}</span>
 						</div>
@@ -371,7 +375,8 @@
 
 			$('#add_student').on('click', function(){
 				const student = JSON.parse($("#student_add").val());
-				const blankProfpic = "{{ asset('img/tempblankprofpic.png') }}";
+				const gender = student.details.gender;
+				const blankProfpic = gender == 1 ? "{{ asset('img/tempblankprofpicmale.png') }}" : "{{ asset('img/tempblankprofpicfemale.png') }}";
 
 				const newStudentCard = $('.student-card').first().clone();
 				const newSelect = $('<select>').addClass('border-slate-400 focus:border-slate-600 focus:ring-0 rounded-2xl shadow-sm focus:outline-none py-2 px-4 cursor-pointer disabled:cursor-not-allowed select-2 w-full _activity').css('border-width', '3px').attr({'id': `_activity${student.id}`});

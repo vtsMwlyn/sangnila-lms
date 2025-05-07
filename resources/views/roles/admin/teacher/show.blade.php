@@ -168,7 +168,11 @@
 											@if($cs->student->details->profpic)
 												<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 											@else
-												<img src="{{ asset('img/tempblankprofpic.png') }}" class="rounded-full hover:border-cyan-500 hover:border-4 border-slate-400 w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center; border-width: 3px;" loading="lazy">
+												@if($cs->student->details->gender == 1)
+													<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-28 h-28" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+												@else
+													<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-28 h-28" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+												@endif
 											@endif
 											<h1 class="text-lg font-bold text-center">{{-- explode(" ", $cs->student->full_name)[0] --}}{{ $cs->student->full_name }}</h1>
 										</div>
