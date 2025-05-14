@@ -15,7 +15,7 @@
 					@endif
 
 					{{-- Special events only --}}
-					<img src="{{ asset('img/special-events/birthdayhat.png') }}" class="absolute top-[-20px] right-[-20px] w-14 rotate-[38deg]">
+					{{-- <img src="{{ asset('img/special-events/birthdayhat.png') }}" class="absolute top-[-20px] right-[-20px] w-14 rotate-[38deg]"> --}}
 				</div>
 				<h1 class="text-xl font-bold">Hello {{ (Auth::user()->details->gender == 1)? "Mr. " : "Ms. " }} {{ explode(" ", Auth::user()->full_name)[0] }}!</h1>
 			</button>

@@ -394,7 +394,7 @@ class AttendanceController extends Controller {
 			return $query->where('role_id', 3);
 		})->orderBy('self_attendance_date')->orderBy('user_id')->get();
 
-		$all_student_attendances = StudentAttendance::filter(request(['course', 'student']))
+		$all_student_attendances = StudentAttendance::filter(request(['course', 'student', 'uploader']))
 			->select('student_attendances.*')
 			->join('attendances', 'student_attendances.attendance_id', '=', 'attendances.id')
 			->orderBy('attendances.attendance_date', 'desc')

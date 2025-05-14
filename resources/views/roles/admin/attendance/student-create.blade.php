@@ -160,14 +160,14 @@
 						$('#teacher_id').val(classData.teacher.id);
 						$('#course_id').val(classData.course_id);
 
-						const filteredCourses = allCoursesWithTopicsAndActivities.filter(acwtaa => acwtaa.id === classData.course_id);
+						const filteredCourses = allCoursesWithTopicsAndActivities.filter(acwtaa => acwtaa.id == classData.course_id);
 						const course = filteredCourses[0];
 
 						$('#_activity_progress').html('');
 
 						if (course) {
 							// Filter topics based on the teacher's user_id
-							const filteredTopics = course.topics.filter(topic => topic.user_id === classData.teacher.id);
+							const filteredTopics = course.topics.filter(topic => topic.user_id == classData.teacher.id);
 
 							// Loop through each topic and its activities
 							filteredTopics.forEach(topic => {

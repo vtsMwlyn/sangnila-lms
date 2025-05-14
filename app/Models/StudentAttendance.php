@@ -38,5 +38,13 @@ class StudentAttendance extends Model
 				});
 			});
 		});
+
+		$query->when($filters["uploader"] ?? false, function($query, $uploader){
+			return $query->whereHas('attendance', function($query) use ($uploader){
+				return $query->whereHas("posted_by", function($query) use ($uploader){
+					return $query->where("full_name", "like", "%" . $uploader . "%");
+				});
+			});
+		});
 	}
 }

@@ -1,7 +1,7 @@
 {{-- Main navbar --}}
 <div class="w-full text-white sticky top-0 z-20 transition duration-500" style="background-color: rgba(255, 255, 255, 1);" id="navbar-container">
-	<div class="flex items-center lg:justify-around justify-between sticky top-0 px-5 w-full space-x-5 py-2 xl:py-0" id="navbar">
-	{{-- <div class="flex items-center justify-between sticky top-0 px-5 w-full space-x-5 py-2 xl:py-0" id="navbar"> --}}
+	{{-- <div class="flex items-center lg:justify-around justify-between sticky top-0 px-5 w-full space-x-5 py-2 xl:py-0" id="navbar"> --}}
+	<div class="flex items-center justify-between sticky top-0 px-5 w-full space-x-5 py-2 xl:py-0" id="navbar">
 		{{-- Logo/Brand Image --}}
 		<div class="flex items-stretch gap-4">
 			<div class="flex justify-center items-center">
@@ -15,7 +15,7 @@
 
 			<div class="flex items-start flex-col justify-center">
 				<div class="text-md md:text-lg text-blue">LEARNING MANAGEMENT SYSTEM</div>
-				<p class="font-extrabold text-indigo-500 text-base">1st Anniversary Edition 🥳</p>
+				{{-- <p class="font-extrabold text-indigo-500 text-base">1st Anniversary Edition 🥳</p> --}}
 			</div>
 		</div>
 

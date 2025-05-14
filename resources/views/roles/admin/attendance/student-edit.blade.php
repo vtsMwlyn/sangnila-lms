@@ -85,7 +85,7 @@
                                         @endforeach
                                     @endforeach
                                 @endif
-								<option value="{{ $activity->title }}" @if(old('activity_progress', $student_attendance->activity_progress == 'Other')) selected @endif>Other (Please specify in the attendance detail)</option>
+								<option value="Other" @if(old('activity_progress', $student_attendance->activity_progress == 'Other')) selected @endif>Other (Please specify in the attendance detail)</option>
 							</x-select>
 						</div>
 

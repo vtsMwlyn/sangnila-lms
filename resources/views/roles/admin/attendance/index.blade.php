@@ -87,6 +87,7 @@
                         <input type="hidden" name="content" value="{{ request('content') }}">
                         <x-input type="text" name="student" placeholder="Search by student..." :value="request('student')"/>
                         <x-input type="text" name="course" placeholder="Search by course..." :value="request('course')"/>
+                        <x-input type="text" name="uploader" placeholder="Search by uploader..." :value="request('uploader')"/>
                         <x-button type="submit"><i class="bi bi-search"></i> Filter</x-button>
                     </form>
                 </div>
@@ -146,7 +147,7 @@
                     <tbody>
                         @forelse ($all_lecturer_self_attendances as $la)
                             @php
-                                $checkInPhotoL = Storage::url("app/public/" . $la->attendance_evidence);
+                                $checkInPhotoL = Storage::url( $la->attendance_evidence);
 
                                 $courseStudents = App\Models\CourseStudent::where('teacher_id', $la->user->id)
                                     ->where('course_id', $la->course->id)->get();
@@ -163,7 +164,7 @@
                                 foreach($filtered as $f){
                                     $ss = [];
 
-                                    $ss['src'] = Storage::url("app/public/" . $f->attendance_evidence);
+                                    $ss['src'] = Storage::url( $f->attendance_evidence);
                                     $ss['validator'] = $f->user->full_name . ' (' . $f->check_in_time . '-' . $f->check_out_time . ')';
 
                                     array_push($sourceStudents, $ss);
@@ -215,6 +216,7 @@
                         <th class="text-start py-3 px-4 border-b-2 border-slate-400">Student</th>
                         <th class="text-start py-3 px-4 border-b-2 border-slate-400">Session</th>
                         <th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Time</th>
+                        <th class="text-start py-3 px-4 border-b-2 border-slate-400">Uploader</th>
                         <th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
                     </thead>
                     <tbody>
@@ -239,6 +241,7 @@
                                     @endphp
                                 </td>
                                 <td class="py-3 px-4">{{ Carbon\Carbon::parse($sa->start_time)->format('H:i') }}-{{ Carbon\Carbon::parse($sa->end_time)->format('H:i') }} GMT+7</td>
+                                <td class="py-3 px-4">{{ $sa->attendance->posted_by->full_name }}</td>
                                 <td class="py-3 px-4">
                                     <div class="w-full flex gap-1">
                                         <button type="button" class="view-student-attendance-btn" data-sa="{{ $sa }}">
