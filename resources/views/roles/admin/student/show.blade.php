@@ -678,7 +678,7 @@
 								$('<td>').addClass('py-3 px-4 whitespace-nowrap').text(assessmentData.performance_score.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
 							)
 							.append(
-								$('<td>').addClass('py-3 px-4').text(assessmentData.performance_description)
+								$('<td>').addClass('py-3 px-4').html(assessmentData.performance_description)
 							)
 					)
 					.append(
@@ -693,7 +693,7 @@
 								$('<td>').addClass('py-3 px-4 whitespace-nowrap').text(assessmentData.technical_skill_score.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
 							)
 							.append(
-								$('<td>').addClass('py-3 px-4').text(assessmentData.technical_skill_description)
+								$('<td>').addClass('py-3 px-4').html(assessmentData.technical_skill_description)
 							)
 					)
 					.append(
@@ -708,7 +708,7 @@
 								$('<td>').addClass('py-3 px-4 whitespace-nowrap').text(assessmentData.aesthetical_skill_score.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
 							)
 							.append(
-								$('<td>').addClass('py-3 px-4').text(assessmentData.aesthetical_skill_description)
+								$('<td>').addClass('py-3 px-4').html(assessmentData.aesthetical_skill_description)
 							)
 					)
 					.append(
@@ -723,7 +723,7 @@
 								$('<td>').addClass('py-3 px-4 whitespace-nowrap').text(assessmentData.overall_score.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
 							)
 							.append(
-								$('<td>').addClass('py-3 px-4').text(assessmentData.overall_description)
+								$('<td>').addClass('py-3 px-4').html(assessmentData.overall_description)
 							)
 					);
 

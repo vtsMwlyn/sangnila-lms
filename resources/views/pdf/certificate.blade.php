@@ -77,28 +77,28 @@
                     <div style="display: inline-block; width: 185px; font-weight: 700; font-size: 16pt;">Performance</div>
                     <div style="display: inline-block; width: 25px; font-weight: 700; font-size: 16pt;">:</div>
                     <div style="display: inline-block; width: 200px; font-weight: 700; font-size: 16pt;">{{ ucwords($assessment->performance_score) }}</div>
-                    <div style="font-size: 13pt; margin-top: -5px; line-height: 0.8; text-align: justify;">{{ $assessment->performance_description }}</div>
+                    <div style="font-size: 13pt; margin-top: -5px; line-height: 0.8; text-align: justify;">{!! $assessment->performance_description !!}</div>
                 </div>
 
                 <div style="margin-top: 10px; padding-left: 20px; padding-right: 20px; width: 90%;">
                     <div style="display: inline-block; width: 185px; font-weight: 700; font-size: 16pt;">Technical Skill</div>
                     <div style="display: inline-block; width: 25px; font-weight: 700; font-size: 16pt;">:</div>
                     <div style="display: inline-block; width: 200px; font-weight: 700; font-size: 16pt;">{{ ucwords($assessment->technical_skill_score) }}</div>
-                    <div style="font-size: 13pt; margin-top: -5px; line-height: 0.8; text-align: justify;">{{ $assessment->technical_skill_description }}</div>
+                    <div style="font-size: 13pt; margin-top: -5px; line-height: 0.8; text-align: justify;">{!! $assessment->technical_skill_description !!}</div>
                 </div>
 
                 <div style="margin-top: 10px; padding-left: 20px; padding-right: 20px; width: 90%;">
                     <div style="display: inline-block; width: 185px; font-weight: 700; font-size: 16pt;">Aesthetical Skill</div>
                     <div style="display: inline-block; width: 25px; font-weight: 700; font-size: 16pt;">:</div>
                     <div style="display: inline-block; width: 200px; font-weight: 700; font-size: 16pt;">{{ ucwords($assessment->aesthetical_skill_score) }}</div>
-                    <div style="font-size: 13pt; margin-top: -5px; line-height: 0.8; text-align: justify;">{{ $assessment->aesthetical_skill_description }}</div>
+                    <div style="font-size: 13pt; margin-top: -5px; line-height: 0.8; text-align: justify;">{!! $assessment->aesthetical_skill_description !!}</div>
                 </div>
 
                 <div style="margin-top: 10px; padding-left: 20px; padding-right: 20px; width: 70%;">
                     <div style="display: inline-block; width: 185px; font-weight: 700; font-size: 16pt;">Overall</div>
                     <div style="display: inline-block; width: 25px; font-weight: 700; font-size: 16pt;">:</div>
                     <div style="display: inline-block; width: 200px; font-weight: 700; font-size: 16pt;">{{ ucwords($assessment->overall_score) }}</div>
-                    <div style="font-size: 13pt; margin-top: -5px; line-height: 0.8; text-align: justify;">{{ $assessment->overall_description }}</div>
+                    <div style="font-size: 13pt; margin-top: -5px; line-height: 0.8; text-align: justify;">{!! $assessment->overall_description !!}</div>
                 </div>
             </div>
 
