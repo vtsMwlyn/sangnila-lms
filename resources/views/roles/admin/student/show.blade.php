@@ -181,6 +181,8 @@
 		</div>
 
 		<div id="certificate_access_status" class="flex items-center gap-1 mt-4"></div>
+		<div id="certificate_custom_name" class="flex items-center gap-1 mt-2"></div>
+		<div id="certificate_custom_date" class="flex items-center gap-1 mt-2"></div>
 
 		<div class="flex w-full justify-center mt-5 gap-2">
 			<x-anchor-button class="w-1/6" id="preview-certificate-btn" target="_blank"><i class="bi bi-eye"></i> Preview Certificate</x-anchor-button>
@@ -726,6 +728,9 @@
 					);
 
 				$('#certificate_access_status').html(assessmentData.certificate_accessible == 1? '<i class="bi bi-check-circle-fill text-green-600"></i> Student can access certificate' : '<i class="bi bi-x-lg text-red"></i> Student has no access to certificate');
+				$('#certificate_custom_name').html(assessmentData.custom_name ? `<i class="bi bi-vector-pen text-slate-600"></i> Custom Name: <b>${assessmentData.custom_name}</b>` : '<i class="bi bi-vector-pen text-slate-600"></i> <i>Custom Name Not Set</i>');
+				$('#certificate_custom_date').html(assessmentData.custom_date ? `<i class="bi bi-calendar-date text-slate-600"></i> Custom Date: <b>${assessmentData.custom_date}</b>` : '<i class="bi bi-calendar-date text-slate-600"></i> <i>Custom Date Not Set</i>');
+
 				$('#edit-assessment-btn').attr('href', $(this).data('route'));
 				$('#preview-certificate-btn').attr('href', $(this).data('view_certificate'));
 

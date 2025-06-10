@@ -94,6 +94,11 @@
 				<x-input id="custom_name" class="w-full mt-1" type="text" name="custom_name" placeholder="Enter custom display name" value="{{ old('custom_name', $assessment->custom_name) }}" />
 			</div>
 
+			<div class="mt-2 flex flex-col w-full">
+				<x-label for="custom_date">Custom Certificate Date</x-label>
+				<x-input id="custom_date" class="w-full mt-1 date-input" type="date" name="custom_date" placeholder="Enter custom date" value="{{ old('custom_date', $assessment->custom_date) }}" />
+			</div>
+
 			<label for="_certificate_access" class="flex items-center gap-1 mt-4">
 				<input type="checkbox" id="_certificate_access" name="_certificate_access" class="mr-2 h-5 w-5" @if(old('certificate_access', $assessment->certificate_accessible) == 1) checked @endif/>
 				Student can access certificate

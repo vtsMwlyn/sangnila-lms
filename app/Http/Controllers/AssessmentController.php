@@ -102,7 +102,8 @@ class AssessmentController extends Controller
             'overall_score' => 'required',
             'overall_description' => 'required',
             'certificate_access' => 'required',
-            'custom_name' => 'nullable|string|max:25'
+            'custom_name' => 'nullable|string|max:25',
+            'custom_date' => 'nullable|date'
         ]);
 
         $course = $assessment->course;
@@ -119,6 +120,7 @@ class AssessmentController extends Controller
             'overall_description' => e($validatedData['overall_description']),
             'certificate_accessible' => $validatedData['certificate_access'],
             'custom_name' => $validatedData['custom_name'],
+            'custom_date' => $validatedData['custom_date'],
         ]);
 
         return redirect(route('admin.student.show', [$student->id, $course->id]))->with('success', 'Successfully edited the assessment for this student!');

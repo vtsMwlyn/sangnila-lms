@@ -2,19 +2,13 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\SysAdminController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\UserAccountController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\CourseStudentController;
-use App\Http\Controllers\CustomOperationController;
-use App\Http\Controllers\PushNotificationController;
+use App\Models\Course;
 
 // Verify email application (dont move this)
 Auth::routes(['verify' => true]);
@@ -88,6 +82,19 @@ Route::middleware([])->group(function(){
 			catch(Exception $e){
 				return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
 			}
+		});
+
+		Route::get('/highlighted-portfolio', function(){
+			$portfolios = Course::whereHas('portfolios', function($query) {
+				$query->where('is_highlighted', 1)
+					->whereIn('type', ['video', 'image']);
+			})->with(['portfolios' => function($query) {
+				$query->where('is_highlighted', 1)
+					->whereIn('type', ['video', 'image'])
+					->with('student');
+			}])->get();
+
+			return response()->json(['success' => true, 'portfolios' => $portfolios]);
 		});
 	});
 });

@@ -62,7 +62,7 @@
                 </div>
                 <div style="font-size: 14pt; font-weight: 400;">Who has completed Class of “{{ $course->course_name }}”</div>
             </div>
-            <div style="position: absolute; right: 75px; top: 550px; color: white; font-size: 60pt; font-weight: 300; font-size: 14pt;">Bandung, {{ Carbon\Carbon::parse($assessment->updated_at)->format('d M Y') }}</div>
+            <div style="position: absolute; right: 75px; top: 550px; color: white; font-size: 60pt; font-weight: 300; font-size: 14pt;">Bandung, {{ $assessment->custom_date ? Carbon\Carbon::parse($assessment->custom_date)->format('d M Y') : Carbon\Carbon::parse($assessment->updated_at)->format('d M Y') }}</div>
         </div>
     </body>
 
