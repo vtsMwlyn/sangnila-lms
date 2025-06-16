@@ -8,22 +8,22 @@
 	<x-section-container>
 		<x-page-title class="text-center">{{ __("List of Active Students") }}</x-page-title>
 
-		<div class="flex items-center justify-between gap-5 mt-5 w-full">
+		<form action="{{ route("admin.student.index") }}" class="flex items-center justify-between gap-5 mt-5 w-full" id="filter-form">
 			<x-anchor-button class="w-56" href="{{ route('admin.student.import-excel') }}"><i class="bi bi-file-earmark-arrow-up"></i> Import From Excel</x-anchor-button>
 
-			<form class="flex w-1/2 justify-center" action="{{ route("admin.student.index") }}">
+			<div class="flex w-1/2 justify-center">
 				<x-input type="text" class="rounded-l-lg rounded-r-none w-full" name="search" placeholder="Search..." :value="request('search')"/>
 				<button class="rounded-l-none rounded-r-lg border-slate-400 border-t-2 border-r-2 border-b-2 py-2 px-4 bg-white text-slate-400 hover:bg-slate-400 hover:text-white" style="border-width: 3px 3px 3px 0;"><i class="bi bi-search"></i></button>
-			</form>
+			</div>
 
-			<x-select id="filter-course" class="w-56" value="{{ request('course_name') }}">
+			<x-select class="w-56" name="course">
 				<option value="">All</option>
 				@forelse(App\Models\Course::where("status", "active")->get() as $c)
 					<option value="{{ $c->id }}" @if(request('course') == $c->id) selected @endif>{{ $c->course_name }}</option>
 				@empty
 				@endforelse
 			</x-select>
-		</div>
+		</form>
 
 		<div class="w-full bg-slate-400 mt-6" style="height: 2px;"></div>
 
@@ -167,18 +167,4 @@
 			{{ $all_students_data->links() }}
 		</div>
 	</x-section-container>
-
-	<script>
-		$(document).ready(() => {
-			$('#search-btn').click(() => {
-				const form = $('#filter-form');
-				form.html('');
-
-				form.append($("<input>").attr({"type": "hidden", "name": "course", "value": $('#filter-course').val()}));
-				form.append($("<input>").attr({"type": "hidden", "name": "search", "value": $('#search-name').val()}));
-
-				form.submit();
-			});
-		});
-	</script>
 @endsection
