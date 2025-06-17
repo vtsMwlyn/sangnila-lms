@@ -142,8 +142,8 @@ Route::prefix('/teacher')
 			Route::post('/{course_id}/upload', [AttendanceController::class, 'store'])->name('store')->whereNumber('course_id');
 
 			// Edit attendance data
-			// Route::get("/{attendance_data_id}/edit", [AttendanceController::class, "edit"])->name("edit")->whereNumber('attendance_data_id');
-			// Route::post("/{attendance_data_id}/edit", [AttendanceController::class, "update"])->name("update")->whereNumber('attendance_data_id');
+			Route::get("/{attendance_data_id}/edit", [AttendanceController::class, "edit"])->name("edit")->whereNumber('attendance_data_id');
+			Route::post("/{attendance_data_id}/edit", [AttendanceController::class, "update"])->name("update")->whereNumber('attendance_data_id');
 
 			// Self attendance
 			Route::get("/{course_id}/self/check-in", [TeacherController::class, "check_in"])->name("check-in")->whereNumber("course_id");
@@ -153,6 +153,13 @@ Route::prefix('/teacher')
 			// Trial class attendance
 			Route::get('/{course_id}/trial-class/create', [AttendanceController::class, 'teacher_create_trial_class_attendance'])->name('trial-class.create')->whereNumber('course_id');
 			Route::post('/{course_id}/trial-class/create', [AttendanceController::class, 'teacher_store_trial_class_attendance'])->name('trial-class.store')->whereNumber('course_id');
+
+			// Substitution attendance
+			Route::get('/substitution', [AttendanceController::class, 'teacher_substitution_index'])->name('substitution.index');
+			Route::get('/substitution/{course_id}/upload', [AttendanceController::class, 'teacher_substitution_create'])->name('substitution.create')->whereNumber('course_id');
+			Route::post('/substitution/{course_id}/upload', [AttendanceController::class, 'teacher_substitution_store'])->name('substitution.store')->whereNumber('course_id');
+			Route::get('/substitution/{subsitution_attendance_id}/edit', [AttendanceController::class, 'teacher_substitution_edit'])->name('substitution.edit')->whereNumber('substitution_attendance_id');
+			Route::post('/substitution/{subsitution_attendance_id}/edit', [AttendanceController::class, 'teacher_substitution_update'])->name('substitution.update')->whereNumber('substitution_attendance_id');
 		});
 
 

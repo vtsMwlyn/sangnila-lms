@@ -28,10 +28,19 @@
 			@csrf
 
 			<div class="bg-white border rounded-2xl p-5 flex flex-col">
-				<h1 class="text-blue font-semibold">Students Currently Teached in This Course</h1>
+				<div>
+					<div class="w-full flex xl:flex-row flex-col justify-between items-start xl:items-center gap-2 xl:gap-0">
+						<h1 class="text-blue font-semibold">Students Currently Teached in This Course</h1>
+						<div class="flex gap-3 w-full xl:w-1/3 items-center">
+							<x-input id="search-student" class="grow" placeholder="Search Student..."/>
+							<x-button type="button" id="clear-button">Clear</x-button>
+						</div>
+					</div>
+				</div>
+				
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 				@forelse ($course_students->where('learning_status', 'learning') as $cs)
-					<div class="my-2 flex gap-3 items-center">
+					<div class="my-2 flex gap-3 items-center currently-teached-students">
 						<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $cs->student_id }}"
 						class="mr-2 h-5 w-5">
 						@if($cs->student->details->profpic)
@@ -55,16 +64,8 @@
 			</div>
 
 			<div class="bg-white border rounded-2xl py-5 flex flex-col mt-8">
-				<div class="px-5">
-					<div class="w-full flex xl:flex-row flex-col justify-between items-start xl:items-center gap-2 xl:gap-0">
-						<h1 class="text-blue font-semibold">Other Students</h1>
-						<div class="flex gap-3 w-full xl:w-1/3 items-center">
-							<x-input id="search-student" class="grow" placeholder="Search Student..."/>
-							<x-button type="button" id="clear-button">Clear</x-button>
-						</div>
-					</div>
-					<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
-				</div>
+				<h1 class="text-blue font-semibold">Other Students</h1>
+				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 				<div class="w-full overflow-y-auto px-5" style="max-height: 40vh;">
 					@forelse ($course_students->where('learning_status', '!=', 'learning') as $cs)
 						<div class="my-2 flex gap-3 items-center">
@@ -86,30 +87,7 @@
 							$iterasus++;
 						@endphp
 					@empty
-
-					@endforelse
-
-					@forelse ($remaining_students as $rs)
-						<div class="my-4 other-students flex gap-3 items-center">
-							<input type="checkbox" id="checkbox{{ $iterasus }}" data-sid="{{ $rs->id }}"
-							class="mr-2 h-5 w-5">
-							@if($rs->details->profpic)
-								<img src="{{ Storage::url("app/public/" . $rs->details->profpic) }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
-							@else
-								@if($rs->details->gender == 1)
-									<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
-								@else
-									<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-12 h-12" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
-								@endif
-							@endif
-							<label for="checkbox{{ $iterasus }}">{{ $rs->full_name }}</label>
-						</div>
-
-						@php
-							$iterasus++;
-						@endphp
-					@empty
-
+						- No other students -
 					@endforelse
 				</div>
 			</div>
@@ -129,7 +107,7 @@
 		$(document).ready(() => {
 			$("#search-student").on("input", function(){
 				const keyword = $(this).val().toLowerCase();
-				$(".other-students").each(function(){
+				$(".currently-teached-students").each(function(){
 					if(!$(this).find("label").text().toLowerCase().includes(keyword)){
 						$(this).hide();
 					} else {
@@ -141,7 +119,7 @@
 			$("#clear-button").click(() => {
 				$("#search-student").val('');
 
-				$(".other-students").each(function(){
+				$(".currently-teached-students").each(function(){
 					$(this).show();
 				});
 			});

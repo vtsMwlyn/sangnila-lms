@@ -4,10 +4,9 @@
 	<h1>Student Attendance</h1>
 @endsection
 
-
 @section("content")
 	<x-section-container>
-		<x-page-title>New Attendance Report</x-page-title>
+		<x-page-title>Edit Attendance Report</x-page-title>
 		<h1 class="font-bold text-lg text-blue mt-1">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
@@ -19,14 +18,14 @@
 			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
-		<form action="{{ route('teacher.attendance.store', $course->id) }}" method="post" id="attendance_form">
+		<form action="{{ route('teacher.attendance.update', $attendance->id) }}" method="post" id="attendance_form">
 			@csrf
 			<div class="my-4 flex w-full justify-between items-start">
 				<div class="w-1/3">
 					<x-label for="attendance_date">Attendance Date<span class="text-red">*</span></x-label>
 					<div class="flex gap-3 mt-1 items-start" id="date-inp-cont">
 						<div class="flex flex-col items-start grow">
-							<x-input type="date" class="date-input w-full" name="attendance_date" id="attendance_date"/>
+							<x-input type="date" class="date-input w-full" name="attendance_date" id="attendance_date" value="{{ Carbon\Carbon::parse($attendance->attendance_date)->format('Y-m-d') }}"/>
 							<p class="text-red font-bold mt-2 hidden" id="error-date"><i class="bi bi-exclamation-circle"></i> Attendance date field is required.</p>
 						</div>
 						<x-button type="button" id="todaybtn" class="mt-1">Today</x-button>
@@ -43,7 +42,10 @@
 			</div>
 
 			<h2 class="mt-12 font-extrabold text-xl text-dark-blue">Attendance Report</h2>
-			@foreach ($students as $student)
+			@foreach ($grouped_student_attendances as $student_id => $gsa)
+				@php
+					$student = App\Models\User::find($student_id);
+				@endphp
 				<div class="bg-white rounded-xl p-5 flex flex-col w-full my-6 student-card">
 					{{-- Accordion trigger --}}
 					<button type="button" class="flex justify-between attendance-detail-accordion-btn items-center">
@@ -72,7 +74,7 @@
 								<input type="checkbox" id="_checkbox{{ $student->id }}" class="_checkbox form-checkbox h-5 w-5" checked/>
 								Is Attended
 							</label>
-							<button type="button" class="bg-red text-white rounded-xl hover:bg-slate-600 py-2 px-4 remove-student-btn" onclick="return confirm('Are you sure want to remove this student from the new attendance report?');" data-sid="{{ $student->id }}"><i class="bi bi-trash3"></i></button>
+							<button type="button" class="bg-red text-white rounded-xl hover:bg-slate-600 py-2 px-4 remove-student-btn" data-sid="{{ $student->id }}"><i class="bi bi-trash3"></i></button>
 						</div>
 
 						<div class="flex gap-5 mt-4 w-full container-session-present">
@@ -168,9 +170,32 @@
 									<th class="text-start py-3 px-4 border-b-2 border-slate-400">Action</th>
 								</thead>
 								<tbody class="session-details-tbody">
-									<tr class="bg-slate-100 empty-table-placeholder">
-										<td colspan="6" class="py-2 px-4 text-center">- No attendance data inputted for this student -</td>
-									</tr>
+									@foreach ($gsa as $sa)
+										<tr>
+											<td class="py-3 px-4">{{ Carbon\Carbon::parse($sa->start_time)->format('H:i') }}-{{ Carbon\Carbon::parse($sa->end_time)->format('H:i') }}</td>
+											<td class="py-3 px-4">
+												@if($sa->is_attend)
+													<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">
+												@else
+													<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">
+												@endif
+											</td>
+											<td class="py-3 px-4">{{ $sa->activity_progress }}</td>
+											<td class="py-3 px-4">{{ $sa->learning_status }}</td>
+											<td class="py-3 px-4">{{ $sa->attendance_detail }}</td>
+											<td class="py-3 px-4">
+												<button class="bg-red remove-row-btn text-white rounded-xl hover:bg-slate-600 py-2 px-4"><i class="bi bi-trash3"></i></button>
+												<div class="hidden-input-container">
+													<input type="hidden" name="is_attend[{{ $student_id }}][]" value="{{ $sa->is_attend == 1 ? 'on' : 'off' }}">
+													<input type="hidden" name="start_time[{{ $student_id }}][]" value="{{ $sa->is_attend == 1 ? $sa->start_time : '00:00' }}">
+													<input type="hidden" name="end_time[{{ $student_id }}][]" value="{{ $sa->is_attend == 1 ? $sa->end_time : '00:00' }}">
+													<input type="hidden" name="activity[{{ $student_id }}][]" value="{{ $sa->is_attend == 1 ? $sa->activity_progress : 'Absent' }}">
+													<input type="hidden" name="learning_status[{{ $student_id }}][]" value="{{ $sa->is_attend == 1 ? $sa->learning_status : 'Absent' }}">
+													<input type="hidden" name="details[{{ $student_id }}][]" value="{{ $sa->attendance_detail }}">
+												</div>
+											</td>
+										</tr>
+									@endforeach
 								</tbody>
 							</table>
 						</div>
@@ -192,7 +217,7 @@
 
 	<script>
 		const baseUrl = "{{ url('/') }}";
-		const allStudents = @json($allStudents);
+		const allStudents = @json($students);
 		let exclude_dropdown = @json($exclude_from_dropdown).map(Number);
 		const course = @json($course);
 		const topics = @json($topics);
@@ -255,6 +280,10 @@
 				}
 			});
 
+			$(document).on('click', '.remove-row-btn', function(){
+				$(this).closest('tr').remove();
+			});
+
 			$(document).on('click', '.add-data-btn', function(){
 				const currCard = $(this).closest('.attendance-detail-accordion-area');
 				const _isAttended = currCard.find('._checkbox').is(':checked')? 'on' : 'off';
@@ -301,6 +330,8 @@
 
 				const rowCount = currCard.find('.session-details-tbody').find('tr').length;
 
+				const actionCol = $('<td>').addClass('py-3 px-4').html(delRowBtn);
+
 				const newRow = $('<tr>').addClass(rowCount % 2 == 0? 'bg-slate-100' : '')
 					.append(
 						// $('<td>').addClass('py-3 px-4').text((_isAttended == 'on')? `${_nthSession} (${_start_time}-${_end_time})` : `${_nthSession}`)
@@ -314,7 +345,7 @@
 					).append(
 						$('<td>').addClass('py-3 px-4').text(_details)
 					).append(
-						$('<td>').addClass('py-3 px-4').html(delRowBtn)
+						actionCol
 					);
 
 				const student = $(this).data('student');
@@ -341,7 +372,7 @@
 				});
 
 				currCard.find('.session-details-tbody').append(newRow);
-				currCard.append(hidIsAttend)/*.append(hidNthSession)*/.append(hidStartTime).append(hidEndTime).append(hidActivity).append(hidLearningStatus).append(hidDetails);
+				actionCol.append(hidIsAttend)/*.append(hidNthSession)*/.append(hidStartTime).append(hidEndTime).append(hidActivity).append(hidLearningStatus).append(hidDetails);
 			});
 
 			$(document).on('change', '.form-checkbox', function(){

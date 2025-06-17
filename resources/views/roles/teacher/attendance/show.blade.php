@@ -111,13 +111,6 @@
 				<x-anchor-button href="{{ route('teacher.attendance.select-students', $course->id) }}" class="self-start xl:self-center">
 					<i class="bi bi-plus-lg"></i> New Attendance Report
 				</x-anchor-button>
-				<div class="relative flex flex-col items-start w-full md:w-96 first-letter:0 dropdown-container">
-					<button type="button" class="border-slate-400 py-2 px-4 rounded-2xl font-bold text-dark-blue w-full bg-white flex justify-between items-center dropdown-toggler" style="border-width: 3px;">{{ ucwords(request('show', 'My Attendances')) }} <img src="{{ asset('img/dropdown-arrow.svg') }}" class="w-5 h-5" alt="icon"></button>
-					<div class="absolute bg-white top-12 w-full rounded-xl flex flex-col hidden overflow-hidden dropdown-menu" style="">
-						<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances', 'content' => 'attendance reports', 'show' => 'my students only']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">My Students Only</div></a>
-						<a href="{{ route('teacher.attendance.show', ['course_id' => $course->id ,'content' => 'my attendances', 'content' => 'attendance reports', 'show' => 'all']) }}" class="w-full"><div class="w-full py-2 px-4 text-start hover:bg-slate-300">All</div></a>
-					</div>
-				</div>
 			</div>
 
 			<div class="w-full overflow-auto hidden xl:block" style="height: 60vh;">
@@ -164,10 +157,8 @@
 								<td class="py-3 px-4 text-center">{{ $atd->student_attendances->where("is_attend", 0)->count() }}</td>
 								<td class="py-3 px-4 text-center">{{ $atd->posted_by->id == Auth::user()->id? 'Me' : $atd->posted_by->full_name }}</td>
 								<td class="py-3 px-4">
-									<div class="flex gap-2 justify-center">
-										{{-- <x-anchor-button  href="{{ route('teacher.attendance.edit', $atd->id) }}">
-											<i class="bi bi-pencil-square"></i>
-										</x-anchor-button> --}}
+									<div class="flex gap-1 justify-center">
+										<a href="{{ route('teacher.attendance.edit', $atd->id) }}"><img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110"></a>
 										<button type="button" class=" show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}" data-session_number="{{ json_encode($sessionNumberPerAttendance[$atd->id]) }}" title="Check this attendance report details"><img src="{{ asset('img/history.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110"></button>
 									</div>
 								</td>
@@ -202,6 +193,7 @@
 	
 							<strong class="mt-5">Actions</strong>
 							<div class="flex gap-3 items-start my-3">
+								<a href="{{ route('teacher.attendance.edit', $atd->id) }}"><img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110"></a>
 								<button type="button" class=" show-attendance-details-button" data-attendance="{{ $atd }}" data-student_attendances="{{ $atd->student_attendances }}" data-session_number="{{ json_encode($sessionNumberPerAttendance[$atd->id]) }}"><img src="{{ asset('img/history.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110"></button>
 							</div>
 						</div>
