@@ -72,7 +72,7 @@
 								<input type="checkbox" id="_checkbox{{ $student->id }}" class="_checkbox form-checkbox h-5 w-5" checked/>
 								Is Attended
 							</label>
-							<button type="button" class="bg-red text-white rounded-xl hover:bg-slate-600 py-2 px-4 remove-student-btn" onclick="return confirm('Are you sure want to remove this student from the new attendance report?');" data-sid="{{ $student->id }}"><i class="bi bi-trash3"></i></button>
+							<button type="button" class="bg-red text-white rounded-xl hover:bg-slate-600 py-2 px-4 remove-student-btn"  data-sid="{{ $student->id }}"><i class="bi bi-trash3"></i> Remove Student</button>
 						</div>
 
 						<div class="flex gap-5 mt-4 w-full container-session-present">
@@ -87,6 +87,7 @@
 							<div class="flex flex-col w-1/2 mt-4 start_time-container-present">
 								<x-label for="_start_time{{ $student->id }}">Start Time<span class="text-red">*</span></x-label>
 								<x-input class="_start_time" type="time" id="_start_time{{ $student->id }}" value="00:00"/>
+								<p class="text-red font-bold mt-2 hidden error-time"><i class="bi bi-exclamation-circle"></i> Invalid learning time range.</p>
 							</div>
 
 							{{-- End Time --}}
@@ -273,6 +274,10 @@
 				currCard.find('._session').removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0');
 				currCard.find('.error-details').addClass('hidden');
 				currCard.find('._details').removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0');
+				
+				currCard.find('._start_time').removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0');
+				currCard.find('._end_time').removeClass('border-red focus:border-red-700 focus:ring-0').addClass('border-slate-400 focus:border-slate-600 focus:ring-0');
+				currCard.find('.error-time').addClass('hidden');
 
 				// if(!_nthSession || _nthSession < 1){
 				// 	currCard.find('.error-session').removeClass('hidden');
@@ -284,6 +289,22 @@
 				if(!_details || _details == ''){
 					currCard.find('.error-details').removeClass('hidden');
 					currCard.find('._details').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
+
+					input_error = true;
+				}
+
+				// convert to Date objects (or just minutes)
+				const [h1, m1] = _start_time.split(":").map(Number);
+				const [h2, m2] = _end_time.split(":").map(Number);
+
+				// compare by total minutes
+				const stime = h1 * 60 + m1;
+				const etime = h2 * 60 + m2;
+
+				if(_start_time == '00:00' && _end_time == '00:00' || etime < stime){
+					currCard.find('.error-time').removeClass('hidden');
+					currCard.find('._start_time').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
+					currCard.find('._end_time').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
 
 					input_error = true;
 				}

@@ -69,6 +69,7 @@
 							<div class="flex flex-col w-1/2">
 								<x-label for="_start_time">Start Time<span class="text-red">*</span></x-label>
 								<x-input class="_start_time" type="time" id="_start_time" value="00:00"/>
+                                <p class="text-red font-bold mt-2 hidden error-time"><i class="bi bi-exclamation-circle"></i> Invalid learning time range.</p>
 							</div>
 
 							{{-- End Time --}}
@@ -102,7 +103,8 @@
 
 						<div class="w-full mt-8">
 							<x-label for="_attendance_details" class="mb-1">Details<span class="text-red">*</span></x-label>
-							<x-textarea rows="4" name="_attendance_details" id="_attendance_details" class="w-full" placeholder="Input details">N/A</x-textarea>
+							<x-textarea rows="4" name="_attendance_details" id="_attendance_details" class="w-full" placeholder="Input details"></x-textarea>
+                            <p class="text-red font-bold mt-2 hidden" id="error-attendance-detail"><i class="bi bi-exclamation-circle"></i> Please input learning details.</p>
 						</div>
 					</div>
 
@@ -133,7 +135,7 @@
                                     <td class="py-3 px-4">{{ Carbon\Carbon::parse($sa->start_time)->format('H:i') }}-{{ Carbon\Carbon::parse($sa->end_time)->format('H:i') }}</td>
                                     <td class="py-3 px-4">{{ $sa->activity_progress }}<br><br>{{ $sa->learning_status }}<br>{{ $sa->attendance_detail }}</td>
                                     <td class="py-3 px-4">
-                                        <button class="bg-red remove-row-btn text-white rounded-xl hover:bg-slate-600 py-2 px-4"><i class="bi bi-trash3"></i></button>
+                                        <button type="button" class="bg-red remove-row-btn text-white rounded-xl hover:bg-slate-600 py-2 px-4"><i class="bi bi-trash3"></i></button>
                                         <div>
                                             <input type="hidden" name="student_id[]" value="{{ $sa->student_id }}">
                                             <input type="hidden" name="start_time[]" value="{{ $sa->start_time }}">
@@ -171,6 +173,42 @@
 						const inpAttendanceDetails = $('#_attendance_details').val();
 						let inpStartTime = $('#_start_time').val();
 						let inpEndTime = $('#_end_time').val();
+
+                        $('#_start_time').addClass('border-slate-400 focus:border-slate-600 focus:ring-0').removeClass('border-red focus:border-red-700 focus:ring-0');
+						$('#_end_time').addClass('border-slate-400 focus:border-slate-600 focus:ring-0').removeClass('border-red focus:border-red-700 focus:ring-0');
+						$('.error-time').hide();
+
+						$('#_attendance_details').addClass('border-slate-400 focus:border-slate-600 focus:ring-0').removeClass('border-red focus:border-red-700 focus:ring-0');
+						$('#error-attendance-detail').hide();
+
+						let invalid = false;
+
+						// convert to Date objects (or just minutes)
+						const [h1, m1] = inpStartTime.split(":").map(Number);
+						const [h2, m2] = inpEndTime.split(":").map(Number);
+
+						// compare by total minutes
+						const stime = h1 * 60 + m1;
+						const etime = h2 * 60 + m2;
+
+						if(inpStartTime == '00:00' && inpEndTime == '00:00' || etime < stime){
+							$('#_start_time').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
+							$('#_end_time').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
+							$('.error-time').show();
+
+							invalid = true;
+						}
+
+						if(!inpAttendanceDetails){
+							$('#_attendance_details').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
+							$('#error-attendance-detail').show();
+
+							invalid = true;
+						}
+
+						if(invalid){
+							return;
+						}
 
 						const inpActivityProgress = _inpActivityProgress;
 

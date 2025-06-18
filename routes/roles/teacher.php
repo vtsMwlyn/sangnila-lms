@@ -153,6 +153,8 @@ Route::prefix('/teacher')
 			// Trial class attendance
 			Route::get('/{course_id}/trial-class/create', [AttendanceController::class, 'teacher_create_trial_class_attendance'])->name('trial-class.create')->whereNumber('course_id');
 			Route::post('/{course_id}/trial-class/create', [AttendanceController::class, 'teacher_store_trial_class_attendance'])->name('trial-class.store')->whereNumber('course_id');
+			Route::get('/{course_id}/trial-class/{trial_class_attendance_id}/edit', [AttendanceController::class, 'teacher_edit_trial_class_attendance'])->name('trial-class.edit')->whereNumber(['course_id', 'trial_class_attendance_id']);
+			Route::post('/{course_id}/trial-class/{trial_class_attendance_id}/edit', [AttendanceController::class, 'teacher_update_trial_class_attendance'])->name('trial-class.update')->whereNumber(['course_id', 'trial_class_attendance_id']);
 
 			// Substitution attendance
 			Route::get('/substitution', [AttendanceController::class, 'teacher_substitution_index'])->name('substitution.index');

@@ -617,6 +617,33 @@ class AttendanceController extends Controller {
 		return redirect(route('teacher.attendance.show', ['course_id' => $course_id, 'content' => 'trial class']))->with('success', 'Successfully added the trial class attendance data!');
 	}
 
+	// Edit trial class attendance
+	public function teacher_edit_trial_class_attendance($course_id, $trial_class_attendance_id){
+		$trial_class_attendance = TrialClassAttendance::findOrFail($trial_class_attendance_id);
+
+		return view('roles.teacher.attendance.edit-trial-class', [
+			'course' => $trial_class_attendance->course,
+			'trial_class_attendance' => $trial_class_attendance
+		]);
+	}
+
+	// Update trial class attendance
+	public function teacher_update_trial_class_attendance(Request $request, $course_id, $trial_class_attendance_id){
+		$validatedData = $request->validate([
+			'candidate_name' => 'required',
+			'start_time' => 'required',
+			'end_time' => 'required',
+			'attendance_date' => 'required|date',
+			'attendance_detail' => 'required'
+		]);
+
+		$validatedData['attendance_detail'] = e($validatedData['attendance_detail']);
+
+		TrialClassAttendance::findOrFail($trial_class_attendance_id)->update($validatedData);
+
+		return redirect(route('teacher.attendance.show', ['course_id' => $course_id, 'content' => 'trial class']))->with('success', 'Successfully edited the trial class attendance!');
+	}
+
 	// ===== STUDENT ====== //
 	// Showing all enrolled course to pick before continue
 	public function student_index(){

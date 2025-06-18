@@ -323,6 +323,7 @@
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Time</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Candidate Name</th>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Details</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Action</th>
 					</thead>
 					<tbody>
 						@forelse ($course->trial_class_attendances()->orderBy('attendance_date', 'desc')->orderBy('candidate_name', 'asc')->get() as $tc_attendance)
@@ -331,6 +332,9 @@
 								<td class="py-3 px-4">{{ Carbon\Carbon::parse($tc_attendance->start_time)->format('H:i') }}-{{ Carbon\Carbon::parse($tc_attendance->end_time)->format('H:i') }} GMT+7</td>
 								<td class="py-3 px-4">{{ $tc_attendance->candidate_name }}</td>
 								<td class="py-3 px-4">{!! nl2br($tc_attendance->attendance_detail) !!}</td>
+								<td class="py-3 px-4">
+									<a href="{{ route('teacher.attendance.trial-class.edit', [$course->id, $tc_attendance->id]) }}"><img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110"></a>
+								</td>
 							</tr>
 						@empty
 							<tr><td class="p-5 bg-white font-semibold text-center" colspan="5">- No trial class attendance data yet -</td></tr>

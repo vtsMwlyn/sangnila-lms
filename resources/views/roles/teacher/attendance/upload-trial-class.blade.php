@@ -38,12 +38,12 @@
             <div class="flex gap-5">
                 <div class="mt-3 w-full md:w-1/2">
                     <x-label class="mb-1" for="_start_time">Start Time<span class="text-red">*</span></x-label>
-                    <x-input type="time" name="_start_time" id="_start_time" class="w-full"/>
+                    <x-input type="time" name="_start_time" id="_start_time" class="w-full" value="00:00"/>
                     <p class="text-red font-bold mt-2 hidden" id="error-start-time"><i class="bi bi-exclamation-circle"></i> Please input start time.</p>
                 </div>
                 <div class="mt-3 w-full md:w-1/2">
                     <x-label class="mb-1" for="_end_time">End Time<span class="text-red">*</span></x-label>
-                    <x-input type="time" name="_end_time" id="_end_time" class="w-full" placeholder="Enter candidate name"/>
+                    <x-input type="time" name="_end_time" id="_end_time" class="w-full" value="00:00"/>
                     <p class="text-red font-bold mt-2 hidden" id="error-end-time"><i class="bi bi-exclamation-circle"></i> Please input end time.</p>
                 </div>
             </div>
@@ -155,19 +155,21 @@
                     invalid = true;
                 }
 
-                if(!inpStartTime.val()){
-                    inpStartTime.removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
-                    errStartTime.show();
+                // convert to Date objects (or just minutes)
+				const [h1, m1] = inpStartTime.val().split(":").map(Number);
+				const [h2, m2] = inpEndTime.val().split(":").map(Number);
 
-                    invalid = true;
-                }
+				// compare by total minutes
+				const stime = h1 * 60 + m1;
+				const etime = h2 * 60 + m2;
 
-                if(!inpEndTime.val()){
+				if(inpStartTime.val() == '00:00' && inpEndTime.val() == '00:00' || etime < stime){
+					inpStartTime.removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
                     inpEndTime.removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
-                    errEndTime.show();
+                    errStartTime.html(`<i class="bi bi-exclamation-circle"></i> Invalid learning time range.`).show();
 
                     invalid = true;
-                }
+				}
 
                 if(!inpDetail.val()){
                     inpDetail.removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
