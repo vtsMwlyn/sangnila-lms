@@ -132,8 +132,8 @@
 				</div>
 
 				<div class="mt-10 w-full flex gap-3 justify-end items-center" method="post" id="leForm">
-					<x-button class=" w-1/2 md:w-1/6">Submit Data</x-button>
 					<x-cancel-button class="w-1/2 md:w-1/6">Cancel</x-cancel-button>
+					<x-button class=" w-1/2 md:w-1/6">Submit</x-button>
 				</div>
 			</form>
 

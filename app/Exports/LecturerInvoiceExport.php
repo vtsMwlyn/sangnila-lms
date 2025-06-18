@@ -25,6 +25,7 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
 {
     protected $invoice;
     protected $grouped_student_attendances_by_month;
+    protected $grouped_substitution_attendances_by_month;
     protected $grouped_reimburses_by_month;
     protected $grouped_trial_class_attendances_by_month;
     protected $data_count;
@@ -33,14 +34,42 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
     protected $fill_gray_pos = [];
     protected $months = [];
 
-    public function __construct($invoice, $grouped_student_attendances_by_month, $grouped_reimburses_by_month, $grouped_trial_class_attendances_by_month){
+    public function __construct($invoice, $grouped_student_attendances_by_month, $grouped_substitution_attendances_by_month, $grouped_reimburses_by_month, $grouped_trial_class_attendances_by_month){
         $this->invoice = $invoice;
         $this->grouped_student_attendances_by_month = $grouped_student_attendances_by_month;
+        $this->grouped_substitution_attendances_by_month = $grouped_substitution_attendances_by_month;
         $this->grouped_reimburses_by_month = $grouped_reimburses_by_month;
         $this->grouped_trial_class_attendances_by_month = $grouped_trial_class_attendances_by_month;
 
+        // Counting subtotals and row count
         $count = 0;
         foreach($grouped_student_attendances_by_month as $period => $grouped_by_month){
+            if(!in_array($period, $this->months)){
+                array_push($this->months, $period);
+            }
+
+            foreach($grouped_by_month as $grouped_by_course){
+                foreach($grouped_by_course as $datetime => $grouped_by_datetime){
+                    // $rate = CourseTeacher::where('course_id', $sa->attendance->course->id)->where('user_id', Auth::user()->id)->first()->rate;
+                    $rate = count($grouped_by_datetime) > 4 ? 125000 : 75000;
+    
+                    [$dateUnformatted, $startTime, $endTime] = explode('-', $datetime);
+
+                    $start_time = Carbon::createFromTimeString($startTime);
+                    $end_time = Carbon::createFromTimeString($endTime);
+
+                    $working_hours = round($start_time->diffInMinutes($end_time) / 30) * 0.5;
+                    $subtotal = $working_hours * $rate;
+
+                    $this->total += $subtotal;
+
+                    $count++;
+                }
+                
+            }
+        }
+
+        foreach($grouped_substitution_attendances_by_month as $period => $grouped_by_month){
             if(!in_array($period, $this->months)){
                 array_push($this->months, $period);
             }
@@ -139,6 +168,7 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
             
             $this->month_separation_pos[] = $pos;
 
+            // Insert normal attendance data
             if(isset($this->grouped_student_attendances_by_month[$period])){
                 foreach($this->grouped_student_attendances_by_month[$period] as $course_id => $grouped_by_course){
                     foreach($grouped_by_course as $datetime => $grouped_by_datetime){
@@ -176,6 +206,45 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
                 }
             }
 
+            // Insert substitution lecture attendance
+            if(isset($this->grouped_substitution_attendances_by_month[$period])){
+                foreach($this->grouped_substitution_attendances_by_month[$period] as $course_id => $grouped_by_course){
+                    foreach($grouped_by_course as $datetime => $grouped_by_datetime){
+                        $pos++;
+                        
+                        if(($pos) % 2 == 0){
+                            $this->fill_gray_pos[] = $pos;
+                        }
+
+                        $rate = count($grouped_by_datetime) > 4 ? 125000 : 75000;
+
+                        [$dateUnformatted, $startTime, $endTime] = explode('-', $datetime);
+                        $date = Carbon::createFromFormat('Y/m/d', $dateUnformatted);
+                        $start_time = Carbon::createFromTimeString($startTime);
+                        $end_time = Carbon::createFromTimeString($endTime);
+
+                        $working_hours = round($start_time->diffInMinutes($end_time) / 30) * 0.5;
+                        $subtotal = $working_hours * $rate;
+
+                        $course = Course::findOrFail($course_id);
+                        $student_names = $grouped_by_datetime->pluck('student.full_name')->implode(', ');
+
+                        $rows[] = [
+                            '',
+                            $course->course_name . " " . $student_names . 
+                                " (" . Carbon::parse($date)->format('l d M') . ")",
+                            'Lecturer (Substitution)',
+                            $start_time->format('H:i') . ' - ' . $end_time->format('H:i'),
+                            $working_hours == 0? '0' : $working_hours,
+                            $rate === 0? '0' : $rate,
+                            $subtotal == 0? '0' : $subtotal,
+                        ];
+                    }
+
+                }
+            }
+
+            // Insert trial class attendance
             if(isset($this->grouped_trial_class_attendances_by_month[$period])){
                 foreach($this->grouped_trial_class_attendances_by_month[$period] as $course_id => $grouped_by_course){
                     foreach($grouped_by_course as $datetime => $grouped_by_datetime){
@@ -213,6 +282,7 @@ class LecturerInvoiceExport implements WithStyles, WithEvents, WithColumnWidths,
                 }
             }
 
+            // Insert reimbursements
             if(isset($this->grouped_reimburses_by_month[$period])){
                 foreach($this->grouped_reimburses_by_month[$period] as $reimburse){
                     $pos++;

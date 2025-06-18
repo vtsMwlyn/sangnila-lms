@@ -93,8 +93,31 @@ class LecturerInvoiceReimburseController extends Controller
                 });
             });
 
+        // return $student_attendances;
 
-        if(count($student_attendances) == 0){
+        $substitution_attendances = StudentAttendance::whereHas('attendance', function ($query) use ($last_26th, $last_25th) {
+                return $query->where('is_substitution', 1)->where('uploader_id', Auth::id())->whereBetween('attendance_date', [$last_26th, $last_25th])->orderBy('attendance_date', 'asc');
+            })
+            ->with('attendance')
+            ->orderBy('student_id')
+            ->get()
+            ->groupBy(function ($item) {
+                return Carbon::parse($item->attendance->attendance_date)->format('m-y'); // Group by Year-Month first
+            })
+            ->sortKeys()
+            ->map(function ($groupedByMonth) {
+                return $groupedByMonth->groupBy(function ($item) {
+                    return $item->attendance->course->id; // Group by course name
+                })->map(function ($groupedByCourse) {
+                    return $groupedByCourse->groupBy(function ($item) {
+                        return Carbon::parse($item->attendance->attendance_date)->format('Y/m/d') . '-' . Carbon::parse($item->start_time)->format('H:i:s') . '-' . Carbon::parse($item->end_time)->format('H:i:s'); // Group by time range
+                    });
+                });
+            });
+
+        // return $substitution_attendances;
+
+        if(count($student_attendances) == 0 && count($substitution_attendances) == 0){
             return back()->with('danger', 'There are no student attendance data between ' . $last_26th->format('l, d M Y') . ' and ' . $last_25th->format('l, d M Y') . ', cannot generate invoice!');
         }
     
@@ -125,7 +148,7 @@ class LecturerInvoiceReimburseController extends Controller
 
         // return $trial_class_attendances;
 
-        return Excel::download(new LecturerInvoiceExport($invoice, $student_attendances, $reimburses, $trial_class_attendances), 'lecturer_invoice_' . Auth::user()->full_name . '_' . '.xlsx');
+        return Excel::download(new LecturerInvoiceExport($invoice, $student_attendances, $substitution_attendances, $reimburses, $trial_class_attendances), 'lecturer_invoice_' . Auth::user()->full_name . '_' . '.xlsx');
     }
 
     public function teacher_create_reimburse(){

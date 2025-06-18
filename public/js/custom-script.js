@@ -26,7 +26,7 @@ function resetSidebarToggler(){
 
 // Auto-refresh CSRF token
 function refreshCsrfToken() {
-	fetch(`http://localhost/sangnila-lms/public/refresh-csrf`)
+	fetch(`https://lms.sangnilaindonesia.com/refresh-csrf`)
 		.then(response => response.json())
 		.then(data => {
 			const newToken = data.csrf_token;

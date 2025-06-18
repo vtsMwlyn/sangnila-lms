@@ -63,7 +63,7 @@
 				@endforelse
 			</div>
 
-			<div class="bg-white border rounded-2xl py-5 flex flex-col mt-8">
+			<div class="bg-white border rounded-2xl p-5 flex flex-col mt-8">
 				<h1 class="text-blue font-semibold">Other Students</h1>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 				<div class="w-full overflow-y-auto px-5" style="max-height: 40vh;">

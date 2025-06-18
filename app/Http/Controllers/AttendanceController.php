@@ -243,10 +243,14 @@ class AttendanceController extends Controller {
 				'is_substitution' => 1,
 			]);
 
+			$course = $newAttendance->course;
+
 			foreach($dataToUpload['student_id'] as $i => $student_id){
+				$student = User::findOrFail($student_id);
+
 				StudentAttendance::create([
 					'attendance_id' => $newAttendance->id,
-					'student_id' => $student_id,
+					'student_id' => $student->id,
 					'activity_progress' => $dataToUpload['activity_progress'][$i],
 					'learning_status' => $dataToUpload['learning_status'][$i],
 					'is_attend' => 1,
@@ -254,6 +258,28 @@ class AttendanceController extends Controller {
 					'end_time' => $dataToUpload['end_time'][$i],
 					'attendance_detail' => $dataToUpload['attendance_details'][$i],
 				]);
+
+				// Auto update progress student
+				$activities = Activity::whereHas('topic', function($query) use ($course){
+					return $query->where('course_id', $course->id)->where('user_id', Auth::user()->id);
+				})->orderBy('session', 'asc')->get();
+
+				$student_attendances = StudentAttendance::where('student_id', $student->id)->whereHas('attendance', function($query) use ($course){
+					return $query->where('course_id', $course->id);
+				})->get();
+
+				foreach($activities as $activity){
+					Progress::updateOrCreate(
+						[
+							"student_id" => $student->id,
+							"course_id" => $course->id,
+							"activity_id" => $activity->id,
+						],
+						[
+							"status" => $activity->session <= $student_attendances->count() + 1 ? 'unlocked' : 'locked',
+						]
+					);
+				}
 			}
 
 			DB::commit();
@@ -269,12 +295,91 @@ class AttendanceController extends Controller {
 
 	public function teacher_substitution_edit($substitution_attendance_id){
 		$substitution_attendance = Attendance::findOrFail($substitution_attendance_id);
-		$courses = Course::where('status', 'active')->orderBy('course_name')->with(['students', 'topics.activities'])->get();
 
 		return view('roles.teacher.substitution.edit', [
 			'substitution_attendance' => $substitution_attendance,
-			'courses' => $courses,
+			'course' => $substitution_attendance->course,
 		]);
+	}
+
+	public function teacher_substitution_update(Request $request, $substitution_attendance_id){
+		$request->validate([
+			'student_id.*' => 'required',
+			'attendance_date' => 'required',
+			'activity_progress.*' => 'required',
+			'start_time.*' => 'required',
+			'end_time.*' => 'required',
+			'learning_status.*' => 'required',
+			'attendance_details.*' => 'required',
+		]);
+
+		$dataToUpload = $request->only([
+			'student_id',
+			'attendance_date',
+			'start_time',
+			'end_time',
+			'activity_progress',
+			'learning_status',
+			'attendance_details'
+		]);
+
+		// return $dataToUpload;
+
+		try {
+			DB::beginTransaction();
+
+			$substitution_attendance = Attendance::findOrFail($substitution_attendance_id);
+			$course = $substitution_attendance->course;
+			$substitution_attendance->student_attendances()->delete();
+
+			$substitution_attendance->update([
+				'attendance_date' => $request->attendance_date,
+			]);
+
+			foreach($dataToUpload['student_id'] as $i => $student_id){
+				$student = User::findOrFail($student_id);
+
+				StudentAttendance::create([
+					'attendance_id' => $substitution_attendance->id,
+					'student_id' => $student->id,
+					'activity_progress' => $dataToUpload['activity_progress'][$i],
+					'learning_status' => $dataToUpload['learning_status'][$i],
+					'is_attend' => 1,
+					'start_time' => $dataToUpload['start_time'][$i],
+					'end_time' => $dataToUpload['end_time'][$i],
+					'attendance_detail' => $dataToUpload['attendance_details'][$i],
+				]);
+
+				// Auto update progress student
+				$activities = Activity::whereHas('topic', function($query) use ($course){
+					return $query->where('course_id', $course->id)->where('user_id', Auth::user()->id);
+				})->orderBy('session', 'asc')->get();
+
+				$student_attendances = StudentAttendance::where('student_id', $student->id)->whereHas('attendance', function($query) use ($course){
+					return $query->where('course_id', $course->id);
+				})->get();
+
+				foreach($activities as $activity){
+					Progress::updateOrCreate(
+						[
+							"student_id" => $student->id,
+							"course_id" => $course->id,
+							"activity_id" => $activity->id,
+						],
+						[
+							"status" => $activity->session <= $student_attendances->count() + 1 ? 'unlocked' : 'locked',
+						]
+					);
+				}
+			}
+
+			DB::commit();
+		}
+		catch(Exception $e){
+			DB::rollback();
+		}
+
+		return redirect(route('teacher.attendance.substitution.index'))->with('success', 'Successfully updated the substitution attendance data!');
 	}
 
 	// New attendance data input form page
@@ -283,13 +388,15 @@ class AttendanceController extends Controller {
 		$selected_student_ids = session('selected_students', []);
 		$students = User::whereIn('id', $selected_student_ids)->with('details')->get();
 		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->with('activities')->get();
-		$allStudents = User::where("role_id", 3)->with('details')->get();
+		$allStudentsTeached = User::whereHas('course_students', function($query) use($course){
+			return $query->where('course_id', $course->id)->where('teacher_id', Auth::id());
+		})->with('details')->get();
 
 		return view("roles.teacher.attendance.upload", [
 			"course" => $course,
 			"topics" => $topics,
 			"students" => $students/*$filteredUsers*/,
-			"allStudents" => $allStudents,
+			"allStudents" => $allStudentsTeached,
 			"exclude_from_dropdown" => $selected_student_ids
 		]);
 	}
@@ -373,8 +480,10 @@ class AttendanceController extends Controller {
 	public function edit($id){
 		$attendance = Attendance::findOrFail($id);
 		$exclude_from_dropdown = $attendance->student_attendances->pluck('student_id')->toArray();
-		$students = User::where('role_id', 3)->where('status', 'enabled')->with('details')->get();
 		$course = $attendance->course;
+		$allStudentsTeached = User::whereHas('course_students', function($query) use($course){
+			return $query->where('course_id', $course->id)->where('teacher_id', Auth::id());
+		})->with('details')->get();
 		$topics = Topic::where("course_id", $course->id)->where("user_id", Auth::user()->id)->with('activities')->get();
 
 		$grouped_student_attendances = $attendance->student_attendances->groupBy('student_id');
@@ -382,7 +491,7 @@ class AttendanceController extends Controller {
 		return view('roles.teacher.attendance.edit', [
 			'course' => $course,
 			'attendance' => $attendance,
-			'students' => $students,
+			'students' => $allStudentsTeached,
 			"exclude_from_dropdown" => $exclude_from_dropdown,
 			'topics' => $topics,
 			'grouped_student_attendances' => $grouped_student_attendances
