@@ -280,10 +280,6 @@
 				}
 			});
 
-			$(document).on('click', '.remove-row-btn', function(){
-				$(this).closest('tr').remove();
-			});
-
 			$(document).on('click', '.add-data-btn', function(){
 				const currCard = $(this).closest('.attendance-detail-accordion-area');
 				const _isAttended = currCard.find('._checkbox').is(':checked')? 'on' : 'off';
