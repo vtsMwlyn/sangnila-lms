@@ -221,6 +221,8 @@
 
                         const rowCount = $('#tableBody').find('tr').length;
                         const lastCol = $('<td>').addClass('py-3 px-4').append(removeBtn);
+						
+						const sanitizedAttendanceDetails = $('<span>').text(inpAttendanceDetails);
 
 						newRow.addClass(rowCount % 2 == 1? 'bg-white' : '')
 							.append(
@@ -228,7 +230,7 @@
                             ).append(
 								$('<td>').addClass('py-3 px-4').html(`${inpStartTime}-${inpEndTime}`)
 							).append(
-								$('<td>').addClass('py-3 px-4').html(`${inpActivityProgress}<br><br>(${inpLearningStatus})<br>${inpAttendanceDetails}`)
+								$('<td>').addClass('py-3 px-4').html(`${inpActivityProgress}<br>(${inpLearningStatus})<br><br>`).append(sanitizedAttendanceDetails)
 							).append(
 								lastCol
 							);

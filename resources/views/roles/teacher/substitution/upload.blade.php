@@ -197,13 +197,15 @@
 
                         const rowCount = $('#tableBody').find('tr').length;
 
+						const sanitizedAttendanceDetails = $('<span>').text(inpAttendanceDetails);
+
 						newRow.addClass(rowCount % 2 == 1? 'bg-white' : '')
 							.append(
 								$('<td>').addClass('py-3 px-4').text(inpStudent.full_name)
                             ).append(
 								$('<td>').addClass('py-3 px-4').html(`${inpStartTime}-${inpEndTime}`)
 							).append(
-								$('<td>').addClass('py-3 px-4').html(`${inpActivityProgress}<br><br>(${inpLearningStatus})<br>${inpAttendanceDetails}`)
+								$('<td>').addClass('py-3 px-4').html(`${inpActivityProgress}<br>(${inpLearningStatus})<br><br>`).append(sanitizedAttendanceDetails)
 							).append(
 								$('<td>').addClass('py-3 px-4').append(removeBtn)
 							);

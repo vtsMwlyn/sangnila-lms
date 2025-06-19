@@ -33,9 +33,9 @@
 					{{-- Class data --}}
 					<h1 class="font-bold text-lg text-blue">Class Data</h1>
 					<div class="flex gap-5">
-						<div class="mt-3 w-full md:w-1/2">
+						<div class="mt-3 w-full md:w-1/2 container-select2">
 							<x-label class="mb-1">Course Name<span class="text-red">*</span></x-label>
-							<x-select name="_course_name" id="_course_name" class="w-full">
+							<x-select name="_course_name" id="_course_name" class="w-full select-2">
 								<option disabled selected>Pick a course</option>
 								@foreach ($student->enrolled_courses as $c)
 									@php
@@ -231,6 +231,8 @@
 
 						let atdIcon = (inpIsAttended == 1)? `<img src="{{ asset('img/yesbox.svg') }}" class="h-6 w-6" alt="icon">` : `<img src="{{ asset('img/nobox.svg') }}" class="h-6 w-6" alt="icon">`;
 						const rowCount = $('#tableBody').find('tr').length;
+						
+						const sanitizedAttendanceDetails = $('<span>').text(inpAttendanceDetails);
 
 						newRow.addClass(rowCount % 2 == 1? 'bg-white' : '').append(
 								$('<td>').addClass('py-3 px-4').text(inpCourse.course.course_name)
@@ -239,7 +241,7 @@
 							).append(
 								$('<td>').addClass('py-3 px-4').html(atdIcon)
 							).append(
-								$('<td>').addClass('py-3 px-4').html(inpIsAttended == 1? `${inpActivityProgress}<br><br>(${inpLearningStatus})<br>${inpAttendanceDetails}` : `Absent<br>${inpAttendanceDetails}`)
+								$('<td>').addClass('py-3 px-4').html(inpIsAttended == 1? `${inpActivityProgress}<br>(${inpLearningStatus})<br><br>` : `Absent<br><br>`).append(sanitizedAttendanceDetails)
 							).append(
 								$('<td>').addClass('py-3 px-4').append(removeBtn)
 							);
