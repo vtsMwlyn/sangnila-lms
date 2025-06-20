@@ -1,7 +1,7 @@
 @extends('layouts.main-head-of-lecturer')
 
 @section('title')
-    <h1>Attendance</h1>
+    <h1>Attendances</h1>
 @endsection
 
 @section('popup')

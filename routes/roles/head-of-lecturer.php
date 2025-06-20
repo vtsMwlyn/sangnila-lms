@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\CourseController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PortfolioController;
 
@@ -8,6 +9,12 @@ Route::prefix('/head-of-lecturer')->name('head-of-lecturer.')->middleware('auth'
     // Landing page
     Route::get('/', function () {
         return redirect(route('dashboard'));
+    });
+
+    // Courses information
+    Route::prefix('/course')->name('course.')->group(function(){
+        Route::get('/', [CourseController::class, 'head_of_lecturer_index'])->name('index');
+        Route::get('/{course}', [CourseController::class, 'head_of_lecturer_show'])->name('show');
     });
 
     // Attendance

@@ -41,19 +41,24 @@
 				<img src="{{ asset('img/sidebar-dashboard.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Dashboard
 			</x-anchor-button>
 
+			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
+				href="{{ route('head-of-lecturer.course.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('head-of-lecturer*course*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
+				<img src="{{ asset('img/sidebar-courses.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Courses
+			</x-anchor-button>
+
             <x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('head-of-lecturer.attendance.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('head-of-lecturer*attendance*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				<img src="{{ asset('img/sidebar-attendance.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Attendance
+				<img src="{{ asset('img/sidebar-attendance.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Attendances
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('head-of-lecturer.portfolio.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('head-of-lecturer*portfolio*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				<img src="{{ asset('img/sidebar-courses.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Portfolio
+				<img src="{{ asset('img/sidebar-courses.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Portfolios
 			</x-anchor-button>
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('list-announcement') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('announcement*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
-				<img src="{{ asset('img/sidebar-announcement.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Announcement
+				<img src="{{ asset('img/sidebar-announcement.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Announcements
 			</x-anchor-button>
 		</div>
 	</div>

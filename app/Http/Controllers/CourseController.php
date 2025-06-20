@@ -126,6 +126,20 @@ class CourseController extends Controller {
 	}
 
 
+	// ===== HEAD OF LECTURER ===== //
+	public function head_of_lecturer_index(){
+		return view('roles.head-of-lecturer.course.index', [
+			'courses' => Course::filter(request(["search"]))->with(['curriculum_topics', 'learning_outcomes', 'teachers', 'students'])->orderByRaw('CASE WHEN status = "active" THEN 0 ELSE 1 END')->orderBy('course_name')->get()
+		]);
+	}
+
+	public function head_of_lecturer_show(Course $course){
+		return view('roles.head-of-lecturer.course.show', [
+			'course' => $course,
+			'learning_outcomes' => LearningOutcome::where("course_id", $course->id)->orderBy("number", "asc")->get(),
+		]);
+	}
+
 	// ===== TEACHER ====== //
 	// List of assigned courses
 	public function teacher_index() {

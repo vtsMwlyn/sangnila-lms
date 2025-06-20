@@ -290,7 +290,7 @@
 								<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 							@endif
 						@endif
-						<h1 class="text-lg font-bold text-center">{{-- explode(" ", $teacher->full_name)[0] --}}{{ $teacher->full_name }}</h1>
+						<h1 class="text-lg font-bold text-center">{{-- explode(" ", $teacher->full_name)[0] --}}{{ ($teacher->details->gender == 1)? 'Mr.' : "Ms." }} {{ $teacher->full_name }}</h1>
 					</div>
 				</a>
 			@empty

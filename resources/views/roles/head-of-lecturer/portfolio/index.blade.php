@@ -1,7 +1,7 @@
 @extends("layouts.main-head-of-lecturer")
 
 @section("title")
-	<h1>Portfolio</h1>
+	<h1>Portfolios</h1>
 @endsection
 
 @section("content")
