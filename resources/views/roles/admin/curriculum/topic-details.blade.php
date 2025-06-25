@@ -44,7 +44,7 @@
 
 @section("content")
 	<x-section-container>
-		<x-back-button href="{{ route('admin.course.show', $curriculum_topic->course->id) }}"></x-back-button>
+		<x-back-button href="{{ route('admin.course.show', ['course_id' => $curriculum_topic->course->id, 'content' => 'syllabus']) }}"></x-back-button>
 		<x-page-title>Syllabus</x-page-title>
 		<h1 class="text-xl font-semibold text-blue-900 mt-2">Topic and Activities Details</h1>
 		<div class="w-full bg-slate-400 mt-4" style="height: 2px;"></div>

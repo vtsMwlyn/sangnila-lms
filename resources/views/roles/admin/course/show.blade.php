@@ -154,14 +154,36 @@
 		<x-back-button href="{{ route('admin.course.index') }}"></x-back-button>
 		<div class="flex items-center justify-between">
 			<x-page-title style="margin-bottom: 0;">{{ $course->course_name }}</x-page-title>
-			<div class="relative">
-				<x-button type="button" id="copy-syllabus-data-btn"><i class="bi bi-copy"></i> Copy Syllabus Data</x-button>
-				@if($course_empty)
-					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
-				@endif
-			</div>
+			@if(request('content') == 'syllabus')
+				<div class="relative">
+					<x-button type="button" id="copy-syllabus-data-btn"><i class="bi bi-copy"></i> Copy Syllabus Data</x-button>
+					@if($course_empty)
+						<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+					@endif
+				</div>
+			@endif
 		</div>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
+
+		<div class="flex w-full flex-wrap mb-6">
+			<a href="{{ route('admin.course.show', ['course_id' => $course->id, 'content' => 'general information']) }}"
+				class="py-2 w-1/2 xl:w-1/6 sm:w-48 text-center hover:bg-slate-200"
+				style="@if(request('content') == 'general information' || !request('content')) border-bottom: 4px solid #1db9cf; @endif">
+				General Information
+			</a>
+
+			<a href="{{ route('admin.course.show', ['course_id' => $course->id ,'content' => 'syllabus']) }}"
+				class="py-2 w-1/2 xl:w-1/6 sm:w-48 text-center hover:bg-slate-200"
+				style="@if(request('content') == 'syllabus') border-bottom: 4px solid #1db9cf; @endif">
+				Syllabus
+			</a>
+
+			<a href="{{ route('admin.course.show', ['course_id' => $course->id ,'content' => 'student portfolio']) }}"
+				class="py-2 w-1/2 xl:w-1/6 sm:w-48 text-center hover:bg-slate-200"
+				style="@if(request('content') == 'student portfolio') border-bottom: 4px solid #1db9cf; @endif">
+				Student Portfolio
+			</a>
+		</div>
 
 		{{-- Flash messages --}}
 		@if(session()->has("success"))
@@ -172,263 +194,321 @@
 			<x-badge-danger badge_text="{{ session('danger') }}"></x-badge-danger>
 		@endif
 
-		{{-- Course informations --}}
-		<div class="w-full flex flex-col gap-y-4">
-			<div class="w-full flex gap-x-4">
-				<div class="flex flex-col w-1/2">
-					<p>Course Name</p>
-					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ $course->course_name }}</div>
+		{{-- General informations --}}
+		@if(!request('content') || request('content') == 'general information')
+			{{-- Course info --}}
+			<div class="w-full flex flex-col gap-y-4">
+				<div class="w-full flex gap-x-4">
+					<div class="flex flex-col w-1/2">
+						<p>Course Name</p>
+						<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ $course->course_name }}</div>
+					</div>
+
+					<div class="flex flex-col w-1/2">
+						<p>Status</p>
+						<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ ucwords($course->status) }}</div>
+					</div>
 				</div>
 
-				<div class="flex flex-col w-1/2">
-					<p>Status</p>
-					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400 font-bold" style="border-width: 3px">{{ ucwords($course->status) }}</div>
-				</div>
-			</div>
+				<div class="w-full flex gap-x-4">
+					<div class="flex flex-col w-1/2">
+						<p>Level</p>
+						<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ ucwords($course->level) }}</div>
+					</div>
 
-			<div class="w-full flex gap-x-4">
-				<div class="flex flex-col w-1/2">
-					<p>Level</p>
-					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ ucwords($course->level) }}</div>
-				</div>
-
-				<div class="flex flex-col w-1/2">
-					<p>Format</p>
-					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $course->format }}</div>
-				</div>
-			</div>
-
-			<div class="w-full flex gap-x-4">
-				<div class="flex flex-col w-1/2">
-					<p>Delivery Mode</p>
-					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ ucwords($course->delivery_mode) }}</div>
+					<div class="flex flex-col w-1/2">
+						<p>Format</p>
+						<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ $course->format }}</div>
+					</div>
 				</div>
 
-				<div class="flex flex-col w-1/2"></div>
+				<div class="w-full flex gap-x-4">
+					<div class="flex flex-col w-1/2">
+						<p>Delivery Mode</p>
+						<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{{ ucwords($course->delivery_mode) }}</div>
+					</div>
+
+					<div class="flex flex-col w-1/2"></div>
+				</div>
+
+				<div class="flex flex-col w-full">
+					<p>Course Description</p>
+					<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{!! nl2br($course->course_description) !!}</div>
+				</div>
+
+			</div>
+		
+
+			{{-- Assigned teachers and students --}}
+			<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
+			<div class="my-3 flex items-center justify-between">
+				<h2 class="font-extrabold text-xl text-dark-blue">List of Assigned Teachers</h2>
+				<div class="relative">
+					<x-anchor-button href="{{ route('admin.course.batch-assign-teacher', $course->id) }}"><i class="bi bi-ui-checks-grid"></i> Assign Teachers</x-anchor-button>
+					@if($no_teachers_assigned)
+						<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+					@endif
+				</div>
+			</div>
+			<div class="w-full bg-slate-400 " style="height: 2px;"></div>
+
+			<div class="mt-8 flex flex-wrap">
+				@forelse ($course->teachers as $index => $teacher)
+					<a href="{{ route('admin.teacher.show', $teacher->id) }}" class="w-1/6 mb-6 hover:text-cyan-500">
+						<div class="flex flex-col items-center">
+							@if($teacher->details->profpic)
+								<img src="{{ Storage::url("app/public/" . $teacher->details->profpic) }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+							@else
+								@if($teacher->details->gender == 1)
+									<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+								@else
+									<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+								@endif
+							@endif
+							<h1 class="text-lg font-bold text-center">{{-- explode(" ", $teacher->full_name)[0] --}}{{ ($teacher->details->gender == 1)? 'Mr.' : "Ms." }} {{ $teacher->full_name }}</h1>
+						</div>
+					</a>
+				@empty
+					- No teachers assigned to this course yet -
+				@endforelse
 			</div>
 
-			<div class="flex flex-col w-full">
-				<p>Course Description</p>
-				<div class="w-full px-4 py-2 mt-1 rounded-2xl bg-white border-slate-400" style="border-width: 3px">{!! nl2br($course->course_description) !!}</div>
+			<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
+			<div class="flex w-full justify-between items-center">
+				<h2 class="my-4 font-extrabold text-xl text-dark-blue">Student List</h2>
+				<div class="flex gap-4 justify-end">
+					<div class="relative">
+						<x-anchor-button  href="{{ route('admin.course.batch-assign-student', $course->id) }}"><i class="bi bi-ui-checks-grid"></i> Assign Students</x-anchor-button>
+						@if($no_students_assigned)
+							<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+						@endif
+					</div>
+					<x-anchor-button  href="{{ route('admin.course.import-student-data', $course->id) }}"><i class="bi bi-card-checklist"></i> Import Old Student</x-anchor-button>
+				</div>
+			</div>
+			<div class="w-full bg-slate-400 " style="height: 2px;"></div>
+
+			<div class="mt-8 flex flex-col w-full">
+				@forelse ($course->course_students()->orderByRaw('CASE WHEN learning_status = "learning" THEN 0 WHEN learning_status = "complete" THEN 1 ELSE 2 END')->get()->groupBy('learning_status') as $status => $gcs)
+					<span class="mb-4 mt-4 @if($status == 'learning') bg-light-blue @elseif($status == 'complete') bg-green-600 @else bg-red @endif text-white text-base rounded-lg px-4 py-3 font-normal">{{ ucwords($status) }} Students</span>
+
+					<div class="mt-8 flex flex-wrap">
+						@foreach($gcs as $index => $cs)
+							@php
+								$student = $cs->student;
+							@endphp
+							<a href="{{ route('admin.student.show', $student->id) }}" class="w-1/6 mb-6 hover:text-cyan-500">
+								<div class="flex flex-col items-center">
+									@if($student->details->profpic)
+										<img src="{{ Storage::url("app/public/" . $student->details->profpic) }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+									@else
+										@if($student->details->gender == 1)
+											<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+										@else
+											<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+										@endif
+									@endif
+									<h1 class="text-lg font-bold text-center">{{-- explode(" ", $student->full_name)[0] --}}{{ $student->full_name }}</h1>
+								</div>
+							</a>
+						@endforeach
+					</div>
+				@empty
+					- No students assigned yet to this course -
+				@endforelse
+			</div>
+		@endif
+
+		@if(request('content') == 'syllabus')
+			{{-- Curriculum --}}
+			{{-- Learning Outcomes --}}
+			<div class="w-full bg-slate-400" style="height: 2px;"></div>
+			<div class="flex items-center justify-between">
+				<h2 class="my-4 font-extrabold text-xl text-dark-blue">Learning Outcomes</h2>
+				<div class="relative">
+					<x-button type="button" class="newlearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.store', $course->id) }}"><i class="bi bi-plus-lg"></i> New Learning Outcome</x-button>
+					@if($learning_outcomes_empty)
+						<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+					@endif
+				</div>
+			</div>
+			<div class="w-full bg-slate-400 " style="height: 2px;"></div>
+
+			<div class="w-full overflow-x-auto my-6">
+				<table class="w-full">
+					<thead>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">#</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Outcome Title</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
+					</thead>
+					<tbody>
+						@forelse ($learning_outcomes as $index => $lo)
+							<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
+								<td class="py-3 px-4">{{ $lo->number }}</td>
+								<td class="py-3 px-4">{{ $lo->title }}</td>
+								<td class="py-3 px-4">
+									<div class="flex justify-start gap-1 w-full">
+										<button type="button" class="editlearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.update', [$course->id, $lo->id]) }}" data-learning_outcome="{{ $lo->toJSON() }}" title="Edit this learning outcome">
+											<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</button>
+										<button type="button" class="deletelearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.destroy', [$course->id, $lo->id]) }}" data-del_lo_name="{{ $lo->title }}" title="Delete this learning outcome">
+											<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</button>
+									</div>
+								</td>
+							</tr>
+						@empty
+							<tr class="bg-white">
+								<td class="p-5 text-center" colspan="3">- No data found -</td>
+							</tr>
+						@endforelse
+					</tbody>
+				</table>
 			</div>
 
-		</div>
-
-		<div class="flex gap-3 mt-8 w-full justify-end">
-			<x-anchor-button  href="{{ route('admin.course.edit', $course->id) }}"><i class="bi bi-pencil-square"></i> Edit</x-anchor-button>
-			<x-button type="button" id="delete-course-btn" data-route="{{ route('admin.course.destroy', $course->id) }}" data-del_course_name="{{ $course->course_name }}"><i class="bi bi-trash3"></i> Delete</x-button>
-		</div>
-
-		{{-- Learning Outcomes --}}
-		<div class="w-full bg-slate-400 mt-12" style="height: 2px;"></div>
-		<div class="flex items-center justify-between">
-			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Learning Outcomes</h2>
-			<div class="relative">
-				<x-button type="button" class="newlearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.store', $course->id) }}"><i class="bi bi-plus-lg"></i> New Learning Outcome</x-button>
-				@if($learning_outcomes_empty)
-					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
-				@endif
+			{{-- Topic and Activities --}}
+			<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
+			<div class="flex w-full justify-between items-center">
+				<h2 class="my-4 font-extrabold text-xl text-dark-blue">Topics and Activities</h2>
+				<div class="flex gap-4 justify-end">
+					<x-anchor-button  href="{{ route('admin.course.curriculum.import-excel', $course->id) }}"><i class="bi bi-file-earmark-arrow-up"></i> Import from Excel</x-anchor-button>
+					<div class="relative">
+						<x-button type="button"  data-route="{{ route('admin.course.curriculum.topic.store', $course->id) }}" id="new-curriculum-topic-btn"><i class="bi bi-plus-lg"></i> Add New Topic</x-button>
+						@if($syllabus_empty)
+							<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+						@endif
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
+			<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
-		<div class="w-full overflow-x-auto my-6">
-			<table class="w-full">
-				<thead>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">#</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Learning Outcome Title</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
-				</thead>
-				<tbody>
-					@forelse ($learning_outcomes as $index => $lo)
+			<div class="overflow-x-auto mt-3">
+				<table class="w-full">
+					<thead>
+						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Session</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Topic</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activities</th>
+						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Learning Outcomes</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
+					</thead>
+
+					@forelse ($course->curriculum_topics as $topic)
 						<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-							<td class="py-3 px-4">{{ $lo->number }}</td>
-							<td class="py-3 px-4">{{ $lo->title }}</td>
+							<td class="py-3 px-4 text-center">
+								@php
+									if($topic->curriculum_activities->count()){
+										echo $topic->curriculum_activities->min('session') . '-' . $topic->curriculum_activities->max('session');
+									} else {
+										echo 'N/A';
+									}
+								@endphp
+							</td>
+							<td class="py-3 px-4 w-1/4">
+								{{ $topic->title }}
+							</td>
+							<td class="py-3 px-4" style="text-align: start">
+								@if($topic->curriculum_activities->count())
+									<ul class="list-disc list-inside">
+										@foreach ($topic->curriculum_activities()->orderBy('session')->get() as $activity)
+											<li class="mb-2">{{ $activity->title }}</li>
+										@endforeach
+									</ul>
+								@else
+									- No curriculum activities yet -
+								@endif
+							</td>
 							<td class="py-3 px-4">
-								<div class="flex justify-start gap-1 w-full">
-									<button type="button" class="editlearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.update', [$course->id, $lo->id]) }}" data-learning_outcome="{{ $lo->toJSON() }}" title="Edit this learning outcome">
+								@php
+									$lolist = [];
+									foreach ($topic->curriculum_activities as $activity) {
+										foreach ($activity->learning_outcomes as $leaout) {
+											if (!in_array($leaout->number, $lolist)) {
+												$lolist[] = $leaout->number;
+											}
+										}
+									}
+
+									sort($lolist);
+								@endphp
+
+								@forelse($lolist as $los)
+									<div class="w-full text-center">LO{{ $los }}@if(count($lolist) > 1 && $loop->index != count($lolist) - 1), @endif</div>
+								@empty
+									<div class="w-full text-center">N/A</div>
+								@endforelse
+							</td>
+							<td class="py-3 px-4">
+								<div class="w-full flex items-center gap-1">
+									<div class="relative">
+										<a href="{{ route('admin.course.curriculum.topic.details', [$course->id, $topic->id]) }}" title="View this curriculum topic details">
+											<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
+										</a>
+										@if($topic->curriculum_activities->count() == 0)
+											<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
+										@endif
+									</div>
+									<button type="button" data-curriculum_topic="{{ $topic }}" data-route="{{ route('admin.course.curriculum.topic.update', [$course->id, $topic->id]) }}" class="edit-curriculum-topic-btn" title="Edit this curriculum topic">
 										<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</button>
-									<button type="button" class="deletelearningoutcome-popuptrigger" data-route="{{ route('admin.course.learning-outcome.destroy', [$course->id, $lo->id]) }}" data-del_lo_name="{{ $lo->title }}" title="Delete this learning outcome">
+									<button type="button" data-del_ct_name="{{ $topic->title }}" data-route="{{ route('admin.course.curriculum.topic.destroy', [$course->id, $topic->id]) }}" class="delete-curriculum-topic-btn" title="Delete this curriculum topic">
 										<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
 									</button>
 								</div>
 							</td>
 						</tr>
 					@empty
-						<tr class="bg-white">
-							<td class="p-5 text-center" colspan="3">- No data found -</td>
-						</tr>
+						<tr><td colspan="5" class="text-center p-5 bg-white">- No curriculum topics and activities yet -</td></tr>
 					@endforelse
-				</tbody>
-			</table>
-		</div>
-
-		{{-- Assigned teachers and students --}}
-		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
-		<div class="my-3 flex items-center justify-between">
-			<h2 class="font-extrabold text-xl text-dark-blue">List of Assigned Teachers</h2>
-			<div class="relative">
-				<x-anchor-button href="{{ route('admin.course.batch-assign-teacher', $course->id) }}"><i class="bi bi-ui-checks-grid"></i> Assign Teachers</x-anchor-button>
-				@if($no_teachers_assigned)
-					<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
-				@endif
+				</table>
 			</div>
-		</div>
-		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
+		@endif
 
-		<div class="mt-8 flex flex-wrap">
-			@forelse ($course->teachers as $index => $teacher)
-				<a href="{{ route('admin.teacher.show', $teacher->id) }}" class="w-1/6 mb-6 hover:text-cyan-500">
-					<div class="flex flex-col items-center">
-						@if($teacher->details->profpic)
-							<img src="{{ Storage::url("app/public/" . $teacher->details->profpic) }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
-						@else
-							@if($teacher->details->gender == 1)
-								<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
-							@else
-								<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
-							@endif
-						@endif
-						<h1 class="text-lg font-bold text-center">{{-- explode(" ", $teacher->full_name)[0] --}}{{ ($teacher->details->gender == 1)? 'Mr.' : "Ms." }} {{ $teacher->full_name }}</h1>
-					</div>
-				</a>
-			@empty
-				- No teachers assigned to this course yet -
-			@endforelse
-		</div>
+		@if(request('content') == 'student portfolio')
+			<div class="flex gap-3 flex-wrap w-full overflow-y-auto items-start media-scroll" style="height: 90vh;">
+            @forelse($course->portfolios()->orderBy('is_highlighted', 'desc')->orderBy('created_at', 'desc')->get() as $portfolio)
+                <div class="relative oneperthree rounded-lg bg-white p-5 overflow-hidden">
+                    @if($portfolio->is_highlighted)
+                        <div class="absolute py-2 px-20 text-white" style="top: 20px; left: -50px; z-index: 5; background-color: rgb(29, 185, 207, 0.9); transform: rotate(-30deg);">
+                            {{ $portfolio->is_highlighted == 1 ? 'Highlighted' : 'Unhighlighted' }}
+                        </div>
+                    @endif
 
-		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
-		<div class="flex w-full justify-between items-center">
-			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Student List</h2>
-			<div class="flex gap-4 justify-end">
-				<div class="relative">
-					<x-anchor-button  href="{{ route('admin.course.batch-assign-student', $course->id) }}"><i class="bi bi-ui-checks-grid"></i> Assign Students</x-anchor-button>
-					@if($no_students_assigned)
-						<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
-					@endif
-				</div>
-				<x-anchor-button  href="{{ route('admin.course.import-student-data', $course->id) }}"><i class="bi bi-card-checklist"></i> Import Old Student</x-anchor-button>
-			</div>
-		</div>
-		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
+                    <div class="relative rounded-lg overflow-hidden" style="height: 250px;">
+                        <a href="{{ $portfolio->type != 'link' ? Storage::url("app/public/" . $portfolio->path) : $portfolio->path }}" target="_blank" class="relative imeeji">
+                            <div class="absolute flex w-full h-full items-center justify-center text-white hint-text" style="display: none; background: rgba(0, 0, 0, 0.7);">Click to view the full file</div>
 
-		<div class="mt-8 flex flex-wrap">
-			@forelse ($course->students as $index => $student)
-				<a href="{{ route('admin.student.show', $student->id) }}" class="w-1/6 mb-6 hover:text-cyan-500">
-					<div class="flex flex-col items-center">
-						@if($student->details->profpic)
-							<img src="{{ Storage::url("app/public/" . $student->details->profpic) }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
-						@else
-							@if($student->details->gender == 1)
-								<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
-							@else
-								<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-28 h-28 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
-							@endif
-						@endif
-						<h1 class="text-lg font-bold text-center">{{-- explode(" ", $student->full_name)[0] --}}{{ $student->full_name }}</h1>
-					</div>
-				</a>
-			@empty
-				- No students assigned yet to this course -
-			@endforelse
-		</div>
+                            @if($portfolio->type == 'image')
+                                <img src="{{ Storage::url("app/public/" . $portfolio->path) }}" alt="img" style="object-fit: cover;" loading="lazy" class="w-full h-full rounded-lg">
+                            @elseif($portfolio->type == "video")
+                                <video class="w-full h-full rounded-lg lazy-video" style="object-fit: cover;" controls preload="none">
+                                    <source src="{{ Storage::url("app/public/" . $portfolio->path) }}" type="{{ Storage::mimeType('app/public/' . $portfolio->path) }}">
+                                </video>
+                            @elseif($portfolio->type == "link")
+                                <div class="w-full h-full flex items-center justify-center bg-slate-400 rounded-lg">
+                                    <i class="bi bi-paperclip text-white text-6xl"></i>
+                                </div>
+                            @else
+                                <div class="w-full h-full flex items-center justify-center bg-slate-400 rounded-lg">
+                                    <i class="bi bi-filetype-pdf text-white text-6xl"></i>
+                                </div>
+                            @endif
+                        </a>
+                    </div>
 
-		{{-- Curriculum --}}
-		<div class="w-full bg-slate-400 mt-8" style="height: 2px;"></div>
-		<div class="flex w-full justify-between items-center">
-			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Syllabus/Curriculum</h2>
-			<div class="flex gap-4 justify-end">
-				<x-anchor-button  href="{{ route('admin.course.curriculum.import-excel', $course->id) }}"><i class="bi bi-file-earmark-arrow-up"></i> Import from Excel</x-anchor-button>
-				<div class="relative">
-					<x-button type="button"  data-route="{{ route('admin.course.curriculum.topic.store', $course->id) }}" id="new-curriculum-topic-btn"><i class="bi bi-plus-lg"></i> Add New Topic</x-button>
-					@if($syllabus_empty)
-						<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
-					@endif
-				</div>
-			</div>
-		</div>
-		<div class="w-full bg-slate-400 " style="height: 2px;"></div>
-
-		<div class="overflow-x-auto mt-3">
-			<table class="w-full">
-				<thead>
-					<th class="text-center py-3 px-4 border-b-2 border-slate-400">Session</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Topic</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Activities</th>
-					<th class="text-center py-3 px-4 border-b-2 border-slate-400">Learning Outcomes</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
-				</thead>
-
-				@forelse ($course->curriculum_topics as $topic)
-					<tr class="@if($loop->iteration % 2 == 1) bg-white @endif">
-						<td class="py-3 px-4 text-center">
-							@php
-								if($topic->curriculum_activities->count()){
-									echo $topic->curriculum_activities->min('session') . '-' . $topic->curriculum_activities->max('session');
-								} else {
-									echo 'N/A';
-								}
-							@endphp
-						</td>
-						<td class="py-3 px-4 w-1/4">
-							{{ $topic->title }}
-						</td>
-						<td class="py-3 px-4" style="text-align: start">
-							@if($topic->curriculum_activities->count())
-								<ul class="list-disc list-inside">
-									@foreach ($topic->curriculum_activities()->orderBy('session')->get() as $activity)
-										<li class="mb-2">{{ $activity->title }}</li>
-									@endforeach
-								</ul>
-							@else
-								- No curriculum activities yet -
-							@endif
-						</td>
-						<td class="py-3 px-4">
-							@php
-								$lolist = [];
-								foreach ($topic->curriculum_activities as $activity) {
-									foreach ($activity->learning_outcomes as $leaout) {
-										if (!in_array($leaout->number, $lolist)) {
-											$lolist[] = $leaout->number;
-										}
-									}
-								}
-
-								sort($lolist);
-							@endphp
-
-							@forelse($lolist as $los)
-								<div class="w-full text-center">LO{{ $los }}@if(count($lolist) > 1 && $loop->index != count($lolist) - 1), @endif</div>
-							@empty
-								<div class="w-full text-center">N/A</div>
-							@endforelse
-						</td>
-						<td class="py-3 px-4">
-							<div class="w-full flex items-center gap-1">
-								<div class="relative">
-									<a href="{{ route('admin.course.curriculum.topic.details', [$course->id, $topic->id]) }}" title="View this curriculum topic details">
-										<img src="{{ asset('img/view.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
-									</a>
-									@if($topic->curriculum_activities->count() == 0)
-										<div class="h-6 w-6 rounded-full bg-red absolute animate-bounce text-white flex items-center justify-center" style="top: -8px; right: -8px;">!</div>
-									@endif
-								</div>
-								<button type="button" data-curriculum_topic="{{ $topic }}" data-route="{{ route('admin.course.curriculum.topic.update', [$course->id, $topic->id]) }}" class="edit-curriculum-topic-btn" title="Edit this curriculum topic">
-									<img src="{{ asset('img/edit.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
-								</button>
-								<button type="button" data-del_ct_name="{{ $topic->title }}" data-route="{{ route('admin.course.curriculum.topic.destroy', [$course->id, $topic->id]) }}" class="delete-curriculum-topic-btn" title="Delete this curriculum topic">
-									<img src="{{ asset('img/delete-button.svg') }}" alt="icon" class="max-w-8 min-w-8 max-h-8 min-h-8 hover:scale-110">
-								</button>
-							</div>
-						</td>
-					</tr>
-				@empty
-					<tr><td colspan="5" class="text-center p-5 bg-white">- No curriculum topics and activities yet -</td></tr>
-				@endforelse
-			</table>
-		</div>
+                    <div class="mt-4">
+                        @php
+                            $cs = App\Models\CourseStudent::where('course_id', $portfolio->course_id)->where('student_id', $portfolio->student_id)->first();
+                        @endphp
+                        <div class="flex gap-2 items-center"><i class="bi bi-calendar2-date text-slate-400 text-xl"></i> {{ Carbon\Carbon::parse($portfolio->created_at)->format('D, d M Y') }}</div>
+                        <div class="flex gap-2 items-center"><img src="{{ asset('img/lecturer.svg') }}" alt="icon"> {{ $cs ? $cs->student->full_name : 'Unknown' }}</div>
+                        <div class="flex gap-2 items-center"><img src="{{ asset('img/lecturer.svg') }}" alt="icon"> @if($cs){{ $cs->teacher->details->gender == 1? 'Mr.' : 'Ms.' }} {{ $cs->teacher->full_name }}@else Unknown @endif</div>
+                    </div>
+                </div>
+            @empty
+                <div class="text-center w-full bg-white rounded-xl py-2 px-4">- No data found -</div>
+            @endforelse
+        </div>
+		@endif
 	</x-section-container>
 
 	<script>

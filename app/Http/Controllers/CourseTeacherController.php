@@ -65,7 +65,7 @@ class CourseTeacherController extends Controller {
 	// Save batch assign teacher
 	public function batch_assign_teacher_store(Request $request, $course_id){
 		$request->validate([
-			'selected_teachers' => ['required', new MinimumOneCheckbox]
+			'selected_teachers' => 'required'
 		]);
 
 		$course = Course::findOrFail($course_id);
@@ -88,7 +88,7 @@ class CourseTeacherController extends Controller {
 			return back()->with('danger', 'System failed to batch assign teacher. Please report to our IT team, error detail: ' . $e->getMessage());
 		}
 
-		return redirect(route('admin.course.show', $course->id))->with('success', 'Successfully assigned the teachers into the course!');
+		return redirect(route('admin.course.show', ['course_id' => $course->id, 'content' => 'general information']))->with('success', 'Successfully assigned the teachers into the course!');
 	}
 
 	// public function update(Request $request, $course_teacher_id){

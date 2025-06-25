@@ -18,6 +18,7 @@ use App\Models\StudentAssignment;
 use App\Models\StudentAttendance;
 use App\Models\TrialClassResource;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CourseController extends Controller {
 	// ===== ADMIN ===== //
@@ -140,10 +141,22 @@ class CourseController extends Controller {
 		]);
 	}
 
+	public function head_of_lecturer_download_syllabus(Course $course){
+		$course->load(['curriculum_topics.curriculum_activities' => function ($query) {
+			$query->orderBy('session', 'asc');
+		}]);
+
+		$pdf = Pdf::loadView('pdf.syllabus', [
+			'course' => $course,
+		])->setPaper('a4', 'landscape');
+
+		return $pdf->stream('SangnilaArtsAcademy_'. $course->course_name . '_' . ucwords($course->level) . '_Syllabus' .'.pdf');;
+	}
+
 	// ===== TEACHER ====== //
 	// List of assigned courses
 	public function teacher_index() {
-		return view('roles.teacher.course.index', []);
+		return view('roles.teacher.course.index');
 	}
 
 	// Shows a course details also topics and activities

@@ -82,8 +82,8 @@
                             $cs = App\Models\CourseStudent::where('course_id', $portfolio->course_id)->where('student_id', $portfolio->student_id)->first();
                         @endphp
                         <div class="flex gap-2 items-center"><i class="bi bi-calendar2-date text-slate-400 text-xl"></i> {{ Carbon\Carbon::parse($portfolio->created_at)->format('D, d M Y') }}</div>
-                        <div class="flex gap-2 items-center"><img src="{{ asset('img/lecturer.svg') }}" alt="icon"> {{ $cs->student->full_name }}</div>
-                        <div class="flex gap-2 items-center"><img src="{{ asset('img/lecturer.svg') }}" alt="icon"> {{ $cs->teacher->details->gender == 1? 'Mr.' : 'Ms.' }} {{ $cs->teacher->full_name }}</div>
+                        <div class="flex gap-2 items-center"><img src="{{ asset('img/lecturer.svg') }}" alt="icon"> {{ $cs ? $cs->student->full_name : 'Unknown' }}</div>
+                        <div class="flex gap-2 items-center"><img src="{{ asset('img/lecturer.svg') }}" alt="icon"> @if($cs){{ $cs->teacher->details->gender == 1? 'Mr.' : 'Ms.' }} {{ $cs->teacher->full_name }}@else Unknown @endif</div>
                     </div>
                 </div>
             @empty

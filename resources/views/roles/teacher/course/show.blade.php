@@ -121,19 +121,28 @@
 			<h2 class="my-4 font-extrabold text-xl text-dark-blue">Student List</h2>
 			<div class="w-full bg-slate-400 " style="height: 2px;"></div>
 
-			<div class="mt-4 xl:mt-8 flex flex-wrap">
-				@forelse ($course_students as $index => $cs)
-					<div class="flex flex-row xl:flex-col gap-2 xl:gap-0 items-center w-1/2 xl:w-1/6 mb-6">
-						@if($cs->student->details->profpic)
-							<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-10 h-10 md:w-14 md:h-14 xl:w-28 xl:h-28 mt-0 mb-0 xl:mt-2 xl:mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
-						@else
-							@if($cs->student->details->gender == 1)
-								<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-10 h-10 md:w-14 md:h-14 xl:w-28 xl:h-28 mt-0 mb-0 xl:mt-2 xl:mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
-							@else
-								<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-10 h-10 md:w-14 md:h-14 xl:w-28 xl:h-28 mt-0 mb-0 xl:mt-2 xl:mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
-							@endif
-						@endif
-						<h1 class="text-sm xl:text-lg font-bold text-start xl:text-center">{{-- explode(" ", $cs->student->full_name)[0] --}}{{ $cs->student->full_name }}</h1>
+			<div class="mt-4 flex flex-col w-full">
+				@forelse ($course->course_students()->where('teacher_id', Auth::id())->orderByRaw('CASE WHEN learning_status = "learning" THEN 0 WHEN learning_status = "complete" THEN 1 ELSE 2 END')->get()->groupBy('learning_status') as $status => $gcs)
+					<span class="mb-4 mt-4 @if($status == 'learning') bg-light-blue @elseif($status == 'complete') bg-green-600 @else bg-red @endif text-white text-base rounded-lg px-4 py-3 font-normal">{{ ucwords($status) }} Students</span>
+
+					<div class="mt-8 flex flex-wrap">
+						@foreach($gcs as $index => $cs)
+							@php
+								$student = $cs->student;
+							@endphp
+							<div class="flex flex-row xl:flex-col gap-2 xl:gap-0 items-center w-1/2 xl:w-1/6 mb-6">
+								@if($cs->student->details->profpic)
+									<img src="{{ Storage::url("app/public/" . $cs->student->details->profpic) }}" class="rounded-full w-10 h-10 md:w-14 md:h-14 xl:w-28 xl:h-28 mt-0 mb-0 xl:mt-2 xl:mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+								@else
+									@if($cs->student->details->gender == 1)
+										<img src="{{ asset('img/tempblankprofpicmale.png') }}" class="rounded-full w-10 h-10 md:w-14 md:h-14 xl:w-28 xl:h-28 mt-0 mb-0 xl:mt-2 xl:mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+									@else
+										<img src="{{ asset('img/tempblankprofpicfemale.png') }}" class="rounded-full w-10 h-10 md:w-14 md:h-14 xl:w-28 xl:h-28 mt-0 mb-0 xl:mt-2 xl:mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+									@endif
+								@endif
+								<h1 class="text-sm xl:text-lg font-bold text-start xl:text-center">{{-- explode(" ", $cs->student->full_name)[0] --}}{{ $cs->student->full_name }}</h1>
+							</div>
+						@endforeach
 					</div>
 				@empty
 				@endforelse

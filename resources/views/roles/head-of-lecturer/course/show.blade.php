@@ -10,6 +10,7 @@
 		<x-back-button href="{{ route('head-of-lecturer.course.index') }}"></x-back-button>
 		<div class="flex items-center justify-between">
 			<x-page-title style="margin-bottom: 0;">{{ $course->course_name }}</x-page-title>
+			<x-anchor-button href="{{ route('head-of-lecturer.course.syllabus-download', $course->id) }}"><i class="bi bi-download"></i> Download Syllabus</x-anchor-button>
 		</div>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 

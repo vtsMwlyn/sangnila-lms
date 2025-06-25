@@ -15,6 +15,7 @@ Route::prefix('/head-of-lecturer')->name('head-of-lecturer.')->middleware('auth'
     Route::prefix('/course')->name('course.')->group(function(){
         Route::get('/', [CourseController::class, 'head_of_lecturer_index'])->name('index');
         Route::get('/{course}', [CourseController::class, 'head_of_lecturer_show'])->name('show');
+        Route::get('/{course}/syllabus-download', [CourseController::class, 'head_of_lecturer_download_syllabus'])->name('syllabus-download');
     });
 
     // Attendance

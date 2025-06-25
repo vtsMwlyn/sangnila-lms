@@ -299,7 +299,7 @@ class CurriculumController extends Controller
 			return back()->with("danger", "System failed to copy syllabus data from the targetted course, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("admin.course.show", $current_course->id))->with("success", "Successfully copied syllabus data from the targetted course!");
+		return redirect(route("admin.course.show", ['course_id' => $current_course->id, 'content' => 'syllabus']))->with("success", "Successfully copied syllabus data from the targetted course!");
 	}
 
 

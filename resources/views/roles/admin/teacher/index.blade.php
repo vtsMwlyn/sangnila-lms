@@ -22,7 +22,6 @@
 				<thead>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Full Name</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Assigned Courses</th>
-					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Price</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Status</th>
 					<th class="text-start py-3 px-4 border-b-2 border-slate-400">Actions</th>
 				</thead>
@@ -48,9 +47,6 @@
 								@endif
 								<td class="py-3 px-4">
 									{{ $course->course_name }} - {{ ucwords($course->level) }}
-								</td>
-								<td class="py-3 px-4">
-									Rp {{ number_format(App\Models\CourseTeacher::where('user_id', $teacher->id)->where('course_id', $course->id)->first()->price, 2, ',', '.') }}
 								</td>
 								@if($j == 0)
 									<td class="py-3 px-4" rowspan="{{ $teacher->teached_courses->count() }}">

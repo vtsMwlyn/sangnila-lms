@@ -295,7 +295,7 @@ class CourseStudentController extends Controller {
 			return back()->with("danger", "System failed to batch assign these students to the course, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("admin.course.show", $course->id))->with("success", "Successfully batch-assigned students!");
+		return redirect(route("admin.course.show", ['course_id' => $course->id, 'content' => 'general information']))->with("success", "Successfully batch-assigned students!");
 
 	}
 
@@ -425,7 +425,7 @@ class CourseStudentController extends Controller {
 			return back()->with("danger", "System failed to import old student data, please report the error to our IT team. Error detail: " . $e->getMessage());
 		}
 
-		return redirect(route("admin.course.show", $course_id))->with("success", "Students data imported successfully!");
+		return redirect(route("admin.course.show", ['course_id' => $course->id, 'content' => 'general information']))->with("success", "Students data imported successfully!");
 	}
 
 	public function imported_data_update(Request $request, $student_id, $course_id){

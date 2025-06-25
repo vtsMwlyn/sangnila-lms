@@ -105,7 +105,6 @@
 				$('input[type="checkbox"]').each(function(){
 					if($(this).is(":checked")){
 						$("#batch-assign-form").append($("<input>").attr({"type": "hidden", "name": "selected_teachers[]", "value": $(this).data("sid")}));
-						n++;
 					}
 				});
 
