@@ -53,7 +53,19 @@
                 <p>Please pick a student</p>
                 <x-select class="w-full mt-1 select-2">
                     @foreach(App\Models\User::where('role_id', 3)->where('status', 'enabled')->orderBy('full_name')->get() as $student)
-                        <option value="{{ route('admin.attendance.input-student-attendance', $student->id) }}">{{ $student->full_name }}</option>
+                        @php
+                            $still_learning = true;
+                            foreach($student->course_students as $cs){
+                                if($cs->learning_status != 'learning'){
+                                    $still_learning = false;
+                                    break;
+                                }
+                            }
+                        @endphp
+                        
+                        @if($still_learning)
+                            <option value="{{ route('admin.attendance.input-student-attendance', $student->id) }}">{{ $student->full_name }}</option>
+                        @endif
                     @endforeach
                 </x-select>
             </div>
