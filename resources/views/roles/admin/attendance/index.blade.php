@@ -54,10 +54,10 @@
                 <x-select class="w-full mt-1 select-2">
                     @foreach(App\Models\User::where('role_id', 3)->where('status', 'enabled')->orderBy('full_name')->get() as $student)
                         @php
-                            $still_learning = true;
+                            $still_learning = false;
                             foreach($student->course_students as $cs){
-                                if($cs->learning_status != 'learning'){
-                                    $still_learning = false;
+                                if($cs->learning_status == 'learning'){
+                                    $still_learning = true;
                                     break;
                                 }
                             }
