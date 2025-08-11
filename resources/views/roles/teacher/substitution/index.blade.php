@@ -67,6 +67,7 @@
 				<table class="w-full">
 					<thead>
 						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Date</th>
+						<th class="text-start py-3 px-4 border-b-2 border-slate-400">Course</th>
 						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Students</th>
 						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Attended</th>
 						<th class="text-center py-3 px-4 border-b-2 border-slate-400">Absent</th>
@@ -77,6 +78,7 @@
 						@forelse ($substitution_attendances as $atd)
 							<tr class="@if($loop->index % 2 == 0) bg-white @endif">
 								<td class="py-3 px-4">{{ Carbon\Carbon::parse($atd->attendance_date)->format('l, d F Y') }}</td>
+								<td class="py-3 px-4">{{ $atd->course->course_name }} - {{ ucwords($atd->course->level) }}</td>
 								<td class="py-3 px-4 text-center">{{ $atd->student_attendances->count() }}</td>
 								<td class="py-3 px-4 text-center">{{ $atd->student_attendances->where("is_attend", 1)->count() }}</td>
 								<td class="py-3 px-4 text-center">{{ $atd->student_attendances->where("is_attend", 0)->count() }}</td>
