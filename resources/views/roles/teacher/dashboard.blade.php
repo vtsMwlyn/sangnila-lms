@@ -139,7 +139,7 @@
 
 				<div class="w-full flex flex-col overflow-y-auto" style="height: 550px;">
 					<ul class="list-disc list-inside">
-						@foreach(App\Models\SelfAttendance::where("user_id", Auth::user()->id)->where("self_attendance_date", Carbon\Carbon::today()->format('Y-m-d'))->latest()->get() as $selfAttendance)
+						@forelse(App\Models\SelfAttendance::where("user_id", Auth::user()->id)->where("self_attendance_date", Carbon\Carbon::today()->format('Y-m-d'))->latest()->get() as $selfAttendance)
 							@php
 								$attendances = App\Models\Attendance::where("uploader_id", Auth::user()->id)->where('course_id', $selfAttendance->course->id)->where("attendance_date", Carbon\Carbon::today()->format('Y-m-d'))->get();
 							@endphp
@@ -150,7 +150,11 @@
 									<a href="{{ route('teacher.attendance.index') }}" class="inline-block py-0.5 px-2 pl-7 bg-indigo-600 hover:bg-slate-700 rounded-lg font-bold text-white">Make Report</a>
 								</li>
 							@endif
-						@endforeach
+						@empty
+						    <div class="flex w-full h-full items-center justify-center">
+    					        - It seems like you haven't signed in yet to any course today ðŸ‘€ -
+    					    </div>
+						@endforelse
 					</ul>
 				</div>
 			</div>
