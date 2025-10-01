@@ -5,7 +5,7 @@
 			<button type="button" class="flex flex-col items-center dropdown-toggler px-10 py-4 mb-6 hover:bg-slate-400 relative" style="background: {{ Request::is('profile*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<div class="relative">
 					@if(Auth::user()->details->profpic)
-						<img src="{{ Storage::url( Auth::user()->details->profpic) }}" class="rounded-full w-32 h-32 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+						<img src="{{ Storage::url( '/app/public/' . Auth::user()->details->profpic) }}" class="rounded-full w-32 h-32 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 					@else
 						@if(Auth::user()->details->gender == 1)
 							<img src="{{ asset('img/tempblankprofpicmale.png') }}" alt="Image Preview" class="rounded-full w-32 h-32 mt-2 mb-4" style="object-fit: cover; object-position: center;" loading="lazy">

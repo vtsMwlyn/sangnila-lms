@@ -84,7 +84,7 @@
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 				<div class="flex flex-col justify-between overflow-y-auto w-full" style="height: 400px;">
-				    <div>
+				    <div class="w-full h-full">
     					@forelse(App\Models\SelfAttendance::where("user_id", Auth::user()->id)->where("self_attendance_date", Carbon\Carbon::today()->format('Y-m-d'))->latest()->get() as $selfAttendance)
     						<div class="flex items-center justify-between font-bold w-full">
     							<div>
@@ -120,7 +120,7 @@
     						</div>
     					@empty
     					    <div class="flex w-full h-full items-center justify-center">
-    					        - It seems like you haven't signed in yet to any course today ðŸ‘€ -
+    					        <p>- It seems like you haven't signed in yet to any course today 👀 -</p>
     					    </div>
     					@endforelse
 					</div>
@@ -131,14 +131,15 @@
 			</div>
 		</div>
 
-		{{-- Todo list --}}
-		<div class="w-full xl:w-1/3 flex gap-5">
+		
+		<div class="w-full xl:w-1/3 flex flex-col gap-5">
+			{{-- Todo list --}}
 			<div class="w-full rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
 				<p class="font-bold text-dark-blue text-base">To Do List</p>
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
-				<div class="w-full flex flex-col overflow-y-auto" style="height: 550px;">
-					<ul class="list-disc list-inside">
+				<div class="w-full flex flex-col overflow-y-auto" style="height: 250px;">
+					<ul class="list-disc list-inside h-full">
 						@forelse(App\Models\SelfAttendance::where("user_id", Auth::user()->id)->where("self_attendance_date", Carbon\Carbon::today()->format('Y-m-d'))->latest()->get() as $selfAttendance)
 							@php
 								$attendances = App\Models\Attendance::where("uploader_id", Auth::user()->id)->where('course_id', $selfAttendance->course->id)->where("attendance_date", Carbon\Carbon::today()->format('Y-m-d'))->get();
@@ -152,10 +153,25 @@
 							@endif
 						@empty
 						    <div class="flex w-full h-full items-center justify-center">
-    					        - It seems like you haven't signed in yet to any course today ðŸ‘€ -
+    					        - It seems like you haven't signed in yet to any course today 👀 -
     					    </div>
 						@endforelse
 					</ul>
+				</div>
+			</div>
+
+			{{-- Help --}}
+			<div class="w-full rounded-3xl p-5 shadow-lg" style="background-color: #FEFEFEB2;">
+				<p class="font-bold text-dark-blue text-base">Need Help?</p>
+				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
+
+				<div class="w-full flex flex-col items-start overflow-y-auto" style="height: 250px;">
+					<a href="#" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I want to check which students I'm currently teaching</a>
+					<a href="#" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I want to upload attendance for other course than mine</a>
+					<a href="#" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I want to check my student's remaining sessions</a>
+					<a href="#" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I need to upload portfolio of my student</a>
+					<a href="#" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I want to check the syllabus of my course</a>
+					<a href="#" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I need to fill assessment for my student</a>
 				</div>
 			</div>
 		</div>
