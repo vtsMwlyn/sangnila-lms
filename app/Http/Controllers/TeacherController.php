@@ -136,7 +136,7 @@ class TeacherController extends Controller {
 			return back()->with('danger', 'Cannot sign in due to system error, please contact our IT team. Error detail: ' . $e->getMessage());
 		}
 
-		return redirect(route('teacher.attendance.show', $course->id))->with('success', 'Successfully checked in to course ' . $course->course_name . ' at ' . $validatedData['check_in_time'] . ' (GMT+7)');
+		return redirect()->route('dashboard')->with('success', 'Successfully checked in to course ' . $course->course_name . ' at ' . $validatedData['check_in_time'] . ' (GMT+7)');
 	}
 
 	public function check_out_store($course_id){
@@ -159,6 +159,6 @@ class TeacherController extends Controller {
 			return back()->with('danger', 'No attendance data found, probably because you have not checked in yet. If the problem persists please contact our IT team.');
 		}
 
-		return redirect(route('teacher.attendance.show', $course->id))->with('success', 'Successfully checked out from course ' . $course->course_name . ' at ' . $checkOutTime . ' (GMT+7)');
+		return back()->with('success', 'Successfully checked out from course ' . $course->course_name . ' at ' . $checkOutTime . ' (GMT+7)');
 	}
 }

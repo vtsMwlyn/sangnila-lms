@@ -4,6 +4,27 @@
 	<h1>Dashboard</h1>
 @endsection
 
+@section("popup")
+    <x-popup popup_title="Check In to A Course" class="w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="select-course">
+		<div class="w-full flex gap-5 mt-3 attendance-detail-fields">
+			<div class="w-full container-select2">
+				<x-label for="course_selection" class="mb-1">Please select a course:</x-label>
+				<x-select name="course_selection" id="course_selection" class="w-full select-2">
+					@foreach(App\Models\Course::where('status', 'active')->orderBy('course_name', 'asc')->get() as $course)
+						<option value="{{ route('teacher.attendance.check-in', $course->id) }}">
+						    {{ $course->course_name }} - {{ ucwords($course->level) }}
+						  </option>
+					@endforeach
+				</x-select>
+			</div>
+		</div>
+
+		<div class="mt-8 w-full flex justify-center">
+			<x-button type="button" class="w-1/3" id="confirm-course-button">Continue</x-button>
+		</div>
+	</x-popup>
+@endsection
+
 @section("content")
 	<style>
 		.fc-toolbar-title {
@@ -63,46 +84,49 @@
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 				<div class="flex flex-col justify-between overflow-y-auto w-full" style="height: 400px;">
-					<ul class="list-disc list-inside">
-						@foreach(Auth::user()->teached_courses as $course)
-							@php
-								$selfAttendances = App\Models\SelfAttendance::where("user_id", Auth::user()->id)->where('course_id', $course->id)->where("self_attendance_date", Carbon\Carbon::today()->format('Y-m-d'))->latest()->first();
-							@endphp
-
-							<div class="flex items-center justify-between font-bold w-full">
-								<div>
-									{{ $course->course_name }} - {{ ucwords($course->level) }}
-									@if($selfAttendances && $selfAttendances->check_in_time && $selfAttendances->check_out_time)
-										<i class="bi bi-check-circle-fill text-green-600"></i>
-									@elseif($selfAttendances && $selfAttendances->check_in_time && !$selfAttendances->check_out_time)
-										<i class="bi bi-clock-fill text-slate-500"></i>
-									@else
-										<i class="bi bi-x-lg text-red"></i>
-									@endif
-								</div>
-
-								@if($selfAttendances && $selfAttendances->check_in_time && !$selfAttendances->check_out_time)
-									<form action="{{ route('teacher.attendance.check-out.store', $course->id) }}" method="post">
-										@csrf
-										<button type="submit" href="{{ route('teacher.attendance.show', $course->id) }}" class="bg-indigo-600 hover:bg-slate-700 py-0.5 px-1.5 rounded-lg font-bold text-white" onclick="return confirm('Are you sure want to check out now?');">Check Out</button>
-									</form>
-								@else
-									<a href="{{ route('teacher.attendance.check-in', $course->id) }}" class="bg-indigo-600 hover:bg-slate-700 py-0.5 px-1.5 rounded-lg font-bold text-white">Check In</a>
-								@endif
-							</div>
-
-							<div class="flex gap-2 xl:gap-5 w-full mb-4 mt-2">
-								<div class="w-1/2 flex flex-col">
-									<x-label>Last check in time</x-label>
-									<x-input type="text" disabled value="{{ $selfAttendances->check_in_time ?? 'N/A' }}"></x-input>
-								</div>
-								<div class="w-1/2 flex flex-col">
-									<x-label>Last check out time</x-label>
-									<x-input type="text" disabled value="{{ $selfAttendances->check_out_time ?? 'N/A' }}"></x-input>
-								</div>
-							</div>
-						@endforeach
-					</ul>
+				    <div>
+    					@forelse(App\Models\SelfAttendance::where("user_id", Auth::user()->id)->where("self_attendance_date", Carbon\Carbon::today()->format('Y-m-d'))->latest()->get() as $selfAttendance)
+    						<div class="flex items-center justify-between font-bold w-full">
+    							<div>
+    								{{ $selfAttendance->course->course_name }} - {{ ucwords($selfAttendance->course->level) }}
+    								@if($selfAttendance && $selfAttendance->check_in_time && $selfAttendance->check_out_time)
+    									<i class="bi bi-check-circle-fill text-green-600"></i>
+    								@elseif($selfAttendance && $selfAttendance->check_in_time && !$selfAttendance->check_out_time)
+    									<i class="bi bi-clock-fill text-slate-500"></i>
+    								@else
+    									<i class="bi bi-x-lg text-red"></i>
+    								@endif
+    							</div>
+    
+    							@if($selfAttendance && $selfAttendance->check_in_time && !$selfAttendance->check_out_time)
+    								<form action="{{ route('teacher.attendance.check-out.store', $selfAttendance->course->id) }}" method="post">
+    									@csrf
+    									<button type="submit" href="{{ route('teacher.attendance.show', $selfAttendance->course->id) }}" class="bg-indigo-600 hover:bg-slate-700 py-0.5 px-1.5 rounded-lg font-bold text-white" onclick="return confirm('Are you sure want to check out now?');">Check Out</button>
+    								</form>
+    							@else
+    								<a href="{{ route('teacher.attendance.check-in', $selfAttendance->course->id) }}" class="bg-indigo-600 hover:bg-slate-700 py-0.5 px-1.5 rounded-lg font-bold text-white">Check In</a>
+    							@endif
+    						</div>
+    
+    						<div class="flex gap-2 xl:gap-5 w-full mb-4 mt-2">
+    							<div class="w-1/2 flex flex-col">
+    								<x-label>Last check in time</x-label>
+    								<x-input type="text" disabled value="{{ $selfAttendance->check_in_time ?? 'N/A' }}"></x-input>
+    							</div>
+    							<div class="w-1/2 flex flex-col">
+    								<x-label>Last check out time</x-label>
+    								<x-input type="text" disabled value="{{ $selfAttendance->check_out_time ?? 'N/A' }}"></x-input>
+    							</div>
+    						</div>
+    					@empty
+    					    <div class="flex w-full h-full items-center justify-center">
+    					        - It seems like you haven't signed in yet to any course today 👀 -
+    					    </div>
+    					@endforelse
+					</div>
+					<div class="w-full mt-8 flex justify-center">
+					   <x-button type="button" id="check-in-other-btn">Sign In to A Course</x-button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -166,7 +190,7 @@
 								@if($announcement->announce_from < now() && $announcement->announce_until > now() && in_array(Auth::user()->role_id, $target))
 									<a class="card-img flex flex-col items-stretch swiper-slide" href="{{ route('view-announcement', $announcement->id) }}">
 										@if($announcement->image_path)
-											<img src="{{ Storage::url("app/public/" . $announcement->image_path) }}" alt="announcement_img" class="w-full rounded-3xl" style="object-fit: cover; object-position: center; height: 340px;">
+											<img src="{{ Storage::url( $announcement->image_path) }}" alt="announcement_img" class="w-full rounded-3xl" style="object-fit: cover; object-position: center; height: 340px;">
 										@else
 											<div class="flex bg-slate-400 items-center justify-center text-white font-extrabold rounded-3xl grow" style="height: 340px;">
 												<i class="bi bi-megaphone-fill text-6xl"></i>
@@ -320,6 +344,15 @@
 
 				calendar.render();
 			@endif
+			
+			$('#check-in-other-btn').on('click', function(){
+			   $('#select-course').parent().show(); 
+			});
+			
+			$('#confirm-course-button').on('click', function() {
+				const selectedUrl = $('#course_selection').val();
+				window.location.href = selectedUrl;
+			});
 		});
 	</script>
 @endsection

@@ -5,7 +5,7 @@
 			<button type="button" class="flex flex-col items-center dropdown-toggler px-10 py-4 mb-6 hover:bg-slate-400 relative" style="background: {{ Request::is('profile*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<div class="relative">
 					@if(Auth::user()->details->profpic)
-						<img src="{{ Storage::url("app/public/" . Auth::user()->details->profpic) }}" class="rounded-full w-32 h-32 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
+						<img src="{{ Storage::url( Auth::user()->details->profpic) }}" class="rounded-full w-32 h-32 mt-2 mb-4" alt="profpic" style="object-fit: cover; object-position: center;" loading="lazy">
 					@else
 						@if(Auth::user()->details->gender == 1)
 							<img src="{{ asset('img/tempblankprofpicmale.png') }}" alt="Image Preview" class="rounded-full w-32 h-32 mt-2 mb-4" style="object-fit: cover; object-position: center;" loading="lazy">
@@ -57,7 +57,7 @@
 				@endif
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
+			{{-- <x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('teacher.forum.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*forum*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-forum.svg') }}" class="h-6 w-8"> Forum Discussion
 			</x-anchor-button>
@@ -65,14 +65,14 @@
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('teacher.assignment.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*assignment*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-assignment.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Assignment
-			</x-anchor-button>
+			</x-anchor-button> --}}
 
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('teacher.attendance.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*attendance*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-attendance.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Attendance
 			</x-anchor-button>
 
-			<x-anchor-button class="grow flex items-center text-start gap-4 py-2 px-6"
+			{{-- <x-anchor-button class="grow flex items-center text-start gap-4 py-2 px-6"
 				href="{{ route('teacher.lecturer-invoice-reimburse.index') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('teacher*invoices*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<i class="bi bi-receipt-cutoff text-2xl mx-1"></i> Invoice & Reimburse
 			</x-anchor-button>
@@ -80,7 +80,7 @@
 			<x-anchor-button class="grow flex items-center text-start gap-4 py-3 px-6"
 				href="{{ route('list-announcement') }}" style="transform: scale(1); border-radius: 0; background: {{ Request::is('announcement*')? 'linear-gradient(90deg, #1EB8CD 31%, rgba(53, 77, 155, 0) 100%)' : '' }};">
 				<img src="{{ asset('img/sidebar-announcement.svg') }}" class="h-6 w-8" alt="sidebar-icon"> Announcement
-			</x-anchor-button>
+			</x-anchor-button> --}}
 		</div>
 	</div>
 </div>

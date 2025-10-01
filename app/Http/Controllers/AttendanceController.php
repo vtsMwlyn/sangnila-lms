@@ -192,14 +192,14 @@ class AttendanceController extends Controller {
 
 	// Substitution attendance list
 	public function teacher_substitution_index(){
-		$courses_teached_by_this_teacher = Auth::user()->teached_courses;
+		$courses = Course::where('status', 'active')->orderBy('course_name', 'asc')->get();
 		$substitution_attendances = Attendance::whereHas('posted_by', function($query){
 			return $query->where('id', Auth::id())->orWhereIn('role_id', [1, 6]);
 		})->where('is_substitution', 1)->orderBy('attendance_date', 'desc')->get();
 
 		return view('roles.teacher.substitution.index', [
 			'substitution_attendances' => $substitution_attendances,
-			'courses' => $courses_teached_by_this_teacher,
+			'courses' => $courses,
 		]);
 	}
 
