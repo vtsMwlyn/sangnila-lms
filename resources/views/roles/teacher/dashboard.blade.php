@@ -166,12 +166,14 @@
 				<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 				<div class="w-full flex flex-col items-start overflow-y-auto" style="height: 250px;">
-					<a href="#" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I want to check which students I'm currently teaching</a>
-					<a href="#" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I want to upload attendance for other course than mine</a>
-					<a href="#" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I want to check my student's remaining sessions</a>
-					<a href="#" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I need to upload portfolio of my student</a>
-					<a href="#" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I want to check the syllabus of my course</a>
-					<a href="#" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I need to fill assessment for my student</a>
+					<a href="https://youtu.be/VugBY6auQDc" target="_blank" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> How to do sign in and sign out</a>
+					<a href="https://youtu.be/8TC2GGyjfVo" target="_blank" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I want to upload attendance for other course than mine</a>
+					<a href="https://youtu.be/xyIaGIkMmhg" target="_blank" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I want to upload attendance report for my students</a>
+					<a href="https://youtu.be/Z3AKPALztU4" target="_blank" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I want to check my student's remaining sessions</a>
+					<a href="https://youtu.be/o3tmTEZuoFI" target="_blank" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I need to upload portfolio of my student</a>
+					<a href="https://youtu.be/rNwKywtWo74" target="_blank" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I need to fill assessment for my student</a>
+					<a href="https://youtu.be/TwBoJi2vf1M" target="_blank" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I want to check the syllabus of my course</a>
+					<a href="https://youtu.be/FpNbdpT5xfQ" target="_blank" class="py-2 flex items-center gap-2 transition transform hover:translate-x-2 hover:text-cyan-600"><i class="bi bi-chevron-right"></i> I want to check which students I'm currently teaching</a>
 				</div>
 			</div>
 		</div>
