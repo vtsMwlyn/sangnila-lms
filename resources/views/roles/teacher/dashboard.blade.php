@@ -5,7 +5,7 @@
 @endsection
 
 @section("popup")
-    <x-popup popup_title="Check In to A Course" class="w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="select-course">
+    <x-popup popup_title="Check In to A Course" class="w-11/12 xl:w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="select-course">
 		<div class="w-full flex gap-5 mt-3 attendance-detail-fields">
 			<div class="w-full container-select2">
 				<x-label for="course_selection" class="mb-1">Please select a course:</x-label>
