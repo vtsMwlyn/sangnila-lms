@@ -301,12 +301,14 @@
 				const stime = h1 * 60 + m1;
 				const etime = h2 * 60 + m2;
 
-				if(_start_time == '00:00' && _end_time == '00:00' || etime < stime){
-					currCard.find('.error-time').removeClass('hidden');
-					currCard.find('._start_time').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
-					currCard.find('._end_time').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
+				if(_isAttended === 'on'){
+					if(_start_time == '00:00' && _end_time == '00:00' || etime < stime){
+						currCard.find('.error-time').removeClass('hidden');
+						currCard.find('._start_time').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
+						currCard.find('._end_time').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
 
-					input_error = true;
+						input_error = true;
+					}
 				}
 
 				if(input_error){
