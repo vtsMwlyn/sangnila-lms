@@ -7,7 +7,7 @@
 @section('content')
     <x-section-container>
 		<x-page-title>New Substitution Attendance Report</x-page-title>
-		<h1 class="font-bold text-lg text-blue mt-1">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
+		<h1 class="font-bold text-lg text-blue mt-1">{{ $student->full_name }}</h1>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("success"))
@@ -21,7 +21,7 @@
 		<x-badge-danger id="emptyDataNotif" badge_text="Please input minimum 1 data to proceed." style="display: none;"></x-badge-danger>
 
 		{{-- @if($allStudents->count() && $course->teachers->count()) --}}
-			<form action="{{ route('teacher.attendance.substitution.store', $course->id) }}" method="post" class="my-4" id="store-attendance-form">
+			<form action="{{ route('teacher.attendance.substitution.store', $student->id) }}" method="post" class="my-4" id="store-attendance-form">
 				@csrf
 
 				<div id="form-area">
@@ -53,13 +53,14 @@
 						</div> --}}
                         <div class="w-full flex gap-5">
                             <div class="mt-3 w-full md:w-1/2 container-select2">
-                                <x-label class="mb-1">Student<span class="text-red">*</span></x-label>
-                                <x-select type="text" name="_student_name" id="_student_name" class="w-full select-2">
-                                    @foreach($course->students as $student)
-										<option value="{{ $student }}">{{ $student->full_name }}</option>
+                                <x-label class="mb-1">Course<span class="text-red">*</span></x-label>
+                                <x-select type="text" name="_course_name" id="_course_name" class="w-full select-2">
+									<option disabled selected>Select a Course</option>
+                                    @foreach($courses as $course)
+										<option value="{{ $course }}">{{ $course->course_name }} - {{ ucwords($course->level) }}</option>
 									@endforeach
                                 </x-select>
-                                <input type="hidden" name="student_id" id="student_id">
+                                <input type="hidden" name="course_id" id="course_id">
                             </div>
                             <div class="w-full md:w-1/2"></div>
 						</div>
@@ -83,12 +84,7 @@
 							<div class="w-full md:w-1/2 container-select2">
 								<x-label for="_activity_progress" class="mb-1">Activity<span class="text-red">*</span></x-label>
 								<x-select name="_activity_progress" id="_activity_progress" class="w-full select-2">
-									@foreach($course->topics as $topic)
-										@foreach($topic->activities as $activity)
-											<option value="{{ $activity->title }}">{{ $activity->title }}</option>
-										@endforeach
-									@endforeach
-									<option value="Other">Other</option>
+									<option value="Other">Other (Please specify on the details)</option>
 								</x-select>
 							</div>
 
@@ -119,7 +115,7 @@
 				<div class="overflow-x-auto mt-2">
 					<table class="w-full">
 						<thead>
-                            <th class="text-start py-3 px-4 border-b-2 border-slate-400">Student</th>
+                            <th class="text-start py-3 px-4 border-b-2 border-slate-400">Course</th>
 							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Time</th>
 							{{-- <th class="text-start py-3 px-4 border-b-2 border-slate-400">Attended</th> --}}
 							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Details</th>
@@ -140,9 +136,32 @@
 			</form>
 
 			<script>
+				const courseTopicsAndActivities = @json($courses);
+
 				$(document).ready(function() {
+					$('#_course_name').on('change', function(){
+						$('#_activity_progress').empty();
+
+						const inpCourse = JSON.parse($('#_course_name').val());
+
+						const targettedCourse = courseTopicsAndActivities.find(ctaa => ctaa.id === inpCourse.id);
+						console.log(targettedCourse);
+
+						targettedCourse.topics.forEach(topic => {
+							topic.activities.forEach(activity => {
+								$('#_activity_progress').append(
+									$('<option>').attr('value', activity.title).text(activity.title)
+								)
+							});
+						});
+
+						$('#_activity_progress').append(
+							$('<option>').attr('value', 'Other').text('Other (please specify on the details)')
+						);
+					});
+
 					$('#addBtn').on('click', function(){
-                        const inpStudent = JSON.parse($('#_student_name').val());
+                        const inpCourse = JSON.parse($('#_course_name').val());
 
 						const _inpActivityProgress = $('#_activity_progress').val();
 						const inpLearningStatus = $('#_learning_status').val();
@@ -199,9 +218,11 @@
 
 						const sanitizedAttendanceDetails = $('<span>').text(inpAttendanceDetails);
 
+						const courseLevel = inpCourse.level.charAt(0).toUpperCase() + inpCourse.level.slice(1);
+
 						newRow.addClass(rowCount % 2 == 1? 'bg-white' : '')
 							.append(
-								$('<td>').addClass('py-3 px-4').text(inpStudent.full_name)
+								$('<td>').addClass('py-3 px-4').text(`${inpCourse.course_name} - ${courseLevel}`)
                             ).append(
 								$('<td>').addClass('py-3 px-4').html(`${inpStartTime}-${inpEndTime}`)
 							).append(
@@ -210,18 +231,18 @@
 								$('<td>').addClass('py-3 px-4').append(removeBtn)
 							);
 
-                        const hidStudentId = $('<input>').attr({'type': 'hidden', 'name': 'student_id[]', 'value': inpStudent.id});
+                        const hidCourseId = $('<input>').attr({'type': 'hidden', 'name': 'course_id[]', 'value': inpCourse.id});
 						const hidStartTime = $('<input>').attr({'type': 'hidden', 'name': 'start_time[]', 'value': inpStartTime});
 						const hidEndTime = $('<input>').attr({'type': 'hidden', 'name': 'end_time[]', 'value': inpEndTime});
 						const hidActivityProgress = $('<input>').attr({'type': 'hidden', 'name': 'activity_progress[]', 'value': inpActivityProgress});
 						const hidLearningStatus = $('<input>').attr({'type': 'hidden', 'name': 'learning_status[]', 'value': inpLearningStatus});
 						const hidAttendanceDetails = $('<input>').attr({'type': 'hidden', 'name': 'attendance_details[]', 'value': inpAttendanceDetails});
 
-						$('#store-attendance-form').append(hidStudentId).append(hidStartTime).append(hidEndTime).append(hidActivityProgress).append(hidLearningStatus).append(hidAttendanceDetails);
+						$('#store-attendance-form').append(hidCourseId).append(hidStartTime).append(hidEndTime).append(hidActivityProgress).append(hidLearningStatus).append(hidAttendanceDetails);
 
 						removeBtn.click(() => {
 							if(confirm('Are you sure want to remove this student from the list?')){
-                                hidStudentId.remove();
+                                hidCourseId.remove();
 								hidStartTime.remove();
 								hidEndTime.remove();
 								hidActivityProgress.remove();

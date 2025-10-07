@@ -192,30 +192,35 @@ class AttendanceController extends Controller {
 
 	// Substitution attendance list
 	public function teacher_substitution_index(){
-		$courses = Course::where('status', 'active')->orderBy('course_name', 'asc')->get();
+		$students = User::where('role_id', 3)->whereHas('course_students', function($query){
+			return $query->where('learning_status', 'learning');
+		})->orderBy('full_name', 'asc')->get();
+
 		$substitution_attendances = Attendance::whereHas('posted_by', function($query){
 			return $query->where('id', Auth::id())->orWhereIn('role_id', [1, 6]);
 		})->where('is_substitution', 1)->orderBy('attendance_date', 'desc')->get();
 
 		return view('roles.teacher.substitution.index', [
 			'substitution_attendances' => $substitution_attendances,
-			'courses' => $courses,
+			'students' => $students,
 		]);
 	}
 
 	// Create new substitution attendance
-	public function teacher_substitution_create($course_id){
-		$course = Course::findOrFail($course_id);
+	public function teacher_substitution_create($student_id){
+		$student = User::findOrFail($student_id);
 
 		return view('roles.teacher.substitution.upload', [
-			'course' => $course,
+			'student' => $student,
+			'courses' => Course::where('status', 'active')->orderBy('course_name', 'asc')->with('topics.activities')->get()
 		]);
 	}
 
 	// Store the substitution attendance
-	public function teacher_substitution_store(Request $request, $course_id){
+	public function teacher_substitution_store(Request $request, $student_id){
+		// return $request;
 		$request->validate([
-			'student_id.*' => 'required',
+			'course_id.*' => 'required',
 			'attendance_date' => 'required',
 			'activity_progress.*' => 'required',
 			'start_time.*' => 'required',
@@ -225,7 +230,7 @@ class AttendanceController extends Controller {
 		]);
 
 		$dataToUpload = $request->only([
-			'student_id',
+			'course_id',
 			'attendance_date',
 			'start_time',
 			'end_time',
@@ -237,17 +242,17 @@ class AttendanceController extends Controller {
 		try {
 			DB::beginTransaction();
 
-			$newAttendance = Attendance::create([
-				'course_id' => $course_id,
-				'uploader_id' => Auth::id(),
-				'attendance_date' => $request->attendance_date,
-				'is_substitution' => 1,
-			]);
+			$student = User::findOrFail($student_id);
 
-			$course = $newAttendance->course;
+			foreach($dataToUpload['course_id'] as $i => $course_id){
+				$course = Course::findOrFail($course_id);
 
-			foreach($dataToUpload['student_id'] as $i => $student_id){
-				$student = User::findOrFail($student_id);
+				$newAttendance = Attendance::create([
+					'course_id' => $course_id,
+					'uploader_id' => Auth::id(),
+					'attendance_date' => $request->attendance_date,
+					'is_substitution' => 1,
+				]);
 
 				StudentAttendance::create([
 					'attendance_id' => $newAttendance->id,
@@ -297,27 +302,34 @@ class AttendanceController extends Controller {
 	// Edit substitution attendance data
 	public function teacher_substitution_edit($substitution_attendance_id){
 		$substitution_attendance = Attendance::findOrFail($substitution_attendance_id);
+		$students = User::where('role_id', 3)->whereHas('course_students', function($query){
+			return $query->where('learning_status', 'learning');
+		})->orderBy('full_name', 'asc')->get();
 
 		return view('roles.teacher.substitution.edit', [
 			'substitution_attendance' => $substitution_attendance,
-			'course' => $substitution_attendance->course,
+			'courses' => Course::where('status', 'active')->orderBy('course_name', 'asc')->with('topics.activities')->get(),
+			'students' => $students,
 		]);
 	}
 
 	// Save the substitution attendance update
 	public function teacher_substitution_update(Request $request, $substitution_attendance_id){
+		// return $request;
 		$request->validate([
-			'student_id.*' => 'required',
+			'student_id' => 'required',
+			'course_id' => 'required',
 			'attendance_date' => 'required',
-			'activity_progress.*' => 'required',
-			'start_time.*' => 'required',
-			'end_time.*' => 'required',
-			'learning_status.*' => 'required',
-			'attendance_details.*' => 'required',
+			'activity_progress' => 'required',
+			'start_time' => 'required',
+			'end_time' => 'required',
+			'learning_status' => 'required',
+			'attendance_details' => 'required',
 		]);
 
 		$dataToUpload = $request->only([
 			'student_id',
+			'course_id',
 			'attendance_date',
 			'start_time',
 			'end_time',
@@ -336,44 +348,43 @@ class AttendanceController extends Controller {
 			$substitution_attendance->student_attendances()->delete();
 
 			$substitution_attendance->update([
-				'attendance_date' => $request->attendance_date,
+				'course_id' => $dataToUpload['course_id'],
+				'attendance_date' => $dataToUpload['attendance_date'],
 			]);
 
-			foreach($dataToUpload['student_id'] as $i => $student_id){
-				$student = User::findOrFail($student_id);
+			$student = User::findOrFail($dataToUpload['student_id']);
 
-				StudentAttendance::create([
-					'attendance_id' => $substitution_attendance->id,
-					'student_id' => $student->id,
-					'activity_progress' => $dataToUpload['activity_progress'][$i],
-					'learning_status' => $dataToUpload['learning_status'][$i],
-					'is_attend' => 1,
-					'start_time' => $dataToUpload['start_time'][$i],
-					'end_time' => $dataToUpload['end_time'][$i],
-					'attendance_detail' => $dataToUpload['attendance_details'][$i],
-				]);
+			StudentAttendance::create([
+				'attendance_id' => $substitution_attendance->id,
+				'student_id' => $student->id,
+				'activity_progress' => $dataToUpload['activity_progress'],
+				'learning_status' => $dataToUpload['learning_status'],
+				'is_attend' => 1,
+				'start_time' => $dataToUpload['start_time'],
+				'end_time' => $dataToUpload['end_time'],
+				'attendance_detail' => $dataToUpload['attendance_details'],
+			]);
 
-				// Auto update progress student
-				$activities = Activity::whereHas('topic', function($query) use ($course){
-					return $query->where('course_id', $course->id)->where('user_id', Auth::user()->id);
-				})->orderBy('session', 'asc')->get();
+			// Auto update progress student
+			$activities = Activity::whereHas('topic', function($query) use ($course){
+				return $query->where('course_id', $course->id)->where('user_id', Auth::user()->id);
+			})->orderBy('session', 'asc')->get();
 
-				$student_attendances = StudentAttendance::where('student_id', $student->id)->whereHas('attendance', function($query) use ($course){
-					return $query->where('course_id', $course->id);
-				})->get();
+			$student_attendances = StudentAttendance::where('student_id', $student->id)->whereHas('attendance', function($query) use ($course){
+				return $query->where('course_id', $course->id);
+			})->get();
 
-				foreach($activities as $activity){
-					Progress::updateOrCreate(
-						[
-							"student_id" => $student->id,
-							"course_id" => $course->id,
-							"activity_id" => $activity->id,
-						],
-						[
-							"status" => $activity->session <= $student_attendances->count() + 1 ? 'unlocked' : 'locked',
-						]
-					);
-				}
+			foreach($activities as $activity){
+				Progress::updateOrCreate(
+					[
+						"student_id" => $student->id,
+						"course_id" => $course->id,
+						"activity_id" => $activity->id,
+					],
+					[
+						"status" => $activity->session <= $student_attendances->count() + 1 ? 'unlocked' : 'locked',
+					]
+				);
 			}
 
 			DB::commit();

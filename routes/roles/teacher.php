@@ -158,8 +158,8 @@ Route::prefix('/teacher')
 
 			// Substitution attendance
 			Route::get('/substitution', [AttendanceController::class, 'teacher_substitution_index'])->name('substitution.index');
-			Route::get('/substitution/{course_id}/upload', [AttendanceController::class, 'teacher_substitution_create'])->name('substitution.create')->whereNumber('course_id');
-			Route::post('/substitution/{course_id}/upload', [AttendanceController::class, 'teacher_substitution_store'])->name('substitution.store')->whereNumber('course_id');
+			Route::get('/substitution/{student_id}/upload', [AttendanceController::class, 'teacher_substitution_create'])->name('substitution.create')->whereNumber('course_id');
+			Route::post('/substitution/{student_id}/upload', [AttendanceController::class, 'teacher_substitution_store'])->name('substitution.store')->whereNumber('course_id');
 			Route::get('/substitution/{subsitution_attendance_id}/edit', [AttendanceController::class, 'teacher_substitution_edit'])->name('substitution.edit')->whereNumber('substitution_attendance_id');
 			Route::post('/substitution/{subsitution_attendance_id}/edit', [AttendanceController::class, 'teacher_substitution_update'])->name('substitution.update')->whereNumber('substitution_attendance_id');
 		});

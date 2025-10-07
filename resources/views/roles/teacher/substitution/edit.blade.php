@@ -7,7 +7,6 @@
 @section('content')
     <x-section-container>
 		<x-page-title>Edit Substitution Attendance Report</x-page-title>
-		<h1 class="font-bold text-lg text-blue mt-1">{{ $course->course_name }} - {{ ucwords($course->level) }}</h1>
 		<div class="w-full bg-slate-400 mt-2 mb-3" style="height: 2px;"></div>
 
 		@if(session()->has("success"))
@@ -41,51 +40,51 @@
 					{{-- Learning data --}}
 					<h1 class="font-bold text-lg text-blue mt-8">Attendance Data</h1>
 					<div class="flex flex-col w-full">
-						{{-- <div class="w-full flex gap-5 mt-3">
-							<div class="w-full md:w-1/2">
-								<x-label class="mb-1">Attendance Status<span class="text-red">*</span></x-label>
-								<x-select name="_is_attended" id="_is_attended" class="w-full">
-									<option value="1">Attended</option>
-									<option value="0">Absent</option>
-								</x-select>
-							</div>
-                            <div class="w-full md:w-1/2"></div>
-						</div> --}}
                         <div class="w-full flex gap-5">
                             <div class="mt-3 w-full md:w-1/2 container-select2">
                                 <x-label class="mb-1">Student<span class="text-red">*</span></x-label>
                                 <x-select type="text" name="_student_name" id="_student_name" class="w-full select-2">
-                                    @foreach($course->students as $student)
-										<option value="{{ $student }}">{{ $student->full_name }}</option>
+									<option disabled selected>Select a Student</option>
+                                    @foreach($students as $student)
+										<option value="{{ $student }}" @if($student->id == $substitution_attendance->student_attendances[0]->student_id) selected @endif>{{ $student->full_name }}</option>
 									@endforeach
                                 </x-select>
-                                <input type="hidden" name="student_id" id="student_id">
+                                <input type="hidden" name="student_id" id="student_id" value="{{ $substitution_attendance->student_attendances[0]->student_id }}">
                             </div>
-                            <div class="w-full md:w-1/2"></div>
+                            <div class="mt-3 w-full md:w-1/2 container-select2">
+								<x-label class="mb-1">Course<span class="text-red">*</span></x-label>
+								<x-select type="text" name="_course_name" id="_course_name" class="w-full select-2">
+									<option disabled selected>Select a Course</option>
+									@foreach($courses as $course)
+										<option value="{{ $course }}" @if($course->id == $substitution_attendance->course_id) selected @endif>{{ $course->course_name }} - {{ ucwords($course->level) }}</option>
+									@endforeach
+								</x-select>
+								<input type="hidden" name="course_id" id="course_id" value="{{ $substitution_attendance->course_id }}">
+							</div>
 						</div>
 
 						<div class="flex gap-5 w-full mt-4 attendance-detail-fields">
 							{{-- Start Time --}}
 							<div class="flex flex-col w-1/2">
-								<x-label for="_start_time">Start Time<span class="text-red">*</span></x-label>
-								<x-input class="_start_time" type="time" id="_start_time" value="00:00"/>
+								<x-label for="start_time">Start Time<span class="text-red">*</span></x-label>
+								<x-input class="start_time" type="time" name="start_time" id="start_time" value="{{ $substitution_attendance->student_attendances[0]->start_time }}"/>
                                 <p class="text-red font-bold mt-2 hidden error-time"><i class="bi bi-exclamation-circle"></i> Invalid learning time range.</p>
 							</div>
 
 							{{-- End Time --}}
 							<div class="flex flex-col w-1/2">
-								<x-label for="_end_time">End Time<span class="text-red">*</span></x-label>
-								<x-input class="_end_time" type="time" id="_end_time" value="00:00"/>
+								<x-label for="end_time">End Time<span class="text-red">*</span></x-label>
+								<x-input class="end_time" type="time" name="end_time" id="end_time" value="{{ $substitution_attendance->student_attendances[0]->end_time }}"/>
 							</div>
 						</div>
 
 						<div class="w-full flex gap-5 mt-3 attendance-detail-fields">
 							<div class="w-full md:w-1/2 container-select2">
-								<x-label for="_activity_progress" class="mb-1">Activity<span class="text-red">*</span></x-label>
-								<x-select name="_activity_progress" id="_activity_progress" class="w-full select-2">
-									@foreach($course->topics as $topic)
+								<x-label for="activity_progress" class="mb-1">Activity<span class="text-red">*</span></x-label>
+								<x-select name="activity_progress" id="activity_progress" class="w-full select-2">
+									@foreach($substitution_attendance->course->topics as $topic)
 										@foreach($topic->activities as $activity)
-											<option value="{{ $activity->title }}">{{ $activity->title }}</option>
+											<option value="{{ $activity->title }}" @if($activity->title == $substitution_attendance->student_attendances[0]->activity_progress) selected @endif>{{ $activity->title }}</option>
 										@endforeach
 									@endforeach
 									<option value="Other">Other</option>
@@ -93,62 +92,20 @@
 							</div>
 
 							<div class="w-full md:w-1/2">
-								<x-label for="_learning_status" class="mb-1">Learning Status<span class="text-red">*</span></x-label>
-								<x-select name="_learning_status" id="_learning_status" class="w-full">
-									<option value="Done">Done</option>
-									<option value="On Progress">On Progress</option>
+								<x-label for="learning_status" class="mb-1">Learning Status<span class="text-red">*</span></x-label>
+								<x-select name="learning_status" id="learning_status" class="w-full">
+									<option value="Done" @if('Done' == $substitution_attendance->student_attendances[0]->learning_status) selected @endif>Done</option>
+									<option value="On Progress" @if('On Progress' == $substitution_attendance->student_attendances[0]->learning_status) selected @endif>On Progress</option>
 								</x-select>
 							</div>
 						</div>
 
 						<div class="w-full mt-8">
-							<x-label for="_attendance_details" class="mb-1">Details<span class="text-red">*</span></x-label>
-							<x-textarea rows="4" name="_attendance_details" id="_attendance_details" class="w-full" placeholder="Input details"></x-textarea>
+							<x-label for="attendance_details" class="mb-1">Details<span class="text-red">*</span></x-label>
+							<x-textarea rows="4" name="attendance_details" id="attendance_details" class="w-full" placeholder="Input details">{{ $substitution_attendance->student_attendances[0]->attendance_detail }}</x-textarea>
                             <p class="text-red font-bold mt-2 hidden" id="error-attendance-detail"><i class="bi bi-exclamation-circle"></i> Please input learning details.</p>
 						</div>
 					</div>
-
-					<div class="flex w-full justify-end mt-8">
-						<x-button class=" w-1/2 md:w-1/6" type="button" id="addBtn">Add Data</x-button>
-					</div>
-				</div>
-
-				<div class="flex mt-8">
-					<h1 class="font-bold text-lg text-blue">Data to Add</h1>
-				</div>
-				<div class="overflow-x-auto mt-2">
-					<table class="w-full">
-						<thead>
-                            <th class="text-start py-3 px-4 border-b-2 border-slate-400">Student</th>
-							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Time</th>
-							{{-- <th class="text-start py-3 px-4 border-b-2 border-slate-400">Attended</th> --}}
-							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Details</th>
-							<th class="text-start py-3 px-4 border-b-2 border-slate-400">Action</th>
-						</thead>
-						<tbody id="tableBody">
-							@foreach($substitution_attendance->student_attendances as $sa)
-                                @php
-                                    $student_id = $sa->student->id;
-                                @endphp
-                                <tr class="@if($loop->iteration % 2 == 0) bg-white @endif">
-                                    <td class="py-3 px-4">{{ $sa->student->full_name }}</td>
-                                    <td class="py-3 px-4">{{ Carbon\Carbon::parse($sa->start_time)->format('H:i') }}-{{ Carbon\Carbon::parse($sa->end_time)->format('H:i') }}</td>
-                                    <td class="py-3 px-4">{{ $sa->activity_progress }}<br><br>{{ $sa->learning_status }}<br>{{ $sa->attendance_detail }}</td>
-                                    <td class="py-3 px-4">
-                                        <button type="button" class="bg-red remove-row-btn text-white rounded-xl hover:bg-slate-600 py-2 px-4"><i class="bi bi-trash3"></i></button>
-                                        <div>
-                                            <input type="hidden" name="student_id[]" value="{{ $sa->student_id }}">
-                                            <input type="hidden" name="start_time[]" value="{{ $sa->start_time }}">
-                                            <input type="hidden" name="end_time[]" value="{{ $sa->end_time }}">
-                                            <input type="hidden" name="activity_progress[]" value="{{ $sa->activity_progress }}">
-                                            <input type="hidden" name="learning_status[]" value="{{ $sa->learning_status }}">
-                                            <input type="hidden" name="attendance_details[]" value="{{ $sa->attendance_detail }}">
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-						</tbody>
-					</table>
 				</div>
 
 				<div class="mt-10 w-full flex gap-3 justify-end items-center" method="post" id="leForm">
@@ -156,106 +113,6 @@
 					<x-button class=" w-1/2 md:w-1/6">Save</x-button>
 				</div>
 			</form>
-
-			<script>
-				$(document).ready(function() {
-                    $(document).on('click', '.remove-row-btn', function(){
-                        if(confirm('Are you sure want to remove this item?')){
-                            $(this).closest('tr').remove();
-                        }
-                    });
-
-					$('#addBtn').on('click', function(){
-                        const inpStudent = JSON.parse($('#_student_name').val());
-
-						const _inpActivityProgress = $('#_activity_progress').val();
-						const inpLearningStatus = $('#_learning_status').val();
-						const inpAttendanceDetails = $('#_attendance_details').val();
-						let inpStartTime = $('#_start_time').val();
-						let inpEndTime = $('#_end_time').val();
-
-                        $('#_start_time').addClass('border-slate-400 focus:border-slate-600 focus:ring-0').removeClass('border-red focus:border-red-700 focus:ring-0');
-						$('#_end_time').addClass('border-slate-400 focus:border-slate-600 focus:ring-0').removeClass('border-red focus:border-red-700 focus:ring-0');
-						$('.error-time').hide();
-
-						$('#_attendance_details').addClass('border-slate-400 focus:border-slate-600 focus:ring-0').removeClass('border-red focus:border-red-700 focus:ring-0');
-						$('#error-attendance-detail').hide();
-
-						let invalid = false;
-
-						// convert to Date objects (or just minutes)
-						const [h1, m1] = inpStartTime.split(":").map(Number);
-						const [h2, m2] = inpEndTime.split(":").map(Number);
-
-						// compare by total minutes
-						const stime = h1 * 60 + m1;
-						const etime = h2 * 60 + m2;
-
-						if(inpStartTime == '00:00' && inpEndTime == '00:00' || etime < stime){
-							$('#_start_time').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
-							$('#_end_time').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
-							$('.error-time').show();
-
-							invalid = true;
-						}
-
-						if(!inpAttendanceDetails){
-							$('#_attendance_details').removeClass('border-slate-400 focus:border-slate-600 focus:ring-0').addClass('border-red focus:border-red-700 focus:ring-0');
-							$('#error-attendance-detail').show();
-
-							invalid = true;
-						}
-
-						if(invalid){
-							return;
-						}
-
-						const inpActivityProgress = _inpActivityProgress;
-
-						if($('#tableBody').find('#empty-table-placeholder').length){
-							$('#empty-table-placeholder').remove();
-						}
-
-						const newRow = $('<tr>');
-						const removeBtn = $('<button>').html('<i class="bi bi-trash3"></i>').attr('type', 'button').addClass('remove-row-btn text-center px-5 py-2 border border-transparent rounded-lg text-white bg-red hover:bg-slate-700 active:bg-slate-900 focus:outline-none focus:border-slate-900 focus:ring ring-slate-300 disabled:opacity-25 transition ease-in-out duration-150');
-
-                        const rowCount = $('#tableBody').find('tr').length;
-                        const lastCol = $('<td>').addClass('py-3 px-4').append(removeBtn);
-						
-						const sanitizedAttendanceDetails = $('<span>').text(inpAttendanceDetails);
-
-						newRow.addClass(rowCount % 2 == 1? 'bg-white' : '')
-							.append(
-								$('<td>').addClass('py-3 px-4').text(inpStudent.full_name)
-                            ).append(
-								$('<td>').addClass('py-3 px-4').html(`${inpStartTime}-${inpEndTime}`)
-							).append(
-								$('<td>').addClass('py-3 px-4').html(`${inpActivityProgress}<br>(${inpLearningStatus})<br><br>`).append(sanitizedAttendanceDetails)
-							).append(
-								lastCol
-							);
-
-                        const hidStudentId = $('<input>').attr({'type': 'hidden', 'name': 'student_id[]', 'value': inpStudent.id});
-						const hidStartTime = $('<input>').attr({'type': 'hidden', 'name': 'start_time[]', 'value': inpStartTime});
-						const hidEndTime = $('<input>').attr({'type': 'hidden', 'name': 'end_time[]', 'value': inpEndTime});
-						const hidActivityProgress = $('<input>').attr({'type': 'hidden', 'name': 'activity_progress[]', 'value': inpActivityProgress});
-						const hidLearningStatus = $('<input>').attr({'type': 'hidden', 'name': 'learning_status[]', 'value': inpLearningStatus});
-						const hidAttendanceDetails = $('<input>').attr({'type': 'hidden', 'name': 'attendance_details[]', 'value': inpAttendanceDetails});
-
-						lastCol.append(hidStudentId).append(hidStartTime).append(hidEndTime).append(hidActivityProgress).append(hidLearningStatus).append(hidAttendanceDetails);
-
-						$('#tableBody').append(newRow);
-					});
-
-                    $('#todaybtn').on('click', function(){
-                        const currentDate = new Date();
-                        const year = currentDate.getFullYear();
-                        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-                        const day = String(currentDate.getDate()).padStart(2, '0');
-                        $('#attendance_date').val(`${year}-${month}-${day}`);
-                    });
-				});
-			</script>
 		{{-- @else
 			<div class="rounded-lg py-5 px-10 bg-blue-800">
 				<p class="text-white italic">- This course still has no students or students assigned to it, or there are no more students to assign to course -</p>
@@ -264,5 +121,40 @@
 				</x-button>
 			</div>
 		@endif --}}
+
+		<script>
+			const courseTopicsAndActivities = @json($courses);
+
+			$(document).ready(() => {
+				$('#_course_name').on('change', function(){
+					$('#activity_progress').empty();
+
+					const inpCourse = JSON.parse($('#_course_name').val());
+
+					const targettedCourse = courseTopicsAndActivities.find(ctaa => ctaa.id === inpCourse.id);
+					console.log(targettedCourse);
+
+					targettedCourse.topics.forEach(topic => {
+						topic.activities.forEach(activity => {
+							$('#activity_progress').append(
+								$('<option>').attr('value', activity.title).text(activity.title)
+							)
+						});
+					});
+
+					$('#activity_progress').append(
+						$('<option>').attr('value', 'Other').text('Other (please specify on the details)')
+					);
+
+					$('#course_id').val(inpCourse.id);
+				});
+
+				$('#_student_name').on('change', function(){
+					const student = JSON.parse($(this).val());
+
+					$('#student_id').val(student.id);
+				});
+			})
+		</script>
 	</x-section-container>
 @endsection

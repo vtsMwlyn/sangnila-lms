@@ -28,10 +28,10 @@
 	<x-popup popup_title="New Substitution Attendance" class="w-1/2 flex flex-col items-stretch justify-center overflow-y-auto" id="select-course">
 		<div class="w-full flex gap-5 mt-3 attendance-detail-fields">
 			<div class="w-full container-select2">
-				<x-label for="course_selection" class="mb-1">Please select a course:</x-label>
-				<x-select name="course_selection" id="course_selection" class="w-full select-2">
-					@foreach($courses as $course)
-						<option value="{{ route('teacher.attendance.substitution.create', $course->id) }}">{{ $course->course_name }} - {{ ucwords($course->level) }}</option>
+				<x-label for="student_selection" class="mb-1">Please select a student:</x-label>
+				<x-select name="student_selection" id="student_selection" class="w-full select-2">
+					@foreach($students as $student)
+						<option value="{{ route('teacher.attendance.substitution.create', $student->id) }}">{{ $student->full_name }}</option>
 					@endforeach
 				</x-select>
 			</div>
@@ -172,7 +172,7 @@
 			});
 
 			$('#confirm-course-button').on('click', function() {
-				const selectedUrl = $('#course_selection').val();
+				const selectedUrl = $('#student_selection').val();
 				window.location.href = selectedUrl;
 			});
 		</script>
