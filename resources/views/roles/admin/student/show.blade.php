@@ -427,7 +427,13 @@
 	</x-section-container>
 
 	<script>
-		const allCoursesWithTeachers = @json(App\Models\Course::where('status', 'active')->with('teachers')->get());
+		const allCoursesWithTeachers = @json(
+              App\Models\Course::where('status', 'active')
+                ->with(['teachers' => function ($q) {
+                    $q->where('status', 'enabled');
+                }])
+                ->get()
+            );
 		const alreadyEnrolled = @json($student->enrolled_courses);
 		const baseUrl = '{{ url('/') }}';
 
@@ -461,9 +467,9 @@
 
 			$('select[name="course"]').empty();
 			$('select[name="course"]').append($("<option>").attr('value', '').prop({"selected": true}).text('Select a course'));
-			const filtered = allCoursesWithTeachers.filter(item =>
-				!alreadyEnrolled.some(course => course.id === item.id)
-			);
+			const filtered = allCoursesWithTeachers.filter(item => !alreadyEnrolled.some(course => course.id === item.id));
+			
+			console.log(filtered);
 
 			filtered.forEach(course => {
 				if(course.teachers.length != 0){
@@ -492,7 +498,7 @@
 			allCoursesWithTeachers.forEach(course => {
 				if(course.id == courseStudent.course_id){
 					$('select[name="teacher"]').empty();
-					for(teacher of course.teachers){
+					for(teacher of course.teachers.filter(t => t.status == 'enabled')){
 						$('select[name="teacher"]').append($("<option>").attr("value", teacher.id).text(teacher.full_name).prop('selected', (teacher.id == courseStudent.teacher_id? true : false)));
 					}
 				}
